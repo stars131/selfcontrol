@@ -1,5 +1,4 @@
-import { ChatPanel } from "../../../../components/chat-panel";
-import { RecordPanel } from "../../../../components/record-panel";
+import { WorkspaceShellClient } from "../../../../components/workspace-shell-client";
 
 export default async function WorkspacePage({
   params,
@@ -8,13 +7,5 @@ export default async function WorkspacePage({
 }) {
   const { workspaceId } = await params;
 
-  return (
-    <main className="page-shell">
-      <div className="workspace-shell">
-        <ChatPanel />
-        <RecordPanel workspaceId={workspaceId} />
-      </div>
-    </main>
-  );
+  return <WorkspaceShellClient workspaceId={workspaceId} />;
 }
-

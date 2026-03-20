@@ -40,6 +40,13 @@ select {
   font: inherit;
 }
 
+input:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .page-shell {
   min-height: 100vh;
   padding: 24px;
@@ -60,6 +67,11 @@ select {
   backdrop-filter: blur(18px);
 }
 
+.auth-panel {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
 .panel-header {
   display: flex;
   align-items: center;
@@ -69,6 +81,12 @@ select {
 
 .panel-body {
   padding: 0 22px 22px;
+}
+
+.two-column-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
 }
 
 .eyebrow {
@@ -86,6 +104,16 @@ select {
 
 .muted {
   color: var(--muted);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field-label {
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .message-list,
@@ -111,15 +139,24 @@ select {
   margin-top: 16px;
 }
 
+.form-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.input,
 .textarea {
   width: 100%;
-  min-height: 88px;
-  resize: vertical;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.8);
   padding: 12px 14px;
   color: var(--text);
+}
+
+.textarea {
+  min-height: 88px;
+  resize: vertical;
 }
 
 .button {
@@ -167,9 +204,25 @@ select {
   font-weight: 600;
 }
 
+.notice {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.notice.error {
+  border-color: rgba(163, 63, 45, 0.2);
+  background: rgba(163, 63, 45, 0.08);
+  color: #7d2f22;
+}
+
 @media (max-width: 960px) {
   .workspace-shell {
     grid-template-columns: 1fr;
   }
-}
 
+  .two-column-grid {
+    grid-template-columns: 1fr;
+  }
+}

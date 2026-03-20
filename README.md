@@ -23,6 +23,13 @@ cp .env.example .env
 docker compose up --build
 ```
 
+数据库迁移：
+
+```bash
+cd apps/api
+alembic upgrade head
+```
+
 3. 访问服务：
 
 - Web: `http://localhost:3000`
@@ -34,4 +41,3 @@ docker compose up --build
 - 项目说明：[PROJECT_SPEC.md](./PROJECT_SPEC.md)
 - ER 与表结构：[docs/ERD_AND_SCHEMA.md](./docs/ERD_AND_SCHEMA.md)
 - API 设计：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
-

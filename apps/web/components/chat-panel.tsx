@@ -2,38 +2,56 @@
 
 import { useState } from "react";
 
-const initialMessages = [
-  {
-    role: "assistant",
-    content:
-      "可以直接告诉我要记录什么，或者查询你吃过的店、零食、避雷项。我会先生成结构化草稿，再等你确认写入。",
-  },
-  {
-    role: "user",
-    content: "昨天在万象城吃的烤鱼很好吃，帮我记一下。",
-  },
-];
+type Message = {
+  role: "assistant" | "user";
+  content: string;
+};
 
-export function ChatPanel() {
-  const [messages, setMessages] = useState(initialMessages);
+export function ChatPanel({
+  workspaceId,
+  onAction,
+}: {
+  workspaceId: string;
+  onAction: (message: string) => Promise<{
+    mode: "create" | "search";
+    assistantMessage: string;
+  }>;
+}) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: "assistant",
+      content:
+        "Type a message to search past records, or describe something to save. Messages containing save/add/record or Chinese equivalents will be written as new records after parsing.",
+    },
+  ]);
   const [draft, setDraft] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const value = draft.trim();
     if (!value) {
       return;
     }
 
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", content: value },
-      {
-        role: "assistant",
-        content:
-          "已识别为新增记录请求。右侧会展示标题、类型、时间、地点、评分等结构化草稿，确认后再写入数据库。",
-      },
-    ]);
+    setLoading(true);
+    setError("");
+    setMessages((prev) => [...prev, { role: "user", content: value }]);
     setDraft("");
+
+    try {
+      const result = await onAction(value);
+      setMessages((prev) => [...prev, { role: "assistant", content: result.assistantMessage }]);
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : "Request failed";
+      setError(message);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: `Action failed: ${message}` },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,12 +60,12 @@ export function ChatPanel() {
         <div>
           <div className="eyebrow">Agent</div>
           <h2 className="title" style={{ fontSize: 22 }}>
-            聊天助手
+            Chat Assistant
           </h2>
+          <div className="muted" style={{ marginTop: 8 }}>
+            Workspace {workspaceId}
+          </div>
         </div>
-        <button className="button secondary" type="button">
-          新建会话
-        </button>
       </div>
       <div className="panel-body">
         <div className="message-list">
@@ -56,7 +74,7 @@ export function ChatPanel() {
               className={`message ${message.role === "assistant" ? "assistant" : ""}`}
               key={`${message.role}-${index}`}
             >
-              <div className="eyebrow">{message.role === "assistant" ? "助手" : "你"}</div>
+              <div className="eyebrow">{message.role === "assistant" ? "assistant" : "you"}</div>
               <div style={{ marginTop: 8, lineHeight: 1.6 }}>{message.content}</div>
             </article>
           ))}
@@ -65,16 +83,16 @@ export function ChatPanel() {
         <div className="composer">
           <textarea
             className="textarea"
-            placeholder="例如：帮我查一下去年在杭州吃过哪些推荐的日料。"
+            placeholder="Examples: save this snack note..., 记一下这家烤鱼不错, last month hangzhou sushi"
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
           />
-          <button className="button" type="button" onClick={handleSend}>
-            发送
+          {error ? <div className="notice error">{error}</div> : null}
+          <button className="button" type="button" onClick={handleSend} disabled={loading}>
+            {loading ? "Working..." : "Send"}
           </button>
         </div>
       </div>
     </section>
   );
 }
-

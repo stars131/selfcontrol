@@ -3,37 +3,43 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="page-shell">
-      <section className="panel" style={{ maxWidth: 920, margin: "0 auto" }}>
+      <section className="panel" style={{ maxWidth: 960, margin: "0 auto" }}>
         <div className="panel-header">
           <div>
             <div className="eyebrow">SelfControl</div>
-            <h1 className="title">个人多模态记忆系统</h1>
+            <h1 className="title">Personal Memory Workspace</h1>
           </div>
-          <Link className="button" href="/app">
-            进入工作台
-          </Link>
+          <div style={{ display: "flex", gap: 12 }}>
+            <Link className="button secondary" href="/register">
+              Create Account
+            </Link>
+            <Link className="button" href="/login">
+              Sign In
+            </Link>
+          </div>
         </div>
         <div className="panel-body">
-          <p className="muted">
-            这是一套以聊天助手为入口的生活记录系统，支持文字、语音、图片、视频、地图与 RAG 检索。
+          <p className="muted" style={{ lineHeight: 1.7, maxWidth: 720 }}>
+            SelfControl is a multi-modal memory system for notes, food records, warning lists,
+            media attachments, search, maps, and an assistant-driven workflow.
           </p>
           <div className="stats-grid" style={{ marginTop: 20 }}>
             <div className="stat-card">
-              <div className="eyebrow">记录方式</div>
+              <div className="eyebrow">Capture</div>
               <div className="title" style={{ fontSize: 18 }}>
-                文字 / 语音 / 图片 / 视频
+                text / voice / image / video
               </div>
             </div>
             <div className="stat-card">
-              <div className="eyebrow">检索</div>
+              <div className="eyebrow">Retrieve</div>
               <div className="title" style={{ fontSize: 18 }}>
-                结构化 + 全文 + 向量
+                filters + text + semantic search
               </div>
             </div>
             <div className="stat-card">
-              <div className="eyebrow">形态</div>
+              <div className="eyebrow">Operate</div>
               <div className="title" style={{ fontSize: 18 }}>
-                桌面与手机响应式
+                chat left, structured cards right
               </div>
             </div>
           </div>
@@ -42,4 +48,3 @@ export default function HomePage() {
     </main>
   );
 }
-

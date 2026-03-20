@@ -23,7 +23,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 def on_startup() -> None:
-    create_db_and_tables()
+    if settings.auto_create_tables:
+        create_db_and_tables()
 
 
 @app.get("/health")
@@ -35,4 +36,3 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(workspaces.router, prefix="/api/v1/workspaces", tags=["workspaces"])
 app.include_router(records.router, prefix="/api/v1/workspaces", tags=["records"])
 app.include_router(search.router, prefix="/api/v1/workspaces", tags=["search"])
-

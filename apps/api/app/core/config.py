@@ -13,6 +13,7 @@ class Settings:
     access_token_expire_minutes: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "10080"))
     api_host: str = os.getenv("API_HOST", "0.0.0.0")
     api_port: int = int(os.getenv("API_PORT", "8000"))
+    auto_create_tables: bool = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
     cors_origins: list[str] = field(
         default_factory=lambda: os.getenv(
             "CORS_ORIGINS",
@@ -22,4 +23,3 @@ class Settings:
 
 
 settings = Settings()
-

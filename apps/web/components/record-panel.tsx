@@ -1,75 +1,78 @@
-const demoRecords = [
-  {
-    title: "万象城烤鱼",
-    type: "food",
-    time: "2026-03-19 19:30",
-    note: "鱼肉新鲜，酱汁偏辣，适合再次去。",
-    tags: ["杭州", "烤鱼", "推荐"],
-  },
-  {
-    title: "某品牌海苔脆",
-    type: "snack",
-    time: "2026-03-18 15:10",
-    note: "包装好看但味道一般，列入避雷。",
-    tags: ["零食", "避雷"],
-  },
-];
+import type { RecordItem } from "../lib/types";
 
-export function RecordPanel({ workspaceId }: { workspaceId: string }) {
+export function RecordPanel({
+  workspaceId,
+  records,
+}: {
+  workspaceId: string;
+  records: RecordItem[];
+}) {
+  const avoidCount = records.filter((record) => record.is_avoid).length;
+  const foodCount = records.filter((record) => record.type_code === "food").length;
+
   return (
     <section className="panel">
       <div className="panel-header">
         <div>
           <div className="eyebrow">Workspace</div>
           <h2 className="title" style={{ fontSize: 22 }}>
-            {workspaceId}
+            Structured Results
           </h2>
+          <div className="muted" style={{ marginTop: 8 }}>
+            {workspaceId}
+          </div>
         </div>
-        <button className="button" type="button">
-          快速新增
-        </button>
       </div>
       <div className="panel-body">
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="eyebrow">总记录</div>
+            <div className="eyebrow">Visible records</div>
             <div className="title" style={{ fontSize: 20 }}>
-              128
+              {records.length}
             </div>
           </div>
           <div className="stat-card">
-            <div className="eyebrow">避雷项</div>
+            <div className="eyebrow">Food</div>
             <div className="title" style={{ fontSize: 20 }}>
-              17
+              {foodCount}
             </div>
           </div>
           <div className="stat-card">
-            <div className="eyebrow">地点</div>
+            <div className="eyebrow">Avoid</div>
             <div className="title" style={{ fontSize: 20 }}>
-              43
+              {avoidCount}
             </div>
           </div>
         </div>
 
         <div style={{ marginTop: 20 }} className="record-list">
-          {demoRecords.map((record) => (
-            <article className="record-card" key={record.title}>
-              <div className="eyebrow">{record.type}</div>
-              <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>{record.title}</h3>
-              <div className="muted">{record.time}</div>
-              <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>{record.note}</p>
-              <div className="tag-row">
-                {record.tags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
+          {records.length ? (
+            records.map((record) => (
+              <article className="record-card" key={record.id}>
+                <div className="eyebrow">{record.type_code}</div>
+                <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>
+                  {record.title || "Untitled"}
+                </h3>
+                <div className="muted">
+                  {record.created_at} · {record.source_type}
+                </div>
+                <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>
+                  {record.content || "No content"}
+                </p>
+                <div className="tag-row">
+                  <span className="tag">{record.status}</span>
+                  {record.rating ? <span className="tag">rating {record.rating}</span> : null}
+                  {record.is_avoid ? <span className="tag">avoid</span> : null}
+                </div>
+              </article>
+            ))
+          ) : (
+            <div className="notice">
+              No records yet. Save one from the chat panel or run a search that returns data.
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
 }
-
