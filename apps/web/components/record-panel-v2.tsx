@@ -2,15 +2,40 @@
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
-import { MapPanel } from "./map-panel";
+import { MapPanel, type LocationDraft } from "./map-panel";
 import type { MediaAsset, RecordItem } from "../lib/types";
 
-type LocationDraft = {
-  place_name: string;
-  address: string;
-  latitude: string;
-  longitude: string;
+type RecordFormState = {
+  title: string;
+  content: string;
+  type_code: string;
+  rating: string;
+  occurred_at: string;
+  is_avoid: boolean;
+  location: LocationDraft;
 };
+
+function createEmptyLocation(): LocationDraft {
+  return {
+    place_name: "",
+    address: "",
+    latitude: "",
+    longitude: "",
+    source: "manual",
+  };
+}
+
+function createEmptyForm(): RecordFormState {
+  return {
+    title: "",
+    content: "",
+    type_code: "memo",
+    rating: "",
+    occurred_at: "",
+    is_avoid: false,
+    location: createEmptyLocation(),
+  };
+}
 
 function readLocation(record: RecordItem | null): LocationDraft {
   const raw = record?.extra_data?.location;
@@ -27,7 +52,28 @@ function readLocation(record: RecordItem | null): LocationDraft {
       typeof location.longitude === "number" || typeof location.longitude === "string"
         ? String(location.longitude)
         : "",
+    source: typeof location.source === "string" ? location.source : "manual",
   };
+}
+
+function formatDatetimeInput(value?: string | null): string {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const timezoneOffsetMs = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16);
+}
+
+function formatRecordTimestamp(record: RecordItem): string {
+  const rawValue = record.occurred_at || record.created_at;
+  const date = new Date(rawValue);
+  return Number.isNaN(date.getTime()) ? rawValue : date.toLocaleString();
 }
 
 export function RecordPanelV2({
@@ -45,13 +91,14 @@ export function RecordPanelV2({
   records: RecordItem[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
-  onSelectRecord: (recordId: string) => void;
+  onSelectRecord: (recordId: string | null) => void;
   onSaveRecord: (input: {
     recordId?: string;
     title?: string;
     content: string;
     type_code: string;
     rating?: number | null;
+    occurred_at?: string;
     is_avoid: boolean;
     extra_data?: Record<string, unknown>;
   }) => Promise<void>;
@@ -65,19 +112,7 @@ export function RecordPanelV2({
     () => records.find((record) => record.id === selectedRecordId) ?? null,
     [records, selectedRecordId],
   );
-  const [form, setForm] = useState({
-    title: "",
-    content: "",
-    type_code: "memo",
-    rating: "",
-    is_avoid: false,
-    location: {
-      place_name: "",
-      address: "",
-      latitude: "",
-      longitude: "",
-    } as LocationDraft,
-  });
+  const [form, setForm] = useState<RecordFormState>(createEmptyForm);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -85,26 +120,16 @@ export function RecordPanelV2({
 
   useEffect(() => {
     if (!selectedRecord) {
-      setForm({
-        title: "",
-        content: "",
-        type_code: "memo",
-        rating: "",
-        is_avoid: false,
-        location: {
-          place_name: "",
-          address: "",
-          latitude: "",
-          longitude: "",
-        },
-      });
+      setForm(createEmptyForm());
       return;
     }
+
     setForm({
       title: selectedRecord.title ?? "",
       content: selectedRecord.content ?? "",
       type_code: selectedRecord.type_code,
       rating: selectedRecord.rating ? String(selectedRecord.rating) : "",
+      occurred_at: formatDatetimeInput(selectedRecord.occurred_at),
       is_avoid: selectedRecord.is_avoid,
       location: readLocation(selectedRecord),
     });
@@ -117,16 +142,27 @@ export function RecordPanelV2({
       return;
     }
 
+    const latitude = form.location.latitude.trim() ? Number(form.location.latitude) : null;
+    const longitude = form.location.longitude.trim() ? Number(form.location.longitude) : null;
+
+    if (form.location.latitude.trim() && (latitude === null || Number.isNaN(latitude))) {
+      setError("Latitude must be a valid number");
+      return;
+    }
+
+    if (form.location.longitude.trim() && (longitude === null || Number.isNaN(longitude))) {
+      setError("Longitude must be a valid number");
+      return;
+    }
+
     setSaving(true);
     setError("");
     try {
-      const latitude = form.location.latitude ? Number(form.location.latitude) : null;
-      const longitude = form.location.longitude ? Number(form.location.longitude) : null;
       const hasLocation =
         form.location.place_name.trim() ||
         form.location.address.trim() ||
-        (latitude !== null && !Number.isNaN(latitude)) ||
-        (longitude !== null && !Number.isNaN(longitude));
+        latitude !== null ||
+        longitude !== null;
 
       await onSaveRecord({
         recordId: selectedRecord?.id,
@@ -134,19 +170,24 @@ export function RecordPanelV2({
         content: form.content.trim(),
         type_code: form.type_code,
         rating: form.rating ? Number(form.rating) : null,
+        occurred_at: form.occurred_at ? new Date(form.occurred_at).toISOString() : undefined,
         is_avoid: form.is_avoid,
         extra_data: hasLocation
           ? {
               location: {
                 place_name: form.location.place_name.trim() || undefined,
                 address: form.location.address.trim() || undefined,
-                latitude: latitude !== null && !Number.isNaN(latitude) ? latitude : undefined,
-                longitude: longitude !== null && !Number.isNaN(longitude) ? longitude : undefined,
-                source: "manual",
+                latitude: latitude ?? undefined,
+                longitude: longitude ?? undefined,
+                source: form.location.source || "manual",
               },
             }
           : {},
       });
+
+      if (!selectedRecord) {
+        setForm(createEmptyForm());
+      }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Failed to save record");
     } finally {
@@ -198,9 +239,14 @@ export function RecordPanelV2({
             {workspaceId}
           </div>
         </div>
-        <button className="button secondary" type="button" onClick={() => void onResetFilter()}>
-          Reset list
-        </button>
+        <div className="action-row">
+          <button className="button secondary" type="button" onClick={() => onSelectRecord(null)}>
+            New record
+          </button>
+          <button className="button secondary" type="button" onClick={() => void onResetFilter()}>
+            Reset list
+          </button>
+        </div>
       </div>
       <div className="panel-body">
         <div className="stats-grid">
@@ -228,6 +274,13 @@ export function RecordPanelV2({
           records={records}
           selectedRecordId={selectedRecordId}
           onSelectRecord={onSelectRecord}
+          draftLocation={form.location}
+          onDraftLocationChange={(nextLocation) =>
+            setForm((prev) => ({
+              ...prev,
+              location: nextLocation,
+            }))
+          }
         />
 
         <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={handleSubmit}>
@@ -250,36 +303,6 @@ export function RecordPanelV2({
               placeholder="Write a note, food review, or reminder"
             />
           </label>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">Place name</span>
-              <input
-                className="input"
-                value={form.location.place_name}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, place_name: event.target.value },
-                  }))
-                }
-                placeholder="West Lake Sushi"
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">Address</span>
-              <input
-                className="input"
-                value={form.location.address}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, address: event.target.value },
-                  }))
-                }
-                placeholder="Hangzhou, West Lake district"
-              />
-            </label>
-          </div>
           <div className="inline-fields">
             <label className="field">
               <span className="field-label">Type</span>
@@ -307,35 +330,42 @@ export function RecordPanelV2({
               />
             </label>
             <label className="field">
-              <span className="field-label">Latitude</span>
+              <span className="field-label">Occurred at</span>
               <input
                 className="input"
-                inputMode="decimal"
-                value={form.location.latitude}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, latitude: event.target.value },
-                  }))
-                }
-                placeholder="30.2741"
+                type="datetime-local"
+                value={form.occurred_at}
+                onChange={(event) => setForm((prev) => ({ ...prev, occurred_at: event.target.value }))}
               />
             </label>
           </div>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Longitude</span>
+              <span className="field-label">Place name</span>
               <input
                 className="input"
-                inputMode="decimal"
-                value={form.location.longitude}
+                value={form.location.place_name}
                 onChange={(event) =>
                   setForm((prev) => ({
                     ...prev,
-                    location: { ...prev.location, longitude: event.target.value },
+                    location: { ...prev.location, place_name: event.target.value, source: "manual" },
                   }))
                 }
-                placeholder="120.1551"
+                placeholder="West Lake Sushi"
+              />
+            </label>
+            <label className="field">
+              <span className="field-label">Address</span>
+              <input
+                className="input"
+                value={form.location.address}
+                onChange={(event) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    location: { ...prev.location, address: event.target.value, source: "manual" },
+                  }))
+                }
+                placeholder="Hangzhou, West Lake district"
               />
             </label>
             <label className="checkbox-field">
@@ -345,6 +375,42 @@ export function RecordPanelV2({
                 onChange={(event) => setForm((prev) => ({ ...prev, is_avoid: event.target.checked }))}
               />
               <span>Avoid item</span>
+            </label>
+          </div>
+          <div className="inline-fields">
+            <label className="field">
+              <span className="field-label">Latitude</span>
+              <input
+                className="input"
+                inputMode="decimal"
+                value={form.location.latitude}
+                onChange={(event) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    location: { ...prev.location, latitude: event.target.value, source: "manual" },
+                  }))
+                }
+                placeholder="30.274100"
+              />
+            </label>
+            <label className="field">
+              <span className="field-label">Longitude</span>
+              <input
+                className="input"
+                inputMode="decimal"
+                value={form.location.longitude}
+                onChange={(event) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    location: { ...prev.location, longitude: event.target.value, source: "manual" },
+                  }))
+                }
+                placeholder="120.155100"
+              />
+            </label>
+            <label className="field">
+              <span className="field-label">Location source</span>
+              <input className="input" disabled value={form.location.source || "manual"} />
             </label>
           </div>
           {error ? <div className="notice error">{error}</div> : null}
@@ -398,7 +464,7 @@ export function RecordPanelV2({
                     {record.title || "Untitled"}
                   </h3>
                   <div className="muted">
-                    {record.created_at} · {record.source_type}
+                    {formatRecordTimestamp(record)} | {record.source_type}
                   </div>
                   <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>
                     {record.content || "No content"}
@@ -406,7 +472,7 @@ export function RecordPanelV2({
                   {location.place_name || location.address ? (
                     <div className="muted" style={{ marginTop: 10 }}>
                       {location.place_name || "Unknown place"}
-                      {location.address ? ` · ${location.address}` : ""}
+                      {location.address ? ` | ${location.address}` : ""}
                     </div>
                   ) : null}
                   <div className="tag-row">
@@ -427,3 +493,4 @@ export function RecordPanelV2({
     </section>
   );
 }
+

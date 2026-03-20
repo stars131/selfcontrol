@@ -142,6 +142,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     content: string;
     type_code: string;
     rating?: number | null;
+    occurred_at?: string;
     is_avoid: boolean;
     extra_data?: Record<string, unknown>;
   }) => {
@@ -154,6 +155,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         title: input.title,
         content: input.content,
         rating: input.rating ?? null,
+        occurred_at: input.occurred_at,
         is_avoid: input.is_avoid,
         extra_data: input.extra_data,
       });
@@ -167,6 +169,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       content: input.content,
       type_code: input.type_code,
       rating: input.rating ?? undefined,
+      occurred_at: input.occurred_at,
       is_avoid: input.is_avoid,
       source_type: "manual",
       extra_data: input.extra_data,

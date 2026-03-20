@@ -75,3 +75,35 @@ def process_chat_message(db: Session, workspace_id: str, user_id: str, content: 
         metadata_json={"mode": "search", "record_ids": [record.id for record in records]},
     )
     return reply, records
+
+
+def infer_record_type(text: str) -> str:
+    lowered = text.lower()
+    if any(keyword in lowered for keyword in ["snack", "chips", "cookie", "dessert", "candy"]):
+        return "snack"
+    if any(keyword in lowered for keyword in ["eat", "food", "dinner", "lunch", "sushi", "hotpot", "restaurant"]):
+        return "food"
+    if any(keyword in text for keyword in ["零食", "薯片", "饼干", "糖果", "甜品"]):
+        return "snack"
+    if any(keyword in text for keyword in ["饭", "菜", "餐厅", "烤鱼", "火锅", "日料", "好吃", "难吃"]):
+        return "food"
+    return "memo"
+
+
+def infer_is_avoid(text: str) -> bool:
+    lowered = text.lower()
+    return any(keyword in lowered for keyword in ["avoid", "bad", "do not buy", "not good", "dislike"]) or any(
+        keyword in text for keyword in ["避雷", "难吃", "不好吃", "别买", "踩雷", "不推荐"]
+    )
+
+
+def build_title(text: str) -> str:
+    normalized = " ".join(text.split())
+    return normalized[:28] + "..." if len(normalized) > 28 else normalized
+
+
+def should_create_record(text: str) -> bool:
+    lowered = text.lower()
+    return any(keyword in lowered for keyword in ["save", "add", "record", "remember", "note"]) or any(
+        keyword in text for keyword in ["记一下", "记录", "保存", "备忘", "备注"]
+    )

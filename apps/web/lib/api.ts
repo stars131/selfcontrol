@@ -103,6 +103,7 @@ export async function createRecord(
     title?: string;
     content: string;
     rating?: number;
+    occurred_at?: string;
     is_avoid?: boolean;
     source_type?: string;
     extra_data?: Record<string, unknown>;
@@ -137,6 +138,7 @@ export async function updateRecord(
     title: string;
     content: string;
     rating: number | null;
+    occurred_at: string | null;
     is_avoid: boolean;
     status: string;
     extra_data: Record<string, unknown>;
