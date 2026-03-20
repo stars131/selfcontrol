@@ -63,6 +63,23 @@ export type ReminderItem = {
   updated_at: string;
 };
 
+export type NotificationItem = {
+  id: string;
+  workspace_id: string;
+  user_id: string;
+  reminder_id?: string | null;
+  record_id?: string | null;
+  title: string;
+  message?: string | null;
+  event_type: string;
+  status: string;
+  is_read: boolean;
+  read_at?: string | null;
+  metadata_json: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
 export type Conversation = {
   id: string;
   workspace_id: string;

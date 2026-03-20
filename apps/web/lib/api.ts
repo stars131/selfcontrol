@@ -1,4 +1,13 @@
-import type { ChatMessage, Conversation, MediaAsset, RecordItem, ReminderItem, User, Workspace } from "./types";
+import type {
+  ChatMessage,
+  Conversation,
+  MediaAsset,
+  NotificationItem,
+  RecordItem,
+  ReminderItem,
+  User,
+  Workspace,
+} from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
 
@@ -302,6 +311,51 @@ export async function deleteReminder(token: string, workspaceId: string, reminde
   return request<{ deleted: boolean }>(
     `/workspaces/${workspaceId}/reminders/${reminderId}`,
     { method: "DELETE" },
+    token,
+  );
+}
+
+export async function syncNotifications(token: string, workspaceId: string) {
+  return request<{ created_count: number; items: NotificationItem[] }>(
+    `/workspaces/${workspaceId}/notifications/sync`,
+    {
+      method: "POST",
+    },
+    token,
+  );
+}
+
+export async function listNotifications(
+  token: string,
+  workspaceId: string,
+  params?: { unreadOnly?: boolean },
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.unreadOnly) {
+    searchParams.set("unread_only", "true");
+  }
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/notifications?${query}`
+    : `/workspaces/${workspaceId}/notifications`;
+  return request<{ items: NotificationItem[] }>(path, { method: "GET" }, token);
+}
+
+export async function updateNotification(
+  token: string,
+  workspaceId: string,
+  notificationId: string,
+  input: Partial<{
+    is_read: boolean;
+    status: string;
+  }>,
+) {
+  return request<{ notification: NotificationItem }>(
+    `/workspaces/${workspaceId}/notifications/${notificationId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    },
     token,
   );
 }

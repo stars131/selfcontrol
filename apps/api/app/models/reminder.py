@@ -32,3 +32,4 @@ class Reminder(Base):
 
     workspace = relationship("Workspace", back_populates="reminders")
     record = relationship("Record", back_populates="reminders")
+    notification_events = relationship("NotificationEvent", back_populates="reminder")

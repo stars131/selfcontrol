@@ -12,15 +12,25 @@ import {
   listConversations,
   listMedia,
   listMessages,
+  listNotifications,
   listRecords,
   listReminders,
   sendMessage,
+  syncNotifications,
+  updateNotification,
   updateRecord,
   updateReminder,
   uploadMedia,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
-import type { ChatMessage, Conversation, MediaAsset, RecordItem, ReminderItem } from "../lib/types";
+import type {
+  ChatMessage,
+  Conversation,
+  MediaAsset,
+  NotificationItem,
+  RecordItem,
+  ReminderItem,
+} from "../lib/types";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
@@ -35,6 +45,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
   const [reminders, setReminders] = useState<ReminderItem[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -61,6 +72,16 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     const result = await listReminders(activeToken, workspaceId, { recordId });
     setReminders(result.items);
+  };
+
+  const refreshNotifications = async (activeToken: string) => {
+    const result = await listNotifications(activeToken, workspaceId);
+    setNotifications(result.items);
+  };
+
+  const syncDueNotifications = async (activeToken: string) => {
+    await syncNotifications(activeToken, workspaceId);
+    await refreshNotifications(activeToken);
   };
 
   const loadConversationMessages = async (activeToken: string, conversationId: string) => {
@@ -90,6 +111,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         setConversations(items);
         setActiveConversationId(items[0].id);
         await loadConversationMessages(activeToken, items[0].id);
+        await refreshNotifications(activeToken);
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
@@ -115,6 +137,19 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     void refreshReminders(token, selectedRecordId);
   }, [token, selectedRecordId, workspaceId]);
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    void syncDueNotifications(token);
+    const timer = window.setInterval(() => {
+      void syncDueNotifications(token);
+    }, 30_000);
+
+    return () => window.clearInterval(timer);
+  }, [token, workspaceId]);
 
   const handleSendMessage = async (message: string) => {
     if (!token || !activeConversationId) {
@@ -270,6 +305,21 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshReminders(token, selectedRecordId);
   };
 
+  const handleSyncNotifications = async () => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await syncDueNotifications(token);
+  };
+
+  const handleMarkNotificationRead = async (notificationId: string) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await updateNotification(token, workspaceId, notificationId, { is_read: true });
+    await refreshNotifications(token);
+  };
+
   if (loading) {
     return (
       <main className="page-shell">
@@ -290,9 +340,12 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           activeConversationId={activeConversationId}
           conversations={conversations}
           messages={messages}
+          notifications={notifications}
           onCreateConversation={handleCreateConversation}
+          onMarkNotificationRead={handleMarkNotificationRead}
           onSelectConversation={handleSelectConversation}
           onSendMessage={handleSendMessage}
+          onSyncNotifications={handleSyncNotifications}
           workspaceId={workspaceId}
         />
         <RecordPanelV2
