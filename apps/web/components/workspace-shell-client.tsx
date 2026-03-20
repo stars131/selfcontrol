@@ -18,7 +18,7 @@ import {
 import { clearStoredSession, getStoredToken } from "../lib/auth";
 import type { ChatMessage, Conversation, MediaAsset, RecordItem } from "../lib/types";
 import { ChatPanel } from "./chat-panel";
-import { RecordPanel } from "./record-panel";
+import { RecordPanelV2 } from "./record-panel-v2";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
@@ -143,6 +143,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     type_code: string;
     rating?: number | null;
     is_avoid: boolean;
+    extra_data?: Record<string, unknown>;
   }) => {
     if (!token) {
       throw new Error("Not authenticated");
@@ -154,6 +155,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         content: input.content,
         rating: input.rating ?? null,
         is_avoid: input.is_avoid,
+        extra_data: input.extra_data,
       });
       await refreshRecords(token);
       setSelectedRecordId(input.recordId);
@@ -167,6 +169,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       rating: input.rating ?? undefined,
       is_avoid: input.is_avoid,
       source_type: "manual",
+      extra_data: input.extra_data,
     });
     await refreshRecords(token);
     setSelectedRecordId(result.record.id);
@@ -222,7 +225,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onSendMessage={handleSendMessage}
           workspaceId={workspaceId}
         />
-        <RecordPanel
+        <RecordPanelV2
           mediaAssets={mediaAssets}
           onDeleteRecord={handleDeleteRecord}
           onResetFilter={handleResetFilter}
