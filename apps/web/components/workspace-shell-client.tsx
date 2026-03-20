@@ -11,6 +11,7 @@ import {
   deleteReminder,
   getKnowledgeStats,
   getMediaStatus,
+  listAuditLogs,
   listConversations,
   listMedia,
   listMessages,
@@ -30,6 +31,7 @@ import {
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
 import type {
+  AuditLogItem,
   ChatMessage,
   Conversation,
   KnowledgeStats,
@@ -56,6 +58,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
   const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -99,6 +102,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setProviderConfigs(result.items);
   };
 
+  const refreshAuditLogs = async (activeToken: string) => {
+    const result = await listAuditLogs(activeToken, workspaceId, { limit: 8 });
+    setAuditLogs(result.items);
+  };
+
   const syncDueNotifications = async (activeToken: string) => {
     await syncNotifications(activeToken, workspaceId);
     await refreshNotifications(activeToken);
@@ -134,6 +142,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
         await refreshProviderConfigs(activeToken);
+        await refreshAuditLogs(activeToken);
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
@@ -185,6 +194,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (mode === "create") {
       await refreshRecords(token);
       await refreshKnowledge(token);
+      await refreshAuditLogs(token);
       if (result.records[0]) {
         setSelectedRecordId(result.records[0].id);
       }
@@ -240,6 +250,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       });
       await refreshRecords(token);
       await refreshKnowledge(token);
+      await refreshAuditLogs(token);
       setSelectedRecordId(input.recordId);
       return;
     }
@@ -256,6 +267,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     });
     await refreshRecords(token);
     await refreshKnowledge(token);
+    await refreshAuditLogs(token);
     setSelectedRecordId(result.record.id);
   };
 
@@ -268,6 +280,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setSelectedRecordId(nextRecords[0]?.id ?? null);
     await refreshRecords(token);
     await refreshKnowledge(token);
+    await refreshAuditLogs(token);
   };
 
   const handleUploadMedia = async (recordId: string, file: File) => {
@@ -277,6 +290,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await uploadMedia(token, workspaceId, recordId, file);
     await refreshMedia(token, recordId);
     await refreshKnowledge(token);
+    await refreshAuditLogs(token);
   };
 
   const handleRetryMedia = async (mediaId: string) => {
@@ -286,6 +300,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await retryMediaProcessing(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
     await refreshKnowledge(token);
+    await refreshAuditLogs(token);
   };
 
   const handleRefreshMediaStatus = async (mediaId: string) => {
@@ -370,6 +385,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     const result = await reindexKnowledge(token, workspaceId);
     setKnowledgeStats(result.stats);
+    await refreshAuditLogs(token);
   };
 
   const handleSaveProviderConfig = async (
@@ -393,6 +409,14 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       current.map((item) => (item.feature_code === featureCode ? result.config : item)),
     );
     await refreshKnowledge(token);
+    await refreshAuditLogs(token);
+  };
+
+  const handleRefreshAuditLogs = async () => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await refreshAuditLogs(token);
   };
 
   if (loading) {
@@ -413,12 +437,14 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       <div className="workspace-shell">
         <ChatPanel
           activeConversationId={activeConversationId}
+          auditLogs={auditLogs}
           conversations={conversations}
           knowledgeStats={knowledgeStats}
           messages={messages}
           notifications={notifications}
           onCreateConversation={handleCreateConversation}
           onMarkNotificationRead={handleMarkNotificationRead}
+          onRefreshAuditLogs={handleRefreshAuditLogs}
           onReindexKnowledge={handleReindexKnowledge}
           onSaveProviderConfig={handleSaveProviderConfig}
           onSelectConversation={handleSelectConversation}

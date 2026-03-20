@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordRead
+from app.services.audit import log_audit_event
 from app.services.knowledge import (
     get_knowledge_stats,
     rebuild_record_knowledge,
@@ -58,6 +59,16 @@ def reindex_workspace_knowledge(
         result = rebuild_workspace_knowledge(db, workspace_id)
 
     stats = get_knowledge_stats(db, workspace_id)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="knowledge.reindex",
+        resource_type="knowledge_index",
+        resource_id=payload.record_id,
+        message="Rebuilt knowledge index",
+        metadata_json={"record_id": payload.record_id, "chunk_count": result.chunk_count},
+    )
     return {
         "success": True,
         "data": {

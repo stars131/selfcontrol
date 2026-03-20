@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user, require_workspace_member
 from app.db.session import get_db
 from app.models.user import User
+from app.services.audit import log_audit_event
 from app.services.provider_configs import list_provider_configs, upsert_provider_config
 
 
@@ -57,4 +58,14 @@ def put_provider_config(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="provider_config.update",
+        resource_type="provider_config",
+        resource_id=feature_code,
+        message=f"Updated provider config for {feature_code}",
+        metadata_json={"provider_code": item.provider_code, "is_enabled": item.is_enabled},
+    )
     return {"success": True, "data": {"config": item.to_dict()}}

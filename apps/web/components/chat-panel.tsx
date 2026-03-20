@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type {
+  AuditLogItem,
   ChatMessage,
   Conversation,
   KnowledgeStats,
@@ -26,10 +27,12 @@ export function ChatPanel({
   notifications,
   knowledgeStats,
   providerConfigs,
+  auditLogs,
   onSelectConversation,
   onCreateConversation,
   onMarkNotificationRead,
   onReindexKnowledge,
+  onRefreshAuditLogs,
   onSaveProviderConfig,
   onSyncNotifications,
   onSendMessage,
@@ -41,10 +44,12 @@ export function ChatPanel({
   notifications: NotificationItem[];
   knowledgeStats: KnowledgeStats | null;
   providerConfigs: ProviderFeatureConfig[];
+  auditLogs: AuditLogItem[];
   onSelectConversation: (conversationId: string) => void;
   onCreateConversation: () => Promise<void>;
   onMarkNotificationRead: (notificationId: string) => Promise<void>;
   onReindexKnowledge: () => Promise<void>;
+  onRefreshAuditLogs: () => Promise<void>;
   onSaveProviderConfig: (
     featureCode: string,
     input: {
@@ -62,6 +67,7 @@ export function ChatPanel({
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [reindexing, setReindexing] = useState(false);
+  const [refreshingAudit, setRefreshingAudit] = useState(false);
   const [providerSavingCode, setProviderSavingCode] = useState("");
   const [providerDrafts, setProviderDrafts] = useState<Record<string, ProviderDraft>>({});
   const [error, setError] = useState("");
@@ -124,6 +130,19 @@ export function ChatPanel({
       setError(message);
     } finally {
       setReindexing(false);
+    }
+  };
+
+  const handleRefreshAuditLogs = async () => {
+    setRefreshingAudit(true);
+    setError("");
+    try {
+      await onRefreshAuditLogs();
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : "Audit refresh failed";
+      setError(message);
+    } finally {
+      setRefreshingAudit(false);
     }
   };
 
@@ -319,6 +338,38 @@ export function ChatPanel({
                 </article>
               );
             })}
+          </div>
+        </div>
+        <div className="record-card" style={{ marginBottom: 16 }}>
+          <div className="action-row" style={{ justifyContent: "space-between" }}>
+            <div className="eyebrow">Audit Logs</div>
+            <button
+              className="button secondary"
+              disabled={refreshingAudit}
+              type="button"
+              onClick={() => void handleRefreshAuditLogs()}
+            >
+              {refreshingAudit ? "Refreshing..." : "Refresh logs"}
+            </button>
+          </div>
+          <div className="record-list compact-list" style={{ marginTop: 12 }}>
+            {auditLogs.length ? (
+              auditLogs.map((item) => (
+                <article className="message" key={item.id}>
+                  <div className="eyebrow">
+                    {item.action_code} / {item.status}
+                  </div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>{item.message ?? item.resource_type}</div>
+                  {item.created_at ? (
+                    <div className="muted" style={{ marginTop: 8 }}>
+                      {new Date(item.created_at).toLocaleString()}
+                    </div>
+                  ) : null}
+                </article>
+              ))
+            ) : (
+              <div className="notice">No audit logs yet.</div>
+            )}
           </div>
         </div>
         <div className="record-card" style={{ marginBottom: 16 }}>

@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordCreate, RecordRead, RecordUpdate
+from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
 
 
@@ -66,6 +67,16 @@ def create_record(
     db.refresh(record)
     rebuild_record_knowledge(db, record.id)
     db.refresh(record)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="record.create",
+        resource_type="record",
+        resource_id=record.id,
+        message=f"Created record {record.title or record.id}",
+        metadata_json={"type_code": record.type_code, "source_type": record.source_type},
+    )
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
 
@@ -104,6 +115,16 @@ def update_record(
     db.refresh(record)
     rebuild_record_knowledge(db, record.id)
     db.refresh(record)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="record.update",
+        resource_type="record",
+        resource_id=record.id,
+        message=f"Updated record {record.title or record.id}",
+        metadata_json={"status": record.status, "is_avoid": record.is_avoid},
+    )
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
 
@@ -121,4 +142,14 @@ def delete_record(
 
     db.delete(record)
     db.commit()
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="record.delete",
+        resource_type="record",
+        resource_id=record_id,
+        message=f"Deleted record {record.title or record_id}",
+        metadata_json={"type_code": record.type_code},
+    )
     return {"success": True, "data": {"deleted": True}}

@@ -21,6 +21,10 @@ Last updated: 2026-03-21
   - safe secret strategy via environment variable names instead of raw key storage
   - frontend provider management panel
   - embeddings feature toggle now controls knowledge indexing and retrieval
+- Audit Log Foundation V1:
+  - audit log table and query API
+  - key mutation events recorded for records, media, provider config, knowledge reindex, and chat-created records
+  - frontend security panel for recent audit events
 
 ## Next
 - OCR / ASR / video transcription provider integration

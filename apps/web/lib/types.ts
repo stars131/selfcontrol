@@ -128,3 +128,16 @@ export type ProviderFeatureConfig = {
   is_default: boolean;
   updated_at?: string | null;
 };
+
+export type AuditLogItem = {
+  id: string;
+  workspace_id: string;
+  actor_user_id: string;
+  action_code: string;
+  resource_type: string;
+  resource_id?: string | null;
+  status: string;
+  message?: string | null;
+  metadata_json: Record<string, unknown>;
+  created_at?: string | null;
+};

@@ -14,6 +14,7 @@ from app.schemas.conversation import (
     MessageRead,
 )
 from app.schemas.record import RecordRead
+from app.services.audit import log_audit_event
 from app.services.chat import process_chat_message
 from app.services.knowledge import rebuild_record_knowledge
 
@@ -106,6 +107,17 @@ def send_message(
     db.refresh(assistant_message)
     for record in records:
         rebuild_record_knowledge(db, record.id)
+        if str(assistant_message.metadata_json.get("mode", "")) == "create":
+            log_audit_event(
+                db,
+                workspace_id=workspace_id,
+                actor_user_id=current_user.id,
+                action_code="record.create_from_chat",
+                resource_type="record",
+                resource_id=record.id,
+                message=f"Created record from chat: {record.title or record.id}",
+                metadata_json={"type_code": record.type_code},
+            )
 
     return {
         "success": True,

@@ -13,6 +13,7 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import MediaRead
+from app.services.audit import log_audit_event
 from app.services.media_processing import process_media_asset
 
 
@@ -89,6 +90,16 @@ async def upload_media(
     db.refresh(media)
 
     media = process_media_asset(db, media.id)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="media.upload",
+        resource_type="media_asset",
+        resource_id=media.id,
+        message=f"Uploaded media {media.original_filename}",
+        metadata_json={"record_id": record_id, "media_type": media.media_type, "mime_type": media.mime_type},
+    )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
 
 
@@ -105,4 +116,14 @@ def retry_media_processing(
         raise HTTPException(status_code=404, detail="Media not found")
 
     media = process_media_asset(db, media.id)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="media.retry_processing",
+        resource_type="media_asset",
+        resource_id=media.id,
+        message=f"Retried media processing for {media.original_filename}",
+        metadata_json={"record_id": media.record_id, "processing_status": media.processing_status},
+    )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
