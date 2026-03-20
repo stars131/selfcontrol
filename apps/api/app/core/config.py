@@ -26,6 +26,12 @@ class Settings:
     api_port: int = int(os.getenv("API_PORT", "8000"))
     auto_create_tables: bool = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
     storage_dir: str = resolve_project_path(os.getenv("STORAGE_DIR", "storage/uploads"))
+    embedding_provider: str = os.getenv("EMBEDDING_PROVIDER", "local")
+    embedding_model: str = os.getenv("EMBEDDING_MODEL", "hash-embedding-v1")
+    embedding_dimensions: int = int(os.getenv("EMBEDDING_DIMENSIONS", "256"))
+    rag_chunk_size_chars: int = int(os.getenv("RAG_CHUNK_SIZE_CHARS", "700"))
+    rag_chunk_overlap_chars: int = int(os.getenv("RAG_CHUNK_OVERLAP_CHARS", "120"))
+    rag_search_limit: int = int(os.getenv("RAG_SEARCH_LIMIT", "8"))
     cors_origins: list[str] = field(
         default_factory=lambda: os.getenv(
             "CORS_ORIGINS",

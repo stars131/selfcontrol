@@ -9,6 +9,7 @@ import {
   createReminder,
   deleteRecord,
   deleteReminder,
+  getKnowledgeStats,
   getMediaStatus,
   listConversations,
   listMedia,
@@ -16,6 +17,7 @@ import {
   listNotifications,
   listRecords,
   listReminders,
+  reindexKnowledge,
   retryMediaProcessing,
   sendMessage,
   syncNotifications,
@@ -28,6 +30,7 @@ import { clearStoredSession, getStoredToken } from "../lib/auth";
 import type {
   ChatMessage,
   Conversation,
+  KnowledgeStats,
   MediaAsset,
   NotificationItem,
   RecordItem,
@@ -48,6 +51,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
   const [reminders, setReminders] = useState<ReminderItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -79,6 +83,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const refreshNotifications = async (activeToken: string) => {
     const result = await listNotifications(activeToken, workspaceId);
     setNotifications(result.items);
+  };
+
+  const refreshKnowledge = async (activeToken: string) => {
+    const result = await getKnowledgeStats(activeToken, workspaceId);
+    setKnowledgeStats(result.stats);
   };
 
   const syncDueNotifications = async (activeToken: string) => {
@@ -114,6 +123,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         setActiveConversationId(items[0].id);
         await loadConversationMessages(activeToken, items[0].id);
         await refreshNotifications(activeToken);
+        await refreshKnowledge(activeToken);
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
@@ -164,6 +174,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const mode = String(result.assistant_message.metadata_json.mode ?? "");
     if (mode === "create") {
       await refreshRecords(token);
+      await refreshKnowledge(token);
       if (result.records[0]) {
         setSelectedRecordId(result.records[0].id);
       }
@@ -218,6 +229,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         extra_data: input.extra_data,
       });
       await refreshRecords(token);
+      await refreshKnowledge(token);
       setSelectedRecordId(input.recordId);
       return;
     }
@@ -233,6 +245,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       extra_data: input.extra_data,
     });
     await refreshRecords(token);
+    await refreshKnowledge(token);
     setSelectedRecordId(result.record.id);
   };
 
@@ -244,6 +257,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
     await refreshRecords(token);
+    await refreshKnowledge(token);
   };
 
   const handleUploadMedia = async (recordId: string, file: File) => {
@@ -252,6 +266,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     await uploadMedia(token, workspaceId, recordId, file);
     await refreshMedia(token, recordId);
+    await refreshKnowledge(token);
   };
 
   const handleRetryMedia = async (mediaId: string) => {
@@ -260,6 +275,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     await retryMediaProcessing(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
+    await refreshKnowledge(token);
   };
 
   const handleRefreshMediaStatus = async (mediaId: string) => {
@@ -338,6 +354,14 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshNotifications(token);
   };
 
+  const handleReindexKnowledge = async () => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    const result = await reindexKnowledge(token, workspaceId);
+    setKnowledgeStats(result.stats);
+  };
+
   if (loading) {
     return (
       <main className="page-shell">
@@ -357,10 +381,12 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         <ChatPanel
           activeConversationId={activeConversationId}
           conversations={conversations}
+          knowledgeStats={knowledgeStats}
           messages={messages}
           notifications={notifications}
           onCreateConversation={handleCreateConversation}
           onMarkNotificationRead={handleMarkNotificationRead}
+          onReindexKnowledge={handleReindexKnowledge}
           onSelectConversation={handleSelectConversation}
           onSendMessage={handleSendMessage}
           onSyncNotifications={handleSyncNotifications}
@@ -368,11 +394,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         />
         <RecordPanelV2
           mediaAssets={mediaAssets}
+          onCreateReminder={handleCreateReminder}
           onDeleteRecord={handleDeleteRecord}
           onDeleteReminder={handleDeleteReminder}
-          onResetFilter={handleResetFilter}
-          onCreateReminder={handleCreateReminder}
           onRefreshMediaStatus={handleRefreshMediaStatus}
+          onResetFilter={handleResetFilter}
           onRetryMedia={handleRetryMedia}
           onSaveRecord={handleSaveRecord}
           onSelectRecord={setSelectedRecordId}

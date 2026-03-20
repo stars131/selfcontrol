@@ -103,3 +103,13 @@ export type ChatMessage = {
   metadata_json: Record<string, unknown>;
   created_at: string;
 };
+
+export type KnowledgeStats = {
+  chunk_count: number;
+  record_count: number;
+  media_count: number;
+  latest_indexed_at?: string | null;
+  embedding_provider: string;
+  embedding_model: string;
+  embedding_dimensions: number;
+};

@@ -29,6 +29,7 @@ class Workspace(Base):
     notification_events = relationship("NotificationEvent", back_populates="workspace", cascade="all, delete-orphan")
     conversations = relationship("Conversation", cascade="all, delete-orphan")
     media_assets = relationship("MediaAsset", cascade="all, delete-orphan")
+    knowledge_chunks = relationship("KnowledgeChunk", back_populates="workspace", cascade="all, delete-orphan")
 
 
 class WorkspaceMember(Base):

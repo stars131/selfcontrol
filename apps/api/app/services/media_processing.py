@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
+from app.services.knowledge import rebuild_record_knowledge
 
 
 TEXT_MIME_PREFIXES = ("text/",)
@@ -110,6 +111,8 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
         db.add(media)
         db.commit()
         db.refresh(media)
+        rebuild_record_knowledge(db, media.record_id)
+        db.refresh(media)
         return media
     except Exception as exc:  # noqa: BLE001
         media.processing_status = "failed"
@@ -117,5 +120,7 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
         media.processed_at = None
         db.add(media)
         db.commit()
+        db.refresh(media)
+        rebuild_record_knowledge(db, media.record_id)
         db.refresh(media)
         return media

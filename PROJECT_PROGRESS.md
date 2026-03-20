@@ -1,37 +1,32 @@
-# SelfControl 项目进度
+# SelfControl Project Progress
 
-最后更新：2026-03-21
+Last updated: 2026-03-21
 
-## 已完成
+## Completed
+- Foundation: Next.js + FastAPI + Alembic + Docker Compose
+- Auth and workspace: register, login, workspace create/list, membership checks
+- Records: CRUD, ratings, avoid flag, occurred time, location fields
+- Chat assistant V1: conversations, persisted messages, create/search record flow
+- Map V1: AMap panel, search, map click fill, manual adjustment
+- Reminder V1: CRUD, due reminder dispatch, in-app notifications, read state
+- Media upload V1: local storage, metadata persistence
+- Media processing V1: text extraction, processing status, retry, search over extracted text
+- RAG foundation V1:
+  - knowledge chunk table and rebuild pipeline
+  - automatic reindex on record change and media processing
+  - hybrid knowledge search for chat and search API
+  - knowledge stats and manual workspace reindex action
 
-- 基础工程：Next.js + FastAPI + Alembic + Docker Compose
-- 认证与空间：注册、登录、工作区创建与访问控制
-- 记录系统：记录 CRUD、评分、避雷、时间、位置字段
-- 聊天助手基础：会话持久化、聊天创建记录、聊天搜索记录
-- 地图 V1：高德地图展示、地点搜索、地图点选回填、手动修正
-- 提醒管理 V1：创建提醒、查看提醒、启用/停用、完成、删除
-- 提醒执行 V1：到期提醒同步、站内通知、已读处理、前端通知中心
-- 媒体上传 V1：记录附件上传、媒体元数据保存
-- 媒体处理 V1
-  - 文本类附件自动提取文本并保存
-  - 媒体处理状态查询与重试
-  - 提取文本纳入搜索
-  - 图片/音频/视频先保留 provider 接口位并返回明确状态
+## Next
+- OCR / ASR / video transcription provider integration
+- Provider configuration center with per-feature model selection
+- Real remote embedding providers and pluggable vendor routing
+- Shared spaces and share links
+- Timeline view and stronger map review flows
+- Media preview and richer metadata extraction
+- Security hardening: audit logs, share permission boundaries, secret management
 
-## 下一步待完成
-
-- OCR / ASR / 视频转写 provider 接入
-- RAG 向量库与分块索引
-- Provider 配置中心
-- 共享空间与分享链接
-- 时间线视图
-- 地图筛选与地点回看增强
-- 媒体预览与更多元数据提取
-- 安全加固：审计日志、分享权限边界、密钥管理完善
-
-## 里程碑说明
-
-- 每完成一个独立功能切片，都要：
-  - 更新本文件
-  - 本地提交一次
-  - 推送 GitHub 一次
+## Delivery Rule
+- Every meaningful slice must update this file
+- Every meaningful slice must be committed locally
+- Every meaningful slice must be pushed to GitHub

@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member
 from app.db.session import get_db
-from app.models.media import MediaAsset
-from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordRead
+from app.services.knowledge import search_records_hybrid
 
 
 router = APIRouter()
@@ -28,28 +26,12 @@ def search_records(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    like_value = f"%{payload.query}%"
-    records = (
-        db.query(Record)
-        .outerjoin(MediaAsset, MediaAsset.record_id == Record.id)
-        .filter(
-            Record.workspace_id == workspace_id,
-            or_(
-                Record.title.ilike(like_value),
-                Record.content.ilike(like_value),
-                MediaAsset.extracted_text.ilike(like_value),
-                MediaAsset.original_filename.ilike(like_value),
-            ),
-        )
-        .distinct()
-        .order_by(Record.created_at.desc())
-        .limit(10)
-        .all()
-    )
+    records, hits = search_records_hybrid(db, workspace_id, payload.query, limit=10)
+    mode = "hybrid" if hits else "keyword"
     return {
         "success": True,
         "data": {
             "items": [RecordRead.model_validate(record).model_dump() for record in records],
-            "summary": f"Found {len(records)} record(s) matching '{payload.query}'.",
+            "summary": f"Found {len(records)} record(s) matching '{payload.query}' via {mode} retrieval.",
         },
     }

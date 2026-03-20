@@ -33,3 +33,4 @@ class MediaAsset(Base):
     )
 
     record = relationship("Record", back_populates="media_assets")
+    knowledge_chunks = relationship("KnowledgeChunk", back_populates="media_asset")

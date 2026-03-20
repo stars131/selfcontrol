@@ -1,28 +1,68 @@
 from __future__ import annotations
 
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.models.conversation import Message
 from app.models.record import Record
+from app.services.knowledge import search_records_hybrid
+
+
+CREATE_KEYWORDS = {"save", "add", "record", "remember", "note"}
+CREATE_KEYWORDS_ZH = {
+    "\u8bb0\u4e00\u4e0b",
+    "\u8bb0\u5f55",
+    "\u4fdd\u5b58",
+    "\u5907\u5fd8",
+    "\u5907\u6ce8",
+}
+AVOID_KEYWORDS = {"avoid", "bad", "do not buy", "not good", "dislike"}
+AVOID_KEYWORDS_ZH = {
+    "\u907f\u96f7",
+    "\u96be\u5403",
+    "\u4e0d\u597d\u5403",
+    "\u522b\u4e70",
+    "\u4e0d\u63a8\u8350",
+}
+SNACK_KEYWORDS = {"snack", "chips", "cookie", "dessert", "candy"}
+SNACK_KEYWORDS_ZH = {
+    "\u96f6\u98df",
+    "\u85af\u7247",
+    "\u997c\u5e72",
+    "\u7cd6\u679c",
+    "\u751c\u54c1",
+}
+FOOD_KEYWORDS = {"eat", "food", "dinner", "lunch", "sushi", "hotpot", "restaurant"}
+FOOD_KEYWORDS_ZH = {
+    "\u996d",
+    "\u83dc",
+    "\u9910\u5385",
+    "\u70e4\u9c7c",
+    "\u706b\u9505",
+    "\u65e5\u6599",
+    "\u597d\u5403",
+    "\u96be\u5403",
+}
+
+
+def contains_any_keyword(text: str, keywords: set[str]) -> bool:
+    lowered = text.lower()
+    return any(keyword in lowered for keyword in keywords)
+
+
+def contains_any_phrase(text: str, phrases: set[str]) -> bool:
+    return any(phrase in text for phrase in phrases)
 
 
 def infer_record_type(text: str) -> str:
-    if any(keyword in text.lower() for keyword in ["snack", "chips", "cookie"]):
+    if contains_any_keyword(text, SNACK_KEYWORDS) or contains_any_phrase(text, SNACK_KEYWORDS_ZH):
         return "snack"
-    if any(keyword in text.lower() for keyword in ["eat", "food", "dinner", "lunch", "sushi", "hotpot"]):
-        return "food"
-    if any(keyword in text for keyword in ["零食", "薯片", "饼干"]):
-        return "snack"
-    if any(keyword in text for keyword in ["饭", "吃", "店", "烤鱼", "火锅", "日料"]):
+    if contains_any_keyword(text, FOOD_KEYWORDS) or contains_any_phrase(text, FOOD_KEYWORDS_ZH):
         return "food"
     return "memo"
 
 
 def infer_is_avoid(text: str) -> bool:
-    return any(keyword in text.lower() for keyword in ["avoid", "bad", "do not buy"]) or any(
-        keyword in text for keyword in ["避雷", "难吃", "不好吃", "别买", "踩雷"]
-    )
+    return contains_any_keyword(text, AVOID_KEYWORDS) or contains_any_phrase(text, AVOID_KEYWORDS_ZH)
 
 
 def build_title(text: str) -> str:
@@ -31,9 +71,38 @@ def build_title(text: str) -> str:
 
 
 def should_create_record(text: str) -> bool:
-    lowered = text.lower()
-    return any(keyword in lowered for keyword in ["save", "add", "record", "remember"]) or any(
-        keyword in text for keyword in ["记", "记录", "保存"]
+    return contains_any_keyword(text, CREATE_KEYWORDS) or contains_any_phrase(text, CREATE_KEYWORDS_ZH)
+
+
+def build_search_reply(records: list[Record], hits: list, query: str) -> tuple[str, dict]:
+    if not records:
+        return (
+            f"No matching memory found for '{query}'.",
+            {"mode": "search", "record_ids": [], "retrieval_mode": "hybrid", "sources": []},
+        )
+
+    source_items = []
+    lines = [f"Found {len(records)} related record(s) for '{query}'."]
+    for index, record in enumerate(records[:3], start=1):
+        matching_hit = next((item for item in hits if item.record_id == record.id), None)
+        label = record.title or "Untitled record"
+        if matching_hit:
+            lines.append(f"{index}. {label} [{record.type_code}] {matching_hit.snippet}")
+            source_items.append(matching_hit.to_dict())
+        else:
+            preview = (record.content or "")[:120].strip()
+            suffix = "..." if record.content and len(record.content) > 120 else ""
+            lines.append(f"{index}. {label} [{record.type_code}] {preview}{suffix}")
+
+    retrieval_mode = "rag" if hits else "keyword"
+    return (
+        "\n".join(lines),
+        {
+            "mode": "search",
+            "record_ids": [record.id for record in records],
+            "retrieval_mode": retrieval_mode,
+            "sources": source_items,
+        },
     )
 
 
@@ -53,57 +122,16 @@ def process_chat_message(db: Session, workspace_id: str, user_id: str, content: 
         records = [record]
         reply = Message(
             role="assistant",
-            content=f"Saved one record: {record.title or 'Untitled'}.",
+            content=f"Saved one record: {record.title or 'Untitled record'}.",
             metadata_json={"mode": "create", "record_ids": [record.id]},
         )
         return reply, records
 
-    like_value = f"%{content}%"
-    records = (
-        db.query(Record)
-        .filter(
-            Record.workspace_id == workspace_id,
-            or_(Record.title.ilike(like_value), Record.content.ilike(like_value)),
-        )
-        .order_by(Record.created_at.desc())
-        .limit(10)
-        .all()
-    )
+    records, hits = search_records_hybrid(db, workspace_id, content, limit=10)
+    reply_content, metadata = build_search_reply(records, hits, content)
     reply = Message(
         role="assistant",
-        content=f"Found {len(records)} record(s) matching your query.",
-        metadata_json={"mode": "search", "record_ids": [record.id for record in records]},
+        content=reply_content,
+        metadata_json=metadata,
     )
     return reply, records
-
-
-def infer_record_type(text: str) -> str:
-    lowered = text.lower()
-    if any(keyword in lowered for keyword in ["snack", "chips", "cookie", "dessert", "candy"]):
-        return "snack"
-    if any(keyword in lowered for keyword in ["eat", "food", "dinner", "lunch", "sushi", "hotpot", "restaurant"]):
-        return "food"
-    if any(keyword in text for keyword in ["零食", "薯片", "饼干", "糖果", "甜品"]):
-        return "snack"
-    if any(keyword in text for keyword in ["饭", "菜", "餐厅", "烤鱼", "火锅", "日料", "好吃", "难吃"]):
-        return "food"
-    return "memo"
-
-
-def infer_is_avoid(text: str) -> bool:
-    lowered = text.lower()
-    return any(keyword in lowered for keyword in ["avoid", "bad", "do not buy", "not good", "dislike"]) or any(
-        keyword in text for keyword in ["避雷", "难吃", "不好吃", "别买", "踩雷", "不推荐"]
-    )
-
-
-def build_title(text: str) -> str:
-    normalized = " ".join(text.split())
-    return normalized[:28] + "..." if len(normalized) > 28 else normalized
-
-
-def should_create_record(text: str) -> bool:
-    lowered = text.lower()
-    return any(keyword in lowered for keyword in ["save", "add", "record", "remember", "note"]) or any(
-        keyword in text for keyword in ["记一下", "记录", "保存", "备忘", "备注"]
-    )

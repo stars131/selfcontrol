@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordCreate, RecordRead, RecordUpdate
+from app.services.knowledge import rebuild_record_knowledge
 
 
 router = APIRouter()
@@ -63,6 +64,8 @@ def create_record(
     db.add(record)
     db.commit()
     db.refresh(record)
+    rebuild_record_knowledge(db, record.id)
+    db.refresh(record)
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
 
@@ -99,6 +102,8 @@ def update_record(
     db.add(record)
     db.commit()
     db.refresh(record)
+    rebuild_record_knowledge(db, record.id)
+    db.refresh(record)
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
 
@@ -117,4 +122,3 @@ def delete_record(
     db.delete(record)
     db.commit()
     return {"success": True, "data": {"deleted": True}}
-

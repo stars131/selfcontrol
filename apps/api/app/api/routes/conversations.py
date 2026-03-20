@@ -15,6 +15,7 @@ from app.schemas.conversation import (
 )
 from app.schemas.record import RecordRead
 from app.services.chat import process_chat_message
+from app.services.knowledge import rebuild_record_knowledge
 
 
 router = APIRouter()
@@ -103,6 +104,8 @@ def send_message(
     db.add(conversation)
     db.commit()
     db.refresh(assistant_message)
+    for record in records:
+        rebuild_record_knowledge(db, record.id)
 
     return {
         "success": True,
