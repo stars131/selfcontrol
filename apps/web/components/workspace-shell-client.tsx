@@ -9,12 +9,14 @@ import {
   createReminder,
   deleteRecord,
   deleteReminder,
+  getMediaStatus,
   listConversations,
   listMedia,
   listMessages,
   listNotifications,
   listRecords,
   listReminders,
+  retryMediaProcessing,
   sendMessage,
   syncNotifications,
   updateNotification,
@@ -252,6 +254,22 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshMedia(token, recordId);
   };
 
+  const handleRetryMedia = async (mediaId: string) => {
+    if (!token || !selectedRecordId) {
+      throw new Error("Not authenticated");
+    }
+    await retryMediaProcessing(token, workspaceId, mediaId);
+    await refreshMedia(token, selectedRecordId);
+  };
+
+  const handleRefreshMediaStatus = async (mediaId: string) => {
+    if (!token || !selectedRecordId) {
+      throw new Error("Not authenticated");
+    }
+    await getMediaStatus(token, workspaceId, mediaId);
+    await refreshMedia(token, selectedRecordId);
+  };
+
   const handleResetFilter = async () => {
     if (!token) {
       throw new Error("Not authenticated");
@@ -354,6 +372,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onDeleteReminder={handleDeleteReminder}
           onResetFilter={handleResetFilter}
           onCreateReminder={handleCreateReminder}
+          onRefreshMediaStatus={handleRefreshMediaStatus}
+          onRetryMedia={handleRetryMedia}
           onSaveRecord={handleSaveRecord}
           onSelectRecord={setSelectedRecordId}
           onUpdateReminder={handleUpdateReminder}

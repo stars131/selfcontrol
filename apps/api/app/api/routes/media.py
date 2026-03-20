@@ -13,6 +13,7 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import MediaRead
+from app.services.media_processing import process_media_asset
 
 
 router = APIRouter()
@@ -33,6 +34,20 @@ def list_media(
         .all()
     )
     return {"success": True, "data": {"items": [MediaRead.model_validate(item).model_dump() for item in items]}}
+
+
+@router.get("/{workspace_id}/media/{media_id}/status")
+def get_media_status(
+    workspace_id: str,
+    media_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_member(workspace_id, current_user, db)
+    media = db.get(MediaAsset, media_id)
+    if not media or media.workspace_id != workspace_id:
+        raise HTTPException(status_code=404, detail="Media not found")
+    return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
 
 
 @router.post("/{workspace_id}/records/{record_id}/media")
@@ -61,13 +76,33 @@ async def upload_media(
         record_id=record_id,
         uploaded_by=current_user.id,
         media_type=(file.content_type or "application/octet-stream").split("/")[0],
+        storage_provider="local",
         storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
         original_filename=file.filename or target_name,
         mime_type=file.content_type or "application/octet-stream",
         size_bytes=len(content),
         metadata_json={},
+        processing_status="pending",
     )
     db.add(media)
     db.commit()
     db.refresh(media)
+
+    media = process_media_asset(db, media.id)
+    return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
+
+
+@router.post("/{workspace_id}/media/{media_id}/retry")
+def retry_media_processing(
+    workspace_id: str,
+    media_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_member(workspace_id, current_user, db)
+    media = db.get(MediaAsset, media_id)
+    if not media or media.workspace_id != workspace_id:
+        raise HTTPException(status_code=404, detail="Media not found")
+
+    media = process_media_asset(db, media.id)
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}

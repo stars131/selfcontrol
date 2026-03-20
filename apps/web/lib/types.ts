@@ -37,12 +37,18 @@ export type MediaAsset = {
   record_id: string;
   uploaded_by: string;
   media_type: string;
+  storage_provider: string;
   storage_key: string;
   original_filename: string;
   mime_type: string;
   size_bytes: number;
   metadata_json: Record<string, unknown>;
+  processing_status: string;
+  processing_error?: string | null;
+  extracted_text?: string | null;
+  processed_at?: string | null;
   created_at: string;
+  updated_at: string;
 };
 
 export type ReminderItem = {

@@ -107,6 +107,8 @@ export function RecordPanelV2({
   onUpdateReminder,
   onDeleteReminder,
   onDeleteRecord,
+  onRefreshMediaStatus,
+  onRetryMedia,
   onUploadMedia,
   onResetFilter,
 }: {
@@ -145,6 +147,8 @@ export function RecordPanelV2({
   ) => Promise<void>;
   onDeleteReminder: (reminderId: string) => Promise<void>;
   onDeleteRecord: (recordId: string) => Promise<void>;
+  onRefreshMediaStatus: (mediaId: string) => Promise<void>;
+  onRetryMedia: (mediaId: string) => Promise<void>;
   onUploadMedia: (recordId: string, file: File) => Promise<void>;
   onResetFilter: () => Promise<void>;
 }) {
@@ -158,6 +162,8 @@ export function RecordPanelV2({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null);
+  const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
   const [savingReminder, setSavingReminder] = useState(false);
   const [error, setError] = useState("");
@@ -313,6 +319,30 @@ export function RecordPanelV2({
       setError(caught instanceof Error ? caught.message : "Failed to create reminder");
     } finally {
       setSavingReminder(false);
+    }
+  };
+
+  const handleRefreshMedia = async (mediaId: string) => {
+    setRefreshingMediaId(mediaId);
+    setError("");
+    try {
+      await onRefreshMediaStatus(mediaId);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to refresh media status");
+    } finally {
+      setRefreshingMediaId(null);
+    }
+  };
+
+  const handleRetryMediaProcessing = async (mediaId: string) => {
+    setRetryingMediaId(mediaId);
+    setError("");
+    try {
+      await onRetryMedia(mediaId);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to retry media processing");
+    } finally {
+      setRetryingMediaId(null);
     }
   };
 
@@ -527,6 +557,42 @@ export function RecordPanelV2({
                       <div className="eyebrow">{asset.media_type}</div>
                       <div>{asset.original_filename}</div>
                       <div className="muted">{asset.mime_type}</div>
+                      <div className="tag-row">
+                        <span className="tag">{asset.processing_status}</span>
+                        <span className="tag">{asset.storage_provider}</span>
+                      </div>
+                      {asset.extracted_text ? (
+                        <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+                          {asset.extracted_text.length > 280
+                            ? `${asset.extracted_text.slice(0, 280)}...`
+                            : asset.extracted_text}
+                        </p>
+                      ) : null}
+                      {asset.processing_error ? (
+                        <div className="notice error" style={{ marginTop: 10 }}>
+                          {asset.processing_error}
+                        </div>
+                      ) : null}
+                      <div className="action-row" style={{ marginTop: 12 }}>
+                        <button
+                          className="button secondary"
+                          type="button"
+                          disabled={refreshingMediaId === asset.id}
+                          onClick={() => void handleRefreshMedia(asset.id)}
+                        >
+                          {refreshingMediaId === asset.id ? "Refreshing..." : "Refresh status"}
+                        </button>
+                        {asset.processing_status !== "completed" ? (
+                          <button
+                            className="button secondary"
+                            type="button"
+                            disabled={retryingMediaId === asset.id}
+                            onClick={() => void handleRetryMediaProcessing(asset.id)}
+                          >
+                            {retryingMediaId === asset.id ? "Retrying..." : "Retry"}
+                          </button>
+                        ) : null}
+                      </div>
                     </article>
                   ))
                 ) : (

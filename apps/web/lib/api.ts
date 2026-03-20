@@ -235,6 +235,22 @@ export async function uploadMedia(token: string, workspaceId: string, recordId: 
   );
 }
 
+export async function getMediaStatus(token: string, workspaceId: string, mediaId: string) {
+  return request<{ media: MediaAsset }>(
+    `/workspaces/${workspaceId}/media/${mediaId}/status`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function retryMediaProcessing(token: string, workspaceId: string, mediaId: string) {
+  return request<{ media: MediaAsset }>(
+    `/workspaces/${workspaceId}/media/${mediaId}/retry`,
+    { method: "POST" },
+    token,
+  );
+}
+
 export async function listReminders(
   token: string,
   workspaceId: string,

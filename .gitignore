@@ -19,6 +19,7 @@ dist/
 # Storage
 storage/uploads/
 storage/tmp/
+apps/api/storage/
 *.db
 *.db-journal
 

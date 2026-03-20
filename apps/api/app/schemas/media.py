@@ -11,9 +11,15 @@ class MediaRead(BaseModel):
     record_id: str
     uploaded_by: str
     media_type: str
+    storage_provider: str
     storage_key: str
     original_filename: str
     mime_type: str
     size_bytes: int
     metadata_json: dict
+    processing_status: str
+    processing_error: str | None = None
+    extracted_text: str | None = None
+    processed_at: datetime | None = None
     created_at: datetime
+    updated_at: datetime

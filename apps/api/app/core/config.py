@@ -5,6 +5,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 
+BASE_DIR = Path(__file__).resolve().parents[4]
+
+
+def resolve_project_path(value: str) -> str:
+    raw_path = Path(value)
+    if raw_path.is_absolute():
+        return str(raw_path.resolve())
+    return str((BASE_DIR / raw_path).resolve())
+
+
 @dataclass
 class Settings:
     app_env: str = os.getenv("APP_ENV", "development")
@@ -15,7 +25,7 @@ class Settings:
     api_host: str = os.getenv("API_HOST", "0.0.0.0")
     api_port: int = int(os.getenv("API_PORT", "8000"))
     auto_create_tables: bool = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
-    storage_dir: str = str(Path(os.getenv("STORAGE_DIR", "./storage/uploads")).resolve())
+    storage_dir: str = resolve_project_path(os.getenv("STORAGE_DIR", "storage/uploads"))
     cors_origins: list[str] = field(
         default_factory=lambda: os.getenv(
             "CORS_ORIGINS",

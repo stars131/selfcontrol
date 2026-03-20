@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member
 from app.db.session import get_db
+from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordRead
@@ -30,10 +31,17 @@ def search_records(
     like_value = f"%{payload.query}%"
     records = (
         db.query(Record)
+        .outerjoin(MediaAsset, MediaAsset.record_id == Record.id)
         .filter(
             Record.workspace_id == workspace_id,
-            or_(Record.title.ilike(like_value), Record.content.ilike(like_value)),
+            or_(
+                Record.title.ilike(like_value),
+                Record.content.ilike(like_value),
+                MediaAsset.extracted_text.ilike(like_value),
+                MediaAsset.original_filename.ilike(like_value),
+            ),
         )
+        .distinct()
         .order_by(Record.created_at.desc())
         .limit(10)
         .all()
@@ -45,4 +53,3 @@ def search_records(
             "summary": f"Found {len(records)} record(s) matching '{payload.query}'.",
         },
     }
-
