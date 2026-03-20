@@ -31,3 +31,4 @@ class Record(Base):
 
     workspace = relationship("Workspace", back_populates="records")
     media_assets = relationship("MediaAsset", back_populates="record", cascade="all, delete-orphan")
+    reminders = relationship("Reminder", back_populates="record", cascade="all, delete-orphan")

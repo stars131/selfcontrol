@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { MapPanel, type LocationDraft } from "./map-panel";
-import type { MediaAsset, RecordItem } from "../lib/types";
+import type { MediaAsset, RecordItem, ReminderItem } from "../lib/types";
 
 type RecordFormState = {
   title: string;
@@ -13,6 +13,12 @@ type RecordFormState = {
   occurred_at: string;
   is_avoid: boolean;
   location: LocationDraft;
+};
+
+type ReminderFormState = {
+  title: string;
+  message: string;
+  remind_at: string;
 };
 
 function createEmptyLocation(): LocationDraft {
@@ -76,13 +82,30 @@ function formatRecordTimestamp(record: RecordItem): string {
   return Number.isNaN(date.getTime()) ? rawValue : date.toLocaleString();
 }
 
+function createEmptyReminderForm(): ReminderFormState {
+  return {
+    title: "",
+    message: "",
+    remind_at: "",
+  };
+}
+
+function formatReminderTimestamp(value: string): string {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
+
 export function RecordPanelV2({
   workspaceId,
   records,
   selectedRecordId,
   mediaAssets,
+  reminders,
   onSelectRecord,
   onSaveRecord,
+  onCreateReminder,
+  onUpdateReminder,
+  onDeleteReminder,
   onDeleteRecord,
   onUploadMedia,
   onResetFilter,
@@ -91,6 +114,7 @@ export function RecordPanelV2({
   records: RecordItem[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
+  reminders: ReminderItem[];
   onSelectRecord: (recordId: string | null) => void;
   onSaveRecord: (input: {
     recordId?: string;
@@ -102,6 +126,24 @@ export function RecordPanelV2({
     is_avoid: boolean;
     extra_data?: Record<string, unknown>;
   }) => Promise<void>;
+  onCreateReminder: (input: {
+    recordId: string;
+    title?: string;
+    message?: string;
+    remind_at: string;
+    channel_code?: string;
+  }) => Promise<void>;
+  onUpdateReminder: (
+    reminderId: string,
+    input: Partial<{
+      title: string | null;
+      message: string | null;
+      remind_at: string | null;
+      status: string;
+      is_enabled: boolean;
+    }>,
+  ) => Promise<void>;
+  onDeleteReminder: (reminderId: string) => Promise<void>;
   onDeleteRecord: (recordId: string) => Promise<void>;
   onUploadMedia: (recordId: string, file: File) => Promise<void>;
   onResetFilter: () => Promise<void>;
@@ -116,6 +158,8 @@ export function RecordPanelV2({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
+  const [savingReminder, setSavingReminder] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -132,6 +176,19 @@ export function RecordPanelV2({
       occurred_at: formatDatetimeInput(selectedRecord.occurred_at),
       is_avoid: selectedRecord.is_avoid,
       location: readLocation(selectedRecord),
+    });
+  }, [selectedRecord]);
+
+  useEffect(() => {
+    if (!selectedRecord) {
+      setReminderForm(createEmptyReminderForm());
+      return;
+    }
+
+    setReminderForm({
+      title: selectedRecord.title ?? "",
+      message: "",
+      remind_at: "",
     });
   }, [selectedRecord]);
 
@@ -224,6 +281,38 @@ export function RecordPanelV2({
       setError(caught instanceof Error ? caught.message : "Failed to upload media");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleCreateReminderSubmit = async () => {
+    if (!selectedRecord) {
+      setError("Save or select a record before adding a reminder");
+      return;
+    }
+    if (!reminderForm.remind_at) {
+      setError("Reminder time is required");
+      return;
+    }
+
+    setSavingReminder(true);
+    setError("");
+    try {
+      await onCreateReminder({
+        recordId: selectedRecord.id,
+        title: reminderForm.title.trim() || selectedRecord.title || undefined,
+        message: reminderForm.message.trim() || undefined,
+        remind_at: new Date(reminderForm.remind_at).toISOString(),
+        channel_code: "in_app",
+      });
+      setReminderForm((prev) => ({
+        ...prev,
+        message: "",
+        remind_at: "",
+      }));
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to create reminder");
+    } finally {
+      setSavingReminder(false);
     }
   };
 
@@ -443,6 +532,129 @@ export function RecordPanelV2({
                 ) : (
                   <div className="notice">No media uploaded for this record yet.</div>
                 )}
+              </div>
+
+              <div className="record-card form-stack">
+                <div className="eyebrow">Reminder V1</div>
+                <div className="muted">
+                  Save one-time reminders on this record. Delivery execution will be connected in the next backend step.
+                </div>
+                <div className="form-stack">
+                  <div className="inline-fields">
+                    <label className="field">
+                      <span className="field-label">Reminder title</span>
+                      <input
+                        className="input"
+                        value={reminderForm.title}
+                        onChange={(event) =>
+                          setReminderForm((prev) => ({
+                            ...prev,
+                            title: event.target.value,
+                          }))
+                        }
+                        placeholder="Dinner follow-up"
+                      />
+                    </label>
+                    <label className="field">
+                      <span className="field-label">Remind at</span>
+                      <input
+                        className="input"
+                        type="datetime-local"
+                        value={reminderForm.remind_at}
+                        onChange={(event) =>
+                          setReminderForm((prev) => ({
+                            ...prev,
+                            remind_at: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+                    <label className="field">
+                      <span className="field-label">Channel</span>
+                      <input className="input" disabled value="in_app" />
+                    </label>
+                  </div>
+                  <label className="field">
+                    <span className="field-label">Reminder note</span>
+                    <textarea
+                      className="textarea"
+                      value={reminderForm.message}
+                      onChange={(event) =>
+                        setReminderForm((prev) => ({
+                          ...prev,
+                          message: event.target.value,
+                        }))
+                      }
+                      placeholder="What should this reminder tell you?"
+                    />
+                  </label>
+                  <div className="action-row">
+                    <button
+                      className="button secondary"
+                      disabled={savingReminder}
+                      type="button"
+                      onClick={() => void handleCreateReminderSubmit()}
+                    >
+                      {savingReminder ? "Saving reminder..." : "Create reminder"}
+                    </button>
+                  </div>
+                </div>
+                <div className="record-list compact-list">
+                  {reminders.length ? (
+                    reminders.map((reminder) => (
+                      <article className="record-card" key={reminder.id}>
+                        <div className="eyebrow">{reminder.channel_code}</div>
+                        <h4 style={{ margin: "8px 0 6px", fontSize: 18 }}>
+                          {reminder.title || selectedRecord.title || "Untitled reminder"}
+                        </h4>
+                        <div className="muted">{formatReminderTimestamp(reminder.remind_at)}</div>
+                        {reminder.message ? (
+                          <p style={{ margin: "10px 0 0", lineHeight: 1.6 }}>{reminder.message}</p>
+                        ) : null}
+                        <div className="tag-row">
+                          <span className="tag">{reminder.status}</span>
+                          <span className="tag">{reminder.is_enabled ? "enabled" : "paused"}</span>
+                        </div>
+                        <div className="action-row" style={{ marginTop: 12 }}>
+                          <button
+                            className="button secondary"
+                            type="button"
+                            onClick={() =>
+                              void onUpdateReminder(reminder.id, {
+                                is_enabled: !reminder.is_enabled,
+                              })
+                            }
+                          >
+                            {reminder.is_enabled ? "Pause" : "Enable"}
+                          </button>
+                          {reminder.status !== "completed" ? (
+                            <button
+                              className="button secondary"
+                              type="button"
+                              onClick={() =>
+                                void onUpdateReminder(reminder.id, {
+                                  status: "completed",
+                                  is_enabled: false,
+                                })
+                              }
+                            >
+                              Mark done
+                            </button>
+                          ) : null}
+                          <button
+                            className="button secondary"
+                            type="button"
+                            onClick={() => void onDeleteReminder(reminder.id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <div className="notice">No reminders for this record yet.</div>
+                  )}
+                </div>
               </div>
             </>
           ) : null}

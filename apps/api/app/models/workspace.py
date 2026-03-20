@@ -25,6 +25,7 @@ class Workspace(Base):
     owner = relationship("User", back_populates="workspaces")
     members = relationship("WorkspaceMember", back_populates="workspace", cascade="all, delete-orphan")
     records = relationship("Record", back_populates="workspace", cascade="all, delete-orphan")
+    reminders = relationship("Reminder", back_populates="workspace", cascade="all, delete-orphan")
     conversations = relationship("Conversation", cascade="all, delete-orphan")
     media_assets = relationship("MediaAsset", cascade="all, delete-orphan")
 

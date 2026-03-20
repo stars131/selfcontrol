@@ -7,7 +7,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from app.db.base import Base
-from app.models import record, user, workspace  # noqa: F401
+from app.models import conversation, media, record, reminder, user, workspace  # noqa: F401
 
 
 config = context.config

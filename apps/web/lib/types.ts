@@ -45,6 +45,24 @@ export type MediaAsset = {
   created_at: string;
 };
 
+export type ReminderItem = {
+  id: string;
+  workspace_id: string;
+  record_id: string;
+  created_by: string;
+  channel_code: string;
+  title?: string | null;
+  message?: string | null;
+  remind_at: string;
+  status: string;
+  is_enabled: boolean;
+  delivered_at?: string | null;
+  cancelled_at?: string | null;
+  metadata_json: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
 export type Conversation = {
   id: string;
   workspace_id: string;

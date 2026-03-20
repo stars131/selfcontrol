@@ -6,17 +6,21 @@ import { useEffect, useState } from "react";
 import {
   createConversation,
   createRecord,
+  createReminder,
   deleteRecord,
+  deleteReminder,
   listConversations,
   listMedia,
   listMessages,
   listRecords,
+  listReminders,
   sendMessage,
   updateRecord,
+  updateReminder,
   uploadMedia,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
-import type { ChatMessage, Conversation, MediaAsset, RecordItem } from "../lib/types";
+import type { ChatMessage, Conversation, MediaAsset, RecordItem, ReminderItem } from "../lib/types";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
@@ -30,6 +34,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
+  const [reminders, setReminders] = useState<ReminderItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -47,6 +52,15 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     const result = await listMedia(activeToken, workspaceId, recordId);
     setMediaAssets(result.items);
+  };
+
+  const refreshReminders = async (activeToken: string, recordId: string | null) => {
+    if (!recordId) {
+      setReminders([]);
+      return;
+    }
+    const result = await listReminders(activeToken, workspaceId, { recordId });
+    setReminders(result.items);
   };
 
   const loadConversationMessages = async (activeToken: string, conversationId: string) => {
@@ -93,6 +107,13 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       return;
     }
     void refreshMedia(token, selectedRecordId);
+  }, [token, selectedRecordId, workspaceId]);
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    void refreshReminders(token, selectedRecordId);
   }, [token, selectedRecordId, workspaceId]);
 
   const handleSendMessage = async (message: string) => {
@@ -203,6 +224,52 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshRecords(token);
   };
 
+  const handleCreateReminder = async (input: {
+    recordId: string;
+    title?: string;
+    message?: string;
+    remind_at: string;
+    channel_code?: string;
+  }) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await createReminder(token, workspaceId, input.recordId, {
+      title: input.title,
+      message: input.message,
+      remind_at: input.remind_at,
+      channel_code: input.channel_code ?? "in_app",
+      is_enabled: true,
+      metadata_json: {},
+    });
+    await refreshReminders(token, input.recordId);
+  };
+
+  const handleUpdateReminder = async (
+    reminderId: string,
+    input: Partial<{
+      title: string | null;
+      message: string | null;
+      remind_at: string | null;
+      status: string;
+      is_enabled: boolean;
+    }>,
+  ) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await updateReminder(token, workspaceId, reminderId, input);
+    await refreshReminders(token, selectedRecordId);
+  };
+
+  const handleDeleteReminder = async (reminderId: string) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await deleteReminder(token, workspaceId, reminderId);
+    await refreshReminders(token, selectedRecordId);
+  };
+
   if (loading) {
     return (
       <main className="page-shell">
@@ -231,11 +298,15 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         <RecordPanelV2
           mediaAssets={mediaAssets}
           onDeleteRecord={handleDeleteRecord}
+          onDeleteReminder={handleDeleteReminder}
           onResetFilter={handleResetFilter}
+          onCreateReminder={handleCreateReminder}
           onSaveRecord={handleSaveRecord}
           onSelectRecord={setSelectedRecordId}
+          onUpdateReminder={handleUpdateReminder}
           onUploadMedia={handleUploadMedia}
           records={visibleRecords}
+          reminders={reminders}
           selectedRecordId={selectedRecordId}
           workspaceId={workspaceId}
         />
