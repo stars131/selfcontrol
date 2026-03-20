@@ -19,6 +19,8 @@ dist/
 # Storage
 storage/uploads/
 storage/tmp/
+*.db
+*.db-journal
 
 # OS
 .DS_Store
