@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
 
 
 @dataclass
@@ -14,6 +15,7 @@ class Settings:
     api_host: str = os.getenv("API_HOST", "0.0.0.0")
     api_port: int = int(os.getenv("API_PORT", "8000"))
     auto_create_tables: bool = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
+    storage_dir: str = str(Path(os.getenv("STORAGE_DIR", "./storage/uploads")).resolve())
     cors_origins: list[str] = field(
         default_factory=lambda: os.getenv(
             "CORS_ORIGINS",

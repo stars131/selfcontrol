@@ -30,3 +30,35 @@ export type RecordItem = {
   created_at: string;
   updated_at: string;
 };
+
+export type MediaAsset = {
+  id: string;
+  workspace_id: string;
+  record_id: string;
+  uploaded_by: string;
+  media_type: string;
+  storage_key: string;
+  original_filename: string;
+  mime_type: string;
+  size_bytes: number;
+  metadata_json: Record<string, unknown>;
+  created_at: string;
+};
+
+export type Conversation = {
+  id: string;
+  workspace_id: string;
+  user_id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ChatMessage = {
+  id: string;
+  conversation_id: string;
+  role: string;
+  content: string;
+  metadata_json: Record<string, unknown>;
+  created_at: string;
+};

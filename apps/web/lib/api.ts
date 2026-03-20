@@ -1,4 +1,4 @@
-import type { RecordItem, User, Workspace } from "./types";
+import type { ChatMessage, Conversation, MediaAsset, RecordItem, User, Workspace } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
 
@@ -22,9 +22,15 @@ type SearchResult = {
   summary: string;
 };
 
+type SendMessageResult = {
+  user_message: ChatMessage;
+  assistant_message: ChatMessage;
+  records: RecordItem[];
+};
+
 async function request<T>(path: string, init: RequestInit = {}, token?: string): Promise<T> {
   const headers = new Headers(init.headers);
-  if (!headers.has("Content-Type") && init.body) {
+  if (!headers.has("Content-Type") && init.body && !(init.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
   if (token) {
@@ -118,6 +124,101 @@ export async function searchRecords(token: string, workspaceId: string, query: s
     {
       method: "POST",
       body: JSON.stringify({ query }),
+    },
+    token,
+  );
+}
+
+export async function updateRecord(
+  token: string,
+  workspaceId: string,
+  recordId: string,
+  input: Partial<{
+    title: string;
+    content: string;
+    rating: number | null;
+    is_avoid: boolean;
+    status: string;
+    extra_data: Record<string, unknown>;
+  }>,
+) {
+  return request<{ record: RecordItem }>(
+    `/workspaces/${workspaceId}/records/${recordId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    },
+    token,
+  );
+}
+
+export async function deleteRecord(token: string, workspaceId: string, recordId: string) {
+  return request<{ deleted: boolean }>(
+    `/workspaces/${workspaceId}/records/${recordId}`,
+    { method: "DELETE" },
+    token,
+  );
+}
+
+export async function listConversations(token: string, workspaceId: string) {
+  return request<{ items: Conversation[] }>(
+    `/workspaces/${workspaceId}/conversations`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function createConversation(token: string, workspaceId: string, title = "New conversation") {
+  return request<{ conversation: Conversation }>(
+    `/workspaces/${workspaceId}/conversations`,
+    {
+      method: "POST",
+      body: JSON.stringify({ title }),
+    },
+    token,
+  );
+}
+
+export async function listMessages(token: string, workspaceId: string, conversationId: string) {
+  return request<{ items: ChatMessage[] }>(
+    `/workspaces/${workspaceId}/conversations/${conversationId}/messages`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function sendMessage(
+  token: string,
+  workspaceId: string,
+  conversationId: string,
+  content: string,
+) {
+  return request<SendMessageResult>(
+    `/workspaces/${workspaceId}/conversations/${conversationId}/messages`,
+    {
+      method: "POST",
+      body: JSON.stringify({ content }),
+    },
+    token,
+  );
+}
+
+export async function listMedia(token: string, workspaceId: string, recordId: string) {
+  return request<{ items: MediaAsset[] }>(
+    `/workspaces/${workspaceId}/records/${recordId}/media`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function uploadMedia(token: string, workspaceId: string, recordId: string, file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  return request<{ media: MediaAsset }>(
+    `/workspaces/${workspaceId}/records/${recordId}/media`,
+    {
+      method: "POST",
+      body: formData,
     },
     token,
   );

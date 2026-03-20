@@ -30,6 +30,7 @@ services:
       APP_ENV: ${APP_ENV}
       API_HOST: ${API_HOST}
       API_PORT: ${API_PORT}
+      STORAGE_DIR: /app/storage/uploads
     ports:
       - "8000:8000"
     depends_on:
@@ -51,6 +52,7 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       APP_ENV: ${APP_ENV}
+      STORAGE_DIR: /app/storage/uploads
     depends_on:
       - db
       - redis
@@ -76,4 +78,3 @@ services:
 
 volumes:
   pg_data:
-
