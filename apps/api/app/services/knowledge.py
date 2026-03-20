@@ -12,6 +12,7 @@ from app.core.config import settings
 from app.models.knowledge import KnowledgeChunk
 from app.models.media import MediaAsset
 from app.models.record import Record
+from app.services.provider_configs import get_effective_provider_config
 
 
 TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+|[\u4e00-\u9fff]")
@@ -208,7 +209,11 @@ def rebuild_record_knowledge(db: Session, record_id: str) -> KnowledgeReindexRes
     if not record:
         return KnowledgeReindexResult(record_count=0, chunk_count=0)
 
+    embedding_config = get_effective_provider_config(db, record.workspace_id, "embeddings")
     db.query(KnowledgeChunk).filter(KnowledgeChunk.record_id == record_id).delete(synchronize_session=False)
+    if not embedding_config.is_enabled:
+        db.commit()
+        return KnowledgeReindexResult(record_count=1, chunk_count=0)
 
     created_chunks = 0
     documents = build_record_documents(record)
@@ -223,8 +228,8 @@ def rebuild_record_knowledge(db: Session, record_id: str) -> KnowledgeReindexRes
                 chunk_index=chunk_index,
                 content=content,
                 content_hash=blake2b(content.encode("utf-8"), digest_size=20).hexdigest(),
-                embedding_provider=settings.embedding_provider,
-                embedding_model=settings.embedding_model,
+                embedding_provider=embedding_config.provider_code,
+                embedding_model=embedding_config.model_name or settings.embedding_model,
                 embedding_dimensions=max(settings.embedding_dimensions, 64),
                 embedding_vector=embed_text(content),
                 metadata_json=document["metadata_json"],
@@ -248,6 +253,7 @@ def rebuild_workspace_knowledge(db: Session, workspace_id: str) -> KnowledgeRein
 
 
 def get_knowledge_stats(db: Session, workspace_id: str) -> KnowledgeStats:
+    embedding_config = get_effective_provider_config(db, workspace_id, "embeddings")
     chunk_count, record_count, media_count, latest_indexed_at = (
         db.query(
             func.count(KnowledgeChunk.id),
@@ -263,8 +269,8 @@ def get_knowledge_stats(db: Session, workspace_id: str) -> KnowledgeStats:
         record_count=int(record_count or 0),
         media_count=int(media_count or 0),
         latest_indexed_at=latest_indexed_at.isoformat() if latest_indexed_at else None,
-        embedding_provider=settings.embedding_provider,
-        embedding_model=settings.embedding_model,
+        embedding_provider=embedding_config.provider_code,
+        embedding_model=embedding_config.model_name or settings.embedding_model,
         embedding_dimensions=max(settings.embedding_dimensions, 64),
     )
 
@@ -277,6 +283,10 @@ def search_knowledge(
 ) -> list[KnowledgeSearchHit]:
     normalized_query = normalize_text(query)
     if not normalized_query:
+        return []
+
+    embedding_config = get_effective_provider_config(db, workspace_id, "embeddings")
+    if not embedding_config.is_enabled:
         return []
 
     search_limit = limit or settings.rag_search_limit

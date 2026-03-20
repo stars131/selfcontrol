@@ -113,3 +113,18 @@ export type KnowledgeStats = {
   embedding_model: string;
   embedding_dimensions: number;
 };
+
+export type ProviderFeatureConfig = {
+  feature_code: string;
+  feature_label: string;
+  feature_description: string;
+  providers: string[];
+  provider_code: string;
+  model_name?: string | null;
+  is_enabled: boolean;
+  api_base_url?: string | null;
+  api_key_env_name?: string | null;
+  options_json: Record<string, unknown>;
+  is_default: boolean;
+  updated_at?: string | null;
+};

@@ -15,6 +15,7 @@ import {
   listMedia,
   listMessages,
   listNotifications,
+  listProviderConfigs,
   listRecords,
   listReminders,
   reindexKnowledge,
@@ -22,6 +23,7 @@ import {
   sendMessage,
   syncNotifications,
   updateNotification,
+  updateProviderConfig,
   updateRecord,
   updateReminder,
   uploadMedia,
@@ -33,6 +35,7 @@ import type {
   KnowledgeStats,
   MediaAsset,
   NotificationItem,
+  ProviderFeatureConfig,
   RecordItem,
   ReminderItem,
 } from "../lib/types";
@@ -52,6 +55,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [reminders, setReminders] = useState<ReminderItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
+  const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -90,6 +94,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setKnowledgeStats(result.stats);
   };
 
+  const refreshProviderConfigs = async (activeToken: string) => {
+    const result = await listProviderConfigs(activeToken, workspaceId);
+    setProviderConfigs(result.items);
+  };
+
   const syncDueNotifications = async (activeToken: string) => {
     await syncNotifications(activeToken, workspaceId);
     await refreshNotifications(activeToken);
@@ -124,6 +133,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await loadConversationMessages(activeToken, items[0].id);
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
+        await refreshProviderConfigs(activeToken);
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
@@ -362,6 +372,29 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setKnowledgeStats(result.stats);
   };
 
+  const handleSaveProviderConfig = async (
+    featureCode: string,
+    input: {
+      provider_code: string;
+      model_name?: string | null;
+      is_enabled: boolean;
+      api_base_url?: string | null;
+      api_key_env_name?: string | null;
+    },
+  ) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    const result = await updateProviderConfig(token, workspaceId, featureCode, {
+      ...input,
+      options_json: {},
+    });
+    setProviderConfigs((current) =>
+      current.map((item) => (item.feature_code === featureCode ? result.config : item)),
+    );
+    await refreshKnowledge(token);
+  };
+
   if (loading) {
     return (
       <main className="page-shell">
@@ -387,9 +420,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onCreateConversation={handleCreateConversation}
           onMarkNotificationRead={handleMarkNotificationRead}
           onReindexKnowledge={handleReindexKnowledge}
+          onSaveProviderConfig={handleSaveProviderConfig}
           onSelectConversation={handleSelectConversation}
           onSendMessage={handleSendMessage}
           onSyncNotifications={handleSyncNotifications}
+          providerConfigs={providerConfigs}
           workspaceId={workspaceId}
         />
         <RecordPanelV2

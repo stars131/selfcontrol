@@ -16,10 +16,14 @@ Last updated: 2026-03-21
   - automatic reindex on record change and media processing
   - hybrid knowledge search for chat and search API
   - knowledge stats and manual workspace reindex action
+- Provider Config Center V1:
+  - per-feature provider config API
+  - safe secret strategy via environment variable names instead of raw key storage
+  - frontend provider management panel
+  - embeddings feature toggle now controls knowledge indexing and retrieval
 
 ## Next
 - OCR / ASR / video transcription provider integration
-- Provider configuration center with per-feature model selection
 - Real remote embedding providers and pluggable vendor routing
 - Shared spaces and share links
 - Timeline view and stronger map review flows
