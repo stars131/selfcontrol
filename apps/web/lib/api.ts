@@ -18,6 +18,7 @@ import type {
   TimelineDay,
   User,
   Workspace,
+  WorkspaceImportResult,
   WorkspaceMemberItem,
 } from "./types";
 
@@ -165,6 +166,32 @@ export async function createWorkspace(
     {
       method: "POST",
       body: JSON.stringify(input),
+    },
+    token,
+  );
+}
+
+export async function importWorkspaceArchive(
+  token: string,
+  input: {
+    file: File;
+    name?: string;
+    slug?: string;
+  },
+) {
+  const formData = new FormData();
+  formData.append("file", input.file);
+  if (input.name?.trim()) {
+    formData.append("name", input.name.trim());
+  }
+  if (input.slug?.trim()) {
+    formData.append("slug", input.slug.trim());
+  }
+  return request<{ result: WorkspaceImportResult }>(
+    "/workspaces/import",
+    {
+      method: "POST",
+      body: formData,
     },
     token,
   );

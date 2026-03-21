@@ -149,10 +149,15 @@ Last updated: 2026-03-21
   - export archives include `manifest.json`, members, records, media metadata, and available local attachment files
   - missing local media files are preserved as manifest entries and flagged instead of breaking the export
   - workspace settings now include a direct export card for owners, with secrets and tokens explicitly excluded
+- Workspace Import and Restore V1:
+  - authenticated users can now import an exported workspace ZIP into a new private workspace they own
+  - import restores records and available local attachments while skipping missing attachment payloads safely
+  - imported workspaces get unique slugs automatically to avoid collisions with existing workspaces
+  - control-center entry page now includes a ZIP import flow alongside create and join actions
 
 ## Next
-- Workspace import and restore flow V1
 - Archive tiering for stale media before deletion
+- Async export and import jobs for large workspaces
 
 ## Delivery Rule
 - Every meaningful slice must update this file

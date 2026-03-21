@@ -36,3 +36,10 @@ class WorkspaceMemberRead(BaseModel):
 
 class WorkspaceMemberUpdate(BaseModel):
     role: str
+
+
+class WorkspaceImportResultRead(BaseModel):
+    workspace: WorkspaceRead
+    imported_record_count: int
+    imported_media_count: int
+    skipped_media_count: int

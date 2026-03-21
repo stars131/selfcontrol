@@ -26,6 +26,13 @@ export type WorkspaceMemberItem = {
   created_at: string;
 };
 
+export type WorkspaceImportResult = {
+  workspace: Workspace;
+  imported_record_count: number;
+  imported_media_count: number;
+  skipped_media_count: number;
+};
+
 export type RecordItem = {
   id: string;
   workspace_id: string;

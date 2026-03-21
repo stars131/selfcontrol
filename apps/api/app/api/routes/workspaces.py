@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
@@ -17,12 +17,14 @@ from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
 from app.schemas.workspace import (
     WorkspaceCreate,
+    WorkspaceImportResultRead,
     WorkspaceMemberRead,
     WorkspaceMemberUpdate,
     WorkspaceRead,
 )
 from app.services.audit import log_audit_event
 from app.services.workspace_export import build_workspace_export_archive
+from app.services.workspace_import import import_workspace_archive
 
 
 router = APIRouter()
@@ -127,6 +129,50 @@ def create_workspace(
         "success": True,
         "data": {
             "workspace": WorkspaceRead.model_validate(serialize_workspace(workspace, "owner")).model_dump()
+        },
+    }
+
+
+@router.post("/import")
+async def import_workspace(
+    file: UploadFile = File(...),
+    name: str | None = Form(default=None),
+    slug: str | None = Form(default=None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    archive_bytes = await file.read()
+    try:
+        workspace, counts = import_workspace_archive(
+            db,
+            archive_bytes,
+            owner_user_id=current_user.id,
+            workspace_name=name,
+            workspace_slug=slug,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    workspace_payload = WorkspaceRead.model_validate(serialize_workspace(workspace, "owner")).model_dump()
+    log_audit_event(
+        db,
+        workspace_id=workspace.id,
+        actor_user_id=current_user.id,
+        action_code="workspace.import",
+        resource_type="workspace",
+        resource_id=workspace.id,
+        message=f"Imported workspace {workspace.name}",
+        metadata_json=counts,
+    )
+    return {
+        "success": True,
+        "data": {
+            "result": WorkspaceImportResultRead.model_validate(
+                {
+                    "workspace": workspace_payload,
+                    **counts,
+                }
+            ).model_dump()
         },
     }
 

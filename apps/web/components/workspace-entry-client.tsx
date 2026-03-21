@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   acceptShareToken,
   createWorkspace,
   getCurrentUser,
+  importWorkspaceArchive,
   listWorkspaces,
   previewShareToken,
 } from "../lib/api";
@@ -29,6 +30,12 @@ const COPY: Record<
     name: string;
     slugPreview: string;
     createWorkspace: string;
+    importEyebrow: string;
+    importTitle: string;
+    importArchive: string;
+    importName: string;
+    importSlug: string;
+    importWorkspace: string;
     joinEyebrow: string;
     joinTitle: string;
     sharePlaceholder: string;
@@ -53,6 +60,12 @@ const COPY: Record<
     name: "名称",
     slugPreview: "Slug 预览",
     createWorkspace: "创建工作区",
+    importEyebrow: "导入",
+    importTitle: "从导出 ZIP 恢复",
+    importArchive: "导入 ZIP",
+    importName: "新工作区名称（可选）",
+    importSlug: "新工作区 Slug（可选）",
+    importWorkspace: "导入工作区",
     joinEyebrow: "加入",
     joinTitle: "共享工作区",
     sharePlaceholder: "粘贴分享 token 或 /share/... 链接",
@@ -62,7 +75,7 @@ const COPY: Record<
     listTitle: "你的工作区",
     openWorkspace: "打开工作区",
     settings: "设置",
-    noWorkspace: "还没有工作区。先在左侧创建一个。",
+    noWorkspace: "还没有工作区，先创建或导入一个。",
     loading: "正在加载工作区列表...",
   },
   en: {
@@ -76,6 +89,12 @@ const COPY: Record<
     name: "Name",
     slugPreview: "Slug preview",
     createWorkspace: "Create workspace",
+    importEyebrow: "Import",
+    importTitle: "Restore from export ZIP",
+    importArchive: "Import ZIP",
+    importName: "New workspace name (optional)",
+    importSlug: "New workspace slug (optional)",
+    importWorkspace: "Import workspace",
     joinEyebrow: "Join",
     joinTitle: "Shared workspace",
     sharePlaceholder: "Paste share token or /share/... link",
@@ -85,7 +104,7 @@ const COPY: Record<
     listTitle: "Your workspaces",
     openWorkspace: "Open workspace",
     settings: "Settings",
-    noWorkspace: "No workspace yet. Create your first one on the left.",
+    noWorkspace: "No workspace yet. Create or import one first.",
     loading: "Loading your workspace list...",
   },
   ja: {
@@ -98,17 +117,23 @@ const COPY: Record<
     createTitle: "新しいワークスペース",
     name: "名前",
     slugPreview: "Slug プレビュー",
-    createWorkspace: "ワークスペース作成",
+    createWorkspace: "ワークスペースを作成",
+    importEyebrow: "インポート",
+    importTitle: "エクスポート ZIP から復元",
+    importArchive: "ZIP を選択",
+    importName: "新しいワークスペース名（任意）",
+    importSlug: "新しいワークスペース slug（任意）",
+    importWorkspace: "ワークスペースをインポート",
     joinEyebrow: "参加",
     joinTitle: "共有ワークスペース",
-    sharePlaceholder: "共有トークンまたは /share/... リンクを貼り付け",
+    sharePlaceholder: "共有 token または /share/... リンクを貼り付け",
     previewShare: "共有を確認",
-    joinWorkspace: "ワークスペース参加",
+    joinWorkspace: "ワークスペースに参加",
     listEyebrow: "一覧",
     listTitle: "あなたのワークスペース",
-    openWorkspace: "ワークスペースを開く",
+    openWorkspace: "開く",
     settings: "設定",
-    noWorkspace: "まだワークスペースがありません。左側で最初のものを作成してください。",
+    noWorkspace: "まだワークスペースがありません。先に作成またはインポートしてください。",
     loading: "ワークスペース一覧を読み込み中...",
   },
 };
@@ -136,15 +161,20 @@ export function WorkspaceEntryClient() {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
   const copy = COPY[locale];
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [name, setName] = useState("");
   const [shareTokenInput, setShareTokenInput] = useState("");
+  const [importName, setImportName] = useState("");
+  const [importSlug, setImportSlug] = useState("");
+  const [importFile, setImportFile] = useState<File | null>(null);
   const [sharePreview, setSharePreview] = useState<SharePreview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [joining, setJoining] = useState(false);
   const [previewing, setPreviewing] = useState(false);
 
@@ -196,6 +226,35 @@ export function WorkspaceEntryClient() {
       setError(caught instanceof Error ? caught.message : "Failed to create workspace");
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleImportWorkspace = async () => {
+    if (!token || !importFile) {
+      return;
+    }
+
+    setImporting(true);
+    setError("");
+    try {
+      const result = await importWorkspaceArchive(token, {
+        file: importFile,
+        name: importName.trim() || undefined,
+        slug: slugify(importSlug) || undefined,
+      });
+      const workspaceResult = await listWorkspaces(token);
+      setWorkspaces(workspaceResult.items);
+      setImportName("");
+      setImportSlug("");
+      setImportFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      router.push(`/app/workspaces/${result.result.workspace.id}`);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to import workspace");
+    } finally {
+      setImporting(false);
     }
   };
 
@@ -270,6 +329,7 @@ export function WorkspaceEntryClient() {
           </div>
         </div>
         <div className="panel-body">
+          {error ? <div className="notice error">{error}</div> : null}
           <div className="two-column-grid">
             <section className="record-card">
               <div className="eyebrow">{copy.createEyebrow}</div>
@@ -288,7 +348,6 @@ export function WorkspaceEntryClient() {
                   <span className="field-label">{copy.slugPreview}</span>
                   <input className="input" value={suggestedSlug} readOnly />
                 </label>
-                {error ? <div className="notice error">{error}</div> : null}
                 <button className="button" type="submit" disabled={creating}>
                   {creating ? `${copy.createWorkspace}...` : copy.createWorkspace}
                 </button>
@@ -306,10 +365,20 @@ export function WorkspaceEntryClient() {
                   onChange={(event) => setShareTokenInput(event.target.value)}
                 />
                 <div className="action-row">
-                  <button className="button secondary" type="button" disabled={previewing} onClick={() => void handlePreviewShare()}>
+                  <button
+                    className="button secondary"
+                    type="button"
+                    disabled={previewing}
+                    onClick={() => void handlePreviewShare()}
+                  >
                     {previewing ? `${copy.previewShare}...` : copy.previewShare}
                   </button>
-                  <button className="button" type="button" disabled={joining || !sharePreview} onClick={() => void handleAcceptShare()}>
+                  <button
+                    className="button"
+                    type="button"
+                    disabled={joining || !sharePreview}
+                    onClick={() => void handleAcceptShare()}
+                  >
                     {joining ? `${copy.joinWorkspace}...` : copy.joinWorkspace}
                   </button>
                 </div>
@@ -323,6 +392,47 @@ export function WorkspaceEntryClient() {
                     </div>
                   </article>
                 ) : null}
+              </div>
+            </section>
+
+            <section className="record-card">
+              <div className="eyebrow">{copy.importEyebrow}</div>
+              <h2 style={{ margin: "8px 0 12px" }}>{copy.importTitle}</h2>
+              <div className="form-stack">
+                <label className="field">
+                  <span className="field-label">{copy.importArchive}</span>
+                  <input
+                    ref={fileInputRef}
+                    className="input"
+                    type="file"
+                    accept=".zip,application/zip"
+                    onChange={(event) => setImportFile(event.target.files?.[0] ?? null)}
+                  />
+                </label>
+                <label className="field">
+                  <span className="field-label">{copy.importName}</span>
+                  <input
+                    className="input"
+                    value={importName}
+                    onChange={(event) => setImportName(event.target.value)}
+                  />
+                </label>
+                <label className="field">
+                  <span className="field-label">{copy.importSlug}</span>
+                  <input
+                    className="input"
+                    value={importSlug}
+                    onChange={(event) => setImportSlug(event.target.value)}
+                  />
+                </label>
+                <button
+                  className="button"
+                  type="button"
+                  disabled={importing || !importFile}
+                  onClick={() => void handleImportWorkspace()}
+                >
+                  {importing ? `${copy.importWorkspace}...` : copy.importWorkspace}
+                </button>
               </div>
             </section>
 
