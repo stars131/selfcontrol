@@ -200,9 +200,14 @@ Last updated: 2026-03-21
   - fallback uploads persist diagnostic metadata such as fallback mode, provider, failure reason, and timestamp for later troubleshooting
   - media upload audit events now record the final storage provider and whether a fallback path was used
   - provider settings now preserve per-feature `options_json` and expose a media-storage fallback toggle instead of discarding feature-specific options on save
+- Remote Media Provider Background Retry and Recovery Policy V1:
+  - remote media extraction failures now classify into auto-retry, manual-only, disabled, or exhausted recovery states instead of remaining opaque deferred or failed items
+  - async worker mode now schedules bounded background retries with configurable retry budget and backoff windows through `REMOTE_MEDIA_RETRY_MAX_ATTEMPTS` and `REMOTE_MEDIA_RETRY_BACKOFF_SECONDS`
+  - stale auto-retry tasks are skipped safely once a media item is completed or manually restarted, preventing old delayed jobs from reprocessing already-recovered assets
+  - media cards and workspace issue overview now expose retry state, retry counts, and next retry time so remote processing recovery is observable from the UI
 
 ## Next
-- Remote media provider background retry and recovery policy
+- Remote media provider dead-letter review and bulk recovery tools
 
 ## Delivery Rule
 - Every meaningful slice must update this file

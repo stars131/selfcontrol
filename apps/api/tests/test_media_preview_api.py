@@ -22,12 +22,14 @@ from app.models.provider_config import ProviderConfig
 from app.models.record import Record
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
+from app.services import background_tasks as background_tasks_service
 from app.services import media_remote_storage as media_remote_storage_service
 from app.services.media_remote_storage import (
     RemoteMediaContentResult,
     RemoteMediaUploadAttemptResult,
     RemoteMediaUploadResult,
 )
+from app.services.media_provider import DeferredMediaProcessingError
 from app.services.provider_configs import ProviderFeatureConfig
 
 
@@ -1108,7 +1110,12 @@ def test_remote_media_retry_can_complete_processing(tmp_path, monkeypatch) -> No
             original_filename="retry-note.txt",
             mime_type="text/plain",
             size_bytes=20,
-            metadata_json={"remote_storage_mode": "custom_webhook"},
+            metadata_json={
+                "remote_storage_mode": "custom_webhook",
+                "processing_retry_count": 2,
+                "processing_retry_state": "scheduled",
+                "processing_retry_next_attempt_at": "2026-03-21T10:00:00+00:00",
+            },
             processing_status="failed",
             processing_error="previous failure",
         )
@@ -1131,3 +1138,168 @@ def test_remote_media_retry_can_complete_processing(tmp_path, monkeypatch) -> No
     media_payload = retry_response.json()["data"]["media"]
     assert media_payload["processing_status"] == "completed"
     assert media_payload["extracted_text"] == "retry remote text"
+    assert media_payload["metadata_json"]["processing_retry_state"] == "idle"
+    assert media_payload["metadata_json"]["processing_retry_count"] == 0
+    assert media_payload["metadata_json"]["processing_retry_next_attempt_at"] is None
+
+
+def test_remote_media_processing_schedules_background_retry_for_transient_remote_errors(tmp_path, monkeypatch) -> None:
+    _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    monkeypatch.setattr("app.services.media_processing.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.media_processing.settings.remote_media_retry_max_attempts", 2)
+    monkeypatch.setattr("app.services.background_tasks.settings.remote_media_retry_max_attempts", 2)
+    monkeypatch.setattr("app.services.media_processing.settings.remote_media_retry_backoff_seconds", [45, 180])
+    monkeypatch.setattr("app.services.background_tasks.settings.remote_media_retry_backoff_seconds", [45, 180])
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-note.m4a",
+            original_filename="voice-note.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="pending",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    temp_remote_file = tmp_path / "tmp" / "voice-note.m4a"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"audio bytes")
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: temp_remote_file,
+    )
+    monkeypatch.setattr(
+        "app.services.media_processing.extract_text_via_provider",
+        lambda db, media, file_path: (_ for _ in ()).throw(DeferredMediaProcessingError("provider processing is not ready")),
+    )
+
+    with session_local() as db:
+        media = background_tasks_service.process_media_asset(db, remote_media_id)
+        metadata = media.metadata_json
+        assert media.processing_status == "deferred"
+        assert metadata["processing_retry_state"] == "scheduled"
+        assert metadata["processing_retry_count"] == 1
+        assert metadata["processing_retry_max_attempts"] == 2
+        assert metadata["processing_retry_delay_seconds"] == 45
+        assert metadata["processing_retry_next_attempt_at"]
+
+    queued_calls: list[dict] = []
+
+    def fake_apply_async(*, args, kwargs, countdown):
+        queued_calls.append({"args": args, "kwargs": kwargs, "countdown": countdown})
+
+    monkeypatch.setattr("app.worker.process_media_asset_task.apply_async", fake_apply_async)
+
+    with session_local() as db:
+        media = db.get(MediaAsset, remote_media_id)
+        result = background_tasks_service.queue_media_retry_if_needed(media)
+
+    assert result == "async_retry_scheduled"
+    assert queued_calls == [
+        {
+            "args": [remote_media_id],
+            "kwargs": {"trigger": "auto_retry"},
+            "countdown": 45,
+        }
+    ]
+
+
+def test_remote_media_processing_uses_manual_recovery_for_non_retriable_errors(tmp_path, monkeypatch) -> None:
+    _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    monkeypatch.setattr("app.services.media_processing.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.media_processing.settings.remote_media_retry_max_attempts", 3)
+    monkeypatch.setattr("app.services.background_tasks.settings.remote_media_retry_max_attempts", 3)
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-note.m4a",
+            original_filename="voice-note.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="pending",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    temp_remote_file = tmp_path / "tmp" / "voice-note-non-retriable.m4a"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"audio bytes")
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: temp_remote_file,
+    )
+    monkeypatch.setattr(
+        "app.services.media_processing.extract_text_via_provider",
+        lambda db, media, file_path: (_ for _ in ()).throw(DeferredMediaProcessingError("audio_asr provider is not enabled")),
+    )
+
+    with session_local() as db:
+        media = background_tasks_service.process_media_asset(db, remote_media_id)
+        metadata = media.metadata_json
+        assert media.processing_status == "deferred"
+        assert metadata["processing_retry_state"] == "manual_only"
+        assert metadata["processing_retry_count"] == 0
+        assert metadata["processing_retry_next_attempt_at"] is None
+        assert background_tasks_service.queue_media_retry_if_needed(media) is None
+
+
+def test_remote_media_processing_marks_retry_budget_exhausted(tmp_path, monkeypatch) -> None:
+    _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    monkeypatch.setattr("app.services.media_processing.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
+    monkeypatch.setattr("app.services.media_processing.settings.remote_media_retry_max_attempts", 2)
+    monkeypatch.setattr("app.services.background_tasks.settings.remote_media_retry_max_attempts", 2)
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-note-exhausted.m4a",
+            original_filename="voice-note-exhausted.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={
+                "remote_storage_mode": "custom_webhook",
+                "processing_retry_count": 2,
+            },
+            processing_status="pending",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: (_ for _ in ()).throw(RuntimeError("Remote media download timed out")),
+    )
+
+    with session_local() as db:
+        media = background_tasks_service.process_media_asset(db, remote_media_id)
+        metadata = media.metadata_json
+        assert media.processing_status == "failed"
+        assert metadata["processing_retry_state"] == "exhausted"
+        assert metadata["processing_retry_count"] == 2
+        assert metadata["processing_retry_next_attempt_at"] is None
+        assert background_tasks_service.queue_media_retry_if_needed(media) is None

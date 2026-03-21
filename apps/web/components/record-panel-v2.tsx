@@ -192,6 +192,11 @@ function readMetadataText(metadata: Record<string, unknown>, key: string): strin
   return typeof value === "string" && value.trim() ? value : null;
 }
 
+function readMetadataNumber(metadata: Record<string, unknown>, key: string): number | null {
+  const value = metadata[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
 export function RecordPanelV2({
   authToken,
   canWriteWorkspace,
@@ -646,6 +651,10 @@ export function RecordPanelV2({
     const processingSource = readMetadataText(asset.metadata_json, "processing_source");
     const lastAttemptAt = readMetadataText(asset.metadata_json, "processing_last_attempt_at");
     const remoteFetchStatus = readMetadataText(asset.metadata_json, "remote_fetch_status");
+    const retryState = readMetadataText(asset.metadata_json, "processing_retry_state");
+    const retryCount = readMetadataNumber(asset.metadata_json, "processing_retry_count");
+    const retryMaxAttempts = readMetadataNumber(asset.metadata_json, "processing_retry_max_attempts");
+    const nextRetryAt = readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at");
 
     return (
       <article className="record-card" key={asset.id}>
@@ -659,6 +668,13 @@ export function RecordPanelV2({
           {processingSource ? <span className="tag">{processingSource}</span> : null}
           {extractionMode ? <span className="tag">{extractionMode}</span> : null}
           {remoteFetchStatus ? <span className="tag">fetch {remoteFetchStatus}</span> : null}
+          {retryState && retryState !== "idle" ? <span className="tag">retry {retryState}</span> : null}
+          {retryCount !== null ? (
+            <span className="tag">
+              retries {retryCount}
+              {retryMaxAttempts !== null ? `/${retryMaxAttempts}` : ""}
+            </span>
+          ) : null}
           {typeof asset.metadata_json.file_extension === "string" && asset.metadata_json.file_extension ? (
             <span className="tag">{String(asset.metadata_json.file_extension)}</span>
           ) : null}
@@ -699,6 +715,14 @@ export function RecordPanelV2({
               <div className="eyebrow">Last attempt</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {formatHistoryTimestamp(lastAttemptAt)}
+              </div>
+            </div>
+          ) : null}
+          {nextRetryAt ? (
+            <div className="subtle-card">
+              <div className="eyebrow">Next retry</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>
+                {formatHistoryTimestamp(nextRetryAt)}
               </div>
             </div>
           ) : null}
@@ -1313,6 +1337,15 @@ export function RecordPanelV2({
                               {issue.processing_source ? <span className="tag">{issue.processing_source}</span> : null}
                               {issue.remote_fetch_status ? <span className="tag">fetch {issue.remote_fetch_status}</span> : null}
                               {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}
+                              {issue.processing_retry_state ? <span className="tag">retry {issue.processing_retry_state}</span> : null}
+                              {typeof issue.processing_retry_count === "number" ? (
+                                <span className="tag">
+                                  retries {issue.processing_retry_count}
+                                  {typeof issue.processing_retry_max_attempts === "number"
+                                    ? `/${issue.processing_retry_max_attempts}`
+                                    : ""}
+                                </span>
+                              ) : null}
                             </div>
                             <div className="muted" style={{ marginTop: 8 }}>
                               Last attempt: {formatHistoryTimestamp(issue.processing_last_attempt_at)}
@@ -1320,6 +1353,11 @@ export function RecordPanelV2({
                             {issue.processing_last_failure_at ? (
                               <div className="muted" style={{ marginTop: 6 }}>
                                 Last failure: {formatHistoryTimestamp(issue.processing_last_failure_at)}
+                              </div>
+                            ) : null}
+                            {issue.processing_retry_next_attempt_at ? (
+                              <div className="muted" style={{ marginTop: 6 }}>
+                                Next retry: {formatHistoryTimestamp(issue.processing_retry_next_attempt_at)}
                               </div>
                             ) : null}
                             {issue.processing_error ? (

@@ -51,6 +51,10 @@ class MediaProcessingIssueRead(BaseModel):
     processing_last_attempt_at: str | None = None
     processing_last_failure_at: str | None = None
     remote_fetch_status: str | None = None
+    processing_retry_state: str | None = None
+    processing_retry_count: int | None = None
+    processing_retry_max_attempts: int | None = None
+    processing_retry_next_attempt_at: str | None = None
     updated_at: datetime
 
 

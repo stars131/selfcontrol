@@ -127,6 +127,10 @@ def build_workspace_media_processing_overview(
                     "processing_last_attempt_at": metadata.get("processing_last_attempt_at") if isinstance(metadata.get("processing_last_attempt_at"), str) else None,
                     "processing_last_failure_at": metadata.get("processing_last_failure_at") if isinstance(metadata.get("processing_last_failure_at"), str) else None,
                     "remote_fetch_status": metadata.get("remote_fetch_status") if isinstance(metadata.get("remote_fetch_status"), str) else None,
+                    "processing_retry_state": metadata.get("processing_retry_state") if isinstance(metadata.get("processing_retry_state"), str) else None,
+                    "processing_retry_count": int(metadata.get("processing_retry_count")) if str(metadata.get("processing_retry_count", "")).strip().isdigit() else None,
+                    "processing_retry_max_attempts": int(metadata.get("processing_retry_max_attempts")) if str(metadata.get("processing_retry_max_attempts", "")).strip().isdigit() else None,
+                    "processing_retry_next_attempt_at": metadata.get("processing_retry_next_attempt_at") if isinstance(metadata.get("processing_retry_next_attempt_at"), str) else None,
                     "updated_at": item.updated_at,
                 }
             )

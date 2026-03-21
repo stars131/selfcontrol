@@ -20,6 +20,21 @@ def parse_csv_env(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def parse_int_csv_env(value: str) -> list[int]:
+    items: list[int] = []
+    for item in value.split(","):
+        normalized = item.strip()
+        if not normalized:
+            continue
+        try:
+            parsed = int(normalized)
+        except ValueError:
+            continue
+        if parsed > 0:
+            items.append(parsed)
+    return items
+
+
 @dataclass
 class Settings:
     app_env: str = os.getenv("APP_ENV", "development")
@@ -40,6 +55,10 @@ class Settings:
     rag_search_limit: int = int(os.getenv("RAG_SEARCH_LIMIT", "8"))
     processing_tmp_dir: str = resolve_project_path(os.getenv("PROCESSING_TMP_DIR", "storage/tmp"))
     provider_request_timeout_seconds: int = int(os.getenv("PROVIDER_REQUEST_TIMEOUT_SECONDS", "90"))
+    remote_media_retry_max_attempts: int = int(os.getenv("REMOTE_MEDIA_RETRY_MAX_ATTEMPTS", "3"))
+    remote_media_retry_backoff_seconds: list[int] = field(
+        default_factory=lambda: parse_int_csv_env(os.getenv("REMOTE_MEDIA_RETRY_BACKOFF_SECONDS", "60,300,900"))
+    )
     cors_origins: list[str] = field(
         default_factory=lambda: parse_csv_env(
             os.getenv(
@@ -98,6 +117,8 @@ def validate_runtime_settings() -> None:
         raise RuntimeError("MEDIA_PROCESSING_MODE must be either 'sync' or 'async'")
     if settings.media_processing_mode == "async" and not settings.redis_url:
         raise RuntimeError("MEDIA_PROCESSING_MODE=async requires REDIS_URL")
+    if settings.remote_media_retry_max_attempts < 0:
+        raise RuntimeError("REMOTE_MEDIA_RETRY_MAX_ATTEMPTS must be zero or greater")
     if not settings.allowed_hosts:
         raise RuntimeError("ALLOWED_HOSTS must include at least one host")
     if settings.app_env == "production":

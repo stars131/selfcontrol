@@ -171,6 +171,10 @@ export type MediaProcessingIssue = {
   processing_last_attempt_at?: string | null;
   processing_last_failure_at?: string | null;
   remote_fetch_status?: string | null;
+  processing_retry_state?: string | null;
+  processing_retry_count?: number | null;
+  processing_retry_max_attempts?: number | null;
+  processing_retry_next_attempt_at?: string | null;
   updated_at: string;
 };
 
