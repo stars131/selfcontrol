@@ -93,6 +93,34 @@ async function requestBlob(path: string, token: string): Promise<Blob> {
   return response.blob();
 }
 
+async function requestDownload(path: string, token: string): Promise<{ blob: Blob; filename: string | null }> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    let message = "Request failed";
+    try {
+      const payload = (await response.json()) as { error?: { message?: string }; detail?: string };
+      message = payload.error?.message || payload.detail || message;
+    } catch {
+      message = response.statusText || message;
+    }
+    throw new Error(message);
+  }
+
+  const blob = await response.blob();
+  const contentDisposition = response.headers.get("content-disposition");
+  const filenameMatch = contentDisposition?.match(/filename="([^"]+)"/i) ?? null;
+  return {
+    blob,
+    filename: filenameMatch?.[1] ?? null,
+  };
+}
+
 export async function register(input: {
   username: string;
   email?: string;
@@ -122,6 +150,10 @@ export async function listWorkspaces(token: string) {
 
 export async function getWorkspace(token: string, workspaceId: string) {
   return request<{ workspace: Workspace }>(`/workspaces/${workspaceId}`, { method: "GET" }, token);
+}
+
+export async function downloadWorkspaceExport(token: string, workspaceId: string) {
+  return requestDownload(`/workspaces/${workspaceId}/export`, token);
 }
 
 export async function createWorkspace(

@@ -24,6 +24,7 @@ import type {
   WorkspaceMemberItem,
 } from "../lib/types";
 import { LanguageSwitcher } from "./language-switcher";
+import { WorkspaceExportCard } from "./workspace-export-card";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
 
@@ -346,6 +347,17 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
                 role={workspace.role}
                 token={token}
                 workspaceId={workspaceId}
+              />
+            ) : null
+          ) : null}
+          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+            token ? (
+              <WorkspaceExportCard
+                locale={locale}
+                role={workspace.role}
+                token={token}
+                workspaceId={workspaceId}
+                workspaceSlug={workspace?.slug}
               />
             ) : null
           ) : null}

@@ -144,9 +144,14 @@ Last updated: 2026-03-21
   - cleanup requests support `dry_run` preview mode on the backend before destructive execution
   - workspace settings retention card now lets owners select stale candidates and execute cleanup safely
   - cleanup API coverage now verifies dry-run behavior, actual deletion, and owner-only permission boundaries
+- Workspace Export V1:
+  - owner-only export API now downloads a ZIP snapshot of the workspace
+  - export archives include `manifest.json`, members, records, media metadata, and available local attachment files
+  - missing local media files are preserved as manifest entries and flagged instead of breaking the export
+  - workspace settings now include a direct export card for owners, with secrets and tokens explicitly excluded
 
 ## Next
-- Workspace and attachment export/import strategy
+- Workspace import and restore flow V1
 - Archive tiering for stale media before deletion
 
 ## Delivery Rule

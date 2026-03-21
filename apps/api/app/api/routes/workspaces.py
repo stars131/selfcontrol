@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from pathlib import Path
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.api.deps import (
@@ -19,6 +22,7 @@ from app.schemas.workspace import (
     WorkspaceRead,
 )
 from app.services.audit import log_audit_event
+from app.services.workspace_export import build_workspace_export_archive
 
 
 router = APIRouter()
@@ -47,6 +51,13 @@ def serialize_workspace_member(member: WorkspaceMember) -> dict:
         "display_name": member.user.display_name,
         "created_at": member.created_at,
     }
+
+
+def _cleanup_export_archive(path: Path) -> None:
+    try:
+        path.unlink(missing_ok=True)
+    except Exception:  # noqa: BLE001
+        return
 
 
 @router.get("")
@@ -134,6 +145,35 @@ def get_workspace(
             "workspace": WorkspaceRead.model_validate(serialize_workspace(workspace, membership.role)).model_dump()
         },
     }
+
+
+@router.get("/{workspace_id}/export")
+def export_workspace_archive(
+    workspace_id: str,
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
+    workspace = require_workspace_member(workspace_id, current_user, db)
+    archive_path, counts = build_workspace_export_archive(
+        db,
+        workspace_id,
+        exported_by_user_id=current_user.id,
+    )
+    background_tasks.add_task(_cleanup_export_archive, archive_path)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="workspace.export",
+        resource_type="workspace",
+        resource_id=workspace_id,
+        message=f"Exported workspace {workspace.name}",
+        metadata_json=counts,
+    )
+    filename = f"{workspace.slug or workspace.id}-export.zip"
+    return FileResponse(path=archive_path, media_type="application/zip", filename=filename)
 
 
 @router.get("/{workspace_id}/members")
