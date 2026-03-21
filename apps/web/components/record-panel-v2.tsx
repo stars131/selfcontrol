@@ -1390,6 +1390,7 @@ export function RecordPanelV2({
                               {issue.remote_fetch_status ? <span className="tag">fetch {issue.remote_fetch_status}</span> : null}
                               {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}
                               {issue.processing_retry_state ? <span className="tag">retry {issue.processing_retry_state}</span> : null}
+                              {issue.issue_label ? <span className="tag">{issue.issue_label}</span> : null}
                               {typeof issue.processing_retry_count === "number" ? (
                                 <span className="tag">
                                   retries {issue.processing_retry_count}
@@ -1410,6 +1411,12 @@ export function RecordPanelV2({
                             {issue.processing_retry_next_attempt_at ? (
                               <div className="muted" style={{ marginTop: 6 }}>
                                 Next retry: {formatHistoryTimestamp(issue.processing_retry_next_attempt_at)}
+                              </div>
+                            ) : null}
+                            {issue.recommended_action_label ? (
+                              <div className="notice" style={{ marginTop: 10 }}>
+                                {issue.recommended_action_label}
+                                {issue.recommended_action_detail ? `: ${issue.recommended_action_detail}` : ""}
                               </div>
                             ) : null}
                             {issue.processing_error ? (
@@ -1442,6 +1449,13 @@ export function RecordPanelV2({
                           ? Object.entries(mediaDeadLetterOverview.by_retry_state).map(([retryState, count]) => (
                               <span className="tag" key={retryState}>
                                 {retryState}: {count}
+                              </span>
+                            ))
+                          : null}
+                        {mediaDeadLetterOverview
+                          ? Object.entries(mediaDeadLetterOverview.by_issue_category).map(([issueCategory, count]) => (
+                              <span className="tag" key={issueCategory}>
+                                {issueCategory}: {count}
                               </span>
                             ))
                           : null}
@@ -1505,6 +1519,7 @@ export function RecordPanelV2({
                                   <span className="tag">{item.processing_status}</span>
                                   <span className="tag">{item.storage_provider}</span>
                                   {item.processing_retry_state ? <span className="tag">retry {item.processing_retry_state}</span> : null}
+                                  {item.issue_label ? <span className="tag">{item.issue_label}</span> : null}
                                 </div>
                               </label>
                               <div className="muted" style={{ marginTop: 8 }}>
@@ -1521,6 +1536,12 @@ export function RecordPanelV2({
                                   {typeof item.processing_retry_max_attempts === "number"
                                     ? ` / ${item.processing_retry_max_attempts}`
                                     : ""}
+                                </div>
+                              ) : null}
+                              {item.recommended_action_label ? (
+                                <div className="notice" style={{ marginTop: 10 }}>
+                                  {item.recommended_action_label}
+                                  {item.recommended_action_detail ? `: ${item.recommended_action_detail}` : ""}
                                 </div>
                               ) : null}
                               {item.processing_error ? (

@@ -55,6 +55,12 @@ class MediaProcessingIssueRead(BaseModel):
     processing_retry_count: int | None = None
     processing_retry_max_attempts: int | None = None
     processing_retry_next_attempt_at: str | None = None
+    issue_category: str | None = None
+    issue_label: str | None = None
+    recommended_action_code: str | None = None
+    recommended_action_label: str | None = None
+    recommended_action_detail: str | None = None
+    can_bulk_retry: bool = False
     updated_at: datetime
 
 
@@ -70,6 +76,7 @@ class MediaProcessingOverviewRead(BaseModel):
     failed_count: int
     by_processing_status: dict[str, int]
     by_storage_provider: dict[str, int]
+    by_issue_category: dict[str, int]
     recent_issues: list[MediaProcessingIssueRead]
 
 
@@ -77,6 +84,7 @@ class MediaDeadLetterOverviewRead(BaseModel):
     workspace_id: str
     total_count: int
     by_retry_state: dict[str, int]
+    by_issue_category: dict[str, int]
     items: list[MediaProcessingIssueRead]
 
 

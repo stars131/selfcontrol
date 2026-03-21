@@ -215,9 +215,14 @@ Last updated: 2026-03-21
   - provider config responses now merge sane media-storage retry defaults into workspace settings so operators can see the effective baseline before saving overrides
   - remote media processing and manual requeue flows now read the workspace retry policy consistently, including disabled-auto-retry workspaces
   - the workspace settings provider panel now exposes retry policy controls beside fallback settings for media storage operations
+- Remote Media Provider Issue Classification and Action Recommendations V1:
+  - workspace media diagnostics now classify failed and deferred media into actionable issue categories such as provider-disabled, transient-remote-failure, remote-asset-missing, and provider-config-error
+  - recent issue overview and dead-letter review APIs now return recommended action codes, human-readable action labels, and operator guidance instead of only raw error text
+  - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
+  - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 
 ## Next
-- Remote media provider issue classification and action recommendations
+- Remote media provider action shortcuts and settings deep links
 
 ## Delivery Rule
 - Every meaningful slice must update this file

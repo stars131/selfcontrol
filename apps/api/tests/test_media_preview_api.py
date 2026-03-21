@@ -344,6 +344,8 @@ def test_media_processing_overview_reports_recent_remote_issues(tmp_path, monkey
     assert overview["by_processing_status"]["pending"] == 1
     assert overview["by_storage_provider"]["local"] == 2
     assert overview["by_storage_provider"]["custom"] == 2
+    assert overview["by_issue_category"]["provider_not_ready"] == 1
+    assert overview["by_issue_category"]["transient_remote_failure"] == 1
 
     recent_issues = overview["recent_issues"]
     assert [item["original_filename"] for item in recent_issues] == ["clip.mp4", "voice.m4a"]
@@ -351,8 +353,13 @@ def test_media_processing_overview_reports_recent_remote_issues(tmp_path, monkey
     assert recent_issues[0]["processing_source"] == "remote_fetch"
     assert recent_issues[0]["remote_fetch_status"] == "failed"
     assert recent_issues[0]["extraction_mode"] == "provider_remote"
+    assert recent_issues[0]["issue_category"] == "transient_remote_failure"
+    assert recent_issues[0]["recommended_action_code"] == "retry_after_remote_check"
+    assert recent_issues[0]["can_bulk_retry"] is True
     assert recent_issues[1]["processing_status"] == "deferred"
     assert recent_issues[1]["remote_fetch_status"] == "downloaded"
+    assert recent_issues[1]["issue_category"] == "provider_not_ready"
+    assert recent_issues[1]["recommended_action_code"] == "retry_when_ready"
 
 
 def test_media_dead_letter_overview_lists_remote_manual_recovery_items(tmp_path, monkeypatch) -> None:
@@ -442,10 +449,18 @@ def test_media_dead_letter_overview_lists_remote_manual_recovery_items(tmp_path,
     assert overview["workspace_id"] == workspace_id
     assert overview["total_count"] == 2
     assert overview["by_retry_state"] == {"exhausted": 1, "manual_only": 1}
+    assert overview["by_issue_category"] == {
+        "provider_disabled": 1,
+        "transient_remote_failure": 1,
+    }
     assert [item["original_filename"] for item in overview["items"]] == [
         "clip-exhausted.mp4",
         "voice-manual.m4a",
     ]
+    assert overview["items"][0]["issue_category"] == "transient_remote_failure"
+    assert overview["items"][0]["recommended_action_code"] == "retry_after_remote_check"
+    assert overview["items"][1]["issue_category"] == "provider_disabled"
+    assert overview["items"][1]["recommended_action_code"] == "enable_provider"
 
 
 def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, monkeypatch) -> None:

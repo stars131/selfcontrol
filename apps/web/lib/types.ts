@@ -175,6 +175,12 @@ export type MediaProcessingIssue = {
   processing_retry_count?: number | null;
   processing_retry_max_attempts?: number | null;
   processing_retry_next_attempt_at?: string | null;
+  issue_category?: string | null;
+  issue_label?: string | null;
+  recommended_action_code?: string | null;
+  recommended_action_label?: string | null;
+  recommended_action_detail?: string | null;
+  can_bulk_retry: boolean;
   updated_at: string;
 };
 
@@ -190,6 +196,7 @@ export type MediaProcessingOverview = {
   failed_count: number;
   by_processing_status: Record<string, number>;
   by_storage_provider: Record<string, number>;
+  by_issue_category: Record<string, number>;
   recent_issues: MediaProcessingIssue[];
 };
 
@@ -197,6 +204,7 @@ export type MediaDeadLetterOverview = {
   workspace_id: string;
   total_count: number;
   by_retry_state: Record<string, number>;
+  by_issue_category: Record<string, number>;
   items: MediaProcessingIssue[];
 };
 
