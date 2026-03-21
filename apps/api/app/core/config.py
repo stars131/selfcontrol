@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 
 BASE_DIR = Path(__file__).resolve().parents[4]
@@ -46,9 +47,44 @@ class Settings:
 settings = Settings()
 
 
+def ensure_runtime_directories() -> None:
+    Path(settings.storage_dir).mkdir(parents=True, exist_ok=True)
+    Path(settings.processing_tmp_dir).mkdir(parents=True, exist_ok=True)
+
+
+def runtime_health_snapshot() -> dict[str, Any]:
+    storage_dir = Path(settings.storage_dir)
+    processing_tmp_dir = Path(settings.processing_tmp_dir)
+    checks = {
+        "storage_dir_exists": storage_dir.exists(),
+        "processing_tmp_dir_exists": processing_tmp_dir.exists(),
+        "redis_config_ok": bool(settings.redis_url) if settings.media_processing_mode == "async" else True,
+        "secret_key_ok": not (
+            settings.app_env == "production"
+            and (settings.secret_key == "change-me" or len(settings.secret_key) < 24)
+        ),
+        "auto_create_tables_ok": not (settings.app_env == "production" and settings.auto_create_tables),
+    }
+    return {
+        "status": "ok" if all(checks.values()) else "degraded",
+        "ready": all(checks.values()),
+        "app_env": settings.app_env,
+        "media_processing_mode": settings.media_processing_mode,
+        "auto_create_tables": settings.auto_create_tables,
+        "storage_dir": str(storage_dir),
+        "processing_tmp_dir": str(processing_tmp_dir),
+        "redis_url_configured": bool(settings.redis_url),
+        "checks": checks,
+    }
+
+
 def validate_runtime_settings() -> None:
     if settings.media_processing_mode not in {"sync", "async"}:
         raise RuntimeError("MEDIA_PROCESSING_MODE must be either 'sync' or 'async'")
+    if settings.media_processing_mode == "async" and not settings.redis_url:
+        raise RuntimeError("MEDIA_PROCESSING_MODE=async requires REDIS_URL")
     if settings.app_env == "production":
         if settings.secret_key == "change-me" or len(settings.secret_key) < 24:
             raise RuntimeError("Production requires a strong SECRET_KEY environment variable")
+        if settings.auto_create_tables:
+            raise RuntimeError("Production requires AUTO_CREATE_TABLES=false and managed migrations")

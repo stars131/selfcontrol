@@ -1,17 +1,28 @@
-from pathlib import Path
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import audit_logs, auth, conversations, knowledge, media, notifications, provider_configs, public_shares, records, reminders, search, search_presets, share_links, timeline, workspaces
-from app.core.config import settings, validate_runtime_settings
+from app.core.config import ensure_runtime_directories, runtime_health_snapshot, settings, validate_runtime_settings
 from app.db.session import create_db_and_tables
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    validate_runtime_settings()
+    ensure_runtime_directories()
+    if settings.auto_create_tables:
+        create_db_and_tables()
+    app.state.runtime_health = runtime_health_snapshot()
+    yield
 
 
 app = FastAPI(
     title="SelfControl API",
     version="0.1.0",
     description="Multi-modal memory system backend.",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -22,29 +33,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.on_event("startup")
-def on_startup() -> None:
-    validate_runtime_settings()
-    if settings.auto_create_tables:
-        create_db_and_tables()
-
-
 @app.get("/health")
 def health() -> dict[str, object]:
-    storage_dir = Path(settings.storage_dir)
-    processing_tmp_dir = Path(settings.processing_tmp_dir)
-    return {
-        "status": "ok",
-        "app_env": settings.app_env,
-        "media_processing_mode": settings.media_processing_mode,
-        "auto_create_tables": settings.auto_create_tables,
-        "storage_dir": str(storage_dir),
-        "storage_dir_exists": storage_dir.exists(),
-        "processing_tmp_dir": str(processing_tmp_dir),
-        "processing_tmp_dir_exists": processing_tmp_dir.exists(),
-        "redis_url_configured": bool(settings.redis_url),
-    }
+    return runtime_health_snapshot()
 
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])

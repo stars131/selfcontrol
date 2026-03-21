@@ -102,10 +102,16 @@ Last updated: 2026-03-21
   - Docker and env templates now expose `MEDIA_PROCESSING_MODE`, with async processing ready for worker-based deployment
   - health endpoint now reports runtime environment, media processing mode, storage directory state, and temp directory state
   - media API tests now cover async upload and retry dispatch behavior, and health API coverage is added
+- Lifespan Startup and Production Readiness Checks V1:
+  - FastAPI startup flow now uses `lifespan` instead of deprecated startup events
+  - runtime startup now creates storage and temp directories explicitly before serving requests
+  - production validation now rejects weak secrets, implicit auto-create-table startup, and async media mode without Redis
+  - health responses now expose readiness checks for storage, temp directories, Redis requirement, and startup-safe table policy
+  - provider-config security tests now cover the new production readiness rules
 
 ## Next
 - Deployment hardening and production operations pass
-- Lifespan startup refactor and production readiness checks
+- Linux deployment playbook and reverse-proxy/runtime hardening
 
 ## Delivery Rule
 - Every meaningful slice must update this file

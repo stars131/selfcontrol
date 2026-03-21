@@ -45,3 +45,4 @@ alembic upgrade head
 - 本地 Windows + Linux VM 开发时，默认保留 `MEDIA_PROCESSING_MODE=async`
 - 如果只临时调试 API，可切回 `sync`
 - 服务器部署时应同时启动 `api`、`worker`、`redis`，否则异步媒体任务不会被消费
+- 生产环境应设置强 `SECRET_KEY`，并关闭 `AUTO_CREATE_TABLES`，改为显式执行 Alembic 迁移

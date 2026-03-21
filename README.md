@@ -41,6 +41,7 @@ alembic upgrade head
 - `MEDIA_PROCESSING_MODE=async`：媒体上传和重试通过 Celery worker 异步处理，适合 Linux 服务器部署。
 - `MEDIA_PROCESSING_MODE=sync`：API 进程同步处理媒体，适合本地调试和最小依赖场景。
 - `/health` 会返回当前媒体处理模式、存储目录状态和基础运行配置。
+- 生产环境应设置强 `SECRET_KEY`，并将 `AUTO_CREATE_TABLES=false`，通过 Alembic 迁移管理数据库结构。
 
 ## 文档
 

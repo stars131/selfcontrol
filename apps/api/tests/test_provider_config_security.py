@@ -132,8 +132,10 @@ def test_provider_config_rejects_dangerous_env_names_and_urls(monkeypatch) -> No
 def test_validate_runtime_settings_requires_strong_secret_in_production(monkeypatch) -> None:
     original_env = settings.app_env
     original_secret = settings.secret_key
+    original_auto_create_tables = settings.auto_create_tables
     try:
         settings.app_env = "production"
+        settings.auto_create_tables = False
         settings.secret_key = "change-me"
         try:
             validate_runtime_settings()
@@ -144,3 +146,41 @@ def test_validate_runtime_settings_requires_strong_secret_in_production(monkeypa
     finally:
         settings.app_env = original_env
         settings.secret_key = original_secret
+        settings.auto_create_tables = original_auto_create_tables
+
+
+def test_validate_runtime_settings_rejects_auto_create_tables_in_production() -> None:
+    original_env = settings.app_env
+    original_secret = settings.secret_key
+    original_auto_create_tables = settings.auto_create_tables
+    try:
+        settings.app_env = "production"
+        settings.secret_key = "production-secret-key-with-sufficient-length"
+        settings.auto_create_tables = True
+        try:
+            validate_runtime_settings()
+        except RuntimeError as exc:
+            assert "AUTO_CREATE_TABLES=false" in str(exc)
+        else:
+            raise AssertionError("Expected production auto-create-table validation to fail")
+    finally:
+        settings.app_env = original_env
+        settings.secret_key = original_secret
+        settings.auto_create_tables = original_auto_create_tables
+
+
+def test_validate_runtime_settings_requires_redis_for_async_media() -> None:
+    original_mode = settings.media_processing_mode
+    original_redis_url = settings.redis_url
+    try:
+        settings.media_processing_mode = "async"
+        settings.redis_url = ""
+        try:
+            validate_runtime_settings()
+        except RuntimeError as exc:
+            assert "REDIS_URL" in str(exc)
+        else:
+            raise AssertionError("Expected async media processing validation to fail without Redis")
+    finally:
+        settings.media_processing_mode = original_mode
+        settings.redis_url = original_redis_url
