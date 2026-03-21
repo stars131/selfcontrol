@@ -5,6 +5,8 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import httpx
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -22,6 +24,7 @@ from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
 from app.services import media_remote_storage as media_remote_storage_service
 from app.services.media_remote_storage import RemoteMediaContentResult, RemoteMediaUploadResult
+from app.services.provider_configs import ProviderFeatureConfig
 
 
 PNG_1X1 = (
@@ -108,6 +111,27 @@ def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str, ses
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_user] = override_get_current_user
     return TestClient(app), workspace_id, record_id, session_local
+
+
+def build_custom_media_storage_config() -> ProviderFeatureConfig:
+    return ProviderFeatureConfig(
+        feature_code="media_storage",
+        feature_label="Media storage",
+        feature_description="Remote media storage",
+        providers=["local", "custom"],
+        provider_code="custom",
+        model_name=None,
+        is_enabled=True,
+        api_base_url="https://storage.example.test/api",
+        api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+        options_json={},
+        is_default=False,
+        updated_at=None,
+        requires_secret=True,
+        secret_env_name="REMOTE_MEDIA_STORAGE_KEY",
+        secret_status="configured",
+        config_warnings=[],
+    )
 
 
 def test_media_upload_returns_preview_metadata_and_content(tmp_path, monkeypatch) -> None:
@@ -822,6 +846,138 @@ def test_custom_remote_storage_service_uses_workspace_provider_config(tmp_path, 
         content_result = media_remote_storage_service.download_remote_media_via_provider(db, media)
         assert content_result.content == b"fetched"
         media_remote_storage_service.delete_remote_media_via_provider(db, media)
+
+
+def test_custom_remote_storage_upload_enforces_webhook_contract(monkeypatch) -> None:
+    config = build_custom_media_storage_config()
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    class FakeResponse:
+        status_code = 200
+        headers = {"content-type": "application/json", "x-request-id": "req-123"}
+
+        @staticmethod
+        def json():
+            return {
+                "storage_key": "remote/workspace/voice-note.m4a",
+                "size_bytes": "11",
+                "provider_asset_id": "asset-123",
+                "metadata_json": {
+                    "bucket": "primary",
+                    "flags": ["warm", {"tier": "archive"}],
+                },
+            }
+
+    class FakeAsyncClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            return False
+
+        async def post(self, url, *, headers, data, files):
+            assert url == "https://storage.example.test/api/media/upload"
+            assert headers["X-SelfControl-Media-Storage-Contract"] == media_remote_storage_service.WEBHOOK_CONTRACT_VERSION
+            assert headers["X-SelfControl-Media-Storage-Operation"] == "upload"
+            assert data["contract_version"] == media_remote_storage_service.WEBHOOK_CONTRACT_VERSION
+            assert data["workspace_id"] == "workspace-1"
+            assert data["record_id"] == "record-1"
+            assert files["file"][0] == "voice-note.m4a"
+            return FakeResponse()
+
+    monkeypatch.setattr(media_remote_storage_service.httpx, "AsyncClient", FakeAsyncClient)
+
+    result = asyncio.run(
+        media_remote_storage_service._perform_custom_upload(
+            config,
+            workspace_id="workspace-1",
+            record_id="record-1",
+            filename="voice-note.m4a",
+            mime_type="audio/mp4",
+            content=b"remote-audio",
+        )
+    )
+
+    assert result.storage_key == "remote/workspace/voice-note.m4a"
+    assert result.size_bytes == 11
+    assert result.metadata_json["remote_storage_mode"] == "custom_webhook"
+    assert result.metadata_json["remote_contract_version"] == media_remote_storage_service.WEBHOOK_CONTRACT_VERSION
+    assert result.metadata_json["provider_asset_id"] == "asset-123"
+    assert result.metadata_json["webhook_request_id"] == "req-123"
+    assert result.metadata_json["bucket"] == "primary"
+    assert result.metadata_json["flags"][1]["tier"] == "archive"
+
+
+def test_custom_remote_storage_upload_rejects_invalid_storage_key(monkeypatch) -> None:
+    config = build_custom_media_storage_config()
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    class FakeResponse:
+        status_code = 200
+        headers = {"content-type": "application/json"}
+
+        @staticmethod
+        def json():
+            return {"storage_key": "remote/workspace/\nvoice-note.m4a"}
+
+    class FakeAsyncClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            return False
+
+        async def post(self, *args, **kwargs):
+            return FakeResponse()
+
+    monkeypatch.setattr(media_remote_storage_service.httpx, "AsyncClient", FakeAsyncClient)
+
+    with pytest.raises(RuntimeError, match="storage_key contains control characters"):
+        asyncio.run(
+            media_remote_storage_service._perform_custom_upload(
+                config,
+                workspace_id="workspace-1",
+                record_id="record-1",
+                filename="voice-note.m4a",
+                mime_type="audio/mp4",
+                content=b"remote-audio",
+            )
+        )
+
+
+def test_custom_remote_storage_download_surfaces_timeout(monkeypatch) -> None:
+    config = build_custom_media_storage_config()
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    class FakeClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def get(self, url, *, headers, params):
+            assert url == "https://storage.example.test/api/media/content"
+            assert headers["X-SelfControl-Media-Storage-Operation"] == "download"
+            assert params["contract_version"] == media_remote_storage_service.WEBHOOK_CONTRACT_VERSION
+            raise httpx.ReadTimeout("timed out")
+
+    monkeypatch.setattr(media_remote_storage_service.httpx, "Client", FakeClient)
+
+    with pytest.raises(RuntimeError, match="Remote media download timed out"):
+        media_remote_storage_service._perform_custom_download(
+            config,
+            storage_key="remote/workspace/voice-note.m4a",
+        )
 
 
 def test_record_delete_triggers_remote_media_delete(tmp_path, monkeypatch) -> None:

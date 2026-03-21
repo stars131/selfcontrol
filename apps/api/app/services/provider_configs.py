@@ -51,6 +51,11 @@ FEATURE_DEFINITIONS: dict[str, dict] = {
         "providers": ["local", "custom"],
     },
 }
+MEDIA_STORAGE_ENDPOINT_SUFFIXES = (
+    "/media/upload",
+    "/media/content",
+    "/media/delete",
+)
 
 
 @dataclass
@@ -164,6 +169,25 @@ def get_feature_definition(feature_code: str) -> dict:
     if not definition:
         raise ValueError("Unsupported feature code")
     return definition
+
+
+def validate_feature_specific_provider_config(
+    *,
+    feature_code: str,
+    provider_code: str,
+    is_enabled: bool,
+    api_base_url: str | None,
+) -> None:
+    if feature_code != "media_storage" or provider_code != "custom":
+        return
+    if is_enabled and not api_base_url:
+        raise ValueError("Custom media storage provider requires an API base URL when enabled")
+    if not api_base_url:
+        return
+
+    normalized_url = api_base_url.rstrip("/").lower()
+    if normalized_url.endswith(MEDIA_STORAGE_ENDPOINT_SUFFIXES):
+        raise ValueError("Media storage API base URL must point to the service root, not a /media/upload|content|delete endpoint")
 
 
 def build_default_feature_config(feature_code: str) -> ProviderFeatureConfig:
@@ -291,6 +315,12 @@ def upsert_provider_config(
 
     normalized_api_base_url = normalize_api_base_url(api_base_url)
     normalized_api_key_env_name = normalize_api_key_env_name(api_key_env_name)
+    validate_feature_specific_provider_config(
+        feature_code=feature_code,
+        provider_code=provider_code,
+        is_enabled=is_enabled,
+        api_base_url=normalized_api_base_url,
+    )
 
     item = (
         db.query(ProviderConfig)

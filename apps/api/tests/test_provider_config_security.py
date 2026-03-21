@@ -142,6 +142,44 @@ def test_provider_config_lists_media_storage_feature(monkeypatch) -> None:
     assert media_storage["providers"] == ["local", "custom"]
 
 
+def test_media_storage_config_requires_service_root_base_url(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": "https://storage.example.test/api/media/upload",
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {},
+        },
+    )
+
+    assert response.status_code == 400
+    assert "service root" in response.json()["detail"]
+
+
+def test_media_storage_config_requires_base_url_when_enabled(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": None,
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {},
+        },
+    )
+
+    assert response.status_code == 400
+    assert "requires an API base URL" in response.json()["detail"]
+
+
 def test_validate_runtime_settings_requires_strong_secret_in_production(monkeypatch) -> None:
     original_env = settings.app_env
     original_secret = settings.secret_key

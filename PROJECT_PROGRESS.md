@@ -184,9 +184,15 @@ Last updated: 2026-03-21
   - media processing metadata now records last attempt, last success or failure, processing source, and remote fetch outcome details for later diagnosis
   - the structured results panel now refreshes this overview after upload, retry, status refresh, media delete, and record delete flows
   - media cards now surface extraction mode, processing source, remote fetch state, and recent-attempt timestamps for faster troubleshooting
+- Remote Media Provider Webhook Contract Hardening V1:
+  - custom remote media storage requests now carry explicit contract-version and operation headers so external webhook services can implement stable routing logic
+  - upload responses are now validated strictly for JSON shape, storage key safety, and non-negative size bytes before anything is persisted
+  - transport failures and timeouts for upload, download, and delete now surface as stable remote-storage errors instead of leaking raw client exceptions
+  - media storage provider config now rejects endpoint-level base URLs and enabled custom configs without a service-root base URL
+  - a dedicated remote media webhook contract document is now included for Linux deployment and third-party storage integration
 
 ## Next
-- Remote media provider webhook contract hardening
+- Remote media provider capability health check
 
 ## Delivery Rule
 - Every meaningful slice must update this file
