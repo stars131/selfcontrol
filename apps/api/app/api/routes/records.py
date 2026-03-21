@@ -12,6 +12,7 @@ from app.schemas.record import RecordCreate, RecordRead, RecordUpdate
 from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.location_review import prepare_record_extra_data
+from app.services.media_storage import remove_storage_file
 
 
 router = APIRouter()
@@ -220,8 +221,13 @@ def delete_record(
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
 
+    media_assets = list(record.media_assets)
     db.delete(record)
     db.commit()
+    removed_media_count = 0
+    for media in media_assets:
+        if remove_storage_file(media):
+            removed_media_count += 1
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -230,6 +236,6 @@ def delete_record(
         resource_type="record",
         resource_id=record_id,
         message=f"Deleted record {record.title or record_id}",
-        metadata_json={"type_code": record.type_code},
+        metadata_json={"type_code": record.type_code, "removed_media_count": removed_media_count},
     )
     return {"success": True, "data": {"deleted": True}}

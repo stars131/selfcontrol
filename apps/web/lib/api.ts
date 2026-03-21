@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaStorageSummary,
   NotificationItem,
   ProviderFeatureConfig,
   RecordFilterState,
@@ -456,6 +457,14 @@ export async function getMediaStatus(token: string, workspaceId: string, mediaId
   );
 }
 
+export async function getMediaStorageSummary(token: string, workspaceId: string) {
+  return request<{ summary: MediaStorageSummary }>(
+    `/workspaces/${workspaceId}/media/storage-summary`,
+    { method: "GET" },
+    token,
+  );
+}
+
 export async function fetchMediaBlob(token: string, workspaceId: string, mediaId: string) {
   return requestBlob(`/workspaces/${workspaceId}/media/${mediaId}/content`, token);
 }
@@ -464,6 +473,14 @@ export async function retryMediaProcessing(token: string, workspaceId: string, m
   return request<{ media: MediaAsset }>(
     `/workspaces/${workspaceId}/media/${mediaId}/retry`,
     { method: "POST" },
+    token,
+  );
+}
+
+export async function deleteMedia(token: string, workspaceId: string, mediaId: string) {
+  return request<{ deleted: boolean }>(
+    `/workspaces/${workspaceId}/media/${mediaId}`,
+    { method: "DELETE" },
     token,
   );
 }

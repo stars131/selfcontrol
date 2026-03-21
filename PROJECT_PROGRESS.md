@@ -91,10 +91,16 @@ Last updated: 2026-03-21
   - workspace settings now expose a member directory for owners and editors, with owner-only role changes and member removal
   - owner and self memberships are protected from normal role change and removal flows
   - permission API tests now cover share-link boundaries and workspace member management behavior
+- Media Lifecycle and Storage Summary V1:
+  - media attachments can now be deleted independently, with storage files removed from disk at the same time
+  - record deletion now also cleans up attached media files to avoid orphaned storage growth
+  - workspace media storage summary now reports file count, total size, missing-file count, and largest file details
+  - structured results panel now shows media storage usage and exposes per-attachment delete controls
+  - media API tests now cover storage summary, media deletion, and record-delete file cleanup
 
 ## Next
-- Deeper media metadata extraction and storage lifecycle controls
 - Deployment hardening and production operations pass
+- Production file storage strategy and background media operations
 
 ## Delivery Rule
 - Every meaningful slice must update this file

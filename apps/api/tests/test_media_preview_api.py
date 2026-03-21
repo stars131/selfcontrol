@@ -8,6 +8,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.api.deps import get_current_user
 from app.api.routes import media as media_route
+from app.api.routes import records as records_route
 from app.db.base import Base
 from app.db.session import get_db
 from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, share_link  # noqa: F401
@@ -73,11 +74,14 @@ def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str]:
 
     monkeypatch.setattr(media_route.settings, "storage_dir", str(tmp_path / "uploads"))
     monkeypatch.setattr("app.services.media_processing.settings.storage_dir", str(tmp_path / "uploads"))
+    monkeypatch.setattr("app.services.media_storage.settings.storage_dir", str(tmp_path / "uploads"))
     monkeypatch.setattr("app.services.media_processing.rebuild_record_knowledge", lambda db, record_id: None)
     monkeypatch.setattr(media_route, "log_audit_event", lambda *args, **kwargs: None)
+    monkeypatch.setattr(records_route, "log_audit_event", lambda *args, **kwargs: None)
 
     app = FastAPI()
     app.include_router(media_route.router, prefix="/api/v1/workspaces")
+    app.include_router(records_route.router, prefix="/api/v1/workspaces")
 
     def override_get_db():
         db = session_local()
@@ -120,3 +124,54 @@ def test_media_upload_returns_preview_metadata_and_content(tmp_path, monkeypatch
     assert content_response.status_code == 200
     assert content_response.headers["content-type"] == "image/png"
     assert content_response.content == PNG_1X1
+
+
+def test_media_delete_cleans_file_and_updates_storage_summary(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("pixel.png", PNG_1X1, "image/png")},
+    )
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    stored_path = tmp_path / media_payload["storage_key"]
+    assert stored_path.exists()
+
+    summary_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/storage-summary")
+    assert summary_response.status_code == 200
+    summary = summary_response.json()["data"]["summary"]
+    assert summary["total_count"] == 1
+    assert summary["total_size_bytes"] == len(PNG_1X1)
+    assert summary["by_media_type"]["image"] == 1
+
+    delete_response = client.delete(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}")
+    assert delete_response.status_code == 200
+    assert delete_response.json()["data"]["deleted"] is True
+    assert not stored_path.exists()
+
+    summary_after_delete = client.get(f"/api/v1/workspaces/{workspace_id}/media/storage-summary")
+    assert summary_after_delete.status_code == 200
+    assert summary_after_delete.json()["data"]["summary"]["total_count"] == 0
+
+
+def test_record_delete_cleans_attached_media_files(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("pixel.png", PNG_1X1, "image/png")},
+    )
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    stored_path = tmp_path / media_payload["storage_key"]
+    assert stored_path.exists()
+
+    record_delete_response = client.delete(f"/api/v1/workspaces/{workspace_id}/records/{record_id}")
+    assert record_delete_response.status_code == 200
+    assert record_delete_response.json()["data"]["deleted"] is True
+    assert not stored_path.exists()
+
+    list_media_response = client.get(f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media")
+    assert list_media_response.status_code == 200
+    assert list_media_response.json()["data"]["items"] == []

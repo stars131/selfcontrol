@@ -10,6 +10,7 @@ import type {
   LocationHistoryEntry,
   LocationReview,
   MediaAsset,
+  MediaStorageSummary,
   RecordFilterState,
   RecordItem,
   ReminderItem,
@@ -193,10 +194,12 @@ export function RecordPanelV2({
   selectedRecordId,
   timelineDays,
   mediaAssets,
+  mediaStorageSummary,
   reminders,
   onSelectRecord,
   onSaveRecord,
   onCreateReminder,
+  onDeleteMedia,
   onUpdateReminder,
   onDeleteReminder,
   onDeleteRecord,
@@ -220,6 +223,7 @@ export function RecordPanelV2({
   timelineDays: TimelineDay[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
+  mediaStorageSummary: MediaStorageSummary | null;
   reminders: ReminderItem[];
   onSelectRecord: (recordId: string | null) => void;
   onSaveRecord: (input: {
@@ -239,6 +243,7 @@ export function RecordPanelV2({
     remind_at: string;
     channel_code?: string;
   }) => Promise<void>;
+  onDeleteMedia: (mediaId: string) => Promise<void>;
   onUpdateReminder: (
     reminderId: string,
     input: Partial<{
@@ -279,6 +284,7 @@ export function RecordPanelV2({
   const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null);
   const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
   const [downloadingMediaId, setDownloadingMediaId] = useState<string | null>(null);
+  const [deletingMediaId, setDeletingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
   const [savingReminder, setSavingReminder] = useState(false);
   const [locationReviewForm, setLocationReviewForm] = useState<LocationReviewFormState>({
@@ -296,6 +302,10 @@ export function RecordPanelV2({
   const selectedLocationHistory = useMemo(
     () => readLocationHistory(selectedRecord?.extra_data).slice().reverse(),
     [selectedRecord],
+  );
+  const selectedRecordMediaSizeBytes = useMemo(
+    () => mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0),
+    [mediaAssets],
   );
 
   useEffect(() => {
@@ -515,6 +525,18 @@ export function RecordPanelV2({
     }
   };
 
+  const handleDeleteMediaAsset = async (mediaId: string) => {
+    setDeletingMediaId(mediaId);
+    setError("");
+    try {
+      await onDeleteMedia(mediaId);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to delete media");
+    } finally {
+      setDeletingMediaId(null);
+    }
+  };
+
   const handleApplyFilter = async () => {
     setError("");
     try {
@@ -556,6 +578,17 @@ export function RecordPanelV2({
 
     const units = ["B", "KB", "MB", "GB"];
     let value = asset.size_bytes;
+    let unitIndex = 0;
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
+      unitIndex += 1;
+    }
+    return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
+  };
+
+  const formatByteCount = (sizeBytes: number): string => {
+    const units = ["B", "KB", "MB", "GB", "TB"];
+    let value = sizeBytes;
     let unitIndex = 0;
     while (value >= 1024 && unitIndex < units.length - 1) {
       value /= 1024;
@@ -1080,6 +1113,37 @@ export function RecordPanelV2({
                 <input disabled={!canWriteWorkspace} onChange={handleUpload} type="file" />
               </label>
               {uploading ? <div className="notice">Uploading media...</div> : null}
+              <div className="detail-grid" style={{ marginBottom: 16 }}>
+                <div className="subtle-card">
+                  <div className="eyebrow">This record media</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {mediaAssets.length} file{mediaAssets.length === 1 ? "" : "s"} / {formatByteCount(selectedRecordMediaSizeBytes)}
+                  </div>
+                </div>
+                <div className="subtle-card">
+                  <div className="eyebrow">Workspace storage</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {mediaStorageSummary
+                      ? `${mediaStorageSummary.total_count} file${mediaStorageSummary.total_count === 1 ? "" : "s"} / ${mediaStorageSummary.total_size_label}`
+                      : "-"}
+                  </div>
+                </div>
+                <div className="subtle-card">
+                  <div className="eyebrow">Storage health</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {mediaStorageSummary
+                      ? mediaStorageSummary.missing_file_count
+                        ? `${mediaStorageSummary.missing_file_count} missing file(s)`
+                        : "All tracked files present"
+                      : "-"}
+                  </div>
+                </div>
+              </div>
+              {mediaStorageSummary?.largest_item_name ? (
+                <div className="muted" style={{ marginBottom: 16 }}>
+                  Largest file: {mediaStorageSummary.largest_item_name} ({mediaStorageSummary.largest_item_size_label})
+                </div>
+              ) : null}
               <div className="record-list compact-list">
                 {mediaAssets.length ? (
                   mediaAssets.map((asset) => (
@@ -1167,6 +1231,14 @@ export function RecordPanelV2({
                             {retryingMediaId === asset.id ? "Retrying..." : "Retry"}
                           </button>
                         ) : null}
+                        <button
+                          className="button secondary"
+                          type="button"
+                          disabled={deletingMediaId === asset.id || !canWriteWorkspace}
+                          onClick={() => void handleDeleteMediaAsset(asset.id)}
+                        >
+                          {deletingMediaId === asset.id ? "Deleting..." : "Delete media"}
+                        </button>
                       </div>
                     </article>
                   ))

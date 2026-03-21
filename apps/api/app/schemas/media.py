@@ -23,3 +23,16 @@ class MediaRead(BaseModel):
     processed_at: datetime | None = None
     created_at: datetime
     updated_at: datetime
+
+
+class MediaStorageSummaryRead(BaseModel):
+    workspace_id: str
+    total_count: int
+    total_size_bytes: int
+    total_size_label: str
+    missing_file_count: int
+    by_media_type: dict[str, int]
+    by_processing_status: dict[str, int]
+    largest_item_name: str | None = None
+    largest_item_size_bytes: int | None = None
+    largest_item_size_label: str | None = None

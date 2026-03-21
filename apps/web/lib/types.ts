@@ -122,6 +122,19 @@ export type MediaAsset = {
   updated_at: string;
 };
 
+export type MediaStorageSummary = {
+  workspace_id: string;
+  total_count: number;
+  total_size_bytes: number;
+  total_size_label: string;
+  missing_file_count: number;
+  by_media_type: Record<string, number>;
+  by_processing_status: Record<string, number>;
+  largest_item_name?: string | null;
+  largest_item_size_bytes?: number | null;
+  largest_item_size_label?: string | null;
+};
+
 export type ReminderItem = {
   id: string;
   workspace_id: string;

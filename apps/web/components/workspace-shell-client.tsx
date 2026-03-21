@@ -9,11 +9,13 @@ import {
   createRecord,
   createReminder,
   createShareLink,
+  deleteMedia,
   deleteSearchPreset,
   deleteRecord,
   deleteReminder,
   getKnowledgeStats,
   getMediaStatus,
+  getMediaStorageSummary,
   getWorkspace,
   listAuditLogs,
   listConversations,
@@ -43,6 +45,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaStorageSummary,
   NotificationItem,
   ProviderFeatureConfig,
   RecordFilterState,
@@ -77,6 +80,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
+  const [mediaStorageSummary, setMediaStorageSummary] = useState<MediaStorageSummary | null>(null);
   const [reminders, setReminders] = useState<ReminderItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
@@ -114,6 +118,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     const result = await listMedia(activeToken, workspaceId, recordId);
     setMediaAssets(result.items);
+  };
+
+  const refreshMediaStorageSummary = async (activeToken: string) => {
+    const result = await getMediaStorageSummary(activeToken, workspaceId);
+    setMediaStorageSummary(result.summary);
   };
 
   const refreshReminders = async (activeToken: string, recordId: string | null) => {
@@ -195,6 +204,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         }
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
+        await refreshMediaStorageSummary(activeToken);
         if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
           await refreshProviderConfigs(activeToken);
           if (workspaceResult.workspace.role === "owner") {
@@ -357,6 +367,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
     await refreshRecords(token, recordFilter);
+    await refreshMediaStorageSummary(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -370,6 +381,21 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     await uploadMedia(token, workspaceId, recordId, file);
     await refreshMedia(token, recordId);
+    await refreshMediaStorageSummary(token);
+    await refreshKnowledge(token);
+    await refreshAuditLogs(token);
+  };
+
+  const handleDeleteMedia = async (mediaId: string) => {
+    if (!token || !selectedRecordId) {
+      throw new Error("Not authenticated");
+    }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
+    await deleteMedia(token, workspaceId, mediaId);
+    await refreshMedia(token, selectedRecordId);
+    await refreshMediaStorageSummary(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -666,7 +692,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           authToken={token}
           canWriteWorkspace={canWriteWorkspace}
           mediaAssets={mediaAssets}
+          mediaStorageSummary={mediaStorageSummary}
           onCreateReminder={handleCreateReminder}
+          onDeleteMedia={handleDeleteMedia}
           onDeleteRecord={handleDeleteRecord}
           onDeleteReminder={handleDeleteReminder}
           onRefreshMediaStatus={handleRefreshMediaStatus}

@@ -13,9 +13,11 @@ from app.db.session import get_db
 from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
-from app.schemas.media import MediaRead
+from app.schemas.media import MediaRead, MediaStorageSummaryRead
 from app.services.audit import log_audit_event
+from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_processing import process_media_asset
+from app.services.media_storage import remove_storage_file, resolve_storage_path, summarize_workspace_media_storage
 
 
 router = APIRouter()
@@ -28,7 +30,7 @@ def list_media(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_write_access(workspace_id, current_user, db)
+    require_workspace_member(workspace_id, current_user, db)
     items = (
         db.query(MediaAsset)
         .filter(MediaAsset.workspace_id == workspace_id, MediaAsset.record_id == record_id)
@@ -38,6 +40,17 @@ def list_media(
     return {"success": True, "data": {"items": [MediaRead.model_validate(item).model_dump() for item in items]}}
 
 
+@router.get("/{workspace_id}/media/storage-summary")
+def get_media_storage_summary(
+    workspace_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_member(workspace_id, current_user, db)
+    summary = summarize_workspace_media_storage(db, workspace_id)
+    return {"success": True, "data": {"summary": MediaStorageSummaryRead.model_validate(summary).model_dump()}}
+
+
 @router.get("/{workspace_id}/media/{media_id}/status")
 def get_media_status(
     workspace_id: str,
@@ -45,7 +58,7 @@ def get_media_status(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_write_access(workspace_id, current_user, db)
+    require_workspace_member(workspace_id, current_user, db)
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
@@ -83,7 +96,7 @@ async def upload_media(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     record = db.get(Record, record_id)
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
@@ -134,7 +147,7 @@ def retry_media_processing(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
@@ -151,3 +164,35 @@ def retry_media_processing(
         metadata_json={"record_id": media.record_id, "processing_status": media.processing_status},
     )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
+
+
+@router.delete("/{workspace_id}/media/{media_id}")
+def delete_media(
+    workspace_id: str,
+    media_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_write_access(workspace_id, current_user, db)
+    media = db.get(MediaAsset, media_id)
+    if not media or media.workspace_id != workspace_id:
+        raise HTTPException(status_code=404, detail="Media not found")
+
+    record_id = media.record_id
+    original_filename = media.original_filename
+    storage_key = media.storage_key
+    remove_storage_file(media)
+    db.delete(media)
+    db.commit()
+    rebuild_record_knowledge(db, record_id)
+    log_audit_event(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        action_code="media.delete",
+        resource_type="media_asset",
+        resource_id=media_id,
+        message=f"Deleted media {original_filename}",
+        metadata_json={"record_id": record_id, "storage_key": storage_key},
+    )
+    return {"success": True, "data": {"deleted": True}}
