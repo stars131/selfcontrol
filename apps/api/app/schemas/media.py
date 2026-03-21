@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class MediaRead(BaseModel):
@@ -67,3 +67,25 @@ class MediaRetentionReportRead(BaseModel):
     orphan_file_size_label: str
     largest_items: list[MediaRetentionItemRead]
     retention_candidates: list[MediaRetentionItemRead]
+
+
+class MediaRetentionCleanupRequest(BaseModel):
+    media_ids: list[str] = Field(default_factory=list)
+    older_than_days: int = Field(default=90, ge=1, le=3650)
+    purge_orphan_files: bool = False
+    dry_run: bool = False
+
+
+class MediaRetentionCleanupResultRead(BaseModel):
+    workspace_id: str
+    older_than_days: int
+    dry_run: bool
+    candidate_media_count: int
+    candidate_media_size_bytes: int
+    candidate_media_size_label: str
+    orphan_file_count: int
+    orphan_file_size_bytes: int
+    orphan_file_size_label: str
+    affected_record_ids: list[str]
+    skipped_media_ids: list[str]
+    skipped_reason_by_media_id: dict[str, str]

@@ -340,7 +340,14 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             )}
           </div>
           {workspace?.role === "owner" || workspace?.role === "editor" ? (
-            token ? <WorkspaceMediaRetentionCard locale={locale} token={token} workspaceId={workspaceId} /> : null
+            token ? (
+              <WorkspaceMediaRetentionCard
+                locale={locale}
+                role={workspace.role}
+                token={token}
+                workspaceId={workspaceId}
+              />
+            ) : null
           ) : null}
           {workspace?.role === "owner" || workspace?.role === "editor" ? (
             <section className="record-card" style={{ marginTop: 24 }}>

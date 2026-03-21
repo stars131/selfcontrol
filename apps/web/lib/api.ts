@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaRetentionCleanupResult,
   MediaRetentionReport,
   MediaStorageSummary,
   NotificationItem,
@@ -483,6 +484,31 @@ export async function getMediaRetentionReport(
     ? `/workspaces/${workspaceId}/media/retention-report?${query}`
     : `/workspaces/${workspaceId}/media/retention-report`;
   return request<{ report: MediaRetentionReport }>(path, { method: "GET" }, token);
+}
+
+export async function cleanupMediaRetention(
+  token: string,
+  workspaceId: string,
+  input: {
+    mediaIds: string[];
+    olderThanDays: number;
+    purgeOrphanFiles?: boolean;
+    dryRun?: boolean;
+  },
+) {
+  return request<{ result: MediaRetentionCleanupResult }>(
+    `/workspaces/${workspaceId}/media/retention-cleanup`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        media_ids: input.mediaIds,
+        older_than_days: input.olderThanDays,
+        purge_orphan_files: input.purgeOrphanFiles ?? false,
+        dry_run: input.dryRun ?? false,
+      }),
+    },
+    token,
+  );
 }
 
 export async function fetchMediaBlob(token: string, workspaceId: string, mediaId: string) {

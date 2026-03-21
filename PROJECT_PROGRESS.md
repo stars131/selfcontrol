@@ -139,10 +139,15 @@ Last updated: 2026-03-21
   - the report summarizes stale attachment counts and size, oldest tracked media, missing tracked files, and local orphan files
   - workspace settings now include a retention card with largest-file and cleanup-candidate lists
   - media API coverage now verifies retention counts, missing-file detection, and orphan-file detection
+- Media Retention Cleanup Actions V1:
+  - owner-only cleanup API now supports deleting selected stale media and purging orphan files
+  - cleanup requests support `dry_run` preview mode on the backend before destructive execution
+  - workspace settings retention card now lets owners select stale candidates and execute cleanup safely
+  - cleanup API coverage now verifies dry-run behavior, actual deletion, and owner-only permission boundaries
 
 ## Next
 - Workspace and attachment export/import strategy
-- Archive and cleanup actions for stale media
+- Archive tiering for stale media before deletion
 
 ## Delivery Rule
 - Every meaningful slice must update this file

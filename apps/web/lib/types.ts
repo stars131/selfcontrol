@@ -166,6 +166,21 @@ export type MediaRetentionReport = {
   retention_candidates: MediaRetentionItem[];
 };
 
+export type MediaRetentionCleanupResult = {
+  workspace_id: string;
+  older_than_days: number;
+  dry_run: boolean;
+  candidate_media_count: number;
+  candidate_media_size_bytes: number;
+  candidate_media_size_label: string;
+  orphan_file_count: number;
+  orphan_file_size_bytes: number;
+  orphan_file_size_label: string;
+  affected_record_ids: string[];
+  skipped_media_ids: string[];
+  skipped_reason_by_media_id: Record<string, string>;
+};
+
 export type ReminderItem = {
   id: string;
   workspace_id: string;

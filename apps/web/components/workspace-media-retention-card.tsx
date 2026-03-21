@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { getMediaRetentionReport } from "../lib/api";
+import { cleanupMediaRetention, getMediaRetentionReport } from "../lib/api";
 import type { LocaleCode } from "../lib/locale";
-import type { MediaRetentionItem, MediaRetentionReport } from "../lib/types";
+import type { MediaRetentionCleanupResult, MediaRetentionItem, MediaRetentionReport } from "../lib/types";
 
 const COPY: Record<
   LocaleCode,
@@ -32,6 +32,19 @@ const COPY: Record<
     allHealthy: string;
     days: string;
     loadFailed: string;
+    ownerActions: string;
+    editorReadOnly: string;
+    selectLabel: string;
+    selectAll: string;
+    clearSelection: string;
+    selectedSummary: string;
+    deleteSelected: string;
+    deleteOrphans: string;
+    processing: string;
+    cleanupFailed: string;
+    cleanupCompleted: string;
+    cleanupConfirmSelected: string;
+    cleanupConfirmOrphans: string;
   }
 > = {
   "zh-CN": {
@@ -58,6 +71,19 @@ const COPY: Record<
     allHealthy: "已跟踪文件完整",
     days: "天",
     loadFailed: "加载保留报告失败",
+    ownerActions: "清理动作",
+    editorReadOnly: "当前为 editor，只能查看保留分析，不能执行删除。",
+    selectLabel: "选择候选",
+    selectAll: "全选候选",
+    clearSelection: "清空选择",
+    selectedSummary: "已选候选",
+    deleteSelected: "删除已选旧媒体",
+    deleteOrphans: "删除孤儿文件",
+    processing: "处理中...",
+    cleanupFailed: "执行清理失败",
+    cleanupCompleted: "清理已完成",
+    cleanupConfirmSelected: "确定删除当前选中的旧媒体吗？此操作会删除数据库记录和本地文件。",
+    cleanupConfirmOrphans: "确定删除当前工作区检测到的孤儿文件吗？此操作不可撤销。",
   },
   en: {
     eyebrow: "Media Retention",
@@ -84,6 +110,21 @@ const COPY: Record<
     allHealthy: "Tracked files are present",
     days: "days",
     loadFailed: "Failed to load retention report",
+    ownerActions: "Cleanup Actions",
+    editorReadOnly: "Editor access can review retention analysis but cannot execute deletions.",
+    selectLabel: "Select candidate",
+    selectAll: "Select all",
+    clearSelection: "Clear selection",
+    selectedSummary: "Selected candidates",
+    deleteSelected: "Delete selected stale media",
+    deleteOrphans: "Delete orphan files",
+    processing: "Processing...",
+    cleanupFailed: "Failed to execute cleanup",
+    cleanupCompleted: "Cleanup completed",
+    cleanupConfirmSelected:
+      "Delete the selected stale media now? This removes both the tracked record and local file.",
+    cleanupConfirmOrphans:
+      "Delete all detected orphan files in this workspace now? This cannot be undone.",
   },
   ja: {
     eyebrow: "メディア保持",
@@ -110,6 +151,19 @@ const COPY: Record<
     allHealthy: "追跡ファイルは揃っています",
     days: "日",
     loadFailed: "保持レポートの読み込みに失敗しました",
+    ownerActions: "整理操作",
+    editorReadOnly: "editor 権限では保持分析のみ確認でき、削除は実行できません。",
+    selectLabel: "候補を選択",
+    selectAll: "候補を全選択",
+    clearSelection: "選択解除",
+    selectedSummary: "選択済み候補",
+    deleteSelected: "選択した古いメディアを削除",
+    deleteOrphans: "孤立ファイルを削除",
+    processing: "処理中...",
+    cleanupFailed: "整理の実行に失敗しました",
+    cleanupCompleted: "整理が完了しました",
+    cleanupConfirmSelected: "選択した古いメディアを削除しますか。DB レコードとローカルファイルの両方が削除されます。",
+    cleanupConfirmOrphans: "このワークスペースで検出された孤立ファイルを削除しますか。この操作は元に戻せません。",
   },
 };
 
@@ -147,16 +201,22 @@ export function WorkspaceMediaRetentionCard({
   token,
   workspaceId,
   locale,
+  role,
 }: {
   token: string;
   workspaceId: string;
   locale: LocaleCode;
+  role: "owner" | "editor";
 }) {
   const copy = COPY[locale];
   const [olderThanDays, setOlderThanDays] = useState(90);
   const [report, setReport] = useState<MediaRetentionReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedMediaIds, setSelectedMediaIds] = useState<string[]>([]);
+  const [cleanupLoading, setCleanupLoading] = useState(false);
+  const [cleanupError, setCleanupError] = useState("");
+  const [cleanupResult, setCleanupResult] = useState<MediaRetentionCleanupResult | null>(null);
 
   const loadReport = async (threshold: number) => {
     setLoading(true);
@@ -167,6 +227,9 @@ export function WorkspaceMediaRetentionCard({
         limit: 5,
       });
       setReport(result.report);
+      setSelectedMediaIds((current) =>
+        current.filter((mediaId) => result.report.retention_candidates.some((item) => item.media_id === mediaId)),
+      );
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : copy.loadFailed);
     } finally {
@@ -184,6 +247,43 @@ export function WorkspaceMediaRetentionCard({
         `${report.orphan_file_count} ${copy.orphanFiles}`,
       ].join(" / ")
     : "-";
+
+  const toggleSelectedMedia = (mediaId: string) => {
+    setSelectedMediaIds((current) =>
+      current.includes(mediaId) ? current.filter((item) => item !== mediaId) : [...current, mediaId],
+    );
+  };
+
+  const handleCleanup = async ({
+    mediaIds,
+    purgeOrphanFiles,
+    confirmMessage,
+  }: {
+    mediaIds: string[];
+    purgeOrphanFiles: boolean;
+    confirmMessage: string;
+  }) => {
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    setCleanupLoading(true);
+    setCleanupError("");
+    try {
+      const result = await cleanupMediaRetention(token, workspaceId, {
+        mediaIds,
+        olderThanDays,
+        purgeOrphanFiles,
+        dryRun: false,
+      });
+      setCleanupResult(result.result);
+      await loadReport(olderThanDays);
+    } catch (caught) {
+      setCleanupError(caught instanceof Error ? caught.message : copy.cleanupFailed);
+    } finally {
+      setCleanupLoading(false);
+    }
+  };
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
@@ -220,6 +320,20 @@ export function WorkspaceMediaRetentionCard({
           {error}
         </div>
       ) : null}
+      {cleanupError ? (
+        <div className="notice error" style={{ marginTop: 16 }}>
+          {cleanupError}
+        </div>
+      ) : null}
+      {cleanupResult ? (
+        <div className="notice" style={{ marginTop: 16 }}>
+          {copy.cleanupCompleted}: {cleanupResult.candidate_media_count} / {cleanupResult.candidate_media_size_label},{" "}
+          {cleanupResult.orphan_file_count} {copy.orphanFiles.toLowerCase ? copy.orphanFiles.toLowerCase() : copy.orphanFiles}
+          {cleanupResult.orphan_file_count || cleanupResult.orphan_file_size_bytes
+            ? ` / ${cleanupResult.orphan_file_size_label}`
+            : ""}
+        </div>
+      ) : null}
       <div className="detail-grid" style={{ marginTop: 16 }}>
         <div className="subtle-card">
           <div className="eyebrow">{copy.totalTracked}</div>
@@ -248,6 +362,66 @@ export function WorkspaceMediaRetentionCard({
           ? `${copy.orphanFiles}: ${report.orphan_file_count} / ${report.orphan_file_size_label}. ${copy.cleanupNote}`
           : copy.cleanupNote}
       </div>
+      <section className="subtle-card" style={{ marginTop: 16 }}>
+        <div className="eyebrow">{copy.ownerActions}</div>
+        {role === "owner" ? (
+          <div className="form-stack" style={{ marginTop: 12 }}>
+            <div className="muted">
+              {copy.selectedSummary}: {selectedMediaIds.length}
+            </div>
+            <div className="action-row">
+              <button
+                className="button secondary"
+                disabled={cleanupLoading || !report?.retention_candidates.length}
+                type="button"
+                onClick={() => setSelectedMediaIds(report?.retention_candidates.map((item) => item.media_id) ?? [])}
+              >
+                {copy.selectAll}
+              </button>
+              <button
+                className="button secondary"
+                disabled={cleanupLoading || !selectedMediaIds.length}
+                type="button"
+                onClick={() => setSelectedMediaIds([])}
+              >
+                {copy.clearSelection}
+              </button>
+              <button
+                className="button secondary"
+                disabled={cleanupLoading || !selectedMediaIds.length}
+                type="button"
+                onClick={() =>
+                  void handleCleanup({
+                    mediaIds: selectedMediaIds,
+                    purgeOrphanFiles: false,
+                    confirmMessage: copy.cleanupConfirmSelected,
+                  })
+                }
+              >
+                {cleanupLoading ? copy.processing : copy.deleteSelected}
+              </button>
+              <button
+                className="button secondary"
+                disabled={cleanupLoading || !report?.orphan_file_count}
+                type="button"
+                onClick={() =>
+                  void handleCleanup({
+                    mediaIds: [],
+                    purgeOrphanFiles: true,
+                    confirmMessage: copy.cleanupConfirmOrphans,
+                  })
+                }
+              >
+                {cleanupLoading ? copy.processing : copy.deleteOrphans}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="notice" style={{ marginTop: 12 }}>
+            {copy.editorReadOnly}
+          </div>
+        )}
+      </section>
       <div className="two-column-grid" style={{ marginTop: 16 }}>
         <section className="subtle-card">
           <div className="eyebrow">{copy.largestTitle}</div>
@@ -263,7 +437,23 @@ export function WorkspaceMediaRetentionCard({
           <div className="eyebrow">{copy.candidatesTitle}</div>
           <div className="record-list compact-list" style={{ marginTop: 12 }}>
             {report?.retention_candidates.length ? (
-              report.retention_candidates.map((item) => renderItem(item, locale, copy))
+              report.retention_candidates.map((item) => (
+                <div key={item.media_id}>
+                  {role === "owner" ? (
+                    <label className="muted" style={{ display: "block", marginBottom: 8 }}>
+                      <input
+                        checked={selectedMediaIds.includes(item.media_id)}
+                        disabled={cleanupLoading}
+                        onChange={() => toggleSelectedMedia(item.media_id)}
+                        style={{ marginRight: 8 }}
+                        type="checkbox"
+                      />
+                      {copy.selectLabel}
+                    </label>
+                  ) : null}
+                  {renderItem(item, locale, copy)}
+                </div>
+              ))
             ) : (
               <div className="notice">{copy.noCandidates}</div>
             )}

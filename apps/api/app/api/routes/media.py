@@ -7,18 +7,25 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_role, require_workspace_write_access
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
-from app.schemas.media import MediaRead, MediaRetentionReportRead, MediaStorageSummaryRead
+from app.schemas.media import (
+    MediaRead,
+    MediaRetentionCleanupRequest,
+    MediaRetentionCleanupResultRead,
+    MediaRetentionReportRead,
+    MediaStorageSummaryRead,
+)
 from app.services.audit import log_audit_event
 from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import (
     build_workspace_media_retention_report,
+    cleanup_workspace_media_retention,
     remove_storage_file,
     resolve_storage_path,
     summarize_workspace_media_storage,
@@ -72,6 +79,46 @@ def get_media_retention_report(
         limit=limit,
     )
     return {"success": True, "data": {"report": MediaRetentionReportRead.model_validate(report).model_dump()}}
+
+
+@router.post("/{workspace_id}/media/retention-cleanup")
+def cleanup_media_retention(
+    workspace_id: str,
+    payload: MediaRetentionCleanupRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
+    result = cleanup_workspace_media_retention(
+        db,
+        workspace_id,
+        media_ids=payload.media_ids,
+        older_than_days=payload.older_than_days,
+        purge_orphan_files=payload.purge_orphan_files,
+        dry_run=payload.dry_run,
+    )
+    if not payload.dry_run and (result["candidate_media_count"] or result["orphan_file_count"]):
+        log_audit_event(
+            db,
+            workspace_id=workspace_id,
+            actor_user_id=current_user.id,
+            action_code="media.retention_cleanup",
+            resource_type="workspace",
+            resource_id=workspace_id,
+            message="Executed media retention cleanup",
+            metadata_json={
+                "older_than_days": payload.older_than_days,
+                "candidate_media_count": result["candidate_media_count"],
+                "candidate_media_size_bytes": result["candidate_media_size_bytes"],
+                "orphan_file_count": result["orphan_file_count"],
+                "orphan_file_size_bytes": result["orphan_file_size_bytes"],
+                "skipped_media_ids": result["skipped_media_ids"],
+            },
+        )
+    return {
+        "success": True,
+        "data": {"result": MediaRetentionCleanupResultRead.model_validate(result).model_dump()},
+    }
 
 
 @router.get("/{workspace_id}/media/{media_id}/status")

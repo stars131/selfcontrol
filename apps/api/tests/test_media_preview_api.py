@@ -267,3 +267,117 @@ def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, mo
 
     assert [item["original_filename"] for item in report["retention_candidates"]] == ["old-note.txt"]
     assert report["retention_candidates"][0]["age_days"] >= 179
+
+
+def test_media_retention_cleanup_supports_dry_run_and_execution(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    old_upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("old-note.txt", b"old snack note", "text/plain")},
+    )
+    assert old_upload_response.status_code == 200
+    old_media_payload = old_upload_response.json()["data"]["media"]
+
+    recent_upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("recent-note.txt", b"recent snack note", "text/plain")},
+    )
+    assert recent_upload_response.status_code == 200
+    recent_media_payload = recent_upload_response.json()["data"]["media"]
+
+    with session_local() as db:
+        old_media = db.get(MediaAsset, old_media_payload["id"])
+        assert old_media is not None
+        old_media.created_at = datetime.now(timezone.utc) - timedelta(days=180)
+        db.add(old_media)
+        db.commit()
+
+    old_file_path = tmp_path / old_media_payload["storage_key"]
+    recent_file_path = tmp_path / recent_media_payload["storage_key"]
+    assert old_file_path.exists()
+    assert recent_file_path.exists()
+
+    orphan_file_path = tmp_path / "uploads" / workspace_id / "orphan.bin"
+    orphan_file_path.parent.mkdir(parents=True, exist_ok=True)
+    orphan_file_path.write_bytes(b"orphan-file")
+
+    dry_run_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-cleanup",
+        json={
+            "media_ids": [old_media_payload["id"], recent_media_payload["id"]],
+            "older_than_days": 90,
+            "purge_orphan_files": True,
+            "dry_run": True,
+        },
+    )
+
+    assert dry_run_response.status_code == 200
+    dry_run_result = dry_run_response.json()["data"]["result"]
+    assert dry_run_result["dry_run"] is True
+    assert dry_run_result["candidate_media_count"] == 1
+    assert dry_run_result["candidate_media_size_bytes"] == len(b"old snack note")
+    assert dry_run_result["orphan_file_count"] == 1
+    assert dry_run_result["skipped_reason_by_media_id"][recent_media_payload["id"]] == "not_old_enough"
+    assert old_file_path.exists()
+    assert recent_file_path.exists()
+    assert orphan_file_path.exists()
+
+    cleanup_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-cleanup",
+        json={
+            "media_ids": [old_media_payload["id"], recent_media_payload["id"]],
+            "older_than_days": 90,
+            "purge_orphan_files": True,
+            "dry_run": False,
+        },
+    )
+
+    assert cleanup_response.status_code == 200
+    cleanup_result = cleanup_response.json()["data"]["result"]
+    assert cleanup_result["dry_run"] is False
+    assert cleanup_result["candidate_media_count"] == 1
+    assert cleanup_result["orphan_file_count"] == 1
+    assert cleanup_result["affected_record_ids"] == [record_id]
+
+    assert not old_file_path.exists()
+    assert recent_file_path.exists()
+    assert not orphan_file_path.exists()
+
+    list_response = client.get(f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media")
+    assert list_response.status_code == 200
+    assert [item["original_filename"] for item in list_response.json()["data"]["items"]] == ["recent-note.txt"]
+
+
+def test_media_retention_cleanup_is_owner_only(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("old-note.txt", b"old snack note", "text/plain")},
+    )
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+
+    with session_local() as db:
+        member = db.query(WorkspaceMember).filter(WorkspaceMember.workspace_id == workspace_id).first()
+        assert member is not None
+        member.role = "editor"
+        old_media = db.get(MediaAsset, media_payload["id"])
+        assert old_media is not None
+        old_media.created_at = datetime.now(timezone.utc) - timedelta(days=180)
+        db.add(member)
+        db.add(old_media)
+        db.commit()
+
+    cleanup_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-cleanup",
+        json={
+            "media_ids": [media_payload["id"]],
+            "older_than_days": 90,
+            "purge_orphan_files": False,
+            "dry_run": False,
+        },
+    )
+
+    assert cleanup_response.status_code == 403
