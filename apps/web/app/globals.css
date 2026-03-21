@@ -222,6 +222,20 @@ button:disabled {
   gap: 10px;
 }
 
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.locale-switcher {
+  display: grid;
+  gap: 6px;
+  min-width: 140px;
+}
+
 .map-canvas {
   width: 100%;
   height: 280px;

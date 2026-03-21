@@ -59,6 +59,12 @@ Last updated: 2026-03-21
   - media processing now records base file metadata including size labels, extension, checksum, and image dimensions
   - text extraction metadata now includes character and line counts for quick review
   - media preview API behavior is covered by dedicated tests
+- Entry Localization and Settings Page V1:
+  - landing page now supports language switching with persisted locale preference
+  - login, register, workspace entry, and workspace settings pages follow the selected locale
+  - dedicated workspace settings page added for AI provider and API-related configuration
+  - provider configuration editor is now reusable across chat and settings surfaces
+  - workspaces list and workspace chat now expose direct links into settings
 
 ## Next
 - Security hardening: audit logs, share permission boundaries, secret management

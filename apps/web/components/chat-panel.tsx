@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { ProviderSettingsPanel } from "./provider-settings-panel";
 import type {
   AuditLogItem,
   ChatMessage,
@@ -11,14 +13,6 @@ import type {
   ProviderFeatureConfig,
   ShareLinkItem,
 } from "../lib/types";
-
-type ProviderDraft = {
-  provider_code: string;
-  model_name: string;
-  is_enabled: boolean;
-  api_base_url: string;
-  api_key_env_name: string;
-};
 
 function buildShareUrl(path: string) {
   if (typeof window === "undefined") {
@@ -93,25 +87,9 @@ export function ChatPanel({
   const [shareName, setShareName] = useState("");
   const [sharePermission, setSharePermission] = useState("viewer");
   const [shareMaxUses, setShareMaxUses] = useState("");
-  const [providerSavingCode, setProviderSavingCode] = useState("");
-  const [providerDrafts, setProviderDrafts] = useState<Record<string, ProviderDraft>>({});
   const [error, setError] = useState("");
   const unreadCount = notifications.filter((item) => !item.is_read).length;
   const latestShareUrl = useMemo(() => (latestSharePath ? buildShareUrl(latestSharePath) : ""), [latestSharePath]);
-
-  useEffect(() => {
-    const nextDrafts: Record<string, ProviderDraft> = {};
-    for (const item of providerConfigs) {
-      nextDrafts[item.feature_code] = {
-        provider_code: item.provider_code,
-        model_name: item.model_name ?? "",
-        is_enabled: item.is_enabled,
-        api_base_url: item.api_base_url ?? "",
-        api_key_env_name: item.api_key_env_name ?? "",
-      };
-    }
-    setProviderDrafts(nextDrafts);
-  }, [providerConfigs]);
 
   const handleSend = async () => {
     const value = draft.trim();
@@ -204,44 +182,6 @@ export function ChatPanel({
     }
   };
 
-  const handleProviderDraftChange = (featureCode: string, patch: Partial<ProviderDraft>) => {
-    setProviderDrafts((current) => ({
-      ...current,
-      [featureCode]: {
-        provider_code: current[featureCode]?.provider_code ?? "",
-        model_name: current[featureCode]?.model_name ?? "",
-        is_enabled: current[featureCode]?.is_enabled ?? false,
-        api_base_url: current[featureCode]?.api_base_url ?? "",
-        api_key_env_name: current[featureCode]?.api_key_env_name ?? "",
-        ...patch,
-      },
-    }));
-  };
-
-  const handleSaveProviderConfig = async (featureCode: string) => {
-    const item = providerDrafts[featureCode];
-    if (!item) {
-      return;
-    }
-
-    setProviderSavingCode(featureCode);
-    setError("");
-    try {
-      await onSaveProviderConfig(featureCode, {
-        provider_code: item.provider_code,
-        model_name: item.model_name || null,
-        is_enabled: item.is_enabled,
-        api_base_url: item.api_base_url || null,
-        api_key_env_name: item.api_key_env_name || null,
-      });
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Save failed";
-      setError(message);
-    } finally {
-      setProviderSavingCode("");
-    }
-  };
-
   return (
     <section className="panel">
       <div className="panel-header">
@@ -254,6 +194,9 @@ export function ChatPanel({
             Workspace {workspaceId}
           </div>
         </div>
+        <Link className="button secondary" href={`/app/workspaces/${workspaceId}/settings`}>
+          Settings
+        </Link>
       </div>
       <div className="panel-body">
         <div className="conversation-bar">
@@ -375,91 +318,11 @@ export function ChatPanel({
             </div>
           </div>
         </div>
-        <div className="record-card" style={{ marginBottom: 16 }}>
-          <div className="eyebrow">Providers</div>
-          <div className="record-list compact-list" style={{ marginTop: 12 }}>
-            {providerConfigs.map((item) => {
-              const draftItem = providerDrafts[item.feature_code];
-              if (!draftItem) {
-                return null;
-              }
-
-              return (
-                <article className="message" key={item.feature_code}>
-                  <div className="eyebrow">{item.feature_label}</div>
-                  <div style={{ marginTop: 8, lineHeight: 1.6 }}>{item.feature_description}</div>
-                  <label className="muted" style={{ display: "block", marginTop: 10 }}>
-                    <input
-                      checked={draftItem.is_enabled}
-                      onChange={(event) =>
-                        handleProviderDraftChange(item.feature_code, { is_enabled: event.target.checked })
-                      }
-                      style={{ marginRight: 8 }}
-                      type="checkbox"
-                    />
-                    Enabled
-                  </label>
-                  <div className="muted" style={{ marginTop: 10 }}>
-                    Provider
-                  </div>
-                  <select
-                    className="input"
-                    style={{ marginTop: 8 }}
-                    value={draftItem.provider_code}
-                    onChange={(event) =>
-                      handleProviderDraftChange(item.feature_code, { provider_code: event.target.value })
-                    }
-                  >
-                    {item.providers.map((providerCode) => (
-                      <option key={providerCode} value={providerCode}>
-                        {providerCode}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    className="input"
-                    placeholder="Model name"
-                    style={{ marginTop: 10 }}
-                    value={draftItem.model_name}
-                    onChange={(event) =>
-                      handleProviderDraftChange(item.feature_code, { model_name: event.target.value })
-                    }
-                  />
-                  <input
-                    className="input"
-                    placeholder="API base URL"
-                    style={{ marginTop: 10 }}
-                    value={draftItem.api_base_url}
-                    onChange={(event) =>
-                      handleProviderDraftChange(item.feature_code, { api_base_url: event.target.value })
-                    }
-                  />
-                  <input
-                    className="input"
-                    placeholder="API key env name"
-                    style={{ marginTop: 10 }}
-                    value={draftItem.api_key_env_name}
-                    onChange={(event) =>
-                      handleProviderDraftChange(item.feature_code, { api_key_env_name: event.target.value })
-                    }
-                  />
-                  <div className="muted" style={{ marginTop: 8 }}>
-                    {item.is_default ? "Using default profile" : "Workspace override saved"}
-                  </div>
-                  <div className="action-row" style={{ marginTop: 10 }}>
-                    <button
-                      className="button secondary"
-                      disabled={providerSavingCode === item.feature_code}
-                      type="button"
-                      onClick={() => void handleSaveProviderConfig(item.feature_code)}
-                    >
-                      {providerSavingCode === item.feature_code ? "Saving..." : "Save provider"}
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+        <div style={{ marginBottom: 16 }}>
+          <ProviderSettingsPanel
+            onSaveProviderConfig={onSaveProviderConfig}
+            providerConfigs={providerConfigs}
+          />
         </div>
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="action-row" style={{ justifyContent: "space-between" }}>

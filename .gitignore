@@ -20,6 +20,7 @@ dist/
 storage/uploads/
 storage/tmp/
 apps/api/storage/
+.codex-runtime/
 *.db
 *.db-journal
 

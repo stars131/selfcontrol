@@ -12,7 +12,106 @@ import {
   previewShareToken,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
+import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import type { SharePreview, User, Workspace } from "../lib/types";
+import { LanguageSwitcher } from "./language-switcher";
+
+const COPY: Record<
+  LocaleCode,
+  {
+    eyebrow: string;
+    title: string;
+    signedInAs: string;
+    signedIn: string;
+    signOut: string;
+    createEyebrow: string;
+    createTitle: string;
+    name: string;
+    slugPreview: string;
+    createWorkspace: string;
+    joinEyebrow: string;
+    joinTitle: string;
+    sharePlaceholder: string;
+    previewShare: string;
+    joinWorkspace: string;
+    listEyebrow: string;
+    listTitle: string;
+    openWorkspace: string;
+    settings: string;
+    noWorkspace: string;
+    loading: string;
+  }
+> = {
+  "zh-CN": {
+    eyebrow: "工作区",
+    title: "控制中心",
+    signedInAs: "当前登录",
+    signedIn: "已登录",
+    signOut: "退出登录",
+    createEyebrow: "创建",
+    createTitle: "新建工作区",
+    name: "名称",
+    slugPreview: "Slug 预览",
+    createWorkspace: "创建工作区",
+    joinEyebrow: "加入",
+    joinTitle: "共享工作区",
+    sharePlaceholder: "粘贴分享 token 或 /share/... 链接",
+    previewShare: "预览分享",
+    joinWorkspace: "加入工作区",
+    listEyebrow: "列表",
+    listTitle: "你的工作区",
+    openWorkspace: "打开工作区",
+    settings: "设置",
+    noWorkspace: "还没有工作区。先在左侧创建一个。",
+    loading: "正在加载工作区列表...",
+  },
+  en: {
+    eyebrow: "Workspace",
+    title: "Control Center",
+    signedInAs: "Signed in as",
+    signedIn: "Signed in",
+    signOut: "Sign Out",
+    createEyebrow: "Create",
+    createTitle: "New workspace",
+    name: "Name",
+    slugPreview: "Slug preview",
+    createWorkspace: "Create workspace",
+    joinEyebrow: "Join",
+    joinTitle: "Shared workspace",
+    sharePlaceholder: "Paste share token or /share/... link",
+    previewShare: "Preview share",
+    joinWorkspace: "Join workspace",
+    listEyebrow: "List",
+    listTitle: "Your workspaces",
+    openWorkspace: "Open workspace",
+    settings: "Settings",
+    noWorkspace: "No workspace yet. Create your first one on the left.",
+    loading: "Loading your workspace list...",
+  },
+  ja: {
+    eyebrow: "ワークスペース",
+    title: "コントロールセンター",
+    signedInAs: "ログイン中",
+    signedIn: "ログイン済み",
+    signOut: "ログアウト",
+    createEyebrow: "作成",
+    createTitle: "新しいワークスペース",
+    name: "名前",
+    slugPreview: "Slug プレビュー",
+    createWorkspace: "ワークスペース作成",
+    joinEyebrow: "参加",
+    joinTitle: "共有ワークスペース",
+    sharePlaceholder: "共有トークンまたは /share/... リンクを貼り付け",
+    previewShare: "共有を確認",
+    joinWorkspace: "ワークスペース参加",
+    listEyebrow: "一覧",
+    listTitle: "あなたのワークスペース",
+    openWorkspace: "ワークスペースを開く",
+    settings: "設定",
+    noWorkspace: "まだワークスペースがありません。左側で最初のものを作成してください。",
+    loading: "ワークスペース一覧を読み込み中...",
+  },
+};
 
 function slugify(value: string) {
   return value
@@ -35,6 +134,8 @@ function extractShareToken(value: string) {
 
 export function WorkspaceEntryClient() {
   const router = useRouter();
+  const { locale, setLocale } = useStoredLocale();
+  const copy = COPY[locale];
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -143,7 +244,7 @@ export function WorkspaceEntryClient() {
       <main className="page-shell">
         <section className="panel auth-panel">
           <div className="panel-body">
-            <div className="notice">Loading your workspace list...</div>
+            <div className="notice">{copy.loading}</div>
           </div>
         </section>
       </main>
@@ -155,24 +256,27 @@ export function WorkspaceEntryClient() {
       <section className="panel" style={{ maxWidth: 1080, margin: "0 auto" }}>
         <div className="panel-header">
           <div>
-            <div className="eyebrow">Workspace</div>
-            <h1 className="title">Control Center</h1>
+            <div className="eyebrow">{copy.eyebrow}</div>
+            <h1 className="title">{copy.title}</h1>
             <div className="muted" style={{ marginTop: 8 }}>
-              {user ? `Signed in as ${user.username}` : "Signed in"}
+              {user ? `${copy.signedInAs} ${user.username}` : copy.signedIn}
             </div>
           </div>
-          <button className="button secondary" type="button" onClick={handleLogout}>
-            Sign Out
-          </button>
+          <div className="hero-actions">
+            <LanguageSwitcher locale={locale} onChange={setLocale} />
+            <button className="button secondary" type="button" onClick={handleLogout}>
+              {copy.signOut}
+            </button>
+          </div>
         </div>
         <div className="panel-body">
           <div className="two-column-grid">
             <section className="record-card">
-              <div className="eyebrow">Create</div>
-              <h2 style={{ margin: "8px 0 12px" }}>New workspace</h2>
+              <div className="eyebrow">{copy.createEyebrow}</div>
+              <h2 style={{ margin: "8px 0 12px" }}>{copy.createTitle}</h2>
               <form className="form-stack" onSubmit={handleCreate}>
                 <label className="field">
-                  <span className="field-label">Name</span>
+                  <span className="field-label">{copy.name}</span>
                   <input
                     className="input"
                     value={name}
@@ -181,32 +285,32 @@ export function WorkspaceEntryClient() {
                   />
                 </label>
                 <label className="field">
-                  <span className="field-label">Slug preview</span>
+                  <span className="field-label">{copy.slugPreview}</span>
                   <input className="input" value={suggestedSlug} readOnly />
                 </label>
                 {error ? <div className="notice error">{error}</div> : null}
                 <button className="button" type="submit" disabled={creating}>
-                  {creating ? "Creating..." : "Create workspace"}
+                  {creating ? `${copy.createWorkspace}...` : copy.createWorkspace}
                 </button>
               </form>
             </section>
 
             <section className="record-card">
-              <div className="eyebrow">Join</div>
-              <h2 style={{ margin: "8px 0 12px" }}>Shared workspace</h2>
+              <div className="eyebrow">{copy.joinEyebrow}</div>
+              <h2 style={{ margin: "8px 0 12px" }}>{copy.joinTitle}</h2>
               <div className="form-stack">
                 <input
                   className="input"
-                  placeholder="Paste share token or /share/... link"
+                  placeholder={copy.sharePlaceholder}
                   value={shareTokenInput}
                   onChange={(event) => setShareTokenInput(event.target.value)}
                 />
                 <div className="action-row">
                   <button className="button secondary" type="button" disabled={previewing} onClick={() => void handlePreviewShare()}>
-                    {previewing ? "Previewing..." : "Preview share"}
+                    {previewing ? `${copy.previewShare}...` : copy.previewShare}
                   </button>
                   <button className="button" type="button" disabled={joining || !sharePreview} onClick={() => void handleAcceptShare()}>
-                    {joining ? "Joining..." : "Join workspace"}
+                    {joining ? `${copy.joinWorkspace}...` : copy.joinWorkspace}
                   </button>
                 </div>
                 {sharePreview ? (
@@ -223,8 +327,8 @@ export function WorkspaceEntryClient() {
             </section>
 
             <section className="record-card" style={{ gridColumn: "1 / -1" }}>
-              <div className="eyebrow">List</div>
-              <h2 style={{ margin: "8px 0 12px" }}>Your workspaces</h2>
+              <div className="eyebrow">{copy.listEyebrow}</div>
+              <h2 style={{ margin: "8px 0 12px" }}>{copy.listTitle}</h2>
               <div className="record-list">
                 {workspaces.length ? (
                   workspaces.map((workspace) => (
@@ -233,14 +337,19 @@ export function WorkspaceEntryClient() {
                       <h3 style={{ margin: "8px 0 6px" }}>{workspace.name}</h3>
                       <div className="muted">{workspace.slug}</div>
                       <div style={{ marginTop: 12 }}>
-                        <Link className="button" href={`/app/workspaces/${workspace.id}`}>
-                          Open workspace
-                        </Link>
+                        <div className="action-row">
+                          <Link className="button" href={`/app/workspaces/${workspace.id}`}>
+                            {copy.openWorkspace}
+                          </Link>
+                          <Link className="button secondary" href={`/app/workspaces/${workspace.id}/settings`}>
+                            {copy.settings}
+                          </Link>
+                        </div>
                       </div>
                     </article>
                   ))
                 ) : (
-                  <div className="notice">No workspace yet. Create your first one on the left.</div>
+                  <div className="notice">{copy.noWorkspace}</div>
                 )}
               </div>
             </section>
