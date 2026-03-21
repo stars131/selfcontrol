@@ -270,6 +270,10 @@ Last updated: 2026-03-22
   - the remaining dead legacy copy blocks are now removed from `apps/web/components/record-panel-v2.tsx`, leaving the active UI on the extracted locale bundles only
   - the record-panel copy verification script now fails if legacy inline copy tokens are reintroduced into the structured-results component
   - this lowers the review surface of the oversized panel and gives later module-splitting work a cleaner baseline
+- Record-Panel Form Helper Extraction V1:
+  - record-panel form state types and initialization helpers are now extracted into `apps/web/lib/record-panel-forms.ts`
+  - datetime input normalization plus location and review form readers no longer live inline inside the oversized structured-results component
+  - this keeps future editor and reminder form changes isolated in a smaller module and improves maintainability under the enterprise standard
 
 ## Next
 - Continue the next product slice

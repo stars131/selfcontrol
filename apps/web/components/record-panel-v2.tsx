@@ -17,11 +17,21 @@ import {
   readMetadataNumber,
   readMetadataText,
 } from "../lib/record-panel-media";
+import {
+  createEmptyForm,
+  createEmptyReminderForm,
+  formatDatetimeInput,
+  readLocationForm,
+  readLocationReviewForm,
+  type LocationReviewFormState,
+  type RecordFormState,
+  type ReminderFormState,
+} from "../lib/record-panel-forms";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
-import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
+import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
   LocationReview,
   MediaAsset,
@@ -33,93 +43,9 @@ import type {
   ReminderItem,
   SearchPresetItem,
   TimelineDay,
-  } from "../lib/types";
-
-type RecordFormState = {
-  title: string;
-  content: string;
-  type_code: string;
-  rating: string;
-  occurred_at: string;
-  is_avoid: boolean;
-  location: LocationDraft;
-};
-
-type ReminderFormState = {
-  title: string;
-  message: string;
-  remind_at: string;
-};
-
-type LocationReviewFormState = {
-  status: string;
-  note: string;
-};
+} from "../lib/types";
 
 type ViewMode = "timeline" | "list";
-
-function createEmptyLocation(): LocationDraft {
-  return {
-    place_name: "",
-    address: "",
-    latitude: "",
-    longitude: "",
-    source: "manual",
-  };
-}
-
-function createEmptyForm(): RecordFormState {
-  return {
-    title: "",
-    content: "",
-    type_code: "memo",
-    rating: "",
-    occurred_at: "",
-    is_avoid: false,
-    location: createEmptyLocation(),
-  };
-}
-
-function readLocation(record: RecordItem | null): LocationDraft {
-  const location = readLocationInfo(record?.extra_data);
-  return {
-    place_name: location.place_name,
-    address: location.address,
-    latitude: location.latitude === null ? "" : String(location.latitude),
-    longitude: location.longitude === null ? "" : String(location.longitude),
-    source: location.source,
-  };
-}
-
-function readLocationReviewForm(record: RecordItem | null): LocationReviewFormState {
-  const review = readLocationReview(record?.extra_data);
-  return {
-    status: review?.status || "pending",
-    note: review?.note || "",
-  };
-}
-
-function formatDatetimeInput(value?: string | null): string {
-  if (!value) {
-    return "";
-  }
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-
-  const timezoneOffsetMs = date.getTimezoneOffset() * 60_000;
-  return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16);
-}
-
-function createEmptyReminderForm(): ReminderFormState {
-  return {
-    title: "",
-    message: "",
-    remind_at: "",
-  };
-}
 
 export function RecordPanelV2({
   authToken,
@@ -304,7 +230,7 @@ export function RecordPanelV2({
       rating: selectedRecord.rating ? String(selectedRecord.rating) : "",
       occurred_at: formatDatetimeInput(selectedRecord.occurred_at),
       is_avoid: selectedRecord.is_avoid,
-      location: readLocation(selectedRecord),
+      location: readLocationForm(selectedRecord),
     });
     setLocationReviewForm(readLocationReviewForm(selectedRecord));
   }, [selectedRecord]);
@@ -617,7 +543,7 @@ export function RecordPanelV2({
   };
 
   const renderRecordCard = (record: RecordItem) => {
-    const location = readLocation(record);
+    const location = readLocationForm(record);
     const review = readLocationReview(record.extra_data);
 
     return (
