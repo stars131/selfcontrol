@@ -266,10 +266,14 @@ Last updated: 2026-03-22
   - record-panel media metadata readers and media-issue action helpers are now extracted into `apps/web/lib/record-panel-media.ts`
   - the large structured-results component now imports these helpers instead of carrying additional provider and metadata logic inline
   - this keeps future media diagnostics and settings-link changes reviewable in a smaller, isolated module under the maintainability standard
+- Record-Panel Legacy Copy Removal Guard V1:
+  - the remaining dead legacy copy blocks are now removed from `apps/web/components/record-panel-v2.tsx`, leaving the active UI on the extracted locale bundles only
+  - the record-panel copy verification script now fails if legacy inline copy tokens are reintroduced into the structured-results component
+  - this lowers the review surface of the oversized panel and gives later module-splitting work a cleaner baseline
 
 ## Next
 - Continue the next product slice
-- Remove the remaining dead legacy copy blocks from `record-panel-v2` and continue splitting oversized UI logic into smaller modules
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the dead-copy cleanup
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

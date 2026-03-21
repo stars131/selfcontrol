@@ -88,4 +88,11 @@ verifyNestedLocaleFile("lib/record-panel-ui-copy.json", {
   panel: ["workspace", "advancedSearch", "locationReview", "storageHealth"]
 });
 
+const recordPanelSource = fs.readFileSync(path.resolve(process.cwd(), "components/record-panel-v2.tsx"), "utf8");
+for (const forbiddenToken of ["legacyMediaIssueCopy", "legacyVisibleMediaIssueCopy", "legacyPanelCopy"]) {
+  if (recordPanelSource.includes(forbiddenToken)) {
+    throw new Error(`Forbidden legacy copy token still present in record-panel-v2.tsx: ${forbiddenToken}`);
+  }
+}
+
 console.log("record-panel copy verification passed");
