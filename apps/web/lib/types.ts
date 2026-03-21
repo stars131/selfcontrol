@@ -31,6 +31,14 @@ export type RecordItem = {
   updated_at: string;
 };
 
+export type TimelineDay = {
+  date: string;
+  count: number;
+  avoid_count: number;
+  top_places: string[];
+  items: RecordItem[];
+};
+
 export type MediaAsset = {
   id: string;
   workspace_id: string;

@@ -12,6 +12,7 @@ import {
   deleteReminder,
   getKnowledgeStats,
   getMediaStatus,
+  getTimeline,
   listAuditLogs,
   listConversations,
   listMedia,
@@ -44,7 +45,9 @@ import type {
   RecordItem,
   ReminderItem,
   ShareLinkItem,
+  TimelineDay,
 } from "../lib/types";
+import { buildTimelineDays } from "../lib/timeline";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
@@ -53,6 +56,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [token, setToken] = useState<string | null>(null);
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [visibleRecords, setVisibleRecords] = useState<RecordItem[]>([]);
+  const [timelineDays, setTimelineDays] = useState<TimelineDay[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -68,11 +72,19 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const refreshTimeline = async (activeToken: string) => {
+    const result = await getTimeline(activeToken, workspaceId);
+    setTimelineDays(result.items);
+  };
+
   const refreshRecords = async (activeToken: string) => {
     const result = await listRecords(activeToken, workspaceId);
     setRecords(result.items);
     setVisibleRecords(result.items);
-    setSelectedRecordId((current) => current ?? result.items[0]?.id ?? null);
+    setSelectedRecordId((current) =>
+      current && result.items.some((item) => item.id === current) ? current : result.items[0]?.id ?? null,
+    );
+    await refreshTimeline(activeToken);
   };
 
   const refreshMedia = async (activeToken: string, recordId: string | null) => {
@@ -214,9 +226,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
 
     setVisibleRecords(result.records);
-    if (result.records[0]) {
-      setSelectedRecordId(result.records[0].id);
-    }
+    setTimelineDays(buildTimelineDays(result.records));
+    setSelectedRecordId(result.records[0]?.id ?? null);
   };
 
   const handleCreateConversation = async () => {
@@ -512,6 +523,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           records={visibleRecords}
           reminders={reminders}
           selectedRecordId={selectedRecordId}
+          timelineDays={timelineDays}
           workspaceId={workspaceId}
         />
       </div>

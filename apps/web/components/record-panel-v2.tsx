@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { MapPanel, type LocationDraft } from "./map-panel";
-import type { MediaAsset, RecordItem, ReminderItem } from "../lib/types";
+import type { MediaAsset, RecordItem, ReminderItem, TimelineDay } from "../lib/types";
 
 type RecordFormState = {
   title: string;
@@ -20,6 +20,8 @@ type ReminderFormState = {
   message: string;
   remind_at: string;
 };
+
+type ViewMode = "timeline" | "list";
 
 function createEmptyLocation(): LocationDraft {
   return {
@@ -82,6 +84,20 @@ function formatRecordTimestamp(record: RecordItem): string {
   return Number.isNaN(date.getTime()) ? rawValue : date.toLocaleString();
 }
 
+function formatTimelineDate(value: string): string {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    weekday: "short",
+  }).format(date);
+}
+
 function createEmptyReminderForm(): ReminderFormState {
   return {
     title: "",
@@ -99,6 +115,7 @@ export function RecordPanelV2({
   workspaceId,
   records,
   selectedRecordId,
+  timelineDays,
   mediaAssets,
   reminders,
   onSelectRecord,
@@ -114,6 +131,7 @@ export function RecordPanelV2({
 }: {
   workspaceId: string;
   records: RecordItem[];
+  timelineDays: TimelineDay[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
   reminders: ReminderItem[];
@@ -166,6 +184,7 @@ export function RecordPanelV2({
   const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
   const [savingReminder, setSavingReminder] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -344,6 +363,38 @@ export function RecordPanelV2({
     } finally {
       setRetryingMediaId(null);
     }
+  };
+
+  const renderRecordCard = (record: RecordItem) => {
+    const location = readLocation(record);
+
+    return (
+      <article
+        className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
+        key={record.id}
+        onClick={() => onSelectRecord(record.id)}
+      >
+        <div className="eyebrow">{record.type_code}</div>
+        <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>
+          {record.title || "Untitled"}
+        </h3>
+        <div className="muted">
+          {formatRecordTimestamp(record)} | {record.source_type}
+        </div>
+        <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>{record.content || "No content"}</p>
+        {location.place_name || location.address ? (
+          <div className="muted" style={{ marginTop: 10 }}>
+            {location.place_name || "Unknown place"}
+            {location.address ? ` | ${location.address}` : ""}
+          </div>
+        ) : null}
+        <div className="tag-row">
+          <span className="tag">{record.status}</span>
+          {record.rating ? <span className="tag">rating {record.rating}</span> : null}
+          {record.is_avoid ? <span className="tag">avoid</span> : null}
+        </div>
+      </article>
+    );
   };
 
   return (
@@ -726,47 +777,72 @@ export function RecordPanelV2({
           ) : null}
         </form>
 
-        <div style={{ marginTop: 20 }} className="record-list">
-          {records.length ? (
-            records.map((record) => {
-              const location = readLocation(record);
+        <div style={{ marginTop: 20 }} className="action-row">
+          <button
+            className={viewMode === "timeline" ? "button" : "button secondary"}
+            type="button"
+            onClick={() => setViewMode("timeline")}
+          >
+            Timeline
+          </button>
+          <button
+            className={viewMode === "list" ? "button" : "button secondary"}
+            type="button"
+            onClick={() => setViewMode("list")}
+          >
+            Flat list
+          </button>
+        </div>
 
-              return (
-                <article
-                  className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
-                  key={record.id}
-                  onClick={() => onSelectRecord(record.id)}
-                >
-                  <div className="eyebrow">{record.type_code}</div>
-                  <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>
-                    {record.title || "Untitled"}
-                  </h3>
-                  <div className="muted">
-                    {formatRecordTimestamp(record)} | {record.source_type}
+        {viewMode === "timeline" ? (
+          <div style={{ marginTop: 20 }} className="record-list">
+            {timelineDays.length ? (
+              timelineDays.map((day) => (
+                <section className="record-card" key={day.date}>
+                  <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <div className="eyebrow">Timeline day</div>
+                      <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>{formatTimelineDate(day.date)}</h3>
+                      <div className="muted">
+                        {day.count} item{day.count === 1 ? "" : "s"} on this day
+                      </div>
+                    </div>
+                    <div className="tag-row" style={{ marginTop: 0, justifyContent: "flex-end" }}>
+                      <span className="tag">{day.date}</span>
+                      {day.avoid_count ? <span className="tag">avoid {day.avoid_count}</span> : null}
+                    </div>
                   </div>
-                  <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>
-                    {record.content || "No content"}
-                  </p>
-                  {location.place_name || location.address ? (
-                    <div className="muted" style={{ marginTop: 10 }}>
-                      {location.place_name || "Unknown place"}
-                      {location.address ? ` | ${location.address}` : ""}
+                  {day.top_places.length ? (
+                    <div className="tag-row" style={{ marginTop: 14 }}>
+                      {day.top_places.map((place) => (
+                        <span className="tag" key={place}>
+                          {place}
+                        </span>
+                      ))}
                     </div>
                   ) : null}
-                  <div className="tag-row">
-                    <span className="tag">{record.status}</span>
-                    {record.rating ? <span className="tag">rating {record.rating}</span> : null}
-                    {record.is_avoid ? <span className="tag">avoid</span> : null}
+                  <div className="record-list compact-list" style={{ marginTop: 14 }}>
+                    {day.items.map((record) => renderRecordCard(record))}
                   </div>
-                </article>
-              );
-            })
-          ) : (
-            <div className="notice">
-              No records yet. Save one from the chat panel or create one manually above.
-            </div>
-          )}
-        </div>
+                </section>
+              ))
+            ) : (
+              <div className="notice">
+                No records yet. Save one from the chat panel or create one manually above.
+              </div>
+            )}
+          </div>
+        ) : (
+          <div style={{ marginTop: 20 }} className="record-list">
+            {records.length ? (
+              records.map((record) => renderRecordCard(record))
+            ) : (
+              <div className="notice">
+                No records yet. Save one from the chat panel or create one manually above.
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -10,6 +10,7 @@ import type {
   ReminderItem,
   ShareLinkItem,
   SharePreview,
+  TimelineDay,
   User,
   Workspace,
 } from "./types";
@@ -107,6 +108,36 @@ export async function createWorkspace(
 
 export async function listRecords(token: string, workspaceId: string) {
   return request<{ items: RecordItem[] }>(`/workspaces/${workspaceId}/records`, { method: "GET" }, token);
+}
+
+export async function getTimeline(
+  token: string,
+  workspaceId: string,
+  params?: { typeCode?: string; isAvoid?: boolean; startDate?: string; endDate?: string },
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.typeCode) {
+    searchParams.set("type_code", params.typeCode);
+  }
+  if (typeof params?.isAvoid === "boolean") {
+    searchParams.set("is_avoid", String(params.isAvoid));
+  }
+  if (params?.startDate) {
+    searchParams.set("start_date", params.startDate);
+  }
+  if (params?.endDate) {
+    searchParams.set("end_date", params.endDate);
+  }
+
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/timeline?${query}`
+    : `/workspaces/${workspaceId}/timeline`;
+  return request<{ items: TimelineDay[]; total_days: number; total_records: number }>(
+    path,
+    { method: "GET" },
+    token,
+  );
 }
 
 export async function createRecord(

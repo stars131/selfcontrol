@@ -41,9 +41,15 @@ Last updated: 2026-03-21
   - knowledge indexing and semantic search now use the configured embeddings provider
   - actual remote embedding dimensions are tracked in knowledge stats
   - verified openai-compatible `/embeddings` flow with provider-based retrieval
+- Timeline View V1:
+  - dedicated workspace timeline API grouped by effective day from `occurred_at` or `created_at`
+  - timeline supports `type_code`, `is_avoid`, `start_date`, and `end_date` filters for future expansion
+  - right-side structured panel now supports timeline and flat-list view switching
+  - chat search results also project into grouped timeline cards instead of only a flat list
+  - backend timeline API behavior is covered by dedicated tests
 
 ## Next
-- Timeline view and stronger map review flows
+- Stronger map review flows and location correction history
 - Media preview and richer metadata extraction
 - Security hardening: audit logs, share permission boundaries, secret management
 
