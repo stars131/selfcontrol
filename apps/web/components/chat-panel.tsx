@@ -26,6 +26,7 @@ export function ChatPanel({
   workspaceRole,
   canWriteWorkspace,
   canManageWorkspace,
+  canManageSharing,
   conversations,
   activeConversationId,
   messages,
@@ -50,6 +51,7 @@ export function ChatPanel({
   workspaceRole: "owner" | "editor" | "viewer";
   canWriteWorkspace: boolean;
   canManageWorkspace: boolean;
+  canManageSharing: boolean;
   conversations: Conversation[];
   activeConversationId: string | null;
   messages: ChatMessage[];
@@ -270,6 +272,7 @@ export function ChatPanel({
             </button>
           </div>
         </div>
+        {canManageSharing ? (
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="eyebrow">Share Links</div>
           <div className="form-stack" style={{ marginTop: 12 }}>
@@ -333,6 +336,7 @@ export function ChatPanel({
             </div>
           </div>
         </div>
+        ) : null}
         <div style={{ marginBottom: 16 }}>
           <ProviderSettingsPanel
             onSaveProviderConfig={onSaveProviderConfig}

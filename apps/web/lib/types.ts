@@ -15,6 +15,17 @@ export type Workspace = {
   created_at: string;
 };
 
+export type WorkspaceMemberItem = {
+  id: string;
+  workspace_id: string;
+  user_id: string;
+  role: "owner" | "editor" | "viewer";
+  username: string;
+  email?: string | null;
+  display_name?: string | null;
+  created_at: string;
+};
+
 export type RecordItem = {
   id: string;
   workspace_id: string;

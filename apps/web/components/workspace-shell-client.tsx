@@ -92,6 +92,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [error, setError] = useState("");
   const canWriteWorkspace = workspace?.role === "owner" || workspace?.role === "editor";
   const canManageWorkspace = canWriteWorkspace;
+  const canManageSharing = workspace?.role === "owner";
 
   const refreshRecords = async (
     activeToken: string,
@@ -196,7 +197,12 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await refreshKnowledge(activeToken);
         if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
           await refreshProviderConfigs(activeToken);
-          await refreshShareLinks(activeToken);
+          if (workspaceResult.workspace.role === "owner") {
+            await refreshShareLinks(activeToken);
+          } else {
+            setShareLinks([]);
+            setLatestSharePath("");
+          }
         } else {
           setProviderConfigs([]);
           setShareLinks([]);
@@ -581,6 +587,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canManageSharing) {
+      throw new Error("Only workspace owners can manage share links");
+    }
     const result = await createShareLink(token, workspaceId, {
       name: input.name,
       permission_code: input.permission_code,
@@ -595,6 +604,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const handleDisableShareLink = async (shareLinkId: string) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canManageSharing) {
+      throw new Error("Only workspace owners can manage share links");
     }
     await updateShareLink(token, workspaceId, shareLinkId, { is_enabled: false });
     await refreshShareLinks(token);
@@ -627,6 +639,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         <ChatPanel
           activeConversationId={activeConversationId}
           auditLogs={auditLogs}
+          canManageSharing={canManageSharing}
           canManageWorkspace={canManageWorkspace}
           canWriteWorkspace={canWriteWorkspace}
           conversations={conversations}

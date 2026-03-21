@@ -86,11 +86,15 @@ Last updated: 2026-03-21
   - provider config responses now expose secret readiness and non-sensitive warning states without returning raw secrets
   - production startup now rejects the default weak `SECRET_KEY`
   - deployment templates now pass through provider secret env vars and browser map env wiring explicitly
+- Workspace Member Management and Owner-Only Sharing V1:
+  - share-link listing and share-link controls are now restricted to workspace owners on both backend and frontend
+  - workspace settings now expose a member directory for owners and editors, with owner-only role changes and member removal
+  - owner and self memberships are protected from normal role change and removal flows
+  - permission API tests now cover share-link boundaries and workspace member management behavior
 
 ## Next
-- Security hardening: audit logs, share permission boundaries, secret management
 - Deeper media metadata extraction and storage lifecycle controls
-- Share permission boundary hardening and membership management UI
+- Deployment hardening and production operations pass
 
 ## Delivery Rule
 - Every meaningful slice must update this file

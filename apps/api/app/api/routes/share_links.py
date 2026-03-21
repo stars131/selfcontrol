@@ -21,7 +21,7 @@ def list_share_links(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner", "editor"})
+    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
     items = (
         db.query(ShareLink)
         .filter(ShareLink.workspace_id == workspace_id)

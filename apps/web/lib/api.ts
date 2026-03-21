@@ -15,6 +15,7 @@ import type {
   TimelineDay,
   User,
   Workspace,
+  WorkspaceMemberItem,
 } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
@@ -130,6 +131,38 @@ export async function createWorkspace(
       method: "POST",
       body: JSON.stringify(input),
     },
+    token,
+  );
+}
+
+export async function listWorkspaceMembers(token: string, workspaceId: string) {
+  return request<{ items: WorkspaceMemberItem[] }>(
+    `/workspaces/${workspaceId}/members`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function updateWorkspaceMember(
+  token: string,
+  workspaceId: string,
+  memberId: string,
+  input: { role: "viewer" | "editor" },
+) {
+  return request<{ member: WorkspaceMemberItem }>(
+    `/workspaces/${workspaceId}/members/${memberId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    },
+    token,
+  );
+}
+
+export async function deleteWorkspaceMember(token: string, workspaceId: string, memberId: string) {
+  return request<{ deleted: boolean }>(
+    `/workspaces/${workspaceId}/members/${memberId}`,
+    { method: "DELETE" },
     token,
   );
 }

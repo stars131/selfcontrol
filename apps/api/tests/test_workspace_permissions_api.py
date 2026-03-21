@@ -10,6 +10,7 @@ from app.api.deps import get_current_user
 from app.api.routes import provider_configs as provider_configs_route
 from app.api.routes import records as records_route
 from app.api.routes import search_presets as search_presets_route
+from app.api.routes import share_links as share_links_route
 from app.api.routes import workspaces as workspaces_route
 from app.db.base import Base
 from app.db.session import get_db
@@ -74,6 +75,8 @@ def build_permissions_client(monkeypatch) -> tuple[TestClient, str, dict[str, st
     monkeypatch.setattr(records_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(search_presets_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(provider_configs_route, "log_audit_event", lambda *args, **kwargs: None)
+    monkeypatch.setattr(share_links_route, "log_audit_event", lambda *args, **kwargs: None)
+    monkeypatch.setattr(workspaces_route, "log_audit_event", lambda *args, **kwargs: None)
 
     current_role = {"value": "owner"}
 
@@ -82,6 +85,7 @@ def build_permissions_client(monkeypatch) -> tuple[TestClient, str, dict[str, st
     app.include_router(records_route.router, prefix="/api/v1/workspaces")
     app.include_router(search_presets_route.router, prefix="/api/v1/workspaces")
     app.include_router(provider_configs_route.router, prefix="/api/v1/workspaces")
+    app.include_router(share_links_route.router, prefix="/api/v1/workspaces")
 
     def override_get_db():
         db = session_local()
@@ -184,3 +188,102 @@ def test_viewer_is_read_only_but_editor_can_write(monkeypatch) -> None:
     items = viewer_read_response.json()["data"]["items"]
     assert len(items) == 1
     assert items[0]["title"] == "Allowed"
+
+
+def test_share_links_are_owner_only(monkeypatch) -> None:
+    client, workspace_id, _ = build_permissions_client(monkeypatch)
+
+    owner_create_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/share-links",
+        json={
+            "name": "Owner link",
+            "permission_code": "viewer",
+            "max_uses": 5,
+            "expires_at": None,
+        },
+    )
+    assert owner_create_response.status_code == 200
+
+    owner_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/share-links")
+    assert owner_list_response.status_code == 200
+    assert len(owner_list_response.json()["data"]["items"]) == 1
+
+    client.current_role["value"] = "editor"  # type: ignore[attr-defined]
+    editor_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/share-links")
+    assert editor_list_response.status_code == 403
+
+    client.current_role["value"] = "viewer"  # type: ignore[attr-defined]
+    viewer_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/share-links")
+    assert viewer_list_response.status_code == 403
+
+
+def test_workspace_members_can_be_listed_and_managed_by_owner(monkeypatch) -> None:
+    client, workspace_id, user_ids = build_permissions_client(monkeypatch)
+
+    owner_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/members")
+    assert owner_list_response.status_code == 200
+    owner_items = owner_list_response.json()["data"]["items"]
+    assert {item["role"] for item in owner_items} == {"owner", "editor", "viewer"}
+
+    viewer_member = next(item for item in owner_items if item["user_id"] == user_ids["viewer"])
+    editor_member = next(item for item in owner_items if item["user_id"] == user_ids["editor"])
+    owner_member = next(item for item in owner_items if item["user_id"] == user_ids["owner"])
+
+    update_response = client.patch(
+        f"/api/v1/workspaces/{workspace_id}/members/{viewer_member['id']}",
+        json={"role": "editor"},
+    )
+    assert update_response.status_code == 200
+    assert update_response.json()["data"]["member"]["role"] == "editor"
+
+    remove_response = client.delete(f"/api/v1/workspaces/{workspace_id}/members/{editor_member['id']}")
+    assert remove_response.status_code == 200
+    assert remove_response.json()["data"]["deleted"] is True
+
+    owner_protected_response = client.patch(
+        f"/api/v1/workspaces/{workspace_id}/members/{owner_member['id']}",
+        json={"role": "viewer"},
+    )
+    assert owner_protected_response.status_code == 400
+
+    self_remove_response = client.delete(f"/api/v1/workspaces/{workspace_id}/members/{owner_member['id']}")
+    assert self_remove_response.status_code == 400
+
+    final_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/members")
+    assert final_list_response.status_code == 200
+    final_items = final_list_response.json()["data"]["items"]
+    assert len(final_items) == 2
+    assert next(item for item in final_items if item["user_id"] == user_ids["viewer"])["role"] == "editor"
+
+
+def test_workspace_member_mutation_is_owner_only(monkeypatch) -> None:
+    client, workspace_id, user_ids = build_permissions_client(monkeypatch)
+
+    owner_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/members")
+    editor_member = next(
+        item for item in owner_list_response.json()["data"]["items"] if item["user_id"] == user_ids["editor"]
+    )
+    viewer_member = next(
+        item for item in owner_list_response.json()["data"]["items"] if item["user_id"] == user_ids["viewer"]
+    )
+
+    client.current_role["value"] = "editor"  # type: ignore[attr-defined]
+    editor_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/members")
+    assert editor_list_response.status_code == 200
+
+    editor_update_response = client.patch(
+        f"/api/v1/workspaces/{workspace_id}/members/{viewer_member['id']}",
+        json={"role": "editor"},
+    )
+    assert editor_update_response.status_code == 403
+
+    editor_delete_response = client.delete(f"/api/v1/workspaces/{workspace_id}/members/{viewer_member['id']}")
+    assert editor_delete_response.status_code == 403
+
+    client.current_role["value"] = "viewer"  # type: ignore[attr-defined]
+    viewer_list_response = client.get(f"/api/v1/workspaces/{workspace_id}/members")
+    assert viewer_list_response.status_code == 403
+
+    client.current_role["value"] = "owner"  # type: ignore[attr-defined]
+    owner_remove_response = client.delete(f"/api/v1/workspaces/{workspace_id}/members/{editor_member['id']}")
+    assert owner_remove_response.status_code == 200
