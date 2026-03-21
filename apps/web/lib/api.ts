@@ -4,6 +4,8 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaDeadLetterBulkRetryResult,
+  MediaDeadLetterOverview,
   MediaStorageProviderHealth,
   MediaProcessingOverview,
   MediaRetentionArchiveResult,
@@ -600,6 +602,48 @@ export async function getMediaProcessingOverview(
     ? `/workspaces/${workspaceId}/media/processing-overview?${query}`
     : `/workspaces/${workspaceId}/media/processing-overview`;
   return request<{ overview: MediaProcessingOverview }>(path, { method: "GET" }, token);
+}
+
+export async function getMediaDeadLetterOverview(
+  token: string,
+  workspaceId: string,
+  params?: { limit?: number; retryStates?: string[] },
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.limit) {
+    searchParams.set("limit", String(params.limit));
+  }
+  for (const retryState of params?.retryStates ?? []) {
+    searchParams.append("retry_states", retryState);
+  }
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/media/dead-letter?${query}`
+    : `/workspaces/${workspaceId}/media/dead-letter`;
+  return request<{ overview: MediaDeadLetterOverview }>(path, { method: "GET" }, token);
+}
+
+export async function bulkRetryMediaDeadLetter(
+  token: string,
+  workspaceId: string,
+  input: {
+    mediaIds?: string[];
+    retryStates?: string[];
+    limit?: number;
+  },
+) {
+  return request<{ result: MediaDeadLetterBulkRetryResult }>(
+    `/workspaces/${workspaceId}/media/dead-letter/retry`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        media_ids: input.mediaIds ?? [],
+        retry_states: input.retryStates ?? [],
+        limit: input.limit ?? 20,
+      }),
+    },
+    token,
+  );
 }
 
 export async function getMediaRetentionReport(

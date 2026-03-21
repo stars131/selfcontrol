@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.api.deps import get_current_user
+from app.api.routes import media as media_route
 from app.api.routes import provider_configs as provider_configs_route
 from app.api.routes import records as records_route
 from app.api.routes import search_presets as search_presets_route
@@ -73,6 +74,7 @@ def build_permissions_client(monkeypatch) -> tuple[TestClient, str, dict[str, st
 
     monkeypatch.setattr(records_route, "rebuild_record_knowledge", lambda db, record_id: None)
     monkeypatch.setattr(records_route, "log_audit_event", lambda *args, **kwargs: None)
+    monkeypatch.setattr(media_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(search_presets_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(provider_configs_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(share_links_route, "log_audit_event", lambda *args, **kwargs: None)
@@ -83,6 +85,7 @@ def build_permissions_client(monkeypatch) -> tuple[TestClient, str, dict[str, st
     app = FastAPI()
     app.include_router(workspaces_route.router, prefix="/api/v1/workspaces")
     app.include_router(records_route.router, prefix="/api/v1/workspaces")
+    app.include_router(media_route.router, prefix="/api/v1/workspaces")
     app.include_router(search_presets_route.router, prefix="/api/v1/workspaces")
     app.include_router(provider_configs_route.router, prefix="/api/v1/workspaces")
     app.include_router(share_links_route.router, prefix="/api/v1/workspaces")
@@ -188,6 +191,13 @@ def test_viewer_is_read_only_but_editor_can_write(monkeypatch) -> None:
     items = viewer_read_response.json()["data"]["items"]
     assert len(items) == 1
     assert items[0]["title"] == "Allowed"
+
+    viewer_dead_letter_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/dead-letter")
+    assert viewer_dead_letter_response.status_code == 403
+
+    client.current_role["value"] = "editor"  # type: ignore[attr-defined]
+    editor_dead_letter_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/dead-letter")
+    assert editor_dead_letter_response.status_code == 200
 
 
 def test_share_links_are_owner_only(monkeypatch) -> None:

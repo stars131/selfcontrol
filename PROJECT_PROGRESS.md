@@ -205,9 +205,14 @@ Last updated: 2026-03-21
   - async worker mode now schedules bounded background retries with configurable retry budget and backoff windows through `REMOTE_MEDIA_RETRY_MAX_ATTEMPTS` and `REMOTE_MEDIA_RETRY_BACKOFF_SECONDS`
   - stale auto-retry tasks are skipped safely once a media item is completed or manually restarted, preventing old delayed jobs from reprocessing already-recovered assets
   - media cards and workspace issue overview now expose retry state, retry counts, and next retry time so remote processing recovery is observable from the UI
+- Remote Media Provider Dead-Letter Review and Bulk Recovery Tools V1:
+  - workspace media APIs now expose a dedicated dead-letter review endpoint for remote items stuck in `manual_only`, `exhausted`, or `disabled` retry states
+  - owner and editor users can now trigger bulk dead-letter recovery for selected or automatically targeted remote media items instead of retrying one attachment at a time
+  - bulk recovery actions reset retry tracking safely, reuse the normal processing dispatch path, and write dedicated audit events for later investigation
+  - the structured results panel now includes a dead-letter recovery card with selection controls, retry-state counts, and one-click bulk recovery actions
 
 ## Next
-- Remote media provider dead-letter review and bulk recovery tools
+- Remote media provider recovery policy tuning and operator controls
 
 ## Delivery Rule
 - Every meaningful slice must update this file

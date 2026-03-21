@@ -10,6 +10,7 @@ import type {
   LocationHistoryEntry,
   LocationReview,
   MediaAsset,
+  MediaDeadLetterOverview,
   MediaProcessingOverview,
   MediaStorageSummary,
   RecordFilterState,
@@ -205,6 +206,7 @@ export function RecordPanelV2({
   selectedRecordId,
   timelineDays,
   mediaAssets,
+  mediaDeadLetterOverview,
   mediaProcessingOverview,
   mediaStorageSummary,
   reminders,
@@ -215,6 +217,7 @@ export function RecordPanelV2({
   onUpdateReminder,
   onDeleteReminder,
   onDeleteRecord,
+  onBulkRetryMediaDeadLetter,
   onRefreshMediaStatus,
   onApplyRecordFilter,
   onApplyLocationFilter,
@@ -235,6 +238,7 @@ export function RecordPanelV2({
   timelineDays: TimelineDay[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
+  mediaDeadLetterOverview: MediaDeadLetterOverview | null;
   mediaProcessingOverview: MediaProcessingOverview | null;
   mediaStorageSummary: MediaStorageSummary | null;
   reminders: ReminderItem[];
@@ -269,6 +273,11 @@ export function RecordPanelV2({
   ) => Promise<void>;
   onDeleteReminder: (reminderId: string) => Promise<void>;
   onDeleteRecord: (recordId: string) => Promise<void>;
+  onBulkRetryMediaDeadLetter: (input: {
+    mediaIds?: string[];
+    retryStates?: string[];
+    limit?: number;
+  }) => Promise<void>;
   onRefreshMediaStatus: (mediaId: string) => Promise<void>;
   onApplyRecordFilter: (nextFilter: RecordFilterState) => Promise<void>;
   onApplyLocationFilter: (
@@ -296,6 +305,7 @@ export function RecordPanelV2({
   const [uploading, setUploading] = useState(false);
   const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null);
   const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
+  const [bulkRetryingDeadLetter, setBulkRetryingDeadLetter] = useState(false);
   const [downloadingMediaId, setDownloadingMediaId] = useState<string | null>(null);
   const [deletingMediaId, setDeletingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
@@ -307,6 +317,7 @@ export function RecordPanelV2({
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [filterDraft, setFilterDraft] = useState<RecordFilterState>(recordFilter);
   const [presetName, setPresetName] = useState("");
+  const [selectedDeadLetterIds, setSelectedDeadLetterIds] = useState<string[]>([]);
   const [error, setError] = useState("");
   const selectedLocationReview = useMemo<LocationReview | null>(
     () => readLocationReview(selectedRecord?.extra_data),
@@ -320,6 +331,11 @@ export function RecordPanelV2({
     () => mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0),
     [mediaAssets],
   );
+
+  useEffect(() => {
+    const allowedIds = new Set(mediaDeadLetterOverview?.items.map((item) => item.media_id) ?? []);
+    setSelectedDeadLetterIds((current) => current.filter((item) => allowedIds.has(item)));
+  }, [mediaDeadLetterOverview]);
 
   useEffect(() => {
     if (!selectedRecord) {
@@ -512,6 +528,42 @@ export function RecordPanelV2({
       setError(caught instanceof Error ? caught.message : "Failed to retry media processing");
     } finally {
       setRetryingMediaId(null);
+    }
+  };
+
+  const handleToggleDeadLetterSelection = (mediaId: string, checked: boolean) => {
+    setSelectedDeadLetterIds((current) => {
+      if (checked) {
+        return current.includes(mediaId) ? current : [...current, mediaId];
+      }
+      return current.filter((item) => item !== mediaId);
+    });
+  };
+
+  const handleSelectAllDeadLetter = () => {
+    setSelectedDeadLetterIds(mediaDeadLetterOverview?.items.map((item) => item.media_id) ?? []);
+  };
+
+  const handleClearDeadLetterSelection = () => {
+    setSelectedDeadLetterIds([]);
+  };
+
+  const handleBulkRetryDeadLetter = async (mode: "selected" | "all") => {
+    setBulkRetryingDeadLetter(true);
+    setError("");
+    try {
+      await onBulkRetryMediaDeadLetter(
+        mode === "selected"
+          ? { mediaIds: selectedDeadLetterIds }
+          : { retryStates: ["manual_only", "exhausted", "disabled"], limit: 50 },
+      );
+      if (mode === "selected") {
+        setSelectedDeadLetterIds([]);
+      }
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to bulk retry dead-letter media");
+    } finally {
+      setBulkRetryingDeadLetter(false);
     }
   };
 
@@ -1372,6 +1424,116 @@ export function RecordPanelV2({
                       <div className="notice" style={{ marginTop: 16 }}>
                         No recent media processing issues.
                       </div>
+                    )}
+                  </div>
+                  <div className="record-card form-stack" style={{ marginBottom: 16 }}>
+                    <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div>
+                        <div className="eyebrow">Dead-letter recovery</div>
+                        <div className="muted" style={{ marginTop: 8 }}>
+                          Remote media items that need manual recovery after retries stopped or were never eligible for auto-retry.
+                        </div>
+                      </div>
+                      <div className="tag-row">
+                        <span className="tag">
+                          {mediaDeadLetterOverview?.total_count ?? 0} item(s)
+                        </span>
+                        {mediaDeadLetterOverview
+                          ? Object.entries(mediaDeadLetterOverview.by_retry_state).map(([retryState, count]) => (
+                              <span className="tag" key={retryState}>
+                                {retryState}: {count}
+                              </span>
+                            ))
+                          : null}
+                      </div>
+                    </div>
+                    {mediaDeadLetterOverview?.items.length ? (
+                      <>
+                        <div className="action-row">
+                          <button
+                            className="button secondary"
+                            disabled={bulkRetryingDeadLetter}
+                            type="button"
+                            onClick={handleSelectAllDeadLetter}
+                          >
+                            Select visible
+                          </button>
+                          <button
+                            className="button secondary"
+                            disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length}
+                            type="button"
+                            onClick={handleClearDeadLetterSelection}
+                          >
+                            Clear selection
+                          </button>
+                          <button
+                            className="button secondary"
+                            disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length}
+                            type="button"
+                            onClick={() => void handleBulkRetryDeadLetter("selected")}
+                          >
+                            {bulkRetryingDeadLetter ? "Retrying..." : `Retry selected (${selectedDeadLetterIds.length})`}
+                          </button>
+                          <button
+                            className="button secondary"
+                            disabled={bulkRetryingDeadLetter}
+                            type="button"
+                            onClick={() => void handleBulkRetryDeadLetter("all")}
+                          >
+                            {bulkRetryingDeadLetter ? "Retrying..." : "Retry all actionable"}
+                          </button>
+                        </div>
+                        <div className="record-list compact-list">
+                          {mediaDeadLetterOverview.items.map((item) => (
+                            <article className="record-card" key={item.media_id}>
+                              <label className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+                                <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                                  <input
+                                    checked={selectedDeadLetterIds.includes(item.media_id)}
+                                    disabled={bulkRetryingDeadLetter}
+                                    type="checkbox"
+                                    onChange={(event) =>
+                                      handleToggleDeadLetterSelection(item.media_id, event.target.checked)
+                                    }
+                                  />
+                                  <div>
+                                    <div className="eyebrow">{item.media_type}</div>
+                                    <div>{item.original_filename}</div>
+                                  </div>
+                                </div>
+                                <div className="tag-row">
+                                  <span className="tag">{item.processing_status}</span>
+                                  <span className="tag">{item.storage_provider}</span>
+                                  {item.processing_retry_state ? <span className="tag">retry {item.processing_retry_state}</span> : null}
+                                </div>
+                              </label>
+                              <div className="muted" style={{ marginTop: 8 }}>
+                                Last attempt: {formatHistoryTimestamp(item.processing_last_attempt_at)}
+                              </div>
+                              {item.processing_last_failure_at ? (
+                                <div className="muted" style={{ marginTop: 6 }}>
+                                  Last failure: {formatHistoryTimestamp(item.processing_last_failure_at)}
+                                </div>
+                              ) : null}
+                              {typeof item.processing_retry_count === "number" ? (
+                                <div className="muted" style={{ marginTop: 6 }}>
+                                  Retry budget used: {item.processing_retry_count}
+                                  {typeof item.processing_retry_max_attempts === "number"
+                                    ? ` / ${item.processing_retry_max_attempts}`
+                                    : ""}
+                                </div>
+                              ) : null}
+                              {item.processing_error ? (
+                                <div className="notice error" style={{ marginTop: 10 }}>
+                                  {item.processing_error}
+                                </div>
+                              ) : null}
+                            </article>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="notice">No dead-letter media items right now.</div>
                     )}
                   </div>
                 </>

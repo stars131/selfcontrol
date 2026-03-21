@@ -355,6 +355,99 @@ def test_media_processing_overview_reports_recent_remote_issues(tmp_path, monkey
     assert recent_issues[1]["remote_fetch_status"] == "downloaded"
 
 
+def test_media_dead_letter_overview_lists_remote_manual_recovery_items(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        user_id = db.query(User).first().id
+        db.add_all(
+            [
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="audio",
+                    storage_provider="custom",
+                    storage_key=f"remote/{workspace_id}/voice-manual.m4a",
+                    original_filename="voice-manual.m4a",
+                    mime_type="audio/mp4",
+                    size_bytes=256,
+                    metadata_json={
+                        "processing_last_attempt_at": "2026-03-21T10:00:00+00:00",
+                        "processing_last_failure_at": "2026-03-21T10:00:05+00:00",
+                        "processing_retry_state": "manual_only",
+                        "processing_retry_count": 0,
+                    },
+                    processing_status="deferred",
+                    processing_error="audio_asr provider is not enabled",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="video",
+                    storage_provider="custom",
+                    storage_key=f"remote/{workspace_id}/clip-exhausted.mp4",
+                    original_filename="clip-exhausted.mp4",
+                    mime_type="video/mp4",
+                    size_bytes=1024,
+                    metadata_json={
+                        "processing_last_attempt_at": "2026-03-21T11:00:00+00:00",
+                        "processing_last_failure_at": "2026-03-21T11:00:06+00:00",
+                        "processing_retry_state": "exhausted",
+                        "processing_retry_count": 3,
+                    },
+                    processing_status="failed",
+                    processing_error="remote fetch timed out",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="image",
+                    storage_provider="custom",
+                    storage_key=f"remote/{workspace_id}/queued.png",
+                    original_filename="queued.png",
+                    mime_type="image/png",
+                    size_bytes=128,
+                    metadata_json={
+                        "processing_retry_state": "scheduled",
+                        "processing_retry_count": 1,
+                    },
+                    processing_status="deferred",
+                    processing_error="provider processing is not ready",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="text",
+                    storage_provider="local",
+                    storage_key=f"uploads/{workspace_id}/local-note.txt",
+                    original_filename="local-note.txt",
+                    mime_type="text/plain",
+                    size_bytes=32,
+                    metadata_json={"processing_retry_state": "manual_only"},
+                    processing_status="failed",
+                    processing_error="local issue",
+                ),
+            ]
+        )
+        db.commit()
+
+    response = client.get(f"/api/v1/workspaces/{workspace_id}/media/dead-letter?limit=10")
+
+    assert response.status_code == 200
+    overview = response.json()["data"]["overview"]
+    assert overview["workspace_id"] == workspace_id
+    assert overview["total_count"] == 2
+    assert overview["by_retry_state"] == {"exhausted": 1, "manual_only": 1}
+    assert [item["original_filename"] for item in overview["items"]] == [
+        "clip-exhausted.mp4",
+        "voice-manual.m4a",
+    ]
+
+
 def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, monkeypatch) -> None:
     client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
 
@@ -1303,3 +1396,112 @@ def test_remote_media_processing_marks_retry_budget_exhausted(tmp_path, monkeypa
         assert metadata["processing_retry_count"] == 2
         assert metadata["processing_retry_next_attempt_at"] is None
         assert background_tasks_service.queue_media_retry_if_needed(media) is None
+
+
+def test_media_dead_letter_bulk_retry_requeues_selected_items(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
+
+    queued_media_ids: list[str] = []
+
+    class FakeTask:
+        @staticmethod
+        def delay(media_id: str) -> None:
+            queued_media_ids.append(media_id)
+
+    monkeypatch.setattr("app.worker.process_media_asset_task", FakeTask())
+
+    with session_local() as db:
+        user_id = db.query(User).first().id
+        manual_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=user_id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-manual.m4a",
+            original_filename="voice-manual.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={
+                "processing_retry_state": "manual_only",
+                "processing_retry_count": 1,
+                "processing_retry_next_attempt_at": "2026-03-21T10:00:00+00:00",
+            },
+            processing_status="failed",
+            processing_error="audio_asr provider is not enabled",
+        )
+        exhausted_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=user_id,
+            media_type="video",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/clip-exhausted.mp4",
+            original_filename="clip-exhausted.mp4",
+            mime_type="video/mp4",
+            size_bytes=1024,
+            metadata_json={
+                "processing_retry_state": "exhausted",
+                "processing_retry_count": 3,
+            },
+            processing_status="deferred",
+            processing_error="remote fetch timed out",
+        )
+        scheduled_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=user_id,
+            media_type="image",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/queued.png",
+            original_filename="queued.png",
+            mime_type="image/png",
+            size_bytes=128,
+            metadata_json={"processing_retry_state": "scheduled"},
+            processing_status="deferred",
+            processing_error="provider processing is not ready",
+        )
+        db.add_all([manual_media, exhausted_media, scheduled_media])
+        db.commit()
+        manual_media_id = manual_media.id
+        exhausted_media_id = exhausted_media.id
+        scheduled_media_id = scheduled_media.id
+
+    response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/dead-letter/retry",
+        json={
+            "media_ids": [manual_media_id, exhausted_media_id, scheduled_media_id],
+            "retry_states": ["manual_only", "exhausted"],
+            "limit": 10,
+        },
+    )
+
+    assert response.status_code == 200
+    result = response.json()["data"]["result"]
+    assert result["target_count"] == 3
+    assert result["retried_count"] == 2
+    assert result["queued_count"] == 2
+    assert result["processing_count"] == 0
+    assert result["retried_media_ids"] == [manual_media_id, exhausted_media_id]
+    assert result["skipped_reason_by_media_id"][scheduled_media_id] == "retry_state_not_selected"
+    assert queued_media_ids == [manual_media_id, exhausted_media_id]
+
+    with session_local() as db:
+        manual_media = db.get(MediaAsset, manual_media_id)
+        exhausted_media = db.get(MediaAsset, exhausted_media_id)
+        scheduled_media = db.get(MediaAsset, scheduled_media_id)
+
+        assert manual_media is not None
+        assert exhausted_media is not None
+        assert scheduled_media is not None
+
+        assert manual_media.processing_status == "pending"
+        assert exhausted_media.processing_status == "pending"
+        assert manual_media.processing_error is None
+        assert exhausted_media.processing_error is None
+        assert manual_media.metadata_json["processing_retry_state"] == "idle"
+        assert exhausted_media.metadata_json["processing_retry_state"] == "idle"
+        assert manual_media.metadata_json["processing_retry_count"] == 0
+        assert exhausted_media.metadata_json["processing_retry_count"] == 0
+        assert scheduled_media.processing_status == "deferred"

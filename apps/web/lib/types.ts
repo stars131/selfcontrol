@@ -193,6 +193,24 @@ export type MediaProcessingOverview = {
   recent_issues: MediaProcessingIssue[];
 };
 
+export type MediaDeadLetterOverview = {
+  workspace_id: string;
+  total_count: number;
+  by_retry_state: Record<string, number>;
+  items: MediaProcessingIssue[];
+};
+
+export type MediaDeadLetterBulkRetryResult = {
+  workspace_id: string;
+  target_count: number;
+  retried_count: number;
+  queued_count: number;
+  processing_count: number;
+  skipped_media_ids: string[];
+  skipped_reason_by_media_id: Record<string, string>;
+  retried_media_ids: string[];
+};
+
 export type MediaRetentionItem = {
   media_id: string;
   record_id: string;

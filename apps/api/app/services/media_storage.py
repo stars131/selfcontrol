@@ -11,6 +11,7 @@ from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_processing import format_size_label
 
 LOCAL_STORAGE_PROVIDER = "local"
+DEAD_LETTER_RETRY_STATES = {"manual_only", "exhausted", "disabled"}
 
 
 def is_local_storage_provider(provider_code: str | None) -> bool:
@@ -19,6 +20,89 @@ def is_local_storage_provider(provider_code: str | None) -> bool:
 
 def media_uses_local_storage(media: MediaAsset) -> bool:
     return is_local_storage_provider(media.storage_provider)
+
+
+def _read_processing_retry_state(media: MediaAsset) -> str | None:
+    metadata = media.metadata_json if isinstance(media.metadata_json, dict) else {}
+    value = metadata.get("processing_retry_state")
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip().lower()
+    return normalized or None
+
+
+def _build_media_processing_issue(item: MediaAsset) -> dict:
+    metadata = item.metadata_json if isinstance(item.metadata_json, dict) else {}
+    return {
+        "media_id": item.id,
+        "record_id": item.record_id,
+        "original_filename": item.original_filename,
+        "media_type": item.media_type,
+        "storage_provider": item.storage_provider,
+        "processing_status": item.processing_status,
+        "processing_error": item.processing_error,
+        "extraction_mode": metadata.get("extraction_mode") if isinstance(metadata.get("extraction_mode"), str) else None,
+        "processing_source": metadata.get("processing_source") if isinstance(metadata.get("processing_source"), str) else None,
+        "processing_last_attempt_at": metadata.get("processing_last_attempt_at") if isinstance(metadata.get("processing_last_attempt_at"), str) else None,
+        "processing_last_failure_at": metadata.get("processing_last_failure_at") if isinstance(metadata.get("processing_last_failure_at"), str) else None,
+        "remote_fetch_status": metadata.get("remote_fetch_status") if isinstance(metadata.get("remote_fetch_status"), str) else None,
+        "processing_retry_state": metadata.get("processing_retry_state") if isinstance(metadata.get("processing_retry_state"), str) else None,
+        "processing_retry_count": int(metadata.get("processing_retry_count")) if str(metadata.get("processing_retry_count", "")).strip().isdigit() else None,
+        "processing_retry_max_attempts": int(metadata.get("processing_retry_max_attempts")) if str(metadata.get("processing_retry_max_attempts", "")).strip().isdigit() else None,
+        "processing_retry_next_attempt_at": metadata.get("processing_retry_next_attempt_at") if isinstance(metadata.get("processing_retry_next_attempt_at"), str) else None,
+        "updated_at": item.updated_at,
+    }
+
+
+def _sort_media_processing_issues(items: list[dict]) -> list[dict]:
+    items.sort(
+        key=lambda item: (
+            item["processing_last_failure_at"] or "",
+            item["processing_last_attempt_at"] or "",
+            item["updated_at"].isoformat() if hasattr(item["updated_at"], "isoformat") else str(item["updated_at"]),
+        ),
+        reverse=True,
+    )
+    return items
+
+
+def list_workspace_media_dead_letter_items(
+    db: Session,
+    workspace_id: str,
+    *,
+    retry_states: set[str] | None = None,
+) -> list[MediaAsset]:
+    target_states = retry_states or DEAD_LETTER_RETRY_STATES
+    items = db.query(MediaAsset).filter(MediaAsset.workspace_id == workspace_id).all()
+    dead_letter_items: list[MediaAsset] = []
+    for item in items:
+        if media_uses_local_storage(item):
+            continue
+        retry_state = _read_processing_retry_state(item)
+        if retry_state not in target_states:
+            continue
+        if item.processing_status not in {"failed", "deferred"} and not item.processing_error:
+            continue
+        dead_letter_items.append(item)
+    dead_letter_items.sort(
+        key=lambda item: (
+            (
+                item.metadata_json.get("processing_last_failure_at")
+                if isinstance(item.metadata_json, dict)
+                and isinstance(item.metadata_json.get("processing_last_failure_at"), str)
+                else ""
+            ),
+            (
+                item.metadata_json.get("processing_last_attempt_at")
+                if isinstance(item.metadata_json, dict)
+                and isinstance(item.metadata_json.get("processing_last_attempt_at"), str)
+                else ""
+            ),
+            item.updated_at.isoformat() if hasattr(item.updated_at, "isoformat") else str(item.updated_at),
+        ),
+        reverse=True,
+    )
+    return dead_letter_items
 
 
 def resolve_storage_path(media: MediaAsset) -> Path:
@@ -111,38 +195,10 @@ def build_workspace_media_processing_overview(
         else:
             remote_item_count += 1
 
-        metadata = item.metadata_json if isinstance(item.metadata_json, dict) else {}
         if item.processing_status in {"failed", "deferred"} or item.processing_error:
-            recent_issues.append(
-                {
-                    "media_id": item.id,
-                    "record_id": item.record_id,
-                    "original_filename": item.original_filename,
-                    "media_type": item.media_type,
-                    "storage_provider": item.storage_provider,
-                    "processing_status": item.processing_status,
-                    "processing_error": item.processing_error,
-                    "extraction_mode": metadata.get("extraction_mode") if isinstance(metadata.get("extraction_mode"), str) else None,
-                    "processing_source": metadata.get("processing_source") if isinstance(metadata.get("processing_source"), str) else None,
-                    "processing_last_attempt_at": metadata.get("processing_last_attempt_at") if isinstance(metadata.get("processing_last_attempt_at"), str) else None,
-                    "processing_last_failure_at": metadata.get("processing_last_failure_at") if isinstance(metadata.get("processing_last_failure_at"), str) else None,
-                    "remote_fetch_status": metadata.get("remote_fetch_status") if isinstance(metadata.get("remote_fetch_status"), str) else None,
-                    "processing_retry_state": metadata.get("processing_retry_state") if isinstance(metadata.get("processing_retry_state"), str) else None,
-                    "processing_retry_count": int(metadata.get("processing_retry_count")) if str(metadata.get("processing_retry_count", "")).strip().isdigit() else None,
-                    "processing_retry_max_attempts": int(metadata.get("processing_retry_max_attempts")) if str(metadata.get("processing_retry_max_attempts", "")).strip().isdigit() else None,
-                    "processing_retry_next_attempt_at": metadata.get("processing_retry_next_attempt_at") if isinstance(metadata.get("processing_retry_next_attempt_at"), str) else None,
-                    "updated_at": item.updated_at,
-                }
-            )
+            recent_issues.append(_build_media_processing_issue(item))
 
-    recent_issues.sort(
-        key=lambda item: (
-            item["processing_last_failure_at"] or "",
-            item["processing_last_attempt_at"] or "",
-            item["updated_at"].isoformat() if hasattr(item["updated_at"], "isoformat") else str(item["updated_at"]),
-        ),
-        reverse=True,
-    )
+    _sort_media_processing_issues(recent_issues)
 
     return {
         "workspace_id": workspace_id,
@@ -157,6 +213,30 @@ def build_workspace_media_processing_overview(
         "by_processing_status": by_processing_status,
         "by_storage_provider": by_storage_provider,
         "recent_issues": recent_issues[:issue_limit],
+    }
+
+
+def build_workspace_media_dead_letter_overview(
+    db: Session,
+    workspace_id: str,
+    *,
+    limit: int = 20,
+    retry_states: set[str] | None = None,
+) -> dict:
+    items = list_workspace_media_dead_letter_items(db, workspace_id, retry_states=retry_states)
+    by_retry_state: dict[str, int] = {}
+    dead_letter_issues = []
+    for item in items:
+        retry_state = _read_processing_retry_state(item) or "unknown"
+        by_retry_state[retry_state] = by_retry_state.get(retry_state, 0) + 1
+        dead_letter_issues.append(_build_media_processing_issue(item))
+
+    _sort_media_processing_issues(dead_letter_issues)
+    return {
+        "workspace_id": workspace_id,
+        "total_count": len(items),
+        "by_retry_state": by_retry_state,
+        "items": dead_letter_issues[:limit],
     }
 
 

@@ -14,6 +14,9 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import (
+    MediaDeadLetterBulkRetryRequest,
+    MediaDeadLetterBulkRetryResultRead,
+    MediaDeadLetterOverviewRead,
     MediaProcessingOverviewRead,
     MediaRead,
     MediaRetentionArchiveRequest,
@@ -27,6 +30,8 @@ from app.services.audit import log_audit_event
 from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import (
+    DEAD_LETTER_RETRY_STATES,
+    build_workspace_media_dead_letter_overview,
     build_workspace_media_processing_overview,
     build_workspace_media_retention_report,
     archive_workspace_media_retention,
@@ -45,6 +50,17 @@ from app.services.media_provider import DeferredMediaProcessingError
 
 
 router = APIRouter()
+
+
+def _normalize_dead_letter_retry_states(values: list[str] | None) -> set[str]:
+    normalized = {str(value).strip().lower() for value in (values or []) if str(value).strip()}
+    invalid = normalized.difference(DEAD_LETTER_RETRY_STATES)
+    if invalid:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported dead-letter retry states: {', '.join(sorted(invalid))}",
+        )
+    return normalized or set(DEAD_LETTER_RETRY_STATES)
 
 
 @router.get("/{workspace_id}/records/{record_id}/media")
@@ -85,6 +101,117 @@ def get_media_processing_overview(
     require_workspace_member(workspace_id, current_user, db)
     overview = build_workspace_media_processing_overview(db, workspace_id, issue_limit=issue_limit)
     return {"success": True, "data": {"overview": MediaProcessingOverviewRead.model_validate(overview).model_dump()}}
+
+
+@router.get("/{workspace_id}/media/dead-letter")
+def get_media_dead_letter_overview(
+    workspace_id: str,
+    limit: int = Query(20, ge=1, le=200),
+    retry_states: list[str] | None = Query(default=None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_write_access(workspace_id, current_user, db)
+    overview = build_workspace_media_dead_letter_overview(
+        db,
+        workspace_id,
+        limit=limit,
+        retry_states=_normalize_dead_letter_retry_states(retry_states),
+    )
+    return {"success": True, "data": {"overview": MediaDeadLetterOverviewRead.model_validate(overview).model_dump()}}
+
+
+@router.post("/{workspace_id}/media/dead-letter/retry")
+def bulk_retry_media_dead_letter(
+    workspace_id: str,
+    payload: MediaDeadLetterBulkRetryRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_write_access(workspace_id, current_user, db)
+    retry_states = _normalize_dead_letter_retry_states(payload.retry_states)
+    if payload.media_ids:
+        target_items = []
+        seen_media_ids: set[str] = set()
+        for media_id in payload.media_ids:
+            if media_id in seen_media_ids:
+                continue
+            seen_media_ids.add(media_id)
+            media = db.get(MediaAsset, media_id)
+            if media and media.workspace_id == workspace_id:
+                target_items.append(media)
+    else:
+        overview = build_workspace_media_dead_letter_overview(
+            db,
+            workspace_id,
+            limit=payload.limit,
+            retry_states=retry_states,
+        )
+        target_items = []
+        for item in overview["items"]:
+            media = db.get(MediaAsset, item["media_id"])
+            if media is not None:
+                target_items.append(media)
+
+    retried_media_ids: list[str] = []
+    skipped_media_ids: list[str] = []
+    skipped_reason_by_media_id: dict[str, str] = {}
+    queued_count = 0
+    processing_count = 0
+
+    for media in target_items:
+        if media is None:
+            continue
+        retry_state = str((media.metadata_json or {}).get("processing_retry_state") or "").strip().lower()
+        if retry_state not in retry_states:
+            skipped_media_ids.append(media.id)
+            skipped_reason_by_media_id[media.id] = "retry_state_not_selected"
+            continue
+        if media.storage_provider == "local":
+            skipped_media_ids.append(media.id)
+            skipped_reason_by_media_id[media.id] = "local_storage_not_supported"
+            continue
+        if media.processing_status == "completed":
+            skipped_media_ids.append(media.id)
+            skipped_reason_by_media_id[media.id] = "already_completed"
+            continue
+        _, processing_mode = dispatch_media_processing(db, media.id)
+        retried_media_ids.append(media.id)
+        if processing_mode == "async":
+            queued_count += 1
+        else:
+            processing_count += 1
+
+    result = {
+        "workspace_id": workspace_id,
+        "target_count": len(target_items),
+        "retried_count": len(retried_media_ids),
+        "queued_count": queued_count,
+        "processing_count": processing_count,
+        "skipped_media_ids": skipped_media_ids,
+        "skipped_reason_by_media_id": skipped_reason_by_media_id,
+        "retried_media_ids": retried_media_ids,
+    }
+    if retried_media_ids:
+        log_audit_event(
+            db,
+            workspace_id=workspace_id,
+            actor_user_id=current_user.id,
+            action_code="media.dead_letter_bulk_retry",
+            resource_type="workspace",
+            resource_id=workspace_id,
+            message="Triggered bulk dead-letter media recovery",
+            metadata_json={
+                "target_count": result["target_count"],
+                "retried_count": result["retried_count"],
+                "queued_count": result["queued_count"],
+                "processing_count": result["processing_count"],
+                "retry_states": sorted(retry_states),
+                "retried_media_ids": retried_media_ids[:50],
+                "skipped_media_ids": skipped_media_ids[:50],
+            },
+        )
+    return {"success": True, "data": {"result": MediaDeadLetterBulkRetryResultRead.model_validate(result).model_dump()}}
 
 
 @router.get("/{workspace_id}/media/retention-report")

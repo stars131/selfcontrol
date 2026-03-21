@@ -73,6 +73,30 @@ class MediaProcessingOverviewRead(BaseModel):
     recent_issues: list[MediaProcessingIssueRead]
 
 
+class MediaDeadLetterOverviewRead(BaseModel):
+    workspace_id: str
+    total_count: int
+    by_retry_state: dict[str, int]
+    items: list[MediaProcessingIssueRead]
+
+
+class MediaDeadLetterBulkRetryRequest(BaseModel):
+    media_ids: list[str] = Field(default_factory=list)
+    retry_states: list[str] = Field(default_factory=list)
+    limit: int = Field(default=20, ge=1, le=200)
+
+
+class MediaDeadLetterBulkRetryResultRead(BaseModel):
+    workspace_id: str
+    target_count: int
+    retried_count: int
+    queued_count: int
+    processing_count: int
+    skipped_media_ids: list[str]
+    skipped_reason_by_media_id: dict[str, str]
+    retried_media_ids: list[str]
+
+
 class MediaRetentionItemRead(BaseModel):
     media_id: str
     record_id: str
