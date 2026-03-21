@@ -258,12 +258,18 @@ Last updated: 2026-03-22
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
   - the structured results panel now reads its active `mediaIssueCopy` and `panelCopy` from a shared bundle loader, reducing the future review surface for locale updates
+- Enterprise Engineering Standard V1:
+  - the repository now defines `docs/ENTERPRISE_ENGINEERING_STANDARD.md` as the baseline delivery standard for future work
+  - all future slices are required to meet enterprise-grade expectations for security, observability, migrations, testing, rollback safety, maintainability, and updateability
+  - the standard is written as a practical repository policy so new features and refactors can be evaluated against the same long-term bar
 
 ## Next
 - Continue the next product slice
 - Remove the remaining dead legacy copy blocks from `record-panel-v2` and continue splitting oversized UI logic into smaller modules
+- Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
 - Every meaningful slice must update this file
 - Every meaningful slice must be committed locally
 - Every meaningful slice must be pushed to GitHub
+- Every meaningful slice must satisfy `docs/ENTERPRISE_ENGINEERING_STANDARD.md`
