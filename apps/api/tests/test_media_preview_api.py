@@ -355,11 +355,13 @@ def test_media_processing_overview_reports_recent_remote_issues(tmp_path, monkey
     assert recent_issues[0]["extraction_mode"] == "provider_remote"
     assert recent_issues[0]["issue_category"] == "transient_remote_failure"
     assert recent_issues[0]["recommended_action_code"] == "retry_after_remote_check"
+    assert recent_issues[0]["recommended_settings_feature_code"] == "media_storage"
     assert recent_issues[0]["can_bulk_retry"] is True
     assert recent_issues[1]["processing_status"] == "deferred"
     assert recent_issues[1]["remote_fetch_status"] == "downloaded"
     assert recent_issues[1]["issue_category"] == "provider_not_ready"
     assert recent_issues[1]["recommended_action_code"] == "retry_when_ready"
+    assert recent_issues[1]["recommended_settings_feature_code"] == "audio_asr"
 
 
 def test_media_dead_letter_overview_lists_remote_manual_recovery_items(tmp_path, monkeypatch) -> None:
@@ -459,8 +461,10 @@ def test_media_dead_letter_overview_lists_remote_manual_recovery_items(tmp_path,
     ]
     assert overview["items"][0]["issue_category"] == "transient_remote_failure"
     assert overview["items"][0]["recommended_action_code"] == "retry_after_remote_check"
+    assert overview["items"][0]["recommended_settings_feature_code"] == "media_storage"
     assert overview["items"][1]["issue_category"] == "provider_disabled"
     assert overview["items"][1]["recommended_action_code"] == "enable_provider"
+    assert overview["items"][1]["recommended_settings_feature_code"] == "audio_asr"
 
 
 def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, monkeypatch) -> None:
@@ -1616,12 +1620,13 @@ def test_media_dead_letter_bulk_retry_requeues_selected_items(tmp_path, monkeypa
     assert response.status_code == 200
     result = response.json()["data"]["result"]
     assert result["target_count"] == 3
-    assert result["retried_count"] == 2
-    assert result["queued_count"] == 2
+    assert result["retried_count"] == 1
+    assert result["queued_count"] == 1
     assert result["processing_count"] == 0
-    assert result["retried_media_ids"] == [manual_media_id, exhausted_media_id]
+    assert result["retried_media_ids"] == [exhausted_media_id]
+    assert result["skipped_reason_by_media_id"][manual_media_id] == "bulk_retry_not_recommended"
     assert result["skipped_reason_by_media_id"][scheduled_media_id] == "retry_state_not_selected"
-    assert queued_media_ids == [manual_media_id, exhausted_media_id]
+    assert queued_media_ids == [exhausted_media_id]
 
     with session_local() as db:
         manual_media = db.get(MediaAsset, manual_media_id)
@@ -1632,12 +1637,12 @@ def test_media_dead_letter_bulk_retry_requeues_selected_items(tmp_path, monkeypa
         assert exhausted_media is not None
         assert scheduled_media is not None
 
-        assert manual_media.processing_status == "pending"
+        assert manual_media.processing_status == "failed"
         assert exhausted_media.processing_status == "pending"
-        assert manual_media.processing_error is None
+        assert manual_media.processing_error == "audio_asr provider is not enabled"
         assert exhausted_media.processing_error is None
-        assert manual_media.metadata_json["processing_retry_state"] == "idle"
+        assert manual_media.metadata_json["processing_retry_state"] == "manual_only"
         assert exhausted_media.metadata_json["processing_retry_state"] == "idle"
-        assert manual_media.metadata_json["processing_retry_count"] == 0
+        assert manual_media.metadata_json["processing_retry_count"] == 1
         assert exhausted_media.metadata_json["processing_retry_count"] == 0
         assert scheduled_media.processing_status == "deferred"

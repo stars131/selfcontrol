@@ -36,16 +36,22 @@ function readTextOption(options: Record<string, unknown>, key: string): string {
   return "";
 }
 
+function readAnchorHighlightClass(targetId: string, highlightedAnchor?: string | null): string {
+  return highlightedAnchor === targetId ? " anchor-highlight" : "";
+}
+
 export function ProviderSettingsPanel({
   providerConfigs,
   mediaStorageHealth = null,
   refreshingMediaStorageHealth = false,
+  highlightedAnchor = null,
   onRefreshMediaStorageHealth,
   onSaveProviderConfig,
 }: {
   providerConfigs: ProviderFeatureConfig[];
   mediaStorageHealth?: MediaStorageProviderHealth | null;
   refreshingMediaStorageHealth?: boolean;
+  highlightedAnchor?: string | null;
   onRefreshMediaStorageHealth?: (() => Promise<void>) | null;
   onSaveProviderConfig: (
     featureCode: string,
@@ -119,7 +125,10 @@ export function ProviderSettingsPanel({
   };
 
   return (
-    <section className="record-card">
+    <section
+      className={`record-card${readAnchorHighlightClass("provider-settings", highlightedAnchor)}`}
+      id="provider-settings"
+    >
       <div className="eyebrow">Provider Settings</div>
       <div className="muted" style={{ marginTop: 8 }}>
         Configure each AI feature separately. Secrets stay in environment variables and this page only stores the env var names.
@@ -133,7 +142,11 @@ export function ProviderSettingsPanel({
           }
 
           return (
-            <article className="message" key={item.feature_code}>
+            <article
+              className={`message${readAnchorHighlightClass(`provider-${item.feature_code}`, highlightedAnchor)}`}
+              id={`provider-${item.feature_code}`}
+              key={item.feature_code}
+            >
               <div className="eyebrow">{item.feature_label}</div>
               <div style={{ marginTop: 8, lineHeight: 1.6 }}>{item.feature_description}</div>
               <label className="muted" style={{ display: "block", marginTop: 10 }}>
@@ -272,7 +285,11 @@ export function ProviderSettingsPanel({
                 </div>
               ) : null}
               {item.feature_code === "media_storage" && mediaStorageHealth ? (
-                <div className="record-card form-stack" style={{ marginTop: 12 }}>
+                <div
+                  className={`record-card form-stack${readAnchorHighlightClass("provider-media_storage-health", highlightedAnchor)}`}
+                  id="provider-media_storage-health"
+                  style={{ marginTop: 12 }}
+                >
                   <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                     <div>
                       <div className="eyebrow">Storage health</div>

@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-21
+Last updated: 2026-03-22
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -220,9 +220,14 @@ Last updated: 2026-03-21
   - recent issue overview and dead-letter review APIs now return recommended action codes, human-readable action labels, and operator guidance instead of only raw error text
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
+- Remote Media Provider Action Shortcuts and Settings Deep Links V1:
+  - recent issue and dead-letter cards now expose direct retry actions for retryable media issues and deep links into the relevant provider settings area
+  - settings links can target either the feature-level provider card or the media storage health section based on the backend recommendation payload
+  - the workspace settings page now supports hash-based scrolling and visual highlight states for provider sections and storage-health diagnostics
+  - bulk dead-letter retry now skips non-actionable issue types safely, and test coverage verifies the recommended-settings field and skip behavior
 
 ## Next
-- Remote media provider action shortcuts and settings deep links
+- Provider issue localization and settings-page operator polish
 
 ## Delivery Rule
 - Every meaningful slice must update this file

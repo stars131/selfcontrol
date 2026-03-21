@@ -343,6 +343,17 @@ button:disabled {
   color: #7d2f22;
 }
 
+#provider-settings,
+[id^="provider-"] {
+  scroll-margin-top: 24px;
+}
+
+.anchor-highlight {
+  border-color: rgba(208, 100, 43, 0.45) !important;
+  background: rgba(255, 248, 237, 0.96);
+  box-shadow: 0 0 0 3px rgba(208, 100, 43, 0.14);
+}
+
 @media (max-width: 960px) {
   .workspace-shell {
     grid-template-columns: 1fr;

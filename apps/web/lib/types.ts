@@ -180,6 +180,7 @@ export type MediaProcessingIssue = {
   recommended_action_code?: string | null;
   recommended_action_label?: string | null;
   recommended_action_detail?: string | null;
+  recommended_settings_feature_code?: string | null;
   can_bulk_retry: boolean;
   updated_at: string;
 };

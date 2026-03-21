@@ -31,6 +31,7 @@ from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import (
     DEAD_LETTER_RETRY_STATES,
+    build_media_processing_issue,
     build_workspace_media_dead_letter_overview,
     build_workspace_media_processing_overview,
     build_workspace_media_retention_report,
@@ -166,6 +167,11 @@ def bulk_retry_media_dead_letter(
         if retry_state not in retry_states:
             skipped_media_ids.append(media.id)
             skipped_reason_by_media_id[media.id] = "retry_state_not_selected"
+            continue
+        issue = build_media_processing_issue(media)
+        if issue.get("can_bulk_retry") is not True:
+            skipped_media_ids.append(media.id)
+            skipped_reason_by_media_id[media.id] = "bulk_retry_not_recommended"
             continue
         if media.storage_provider == "local":
             skipped_media_ids.append(media.id)

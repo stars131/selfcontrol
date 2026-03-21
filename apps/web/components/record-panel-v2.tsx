@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
@@ -11,6 +12,7 @@ import type {
   LocationReview,
   MediaAsset,
   MediaDeadLetterOverview,
+  MediaProcessingIssue,
   MediaProcessingOverview,
   MediaStorageSummary,
   RecordFilterState,
@@ -198,6 +200,33 @@ function readMetadataNumber(metadata: Record<string, unknown>, key: string): num
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
+function canRetryMediaIssue(issue: MediaProcessingIssue): boolean {
+  return issue.can_bulk_retry === true;
+}
+
+function resolveMediaIssueSettingsAnchor(issue: MediaProcessingIssue): string | null {
+  const actionCode = issue.recommended_action_code ?? "";
+  const featureCode = issue.recommended_settings_feature_code ?? "";
+  if (!featureCode) {
+    return null;
+  }
+  if (
+    actionCode === "check_remote_storage_health" ||
+    (actionCode === "retry_after_remote_check" && featureCode === "media_storage")
+  ) {
+    return "provider-media_storage-health";
+  }
+  return `provider-${featureCode}`;
+}
+
+function buildMediaIssueSettingsHref(workspaceId: string, issue: MediaProcessingIssue): string | null {
+  const anchor = resolveMediaIssueSettingsAnchor(issue);
+  if (!anchor) {
+    return null;
+  }
+  return `/app/workspaces/${workspaceId}/settings#${anchor}`;
+}
+
 export function RecordPanelV2({
   authToken,
   canWriteWorkspace,
@@ -331,11 +360,19 @@ export function RecordPanelV2({
     () => mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0),
     [mediaAssets],
   );
+  const actionableDeadLetterIds = useMemo(
+    () =>
+      new Set(
+        (mediaDeadLetterOverview?.items ?? [])
+          .filter((item) => canRetryMediaIssue(item))
+          .map((item) => item.media_id),
+      ),
+    [mediaDeadLetterOverview],
+  );
 
   useEffect(() => {
-    const allowedIds = new Set(mediaDeadLetterOverview?.items.map((item) => item.media_id) ?? []);
-    setSelectedDeadLetterIds((current) => current.filter((item) => allowedIds.has(item)));
-  }, [mediaDeadLetterOverview]);
+    setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)));
+  }, [actionableDeadLetterIds]);
 
   useEffect(() => {
     if (!selectedRecord) {
@@ -541,7 +578,11 @@ export function RecordPanelV2({
   };
 
   const handleSelectAllDeadLetter = () => {
-    setSelectedDeadLetterIds(mediaDeadLetterOverview?.items.map((item) => item.media_id) ?? []);
+    setSelectedDeadLetterIds(
+      (mediaDeadLetterOverview?.items ?? [])
+        .filter((item) => canRetryMediaIssue(item))
+        .map((item) => item.media_id),
+    );
   };
 
   const handleClearDeadLetterSelection = () => {
@@ -1419,6 +1460,28 @@ export function RecordPanelV2({
                                 {issue.recommended_action_detail ? `: ${issue.recommended_action_detail}` : ""}
                               </div>
                             ) : null}
+                            {canWriteWorkspace || buildMediaIssueSettingsHref(workspaceId, issue) ? (
+                              <div className="action-row" style={{ marginTop: 10 }}>
+                                {canWriteWorkspace && canRetryMediaIssue(issue) ? (
+                                  <button
+                                    className="button secondary"
+                                    disabled={retryingMediaId === issue.media_id}
+                                    type="button"
+                                    onClick={() => void handleRetryMediaProcessing(issue.media_id)}
+                                  >
+                                    {retryingMediaId === issue.media_id ? "Retrying..." : "Retry now"}
+                                  </button>
+                                ) : null}
+                                {buildMediaIssueSettingsHref(workspaceId, issue) ? (
+                                  <Link
+                                    className="button secondary"
+                                    href={buildMediaIssueSettingsHref(workspaceId, issue) ?? "#"}
+                                  >
+                                    Open settings
+                                  </Link>
+                                ) : null}
+                              </div>
+                            ) : null}
                             {issue.processing_error ? (
                               <div className="notice error" style={{ marginTop: 10 }}>
                                 {issue.processing_error}
@@ -1504,7 +1567,7 @@ export function RecordPanelV2({
                                 <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                                   <input
                                     checked={selectedDeadLetterIds.includes(item.media_id)}
-                                    disabled={bulkRetryingDeadLetter}
+                                    disabled={bulkRetryingDeadLetter || !canRetryMediaIssue(item)}
                                     type="checkbox"
                                     onChange={(event) =>
                                       handleToggleDeadLetterSelection(item.media_id, event.target.checked)
@@ -1542,6 +1605,28 @@ export function RecordPanelV2({
                                 <div className="notice" style={{ marginTop: 10 }}>
                                   {item.recommended_action_label}
                                   {item.recommended_action_detail ? `: ${item.recommended_action_detail}` : ""}
+                                </div>
+                              ) : null}
+                              {canWriteWorkspace || buildMediaIssueSettingsHref(workspaceId, item) ? (
+                                <div className="action-row" style={{ marginTop: 10 }}>
+                                  {canWriteWorkspace && canRetryMediaIssue(item) ? (
+                                    <button
+                                      className="button secondary"
+                                      disabled={retryingMediaId === item.media_id}
+                                      type="button"
+                                      onClick={() => void handleRetryMediaProcessing(item.media_id)}
+                                    >
+                                      {retryingMediaId === item.media_id ? "Retrying..." : "Retry now"}
+                                    </button>
+                                  ) : null}
+                                  {buildMediaIssueSettingsHref(workspaceId, item) ? (
+                                    <Link
+                                      className="button secondary"
+                                      href={buildMediaIssueSettingsHref(workspaceId, item) ?? "#"}
+                                    >
+                                      Open settings
+                                    </Link>
+                                  ) : null}
                                 </div>
                               ) : null}
                               {item.processing_error ? (

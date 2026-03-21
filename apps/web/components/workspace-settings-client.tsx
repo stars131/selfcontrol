@@ -157,8 +157,20 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
   const [savingMemberId, setSavingMemberId] = useState("");
   const [removingMemberId, setRemovingMemberId] = useState("");
   const [refreshingMediaStorageHealth, setRefreshingMediaStorageHealth] = useState(false);
+  const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const syncHighlightedAnchor = () => {
+      const anchor = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
+      setHighlightedAnchor(anchor || null);
+    };
+
+    syncHighlightedAnchor();
+    window.addEventListener("hashchange", syncHighlightedAnchor);
+    return () => window.removeEventListener("hashchange", syncHighlightedAnchor);
+  }, []);
 
   useEffect(() => {
     const activeToken = getStoredToken();
@@ -204,6 +216,19 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
 
     void load();
   }, [router, workspaceId]);
+
+  useEffect(() => {
+    if (!highlightedAnchor) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(highlightedAnchor);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [highlightedAnchor, providerConfigs.length, mediaStorageHealth?.checked_at]);
 
   const refreshMediaStorageHealthState = async (activeToken: string) => {
     setRefreshingMediaStorageHealth(true);
@@ -350,6 +375,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             </section>
             {workspace?.role === "owner" || workspace?.role === "editor" ? (
               <ProviderSettingsPanel
+                highlightedAnchor={highlightedAnchor}
                 mediaStorageHealth={mediaStorageHealth}
                 onRefreshMediaStorageHealth={
                   token ? async () => refreshMediaStorageHealthState(token) : null

@@ -60,6 +60,7 @@ class MediaProcessingIssueRead(BaseModel):
     recommended_action_code: str | None = None
     recommended_action_label: str | None = None
     recommended_action_detail: str | None = None
+    recommended_settings_feature_code: str | None = None
     can_bulk_retry: bool = False
     updated_at: datetime
 
