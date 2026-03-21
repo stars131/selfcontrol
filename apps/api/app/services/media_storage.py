@@ -90,6 +90,72 @@ def summarize_workspace_media_storage(db: Session, workspace_id: str) -> dict:
     }
 
 
+def build_workspace_media_processing_overview(
+    db: Session,
+    workspace_id: str,
+    *,
+    issue_limit: int = 5,
+) -> dict:
+    items = db.query(MediaAsset).filter(MediaAsset.workspace_id == workspace_id).all()
+    by_processing_status: dict[str, int] = {}
+    by_storage_provider: dict[str, int] = {}
+    recent_issues: list[dict] = []
+    local_item_count = 0
+    remote_item_count = 0
+
+    for item in items:
+        by_processing_status[item.processing_status] = by_processing_status.get(item.processing_status, 0) + 1
+        by_storage_provider[item.storage_provider] = by_storage_provider.get(item.storage_provider, 0) + 1
+        if media_uses_local_storage(item):
+            local_item_count += 1
+        else:
+            remote_item_count += 1
+
+        metadata = item.metadata_json if isinstance(item.metadata_json, dict) else {}
+        if item.processing_status in {"failed", "deferred"} or item.processing_error:
+            recent_issues.append(
+                {
+                    "media_id": item.id,
+                    "record_id": item.record_id,
+                    "original_filename": item.original_filename,
+                    "media_type": item.media_type,
+                    "storage_provider": item.storage_provider,
+                    "processing_status": item.processing_status,
+                    "processing_error": item.processing_error,
+                    "extraction_mode": metadata.get("extraction_mode") if isinstance(metadata.get("extraction_mode"), str) else None,
+                    "processing_source": metadata.get("processing_source") if isinstance(metadata.get("processing_source"), str) else None,
+                    "processing_last_attempt_at": metadata.get("processing_last_attempt_at") if isinstance(metadata.get("processing_last_attempt_at"), str) else None,
+                    "processing_last_failure_at": metadata.get("processing_last_failure_at") if isinstance(metadata.get("processing_last_failure_at"), str) else None,
+                    "remote_fetch_status": metadata.get("remote_fetch_status") if isinstance(metadata.get("remote_fetch_status"), str) else None,
+                    "updated_at": item.updated_at,
+                }
+            )
+
+    recent_issues.sort(
+        key=lambda item: (
+            item["processing_last_failure_at"] or "",
+            item["processing_last_attempt_at"] or "",
+            item["updated_at"].isoformat() if hasattr(item["updated_at"], "isoformat") else str(item["updated_at"]),
+        ),
+        reverse=True,
+    )
+
+    return {
+        "workspace_id": workspace_id,
+        "total_count": len(items),
+        "local_item_count": local_item_count,
+        "remote_item_count": remote_item_count,
+        "completed_count": by_processing_status.get("completed", 0),
+        "pending_count": by_processing_status.get("pending", 0),
+        "processing_count": by_processing_status.get("processing", 0),
+        "deferred_count": by_processing_status.get("deferred", 0),
+        "failed_count": by_processing_status.get("failed", 0),
+        "by_processing_status": by_processing_status,
+        "by_storage_provider": by_storage_provider,
+        "recent_issues": recent_issues[:issue_limit],
+    }
+
+
 def _coerce_utc(value: datetime) -> datetime:
     if value.tzinfo is None:
         return value.replace(tzinfo=timezone.utc)

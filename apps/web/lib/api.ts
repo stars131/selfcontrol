@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaProcessingOverview,
   MediaRetentionArchiveResult,
   MediaRetentionCleanupResult,
   MediaRetentionReport,
@@ -582,6 +583,22 @@ export async function getMediaStorageSummary(token: string, workspaceId: string)
     { method: "GET" },
     token,
   );
+}
+
+export async function getMediaProcessingOverview(
+  token: string,
+  workspaceId: string,
+  params?: { issueLimit?: number },
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.issueLimit) {
+    searchParams.set("issue_limit", String(params.issueLimit));
+  }
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/media/processing-overview?${query}`
+    : `/workspaces/${workspaceId}/media/processing-overview`;
+  return request<{ overview: MediaProcessingOverview }>(path, { method: "GET" }, token);
 }
 
 export async function getMediaRetentionReport(

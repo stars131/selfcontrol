@@ -38,6 +38,37 @@ class MediaStorageSummaryRead(BaseModel):
     largest_item_size_label: str | None = None
 
 
+class MediaProcessingIssueRead(BaseModel):
+    media_id: str
+    record_id: str
+    original_filename: str
+    media_type: str
+    storage_provider: str
+    processing_status: str
+    processing_error: str | None = None
+    extraction_mode: str | None = None
+    processing_source: str | None = None
+    processing_last_attempt_at: str | None = None
+    processing_last_failure_at: str | None = None
+    remote_fetch_status: str | None = None
+    updated_at: datetime
+
+
+class MediaProcessingOverviewRead(BaseModel):
+    workspace_id: str
+    total_count: int
+    local_item_count: int
+    remote_item_count: int
+    completed_count: int
+    pending_count: int
+    processing_count: int
+    deferred_count: int
+    failed_count: int
+    by_processing_status: dict[str, int]
+    by_storage_provider: dict[str, int]
+    recent_issues: list[MediaProcessingIssueRead]
+
+
 class MediaRetentionItemRead(BaseModel):
     media_id: str
     record_id: str

@@ -216,6 +216,115 @@ def test_media_upload_can_be_dispatched_async(tmp_path, monkeypatch) -> None:
     assert queued_media_ids == [media_payload["id"], media_payload["id"]]
 
 
+def test_media_processing_overview_reports_recent_remote_issues(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        user_id = db.query(User).first().id
+        db.add_all(
+            [
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="text",
+                    storage_provider="local",
+                    storage_key=f"uploads/{workspace_id}/note.txt",
+                    original_filename="note.txt",
+                    mime_type="text/plain",
+                    size_bytes=12,
+                    metadata_json={
+                        "processing_source": "local_file",
+                        "processing_last_attempt_at": "2026-03-21T09:00:00+00:00",
+                        "processing_last_success_at": "2026-03-21T09:00:01+00:00",
+                    },
+                    processing_status="completed",
+                    extracted_text="good noodle shop",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="image",
+                    storage_provider="local",
+                    storage_key=f"uploads/{workspace_id}/queued.png",
+                    original_filename="queued.png",
+                    mime_type="image/png",
+                    size_bytes=128,
+                    metadata_json={},
+                    processing_status="pending",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="audio",
+                    storage_provider="custom",
+                    storage_key=f"remote/{workspace_id}/voice.m4a",
+                    original_filename="voice.m4a",
+                    mime_type="audio/mp4",
+                    size_bytes=256,
+                    metadata_json={
+                        "processing_source": "remote_fetch",
+                        "extraction_mode": "provider_deferred",
+                        "processing_last_attempt_at": "2026-03-21T10:00:00+00:00",
+                        "processing_last_failure_at": "2026-03-21T10:00:05+00:00",
+                        "remote_fetch_status": "downloaded",
+                    },
+                    processing_status="deferred",
+                    processing_error="provider processing is not ready",
+                ),
+                MediaAsset(
+                    workspace_id=workspace_id,
+                    record_id=record_id,
+                    uploaded_by=user_id,
+                    media_type="video",
+                    storage_provider="custom",
+                    storage_key=f"remote/{workspace_id}/clip.mp4",
+                    original_filename="clip.mp4",
+                    mime_type="video/mp4",
+                    size_bytes=1024,
+                    metadata_json={
+                        "processing_source": "remote_fetch",
+                        "extraction_mode": "provider_remote",
+                        "processing_last_attempt_at": "2026-03-21T11:00:00+00:00",
+                        "processing_last_failure_at": "2026-03-21T11:00:06+00:00",
+                        "remote_fetch_status": "failed",
+                    },
+                    processing_status="failed",
+                    processing_error="remote fetch timed out",
+                ),
+            ]
+        )
+        db.commit()
+
+    response = client.get(f"/api/v1/workspaces/{workspace_id}/media/processing-overview?issue_limit=2")
+
+    assert response.status_code == 200
+    overview = response.json()["data"]["overview"]
+    assert overview["workspace_id"] == workspace_id
+    assert overview["total_count"] == 4
+    assert overview["local_item_count"] == 2
+    assert overview["remote_item_count"] == 2
+    assert overview["completed_count"] == 1
+    assert overview["pending_count"] == 1
+    assert overview["deferred_count"] == 1
+    assert overview["failed_count"] == 1
+    assert overview["by_processing_status"]["completed"] == 1
+    assert overview["by_processing_status"]["pending"] == 1
+    assert overview["by_storage_provider"]["local"] == 2
+    assert overview["by_storage_provider"]["custom"] == 2
+
+    recent_issues = overview["recent_issues"]
+    assert [item["original_filename"] for item in recent_issues] == ["clip.mp4", "voice.m4a"]
+    assert recent_issues[0]["processing_status"] == "failed"
+    assert recent_issues[0]["processing_source"] == "remote_fetch"
+    assert recent_issues[0]["remote_fetch_status"] == "failed"
+    assert recent_issues[0]["extraction_mode"] == "provider_remote"
+    assert recent_issues[1]["processing_status"] == "deferred"
+    assert recent_issues[1]["remote_fetch_status"] == "downloaded"
+
+
 def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, monkeypatch) -> None:
     client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
 

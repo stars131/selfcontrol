@@ -14,6 +14,7 @@ import {
   deleteRecord,
   deleteReminder,
   getKnowledgeStats,
+  getMediaProcessingOverview,
   getMediaStatus,
   getMediaStorageSummary,
   getWorkspace,
@@ -45,6 +46,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaProcessingOverview,
   MediaStorageSummary,
   NotificationItem,
   ProviderFeatureConfig,
@@ -80,6 +82,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
+  const [mediaProcessingOverview, setMediaProcessingOverview] = useState<MediaProcessingOverview | null>(null);
   const [mediaStorageSummary, setMediaStorageSummary] = useState<MediaStorageSummary | null>(null);
   const [reminders, setReminders] = useState<ReminderItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -123,6 +126,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const refreshMediaStorageSummary = async (activeToken: string) => {
     const result = await getMediaStorageSummary(activeToken, workspaceId);
     setMediaStorageSummary(result.summary);
+  };
+
+  const refreshMediaProcessingOverview = async (activeToken: string) => {
+    const result = await getMediaProcessingOverview(activeToken, workspaceId, { issueLimit: 6 });
+    setMediaProcessingOverview(result.overview);
   };
 
   const refreshReminders = async (activeToken: string, recordId: string | null) => {
@@ -205,6 +213,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
         await refreshMediaStorageSummary(activeToken);
+        await refreshMediaProcessingOverview(activeToken);
         if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
           await refreshProviderConfigs(activeToken);
           if (workspaceResult.workspace.role === "owner") {
@@ -368,6 +377,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setSelectedRecordId(nextRecords[0]?.id ?? null);
     await refreshRecords(token, recordFilter);
     await refreshMediaStorageSummary(token);
+    await refreshMediaProcessingOverview(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -382,6 +392,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await uploadMedia(token, workspaceId, recordId, file);
     await refreshMedia(token, recordId);
     await refreshMediaStorageSummary(token);
+    await refreshMediaProcessingOverview(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -396,6 +407,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await deleteMedia(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
     await refreshMediaStorageSummary(token);
+    await refreshMediaProcessingOverview(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -409,6 +421,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     await retryMediaProcessing(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
+    await refreshMediaProcessingOverview(token);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -419,6 +432,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     }
     await getMediaStatus(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
+    await refreshMediaProcessingOverview(token);
   };
 
   const handleResetFilter = async () => {
@@ -692,6 +706,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           authToken={token}
           canWriteWorkspace={canWriteWorkspace}
           mediaAssets={mediaAssets}
+          mediaProcessingOverview={mediaProcessingOverview}
           mediaStorageSummary={mediaStorageSummary}
           onCreateReminder={handleCreateReminder}
           onDeleteMedia={handleDeleteMedia}

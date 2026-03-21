@@ -158,6 +158,37 @@ export type MediaStorageSummary = {
   largest_item_size_label?: string | null;
 };
 
+export type MediaProcessingIssue = {
+  media_id: string;
+  record_id: string;
+  original_filename: string;
+  media_type: string;
+  storage_provider: string;
+  processing_status: string;
+  processing_error?: string | null;
+  extraction_mode?: string | null;
+  processing_source?: string | null;
+  processing_last_attempt_at?: string | null;
+  processing_last_failure_at?: string | null;
+  remote_fetch_status?: string | null;
+  updated_at: string;
+};
+
+export type MediaProcessingOverview = {
+  workspace_id: string;
+  total_count: number;
+  local_item_count: number;
+  remote_item_count: number;
+  completed_count: number;
+  pending_count: number;
+  processing_count: number;
+  deferred_count: number;
+  failed_count: number;
+  by_processing_status: Record<string, number>;
+  by_storage_provider: Record<string, number>;
+  recent_issues: MediaProcessingIssue[];
+};
+
 export type MediaRetentionItem = {
   media_id: string;
   record_id: string;

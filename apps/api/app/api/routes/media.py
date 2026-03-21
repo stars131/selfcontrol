@@ -14,6 +14,7 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import (
+    MediaProcessingOverviewRead,
     MediaRead,
     MediaRetentionArchiveRequest,
     MediaRetentionArchiveResultRead,
@@ -26,6 +27,7 @@ from app.services.audit import log_audit_event
 from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import (
+    build_workspace_media_processing_overview,
     build_workspace_media_retention_report,
     archive_workspace_media_retention,
     cleanup_workspace_media_retention,
@@ -71,6 +73,18 @@ def get_media_storage_summary(
     require_workspace_member(workspace_id, current_user, db)
     summary = summarize_workspace_media_storage(db, workspace_id)
     return {"success": True, "data": {"summary": MediaStorageSummaryRead.model_validate(summary).model_dump()}}
+
+
+@router.get("/{workspace_id}/media/processing-overview")
+def get_media_processing_overview(
+    workspace_id: str,
+    issue_limit: int = Query(5, ge=1, le=20),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_member(workspace_id, current_user, db)
+    overview = build_workspace_media_processing_overview(db, workspace_id, issue_limit=issue_limit)
+    return {"success": True, "data": {"overview": MediaProcessingOverviewRead.model_validate(overview).model_dump()}}
 
 
 @router.get("/{workspace_id}/media/retention-report")

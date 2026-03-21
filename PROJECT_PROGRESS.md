@@ -179,9 +179,14 @@ Last updated: 2026-03-21
   - remote text uploads can now complete searchable extraction on first upload, and remote media retry now works through the normal processing API
   - record deletion now also attempts remote media cleanup for custom storage assets so remote binaries are not left behind by default
   - media API coverage now verifies remote upload processing, remote retry completion, and remote cleanup during record deletion
+- Remote Media Provider Status and Failure Observability V1:
+  - media API now exposes a workspace-level processing overview with local/remote counts, provider breakdown, queue state, and recent failed or deferred items
+  - media processing metadata now records last attempt, last success or failure, processing source, and remote fetch outcome details for later diagnosis
+  - the structured results panel now refreshes this overview after upload, retry, status refresh, media delete, and record delete flows
+  - media cards now surface extraction mode, processing source, remote fetch state, and recent-attempt timestamps for faster troubleshooting
 
 ## Next
-- Remote media provider status and failure observability
+- Remote media provider webhook contract hardening
 
 ## Delivery Rule
 - Every meaningful slice must update this file

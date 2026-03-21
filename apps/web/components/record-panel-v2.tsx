@@ -10,6 +10,7 @@ import type {
   LocationHistoryEntry,
   LocationReview,
   MediaAsset,
+  MediaProcessingOverview,
   MediaStorageSummary,
   RecordFilterState,
   RecordItem,
@@ -186,6 +187,11 @@ function summarizeRecordFilter(filter: RecordFilterState): string {
   return parts.length ? parts.join(" | ") : "All records";
 }
 
+function readMetadataText(metadata: Record<string, unknown>, key: string): string | null {
+  const value = metadata[key];
+  return typeof value === "string" && value.trim() ? value : null;
+}
+
 export function RecordPanelV2({
   authToken,
   canWriteWorkspace,
@@ -194,6 +200,7 @@ export function RecordPanelV2({
   selectedRecordId,
   timelineDays,
   mediaAssets,
+  mediaProcessingOverview,
   mediaStorageSummary,
   reminders,
   onSelectRecord,
@@ -223,6 +230,7 @@ export function RecordPanelV2({
   timelineDays: TimelineDay[];
   selectedRecordId: string | null;
   mediaAssets: MediaAsset[];
+  mediaProcessingOverview: MediaProcessingOverview | null;
   mediaStorageSummary: MediaStorageSummary | null;
   reminders: ReminderItem[];
   onSelectRecord: (recordId: string | null) => void;
@@ -628,6 +636,120 @@ export function RecordPanelV2({
           {location.latitude && location.longitude ? (
             <span className="tag">map {formatReviewStatus(review?.status)}</span>
           ) : null}
+        </div>
+      </article>
+    );
+  };
+
+  const renderMediaAssetCard = (asset: MediaAsset) => {
+    const extractionMode = readMetadataText(asset.metadata_json, "extraction_mode");
+    const processingSource = readMetadataText(asset.metadata_json, "processing_source");
+    const lastAttemptAt = readMetadataText(asset.metadata_json, "processing_last_attempt_at");
+    const remoteFetchStatus = readMetadataText(asset.metadata_json, "remote_fetch_status");
+
+    return (
+      <article className="record-card" key={asset.id}>
+        <div className="eyebrow">{asset.media_type}</div>
+        <div>{asset.original_filename}</div>
+        <div className="muted">{asset.mime_type}</div>
+        <div className="tag-row">
+          <span className="tag">{asset.processing_status}</span>
+          <span className="tag">{asset.storage_provider}</span>
+          <span className="tag">{formatMediaSize(asset)}</span>
+          {processingSource ? <span className="tag">{processingSource}</span> : null}
+          {extractionMode ? <span className="tag">{extractionMode}</span> : null}
+          {remoteFetchStatus ? <span className="tag">fetch {remoteFetchStatus}</span> : null}
+          {typeof asset.metadata_json.file_extension === "string" && asset.metadata_json.file_extension ? (
+            <span className="tag">{String(asset.metadata_json.file_extension)}</span>
+          ) : null}
+        </div>
+        {authToken ? (
+          <div style={{ marginTop: 12 }}>
+            <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
+          </div>
+        ) : null}
+        <div className="detail-grid" style={{ marginTop: 12 }}>
+          {typeof asset.metadata_json.width === "number" &&
+          typeof asset.metadata_json.height === "number" ? (
+            <div className="subtle-card">
+              <div className="eyebrow">Dimensions</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>
+                {asset.metadata_json.width} x {asset.metadata_json.height}
+              </div>
+            </div>
+          ) : null}
+          {typeof asset.metadata_json.text_char_count === "number" ? (
+            <div className="subtle-card">
+              <div className="eyebrow">Text chars</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>
+                {asset.metadata_json.text_char_count}
+              </div>
+            </div>
+          ) : null}
+          {typeof asset.metadata_json.text_line_count === "number" ? (
+            <div className="subtle-card">
+              <div className="eyebrow">Text lines</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>
+                {asset.metadata_json.text_line_count}
+              </div>
+            </div>
+          ) : null}
+          {lastAttemptAt ? (
+            <div className="subtle-card">
+              <div className="eyebrow">Last attempt</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>
+                {formatHistoryTimestamp(lastAttemptAt)}
+              </div>
+            </div>
+          ) : null}
+        </div>
+        {asset.extracted_text ? (
+          <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+            {asset.extracted_text.length > 280
+              ? `${asset.extracted_text.slice(0, 280)}...`
+              : asset.extracted_text}
+          </p>
+        ) : null}
+        {asset.processing_error ? (
+          <div className="notice error" style={{ marginTop: 10 }}>
+            {asset.processing_error}
+          </div>
+        ) : null}
+        <div className="action-row" style={{ marginTop: 12 }}>
+          <button
+            className="button secondary"
+            type="button"
+            disabled={downloadingMediaId === asset.id}
+            onClick={() => void handleDownloadMedia(asset)}
+          >
+            {downloadingMediaId === asset.id ? "Downloading..." : "Download"}
+          </button>
+          <button
+            className="button secondary"
+            type="button"
+            disabled={refreshingMediaId === asset.id}
+            onClick={() => void handleRefreshMedia(asset.id)}
+          >
+            {refreshingMediaId === asset.id ? "Refreshing..." : "Refresh status"}
+          </button>
+          {asset.processing_status !== "completed" ? (
+            <button
+              className="button secondary"
+              type="button"
+              disabled={retryingMediaId === asset.id}
+              onClick={() => void handleRetryMediaProcessing(asset.id)}
+            >
+              {retryingMediaId === asset.id ? "Retrying..." : "Retry"}
+            </button>
+          ) : null}
+          <button
+            className="button secondary"
+            type="button"
+            disabled={deletingMediaId === asset.id || !canWriteWorkspace}
+            onClick={() => void handleDeleteMediaAsset(asset.id)}
+          >
+            {deletingMediaId === asset.id ? "Deleting..." : "Delete media"}
+          </button>
         </div>
       </article>
     );
@@ -1139,6 +1261,83 @@ export function RecordPanelV2({
                   </div>
                 </div>
               </div>
+              {mediaProcessingOverview ? (
+                <>
+                  <div className="detail-grid" style={{ marginBottom: 16 }}>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Processing completed</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaProcessingOverview.completed_count}/{mediaProcessingOverview.total_count}
+                      </div>
+                    </div>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Needs attention</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaProcessingOverview.failed_count + mediaProcessingOverview.deferred_count}
+                      </div>
+                    </div>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Queue state</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaProcessingOverview.pending_count + mediaProcessingOverview.processing_count} queued
+                      </div>
+                    </div>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Storage mix</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaProcessingOverview.local_item_count} local / {mediaProcessingOverview.remote_item_count} remote
+                      </div>
+                    </div>
+                  </div>
+                  <div className="tag-row" style={{ marginBottom: 16 }}>
+                    {Object.entries(mediaProcessingOverview.by_storage_provider).map(([providerCode, count]) => (
+                      <span className="tag" key={providerCode}>
+                        {providerCode}: {count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="record-card form-stack" style={{ marginBottom: 16 }}>
+                    <div className="eyebrow">Recent media issues</div>
+                    <div className="muted">
+                      Recent failed or deferred items across the workspace, including remote fetch state.
+                    </div>
+                    {mediaProcessingOverview.recent_issues.length ? (
+                      <div className="record-list compact-list" style={{ marginTop: 16 }}>
+                        {mediaProcessingOverview.recent_issues.map((issue) => (
+                          <article className="record-card" key={issue.media_id}>
+                            <div className="eyebrow">{issue.media_type}</div>
+                            <div>{issue.original_filename}</div>
+                            <div className="tag-row">
+                              <span className="tag">{issue.processing_status}</span>
+                              <span className="tag">{issue.storage_provider}</span>
+                              {issue.processing_source ? <span className="tag">{issue.processing_source}</span> : null}
+                              {issue.remote_fetch_status ? <span className="tag">fetch {issue.remote_fetch_status}</span> : null}
+                              {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}
+                            </div>
+                            <div className="muted" style={{ marginTop: 8 }}>
+                              Last attempt: {formatHistoryTimestamp(issue.processing_last_attempt_at)}
+                            </div>
+                            {issue.processing_last_failure_at ? (
+                              <div className="muted" style={{ marginTop: 6 }}>
+                                Last failure: {formatHistoryTimestamp(issue.processing_last_failure_at)}
+                              </div>
+                            ) : null}
+                            {issue.processing_error ? (
+                              <div className="notice error" style={{ marginTop: 10 }}>
+                                {issue.processing_error}
+                              </div>
+                            ) : null}
+                          </article>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="notice" style={{ marginTop: 16 }}>
+                        No recent media processing issues.
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : null}
               {mediaStorageSummary?.largest_item_name ? (
                 <div className="muted" style={{ marginBottom: 16 }}>
                   Largest file: {mediaStorageSummary.largest_item_name} ({mediaStorageSummary.largest_item_size_label})
@@ -1146,102 +1345,7 @@ export function RecordPanelV2({
               ) : null}
               <div className="record-list compact-list">
                 {mediaAssets.length ? (
-                  mediaAssets.map((asset) => (
-                    <article className="record-card" key={asset.id}>
-                      <div className="eyebrow">{asset.media_type}</div>
-                      <div>{asset.original_filename}</div>
-                      <div className="muted">{asset.mime_type}</div>
-                      <div className="tag-row">
-                        <span className="tag">{asset.processing_status}</span>
-                        <span className="tag">{asset.storage_provider}</span>
-                        <span className="tag">{formatMediaSize(asset)}</span>
-                        {typeof asset.metadata_json.file_extension === "string" &&
-                        asset.metadata_json.file_extension ? (
-                          <span className="tag">{String(asset.metadata_json.file_extension)}</span>
-                        ) : null}
-                      </div>
-                      {authToken ? (
-                        <div style={{ marginTop: 12 }}>
-                          <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
-                        </div>
-                      ) : null}
-                      <div className="detail-grid" style={{ marginTop: 12 }}>
-                        {typeof asset.metadata_json.width === "number" &&
-                        typeof asset.metadata_json.height === "number" ? (
-                          <div className="subtle-card">
-                            <div className="eyebrow">Dimensions</div>
-                            <div style={{ marginTop: 8, fontWeight: 600 }}>
-                              {asset.metadata_json.width} x {asset.metadata_json.height}
-                            </div>
-                          </div>
-                        ) : null}
-                        {typeof asset.metadata_json.text_char_count === "number" ? (
-                          <div className="subtle-card">
-                            <div className="eyebrow">Text chars</div>
-                            <div style={{ marginTop: 8, fontWeight: 600 }}>
-                              {asset.metadata_json.text_char_count}
-                            </div>
-                          </div>
-                        ) : null}
-                        {typeof asset.metadata_json.text_line_count === "number" ? (
-                          <div className="subtle-card">
-                            <div className="eyebrow">Text lines</div>
-                            <div style={{ marginTop: 8, fontWeight: 600 }}>
-                              {asset.metadata_json.text_line_count}
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                      {asset.extracted_text ? (
-                        <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-                          {asset.extracted_text.length > 280
-                            ? `${asset.extracted_text.slice(0, 280)}...`
-                            : asset.extracted_text}
-                        </p>
-                      ) : null}
-                      {asset.processing_error ? (
-                        <div className="notice error" style={{ marginTop: 10 }}>
-                          {asset.processing_error}
-                        </div>
-                      ) : null}
-                      <div className="action-row" style={{ marginTop: 12 }}>
-                        <button
-                          className="button secondary"
-                          type="button"
-                          disabled={downloadingMediaId === asset.id}
-                          onClick={() => void handleDownloadMedia(asset)}
-                        >
-                          {downloadingMediaId === asset.id ? "Downloading..." : "Download"}
-                        </button>
-                        <button
-                          className="button secondary"
-                          type="button"
-                          disabled={refreshingMediaId === asset.id}
-                          onClick={() => void handleRefreshMedia(asset.id)}
-                        >
-                          {refreshingMediaId === asset.id ? "Refreshing..." : "Refresh status"}
-                        </button>
-                        {asset.processing_status !== "completed" ? (
-                          <button
-                            className="button secondary"
-                            type="button"
-                            disabled={retryingMediaId === asset.id}
-                            onClick={() => void handleRetryMediaProcessing(asset.id)}
-                          >
-                            {retryingMediaId === asset.id ? "Retrying..." : "Retry"}
-                          </button>
-                        ) : null}
-                        <button
-                          className="button secondary"
-                          type="button"
-                          disabled={deletingMediaId === asset.id || !canWriteWorkspace}
-                          onClick={() => void handleDeleteMediaAsset(asset.id)}
-                        >
-                          {deletingMediaId === asset.id ? "Deleting..." : "Delete media"}
-                        </button>
-                      </div>
-                    </article>
-                  ))
+                  mediaAssets.map((asset) => renderMediaAssetCard(asset))
                 ) : (
                   <div className="notice">No media uploaded for this record yet.</div>
                 )}
