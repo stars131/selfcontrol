@@ -25,9 +25,14 @@ Last updated: 2026-03-21
   - audit log table and query API
   - key mutation events recorded for records, media, provider config, knowledge reindex, and chat-created records
   - frontend security panel for recent audit events
+- OCR / ASR / Video Provider Integration V1:
+  - provider-driven media extraction pipeline for image, audio, and video
+  - image OCR via vision-capable provider adapters
+  - audio transcription via provider transcription adapters
+  - video transcription via custom webhook providers, or ffmpeg plus audio transcription for openai-compatible providers
+  - extracted provider text is indexed into the knowledge base automatically
 
 ## Next
-- OCR / ASR / video transcription provider integration
 - Real remote embedding providers and pluggable vendor routing
 - Shared spaces and share links
 - Timeline view and stronger map review flows

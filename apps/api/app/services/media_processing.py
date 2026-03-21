@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
+from app.services.media_provider import DeferredMediaProcessingError, extract_text_via_provider
 
 
 TEXT_MIME_PREFIXES = ("text/",)
@@ -71,6 +72,15 @@ def normalize_extracted_text(media: MediaAsset, raw_text: str) -> str:
     return text[:MAX_EXTRACTED_TEXT_LENGTH]
 
 
+def mark_media_deferred(media: MediaAsset, reason: str, metadata_patch: dict | None = None) -> None:
+    media.processing_status = "deferred"
+    media.processing_error = reason
+    media.processed_at = None
+    metadata = dict(media.metadata_json or {})
+    metadata.update(metadata_patch or {})
+    media.metadata_json = metadata
+
+
 def process_media_asset(db: Session, media_id: str) -> MediaAsset:
     media = db.get(MediaAsset, media_id)
     if not media:
@@ -97,16 +107,31 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
             metadata["extraction_mode"] = "text_direct"
             media.metadata_json = metadata
         else:
-            media.extracted_text = (
-                f"Uploaded {media.media_type} file: {media.original_filename}. "
-                "Advanced OCR/ASR/video understanding provider is not configured yet."
-            )
-            media.processing_status = "deferred"
-            media.processing_error = "Provider configuration required for this media type"
-            media.processed_at = None
-            metadata = dict(media.metadata_json or {})
-            metadata["extraction_mode"] = "provider_required"
-            media.metadata_json = metadata
+            try:
+                extraction = extract_text_via_provider(db, media, file_path)
+            except DeferredMediaProcessingError as exc:
+                media.extracted_text = (
+                    f"Uploaded {media.media_type} file: {media.original_filename}. "
+                    f"Provider processing is not ready: {exc}"
+                )
+                mark_media_deferred(
+                    media,
+                    str(exc),
+                    metadata_patch={"extraction_mode": "provider_deferred"},
+                )
+            else:
+                media.extracted_text = normalize_extracted_text(media, extraction.text)
+                media.processing_status = "completed"
+                media.processing_error = None
+                media.processed_at = datetime.now(timezone.utc)
+                metadata = dict(media.metadata_json or {})
+                metadata.update(extraction.metadata_json)
+                metadata["extraction_mode"] = extraction.extraction_mode
+                metadata["provider_code"] = extraction.provider_code
+                metadata["feature_code"] = extraction.feature_code
+                if extraction.model_name:
+                    metadata["model_name"] = extraction.model_name
+                media.metadata_json = metadata
 
         db.add(media)
         db.commit()

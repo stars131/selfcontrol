@@ -32,6 +32,8 @@ class Settings:
     rag_chunk_size_chars: int = int(os.getenv("RAG_CHUNK_SIZE_CHARS", "700"))
     rag_chunk_overlap_chars: int = int(os.getenv("RAG_CHUNK_OVERLAP_CHARS", "120"))
     rag_search_limit: int = int(os.getenv("RAG_SEARCH_LIMIT", "8"))
+    processing_tmp_dir: str = resolve_project_path(os.getenv("PROCESSING_TMP_DIR", "storage/tmp"))
+    provider_request_timeout_seconds: int = int(os.getenv("PROVIDER_REQUEST_TIMEOUT_SECONDS", "90"))
     cors_origins: list[str] = field(
         default_factory=lambda: os.getenv(
             "CORS_ORIGINS",
