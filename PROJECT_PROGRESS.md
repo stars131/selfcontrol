@@ -174,9 +174,14 @@ Last updated: 2026-03-21
   - media upload can now hand off binaries to a custom remote storage webhook and persist remote storage keys instead of always writing local files
   - media preview and download now proxy remote content through the server for custom webhook storage, and remote deletes also call the configured provider
   - remote-uploaded media is marked deferred intentionally so future remote extraction work can be added without breaking current upload and fetch flows
+- Remote Media Extraction Bridge V1:
+  - background media processing now downloads remote-provider media into the processing temp directory and reuses the existing extraction pipeline instead of failing immediately
+  - remote text uploads can now complete searchable extraction on first upload, and remote media retry now works through the normal processing API
+  - record deletion now also attempts remote media cleanup for custom storage assets so remote binaries are not left behind by default
+  - media API coverage now verifies remote upload processing, remote retry completion, and remote cleanup during record deletion
 
 ## Next
-- Remote media extraction bridge for custom storage providers
+- Remote media provider status and failure observability
 
 ## Delivery Rule
 - Every meaningful slice must update this file

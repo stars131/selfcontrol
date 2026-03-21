@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import tempfile
+from pathlib import Path
 
 import httpx
 from sqlalchemy.orm import Session
@@ -150,6 +152,22 @@ def download_remote_media_via_provider(db: Session, media: MediaAsset) -> Remote
     if media.storage_provider != "custom":
         raise DeferredMediaProcessingError(f"Unsupported media storage provider: {media.storage_provider}")
     return _perform_custom_download(config, storage_key=media.storage_key)
+
+
+def download_remote_media_to_temp_file(db: Session, media: MediaAsset) -> Path:
+    content_result = download_remote_media_via_provider(db, media)
+    tmp_dir = Path(settings.processing_tmp_dir)
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+    suffix = Path(media.original_filename or "").suffix or ".bin"
+    with tempfile.NamedTemporaryFile(
+        dir=tmp_dir,
+        prefix=f"remote-media-{media.id}-",
+        suffix=suffix,
+        delete=False,
+    ) as temp_file:
+        temp_path = Path(temp_file.name)
+        temp_file.write(content_result.content)
+    return temp_path
 
 
 def delete_remote_media_via_provider(db: Session, media: MediaAsset) -> None:

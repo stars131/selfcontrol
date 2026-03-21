@@ -80,7 +80,9 @@ def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str, ses
         record_id = db.query(Record).filter(Record.workspace_id == workspace.id).first().id
 
     monkeypatch.setattr("app.services.media_processing.settings.storage_dir", str(tmp_path / "uploads"))
+    monkeypatch.setattr("app.services.media_processing.settings.processing_tmp_dir", str(tmp_path / "tmp"))
     monkeypatch.setattr("app.services.media_storage.settings.storage_dir", str(tmp_path / "uploads"))
+    monkeypatch.setattr("app.services.media_remote_storage.settings.processing_tmp_dir", str(tmp_path / "tmp"))
     monkeypatch.setattr("app.services.media_processing.rebuild_record_knowledge", lambda db, record_id: None)
     monkeypatch.setattr(media_route, "log_audit_event", lambda *args, **kwargs: None)
     monkeypatch.setattr(records_route, "log_audit_event", lambda *args, **kwargs: None)
@@ -560,6 +562,13 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
     monkeypatch.setattr(media_route, "upload_media_via_provider", fake_remote_upload)
     monkeypatch.setattr(media_route, "download_remote_media_via_provider", fake_remote_download)
     monkeypatch.setattr(media_route, "delete_remote_media_via_provider", fake_remote_delete)
+    def fake_processing_download(db, media):
+        temp_remote_file = tmp_path / "tmp" / f"{media.id}.m4a"
+        temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+        temp_remote_file.write_bytes(b"remote-audio")
+        return temp_remote_file
+
+    monkeypatch.setattr("app.services.media_processing.download_remote_media_to_temp_file", fake_processing_download)
 
     upload_response = client.post(
         f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
@@ -570,7 +579,7 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
     media_payload = upload_response.json()["data"]["media"]
     assert media_payload["storage_provider"] == "custom"
     assert media_payload["processing_status"] == "deferred"
-    assert media_payload["processing_error"] == "Remote media storage is configured without background extraction yet"
+    assert media_payload["processing_error"] == "audio_asr provider is not enabled"
     assert upload_calls == [(workspace_id, record_id, "voice-note.m4a")]
 
     content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/content")
@@ -579,7 +588,8 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
     assert content_response.headers["content-type"] == "audio/mp4"
 
     retry_response = client.post(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/retry")
-    assert retry_response.status_code == 400
+    assert retry_response.status_code == 200
+    assert retry_response.json()["data"]["media"]["processing_status"] == "deferred"
 
     delete_response = client.delete(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}")
     assert delete_response.status_code == 200
@@ -587,6 +597,46 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
 
     with session_local() as db:
         assert db.get(MediaAsset, media_payload["id"]) is None
+
+
+def test_custom_remote_text_upload_is_processed_and_searchable(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
+
+    async def fake_remote_upload(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
+        return RemoteMediaUploadResult(
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/{filename}",
+            size_bytes=len(content),
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+        )
+
+    def fake_remote_download(db, media: MediaAsset) -> RemoteMediaContentResult:
+        return RemoteMediaContentResult(content=b"best noodle note", media_type="text/plain")
+
+    monkeypatch.setattr(media_route, "upload_media_via_provider", fake_remote_upload)
+    monkeypatch.setattr("app.services.media_processing.download_remote_media_to_temp_file", lambda db, media: (tmp_path / "tmp" / "remote.txt"))
+
+    temp_remote_file = tmp_path / "tmp" / "remote.txt"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"best noodle note")
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("note.txt", b"best noodle note", "text/plain")},
+    )
+
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    assert media_payload["storage_provider"] == "custom"
+    assert media_payload["processing_status"] == "completed"
+    assert media_payload["extracted_text"] == "best noodle note"
+    assert media_payload["metadata_json"]["extraction_mode"] == "text_direct"
+    assert media_payload["metadata_json"]["file_extension"] == ".txt"
+
+    monkeypatch.setattr(media_route, "download_remote_media_via_provider", fake_remote_download)
+    content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/content")
+    assert content_response.status_code == 200
+    assert content_response.content == b"best noodle note"
 
 
 def test_custom_remote_storage_service_uses_workspace_provider_config(tmp_path, monkeypatch) -> None:
@@ -663,3 +713,71 @@ def test_custom_remote_storage_service_uses_workspace_provider_config(tmp_path, 
         content_result = media_remote_storage_service.download_remote_media_via_provider(db, media)
         assert content_result.content == b"fetched"
         media_remote_storage_service.delete_remote_media_via_provider(db, media)
+
+
+def test_record_delete_triggers_remote_media_delete(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    deleted_keys: list[str] = []
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-note.m4a",
+            original_filename="voice-note.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="deferred",
+        )
+        db.add(remote_media)
+        db.commit()
+
+    monkeypatch.setattr(records_route, "delete_remote_media_via_provider", lambda db, media: deleted_keys.append(media.storage_key))
+
+    response = client.delete(f"/api/v1/workspaces/{workspace_id}/records/{record_id}")
+
+    assert response.status_code == 200
+    assert deleted_keys == [f"remote/{workspace_id}/voice-note.m4a"]
+
+
+def test_remote_media_retry_can_complete_processing(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="text",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/retry-note.txt",
+            original_filename="retry-note.txt",
+            mime_type="text/plain",
+            size_bytes=20,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="failed",
+            processing_error="previous failure",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: (tmp_path / "tmp" / "retry-note.txt"),
+    )
+
+    temp_remote_file = tmp_path / "tmp" / "retry-note.txt"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"retry remote text")
+
+    retry_response = client.post(f"/api/v1/workspaces/{workspace_id}/media/{remote_media_id}/retry")
+
+    assert retry_response.status_code == 200
+    media_payload = retry_response.json()["data"]["media"]
+    assert media_payload["processing_status"] == "completed"
+    assert media_payload["extracted_text"] == "retry remote text"

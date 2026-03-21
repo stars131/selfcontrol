@@ -12,7 +12,8 @@ from app.schemas.record import RecordCreate, RecordRead, RecordUpdate
 from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.location_review import prepare_record_extra_data
-from app.services.media_storage import remove_storage_file
+from app.services.media_remote_storage import delete_remote_media_via_provider
+from app.services.media_storage import media_uses_local_storage, remove_storage_file
 
 
 router = APIRouter()
@@ -226,8 +227,15 @@ def delete_record(
     db.commit()
     removed_media_count = 0
     for media in media_assets:
-        if remove_storage_file(media):
-            removed_media_count += 1
+        if media_uses_local_storage(media):
+            if remove_storage_file(media):
+                removed_media_count += 1
+        else:
+            try:
+                delete_remote_media_via_provider(db, media)
+                removed_media_count += 1
+            except Exception:  # noqa: BLE001
+                continue
     log_audit_event(
         db,
         workspace_id=workspace_id,

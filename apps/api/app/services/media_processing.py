@@ -11,6 +11,7 @@ from app.core.config import settings
 from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_provider import DeferredMediaProcessingError, extract_text_via_provider
+from app.services.media_remote_storage import download_remote_media_to_temp_file
 
 
 TEXT_MIME_PREFIXES = ("text/",)
@@ -186,10 +187,12 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
     db.refresh(media)
 
     try:
-        if media.storage_provider != "local":
-            raise ValueError("Remote storage media cannot be processed without a local file payload")
-
-        file_path = resolve_storage_path(media)
+        cleanup_temp_file = False
+        if media.storage_provider == "local":
+            file_path = resolve_storage_path(media)
+        else:
+            file_path = download_remote_media_to_temp_file(db, media)
+            cleanup_temp_file = True
         if not file_path.exists():
             raise FileNotFoundError(f"Stored file not found: {file_path}")
 
@@ -249,3 +252,9 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
         rebuild_record_knowledge(db, media.record_id)
         db.refresh(media)
         return media
+    finally:
+        if "cleanup_temp_file" in locals() and cleanup_temp_file and "file_path" in locals():
+            try:
+                file_path.unlink(missing_ok=True)
+            except OSError:
+                pass

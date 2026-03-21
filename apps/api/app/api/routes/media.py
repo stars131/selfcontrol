@@ -251,7 +251,6 @@ async def upload_media(
     except RuntimeError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
-    processing_mode = "remote_deferred"
     if remote_upload is not None:
         media = MediaAsset(
             workspace_id=workspace_id,
@@ -264,8 +263,8 @@ async def upload_media(
             mime_type=mime_type,
             size_bytes=remote_upload.size_bytes,
             metadata_json=remote_upload.metadata_json,
-            processing_status="deferred",
-            processing_error="Remote media storage is configured without background extraction yet",
+            processing_status="pending",
+            processing_error=None,
         )
     else:
         target_dir.mkdir(parents=True, exist_ok=True)
@@ -290,8 +289,7 @@ async def upload_media(
     db.commit()
     db.refresh(media)
 
-    if media_uses_local_storage(media):
-        media, processing_mode = dispatch_media_processing(db, media.id)
+    media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -321,8 +319,6 @@ def retry_media_processing(
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
-    if not media_uses_local_storage(media):
-        raise HTTPException(status_code=400, detail="Remote media retry is not available until remote extraction is supported")
 
     media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
