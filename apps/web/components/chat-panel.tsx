@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type {
   AuditLogItem,
@@ -9,6 +9,7 @@ import type {
   KnowledgeStats,
   NotificationItem,
   ProviderFeatureConfig,
+  ShareLinkItem,
 } from "../lib/types";
 
 type ProviderDraft = {
@@ -19,6 +20,13 @@ type ProviderDraft = {
   api_key_env_name: string;
 };
 
+function buildShareUrl(path: string) {
+  if (typeof window === "undefined") {
+    return path;
+  }
+  return `${window.location.origin}${path}`;
+}
+
 export function ChatPanel({
   workspaceId,
   conversations,
@@ -27,12 +35,16 @@ export function ChatPanel({
   notifications,
   knowledgeStats,
   providerConfigs,
+  shareLinks,
+  latestSharePath,
   auditLogs,
   onSelectConversation,
   onCreateConversation,
   onMarkNotificationRead,
   onReindexKnowledge,
   onRefreshAuditLogs,
+  onCreateShareLink,
+  onDisableShareLink,
   onSaveProviderConfig,
   onSyncNotifications,
   onSendMessage,
@@ -44,12 +56,20 @@ export function ChatPanel({
   notifications: NotificationItem[];
   knowledgeStats: KnowledgeStats | null;
   providerConfigs: ProviderFeatureConfig[];
+  shareLinks: ShareLinkItem[];
+  latestSharePath: string;
   auditLogs: AuditLogItem[];
   onSelectConversation: (conversationId: string) => void;
   onCreateConversation: () => Promise<void>;
   onMarkNotificationRead: (notificationId: string) => Promise<void>;
   onReindexKnowledge: () => Promise<void>;
   onRefreshAuditLogs: () => Promise<void>;
+  onCreateShareLink: (input: {
+    name?: string;
+    permission_code: string;
+    max_uses?: number | null;
+  }) => Promise<void>;
+  onDisableShareLink: (shareLinkId: string) => Promise<void>;
   onSaveProviderConfig: (
     featureCode: string,
     input: {
@@ -68,10 +88,16 @@ export function ChatPanel({
   const [syncing, setSyncing] = useState(false);
   const [reindexing, setReindexing] = useState(false);
   const [refreshingAudit, setRefreshingAudit] = useState(false);
+  const [creatingShare, setCreatingShare] = useState(false);
+  const [disablingShareId, setDisablingShareId] = useState("");
+  const [shareName, setShareName] = useState("");
+  const [sharePermission, setSharePermission] = useState("viewer");
+  const [shareMaxUses, setShareMaxUses] = useState("");
   const [providerSavingCode, setProviderSavingCode] = useState("");
   const [providerDrafts, setProviderDrafts] = useState<Record<string, ProviderDraft>>({});
   const [error, setError] = useState("");
   const unreadCount = notifications.filter((item) => !item.is_read).length;
+  const latestShareUrl = useMemo(() => (latestSharePath ? buildShareUrl(latestSharePath) : ""), [latestSharePath]);
 
   useEffect(() => {
     const nextDrafts: Record<string, ProviderDraft> = {};
@@ -143,6 +169,38 @@ export function ChatPanel({
       setError(message);
     } finally {
       setRefreshingAudit(false);
+    }
+  };
+
+  const handleCreateShareLink = async () => {
+    setCreatingShare(true);
+    setError("");
+    try {
+      await onCreateShareLink({
+        name: shareName || undefined,
+        permission_code: sharePermission,
+        max_uses: shareMaxUses ? Number(shareMaxUses) : null,
+      });
+      setShareName("");
+      setShareMaxUses("");
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : "Share creation failed";
+      setError(message);
+    } finally {
+      setCreatingShare(false);
+    }
+  };
+
+  const handleDisableShareLink = async (shareLinkId: string) => {
+    setDisablingShareId(shareLinkId);
+    setError("");
+    try {
+      await onDisableShareLink(shareLinkId);
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : "Share update failed";
+      setError(message);
+    } finally {
+      setDisablingShareId("");
     }
   };
 
@@ -252,6 +310,69 @@ export function ChatPanel({
             >
               {reindexing ? "Reindexing..." : "Rebuild knowledge index"}
             </button>
+          </div>
+        </div>
+        <div className="record-card" style={{ marginBottom: 16 }}>
+          <div className="eyebrow">Share Links</div>
+          <div className="form-stack" style={{ marginTop: 12 }}>
+            <input
+              className="input"
+              placeholder="Share name"
+              value={shareName}
+              onChange={(event) => setShareName(event.target.value)}
+            />
+            <div className="action-row">
+              <select
+                className="input"
+                value={sharePermission}
+                onChange={(event) => setSharePermission(event.target.value)}
+              >
+                <option value="viewer">viewer</option>
+                <option value="editor">editor</option>
+              </select>
+              <input
+                className="input"
+                placeholder="Max uses"
+                value={shareMaxUses}
+                onChange={(event) => setShareMaxUses(event.target.value.replace(/[^0-9]/g, ""))}
+              />
+            </div>
+            <button className="button secondary" disabled={creatingShare} type="button" onClick={() => void handleCreateShareLink()}>
+              {creatingShare ? "Creating..." : "Create share link"}
+            </button>
+            {latestShareUrl ? (
+              <article className="message assistant">
+                <div className="eyebrow">Latest link</div>
+                <div style={{ marginTop: 8, wordBreak: "break-all" }}>{latestShareUrl}</div>
+              </article>
+            ) : null}
+            <div className="record-list compact-list">
+              {shareLinks.length ? (
+                shareLinks.map((item) => (
+                  <article className="message" key={item.id}>
+                    <div className="eyebrow">
+                      {item.permission_code} / {item.is_enabled ? "enabled" : "disabled"}
+                    </div>
+                    <div style={{ marginTop: 8, fontWeight: 600 }}>{item.name}</div>
+                    <div className="muted" style={{ marginTop: 8 }}>
+                      token hint {item.token_hint} · used {item.use_count}
+                    </div>
+                    <div className="action-row" style={{ marginTop: 10 }}>
+                      <button
+                        className="button secondary"
+                        disabled={!item.is_enabled || disablingShareId === item.id}
+                        type="button"
+                        onClick={() => void handleDisableShareLink(item.id)}
+                      >
+                        {disablingShareId === item.id ? "Updating..." : "Disable"}
+                      </button>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <div className="notice">No share links yet.</div>
+              )}
+            </div>
           </div>
         </div>
         <div className="record-card" style={{ marginBottom: 16 }}>

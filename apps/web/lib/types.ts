@@ -141,3 +141,31 @@ export type AuditLogItem = {
   metadata_json: Record<string, unknown>;
   created_at?: string | null;
 };
+
+export type ShareLinkItem = {
+  id: string;
+  workspace_id: string;
+  created_by: string;
+  name: string;
+  token_hint: string;
+  permission_code: string;
+  is_enabled: boolean;
+  expires_at?: string | null;
+  max_uses?: number | null;
+  use_count: number;
+  last_used_at?: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SharePreview = {
+  name: string;
+  workspace_id: string;
+  workspace_name: string;
+  workspace_slug: string;
+  permission_code: string;
+  is_enabled: boolean;
+  expires_at?: string | null;
+  max_uses?: number | null;
+  use_count: number;
+};

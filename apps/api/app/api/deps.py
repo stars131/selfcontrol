@@ -56,3 +56,26 @@ def require_workspace_member(
         raise HTTPException(status_code=403, detail="Forbidden")
     return workspace
 
+
+def require_workspace_role(
+    workspace_id: str,
+    user: User,
+    db: Session,
+    *,
+    allowed_roles: set[str],
+) -> WorkspaceMember:
+    workspace = db.get(Workspace, workspace_id)
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+
+    membership = (
+        db.query(WorkspaceMember)
+        .filter(
+            WorkspaceMember.workspace_id == workspace_id,
+            WorkspaceMember.user_id == user.id,
+        )
+        .first()
+    )
+    if not membership or membership.role not in allowed_roles:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    return membership

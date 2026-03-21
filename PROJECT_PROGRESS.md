@@ -31,10 +31,14 @@ Last updated: 2026-03-21
   - audio transcription via provider transcription adapters
   - video transcription via custom webhook providers, or ffmpeg plus audio transcription for openai-compatible providers
   - extracted provider text is indexed into the knowledge base automatically
+- Shared Spaces / Share Links V1:
+  - secure share link model with token hash storage
+  - share preview, accept, disable, max-use support
+  - control-center join flow and workspace-side share management
+  - share creation and acceptance are covered by audit logs
 
 ## Next
 - Real remote embedding providers and pluggable vendor routing
-- Shared spaces and share links
 - Timeline view and stronger map review flows
 - Media preview and richer metadata extraction
 - Security hardening: audit logs, share permission boundaries, secret management

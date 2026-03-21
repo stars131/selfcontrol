@@ -7,6 +7,7 @@ import {
   createConversation,
   createRecord,
   createReminder,
+  createShareLink,
   deleteRecord,
   deleteReminder,
   getKnowledgeStats,
@@ -19,6 +20,7 @@ import {
   listProviderConfigs,
   listRecords,
   listReminders,
+  listShareLinks,
   reindexKnowledge,
   retryMediaProcessing,
   sendMessage,
@@ -27,6 +29,7 @@ import {
   updateProviderConfig,
   updateRecord,
   updateReminder,
+  updateShareLink,
   uploadMedia,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
@@ -40,6 +43,7 @@ import type {
   ProviderFeatureConfig,
   RecordItem,
   ReminderItem,
+  ShareLinkItem,
 } from "../lib/types";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
@@ -58,6 +62,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
   const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
+  const [shareLinks, setShareLinks] = useState<ShareLinkItem[]>([]);
+  const [latestSharePath, setLatestSharePath] = useState("");
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -102,6 +108,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setProviderConfigs(result.items);
   };
 
+  const refreshShareLinks = async (activeToken: string) => {
+    const result = await listShareLinks(activeToken, workspaceId);
+    setShareLinks(result.items);
+  };
+
   const refreshAuditLogs = async (activeToken: string) => {
     const result = await listAuditLogs(activeToken, workspaceId, { limit: 8 });
     setAuditLogs(result.items);
@@ -142,6 +153,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
         await refreshProviderConfigs(activeToken);
+        await refreshShareLinks(activeToken);
         await refreshAuditLogs(activeToken);
       } catch (caught) {
         clearStoredSession();
@@ -412,6 +424,34 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshAuditLogs(token);
   };
 
+  const handleCreateShareLink = async (input: {
+    name?: string;
+    permission_code: string;
+    max_uses?: number | null;
+  }) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    const result = await createShareLink(token, workspaceId, {
+      name: input.name,
+      permission_code: input.permission_code,
+      max_uses: input.max_uses ?? null,
+      expires_at: null,
+    });
+    setLatestSharePath(result.share_path);
+    await refreshShareLinks(token);
+    await refreshAuditLogs(token);
+  };
+
+  const handleDisableShareLink = async (shareLinkId: string) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await updateShareLink(token, workspaceId, shareLinkId, { is_enabled: false });
+    await refreshShareLinks(token);
+    await refreshAuditLogs(token);
+  };
+
   const handleRefreshAuditLogs = async () => {
     if (!token) {
       throw new Error("Not authenticated");
@@ -440,9 +480,12 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           auditLogs={auditLogs}
           conversations={conversations}
           knowledgeStats={knowledgeStats}
+          latestSharePath={latestSharePath}
           messages={messages}
           notifications={notifications}
           onCreateConversation={handleCreateConversation}
+          onCreateShareLink={handleCreateShareLink}
+          onDisableShareLink={handleDisableShareLink}
           onMarkNotificationRead={handleMarkNotificationRead}
           onRefreshAuditLogs={handleRefreshAuditLogs}
           onReindexKnowledge={handleReindexKnowledge}
@@ -451,6 +494,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onSendMessage={handleSendMessage}
           onSyncNotifications={handleSyncNotifications}
           providerConfigs={providerConfigs}
+          shareLinks={shareLinks}
           workspaceId={workspaceId}
         />
         <RecordPanelV2
