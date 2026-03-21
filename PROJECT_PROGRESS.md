@@ -36,9 +36,13 @@ Last updated: 2026-03-21
   - share preview, accept, disable, max-use support
   - control-center join flow and workspace-side share management
   - share creation and acceptance are covered by audit logs
+- Remote Embeddings Provider Routing V1:
+  - pluggable embeddings service for local, openai-compatible, and custom webhook providers
+  - knowledge indexing and semantic search now use the configured embeddings provider
+  - actual remote embedding dimensions are tracked in knowledge stats
+  - verified openai-compatible `/embeddings` flow with provider-based retrieval
 
 ## Next
-- Real remote embedding providers and pluggable vendor routing
 - Timeline view and stronger map review flows
 - Media preview and richer metadata extraction
 - Security hardening: audit logs, share permission boundaries, secret management
