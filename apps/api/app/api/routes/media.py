@@ -15,8 +15,8 @@ from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import MediaRead, MediaStorageSummaryRead
 from app.services.audit import log_audit_event
+from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
-from app.services.media_processing import process_media_asset
 from app.services.media_storage import remove_storage_file, resolve_storage_path, summarize_workspace_media_storage
 
 
@@ -126,7 +126,7 @@ async def upload_media(
     db.commit()
     db.refresh(media)
 
-    media = process_media_asset(db, media.id)
+    media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -135,7 +135,12 @@ async def upload_media(
         resource_type="media_asset",
         resource_id=media.id,
         message=f"Uploaded media {media.original_filename}",
-        metadata_json={"record_id": record_id, "media_type": media.media_type, "mime_type": media.mime_type},
+        metadata_json={
+            "record_id": record_id,
+            "media_type": media.media_type,
+            "mime_type": media.mime_type,
+            "processing_mode": processing_mode,
+        },
     )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
 
@@ -152,7 +157,7 @@ def retry_media_processing(
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
 
-    media = process_media_asset(db, media.id)
+    media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -161,7 +166,11 @@ def retry_media_processing(
         resource_type="media_asset",
         resource_id=media.id,
         message=f"Retried media processing for {media.original_filename}",
-        metadata_json={"record_id": media.record_id, "processing_status": media.processing_status},
+        metadata_json={
+            "record_id": media.record_id,
+            "processing_status": media.processing_status,
+            "processing_mode": processing_mode,
+        },
     )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
 

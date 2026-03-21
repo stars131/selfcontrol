@@ -1,43 +1,50 @@
 # SelfControl
 
-SelfControl 是一个多模态生活记录、检索与聊天助手系统。
+SelfControl 是一个面向个人长期使用的多模态记忆与检索系统，支持聊天式录入、结构化记录、媒体附件、地图、RAG 知识检索和可扩展的 AI Provider 配置。
 
 当前仓库包含：
-
 - `apps/api`: FastAPI 后端
 - `apps/web`: Next.js 前端
-- `infra`: Docker 与 Nginx 配置
-- `docs`: 设计文档
+- `infra`: 部署相关配置
+- `docs`: 项目和开发文档
 
 ## 快速开始
 
-1. 复制环境变量模板：
+1. 复制环境变量模板
 
 ```bash
 cp .env.example .env
 ```
 
-2. 启动开发环境：
+2. 启动开发环境
 
 ```bash
 docker compose up --build
 ```
 
-数据库迁移：
+3. 执行数据库迁移
 
 ```bash
 cd apps/api
 alembic upgrade head
 ```
 
-3. 访问服务：
+4. 访问服务
 
 - Web: `http://localhost:3000`
 - API: `http://localhost:8000`
 - API Docs: `http://localhost:8000/docs`
+- Health: `http://localhost:8000/health`
+
+## 运行说明
+
+- `MEDIA_PROCESSING_MODE=async`：媒体上传和重试通过 Celery worker 异步处理，适合 Linux 服务器部署。
+- `MEDIA_PROCESSING_MODE=sync`：API 进程同步处理媒体，适合本地调试和最小依赖场景。
+- `/health` 会返回当前媒体处理模式、存储目录状态和基础运行配置。
 
 ## 文档
 
-- 项目说明：[PROJECT_SPEC.md](./PROJECT_SPEC.md)
+- 项目规格：[PROJECT_SPEC.md](./PROJECT_SPEC.md)
 - ER 与表结构：[docs/ERD_AND_SCHEMA.md](./docs/ERD_AND_SCHEMA.md)
-- API 设计：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
+- API 与工作流：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
+- 开发环境：[docs/DEVELOPMENT_SETUP.md](./docs/DEVELOPMENT_SETUP.md)

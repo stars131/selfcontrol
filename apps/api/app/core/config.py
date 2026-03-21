@@ -26,6 +26,7 @@ class Settings:
     api_port: int = int(os.getenv("API_PORT", "8000"))
     auto_create_tables: bool = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
     storage_dir: str = resolve_project_path(os.getenv("STORAGE_DIR", "storage/uploads"))
+    media_processing_mode: str = os.getenv("MEDIA_PROCESSING_MODE", "sync").lower()
     embedding_provider: str = os.getenv("EMBEDDING_PROVIDER", "local")
     embedding_model: str = os.getenv("EMBEDDING_MODEL", "hash-embedding-v1")
     embedding_dimensions: int = int(os.getenv("EMBEDDING_DIMENSIONS", "256"))
@@ -46,6 +47,8 @@ settings = Settings()
 
 
 def validate_runtime_settings() -> None:
+    if settings.media_processing_mode not in {"sync", "async"}:
+        raise RuntimeError("MEDIA_PROCESSING_MODE must be either 'sync' or 'async'")
     if settings.app_env == "production":
         if settings.secret_key == "change-me" or len(settings.secret_key) < 24:
             raise RuntimeError("Production requires a strong SECRET_KEY environment variable")

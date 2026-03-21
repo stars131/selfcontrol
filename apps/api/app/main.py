@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,8 +31,20 @@ def on_startup() -> None:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, object]:
+    storage_dir = Path(settings.storage_dir)
+    processing_tmp_dir = Path(settings.processing_tmp_dir)
+    return {
+        "status": "ok",
+        "app_env": settings.app_env,
+        "media_processing_mode": settings.media_processing_mode,
+        "auto_create_tables": settings.auto_create_tables,
+        "storage_dir": str(storage_dir),
+        "storage_dir_exists": storage_dir.exists(),
+        "processing_tmp_dir": str(processing_tmp_dir),
+        "processing_tmp_dir_exists": processing_tmp_dir.exists(),
+        "redis_url_configured": bool(settings.redis_url),
+    }
 
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])

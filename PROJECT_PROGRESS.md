@@ -97,10 +97,15 @@ Last updated: 2026-03-21
   - workspace media storage summary now reports file count, total size, missing-file count, and largest file details
   - structured results panel now shows media storage usage and exposes per-attachment delete controls
   - media API tests now cover storage summary, media deletion, and record-delete file cleanup
+- Background Media Processing and Runtime Health V1:
+  - media processing now supports `sync` and `async` modes through a shared dispatch layer
+  - Docker and env templates now expose `MEDIA_PROCESSING_MODE`, with async processing ready for worker-based deployment
+  - health endpoint now reports runtime environment, media processing mode, storage directory state, and temp directory state
+  - media API tests now cover async upload and retry dispatch behavior, and health API coverage is added
 
 ## Next
 - Deployment hardening and production operations pass
-- Production file storage strategy and background media operations
+- Lifespan startup refactor and production readiness checks
 
 ## Delivery Rule
 - Every meaningful slice must update this file

@@ -175,3 +175,34 @@ def test_record_delete_cleans_attached_media_files(tmp_path, monkeypatch) -> Non
     list_media_response = client.get(f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media")
     assert list_media_response.status_code == 200
     assert list_media_response.json()["data"]["items"] == []
+
+
+def test_media_upload_can_be_dispatched_async(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+    queued_media_ids: list[str] = []
+
+    monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
+
+    class FakeTask:
+        @staticmethod
+        def delay(media_id: str) -> None:
+            queued_media_ids.append(media_id)
+
+    monkeypatch.setattr("app.worker.process_media_asset_task", FakeTask())
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("pixel.png", PNG_1X1, "image/png")},
+    )
+
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    assert media_payload["processing_status"] == "pending"
+    assert media_payload["processed_at"] is None
+    assert queued_media_ids == [media_payload["id"]]
+
+    retry_response = client.post(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/retry")
+    assert retry_response.status_code == 200
+    retry_payload = retry_response.json()["data"]["media"]
+    assert retry_payload["processing_status"] == "pending"
+    assert queued_media_ids == [media_payload["id"], media_payload["id"]]
