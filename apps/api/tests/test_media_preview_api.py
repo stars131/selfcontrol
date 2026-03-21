@@ -381,3 +381,92 @@ def test_media_retention_cleanup_is_owner_only(tmp_path, monkeypatch) -> None:
     )
 
     assert cleanup_response.status_code == 403
+
+
+def test_media_retention_archive_moves_file_and_updates_report(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("old-note.txt", b"old snack note", "text/plain")},
+    )
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+
+    with session_local() as db:
+        old_media = db.get(MediaAsset, media_payload["id"])
+        assert old_media is not None
+        old_media.created_at = datetime.now(timezone.utc) - timedelta(days=180)
+        db.add(old_media)
+        db.commit()
+
+    original_file_path = tmp_path / media_payload["storage_key"]
+    assert original_file_path.exists()
+
+    archive_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-archive",
+        json={
+            "media_ids": [media_payload["id"]],
+            "older_than_days": 90,
+            "dry_run": False,
+        },
+    )
+
+    assert archive_response.status_code == 200
+    archive_result = archive_response.json()["data"]["result"]
+    assert archive_result["candidate_media_count"] == 1
+    assert archive_result["affected_record_ids"] == [record_id]
+    assert not original_file_path.exists()
+
+    status_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/status")
+    assert status_response.status_code == 200
+    archived_media = status_response.json()["data"]["media"]
+    assert archived_media["metadata_json"]["storage_tier"] == "archive"
+    archived_file_path = tmp_path / archived_media["storage_key"]
+    assert archived_file_path.exists()
+    assert "\\archive\\" in str(archived_file_path) or "/archive/" in str(archived_file_path)
+
+    content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/content")
+    assert content_response.status_code == 200
+    assert content_response.content == b"old snack note"
+
+    report_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/retention-report?older_than_days=90&limit=5")
+    assert report_response.status_code == 200
+    report = report_response.json()["data"]["report"]
+    assert report["archived_item_count"] == 1
+    assert report["archived_item_size_bytes"] == len(b"old snack note")
+    assert report["retention_candidates"] == []
+    assert report["largest_items"][0]["storage_tier"] == "archive"
+
+
+def test_media_retention_archive_is_owner_only(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("old-note.txt", b"old snack note", "text/plain")},
+    )
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+
+    with session_local() as db:
+        member = db.query(WorkspaceMember).filter(WorkspaceMember.workspace_id == workspace_id).first()
+        assert member is not None
+        member.role = "editor"
+        old_media = db.get(MediaAsset, media_payload["id"])
+        assert old_media is not None
+        old_media.created_at = datetime.now(timezone.utc) - timedelta(days=180)
+        db.add(member)
+        db.add(old_media)
+        db.commit()
+
+    archive_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-archive",
+        json={
+            "media_ids": [media_payload["id"]],
+            "older_than_days": 90,
+            "dry_run": False,
+        },
+    )
+
+    assert archive_response.status_code == 403

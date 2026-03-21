@@ -43,6 +43,7 @@ class MediaRetentionItemRead(BaseModel):
     record_id: str
     original_filename: str
     media_type: str
+    storage_tier: str
     processing_status: str
     size_bytes: int
     size_label: str
@@ -61,6 +62,9 @@ class MediaRetentionReportRead(BaseModel):
     old_item_count: int
     old_item_size_bytes: int
     old_item_size_label: str
+    archived_item_count: int
+    archived_item_size_bytes: int
+    archived_item_size_label: str
     missing_file_count: int
     orphan_file_count: int
     orphan_file_size_bytes: int
@@ -86,6 +90,24 @@ class MediaRetentionCleanupResultRead(BaseModel):
     orphan_file_count: int
     orphan_file_size_bytes: int
     orphan_file_size_label: str
+    affected_record_ids: list[str]
+    skipped_media_ids: list[str]
+    skipped_reason_by_media_id: dict[str, str]
+
+
+class MediaRetentionArchiveRequest(BaseModel):
+    media_ids: list[str] = Field(default_factory=list)
+    older_than_days: int = Field(default=90, ge=1, le=3650)
+    dry_run: bool = False
+
+
+class MediaRetentionArchiveResultRead(BaseModel):
+    workspace_id: str
+    older_than_days: int
+    dry_run: bool
+    candidate_media_count: int
+    candidate_media_size_bytes: int
+    candidate_media_size_label: str
     affected_record_ids: list[str]
     skipped_media_ids: list[str]
     skipped_reason_by_media_id: dict[str, str]

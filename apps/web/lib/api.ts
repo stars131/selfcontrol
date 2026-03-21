@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaRetentionArchiveResult,
   MediaRetentionCleanupResult,
   MediaRetentionReport,
   MediaStorageSummary,
@@ -563,6 +564,29 @@ export async function cleanupMediaRetention(
         media_ids: input.mediaIds,
         older_than_days: input.olderThanDays,
         purge_orphan_files: input.purgeOrphanFiles ?? false,
+        dry_run: input.dryRun ?? false,
+      }),
+    },
+    token,
+  );
+}
+
+export async function archiveMediaRetention(
+  token: string,
+  workspaceId: string,
+  input: {
+    mediaIds: string[];
+    olderThanDays: number;
+    dryRun?: boolean;
+  },
+) {
+  return request<{ result: MediaRetentionArchiveResult }>(
+    `/workspaces/${workspaceId}/media/retention-archive`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        media_ids: input.mediaIds,
+        older_than_days: input.olderThanDays,
         dry_run: input.dryRun ?? false,
       }),
     },

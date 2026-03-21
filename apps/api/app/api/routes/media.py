@@ -15,6 +15,8 @@ from app.models.record import Record
 from app.models.user import User
 from app.schemas.media import (
     MediaRead,
+    MediaRetentionArchiveRequest,
+    MediaRetentionArchiveResultRead,
     MediaRetentionCleanupRequest,
     MediaRetentionCleanupResultRead,
     MediaRetentionReportRead,
@@ -25,6 +27,7 @@ from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import (
     build_workspace_media_retention_report,
+    archive_workspace_media_retention,
     cleanup_workspace_media_retention,
     remove_storage_file,
     resolve_storage_path,
@@ -118,6 +121,43 @@ def cleanup_media_retention(
     return {
         "success": True,
         "data": {"result": MediaRetentionCleanupResultRead.model_validate(result).model_dump()},
+    }
+
+
+@router.post("/{workspace_id}/media/retention-archive")
+def archive_media_retention(
+    workspace_id: str,
+    payload: MediaRetentionArchiveRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
+    result = archive_workspace_media_retention(
+        db,
+        workspace_id,
+        media_ids=payload.media_ids,
+        older_than_days=payload.older_than_days,
+        dry_run=payload.dry_run,
+    )
+    if not payload.dry_run and result["candidate_media_count"]:
+        log_audit_event(
+            db,
+            workspace_id=workspace_id,
+            actor_user_id=current_user.id,
+            action_code="media.retention_archive",
+            resource_type="workspace",
+            resource_id=workspace_id,
+            message="Archived stale media into archive tier",
+            metadata_json={
+                "older_than_days": payload.older_than_days,
+                "candidate_media_count": result["candidate_media_count"],
+                "candidate_media_size_bytes": result["candidate_media_size_bytes"],
+                "skipped_media_ids": result["skipped_media_ids"],
+            },
+        )
+    return {
+        "success": True,
+        "data": {"result": MediaRetentionArchiveResultRead.model_validate(result).model_dump()},
     }
 
 

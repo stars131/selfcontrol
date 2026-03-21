@@ -15,6 +15,14 @@ def resolve_storage_path(media: MediaAsset) -> Path:
     return Path(settings.storage_dir).parent / media.storage_key
 
 
+def get_media_storage_tier(media: MediaAsset) -> str:
+    metadata = media.metadata_json if isinstance(media.metadata_json, dict) else {}
+    tier = metadata.get("storage_tier")
+    if isinstance(tier, str) and tier.strip():
+        return tier.strip().lower()
+    return "primary"
+
+
 def remove_storage_file(media: MediaAsset) -> bool:
     file_path = resolve_storage_path(media)
     if not file_path.exists():
@@ -97,6 +105,31 @@ def _list_workspace_orphan_files(workspace_id: str, tracked_storage_keys: set[st
     return orphan_files
 
 
+def archive_workspace_media_item(media: MediaAsset) -> bool:
+    file_path = resolve_storage_path(media)
+    if not file_path.exists():
+        return False
+
+    archive_dir = Path(settings.storage_dir).parent / "archive" / media.workspace_id
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    archive_path = archive_dir / file_path.name
+    suffix_index = 2
+    while archive_path.exists():
+        archive_path = archive_dir / f"{archive_path.stem}-{suffix_index}{archive_path.suffix}"
+        suffix_index += 1
+
+    archive_path.write_bytes(file_path.read_bytes())
+    _remove_file_and_cleanup_dirs(file_path)
+    media.storage_key = str(archive_path.relative_to(Path(settings.storage_dir).parent))
+    metadata = media.metadata_json if isinstance(media.metadata_json, dict) else {}
+    media.metadata_json = {
+        **metadata,
+        "storage_tier": "archive",
+        "archived_at": datetime.now(timezone.utc).isoformat(),
+    }
+    return True
+
+
 def build_workspace_media_retention_report(
     db: Session,
     workspace_id: str,
@@ -109,6 +142,8 @@ def build_workspace_media_retention_report(
     total_size_bytes = 0
     missing_file_count = 0
     oldest_media_age_days: int | None = None
+    archived_item_count = 0
+    archived_item_size_bytes = 0
     tracked_storage_keys: set[str] = set()
     report_items: list[dict] = []
 
@@ -117,10 +152,14 @@ def build_workspace_media_retention_report(
         age_days = max((now - created_at).days, 0)
         size_bytes = int(item.size_bytes or 0)
         file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        storage_tier = get_media_storage_tier(item)
 
         total_size_bytes += size_bytes
         if file_missing:
             missing_file_count += 1
+        if storage_tier == "archive":
+            archived_item_count += 1
+            archived_item_size_bytes += size_bytes
         if oldest_media_age_days is None or age_days > oldest_media_age_days:
             oldest_media_age_days = age_days
         tracked_storage_keys.add(item.storage_key)
@@ -130,6 +169,7 @@ def build_workspace_media_retention_report(
                 "record_id": item.record_id,
                 "original_filename": item.original_filename,
                 "media_type": item.media_type,
+                "storage_tier": storage_tier,
                 "processing_status": item.processing_status,
                 "size_bytes": size_bytes,
                 "size_label": format_size_label(size_bytes),
@@ -140,13 +180,14 @@ def build_workspace_media_retention_report(
         )
 
     old_items = [item for item in report_items if item["age_days"] >= older_than_days]
+    retention_candidates = [item for item in old_items if item["storage_tier"] != "archive"]
     orphan_file_count, orphan_file_size_bytes = _scan_workspace_orphan_files(workspace_id, tracked_storage_keys)
     largest_items = sorted(
         report_items,
         key=lambda item: (-item["size_bytes"], -item["age_days"], item["original_filename"].lower()),
     )[:limit]
     retention_candidates = sorted(
-        old_items,
+        retention_candidates,
         key=lambda item: (-item["size_bytes"], -item["age_days"], item["original_filename"].lower()),
     )[:limit]
     old_item_size_bytes = sum(item["size_bytes"] for item in old_items)
@@ -161,6 +202,9 @@ def build_workspace_media_retention_report(
         "old_item_count": len(old_items),
         "old_item_size_bytes": old_item_size_bytes,
         "old_item_size_label": format_size_label(old_item_size_bytes),
+        "archived_item_count": archived_item_count,
+        "archived_item_size_bytes": archived_item_size_bytes,
+        "archived_item_size_label": format_size_label(archived_item_size_bytes),
         "missing_file_count": missing_file_count,
         "orphan_file_count": orphan_file_count,
         "orphan_file_size_bytes": orphan_file_size_bytes,
@@ -197,6 +241,9 @@ def cleanup_workspace_media_retention(
         created_at = _coerce_utc(item.created_at)
         age_days = max((now - created_at).days, 0)
         file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        if get_media_storage_tier(item) == "archive":
+            skipped_reason_by_media_id[media_id] = "already_archived"
+            continue
         if age_days < older_than_days and not file_missing:
             skipped_reason_by_media_id[media_id] = "not_old_enough"
             continue
@@ -232,6 +279,69 @@ def cleanup_workspace_media_retention(
         "orphan_file_count": len(orphan_files),
         "orphan_file_size_bytes": orphan_file_size_bytes,
         "orphan_file_size_label": format_size_label(orphan_file_size_bytes),
+        "affected_record_ids": sorted(affected_record_ids),
+        "skipped_media_ids": list(skipped_reason_by_media_id.keys()),
+        "skipped_reason_by_media_id": skipped_reason_by_media_id,
+    }
+
+
+def archive_workspace_media_retention(
+    db: Session,
+    workspace_id: str,
+    *,
+    media_ids: list[str],
+    older_than_days: int = 90,
+    dry_run: bool = False,
+) -> dict:
+    now = datetime.now(timezone.utc)
+    workspace_items = db.query(MediaAsset).filter(MediaAsset.workspace_id == workspace_id).all()
+    media_id_set = set(media_ids)
+    matched_items_by_id = {item.id: item for item in workspace_items if item.id in media_id_set}
+    candidate_items: list[MediaAsset] = []
+    skipped_reason_by_media_id: dict[str, str] = {}
+    affected_record_ids: set[str] = set()
+
+    for media_id in media_ids:
+        item = matched_items_by_id.get(media_id)
+        if item is None:
+            skipped_reason_by_media_id[media_id] = "not_found"
+            continue
+
+        if get_media_storage_tier(item) == "archive":
+            skipped_reason_by_media_id[media_id] = "already_archived"
+            continue
+
+        created_at = _coerce_utc(item.created_at)
+        age_days = max((now - created_at).days, 0)
+        file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        if file_missing:
+            skipped_reason_by_media_id[media_id] = "missing_storage_file"
+            continue
+        if age_days < older_than_days:
+            skipped_reason_by_media_id[media_id] = "not_old_enough"
+            continue
+
+        candidate_items.append(item)
+        affected_record_ids.add(item.record_id)
+
+    candidate_media_size_bytes = sum(int(item.size_bytes or 0) for item in candidate_items)
+
+    if not dry_run:
+        for item in candidate_items:
+            archive_workspace_media_item(item)
+            db.add(item)
+        db.commit()
+
+        for record_id in sorted(affected_record_ids):
+            rebuild_record_knowledge(db, record_id)
+
+    return {
+        "workspace_id": workspace_id,
+        "older_than_days": older_than_days,
+        "dry_run": dry_run,
+        "candidate_media_count": len(candidate_items),
+        "candidate_media_size_bytes": candidate_media_size_bytes,
+        "candidate_media_size_label": format_size_label(candidate_media_size_bytes),
         "affected_record_ids": sorted(affected_record_ids),
         "skipped_media_ids": list(skipped_reason_by_media_id.keys()),
         "skipped_reason_by_media_id": skipped_reason_by_media_id,

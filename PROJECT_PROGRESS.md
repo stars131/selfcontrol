@@ -154,10 +154,15 @@ Last updated: 2026-03-21
   - import restores records and available local attachments while skipping missing attachment payloads safely
   - imported workspaces get unique slugs automatically to avoid collisions with existing workspaces
   - control-center entry page now includes a ZIP import flow alongside create and join actions
+- Media Archive Tiering V1:
+  - owner-only archive API now moves selected stale local media into a dedicated `archive/` storage tier
+  - archived media remains readable through the existing secure content endpoint because `storage_key` is updated in place
+  - retention reports now distinguish archived media from unarchived stale candidates
+  - workspace retention UI now supports archive-before-delete flows for safer long-term storage management
 
 ## Next
-- Archive tiering for stale media before deletion
 - Async export and import jobs for large workspaces
+- Provider-aware remote media archive/export strategy
 
 ## Delivery Rule
 - Every meaningful slice must update this file

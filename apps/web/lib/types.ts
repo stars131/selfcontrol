@@ -147,6 +147,7 @@ export type MediaRetentionItem = {
   record_id: string;
   original_filename: string;
   media_type: string;
+  storage_tier: string;
   processing_status: string;
   size_bytes: number;
   size_label: string;
@@ -165,12 +166,27 @@ export type MediaRetentionReport = {
   old_item_count: number;
   old_item_size_bytes: number;
   old_item_size_label: string;
+  archived_item_count: number;
+  archived_item_size_bytes: number;
+  archived_item_size_label: string;
   missing_file_count: number;
   orphan_file_count: number;
   orphan_file_size_bytes: number;
   orphan_file_size_label: string;
   largest_items: MediaRetentionItem[];
   retention_candidates: MediaRetentionItem[];
+};
+
+export type MediaRetentionArchiveResult = {
+  workspace_id: string;
+  older_than_days: number;
+  dry_run: boolean;
+  candidate_media_count: number;
+  candidate_media_size_bytes: number;
+  candidate_media_size_label: string;
+  affected_record_ids: string[];
+  skipped_media_ids: string[];
+  skipped_reason_by_media_id: Record<string, string>;
 };
 
 export type MediaRetentionCleanupResult = {
