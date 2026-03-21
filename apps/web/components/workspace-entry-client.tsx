@@ -333,7 +333,9 @@ export function WorkspaceEntryClient() {
                 {workspaces.length ? (
                   workspaces.map((workspace) => (
                     <article className="record-card" key={workspace.id}>
-                      <div className="eyebrow">{workspace.visibility}</div>
+                      <div className="eyebrow">
+                        {workspace.visibility} / {workspace.role}
+                      </div>
                       <h3 style={{ margin: "8px 0 6px" }}>{workspace.name}</h3>
                       <div className="muted">{workspace.slug}</div>
                       <div style={{ marginTop: 12 }}>
@@ -341,9 +343,11 @@ export function WorkspaceEntryClient() {
                           <Link className="button" href={`/app/workspaces/${workspace.id}`}>
                             {copy.openWorkspace}
                           </Link>
-                          <Link className="button secondary" href={`/app/workspaces/${workspace.id}/settings`}>
-                            {copy.settings}
-                          </Link>
+                          {workspace.role !== "viewer" ? (
+                            <Link className="button secondary" href={`/app/workspaces/${workspace.id}/settings`}>
+                              {copy.settings}
+                            </Link>
+                          ) : null}
                         </div>
                       </div>
                     </article>

@@ -14,6 +14,7 @@ import {
   deleteReminder,
   getKnowledgeStats,
   getMediaStatus,
+  getWorkspace,
   listAuditLogs,
   listConversations,
   listMedia,
@@ -50,6 +51,7 @@ import type {
   SearchPresetItem,
   ShareLinkItem,
   TimelineDay,
+  Workspace,
 } from "../lib/types";
 import { buildTimelineDays } from "../lib/timeline";
 import { ChatPanel } from "./chat-panel";
@@ -66,6 +68,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   };
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [visibleRecords, setVisibleRecords] = useState<RecordItem[]>([]);
   const [timelineDays, setTimelineDays] = useState<TimelineDay[]>([]);
@@ -87,6 +90,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [savingSearchPreset, setSavingSearchPreset] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const canWriteWorkspace = workspace?.role === "owner" || workspace?.role === "editor";
+  const canManageWorkspace = canWriteWorkspace;
 
   const refreshRecords = async (
     activeToken: string,
@@ -169,22 +174,34 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const load = async () => {
       try {
         setToken(activeToken);
+        const workspaceResult = await getWorkspace(activeToken, workspaceId);
+        setWorkspace(workspaceResult.workspace);
         await refreshRecords(activeToken, initialRecordFilter);
 
         const conversationResult = await listConversations(activeToken, workspaceId);
         let items = conversationResult.items;
-        if (!items.length) {
+        if (!items.length && (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor")) {
           const created = await createConversation(activeToken, workspaceId, "Workspace chat");
           items = [created.conversation];
         }
 
         setConversations(items);
-        setActiveConversationId(items[0].id);
-        await loadConversationMessages(activeToken, items[0].id);
+        setActiveConversationId(items[0]?.id ?? null);
+        if (items[0]) {
+          await loadConversationMessages(activeToken, items[0].id);
+        } else {
+          setMessages([]);
+        }
         await refreshNotifications(activeToken);
         await refreshKnowledge(activeToken);
-        await refreshProviderConfigs(activeToken);
-        await refreshShareLinks(activeToken);
+        if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
+          await refreshProviderConfigs(activeToken);
+          await refreshShareLinks(activeToken);
+        } else {
+          setProviderConfigs([]);
+          setShareLinks([]);
+          setLatestSharePath("");
+        }
         await refreshSearchPresets(activeToken);
         await refreshAuditLogs(activeToken);
       } catch (caught) {
@@ -227,6 +244,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   }, [token, workspaceId]);
 
   const handleSendMessage = async (message: string) => {
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     if (!token || !activeConversationId) {
       throw new Error("No active conversation");
     }
@@ -251,6 +271,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   };
 
   const handleCreateConversation = async () => {
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     if (!token) {
       throw new Error("Not authenticated");
     }
@@ -280,6 +303,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   }) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
 
     if (input.recordId) {
@@ -318,6 +344,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     await deleteRecord(token, workspaceId, recordId);
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
@@ -330,6 +359,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     await uploadMedia(token, workspaceId, recordId, file);
     await refreshMedia(token, recordId);
     await refreshKnowledge(token);
@@ -339,6 +371,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const handleRetryMedia = async (mediaId: string) => {
     if (!token || !selectedRecordId) {
       throw new Error("Not authenticated");
+    }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     await retryMediaProcessing(token, workspaceId, mediaId);
     await refreshMedia(token, selectedRecordId);
@@ -358,6 +393,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     setRecordFilter(initialRecordFilter);
     await refreshRecords(token, initialRecordFilter);
   };
@@ -365,6 +403,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const handleApplyRecordFilter = async (nextFilter: RecordFilterState) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     setFilteringRecords(true);
     setRecordFilter(nextFilter);
@@ -392,6 +433,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     setSavingSearchPreset(true);
     try {
       await createSearchPreset(token, workspaceId, {
@@ -409,6 +453,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     await deleteSearchPreset(token, workspaceId, presetId);
     await refreshSearchPresets(token);
     await refreshAuditLogs(token);
@@ -423,6 +470,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   }) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canManageWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     await createReminder(token, workspaceId, input.recordId, {
       title: input.title,
@@ -448,6 +498,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     await updateReminder(token, workspaceId, reminderId, input);
     await refreshReminders(token, selectedRecordId);
   };
@@ -455,6 +508,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const handleDeleteReminder = async (reminderId: string) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canWriteWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     await deleteReminder(token, workspaceId, reminderId);
     await refreshReminders(token, selectedRecordId);
@@ -464,12 +520,18 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
+    if (!canManageWorkspace) {
+      throw new Error("Viewer access is read-only");
+    }
     await syncDueNotifications(token);
   };
 
   const handleMarkNotificationRead = async (notificationId: string) => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canManageWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     await updateNotification(token, workspaceId, notificationId, { is_read: true });
     await refreshNotifications(token);
@@ -478,6 +540,9 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const handleReindexKnowledge = async () => {
     if (!token) {
       throw new Error("Not authenticated");
+    }
+    if (!canManageWorkspace) {
+      throw new Error("Viewer access is read-only");
     }
     const result = await reindexKnowledge(token, workspaceId);
     setKnowledgeStats(result.stats);
@@ -562,6 +627,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         <ChatPanel
           activeConversationId={activeConversationId}
           auditLogs={auditLogs}
+          canManageWorkspace={canManageWorkspace}
+          canWriteWorkspace={canWriteWorkspace}
           conversations={conversations}
           knowledgeStats={knowledgeStats}
           latestSharePath={latestSharePath}
@@ -580,9 +647,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           providerConfigs={providerConfigs}
           shareLinks={shareLinks}
           workspaceId={workspaceId}
+          workspaceRole={workspace?.role ?? "viewer"}
         />
         <RecordPanelV2
           authToken={token}
+          canWriteWorkspace={canWriteWorkspace}
           mediaAssets={mediaAssets}
           onCreateReminder={handleCreateReminder}
           onDeleteRecord={handleDeleteRecord}

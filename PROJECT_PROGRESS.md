@@ -76,11 +76,16 @@ Last updated: 2026-03-21
   - workspace members can save reusable search presets and apply or delete them from the structured results panel
   - saved presets are stored server-side with dedicated API routes and audit events
   - record API coverage now includes combined advanced filters alongside saved preset CRUD tests
+- Role-Based Workspace Permission Refinement V1:
+  - workspace APIs now return the current member role so the client can distinguish owner, editor, and viewer access
+  - write APIs for records, media upload/retry, reminders, conversations, provider settings, knowledge reindex, and search preset management now require owner/editor access
+  - shared-workspace viewer mode is now read-only in the UI, with editing and settings actions hidden or disabled
+  - dedicated permission tests now verify viewer read-only behavior and editor write access
 
 ## Next
 - Security hardening: audit logs, share permission boundaries, secret management
 - Deeper media metadata extraction and storage lifecycle controls
-- Role-based workspace permission refinement for shared editing and settings access
+- Secret management hardening and local/remote configuration boundary cleanup
 
 ## Delivery Rule
 - Every meaningful slice must update this file

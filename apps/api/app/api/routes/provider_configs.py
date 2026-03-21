@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_write_access
 from app.db.session import get_db
 from app.models.user import User
 from app.services.audit import log_audit_event
@@ -29,7 +29,7 @@ def get_provider_configs(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     items = list_provider_configs(db, workspace_id)
     return {"success": True, "data": {"items": [item.to_dict() for item in items]}}
 
@@ -42,7 +42,7 @@ def put_provider_config(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     try:
         item = upsert_provider_config(
             db,

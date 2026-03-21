@@ -187,6 +187,7 @@ function summarizeRecordFilter(filter: RecordFilterState): string {
 
 export function RecordPanelV2({
   authToken,
+  canWriteWorkspace,
   workspaceId,
   records,
   selectedRecordId,
@@ -213,6 +214,7 @@ export function RecordPanelV2({
   filteringRecords,
 }: {
   authToken: string | null;
+  canWriteWorkspace: boolean;
   workspaceId: string;
   records: RecordItem[];
   timelineDays: TimelineDay[];
@@ -611,7 +613,7 @@ export function RecordPanelV2({
           </div>
         </div>
         <div className="action-row">
-          <button className="button secondary" type="button" onClick={() => onSelectRecord(null)}>
+          <button className="button secondary" disabled={!canWriteWorkspace} type="button" onClick={() => onSelectRecord(null)}>
             New record
           </button>
         </div>
@@ -706,6 +708,7 @@ export function RecordPanelV2({
               <span className="field-label">Preset name</span>
               <input
                 className="input"
+                disabled={!canWriteWorkspace}
                 value={presetName}
                 onChange={(event) => setPresetName(event.target.value)}
                 placeholder="Confirmed food spots"
@@ -714,7 +717,7 @@ export function RecordPanelV2({
             <div className="field" style={{ alignSelf: "end" }}>
               <button
                 className="button secondary"
-                disabled={savingSearchPreset}
+                disabled={savingSearchPreset || !canWriteWorkspace}
                 type="button"
                 onClick={() => void handleSavePreset()}
               >
@@ -740,9 +743,11 @@ export function RecordPanelV2({
                     >
                       Apply preset
                     </button>
-                    <button className="button secondary" type="button" onClick={() => void handleDeletePreset(preset.id)}>
-                      Delete preset
-                    </button>
+                    {canWriteWorkspace ? (
+                      <button className="button secondary" type="button" onClick={() => void handleDeletePreset(preset.id)}>
+                        Delete preset
+                      </button>
+                    ) : null}
                   </div>
                 </article>
               ))}
@@ -759,12 +764,15 @@ export function RecordPanelV2({
           filteringRecords={filteringRecords}
           locationFilter={recordFilter}
           onApplyLocationFilter={onApplyLocationFilter}
-          draftLocation={form.location}
-          onDraftLocationChange={(nextLocation) =>
-            setForm((prev) => ({
-              ...prev,
-              location: nextLocation,
-            }))
+          draftLocation={canWriteWorkspace ? form.location : null}
+          onDraftLocationChange={
+            canWriteWorkspace
+              ? (nextLocation) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    location: nextLocation,
+                  }))
+              : undefined
           }
         />
 
@@ -774,6 +782,7 @@ export function RecordPanelV2({
             <span className="field-label">Title</span>
             <input
               className="input"
+              disabled={!canWriteWorkspace}
               value={form.title}
               onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
               placeholder="Optional title"
@@ -783,6 +792,7 @@ export function RecordPanelV2({
             <span className="field-label">Content</span>
             <textarea
               className="textarea"
+              disabled={!canWriteWorkspace}
               value={form.content}
               onChange={(event) => setForm((prev) => ({ ...prev, content: event.target.value }))}
               placeholder="Write a note, food review, or reminder"
@@ -793,6 +803,7 @@ export function RecordPanelV2({
               <span className="field-label">Type</span>
               <select
                 className="input"
+                disabled={!canWriteWorkspace}
                 value={form.type_code}
                 onChange={(event) => setForm((prev) => ({ ...prev, type_code: event.target.value }))}
               >
@@ -807,6 +818,7 @@ export function RecordPanelV2({
               <input
                 className="input"
                 type="number"
+                disabled={!canWriteWorkspace}
                 min="1"
                 max="5"
                 value={form.rating}
@@ -819,6 +831,7 @@ export function RecordPanelV2({
               <input
                 className="input"
                 type="datetime-local"
+                disabled={!canWriteWorkspace}
                 value={form.occurred_at}
                 onChange={(event) => setForm((prev) => ({ ...prev, occurred_at: event.target.value }))}
               />
@@ -829,6 +842,7 @@ export function RecordPanelV2({
               <span className="field-label">Place name</span>
               <input
                 className="input"
+                disabled={!canWriteWorkspace}
                 value={form.location.place_name}
                 onChange={(event) =>
                   setForm((prev) => ({
@@ -843,6 +857,7 @@ export function RecordPanelV2({
               <span className="field-label">Address</span>
               <input
                 className="input"
+                disabled={!canWriteWorkspace}
                 value={form.location.address}
                 onChange={(event) =>
                   setForm((prev) => ({
@@ -856,6 +871,7 @@ export function RecordPanelV2({
             <label className="checkbox-field">
               <input
                 checked={form.is_avoid}
+                disabled={!canWriteWorkspace}
                 type="checkbox"
                 onChange={(event) => setForm((prev) => ({ ...prev, is_avoid: event.target.checked }))}
               />
@@ -868,6 +884,7 @@ export function RecordPanelV2({
               <input
                 className="input"
                 inputMode="decimal"
+                disabled={!canWriteWorkspace}
                 value={form.location.latitude}
                 onChange={(event) =>
                   setForm((prev) => ({
@@ -883,6 +900,7 @@ export function RecordPanelV2({
               <input
                 className="input"
                 inputMode="decimal"
+                disabled={!canWriteWorkspace}
                 value={form.location.longitude}
                 onChange={(event) =>
                   setForm((prev) => ({
@@ -908,6 +926,7 @@ export function RecordPanelV2({
                 <span className="field-label">Review status</span>
                 <select
                   className="input"
+                  disabled={!canWriteWorkspace}
                   value={locationReviewForm.status}
                   onChange={(event) =>
                     setLocationReviewForm((prev) => ({
@@ -925,6 +944,7 @@ export function RecordPanelV2({
                 <span className="field-label">Review note</span>
                 <input
                   className="input"
+                  disabled={!canWriteWorkspace}
                   value={locationReviewForm.note}
                   onChange={(event) =>
                     setLocationReviewForm((prev) => ({
@@ -940,6 +960,7 @@ export function RecordPanelV2({
               <button
                 className="button secondary"
                 type="button"
+                disabled={!canWriteWorkspace}
                 onClick={() =>
                   setLocationReviewForm((prev) => ({
                     ...prev,
@@ -952,6 +973,7 @@ export function RecordPanelV2({
               <button
                 className="button secondary"
                 type="button"
+                disabled={!canWriteWorkspace}
                 onClick={() =>
                   setLocationReviewForm((prev) => ({
                     ...prev,
@@ -964,6 +986,7 @@ export function RecordPanelV2({
               <button
                 className="button secondary"
                 type="button"
+                disabled={!canWriteWorkspace}
                 onClick={() =>
                   setLocationReviewForm({
                     status: "pending",
@@ -1041,11 +1064,11 @@ export function RecordPanelV2({
           </div>
           {error ? <div className="notice error">{error}</div> : null}
           <div className="action-row">
-            <button className="button" disabled={saving} type="submit">
+            <button className="button" disabled={saving || !canWriteWorkspace} type="submit">
               {saving ? "Saving..." : selectedRecord ? "Update record" : "Create record"}
             </button>
             {selectedRecord ? (
-              <button className="button secondary" disabled={deleting} onClick={handleDelete} type="button">
+              <button className="button secondary" disabled={deleting || !canWriteWorkspace} onClick={handleDelete} type="button">
                 {deleting ? "Deleting..." : "Delete record"}
               </button>
             ) : null}
@@ -1054,7 +1077,7 @@ export function RecordPanelV2({
             <>
               <label className="field">
                 <span className="field-label">Upload attachment</span>
-                <input onChange={handleUpload} type="file" />
+                <input disabled={!canWriteWorkspace} onChange={handleUpload} type="file" />
               </label>
               {uploading ? <div className="notice">Uploading media...</div> : null}
               <div className="record-list compact-list">
@@ -1163,6 +1186,7 @@ export function RecordPanelV2({
                       <span className="field-label">Reminder title</span>
                       <input
                         className="input"
+                        disabled={!canWriteWorkspace}
                         value={reminderForm.title}
                         onChange={(event) =>
                           setReminderForm((prev) => ({
@@ -1178,6 +1202,7 @@ export function RecordPanelV2({
                       <input
                         className="input"
                         type="datetime-local"
+                        disabled={!canWriteWorkspace}
                         value={reminderForm.remind_at}
                         onChange={(event) =>
                           setReminderForm((prev) => ({
@@ -1196,6 +1221,7 @@ export function RecordPanelV2({
                     <span className="field-label">Reminder note</span>
                     <textarea
                       className="textarea"
+                      disabled={!canWriteWorkspace}
                       value={reminderForm.message}
                       onChange={(event) =>
                         setReminderForm((prev) => ({
@@ -1209,7 +1235,7 @@ export function RecordPanelV2({
                   <div className="action-row">
                     <button
                       className="button secondary"
-                      disabled={savingReminder}
+                      disabled={savingReminder || !canWriteWorkspace}
                       type="button"
                       onClick={() => void handleCreateReminderSubmit()}
                     >
@@ -1237,6 +1263,7 @@ export function RecordPanelV2({
                           <button
                             className="button secondary"
                             type="button"
+                            disabled={!canWriteWorkspace}
                             onClick={() =>
                               void onUpdateReminder(reminder.id, {
                                 is_enabled: !reminder.is_enabled,
@@ -1249,6 +1276,7 @@ export function RecordPanelV2({
                             <button
                               className="button secondary"
                               type="button"
+                              disabled={!canWriteWorkspace}
                               onClick={() =>
                                 void onUpdateReminder(reminder.id, {
                                   status: "completed",
@@ -1262,6 +1290,7 @@ export function RecordPanelV2({
                           <button
                             className="button secondary"
                             type="button"
+                            disabled={!canWriteWorkspace}
                             onClick={() => void onDeleteReminder(reminder.id)}
                           >
                             Delete

@@ -35,11 +35,11 @@ def get_current_user(
     return user
 
 
-def require_workspace_member(
+def get_workspace_membership(
     workspace_id: str,
     user: User,
     db: Session,
-) -> Workspace:
+) -> WorkspaceMember:
     workspace = db.get(Workspace, workspace_id)
     if not workspace:
         raise HTTPException(status_code=404, detail="Workspace not found")
@@ -54,6 +54,18 @@ def require_workspace_member(
     )
     if not membership:
         raise HTTPException(status_code=403, detail="Forbidden")
+    return membership
+
+
+def require_workspace_member(
+    workspace_id: str,
+    user: User,
+    db: Session,
+) -> Workspace:
+    membership = get_workspace_membership(workspace_id, user, db)
+    workspace = db.get(Workspace, membership.workspace_id)
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
     return workspace
 
 
@@ -64,18 +76,15 @@ def require_workspace_role(
     *,
     allowed_roles: set[str],
 ) -> WorkspaceMember:
-    workspace = db.get(Workspace, workspace_id)
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-
-    membership = (
-        db.query(WorkspaceMember)
-        .filter(
-            WorkspaceMember.workspace_id == workspace_id,
-            WorkspaceMember.user_id == user.id,
-        )
-        .first()
-    )
-    if not membership or membership.role not in allowed_roles:
+    membership = get_workspace_membership(workspace_id, user, db)
+    if membership.role not in allowed_roles:
         raise HTTPException(status_code=403, detail="Forbidden")
     return membership
+
+
+def require_workspace_write_access(
+    workspace_id: str,
+    user: User,
+    db: Session,
+) -> WorkspaceMember:
+    return require_workspace_role(workspace_id, user, db, allowed_roles={"owner", "editor"})

@@ -23,6 +23,9 @@ function buildShareUrl(path: string) {
 
 export function ChatPanel({
   workspaceId,
+  workspaceRole,
+  canWriteWorkspace,
+  canManageWorkspace,
   conversations,
   activeConversationId,
   messages,
@@ -44,6 +47,9 @@ export function ChatPanel({
   onSendMessage,
 }: {
   workspaceId: string;
+  workspaceRole: "owner" | "editor" | "viewer";
+  canWriteWorkspace: boolean;
+  canManageWorkspace: boolean;
   conversations: Conversation[];
   activeConversationId: string | null;
   messages: ChatMessage[];
@@ -191,17 +197,24 @@ export function ChatPanel({
             Chat Assistant
           </h2>
           <div className="muted" style={{ marginTop: 8 }}>
-            Workspace {workspaceId}
+            Workspace {workspaceId} / {workspaceRole}
           </div>
         </div>
-        <Link className="button secondary" href={`/app/workspaces/${workspaceId}/settings`}>
-          Settings
-        </Link>
+        {canManageWorkspace ? (
+          <Link className="button secondary" href={`/app/workspaces/${workspaceId}/settings`}>
+            Settings
+          </Link>
+        ) : null}
       </div>
       <div className="panel-body">
         <div className="conversation-bar">
           <div className="action-row">
-            <button className="button secondary" type="button" onClick={() => void onCreateConversation()}>
+            <button
+              className="button secondary"
+              disabled={!canWriteWorkspace}
+              type="button"
+              onClick={() => void onCreateConversation()}
+            >
               New conversation
             </button>
             <button
@@ -226,6 +239,8 @@ export function ChatPanel({
             ))}
           </div>
         </div>
+        {canManageWorkspace ? (
+        <>
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="eyebrow">Knowledge Base</div>
           <div className="muted" style={{ marginTop: 8 }}>
@@ -247,7 +262,7 @@ export function ChatPanel({
           <div className="action-row" style={{ marginTop: 12 }}>
             <button
               className="button secondary"
-              disabled={reindexing}
+              disabled={reindexing || !canManageWorkspace}
               type="button"
               onClick={() => void handleReindexKnowledge()}
             >
@@ -324,6 +339,8 @@ export function ChatPanel({
             providerConfigs={providerConfigs}
           />
         </div>
+        </>
+        ) : null}
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="action-row" style={{ justifyContent: "space-between" }}>
             <div className="eyebrow">Audit Logs</div>
@@ -450,12 +467,17 @@ export function ChatPanel({
         <div className="composer">
           <textarea
             className="textarea"
-            placeholder="Examples: save this snack note..., bad hotpot in Hangzhou, ramen near last summer trip"
+            disabled={!canWriteWorkspace}
+            placeholder={
+              canWriteWorkspace
+                ? "Examples: save this snack note..., bad hotpot in Hangzhou, ramen near last summer trip"
+                : "Viewer mode: chat creation is disabled for this shared workspace."
+            }
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
           />
           {error ? <div className="notice error">{error}</div> : null}
-          <button className="button" type="button" onClick={handleSend} disabled={loading}>
+          <button className="button" type="button" onClick={handleSend} disabled={loading || !canWriteWorkspace}>
             {loading ? "Working..." : "Send"}
           </button>
         </div>

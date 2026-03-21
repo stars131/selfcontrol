@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.media import MediaAsset
@@ -28,7 +28,7 @@ def list_media(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     items = (
         db.query(MediaAsset)
         .filter(MediaAsset.workspace_id == workspace_id, MediaAsset.record_id == record_id)
@@ -45,7 +45,7 @@ def get_media_status(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")

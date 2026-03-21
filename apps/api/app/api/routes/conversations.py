@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.db.session import get_db
 from app.models.conversation import Conversation, Message
 from app.models.user import User
@@ -28,7 +28,7 @@ def list_conversations(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     items = (
         db.query(Conversation)
         .filter(Conversation.workspace_id == workspace_id, Conversation.user_id == current_user.id)
@@ -48,7 +48,7 @@ def create_conversation(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     item = Conversation(workspace_id=workspace_id, user_id=current_user.id, title=payload.title)
     db.add(item)
     db.commit()

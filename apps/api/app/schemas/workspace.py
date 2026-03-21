@@ -17,5 +17,5 @@ class WorkspaceRead(BaseModel):
     slug: str
     owner_id: str
     visibility: str
+    role: str
     created_at: datetime
-

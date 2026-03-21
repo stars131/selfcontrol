@@ -11,6 +11,7 @@ export type Workspace = {
   slug: string;
   owner_id: string;
   visibility: string;
+  role: "owner" | "editor" | "viewer";
   created_at: string;
 };
 

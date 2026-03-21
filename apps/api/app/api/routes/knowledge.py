@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
@@ -36,7 +36,7 @@ def get_workspace_knowledge_stats(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     stats = get_knowledge_stats(db, workspace_id)
     return {"success": True, "data": {"stats": stats.to_dict()}}
 

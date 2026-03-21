@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, get_workspace_membership, require_workspace_member
 from app.db.session import get_db
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
@@ -11,6 +11,18 @@ from app.schemas.workspace import WorkspaceCreate, WorkspaceRead
 
 
 router = APIRouter()
+
+
+def serialize_workspace(workspace: Workspace, role: str) -> dict:
+    return {
+        "id": workspace.id,
+        "name": workspace.name,
+        "slug": workspace.slug,
+        "owner_id": workspace.owner_id,
+        "visibility": workspace.visibility,
+        "role": role,
+        "created_at": workspace.created_at,
+    }
 
 
 @router.get("")
@@ -28,7 +40,22 @@ def list_workspaces(
     return {
         "success": True,
         "data": {
-            "items": [WorkspaceRead.model_validate(workspace).model_dump() for workspace in workspaces]
+            "items": [
+                WorkspaceRead.model_validate(
+                    serialize_workspace(
+                        workspace,
+                        next(
+                            (
+                                membership.role
+                                for membership in workspace.members
+                                if membership.user_id == current_user.id
+                            ),
+                            "viewer",
+                        ),
+                    )
+                ).model_dump()
+                for workspace in workspaces
+            ]
         },
     }
 
@@ -61,7 +88,12 @@ def create_workspace(
     db.commit()
     db.refresh(workspace)
 
-    return {"success": True, "data": {"workspace": WorkspaceRead.model_validate(workspace).model_dump()}}
+    return {
+        "success": True,
+        "data": {
+            "workspace": WorkspaceRead.model_validate(serialize_workspace(workspace, "owner")).model_dump()
+        },
+    }
 
 
 @router.get("/{workspace_id}")
@@ -71,5 +103,10 @@ def get_workspace(
     db: Session = Depends(get_db),
 ) -> dict:
     workspace = require_workspace_member(workspace_id, current_user, db)
-    return {"success": True, "data": {"workspace": WorkspaceRead.model_validate(workspace).model_dump()}}
-
+    membership = get_workspace_membership(workspace_id, current_user, db)
+    return {
+        "success": True,
+        "data": {
+            "workspace": WorkspaceRead.model_validate(serialize_workspace(workspace, membership.role)).model_dump()
+        },
+    }

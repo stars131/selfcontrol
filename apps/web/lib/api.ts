@@ -116,6 +116,10 @@ export async function listWorkspaces(token: string) {
   return request<{ items: Workspace[] }>("/workspaces", { method: "GET" }, token);
 }
 
+export async function getWorkspace(token: string, workspaceId: string) {
+  return request<{ workspace: Workspace }>(`/workspaces/${workspaceId}`, { method: "GET" }, token);
+}
+
 export async function createWorkspace(
   token: string,
   input: { name: string; slug: string; visibility?: string },

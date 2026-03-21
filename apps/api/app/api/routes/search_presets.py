@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.db.session import get_db
 from app.models.search_preset import SearchPreset
 from app.models.user import User
@@ -49,7 +49,7 @@ def list_search_presets(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     items = (
         db.query(SearchPreset)
         .filter(SearchPreset.workspace_id == workspace_id)
@@ -66,7 +66,7 @@ def create_search_preset(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     name = payload.name.strip()
     if not name:
         raise HTTPException(status_code=400, detail="Preset name is required")
@@ -101,7 +101,7 @@ def update_search_preset(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     item = db.get(SearchPreset, preset_id)
     if not item or item.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Search preset not found")

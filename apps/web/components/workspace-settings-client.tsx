@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { getCurrentUser, getKnowledgeStats, listProviderConfigs, updateProviderConfig } from "../lib/api";
+import { getCurrentUser, getKnowledgeStats, getWorkspace, listProviderConfigs, updateProviderConfig } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
-import type { KnowledgeStats, ProviderFeatureConfig, User } from "../lib/types";
+import type { KnowledgeStats, ProviderFeatureConfig, User, Workspace } from "../lib/types";
 import { LanguageSwitcher } from "./language-switcher";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 
@@ -84,6 +84,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
   const copy = COPY[locale];
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -99,14 +100,20 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
     const load = async () => {
       try {
         setToken(activeToken);
-        const [me, providerResult, knowledgeResult] = await Promise.all([
+        const [me, workspaceResult, knowledgeResult] = await Promise.all([
           getCurrentUser(activeToken),
-          listProviderConfigs(activeToken, workspaceId),
+          getWorkspace(activeToken, workspaceId),
           getKnowledgeStats(activeToken, workspaceId),
         ]);
         setUser(me.user);
-        setProviderConfigs(providerResult.items);
+        setWorkspace(workspaceResult.workspace);
         setKnowledgeStats(knowledgeResult.stats);
+        if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
+          const providerResult = await listProviderConfigs(activeToken, workspaceId);
+          setProviderConfigs(providerResult.items);
+        } else {
+          setProviderConfigs([]);
+        }
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load settings");
@@ -167,6 +174,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             {user ? (
               <div className="muted" style={{ marginTop: 8 }}>
                 {user.username}
+                {workspace ? ` / ${workspace.role}` : ""}
               </div>
             ) : null}
           </div>
@@ -208,10 +216,19 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
                 </div>
               </div>
             </section>
-            <ProviderSettingsPanel
-              onSaveProviderConfig={handleSaveProviderConfig}
-              providerConfigs={providerConfigs}
-            />
+            {workspace?.role === "owner" || workspace?.role === "editor" ? (
+              <ProviderSettingsPanel
+                onSaveProviderConfig={handleSaveProviderConfig}
+                providerConfigs={providerConfigs}
+              />
+            ) : (
+              <section className="record-card">
+                <div className="eyebrow">{copy.providerTitle}</div>
+                <div className="notice" style={{ marginTop: 12 }}>
+                  Viewer access is read-only. Workspace settings are available to owners and editors only.
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </section>

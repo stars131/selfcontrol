@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member
+from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
@@ -103,7 +103,7 @@ def create_record(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     extra_data, location_changed, review_changed = prepare_record_extra_data(
         existing_extra_data=None,
         incoming_extra_data=payload.extra_data,
@@ -167,7 +167,7 @@ def update_record(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     record = db.get(Record, record_id)
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
@@ -215,7 +215,7 @@ def delete_record(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     record = db.get(Record, record_id)
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
