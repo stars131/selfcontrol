@@ -2,8 +2,8 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import type { RecordItem } from "../lib/types";
-import { readLocationReview } from "../lib/location";
+import type { LocationFilterState, RecordItem } from "../lib/types";
+import { readLocationInfo, readLocationReview } from "../lib/location";
 
 type AMapMapInstance = {
   clearMap?: () => void;
@@ -61,6 +61,9 @@ export type LocationDraft = {
 type MappedRecord = {
   id: string;
   title: string;
+  placeName: string;
+  address: string;
+  reviewStatus: string;
   latitude: number;
   longitude: number;
 };
@@ -182,8 +185,8 @@ function readLongitudeValue(value: unknown): number | null {
 function parseMappedRecords(records: RecordItem[]): MappedRecord[] {
   return records
     .map((record) => {
-      const raw = record.extra_data?.location;
-      const location = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+      const location = readLocationInfo(record.extra_data);
+      const reviewStatus = readLocationReview(record.extra_data)?.status ?? "pending";
       const latitude = readLatitudeValue(location.latitude);
       const longitude = readLongitudeValue(location.longitude);
 
@@ -194,6 +197,9 @@ function parseMappedRecords(records: RecordItem[]): MappedRecord[] {
       return {
         id: record.id,
         title: record.title || record.content || "Untitled",
+        placeName: location.place_name || "Unknown place",
+        address: location.address || "",
+        reviewStatus,
         latitude,
         longitude,
       };
@@ -235,12 +241,18 @@ export function MapPanel({
   records,
   selectedRecordId,
   onSelectRecord,
+  locationFilter,
+  filteringRecords,
+  onApplyLocationFilter,
   draftLocation,
   onDraftLocationChange,
 }: {
   records: RecordItem[];
   selectedRecordId: string | null;
   onSelectRecord: (recordId: string | null) => void;
+  locationFilter: LocationFilterState;
+  filteringRecords: boolean;
+  onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>;
   draftLocation?: LocationDraft | null;
   onDraftLocationChange?: (next: LocationDraft) => void;
 }) {
@@ -252,6 +264,7 @@ export function MapPanel({
   const [searchError, setSearchError] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterDraft, setFilterDraft] = useState<LocationFilterState>(locationFilter);
   const amapKey = process.env.NEXT_PUBLIC_AMAP_KEY;
   const mappedRecords = useMemo(() => parseMappedRecords(records), [records]);
   const confirmedCount = useMemo(
@@ -268,6 +281,10 @@ export function MapPanel({
   useEffect(() => {
     onDraftLocationChangeRef.current = onDraftLocationChange;
   }, [onDraftLocationChange]);
+
+  useEffect(() => {
+    setFilterDraft(locationFilter);
+  }, [locationFilter]);
 
   useEffect(() => {
     setSearchQuery(draftLocation?.place_name || draftLocation?.address || "");
@@ -357,6 +374,8 @@ export function MapPanel({
       marker.setMap?.(mapRef.current);
     }
 
+    const selectedMappedRecord = mappedRecords.find((item) => item.id === selectedRecordId) ?? null;
+
     if (draftCoordinates) {
       const draftTitle = draftLocation?.place_name || draftLocation?.address || "Draft location";
       const draftMarker = new window.AMap.Marker({
@@ -367,6 +386,8 @@ export function MapPanel({
       });
       draftMarker.setMap?.(mapRef.current);
       mapRef.current.setZoomAndCenter?.(15, draftCoordinates);
+    } else if (selectedMappedRecord) {
+      mapRef.current.setZoomAndCenter?.(15, [selectedMappedRecord.longitude, selectedMappedRecord.latitude]);
     } else if (mappedRecords.length) {
       mapRef.current.setFitView?.();
     }
@@ -437,6 +458,29 @@ export function MapPanel({
     }
   };
 
+  const handleApplyFilter = async () => {
+    await onApplyLocationFilter(filterDraft);
+  };
+
+  const handleUseMappedOnly = async () => {
+    const nextFilter: LocationFilterState = {
+      ...filterDraft,
+      mappedOnly: "mapped",
+    };
+    setFilterDraft(nextFilter);
+    await onApplyLocationFilter(nextFilter);
+  };
+
+  const handleClearFilter = async () => {
+    const nextFilter: LocationFilterState = {
+      placeQuery: "",
+      reviewStatus: "all",
+      mappedOnly: "all",
+    };
+    setFilterDraft(nextFilter);
+    await onApplyLocationFilter(nextFilter);
+  };
+
   if (!amapKey) {
     return (
       <section className="record-card" style={{ marginTop: 20 }}>
@@ -460,6 +504,71 @@ export function MapPanel({
         <span className="tag">{mappedRecords.length} mapped</span>
         <span className="tag">{confirmedCount} confirmed</span>
         <span className="tag">{needsReviewCount} need review</span>
+      </div>
+      <div className="record-card form-stack" style={{ marginTop: 12 }}>
+        <div className="eyebrow">Map drill-down</div>
+        <div className="inline-fields">
+          <label className="field">
+            <span className="field-label">Place query</span>
+            <input
+              className="input"
+              value={filterDraft.placeQuery}
+              onChange={(event) =>
+                setFilterDraft((current) => ({
+                  ...current,
+                  placeQuery: event.target.value,
+                }))
+              }
+              placeholder="Soup House / address / landmark"
+            />
+          </label>
+          <label className="field">
+            <span className="field-label">Map status</span>
+            <select
+              className="input"
+              value={filterDraft.mappedOnly}
+              onChange={(event) =>
+                setFilterDraft((current) => ({
+                  ...current,
+                  mappedOnly: event.target.value as LocationFilterState["mappedOnly"],
+                }))
+              }
+            >
+              <option value="all">all records</option>
+              <option value="mapped">mapped only</option>
+              <option value="unmapped">unmapped only</option>
+            </select>
+          </label>
+          <label className="field">
+            <span className="field-label">Review</span>
+            <select
+              className="input"
+              value={filterDraft.reviewStatus}
+              onChange={(event) =>
+                setFilterDraft((current) => ({
+                  ...current,
+                  reviewStatus: event.target.value as LocationFilterState["reviewStatus"],
+                }))
+              }
+            >
+              <option value="all">all</option>
+              <option value="pending">pending</option>
+              <option value="confirmed">confirmed</option>
+              <option value="needs_review">needs_review</option>
+            </select>
+          </label>
+        </div>
+        <div className="action-row">
+          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleApplyFilter()}>
+            {filteringRecords ? "Filtering..." : "Apply location filter"}
+          </button>
+          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleUseMappedOnly()}>
+            Mapped only
+          </button>
+          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleClearFilter()}>
+            Clear location filter
+          </button>
+        </div>
       </div>
       {isEditable ? (
         <form className="composer" style={{ marginTop: 12 }} onSubmit={handleSearch}>
@@ -492,6 +601,29 @@ export function MapPanel({
         </div>
       ) : null}
       <div className="map-canvas" ref={containerRef} />
+      {mappedRecords.length ? (
+        <div className="record-list compact-list" style={{ marginTop: 12 }}>
+          {mappedRecords.slice(0, 8).map((record) => (
+            <button
+              className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
+              key={record.id}
+              type="button"
+              onClick={() => onSelectRecord(record.id)}
+            >
+              <div className="eyebrow">{record.reviewStatus}</div>
+              <div style={{ marginTop: 8, fontWeight: 600 }}>{record.placeName}</div>
+              {record.address ? (
+                <div className="muted" style={{ marginTop: 8 }}>
+                  {record.address}
+                </div>
+              ) : null}
+              <div className="muted" style={{ marginTop: 8 }}>
+                {record.latitude.toFixed(5)}, {record.longitude.toFixed(5)}
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : null}
       {draftLocation?.latitude && draftLocation?.longitude ? (
         <div className="muted" style={{ marginTop: 12 }}>
           Current point: {draftLocation.latitude}, {draftLocation.longitude}

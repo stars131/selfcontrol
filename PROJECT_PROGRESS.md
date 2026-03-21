@@ -65,11 +65,17 @@ Last updated: 2026-03-21
   - dedicated workspace settings page added for AI provider and API-related configuration
   - provider configuration editor is now reusable across chat and settings surfaces
   - workspaces list and workspace chat now expose direct links into settings
+- Location Filtering and Map Drill-Down V1:
+  - records API now supports filtering by place query, review status, and mapped/unmapped state
+  - map panel now exposes location filter controls and one-click mapped-only mode
+  - filtered record sets stay consistent across record cards and timeline grouping
+  - map view now zooms to the selected mapped record for faster drill-down
+  - map panel shows a clickable mapped-record list for direct place-based navigation
 
 ## Next
 - Security hardening: audit logs, share permission boundaries, secret management
-- Location-aware filtering and richer map drill-down
 - Deeper media metadata extraction and storage lifecycle controls
+- Workspace-wide advanced search presets and saved filters
 
 ## Delivery Rule
 - Every meaningful slice must update this file

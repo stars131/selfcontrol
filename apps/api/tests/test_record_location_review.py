@@ -182,3 +182,67 @@ def test_record_location_history_and_review_flow(monkeypatch) -> None:
     assert "location_review" not in cleared_record["extra_data"]
     assert len(cleared_record["extra_data"]["location_history"]) == 3
     assert cleared_record["extra_data"]["location_history"][-1]["action_code"] == "removed"
+
+
+def test_record_list_supports_location_filters(monkeypatch) -> None:
+    client, workspace_id = build_records_client(monkeypatch)
+
+    mapped_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        json={
+            "type_code": "food",
+            "title": "Soup lunch",
+            "content": "Mapped place",
+            "source_type": "manual",
+            "extra_data": {
+                "location": {
+                    "place_name": "Soup House",
+                    "address": "Block A",
+                    "latitude": 30.2741,
+                    "longitude": 120.1551,
+                    "source": "search",
+                },
+                "location_review": {
+                    "status": "confirmed",
+                    "note": "Trusted point",
+                },
+            },
+        },
+    )
+    assert mapped_response.status_code == 200
+
+    plain_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        json={
+            "type_code": "memo",
+            "title": "Desk note",
+            "content": "No location here",
+            "source_type": "manual",
+            "extra_data": {},
+        },
+    )
+    assert plain_response.status_code == 200
+
+    filtered_response = client.get(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        params={
+            "has_coordinates": "true",
+            "review_status": "confirmed",
+            "location_query": "soup",
+        },
+    )
+
+    assert filtered_response.status_code == 200
+    items = filtered_response.json()["data"]["items"]
+    assert len(items) == 1
+    assert items[0]["title"] == "Soup lunch"
+
+    unmapped_response = client.get(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        params={"has_coordinates": "false"},
+    )
+
+    assert unmapped_response.status_code == 200
+    unmapped_items = unmapped_response.json()["data"]["items"]
+    assert len(unmapped_items) == 1
+    assert unmapped_items[0]["title"] == "Desk note"

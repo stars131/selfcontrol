@@ -6,6 +6,7 @@ import type {
   MediaAsset,
   NotificationItem,
   ProviderFeatureConfig,
+  LocationFilterState,
   RecordItem,
   ReminderItem,
   ShareLinkItem,
@@ -128,8 +129,30 @@ export async function createWorkspace(
   );
 }
 
-export async function listRecords(token: string, workspaceId: string) {
-  return request<{ items: RecordItem[] }>(`/workspaces/${workspaceId}/records`, { method: "GET" }, token);
+export async function listRecords(
+  token: string,
+  workspaceId: string,
+  params?: Partial<LocationFilterState>,
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.placeQuery?.trim()) {
+    searchParams.set("location_query", params.placeQuery.trim());
+  }
+  if (params?.reviewStatus && params.reviewStatus !== "all") {
+    searchParams.set("review_status", params.reviewStatus);
+  }
+  if (params?.mappedOnly === "mapped") {
+    searchParams.set("has_coordinates", "true");
+  }
+  if (params?.mappedOnly === "unmapped") {
+    searchParams.set("has_coordinates", "false");
+  }
+
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/records?${query}`
+    : `/workspaces/${workspaceId}/records`;
+  return request<{ items: RecordItem[] }>(path, { method: "GET" }, token);
 }
 
 export async function getTimeline(

@@ -17,12 +17,58 @@ from app.services.location_review import prepare_record_extra_data
 router = APIRouter()
 
 
+def _read_location(record: Record) -> dict[str, object]:
+    if not isinstance(record.extra_data, dict):
+        return {}
+    location = record.extra_data.get("location")
+    return location if isinstance(location, dict) else {}
+
+
+def _has_coordinates(record: Record) -> bool:
+    location = _read_location(record)
+    latitude = location.get("latitude")
+    longitude = location.get("longitude")
+    return isinstance(latitude, (int, float)) and isinstance(longitude, (int, float))
+
+
+def _matches_location_query(record: Record, location_query: str) -> bool:
+    query = location_query.strip().lower()
+    if not query:
+        return True
+
+    location = _read_location(record)
+    haystacks = [
+        location.get("place_name"),
+        location.get("address"),
+    ]
+    return any(isinstance(value, str) and query in value.lower() for value in haystacks)
+
+
+def _matches_review_status(record: Record, review_status: str) -> bool:
+    normalized = review_status.strip().lower()
+    if not normalized:
+        return True
+
+    if not isinstance(record.extra_data, dict):
+        return normalized == "pending"
+
+    review = record.extra_data.get("location_review")
+    if not isinstance(review, dict):
+        return normalized == "pending"
+
+    status = review.get("status")
+    return isinstance(status, str) and status.lower() == normalized
+
+
 @router.get("/{workspace_id}/records")
 def list_records(
     workspace_id: str,
     q: str | None = Query(default=None),
     type_code: str | None = Query(default=None),
     is_avoid: bool | None = Query(default=None),
+    location_query: str | None = Query(default=None),
+    review_status: str | None = Query(default=None),
+    has_coordinates: bool | None = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
@@ -37,6 +83,13 @@ def list_records(
         query = query.filter(Record.is_avoid == is_avoid)
 
     records = query.order_by(Record.created_at.desc()).all()
+    if location_query:
+        records = [record for record in records if _matches_location_query(record, location_query)]
+    if review_status:
+        records = [record for record in records if _matches_review_status(record, review_status)]
+    if has_coordinates is not None:
+        records = [record for record in records if _has_coordinates(record) is has_coordinates]
+
     return {
         "success": True,
         "data": {"items": [RecordRead.model_validate(record).model_dump() for record in records]},

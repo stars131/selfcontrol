@@ -12,7 +12,6 @@ import {
   deleteReminder,
   getKnowledgeStats,
   getMediaStatus,
-  getTimeline,
   listAuditLogs,
   listConversations,
   listMedia,
@@ -41,6 +40,7 @@ import type {
   KnowledgeStats,
   MediaAsset,
   NotificationItem,
+  LocationFilterState,
   ProviderFeatureConfig,
   RecordItem,
   ReminderItem,
@@ -52,6 +52,11 @@ import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
+  const initialLocationFilter: LocationFilterState = {
+    placeQuery: "",
+    reviewStatus: "all",
+    mappedOnly: "all",
+  };
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [records, setRecords] = useState<RecordItem[]>([]);
@@ -69,22 +74,22 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [shareLinks, setShareLinks] = useState<ShareLinkItem[]>([]);
   const [latestSharePath, setLatestSharePath] = useState("");
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
+  const [locationFilter, setLocationFilter] = useState<LocationFilterState>(initialLocationFilter);
+  const [filteringRecords, setFilteringRecords] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const refreshTimeline = async (activeToken: string) => {
-    const result = await getTimeline(activeToken, workspaceId);
-    setTimelineDays(result.items);
-  };
-
-  const refreshRecords = async (activeToken: string) => {
-    const result = await listRecords(activeToken, workspaceId);
+  const refreshRecords = async (
+    activeToken: string,
+    nextLocationFilter: LocationFilterState = initialLocationFilter,
+  ) => {
+    const result = await listRecords(activeToken, workspaceId, nextLocationFilter);
     setRecords(result.items);
     setVisibleRecords(result.items);
+    setTimelineDays(buildTimelineDays(result.items));
     setSelectedRecordId((current) =>
       current && result.items.some((item) => item.id === current) ? current : result.items[0]?.id ?? null,
     );
-    await refreshTimeline(activeToken);
   };
 
   const refreshMedia = async (activeToken: string, recordId: string | null) => {
@@ -150,7 +155,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const load = async () => {
       try {
         setToken(activeToken);
-        await refreshRecords(activeToken);
+        await refreshRecords(activeToken, initialLocationFilter);
 
         const conversationResult = await listConversations(activeToken, workspaceId);
         let items = conversationResult.items;
@@ -216,7 +221,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
 
     const mode = String(result.assistant_message.metadata_json.mode ?? "");
     if (mode === "create") {
-      await refreshRecords(token);
+      await refreshRecords(token, locationFilter);
       await refreshKnowledge(token);
       await refreshAuditLogs(token);
       if (result.records[0]) {
@@ -271,7 +276,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         is_avoid: input.is_avoid,
         extra_data: input.extra_data,
       });
-      await refreshRecords(token);
+      await refreshRecords(token, locationFilter);
       await refreshKnowledge(token);
       await refreshAuditLogs(token);
       setSelectedRecordId(input.recordId);
@@ -288,7 +293,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       source_type: "manual",
       extra_data: input.extra_data,
     });
-    await refreshRecords(token);
+    await refreshRecords(token, locationFilter);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
     setSelectedRecordId(result.record.id);
@@ -301,7 +306,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await deleteRecord(token, workspaceId, recordId);
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
-    await refreshRecords(token);
+    await refreshRecords(token, locationFilter);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -338,7 +343,21 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
-    await refreshRecords(token);
+    setLocationFilter(initialLocationFilter);
+    await refreshRecords(token, initialLocationFilter);
+  };
+
+  const handleApplyLocationFilter = async (nextFilter: LocationFilterState) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    setFilteringRecords(true);
+    setLocationFilter(nextFilter);
+    try {
+      await refreshRecords(token, nextFilter);
+    } finally {
+      setFilteringRecords(false);
+    }
   };
 
   const handleCreateReminder = async (input: {
@@ -515,7 +534,10 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onDeleteRecord={handleDeleteRecord}
           onDeleteReminder={handleDeleteReminder}
           onRefreshMediaStatus={handleRefreshMediaStatus}
+          onApplyLocationFilter={handleApplyLocationFilter}
           onResetFilter={handleResetFilter}
+          filteringRecords={filteringRecords}
+          locationFilter={locationFilter}
           onRetryMedia={handleRetryMedia}
           onSaveRecord={handleSaveRecord}
           onSelectRecord={setSelectedRecordId}

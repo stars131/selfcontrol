@@ -7,6 +7,7 @@ import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
 import type {
+  LocationFilterState,
   LocationHistoryEntry,
   LocationReview,
   MediaAsset,
@@ -175,9 +176,12 @@ export function RecordPanelV2({
   onDeleteReminder,
   onDeleteRecord,
   onRefreshMediaStatus,
+  onApplyLocationFilter,
   onRetryMedia,
   onUploadMedia,
   onResetFilter,
+  locationFilter,
+  filteringRecords,
 }: {
   authToken: string | null;
   workspaceId: string;
@@ -217,9 +221,12 @@ export function RecordPanelV2({
   onDeleteReminder: (reminderId: string) => Promise<void>;
   onDeleteRecord: (recordId: string) => Promise<void>;
   onRefreshMediaStatus: (mediaId: string) => Promise<void>;
+  onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>;
   onRetryMedia: (mediaId: string) => Promise<void>;
   onUploadMedia: (recordId: string, file: File) => Promise<void>;
   onResetFilter: () => Promise<void>;
+  locationFilter: LocationFilterState;
+  filteringRecords: boolean;
 }) {
   const avoidCount = records.filter((record) => record.is_avoid).length;
   const foodCount = records.filter((record) => record.type_code === "food").length;
@@ -563,6 +570,9 @@ export function RecordPanelV2({
           records={records}
           selectedRecordId={selectedRecordId}
           onSelectRecord={onSelectRecord}
+          filteringRecords={filteringRecords}
+          locationFilter={locationFilter}
+          onApplyLocationFilter={onApplyLocationFilter}
           draftLocation={form.location}
           onDraftLocationChange={(nextLocation) =>
             setForm((prev) => ({

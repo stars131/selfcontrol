@@ -60,6 +60,12 @@ export type LocationHistoryEntry = {
   source: string | null;
 };
 
+export type LocationFilterState = {
+  placeQuery: string;
+  reviewStatus: "all" | "pending" | "confirmed" | "needs_review";
+  mappedOnly: "all" | "mapped" | "unmapped";
+};
+
 export type TimelineDay = {
   date: string;
   count: number;
