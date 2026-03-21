@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import type { RecordItem } from "../lib/types";
+import { readLocationReview } from "../lib/location";
 
 type AMapMapInstance = {
   clearMap?: () => void;
@@ -253,6 +254,14 @@ export function MapPanel({
   const [searchQuery, setSearchQuery] = useState("");
   const amapKey = process.env.NEXT_PUBLIC_AMAP_KEY;
   const mappedRecords = useMemo(() => parseMappedRecords(records), [records]);
+  const confirmedCount = useMemo(
+    () => records.filter((record) => readLocationReview(record.extra_data)?.status === "confirmed").length,
+    [records],
+  );
+  const needsReviewCount = useMemo(
+    () => records.filter((record) => readLocationReview(record.extra_data)?.status === "needs_review").length,
+    [records],
+  );
   const draftCoordinates = parseDraftCoordinates(draftLocation);
   const isEditable = Boolean(onDraftLocationChange);
 
@@ -446,6 +455,11 @@ export function MapPanel({
         {isEditable
           ? "Search an address or click the map to fill place details for the current record."
           : "Records with latitude and longitude appear here."}
+      </div>
+      <div className="tag-row">
+        <span className="tag">{mappedRecords.length} mapped</span>
+        <span className="tag">{confirmedCount} confirmed</span>
+        <span className="tag">{needsReviewCount} need review</span>
       </div>
       {isEditable ? (
         <form className="composer" style={{ marginTop: 12 }} onSubmit={handleSearch}>

@@ -31,6 +31,35 @@ export type RecordItem = {
   updated_at: string;
 };
 
+export type LocationInfo = {
+  place_name: string;
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  source: string;
+};
+
+export type LocationReview = {
+  status: string;
+  note?: string | null;
+  updated_at?: string | null;
+  updated_by?: string | null;
+  confirmed_at?: string | null;
+};
+
+export type LocationHistoryEntry = {
+  changed_at: string;
+  changed_by: string;
+  action_code: string;
+  review_status: string | null;
+  review_note: string | null;
+  place_name: string | null;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  source: string | null;
+};
+
 export type TimelineDay = {
   date: string;
   count: number;

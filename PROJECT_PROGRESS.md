@@ -47,11 +47,17 @@ Last updated: 2026-03-21
   - right-side structured panel now supports timeline and flat-list view switching
   - chat search results also project into grouped timeline cards instead of only a flat list
   - backend timeline API behavior is covered by dedicated tests
+- Map Review and Location History V1:
+  - record saves now normalize location payloads and preserve other `extra_data` keys
+  - location changes automatically create a bounded history trail inside the record metadata
+  - review state supports `pending`, `confirmed`, and `needs_review` with confirmation timestamps
+  - record editor now exposes location review controls and recent correction history
+  - map panel shows mapped / confirmed / needs-review counts for faster workspace triage
 
 ## Next
-- Stronger map review flows and location correction history
 - Media preview and richer metadata extraction
 - Security hardening: audit logs, share permission boundaries, secret management
+- Location-aware filtering and richer map drill-down
 
 ## Delivery Rule
 - Every meaningful slice must update this file

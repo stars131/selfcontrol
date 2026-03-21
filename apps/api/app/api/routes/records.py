@@ -11,6 +11,7 @@ from app.models.user import User
 from app.schemas.record import RecordCreate, RecordRead, RecordUpdate
 from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
+from app.services.location_review import prepare_record_extra_data
 
 
 router = APIRouter()
@@ -50,6 +51,11 @@ def create_record(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
+    extra_data, location_changed, review_changed = prepare_record_extra_data(
+        existing_extra_data=None,
+        incoming_extra_data=payload.extra_data,
+        actor_user_id=current_user.id,
+    )
     record = Record(
         workspace_id=workspace_id,
         creator_id=current_user.id,
@@ -60,7 +66,7 @@ def create_record(
         is_avoid=payload.is_avoid,
         occurred_at=payload.occurred_at,
         source_type=payload.source_type,
-        extra_data=payload.extra_data,
+        extra_data=extra_data,
     )
     db.add(record)
     db.commit()
@@ -75,7 +81,13 @@ def create_record(
         resource_type="record",
         resource_id=record.id,
         message=f"Created record {record.title or record.id}",
-        metadata_json={"type_code": record.type_code, "source_type": record.source_type},
+        metadata_json={
+            "type_code": record.type_code,
+            "source_type": record.source_type,
+            "has_location": bool(extra_data.get("location")),
+            "location_changed": location_changed,
+            "location_review_changed": review_changed,
+        },
     )
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
@@ -107,7 +119,17 @@ def update_record(
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
 
-    for field, value in payload.model_dump(exclude_unset=True).items():
+    payload_data = payload.model_dump(exclude_unset=True)
+    location_changed = False
+    review_changed = False
+    if "extra_data" in payload_data:
+        payload_data["extra_data"], location_changed, review_changed = prepare_record_extra_data(
+            existing_extra_data=record.extra_data,
+            incoming_extra_data=payload_data.get("extra_data"),
+            actor_user_id=current_user.id,
+        )
+
+    for field, value in payload_data.items():
         setattr(record, field, value)
 
     db.add(record)
@@ -123,7 +145,12 @@ def update_record(
         resource_type="record",
         resource_id=record.id,
         message=f"Updated record {record.title or record.id}",
-        metadata_json={"status": record.status, "is_avoid": record.is_avoid},
+        metadata_json={
+            "status": record.status,
+            "is_avoid": record.is_avoid,
+            "location_changed": location_changed,
+            "location_review_changed": review_changed,
+        },
     )
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 

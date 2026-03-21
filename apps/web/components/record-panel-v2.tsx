@@ -3,7 +3,15 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { MapPanel, type LocationDraft } from "./map-panel";
-import type { MediaAsset, RecordItem, ReminderItem, TimelineDay } from "../lib/types";
+import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
+import type {
+  LocationHistoryEntry,
+  LocationReview,
+  MediaAsset,
+  RecordItem,
+  ReminderItem,
+  TimelineDay,
+} from "../lib/types";
 
 type RecordFormState = {
   title: string;
@@ -19,6 +27,11 @@ type ReminderFormState = {
   title: string;
   message: string;
   remind_at: string;
+};
+
+type LocationReviewFormState = {
+  status: string;
+  note: string;
 };
 
 type ViewMode = "timeline" | "list";
@@ -46,21 +59,21 @@ function createEmptyForm(): RecordFormState {
 }
 
 function readLocation(record: RecordItem | null): LocationDraft {
-  const raw = record?.extra_data?.location;
-  const location = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
-
+  const location = readLocationInfo(record?.extra_data);
   return {
-    place_name: typeof location.place_name === "string" ? location.place_name : "",
-    address: typeof location.address === "string" ? location.address : "",
-    latitude:
-      typeof location.latitude === "number" || typeof location.latitude === "string"
-        ? String(location.latitude)
-        : "",
-    longitude:
-      typeof location.longitude === "number" || typeof location.longitude === "string"
-        ? String(location.longitude)
-        : "",
-    source: typeof location.source === "string" ? location.source : "manual",
+    place_name: location.place_name,
+    address: location.address,
+    latitude: location.latitude === null ? "" : String(location.latitude),
+    longitude: location.longitude === null ? "" : String(location.longitude),
+    source: location.source,
+  };
+}
+
+function readLocationReviewForm(record: RecordItem | null): LocationReviewFormState {
+  const review = readLocationReview(record?.extra_data);
+  return {
+    status: review?.status || "pending",
+    note: review?.note || "",
   };
 }
 
@@ -98,6 +111,16 @@ function formatTimelineDate(value: string): string {
   }).format(date);
 }
 
+function formatReviewStatus(value?: string | null): string {
+  if (value === "confirmed") {
+    return "confirmed";
+  }
+  if (value === "needs_review") {
+    return "needs review";
+  }
+  return "pending";
+}
+
 function createEmptyReminderForm(): ReminderFormState {
   return {
     title: "",
@@ -109,6 +132,30 @@ function createEmptyReminderForm(): ReminderFormState {
 function formatReminderTimestamp(value: string): string {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
+
+function formatHistoryTimestamp(value?: string | null): string {
+  if (!value) {
+    return "Unknown time";
+  }
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
+
+function summarizeHistoryAction(entry: LocationHistoryEntry): string {
+  if (entry.action_code === "set") {
+    return "Initial location saved";
+  }
+  if (entry.action_code === "moved") {
+    return "Location corrected";
+  }
+  if (entry.action_code === "removed") {
+    return "Location removed";
+  }
+  if (entry.action_code === "review") {
+    return "Review status updated";
+  }
+  return entry.action_code;
 }
 
 export function RecordPanelV2({
@@ -184,12 +231,28 @@ export function RecordPanelV2({
   const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
   const [savingReminder, setSavingReminder] = useState(false);
+  const [locationReviewForm, setLocationReviewForm] = useState<LocationReviewFormState>({
+    status: "pending",
+    note: "",
+  });
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [error, setError] = useState("");
+  const selectedLocationReview = useMemo<LocationReview | null>(
+    () => readLocationReview(selectedRecord?.extra_data),
+    [selectedRecord],
+  );
+  const selectedLocationHistory = useMemo(
+    () => readLocationHistory(selectedRecord?.extra_data).slice().reverse(),
+    [selectedRecord],
+  );
 
   useEffect(() => {
     if (!selectedRecord) {
       setForm(createEmptyForm());
+      setLocationReviewForm({
+        status: "pending",
+        note: "",
+      });
       return;
     }
 
@@ -202,6 +265,7 @@ export function RecordPanelV2({
       is_avoid: selectedRecord.is_avoid,
       location: readLocation(selectedRecord),
     });
+    setLocationReviewForm(readLocationReviewForm(selectedRecord));
   }, [selectedRecord]);
 
   useEffect(() => {
@@ -263,8 +327,15 @@ export function RecordPanelV2({
                 longitude: longitude ?? undefined,
                 source: form.location.source || "manual",
               },
+              location_review: {
+                status: locationReviewForm.status || "pending",
+                note: locationReviewForm.note.trim() || undefined,
+              },
             }
-          : {},
+          : {
+              location: null,
+              location_review: null,
+            },
       });
 
       if (!selectedRecord) {
@@ -367,6 +438,7 @@ export function RecordPanelV2({
 
   const renderRecordCard = (record: RecordItem) => {
     const location = readLocation(record);
+    const review = readLocationReview(record.extra_data);
 
     return (
       <article
@@ -392,6 +464,9 @@ export function RecordPanelV2({
           <span className="tag">{record.status}</span>
           {record.rating ? <span className="tag">rating {record.rating}</span> : null}
           {record.is_avoid ? <span className="tag">avoid</span> : null}
+          {location.latitude && location.longitude ? (
+            <span className="tag">map {formatReviewStatus(review?.status)}</span>
+          ) : null}
         </div>
       </article>
     );
@@ -582,6 +657,147 @@ export function RecordPanelV2({
               <span className="field-label">Location source</span>
               <input className="input" disabled value={form.location.source || "manual"} />
             </label>
+          </div>
+          <div className="record-card form-stack">
+            <div className="eyebrow">Location Review</div>
+            <div className="muted">
+              Confirm trusted coordinates or flag doubtful places before this record enters long-term memory.
+            </div>
+            <div className="inline-fields">
+              <label className="field">
+                <span className="field-label">Review status</span>
+                <select
+                  className="input"
+                  value={locationReviewForm.status}
+                  onChange={(event) =>
+                    setLocationReviewForm((prev) => ({
+                      ...prev,
+                      status: event.target.value,
+                    }))
+                  }
+                >
+                  <option value="pending">pending</option>
+                  <option value="confirmed">confirmed</option>
+                  <option value="needs_review">needs_review</option>
+                </select>
+              </label>
+              <label className="field" style={{ gridColumn: "span 2" }}>
+                <span className="field-label">Review note</span>
+                <input
+                  className="input"
+                  value={locationReviewForm.note}
+                  onChange={(event) =>
+                    setLocationReviewForm((prev) => ({
+                      ...prev,
+                      note: event.target.value,
+                    }))
+                  }
+                  placeholder="Why this place is trusted or needs another check"
+                />
+              </label>
+            </div>
+            <div className="action-row">
+              <button
+                className="button secondary"
+                type="button"
+                onClick={() =>
+                  setLocationReviewForm((prev) => ({
+                    ...prev,
+                    status: "confirmed",
+                  }))
+                }
+              >
+                Mark confirmed
+              </button>
+              <button
+                className="button secondary"
+                type="button"
+                onClick={() =>
+                  setLocationReviewForm((prev) => ({
+                    ...prev,
+                    status: "needs_review",
+                  }))
+                }
+              >
+                Mark needs review
+              </button>
+              <button
+                className="button secondary"
+                type="button"
+                onClick={() =>
+                  setLocationReviewForm({
+                    status: "pending",
+                    note: "",
+                  })
+                }
+              >
+                Reset review
+              </button>
+            </div>
+            {selectedRecord && selectedLocationReview ? (
+              <div className="detail-grid">
+                <div className="subtle-card">
+                  <div className="eyebrow">Stored status</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {formatReviewStatus(selectedLocationReview.status)}
+                  </div>
+                </div>
+                <div className="subtle-card">
+                  <div className="eyebrow">Last updated</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {formatHistoryTimestamp(selectedLocationReview.updated_at)}
+                  </div>
+                </div>
+                <div className="subtle-card">
+                  <div className="eyebrow">Confirmed at</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>
+                    {selectedLocationReview.confirmed_at
+                      ? formatHistoryTimestamp(selectedLocationReview.confirmed_at)
+                      : "Not confirmed"}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {selectedRecord ? (
+              <div className="history-list">
+                {selectedLocationHistory.length ? (
+                  selectedLocationHistory.slice(0, 6).map((entry) => (
+                    <article className="history-item" key={`${entry.changed_at}-${entry.action_code}`}>
+                      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                          <div className="eyebrow">{summarizeHistoryAction(entry)}</div>
+                          <div style={{ marginTop: 8, fontWeight: 600 }}>
+                            {entry.place_name || entry.address || "Unnamed location"}
+                          </div>
+                        </div>
+                        <div className="muted">{formatHistoryTimestamp(entry.changed_at)}</div>
+                      </div>
+                      <div className="muted" style={{ marginTop: 8 }}>
+                        {entry.address || "No address"}
+                      </div>
+                      {(entry.latitude ?? null) !== null && (entry.longitude ?? null) !== null ? (
+                        <div className="muted" style={{ marginTop: 8 }}>
+                          {entry.latitude}, {entry.longitude}
+                        </div>
+                      ) : null}
+                      <div className="tag-row">
+                        {entry.source ? <span className="tag">{entry.source}</span> : null}
+                        {entry.review_status ? <span className="tag">{formatReviewStatus(entry.review_status)}</span> : null}
+                      </div>
+                      {entry.review_note ? (
+                        <div className="muted" style={{ marginTop: 8 }}>
+                          {entry.review_note}
+                        </div>
+                      ) : null}
+                    </article>
+                  ))
+                ) : (
+                  <div className="notice">
+                    No location history yet. Save a mapped point to start review tracking.
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
           {error ? <div className="notice error">{error}</div> : null}
           <div className="action-row">

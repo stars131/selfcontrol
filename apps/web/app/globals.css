@@ -270,6 +270,25 @@ button:disabled {
   font-weight: 600;
 }
 
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.subtle-card,
+.history-item {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 248, 237, 0.62);
+  padding: 14px;
+}
+
+.history-list {
+  display: grid;
+  gap: 10px;
+}
+
 .notice {
   padding: 12px 14px;
   border-radius: 14px;
@@ -293,6 +312,10 @@ button:disabled {
   }
 
   .inline-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
     grid-template-columns: 1fr;
   }
 }
