@@ -246,9 +246,16 @@ Last updated: 2026-03-22
   - the structured results header, stats cards, advanced search controls, and saved-filter actions now render clean locale-aware operator copy
   - the manual record editor now localizes record fields, location review controls, attachment upload prompts, and storage summary labels
   - media overview cards now use locale-aware labels for queue state, storage mix, and missing-file health summaries while keeping existing behavior unchanged
+- Structured Results Reminder and Timeline Locale Cleanup V1:
+  - the structured results panel now localizes reminder creation, reminder state labels, timeline view toggles, and empty-state guidance
+  - record-card timestamps, reminder timestamps, timeline day formatting, and history timestamps now follow the active UI locale consistently
+  - remaining reminder, filter-summary, and record-card helper strings are now centralized inside the record panel instead of being spread across inline literals
 
 ## Next
 - Continue the next product slice
+- Maintainability and Updateability Hardening V1:
+  - extract oversized record-panel locale and formatting helpers into dedicated modules with clear ownership boundaries
+  - add lightweight regression checks for key locale paths and critical UI formatting so future updates do not silently reintroduce broken copy
 
 ## Delivery Rule
 - Every meaningful slice must update this file
