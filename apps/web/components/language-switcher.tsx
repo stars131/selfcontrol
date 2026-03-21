@@ -2,6 +2,12 @@
 
 import { LOCALE_OPTIONS, type LocaleCode } from "../lib/locale";
 
+const LABEL_BY_LOCALE: Record<LocaleCode, string> = {
+  "zh-CN": "语言",
+  en: "Language",
+  ja: "言語",
+};
+
 export function LanguageSwitcher({
   locale,
   onChange,
@@ -11,7 +17,7 @@ export function LanguageSwitcher({
 }) {
   return (
     <label className="locale-switcher">
-      <span className="field-label">Language</span>
+      <span className="field-label">{LABEL_BY_LOCALE[locale]}</span>
       <select
         className="input"
         value={locale}

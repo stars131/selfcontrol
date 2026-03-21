@@ -26,9 +26,9 @@ import type {
   WorkspaceMemberItem,
 } from "../lib/types";
 import { LanguageSwitcher } from "./language-switcher";
+import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { WorkspaceExportCard } from "./workspace-export-card";
 import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";
-import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
 
 const COPY: Record<
@@ -63,9 +63,9 @@ const COPY: Record<
   "zh-CN": {
     eyebrow: "设置",
     title: "工作区设置",
-    subtitle: "管理当前工作区的 AI Provider、API 接入方式和成员权限。",
+    subtitle: "管理当前工作区的 AI 提供商、API 接入方式和成员权限。",
     back: "返回工作区",
-    providerTitle: "AI Provider",
+    providerTitle: "AI Providers",
     apiTitle: "API 接入",
     apiDescription:
       "浏览器端只保存 provider 选择、模型名、API Base URL 和环境变量名，真正的密钥只保存在服务端环境变量中。",
@@ -117,18 +117,18 @@ const COPY: Record<
   ja: {
     eyebrow: "設定",
     title: "ワークスペース設定",
-    subtitle: "このワークスペースの AI Provider、API 接続、メンバー権限を管理します。",
+    subtitle: "このワークスペースの AI Provider、API 連携、メンバー権限を管理します。",
     back: "ワークスペースへ戻る",
     providerTitle: "AI Providers",
     apiTitle: "API 連携",
     apiDescription:
-      "ブラウザには provider 選択、モデル名、API Base URL、環境変数名のみを保存し、実際の秘密鍵はサーバー環境変数に保持します。",
+      "ブラウザには provider の選択、モデル名、API Base URL、環境変数名のみを保存し、実際の秘密情報はサーバー側環境変数に保持します。",
     apiBaseLabel: "現在のフロントエンド API Base URL",
     mapKeyLabel: "AMap キー状態",
     mapKeyReady: "設定済み",
     mapKeyMissing: "未設定",
     knowledgeTitle: "ナレッジ状態",
-    browserKeyNote: "ブラウザ側の地図キーはローカルまたはデプロイ環境変数にのみ保存され、ワークスペース設定には保存されません。",
+    browserKeyNote: "ブラウザ用の地図キーはローカルまたはデプロイ環境変数にのみ保存され、ワークスペース設定には保存されません。",
     viewerNotice: "Viewer は読み取り専用です。ワークスペース設定は owner と editor のみ利用できます。",
     membersTitle: "ワークスペースメンバー",
     membersDescription: "Owner は non-owner の権限変更と削除ができ、editor は一覧確認のみ可能です。",
@@ -138,7 +138,7 @@ const COPY: Record<
     joinedLabel: "参加日時",
     removeLabel: "メンバー削除",
     removingLabel: "削除中...",
-    ownerProtected: "Owner メンバーは保護されており、ここでは変更・削除できません。",
+    ownerProtected: "Owner メンバーは保護されており、ここでは変更や削除はできません。",
     loading: "設定を読み込み中...",
   },
 };
@@ -444,7 +444,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
                               {member.display_name || member.email || member.user_id}
                             </div>
                             <div className="muted" style={{ marginTop: 8 }}>
-                              {copy.joinedLabel} {new Date(member.created_at).toLocaleString()}
+                              {copy.joinedLabel} {new Date(member.created_at).toLocaleString(locale)}
                             </div>
                           </div>
                           <div style={{ minWidth: 220 }}>

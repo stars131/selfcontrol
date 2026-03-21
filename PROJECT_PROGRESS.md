@@ -230,9 +230,13 @@ Last updated: 2026-03-22
   - dead-letter summary chips now use readable issue and retry labels, while retry and settings actions follow the current UI language
   - provider settings now expose quick section jumps, unsaved-change badges, reset actions, and save-button gating so operators can review and stage config edits more safely
   - provider settings and embedded chat-side provider controls now share the same locale-aware operator copy and continue to pass frontend type-checking alongside the existing backend regression suite
+- Workspace Settings Locale Text Cleanup V1:
+  - the workspace settings page now uses cleaner Chinese and Japanese operator copy for provider, API, member, and browser-key explanations
+  - member joined-time rendering on the settings page now respects the active UI locale instead of using the browser default only
+  - the shared language switcher now labels itself in the currently selected language (`语言`, `Language`, `言語`) for clearer cross-language navigation
 
 ## Next
-- Workspace settings locale text cleanup
+- Control-center locale text cleanup
 
 ## Delivery Rule
 - Every meaningful slice must update this file
