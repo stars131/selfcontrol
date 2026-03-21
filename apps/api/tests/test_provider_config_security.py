@@ -225,6 +225,28 @@ def test_media_storage_health_reports_custom_capabilities(monkeypatch) -> None:
     assert health["capabilities"]["delete"] is False
 
 
+def test_media_storage_config_persists_options_json(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": "https://storage.example.test/api",
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {
+                "fallback_to_local_on_upload_failure": True,
+            },
+        },
+    )
+
+    assert response.status_code == 200
+    config = response.json()["data"]["config"]
+    assert config["options_json"]["fallback_to_local_on_upload_failure"] is True
+
+
 def test_media_storage_config_requires_service_root_base_url(monkeypatch) -> None:
     client, workspace_id = build_provider_config_client(monkeypatch)
 

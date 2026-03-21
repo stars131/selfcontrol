@@ -80,6 +80,7 @@ export function ChatPanel({
       is_enabled: boolean;
       api_base_url?: string | null;
       api_key_env_name?: string | null;
+      options_json?: Record<string, unknown>;
     },
   ) => Promise<void>;
   onSyncNotifications: () => Promise<void>;

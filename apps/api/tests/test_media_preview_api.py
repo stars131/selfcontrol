@@ -23,7 +23,11 @@ from app.models.record import Record
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
 from app.services import media_remote_storage as media_remote_storage_service
-from app.services.media_remote_storage import RemoteMediaContentResult, RemoteMediaUploadResult
+from app.services.media_remote_storage import (
+    RemoteMediaContentResult,
+    RemoteMediaUploadAttemptResult,
+    RemoteMediaUploadResult,
+)
 from app.services.provider_configs import ProviderFeatureConfig
 
 
@@ -677,13 +681,16 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
     upload_calls: list[tuple[str, str, str]] = []
     delete_calls: list[str] = []
 
-    async def fake_remote_upload(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
+    async def fake_remote_upload_attempt(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
         upload_calls.append((workspace_id, record_id, filename))
-        return RemoteMediaUploadResult(
-            storage_provider="custom",
-            storage_key=f"remote/{workspace_id}/{filename}",
-            size_bytes=len(content),
-            metadata_json={"remote_storage_mode": "custom_webhook"},
+        return RemoteMediaUploadAttemptResult(
+            remote_upload=RemoteMediaUploadResult(
+                storage_provider="custom",
+                storage_key=f"remote/{workspace_id}/{filename}",
+                size_bytes=len(content),
+                metadata_json={"remote_storage_mode": "custom_webhook"},
+            ),
+            fallback_used=False,
         )
 
     def fake_remote_download(db, media: MediaAsset) -> RemoteMediaContentResult:
@@ -692,7 +699,7 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
     def fake_remote_delete(db, media: MediaAsset) -> None:
         delete_calls.append(media.storage_key)
 
-    monkeypatch.setattr(media_route, "upload_media_via_provider", fake_remote_upload)
+    monkeypatch.setattr(media_route, "attempt_media_upload_via_provider", fake_remote_upload_attempt)
     monkeypatch.setattr(media_route, "download_remote_media_via_provider", fake_remote_download)
     monkeypatch.setattr(media_route, "delete_remote_media_via_provider", fake_remote_delete)
     def fake_processing_download(db, media):
@@ -735,18 +742,21 @@ def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatc
 def test_custom_remote_text_upload_is_processed_and_searchable(tmp_path, monkeypatch) -> None:
     client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
 
-    async def fake_remote_upload(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
-        return RemoteMediaUploadResult(
-            storage_provider="custom",
-            storage_key=f"remote/{workspace_id}/{filename}",
-            size_bytes=len(content),
-            metadata_json={"remote_storage_mode": "custom_webhook"},
+    async def fake_remote_upload_attempt(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
+        return RemoteMediaUploadAttemptResult(
+            remote_upload=RemoteMediaUploadResult(
+                storage_provider="custom",
+                storage_key=f"remote/{workspace_id}/{filename}",
+                size_bytes=len(content),
+                metadata_json={"remote_storage_mode": "custom_webhook"},
+            ),
+            fallback_used=False,
         )
 
     def fake_remote_download(db, media: MediaAsset) -> RemoteMediaContentResult:
         return RemoteMediaContentResult(content=b"best noodle note", media_type="text/plain")
 
-    monkeypatch.setattr(media_route, "upload_media_via_provider", fake_remote_upload)
+    monkeypatch.setattr(media_route, "attempt_media_upload_via_provider", fake_remote_upload_attempt)
     monkeypatch.setattr("app.services.media_processing.download_remote_media_to_temp_file", lambda db, media: (tmp_path / "tmp" / "remote.txt"))
 
     temp_remote_file = tmp_path / "tmp" / "remote.txt"
@@ -846,6 +856,81 @@ def test_custom_remote_storage_service_uses_workspace_provider_config(tmp_path, 
         content_result = media_remote_storage_service.download_remote_media_via_provider(db, media)
         assert content_result.content == b"fetched"
         media_remote_storage_service.delete_remote_media_via_provider(db, media)
+
+
+def test_custom_remote_storage_upload_falls_back_to_local_when_enabled(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        db.add(
+            ProviderConfig(
+                workspace_id=workspace_id,
+                feature_code="media_storage",
+                provider_code="custom",
+                is_enabled=True,
+                api_base_url="https://storage.example.test/api",
+                api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+                options_json={"fallback_to_local_on_upload_failure": True},
+            )
+        )
+        db.commit()
+
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    async def fake_perform_upload(config, **kwargs):
+        raise RuntimeError("Remote media upload failed with status 503")
+
+    monkeypatch.setattr(media_remote_storage_service, "_perform_custom_upload", fake_perform_upload)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("fallback-note.txt", b"fallback note", "text/plain")},
+    )
+
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    assert media_payload["storage_provider"] == "local"
+    assert media_payload["metadata_json"]["storage_fallback_mode"] == "remote_to_local"
+    assert media_payload["metadata_json"]["storage_fallback_provider"] == "custom"
+    assert media_payload["metadata_json"]["storage_fallback_reason"] == "Remote media upload failed with status 503"
+    assert media_payload["metadata_json"]["storage_fallback_at"]
+
+    stored_path = tmp_path / media_payload["storage_key"]
+    assert stored_path.exists()
+    assert stored_path.read_bytes() == b"fallback note"
+
+
+def test_custom_remote_storage_upload_returns_502_when_fallback_disabled(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        db.add(
+            ProviderConfig(
+                workspace_id=workspace_id,
+                feature_code="media_storage",
+                provider_code="custom",
+                is_enabled=True,
+                api_base_url="https://storage.example.test/api",
+                api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+                options_json={},
+            )
+        )
+        db.commit()
+
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    async def fake_perform_upload(config, **kwargs):
+        raise RuntimeError("Remote media upload failed with status 503")
+
+    monkeypatch.setattr(media_remote_storage_service, "_perform_custom_upload", fake_perform_upload)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("no-fallback.txt", b"still remote", "text/plain")},
+    )
+
+    assert upload_response.status_code == 502
+    assert upload_response.json()["detail"] == "Remote media upload failed with status 503"
 
 
 def test_custom_remote_storage_upload_enforces_webhook_contract(monkeypatch) -> None:

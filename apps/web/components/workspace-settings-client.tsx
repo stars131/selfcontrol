@@ -226,16 +226,14 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
       is_enabled: boolean;
       api_base_url?: string | null;
       api_key_env_name?: string | null;
+      options_json?: Record<string, unknown>;
     },
   ) => {
     if (!token) {
       throw new Error("Not authenticated");
     }
 
-    const result = await updateProviderConfig(token, workspaceId, featureCode, {
-      ...input,
-      options_json: {},
-    });
+    const result = await updateProviderConfig(token, workspaceId, featureCode, input);
     setProviderConfigs((current) =>
       current.map((item) => (item.feature_code === featureCode ? result.config : item)),
     );

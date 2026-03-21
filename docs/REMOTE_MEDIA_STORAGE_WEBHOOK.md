@@ -171,6 +171,21 @@ SelfControl treats these cases as remote storage failures:
 - negative or non-integer `size_bytes`
 - HTTP status `>= 400` except `404` for delete/content handling above
 
+If the `media_storage` provider config includes:
+
+- `options_json.fallback_to_local_on_upload_failure: true`
+
+then upload failures from a custom remote storage provider are allowed to fall back to
+local disk storage for that upload attempt. In that case the saved media metadata records:
+
+- `storage_fallback_mode: remote_to_local`
+- `storage_fallback_reason`
+- `storage_fallback_provider`
+- `storage_fallback_at`
+
+If this option is absent or false, the upload request fails instead of silently switching
+storage backends.
+
 ## Stored Metadata
 
 For accepted upload responses, SelfControl stores:

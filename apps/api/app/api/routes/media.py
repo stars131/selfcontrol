@@ -37,9 +37,9 @@ from app.services.media_storage import (
     summarize_workspace_media_storage,
 )
 from app.services.media_remote_storage import (
+    attempt_media_upload_via_provider,
     delete_remote_media_via_provider,
     download_remote_media_via_provider,
-    upload_media_via_provider,
 )
 from app.services.media_provider import DeferredMediaProcessingError
 
@@ -252,7 +252,7 @@ async def upload_media(
     mime_type = file.content_type or "application/octet-stream"
     media_type = mime_type.split("/")[0]
     try:
-        remote_upload = await upload_media_via_provider(
+        upload_attempt = await attempt_media_upload_via_provider(
             db,
             workspace_id=workspace_id,
             record_id=record_id,
@@ -265,6 +265,7 @@ async def upload_media(
     except RuntimeError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
+    remote_upload = upload_attempt.remote_upload
     if remote_upload is not None:
         media = MediaAsset(
             workspace_id=workspace_id,
@@ -285,6 +286,15 @@ async def upload_media(
         target_name = f"{uuid.uuid4().hex}_{original_filename}"
         target_path = target_dir / target_name
         target_path.write_bytes(content)
+        fallback_metadata: dict[str, str] = {}
+        if upload_attempt.fallback_used:
+            fallback_metadata = {
+                "storage_fallback_mode": "remote_to_local",
+                "storage_fallback_reason": upload_attempt.fallback_reason or "Remote media upload failed",
+                "storage_fallback_provider": upload_attempt.fallback_provider or "custom",
+            }
+            if upload_attempt.fallback_at:
+                fallback_metadata["storage_fallback_at"] = upload_attempt.fallback_at
 
         media = MediaAsset(
             workspace_id=workspace_id,
@@ -296,7 +306,7 @@ async def upload_media(
             original_filename=original_filename,
             mime_type=mime_type,
             size_bytes=len(content),
-            metadata_json={},
+            metadata_json=fallback_metadata,
             processing_status="pending",
         )
     db.add(media)
@@ -316,7 +326,10 @@ async def upload_media(
             "record_id": record_id,
             "media_type": media.media_type,
             "mime_type": media.mime_type,
+            "storage_provider": media.storage_provider,
             "processing_mode": processing_mode,
+            "storage_fallback_used": upload_attempt.fallback_used,
+            "storage_fallback_reason": upload_attempt.fallback_reason,
         },
     )
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}

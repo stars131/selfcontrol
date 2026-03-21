@@ -29,6 +29,15 @@ class RemoteMediaUploadResult:
 
 
 @dataclass
+class RemoteMediaUploadAttemptResult:
+    remote_upload: RemoteMediaUploadResult | None
+    fallback_used: bool
+    fallback_reason: str | None = None
+    fallback_provider: str | None = None
+    fallback_at: str | None = None
+
+
+@dataclass
 class RemoteMediaContentResult:
     content: bytes
     media_type: str | None
@@ -93,6 +102,21 @@ def _build_custom_headers(
     if secret:
         headers["Authorization"] = f"Bearer {secret}"
     return headers
+
+
+def _is_enabled_option(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        return normalized in {"true", "1", "yes", "enabled", "on"}
+    return False
+
+
+def _fallback_to_local_on_upload_failure_enabled(config: ProviderFeatureConfig) -> bool:
+    return _is_enabled_option((config.options_json or {}).get("fallback_to_local_on_upload_failure"))
 
 
 def _coerce_remote_storage_key(value: object) -> str:
@@ -410,19 +434,51 @@ async def upload_media_via_provider(
     mime_type: str,
     content: bytes,
 ) -> RemoteMediaUploadResult | None:
-    config = _get_media_storage_config(db, workspace_id)
-    if not config.is_enabled or config.provider_code in {"", "none", "local"}:
-        return None
-    if config.provider_code != "custom":
-        raise DeferredMediaProcessingError(f"Unsupported media storage provider: {config.provider_code}")
-    return await _perform_custom_upload(
-        config,
+    attempt = await attempt_media_upload_via_provider(
+        db,
         workspace_id=workspace_id,
         record_id=record_id,
         filename=filename,
         mime_type=mime_type,
         content=content,
     )
+    return attempt.remote_upload
+
+
+async def attempt_media_upload_via_provider(
+    db: Session,
+    *,
+    workspace_id: str,
+    record_id: str,
+    filename: str,
+    mime_type: str,
+    content: bytes,
+) -> RemoteMediaUploadAttemptResult:
+    config = _get_media_storage_config(db, workspace_id)
+    if not config.is_enabled or config.provider_code in {"", "none", "local"}:
+        return RemoteMediaUploadAttemptResult(remote_upload=None, fallback_used=False)
+    if config.provider_code != "custom":
+        raise DeferredMediaProcessingError(f"Unsupported media storage provider: {config.provider_code}")
+    try:
+        remote_upload = await _perform_custom_upload(
+            config,
+            workspace_id=workspace_id,
+            record_id=record_id,
+            filename=filename,
+            mime_type=mime_type,
+            content=content,
+        )
+    except RuntimeError as exc:
+        if not _fallback_to_local_on_upload_failure_enabled(config):
+            raise
+        return RemoteMediaUploadAttemptResult(
+            remote_upload=None,
+            fallback_used=True,
+            fallback_reason=str(exc),
+            fallback_provider=config.provider_code,
+            fallback_at=_now_iso(),
+        )
+    return RemoteMediaUploadAttemptResult(remote_upload=remote_upload, fallback_used=False)
 
 
 def download_remote_media_via_provider(db: Session, media: MediaAsset) -> RemoteMediaContentResult:

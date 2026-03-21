@@ -195,9 +195,14 @@ Last updated: 2026-03-21
   - the backend now checks local-vs-remote media storage readiness, secret status, endpoint reachability, reported provider capabilities, and response latency
   - custom remote storage services can now implement `GET /media/health` to advertise upload, download, and delete capability status back to SelfControl
   - provider settings now include a refreshable health card for the `media_storage` feature so remote storage issues can be diagnosed before users upload files
+- Remote Media Provider Fallback and Graceful Degradation V1:
+  - custom remote media uploads can now fall back to local disk storage when `options_json.fallback_to_local_on_upload_failure` is enabled explicitly
+  - fallback uploads persist diagnostic metadata such as fallback mode, provider, failure reason, and timestamp for later troubleshooting
+  - media upload audit events now record the final storage provider and whether a fallback path was used
+  - provider settings now preserve per-feature `options_json` and expose a media-storage fallback toggle instead of discarding feature-specific options on save
 
 ## Next
-- Remote media provider fallback and graceful degradation
+- Remote media provider background retry and recovery policy
 
 ## Delivery Rule
 - Every meaningful slice must update this file

@@ -10,7 +10,14 @@ type ProviderDraft = {
   is_enabled: boolean;
   api_base_url: string;
   api_key_env_name: string;
+  options_json: Record<string, unknown>;
 };
+
+const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
+
+function readBooleanOption(options: Record<string, unknown>, key: string) {
+  return options[key] === true;
+}
 
 export function ProviderSettingsPanel({
   providerConfigs,
@@ -31,6 +38,7 @@ export function ProviderSettingsPanel({
       is_enabled: boolean;
       api_base_url?: string | null;
       api_key_env_name?: string | null;
+      options_json?: Record<string, unknown>;
     },
   ) => Promise<void>;
 }) {
@@ -47,6 +55,7 @@ export function ProviderSettingsPanel({
         is_enabled: item.is_enabled,
         api_base_url: item.api_base_url ?? "",
         api_key_env_name: item.api_key_env_name ?? "",
+        options_json: item.options_json ?? {},
       };
     }
     setProviderDrafts(nextDrafts);
@@ -61,6 +70,7 @@ export function ProviderSettingsPanel({
         is_enabled: current[featureCode]?.is_enabled ?? false,
         api_base_url: current[featureCode]?.api_base_url ?? "",
         api_key_env_name: current[featureCode]?.api_key_env_name ?? "",
+        options_json: current[featureCode]?.options_json ?? {},
         ...patch,
       },
     }));
@@ -81,6 +91,7 @@ export function ProviderSettingsPanel({
         is_enabled: item.is_enabled,
         api_base_url: item.api_base_url || null,
         api_key_env_name: item.api_key_env_name || null,
+        options_json: item.options_json,
       });
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "Save failed";
@@ -161,6 +172,24 @@ export function ProviderSettingsPanel({
                   handleProviderDraftChange(item.feature_code, { api_key_env_name: event.target.value })
                 }
               />
+              {item.feature_code === "media_storage" ? (
+                <label className="muted" style={{ display: "block", marginTop: 10 }}>
+                  <input
+                    checked={readBooleanOption(draftItem.options_json, MEDIA_STORAGE_FALLBACK_OPTION)}
+                    onChange={(event) =>
+                      handleProviderDraftChange(item.feature_code, {
+                        options_json: {
+                          ...draftItem.options_json,
+                          [MEDIA_STORAGE_FALLBACK_OPTION]: event.target.checked,
+                        },
+                      })
+                    }
+                    style={{ marginRight: 8 }}
+                    type="checkbox"
+                  />
+                  Fallback to local storage if remote upload fails
+                </label>
+              ) : null}
               <div className="muted" style={{ marginTop: 8 }}>
                 {item.is_default ? "Using default profile" : "Workspace override saved"}
               </div>
