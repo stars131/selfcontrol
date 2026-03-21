@@ -39,6 +39,10 @@ services:
       RAG_SEARCH_LIMIT: ${RAG_SEARCH_LIMIT}
       PROCESSING_TMP_DIR: /app/storage/tmp
       PROVIDER_REQUEST_TIMEOUT_SECONDS: ${PROVIDER_REQUEST_TIMEOUT_SECONDS}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     ports:
       - "8000:8000"
     depends_on:
@@ -69,6 +73,10 @@ services:
       RAG_SEARCH_LIMIT: ${RAG_SEARCH_LIMIT}
       PROCESSING_TMP_DIR: /app/storage/tmp
       PROVIDER_REQUEST_TIMEOUT_SECONDS: ${PROVIDER_REQUEST_TIMEOUT_SECONDS}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     depends_on:
       - db
       - redis
@@ -84,6 +92,7 @@ services:
     container_name: selfcontrol-web
     environment:
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+      NEXT_PUBLIC_AMAP_KEY: ${NEXT_PUBLIC_AMAP_KEY}
     ports:
       - "3000:3000"
     depends_on:

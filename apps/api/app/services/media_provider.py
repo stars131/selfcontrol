@@ -3,7 +3,6 @@ from __future__ import annotations
 import base64
 import json
 import mimetypes
-import os
 import shutil
 import subprocess
 import tempfile
@@ -15,7 +14,12 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
-from app.services.provider_configs import ProviderFeatureConfig, get_effective_provider_config
+from app.services.provider_configs import (
+    ProviderFeatureConfig,
+    get_effective_provider_config,
+    read_secret_from_env_name,
+    resolve_secret_env_name,
+)
 
 
 IMAGE_PROMPT = (
@@ -63,17 +67,11 @@ def get_effective_api_base_url(config: ProviderFeatureConfig) -> str:
 
 
 def get_secret_for_provider(config: ProviderFeatureConfig) -> str | None:
-    env_name = (config.api_key_env_name or "").strip()
-    if not env_name:
-        if config.provider_code == "openai":
-            env_name = "OPENAI_API_KEY"
-        elif config.provider_code == "openrouter":
-            env_name = "OPENROUTER_API_KEY"
-
+    env_name = resolve_secret_env_name(config)
     if not env_name:
         return None
 
-    secret = os.getenv(env_name, "").strip()
+    secret = read_secret_from_env_name(env_name)
     if not secret:
         raise DeferredMediaProcessingError(f"Required secret environment variable is missing: {env_name}")
     return secret

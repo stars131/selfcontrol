@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import audit_logs, auth, conversations, knowledge, media, notifications, provider_configs, public_shares, records, reminders, search, search_presets, share_links, timeline, workspaces
-from app.core.config import settings
+from app.core.config import settings, validate_runtime_settings
 from app.db.session import create_db_and_tables
 
 
@@ -23,6 +23,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 def on_startup() -> None:
+    validate_runtime_settings()
     if settings.auto_create_tables:
         create_db_and_tables()
 

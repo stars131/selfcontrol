@@ -158,6 +158,18 @@ export function ProviderSettingsPanel({
               <div className="muted" style={{ marginTop: 8 }}>
                 {item.is_default ? "Using default profile" : "Workspace override saved"}
               </div>
+              <div className="tag-row">
+                <span className="tag">
+                  secret {item.secret_status}
+                  {item.secret_env_name ? ` (${item.secret_env_name})` : ""}
+                </span>
+                {item.api_base_url ? <span className="tag">custom endpoint</span> : <span className="tag">default endpoint</span>}
+              </div>
+              {item.config_warnings.length ? (
+                <div className="notice" style={{ marginTop: 10 }}>
+                  {item.config_warnings.join(" ")}
+                </div>
+              ) : null}
               <div className="action-row" style={{ marginTop: 10 }}>
                 <button
                   className="button secondary"

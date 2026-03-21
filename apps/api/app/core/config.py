@@ -43,3 +43,9 @@ class Settings:
 
 
 settings = Settings()
+
+
+def validate_runtime_settings() -> None:
+    if settings.app_env == "production":
+        if settings.secret_key == "change-me" or len(settings.secret_key) < 24:
+            raise RuntimeError("Production requires a strong SECRET_KEY environment variable")

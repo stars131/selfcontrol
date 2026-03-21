@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import math
-import os
 import re
 from dataclasses import dataclass
 from hashlib import blake2b
@@ -10,7 +9,12 @@ import httpx
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.services.provider_configs import ProviderFeatureConfig, get_effective_provider_config
+from app.services.provider_configs import (
+    ProviderFeatureConfig,
+    get_effective_provider_config,
+    read_secret_from_env_name,
+    resolve_secret_env_name,
+)
 
 
 TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+|[\u4e00-\u9fff]")
@@ -58,17 +62,11 @@ def local_hash_embedding(value: str, dimensions: int) -> list[float]:
 
 
 def get_secret_for_provider(config: ProviderFeatureConfig) -> str | None:
-    env_name = (config.api_key_env_name or "").strip()
-    if not env_name:
-        if config.provider_code == "openai":
-            env_name = "OPENAI_API_KEY"
-        elif config.provider_code == "openrouter":
-            env_name = "OPENROUTER_API_KEY"
-
+    env_name = resolve_secret_env_name(config)
     if not env_name:
         return None
 
-    secret = os.getenv(env_name, "").strip()
+    secret = read_secret_from_env_name(env_name)
     if not secret:
         raise EmbeddingProviderError(f"Required secret environment variable is missing: {env_name}")
     return secret

@@ -205,6 +205,9 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {process.env.NEXT_PUBLIC_AMAP_KEY ? copy.mapKeyReady : copy.mapKeyMissing}
                   </div>
+                  <div className="muted" style={{ marginTop: 8 }}>
+                    Browser map keys stay in local or deployment env files and are not stored in workspace settings.
+                  </div>
                 </div>
                 <div className="subtle-card">
                   <div className="eyebrow">{copy.knowledgeTitle}</div>

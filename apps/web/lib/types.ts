@@ -187,6 +187,10 @@ export type ProviderFeatureConfig = {
   options_json: Record<string, unknown>;
   is_default: boolean;
   updated_at?: string | null;
+  requires_secret: boolean;
+  secret_env_name?: string | null;
+  secret_status: "configured" | "missing" | "not_required";
+  config_warnings: string[];
 };
 
 export type AuditLogItem = {

@@ -81,11 +81,16 @@ Last updated: 2026-03-21
   - write APIs for records, media upload/retry, reminders, conversations, provider settings, knowledge reindex, and search preset management now require owner/editor access
   - shared-workspace viewer mode is now read-only in the UI, with editing and settings actions hidden or disabled
   - dedicated permission tests now verify viewer read-only behavior and editor write access
+- Secret Management and Config Boundary Hardening V1:
+  - provider config updates now validate server-side env var names and API base URLs before saving
+  - provider config responses now expose secret readiness and non-sensitive warning states without returning raw secrets
+  - production startup now rejects the default weak `SECRET_KEY`
+  - deployment templates now pass through provider secret env vars and browser map env wiring explicitly
 
 ## Next
 - Security hardening: audit logs, share permission boundaries, secret management
 - Deeper media metadata extraction and storage lifecycle controls
-- Secret management hardening and local/remote configuration boundary cleanup
+- Share permission boundary hardening and membership management UI
 
 ## Delivery Rule
 - Every meaningful slice must update this file
