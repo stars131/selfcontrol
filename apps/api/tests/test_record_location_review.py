@@ -223,6 +223,27 @@ def test_record_list_supports_location_filters(monkeypatch) -> None:
     )
     assert plain_response.status_code == 200
 
+    avoid_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        json={
+            "type_code": "bad_experience",
+            "title": "Soup was cold",
+            "content": "Avoid next time",
+            "source_type": "manual",
+            "is_avoid": True,
+            "extra_data": {
+                "location": {
+                    "place_name": "Soup House",
+                    "address": "Block C",
+                    "latitude": 30.2742,
+                    "longitude": 120.1552,
+                    "source": "search",
+                }
+            },
+        },
+    )
+    assert avoid_response.status_code == 200
+
     filtered_response = client.get(
         f"/api/v1/workspaces/{workspace_id}/records",
         params={
@@ -246,3 +267,18 @@ def test_record_list_supports_location_filters(monkeypatch) -> None:
     unmapped_items = unmapped_response.json()["data"]["items"]
     assert len(unmapped_items) == 1
     assert unmapped_items[0]["title"] == "Desk note"
+
+    combined_response = client.get(
+        f"/api/v1/workspaces/{workspace_id}/records",
+        params={
+            "q": "avoid",
+            "type_code": "bad_experience",
+            "is_avoid": "true",
+            "location_query": "block c",
+        },
+    )
+
+    assert combined_response.status_code == 200
+    combined_items = combined_response.json()["data"]["items"]
+    assert len(combined_items) == 1
+    assert combined_items[0]["title"] == "Soup was cold"

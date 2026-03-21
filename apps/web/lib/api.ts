@@ -6,9 +6,10 @@ import type {
   MediaAsset,
   NotificationItem,
   ProviderFeatureConfig,
-  LocationFilterState,
+  RecordFilterState,
   RecordItem,
   ReminderItem,
+  SearchPresetItem,
   ShareLinkItem,
   SharePreview,
   TimelineDay,
@@ -132,9 +133,21 @@ export async function createWorkspace(
 export async function listRecords(
   token: string,
   workspaceId: string,
-  params?: Partial<LocationFilterState>,
+  params?: Partial<RecordFilterState>,
 ) {
   const searchParams = new URLSearchParams();
+  if (params?.query?.trim()) {
+    searchParams.set("q", params.query.trim());
+  }
+  if (params?.typeCode && params.typeCode !== "all") {
+    searchParams.set("type_code", params.typeCode);
+  }
+  if (params?.avoidOnly === "avoid") {
+    searchParams.set("is_avoid", "true");
+  }
+  if (params?.avoidOnly === "normal") {
+    searchParams.set("is_avoid", "false");
+  }
   if (params?.placeQuery?.trim()) {
     searchParams.set("location_query", params.placeQuery.trim());
   }
@@ -153,6 +166,88 @@ export async function listRecords(
     ? `/workspaces/${workspaceId}/records?${query}`
     : `/workspaces/${workspaceId}/records`;
   return request<{ items: RecordItem[] }>(path, { method: "GET" }, token);
+}
+
+type SearchPresetApiItem = {
+  id: string;
+  workspace_id: string;
+  created_by: string;
+  name: string;
+  filters_json: {
+    query?: string;
+    type_code?: string;
+    is_avoid?: string;
+    place_query?: string;
+    review_status?: string;
+    mapped_only?: string;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
+function mapSearchPreset(item: SearchPresetApiItem): SearchPresetItem {
+  return {
+    id: item.id,
+    workspace_id: item.workspace_id,
+    created_by: item.created_by,
+    name: item.name,
+    filters: {
+      query: item.filters_json.query ?? "",
+      typeCode: item.filters_json.type_code ?? "all",
+      avoidOnly: (item.filters_json.is_avoid as RecordFilterState["avoidOnly"]) ?? "all",
+      placeQuery: item.filters_json.place_query ?? "",
+      reviewStatus: (item.filters_json.review_status as RecordFilterState["reviewStatus"]) ?? "all",
+      mappedOnly: (item.filters_json.mapped_only as RecordFilterState["mappedOnly"]) ?? "all",
+    },
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+  };
+}
+
+export async function listSearchPresets(token: string, workspaceId: string) {
+  const result = await request<{ items: SearchPresetApiItem[] }>(
+    `/workspaces/${workspaceId}/search-presets`,
+    { method: "GET" },
+    token,
+  );
+  return { items: result.items.map(mapSearchPreset) };
+}
+
+export async function createSearchPreset(
+  token: string,
+  workspaceId: string,
+  input: {
+    name: string;
+    filters: RecordFilterState;
+  },
+) {
+  const result = await request<{ preset: SearchPresetApiItem }>(
+    `/workspaces/${workspaceId}/search-presets`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        name: input.name,
+        filters: {
+          query: input.filters.query,
+          type_code: input.filters.typeCode,
+          is_avoid: input.filters.avoidOnly,
+          place_query: input.filters.placeQuery,
+          review_status: input.filters.reviewStatus,
+          mapped_only: input.filters.mappedOnly,
+        },
+      }),
+    },
+    token,
+  );
+  return { preset: mapSearchPreset(result.preset) };
+}
+
+export async function deleteSearchPreset(token: string, workspaceId: string, presetId: string) {
+  return request<{ deleted: boolean }>(
+    `/workspaces/${workspaceId}/search-presets/${presetId}`,
+    { method: "DELETE" },
+    token,
+  );
 }
 
 export async function getTimeline(

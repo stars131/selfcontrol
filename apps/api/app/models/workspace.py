@@ -33,6 +33,7 @@ class Workspace(Base):
     provider_configs = relationship("ProviderConfig", back_populates="workspace", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="workspace", cascade="all, delete-orphan")
     share_links = relationship("ShareLink", back_populates="workspace", cascade="all, delete-orphan")
+    search_presets = relationship("SearchPreset", back_populates="workspace", cascade="all, delete-orphan")
 
 
 class WorkspaceMember(Base):

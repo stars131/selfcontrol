@@ -4,10 +4,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
+  createSearchPreset,
   createConversation,
   createRecord,
   createReminder,
   createShareLink,
+  deleteSearchPreset,
   deleteRecord,
   deleteReminder,
   getKnowledgeStats,
@@ -20,6 +22,7 @@ import {
   listProviderConfigs,
   listRecords,
   listReminders,
+  listSearchPresets,
   listShareLinks,
   reindexKnowledge,
   retryMediaProcessing,
@@ -40,10 +43,11 @@ import type {
   KnowledgeStats,
   MediaAsset,
   NotificationItem,
-  LocationFilterState,
   ProviderFeatureConfig,
+  RecordFilterState,
   RecordItem,
   ReminderItem,
+  SearchPresetItem,
   ShareLinkItem,
   TimelineDay,
 } from "../lib/types";
@@ -52,7 +56,10 @@ import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
-  const initialLocationFilter: LocationFilterState = {
+  const initialRecordFilter: RecordFilterState = {
+    query: "",
+    typeCode: "all",
+    avoidOnly: "all",
     placeQuery: "",
     reviewStatus: "all",
     mappedOnly: "all",
@@ -74,16 +81,18 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [shareLinks, setShareLinks] = useState<ShareLinkItem[]>([]);
   const [latestSharePath, setLatestSharePath] = useState("");
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
-  const [locationFilter, setLocationFilter] = useState<LocationFilterState>(initialLocationFilter);
+  const [recordFilter, setRecordFilter] = useState<RecordFilterState>(initialRecordFilter);
+  const [searchPresets, setSearchPresets] = useState<SearchPresetItem[]>([]);
   const [filteringRecords, setFilteringRecords] = useState(false);
+  const [savingSearchPreset, setSavingSearchPreset] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const refreshRecords = async (
     activeToken: string,
-    nextLocationFilter: LocationFilterState = initialLocationFilter,
+    nextRecordFilter: RecordFilterState = initialRecordFilter,
   ) => {
-    const result = await listRecords(activeToken, workspaceId, nextLocationFilter);
+    const result = await listRecords(activeToken, workspaceId, nextRecordFilter);
     setRecords(result.items);
     setVisibleRecords(result.items);
     setTimelineDays(buildTimelineDays(result.items));
@@ -130,6 +139,11 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setShareLinks(result.items);
   };
 
+  const refreshSearchPresets = async (activeToken: string) => {
+    const result = await listSearchPresets(activeToken, workspaceId);
+    setSearchPresets(result.items);
+  };
+
   const refreshAuditLogs = async (activeToken: string) => {
     const result = await listAuditLogs(activeToken, workspaceId, { limit: 8 });
     setAuditLogs(result.items);
@@ -155,7 +169,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     const load = async () => {
       try {
         setToken(activeToken);
-        await refreshRecords(activeToken, initialLocationFilter);
+        await refreshRecords(activeToken, initialRecordFilter);
 
         const conversationResult = await listConversations(activeToken, workspaceId);
         let items = conversationResult.items;
@@ -171,6 +185,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         await refreshKnowledge(activeToken);
         await refreshProviderConfigs(activeToken);
         await refreshShareLinks(activeToken);
+        await refreshSearchPresets(activeToken);
         await refreshAuditLogs(activeToken);
       } catch (caught) {
         clearStoredSession();
@@ -221,7 +236,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
 
     const mode = String(result.assistant_message.metadata_json.mode ?? "");
     if (mode === "create") {
-      await refreshRecords(token, locationFilter);
+      await refreshRecords(token, recordFilter);
       await refreshKnowledge(token);
       await refreshAuditLogs(token);
       if (result.records[0]) {
@@ -276,7 +291,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         is_avoid: input.is_avoid,
         extra_data: input.extra_data,
       });
-      await refreshRecords(token, locationFilter);
+      await refreshRecords(token, recordFilter);
       await refreshKnowledge(token);
       await refreshAuditLogs(token);
       setSelectedRecordId(input.recordId);
@@ -293,7 +308,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
       source_type: "manual",
       extra_data: input.extra_data,
     });
-    await refreshRecords(token, locationFilter);
+    await refreshRecords(token, recordFilter);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
     setSelectedRecordId(result.record.id);
@@ -306,7 +321,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await deleteRecord(token, workspaceId, recordId);
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
-    await refreshRecords(token, locationFilter);
+    await refreshRecords(token, recordFilter);
     await refreshKnowledge(token);
     await refreshAuditLogs(token);
   };
@@ -343,21 +358,60 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!token) {
       throw new Error("Not authenticated");
     }
-    setLocationFilter(initialLocationFilter);
-    await refreshRecords(token, initialLocationFilter);
+    setRecordFilter(initialRecordFilter);
+    await refreshRecords(token, initialRecordFilter);
   };
 
-  const handleApplyLocationFilter = async (nextFilter: LocationFilterState) => {
+  const handleApplyRecordFilter = async (nextFilter: RecordFilterState) => {
     if (!token) {
       throw new Error("Not authenticated");
     }
     setFilteringRecords(true);
-    setLocationFilter(nextFilter);
+    setRecordFilter(nextFilter);
     try {
       await refreshRecords(token, nextFilter);
     } finally {
       setFilteringRecords(false);
     }
+  };
+
+  const handleApplyLocationFilter = async ({
+    placeQuery,
+    reviewStatus,
+    mappedOnly,
+  }: Pick<RecordFilterState, "placeQuery" | "reviewStatus" | "mappedOnly">) => {
+    await handleApplyRecordFilter({
+      ...recordFilter,
+      placeQuery,
+      reviewStatus,
+      mappedOnly,
+    });
+  };
+
+  const handleCreateSearchPreset = async (name: string, nextFilter: RecordFilterState) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    setSavingSearchPreset(true);
+    try {
+      await createSearchPreset(token, workspaceId, {
+        name,
+        filters: nextFilter,
+      });
+      await refreshSearchPresets(token);
+      await refreshAuditLogs(token);
+    } finally {
+      setSavingSearchPreset(false);
+    }
+  };
+
+  const handleDeleteSearchPreset = async (presetId: string) => {
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+    await deleteSearchPreset(token, workspaceId, presetId);
+    await refreshSearchPresets(token);
+    await refreshAuditLogs(token);
   };
 
   const handleCreateReminder = async (input: {
@@ -534,10 +588,15 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           onDeleteRecord={handleDeleteRecord}
           onDeleteReminder={handleDeleteReminder}
           onRefreshMediaStatus={handleRefreshMediaStatus}
+          onApplyRecordFilter={handleApplyRecordFilter}
           onApplyLocationFilter={handleApplyLocationFilter}
+          onCreateSearchPreset={handleCreateSearchPreset}
+          onDeleteSearchPreset={handleDeleteSearchPreset}
           onResetFilter={handleResetFilter}
           filteringRecords={filteringRecords}
-          locationFilter={locationFilter}
+          recordFilter={recordFilter}
+          searchPresets={searchPresets}
+          savingSearchPreset={savingSearchPreset}
           onRetryMedia={handleRetryMedia}
           onSaveRecord={handleSaveRecord}
           onSelectRecord={setSelectedRecordId}

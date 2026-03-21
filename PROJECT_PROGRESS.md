@@ -71,11 +71,16 @@ Last updated: 2026-03-21
   - filtered record sets stay consistent across record cards and timeline grouping
   - map view now zooms to the selected mapped record for faster drill-down
   - map panel shows a clickable mapped-record list for direct place-based navigation
+- Workspace-wide Advanced Search Presets V1:
+  - record list filtering now supports text query, type, avoid-only, and map-related conditions in one unified state
+  - workspace members can save reusable search presets and apply or delete them from the structured results panel
+  - saved presets are stored server-side with dedicated API routes and audit events
+  - record API coverage now includes combined advanced filters alongside saved preset CRUD tests
 
 ## Next
 - Security hardening: audit logs, share permission boundaries, secret management
 - Deeper media metadata extraction and storage lifecycle controls
-- Workspace-wide advanced search presets and saved filters
+- Role-based workspace permission refinement for shared editing and settings access
 
 ## Delivery Rule
 - Every meaningful slice must update this file

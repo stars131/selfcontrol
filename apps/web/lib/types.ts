@@ -66,6 +66,22 @@ export type LocationFilterState = {
   mappedOnly: "all" | "mapped" | "unmapped";
 };
 
+export type RecordFilterState = LocationFilterState & {
+  query: string;
+  typeCode: string;
+  avoidOnly: "all" | "avoid" | "normal";
+};
+
+export type SearchPresetItem = {
+  id: string;
+  workspace_id: string;
+  created_by: string;
+  name: string;
+  filters: RecordFilterState;
+  created_at: string;
+  updated_at: string;
+};
+
 export type TimelineDay = {
   date: string;
   count: number;

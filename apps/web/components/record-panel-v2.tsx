@@ -7,12 +7,13 @@ import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
 import type {
-  LocationFilterState,
   LocationHistoryEntry,
   LocationReview,
   MediaAsset,
+  RecordFilterState,
   RecordItem,
   ReminderItem,
+  SearchPresetItem,
   TimelineDay,
 } from "../lib/types";
 
@@ -161,6 +162,29 @@ function summarizeHistoryAction(entry: LocationHistoryEntry): string {
   return entry.action_code;
 }
 
+function summarizeRecordFilter(filter: RecordFilterState): string {
+  const parts: string[] = [];
+  if (filter.query) {
+    parts.push(`text:${filter.query}`);
+  }
+  if (filter.typeCode !== "all") {
+    parts.push(`type:${filter.typeCode}`);
+  }
+  if (filter.avoidOnly !== "all") {
+    parts.push(filter.avoidOnly === "avoid" ? "avoid only" : "non-avoid");
+  }
+  if (filter.placeQuery) {
+    parts.push(`place:${filter.placeQuery}`);
+  }
+  if (filter.reviewStatus !== "all") {
+    parts.push(`review:${filter.reviewStatus}`);
+  }
+  if (filter.mappedOnly !== "all") {
+    parts.push(filter.mappedOnly === "mapped" ? "mapped" : "unmapped");
+  }
+  return parts.length ? parts.join(" | ") : "All records";
+}
+
 export function RecordPanelV2({
   authToken,
   workspaceId,
@@ -176,11 +200,16 @@ export function RecordPanelV2({
   onDeleteReminder,
   onDeleteRecord,
   onRefreshMediaStatus,
+  onApplyRecordFilter,
   onApplyLocationFilter,
+  onCreateSearchPreset,
+  onDeleteSearchPreset,
   onRetryMedia,
   onUploadMedia,
   onResetFilter,
-  locationFilter,
+  recordFilter,
+  searchPresets,
+  savingSearchPreset,
   filteringRecords,
 }: {
   authToken: string | null;
@@ -221,11 +250,18 @@ export function RecordPanelV2({
   onDeleteReminder: (reminderId: string) => Promise<void>;
   onDeleteRecord: (recordId: string) => Promise<void>;
   onRefreshMediaStatus: (mediaId: string) => Promise<void>;
-  onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>;
+  onApplyRecordFilter: (nextFilter: RecordFilterState) => Promise<void>;
+  onApplyLocationFilter: (
+    nextFilter: Pick<RecordFilterState, "placeQuery" | "reviewStatus" | "mappedOnly">,
+  ) => Promise<void>;
+  onCreateSearchPreset: (name: string, nextFilter: RecordFilterState) => Promise<void>;
+  onDeleteSearchPreset: (presetId: string) => Promise<void>;
   onRetryMedia: (mediaId: string) => Promise<void>;
   onUploadMedia: (recordId: string, file: File) => Promise<void>;
   onResetFilter: () => Promise<void>;
-  locationFilter: LocationFilterState;
+  recordFilter: RecordFilterState;
+  searchPresets: SearchPresetItem[];
+  savingSearchPreset: boolean;
   filteringRecords: boolean;
 }) {
   const avoidCount = records.filter((record) => record.is_avoid).length;
@@ -248,6 +284,8 @@ export function RecordPanelV2({
     note: "",
   });
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
+  const [filterDraft, setFilterDraft] = useState<RecordFilterState>(recordFilter);
+  const [presetName, setPresetName] = useState("");
   const [error, setError] = useState("");
   const selectedLocationReview = useMemo<LocationReview | null>(
     () => readLocationReview(selectedRecord?.extra_data),
@@ -292,6 +330,10 @@ export function RecordPanelV2({
       remind_at: "",
     });
   }, [selectedRecord]);
+
+  useEffect(() => {
+    setFilterDraft(recordFilter);
+  }, [recordFilter]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -471,6 +513,39 @@ export function RecordPanelV2({
     }
   };
 
+  const handleApplyFilter = async () => {
+    setError("");
+    try {
+      await onApplyRecordFilter(filterDraft);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to apply filter");
+    }
+  };
+
+  const handleSavePreset = async () => {
+    if (!presetName.trim()) {
+      setError("Preset name is required");
+      return;
+    }
+
+    setError("");
+    try {
+      await onCreateSearchPreset(presetName.trim(), filterDraft);
+      setPresetName("");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to save preset");
+    }
+  };
+
+  const handleDeletePreset = async (presetId: string) => {
+    setError("");
+    try {
+      await onDeleteSearchPreset(presetId);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to delete preset");
+    }
+  };
+
   const formatMediaSize = (asset: MediaAsset): string => {
     const stored = asset.metadata_json.size_label;
     if (typeof stored === "string" && stored.trim()) {
@@ -539,9 +614,6 @@ export function RecordPanelV2({
           <button className="button secondary" type="button" onClick={() => onSelectRecord(null)}>
             New record
           </button>
-          <button className="button secondary" type="button" onClick={() => void onResetFilter()}>
-            Reset list
-          </button>
         </div>
       </div>
       <div className="panel-body">
@@ -566,12 +638,126 @@ export function RecordPanelV2({
           </div>
         </div>
 
+        <div className="record-card form-stack" style={{ marginTop: 20 }}>
+          <div className="eyebrow">Advanced search</div>
+          <div className="inline-fields">
+            <label className="field">
+              <span className="field-label">Text query</span>
+              <input
+                className="input"
+                value={filterDraft.query}
+                onChange={(event) =>
+                  setFilterDraft((current) => ({
+                    ...current,
+                    query: event.target.value,
+                  }))
+                }
+                placeholder="dish / snack / warning"
+              />
+            </label>
+            <label className="field">
+              <span className="field-label">Type</span>
+              <select
+                className="input"
+                value={filterDraft.typeCode}
+                onChange={(event) =>
+                  setFilterDraft((current) => ({
+                    ...current,
+                    typeCode: event.target.value,
+                  }))
+                }
+              >
+                <option value="all">all</option>
+                <option value="memo">memo</option>
+                <option value="food">food</option>
+                <option value="snack">snack</option>
+                <option value="bad_experience">bad_experience</option>
+              </select>
+            </label>
+            <label className="field">
+              <span className="field-label">Avoid</span>
+              <select
+                className="input"
+                value={filterDraft.avoidOnly}
+                onChange={(event) =>
+                  setFilterDraft((current) => ({
+                    ...current,
+                    avoidOnly: event.target.value as RecordFilterState["avoidOnly"],
+                  }))
+                }
+              >
+                <option value="all">all records</option>
+                <option value="avoid">avoid only</option>
+                <option value="normal">non-avoid only</option>
+              </select>
+            </label>
+          </div>
+          <div className="action-row">
+            <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleApplyFilter()}>
+              {filteringRecords ? "Filtering..." : "Apply advanced filter"}
+            </button>
+            <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onResetFilter()}>
+              Reset list
+            </button>
+          </div>
+          <div className="muted">{summarizeRecordFilter(recordFilter)}</div>
+          <div className="inline-fields">
+            <label className="field">
+              <span className="field-label">Preset name</span>
+              <input
+                className="input"
+                value={presetName}
+                onChange={(event) => setPresetName(event.target.value)}
+                placeholder="Confirmed food spots"
+              />
+            </label>
+            <div className="field" style={{ alignSelf: "end" }}>
+              <button
+                className="button secondary"
+                disabled={savingSearchPreset}
+                type="button"
+                onClick={() => void handleSavePreset()}
+              >
+                {savingSearchPreset ? "Saving preset..." : "Save current filter"}
+              </button>
+            </div>
+          </div>
+          {searchPresets.length ? (
+            <div className="record-list compact-list">
+              {searchPresets.map((preset) => (
+                <article className="record-card" key={preset.id}>
+                  <div className="eyebrow">Saved preset</div>
+                  <div style={{ marginTop: 8, fontWeight: 600 }}>{preset.name}</div>
+                  <div className="muted" style={{ marginTop: 8 }}>
+                    {summarizeRecordFilter(preset.filters)}
+                  </div>
+                  <div className="action-row" style={{ marginTop: 12 }}>
+                    <button
+                      className="button secondary"
+                      disabled={filteringRecords}
+                      type="button"
+                      onClick={() => void onApplyRecordFilter(preset.filters)}
+                    >
+                      Apply preset
+                    </button>
+                    <button className="button secondary" type="button" onClick={() => void handleDeletePreset(preset.id)}>
+                      Delete preset
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="notice">No saved filters yet. Save your current advanced filter to reuse it.</div>
+          )}
+        </div>
+
         <MapPanel
           records={records}
           selectedRecordId={selectedRecordId}
           onSelectRecord={onSelectRecord}
           filteringRecords={filteringRecords}
-          locationFilter={locationFilter}
+          locationFilter={recordFilter}
           onApplyLocationFilter={onApplyLocationFilter}
           draftLocation={form.location}
           onDraftLocationChange={(nextLocation) =>

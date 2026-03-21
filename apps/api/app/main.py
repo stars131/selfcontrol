@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import audit_logs, auth, conversations, knowledge, media, notifications, provider_configs, public_shares, records, reminders, search, share_links, timeline, workspaces
+from app.api.routes import audit_logs, auth, conversations, knowledge, media, notifications, provider_configs, public_shares, records, reminders, search, search_presets, share_links, timeline, workspaces
 from app.core.config import settings
 from app.db.session import create_db_and_tables
 
@@ -41,6 +41,7 @@ app.include_router(knowledge.router, prefix="/api/v1/workspaces", tags=["knowled
 app.include_router(audit_logs.router, prefix="/api/v1/workspaces", tags=["audit-logs"])
 app.include_router(provider_configs.router, prefix="/api/v1/workspaces", tags=["provider-configs"])
 app.include_router(share_links.router, prefix="/api/v1/workspaces", tags=["share-links"])
+app.include_router(search_presets.router, prefix="/api/v1/workspaces", tags=["search-presets"])
 app.include_router(reminders.router, prefix="/api/v1/workspaces", tags=["reminders"])
 app.include_router(notifications.router, prefix="/api/v1/workspaces", tags=["notifications"])
 app.include_router(search.router, prefix="/api/v1/workspaces", tags=["search"])
