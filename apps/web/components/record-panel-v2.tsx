@@ -4,6 +4,13 @@ import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
+import { useStoredLocale } from "../lib/locale";
+import {
+  getMediaIssueAction,
+  getMediaIssueLabel,
+  getProcessingStatusLabel,
+  getRetryStateLabel,
+} from "../lib/media-issue-display";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
@@ -322,6 +329,7 @@ export function RecordPanelV2({
   savingSearchPreset: boolean;
   filteringRecords: boolean;
 }) {
+  const { locale } = useStoredLocale();
   const avoidCount = records.filter((record) => record.is_avoid).length;
   const foodCount = records.filter((record) => record.type_code === "food").length;
   const selectedRecord = useMemo(
@@ -368,6 +376,64 @@ export function RecordPanelV2({
           .map((item) => item.media_id),
       ),
     [mediaDeadLetterOverview],
+  );
+
+  const mediaIssueCopy = useMemo(
+    () => ({
+      recentIssuesTitle:
+        locale === "zh-CN" ? "最近媒体问题" : locale === "ja" ? "最近の媒体問題" : "Recent media issues",
+      recentIssuesDescription:
+        locale === "zh-CN"
+          ? "展示工作区最近失败或延后的媒体项目，并附带远端拉取状态。"
+          : locale === "ja"
+            ? "ワークスペース内で最近失敗または保留になった媒体項目と、リモート取得状態を表示します。"
+            : "Recent failed or deferred items across the workspace, including remote fetch state.",
+      noRecentIssues:
+        locale === "zh-CN"
+          ? "当前没有最近的媒体处理问题。"
+          : locale === "ja"
+            ? "最近の媒体処理問題はありません。"
+            : "No recent media processing issues.",
+      deadLetterTitle:
+        locale === "zh-CN" ? "死信恢复" : locale === "ja" ? "デッドレター復旧" : "Dead-letter recovery",
+      deadLetterDescription:
+        locale === "zh-CN"
+          ? "这些远端媒体因为重试停止或本就不适合自动重试，需要人工介入。"
+          : locale === "ja"
+            ? "これらのリモート媒体は再試行が停止したか、自動再試行に不向きで、手動対応が必要です。"
+            : "Remote media items that need manual recovery after retries stopped or were never eligible for auto-retry.",
+      noDeadLetter:
+        locale === "zh-CN"
+          ? "当前没有死信媒体项目。"
+          : locale === "ja"
+            ? "現在デッドレター媒体はありません。"
+            : "No dead-letter media items right now.",
+      openSettings:
+        locale === "zh-CN" ? "打开设置" : locale === "ja" ? "設定を開く" : "Open settings",
+      retryNow:
+        locale === "zh-CN" ? "立即重试" : locale === "ja" ? "今すぐ再試行" : "Retry now",
+      retrying:
+        locale === "zh-CN" ? "重试中..." : locale === "ja" ? "再試行中..." : "Retrying...",
+      selectVisible:
+        locale === "zh-CN" ? "选择可见项" : locale === "ja" ? "表示項目を選択" : "Select visible",
+      clearSelection:
+        locale === "zh-CN" ? "清空选择" : locale === "ja" ? "選択を解除" : "Clear selection",
+      retrySelectedPrefix:
+        locale === "zh-CN" ? "重试已选" : locale === "ja" ? "選択分を再試行" : "Retry selected",
+      retryAll:
+        locale === "zh-CN" ? "重试全部可操作项" : locale === "ja" ? "実行可能な項目をすべて再試行" : "Retry all actionable",
+      itemSuffix: locale === "zh-CN" ? "项" : locale === "ja" ? "件" : "item(s)",
+      lastAttempt: locale === "zh-CN" ? "最近尝试" : locale === "ja" ? "最終試行" : "Last attempt",
+      lastFailure: locale === "zh-CN" ? "最近失败" : locale === "ja" ? "最終失敗" : "Last failure",
+      nextRetry: locale === "zh-CN" ? "下一次重试" : locale === "ja" ? "次回再試行" : "Next retry",
+      retryBudgetUsed:
+        locale === "zh-CN" ? "已使用重试额度" : locale === "ja" ? "使用済み再試行枠" : "Retry budget used",
+      retries: locale === "zh-CN" ? "重试" : locale === "ja" ? "再試行" : "retries",
+      retryStatePrefix:
+        locale === "zh-CN" ? "恢复" : locale === "ja" ? "復旧" : "retry",
+      fetchPrefix: locale === "zh-CN" ? "拉取" : locale === "ja" ? "取得" : "fetch",
+    }),
+    [locale],
   );
 
   useEffect(() => {
@@ -1413,10 +1479,10 @@ export function RecordPanelV2({
                       </span>
                     ))}
                   </div>
-                  <div className="record-card form-stack" style={{ marginBottom: 16 }}>
-                    <div className="eyebrow">Recent media issues</div>
+                    <div className="record-card form-stack" style={{ marginBottom: 16 }}>
+                    <div className="eyebrow">{mediaIssueCopy.recentIssuesTitle}</div>
                     <div className="muted">
-                      Recent failed or deferred items across the workspace, including remote fetch state.
+                      {mediaIssueCopy.recentIssuesDescription}
                     </div>
                     {mediaProcessingOverview.recent_issues.length ? (
                       <div className="record-list compact-list" style={{ marginTop: 16 }}>
@@ -1425,16 +1491,24 @@ export function RecordPanelV2({
                             <div className="eyebrow">{issue.media_type}</div>
                             <div>{issue.original_filename}</div>
                             <div className="tag-row">
-                              <span className="tag">{issue.processing_status}</span>
+                              <span className="tag">{getProcessingStatusLabel(locale, issue.processing_status)}</span>
                               <span className="tag">{issue.storage_provider}</span>
                               {issue.processing_source ? <span className="tag">{issue.processing_source}</span> : null}
-                              {issue.remote_fetch_status ? <span className="tag">fetch {issue.remote_fetch_status}</span> : null}
+                              {issue.remote_fetch_status ? (
+                                <span className="tag">{mediaIssueCopy.fetchPrefix} {issue.remote_fetch_status}</span>
+                              ) : null}
                               {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}
-                              {issue.processing_retry_state ? <span className="tag">retry {issue.processing_retry_state}</span> : null}
-                              {issue.issue_label ? <span className="tag">{issue.issue_label}</span> : null}
+                              {issue.processing_retry_state ? (
+                                <span className="tag">
+                                  {mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, issue.processing_retry_state)}
+                                </span>
+                              ) : null}
+                              {getMediaIssueLabel(locale, issue) ? (
+                                <span className="tag">{getMediaIssueLabel(locale, issue)}</span>
+                              ) : null}
                               {typeof issue.processing_retry_count === "number" ? (
                                 <span className="tag">
-                                  retries {issue.processing_retry_count}
+                                  {mediaIssueCopy.retries} {issue.processing_retry_count}
                                   {typeof issue.processing_retry_max_attempts === "number"
                                     ? `/${issue.processing_retry_max_attempts}`
                                     : ""}
@@ -1442,22 +1516,22 @@ export function RecordPanelV2({
                               ) : null}
                             </div>
                             <div className="muted" style={{ marginTop: 8 }}>
-                              Last attempt: {formatHistoryTimestamp(issue.processing_last_attempt_at)}
+                              {mediaIssueCopy.lastAttempt}: {formatHistoryTimestamp(issue.processing_last_attempt_at)}
                             </div>
                             {issue.processing_last_failure_at ? (
                               <div className="muted" style={{ marginTop: 6 }}>
-                                Last failure: {formatHistoryTimestamp(issue.processing_last_failure_at)}
+                                {mediaIssueCopy.lastFailure}: {formatHistoryTimestamp(issue.processing_last_failure_at)}
                               </div>
                             ) : null}
                             {issue.processing_retry_next_attempt_at ? (
                               <div className="muted" style={{ marginTop: 6 }}>
-                                Next retry: {formatHistoryTimestamp(issue.processing_retry_next_attempt_at)}
+                                {mediaIssueCopy.nextRetry}: {formatHistoryTimestamp(issue.processing_retry_next_attempt_at)}
                               </div>
                             ) : null}
-                            {issue.recommended_action_label ? (
+                            {getMediaIssueAction(locale, issue).label ? (
                               <div className="notice" style={{ marginTop: 10 }}>
-                                {issue.recommended_action_label}
-                                {issue.recommended_action_detail ? `: ${issue.recommended_action_detail}` : ""}
+                                {getMediaIssueAction(locale, issue).label}
+                                {getMediaIssueAction(locale, issue).detail ? `: ${getMediaIssueAction(locale, issue).detail}` : ""}
                               </div>
                             ) : null}
                             {canWriteWorkspace || buildMediaIssueSettingsHref(workspaceId, issue) ? (
@@ -1469,7 +1543,7 @@ export function RecordPanelV2({
                                     type="button"
                                     onClick={() => void handleRetryMediaProcessing(issue.media_id)}
                                   >
-                                    {retryingMediaId === issue.media_id ? "Retrying..." : "Retry now"}
+                                    {retryingMediaId === issue.media_id ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
                                   </button>
                                 ) : null}
                                 {buildMediaIssueSettingsHref(workspaceId, issue) ? (
@@ -1477,7 +1551,7 @@ export function RecordPanelV2({
                                     className="button secondary"
                                     href={buildMediaIssueSettingsHref(workspaceId, issue) ?? "#"}
                                   >
-                                    Open settings
+                                    {mediaIssueCopy.openSettings}
                                   </Link>
                                 ) : null}
                               </div>
@@ -1492,33 +1566,33 @@ export function RecordPanelV2({
                       </div>
                     ) : (
                       <div className="notice" style={{ marginTop: 16 }}>
-                        No recent media processing issues.
+                        {mediaIssueCopy.noRecentIssues}
                       </div>
                     )}
                   </div>
                   <div className="record-card form-stack" style={{ marginBottom: 16 }}>
                     <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                       <div>
-                        <div className="eyebrow">Dead-letter recovery</div>
+                        <div className="eyebrow">{mediaIssueCopy.deadLetterTitle}</div>
                         <div className="muted" style={{ marginTop: 8 }}>
-                          Remote media items that need manual recovery after retries stopped or were never eligible for auto-retry.
+                          {mediaIssueCopy.deadLetterDescription}
                         </div>
                       </div>
                       <div className="tag-row">
                         <span className="tag">
-                          {mediaDeadLetterOverview?.total_count ?? 0} item(s)
+                          {mediaDeadLetterOverview?.total_count ?? 0} {mediaIssueCopy.itemSuffix}
                         </span>
                         {mediaDeadLetterOverview
                           ? Object.entries(mediaDeadLetterOverview.by_retry_state).map(([retryState, count]) => (
                               <span className="tag" key={retryState}>
-                                {retryState}: {count}
+                                {getRetryStateLabel(locale, retryState)}: {count}
                               </span>
                             ))
                           : null}
                         {mediaDeadLetterOverview
                           ? Object.entries(mediaDeadLetterOverview.by_issue_category).map(([issueCategory, count]) => (
                               <span className="tag" key={issueCategory}>
-                                {issueCategory}: {count}
+                                {getMediaIssueLabel(locale, { issue_category: issueCategory, issue_label: null })}: {count}
                               </span>
                             ))
                           : null}
@@ -1533,7 +1607,7 @@ export function RecordPanelV2({
                             type="button"
                             onClick={handleSelectAllDeadLetter}
                           >
-                            Select visible
+                            {mediaIssueCopy.selectVisible}
                           </button>
                           <button
                             className="button secondary"
@@ -1541,7 +1615,7 @@ export function RecordPanelV2({
                             type="button"
                             onClick={handleClearDeadLetterSelection}
                           >
-                            Clear selection
+                            {mediaIssueCopy.clearSelection}
                           </button>
                           <button
                             className="button secondary"
@@ -1549,7 +1623,9 @@ export function RecordPanelV2({
                             type="button"
                             onClick={() => void handleBulkRetryDeadLetter("selected")}
                           >
-                            {bulkRetryingDeadLetter ? "Retrying..." : `Retry selected (${selectedDeadLetterIds.length})`}
+                            {bulkRetryingDeadLetter
+                              ? mediaIssueCopy.retrying
+                              : `${mediaIssueCopy.retrySelectedPrefix} (${selectedDeadLetterIds.length})`}
                           </button>
                           <button
                             className="button secondary"
@@ -1557,7 +1633,7 @@ export function RecordPanelV2({
                             type="button"
                             onClick={() => void handleBulkRetryDeadLetter("all")}
                           >
-                            {bulkRetryingDeadLetter ? "Retrying..." : "Retry all actionable"}
+                            {bulkRetryingDeadLetter ? mediaIssueCopy.retrying : mediaIssueCopy.retryAll}
                           </button>
                         </div>
                         <div className="record-list compact-list">
@@ -1579,32 +1655,38 @@ export function RecordPanelV2({
                                   </div>
                                 </div>
                                 <div className="tag-row">
-                                  <span className="tag">{item.processing_status}</span>
+                                  <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
                                   <span className="tag">{item.storage_provider}</span>
-                                  {item.processing_retry_state ? <span className="tag">retry {item.processing_retry_state}</span> : null}
-                                  {item.issue_label ? <span className="tag">{item.issue_label}</span> : null}
+                                  {item.processing_retry_state ? (
+                                    <span className="tag">
+                                      {mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, item.processing_retry_state)}
+                                    </span>
+                                  ) : null}
+                                  {getMediaIssueLabel(locale, item) ? (
+                                    <span className="tag">{getMediaIssueLabel(locale, item)}</span>
+                                  ) : null}
                                 </div>
                               </label>
                               <div className="muted" style={{ marginTop: 8 }}>
-                                Last attempt: {formatHistoryTimestamp(item.processing_last_attempt_at)}
+                                {mediaIssueCopy.lastAttempt}: {formatHistoryTimestamp(item.processing_last_attempt_at)}
                               </div>
                               {item.processing_last_failure_at ? (
                                 <div className="muted" style={{ marginTop: 6 }}>
-                                  Last failure: {formatHistoryTimestamp(item.processing_last_failure_at)}
+                                  {mediaIssueCopy.lastFailure}: {formatHistoryTimestamp(item.processing_last_failure_at)}
                                 </div>
                               ) : null}
                               {typeof item.processing_retry_count === "number" ? (
                                 <div className="muted" style={{ marginTop: 6 }}>
-                                  Retry budget used: {item.processing_retry_count}
+                                  {mediaIssueCopy.retryBudgetUsed}: {item.processing_retry_count}
                                   {typeof item.processing_retry_max_attempts === "number"
                                     ? ` / ${item.processing_retry_max_attempts}`
                                     : ""}
                                 </div>
                               ) : null}
-                              {item.recommended_action_label ? (
+                              {getMediaIssueAction(locale, item).label ? (
                                 <div className="notice" style={{ marginTop: 10 }}>
-                                  {item.recommended_action_label}
-                                  {item.recommended_action_detail ? `: ${item.recommended_action_detail}` : ""}
+                                  {getMediaIssueAction(locale, item).label}
+                                  {getMediaIssueAction(locale, item).detail ? `: ${getMediaIssueAction(locale, item).detail}` : ""}
                                 </div>
                               ) : null}
                               {canWriteWorkspace || buildMediaIssueSettingsHref(workspaceId, item) ? (
@@ -1616,7 +1698,7 @@ export function RecordPanelV2({
                                       type="button"
                                       onClick={() => void handleRetryMediaProcessing(item.media_id)}
                                     >
-                                      {retryingMediaId === item.media_id ? "Retrying..." : "Retry now"}
+                                      {retryingMediaId === item.media_id ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
                                     </button>
                                   ) : null}
                                   {buildMediaIssueSettingsHref(workspaceId, item) ? (
@@ -1624,7 +1706,7 @@ export function RecordPanelV2({
                                       className="button secondary"
                                       href={buildMediaIssueSettingsHref(workspaceId, item) ?? "#"}
                                     >
-                                      Open settings
+                                      {mediaIssueCopy.openSettings}
                                     </Link>
                                   ) : null}
                                 </div>
@@ -1639,7 +1721,7 @@ export function RecordPanelV2({
                         </div>
                       </>
                     ) : (
-                      <div className="notice">No dead-letter media items right now.</div>
+                      <div className="notice">{mediaIssueCopy.noDeadLetter}</div>
                     )}
                   </div>
                 </>

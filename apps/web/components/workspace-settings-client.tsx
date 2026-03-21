@@ -375,6 +375,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             </section>
             {workspace?.role === "owner" || workspace?.role === "editor" ? (
               <ProviderSettingsPanel
+                locale={locale}
                 highlightedAnchor={highlightedAnchor}
                 mediaStorageHealth={mediaStorageHealth}
                 onRefreshMediaStorageHealth={

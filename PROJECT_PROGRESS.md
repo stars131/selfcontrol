@@ -225,9 +225,14 @@ Last updated: 2026-03-22
   - settings links can target either the feature-level provider card or the media storage health section based on the backend recommendation payload
   - the workspace settings page now supports hash-based scrolling and visual highlight states for provider sections and storage-health diagnostics
   - bulk dead-letter retry now skips non-actionable issue types safely, and test coverage verifies the recommended-settings field and skip behavior
+- Provider Issue Localization and Settings-Page Operator Polish V1:
+  - media issue cards now translate issue categories, retry states, processing statuses, and recommended actions into locale-aware operator-facing labels instead of exposing only raw internal codes
+  - dead-letter summary chips now use readable issue and retry labels, while retry and settings actions follow the current UI language
+  - provider settings now expose quick section jumps, unsaved-change badges, reset actions, and save-button gating so operators can review and stage config edits more safely
+  - provider settings and embedded chat-side provider controls now share the same locale-aware operator copy and continue to pass frontend type-checking alongside the existing backend regression suite
 
 ## Next
-- Provider issue localization and settings-page operator polish
+- Workspace settings locale text cleanup
 
 ## Delivery Rule
 - Every meaningful slice must update this file

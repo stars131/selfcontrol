@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { useStoredLocale } from "../lib/locale";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 import type {
   AuditLogItem,
@@ -86,6 +87,7 @@ export function ChatPanel({
   onSyncNotifications: () => Promise<void>;
   onSendMessage: (message: string) => Promise<void>;
 }) {
+  const { locale } = useStoredLocale();
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -340,6 +342,7 @@ export function ChatPanel({
         ) : null}
         <div style={{ marginBottom: 16 }}>
           <ProviderSettingsPanel
+            locale={locale}
             onSaveProviderConfig={onSaveProviderConfig}
             providerConfigs={providerConfigs}
           />
