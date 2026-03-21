@@ -11,11 +11,11 @@ import {
   getProcessingStatusLabel,
   getRetryStateLabel,
 } from "../lib/media-issue-display";
+import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
 import type {
-  LocationHistoryEntry,
   LocationReview,
   MediaAsset,
   MediaDeadLetterOverview,
@@ -107,94 +107,12 @@ function formatDatetimeInput(value?: string | null): string {
   return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16);
 }
 
-function formatRecordTimestamp(record: RecordItem, locale?: string): string {
-  const rawValue = record.occurred_at || record.created_at;
-  const date = new Date(rawValue);
-  return Number.isNaN(date.getTime()) ? rawValue : date.toLocaleString(locale);
-}
-
-function formatTimelineDate(value: string, locale?: string): string {
-  const date = new Date(`${value}T00:00:00`);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat(locale, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    weekday: "short",
-  }).format(date);
-}
-
-function formatReviewStatus(value?: string | null): string {
-  if (value === "confirmed") {
-    return "confirmed";
-  }
-  if (value === "needs_review") {
-    return "needs review";
-  }
-  return "pending";
-}
-
 function createEmptyReminderForm(): ReminderFormState {
   return {
     title: "",
     message: "",
     remind_at: "",
   };
-}
-
-function formatReminderTimestamp(value: string, locale?: string): string {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString(locale);
-}
-
-function formatHistoryTimestamp(value?: string | null, locale?: string, unknownLabel = "Unknown time"): string {
-  if (!value) {
-    return unknownLabel;
-  }
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString(locale);
-}
-
-function summarizeHistoryAction(entry: LocationHistoryEntry): string {
-  if (entry.action_code === "set") {
-    return "Initial location saved";
-  }
-  if (entry.action_code === "moved") {
-    return "Location corrected";
-  }
-  if (entry.action_code === "removed") {
-    return "Location removed";
-  }
-  if (entry.action_code === "review") {
-    return "Review status updated";
-  }
-  return entry.action_code;
-}
-
-function summarizeRecordFilter(filter: RecordFilterState): string {
-  const parts: string[] = [];
-  if (filter.query) {
-    parts.push(`text:${filter.query}`);
-  }
-  if (filter.typeCode !== "all") {
-    parts.push(`type:${filter.typeCode}`);
-  }
-  if (filter.avoidOnly !== "all") {
-    parts.push(filter.avoidOnly === "avoid" ? "avoid only" : "non-avoid");
-  }
-  if (filter.placeQuery) {
-    parts.push(`place:${filter.placeQuery}`);
-  }
-  if (filter.reviewStatus !== "all") {
-    parts.push(`review:${filter.reviewStatus}`);
-  }
-  if (filter.mappedOnly !== "all") {
-    parts.push(filter.mappedOnly === "mapped" ? "mapped" : "unmapped");
-  }
-  return parts.length ? parts.join(" | ") : "All records";
 }
 
 function readMetadataText(metadata: Record<string, unknown>, key: string): string | null {
@@ -624,189 +542,21 @@ export function RecordPanelV2({
     [locale],
   );
 
-  const formatFileCountLabel = (count: number) => {
-    if (locale === "zh-CN") {
-      return `${count} 个文件`;
-    }
-    if (locale === "ja") {
-      return `${count} 件`;
-    }
-    return `${count} file${count === 1 ? "" : "s"}`;
-  };
-  const detailCopy = useMemo(
-    () => ({
-      unknownTime: locale === "zh-CN" ? "\u672a\u77e5\u65f6\u95f4" : locale === "ja" ? "\u4e0d\u660e\u306a\u6642\u523b" : "Unknown time",
-      untitledRecord: locale === "zh-CN" ? "\u65e0\u6807\u9898" : locale === "ja" ? "\u7121\u984c" : "Untitled",
-      noContent: locale === "zh-CN" ? "\u65e0\u5185\u5bb9" : locale === "ja" ? "\u5185\u5bb9\u306a\u3057" : "No content",
-      unknownPlace: locale === "zh-CN" ? "\u672a\u77e5\u5730\u70b9" : locale === "ja" ? "\u4e0d\u660e\u306a\u5834\u6240" : "Unknown place",
-      ratingPrefix: locale === "zh-CN" ? "\u8bc4\u5206" : locale === "ja" ? "\u8a55\u4fa1" : "rating",
-      avoidLabel: locale === "zh-CN" ? "\u907f\u96f7" : locale === "ja" ? "\u56de\u907f" : "avoid",
-      mapPrefix: locale === "zh-CN" ? "\u5730\u56fe" : locale === "ja" ? "\u5730\u56f3" : "map",
-      historyInitialLocation:
-        locale === "zh-CN" ? "\u521d\u59cb\u4f4d\u7f6e\u5df2\u4fdd\u5b58" : locale === "ja" ? "\u521d\u56de\u306e\u4f4d\u7f6e\u3092\u4fdd\u5b58" : "Initial location saved",
-      historyLocationCorrected:
-        locale === "zh-CN" ? "\u4f4d\u7f6e\u5df2\u4fee\u6b63" : locale === "ja" ? "\u4f4d\u7f6e\u3092\u4fee\u6b63" : "Location corrected",
-      historyLocationRemoved:
-        locale === "zh-CN" ? "\u4f4d\u7f6e\u5df2\u79fb\u9664" : locale === "ja" ? "\u4f4d\u7f6e\u3092\u524a\u9664" : "Location removed",
-      historyReviewUpdated:
-        locale === "zh-CN" ? "\u590d\u6838\u72b6\u6001\u5df2\u66f4\u65b0" : locale === "ja" ? "\u30ec\u30d3\u30e5\u30fc\u72b6\u614b\u3092\u66f4\u65b0" : "Review status updated",
-      reviewPending: locale === "zh-CN" ? "\u5f85\u5904\u7406" : locale === "ja" ? "\u4fdd\u7559" : "pending",
-      reviewConfirmed: locale === "zh-CN" ? "\u5df2\u786e\u8ba4" : locale === "ja" ? "\u78ba\u8a8d\u6e08\u307f" : "confirmed",
-      reviewNeedsReview: locale === "zh-CN" ? "\u9700\u590d\u6838" : locale === "ja" ? "\u518d\u78ba\u8a8d\u304c\u5fc5\u8981" : "needs review",
-      allRecords: locale === "zh-CN" ? "\u5168\u90e8\u8bb0\u5f55" : locale === "ja" ? "\u5168\u8a18\u9332" : "All records",
-      filterText: locale === "zh-CN" ? "\u6587\u672c" : locale === "ja" ? "\u30c6\u30ad\u30b9\u30c8" : "text",
-      filterType: locale === "zh-CN" ? "\u7c7b\u578b" : locale === "ja" ? "\u7a2e\u985e" : "type",
-      filterPlace: locale === "zh-CN" ? "\u5730\u70b9" : locale === "ja" ? "\u5834\u6240" : "place",
-      filterReview: locale === "zh-CN" ? "\u590d\u6838" : locale === "ja" ? "\u30ec\u30d3\u30e5\u30fc" : "review",
-      filterAvoidOnly: locale === "zh-CN" ? "\u4ec5\u907f\u96f7" : locale === "ja" ? "\u56de\u907f\u306e\u307f" : "avoid only",
-      filterNonAvoid: locale === "zh-CN" ? "\u4ec5\u975e\u907f\u96f7" : locale === "ja" ? "\u901a\u5e38\u306e\u307f" : "non-avoid",
-      filterMapped: locale === "zh-CN" ? "\u5df2\u6807\u70b9" : locale === "ja" ? "\u30de\u30c3\u30d7\u6e08\u307f" : "mapped",
-      filterUnmapped: locale === "zh-CN" ? "\u672a\u6807\u70b9" : locale === "ja" ? "\u672a\u30de\u30c3\u30d7" : "unmapped",
-      contentRequiredError: locale === "zh-CN" ? "\u5185\u5bb9\u4e0d\u80fd\u4e3a\u7a7a" : locale === "ja" ? "\u5185\u5bb9\u306f\u5fc5\u9808\u3067\u3059" : "Content is required",
-      latitudeInvalidError:
-        locale === "zh-CN" ? "\u7eac\u5ea6\u5fc5\u987b\u662f\u6709\u6548\u6570\u5b57" : locale === "ja" ? "\u7def\u5ea6\u306f\u6709\u52b9\u306a\u6570\u5024\u3067\u3042\u308b\u5fc5\u8981\u304c\u3042\u308a\u307e\u3059" : "Latitude must be a valid number",
-      longitudeInvalidError:
-        locale === "zh-CN" ? "\u7ecf\u5ea6\u5fc5\u987b\u662f\u6709\u6548\u6570\u5b57" : locale === "ja" ? "\u7d4c\u5ea6\u306f\u6709\u52b9\u306a\u6570\u5024\u3067\u3042\u308b\u5fc5\u8981\u304c\u3042\u308a\u307e\u3059" : "Longitude must be a valid number",
-      saveRecordError: locale === "zh-CN" ? "\u4fdd\u5b58\u8bb0\u5f55\u5931\u8d25" : locale === "ja" ? "\u8a18\u9332\u306e\u4fdd\u5b58\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to save record",
-      deleteRecordError: locale === "zh-CN" ? "\u5220\u9664\u8bb0\u5f55\u5931\u8d25" : locale === "ja" ? "\u8a18\u9332\u306e\u524a\u9664\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to delete record",
-      uploadMediaError: locale === "zh-CN" ? "\u4e0a\u4f20\u5a92\u4f53\u5931\u8d25" : locale === "ja" ? "\u30e1\u30c7\u30a3\u30a2\u306e\u30a2\u30c3\u30d7\u30ed\u30fc\u30c9\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to upload media",
-      reminderTimeRequiredError:
-        locale === "zh-CN" ? "\u63d0\u9192\u65f6\u95f4\u4e0d\u80fd\u4e3a\u7a7a" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c9\u6642\u523b\u306f\u5fc5\u9808\u3067\u3059" : "Reminder time is required",
-      createReminderError: locale === "zh-CN" ? "\u521b\u5efa\u63d0\u9192\u5931\u8d25" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u306e\u4f5c\u6210\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to create reminder",
-      refreshMediaError: locale === "zh-CN" ? "\u5237\u65b0\u5a92\u4f53\u72b6\u6001\u5931\u8d25" : locale === "ja" ? "\u30e1\u30c7\u30a3\u30a2\u72b6\u614b\u306e\u66f4\u65b0\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to refresh media status",
-      retryMediaError: locale === "zh-CN" ? "\u91cd\u8bd5\u5a92\u4f53\u5904\u7406\u5931\u8d25" : locale === "ja" ? "\u30e1\u30c7\u30a3\u30a2\u51e6\u7406\u306e\u518d\u8a66\u884c\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to retry media processing",
-      bulkRetryError: locale === "zh-CN" ? "\u6279\u91cf\u91cd\u8bd5\u6b7b\u4fe1\u5a92\u4f53\u5931\u8d25" : locale === "ja" ? "\u30c7\u30c3\u30c9\u30ec\u30bf\u30fc\u30e1\u30c7\u30a3\u30a2\u306e\u4e00\u62ec\u518d\u8a66\u884c\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to bulk retry dead-letter media",
-      downloadMediaError: locale === "zh-CN" ? "\u4e0b\u8f7d\u5a92\u4f53\u5931\u8d25" : locale === "ja" ? "\u30e1\u30c7\u30a3\u30a2\u306e\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to download media",
-      deleteMediaError: locale === "zh-CN" ? "\u5220\u9664\u5a92\u4f53\u5931\u8d25" : locale === "ja" ? "\u30e1\u30c7\u30a3\u30a2\u306e\u524a\u9664\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to delete media",
-      applyFilterError: locale === "zh-CN" ? "\u5e94\u7528\u7b5b\u9009\u5931\u8d25" : locale === "ja" ? "\u30d5\u30a3\u30eb\u30bf\u30fc\u306e\u9069\u7528\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to apply filter",
-      presetNameRequiredError:
-        locale === "zh-CN" ? "\u9884\u8bbe\u540d\u79f0\u4e0d\u80fd\u4e3a\u7a7a" : locale === "ja" ? "\u30d7\u30ea\u30bb\u30c3\u30c8\u540d\u306f\u5fc5\u9808\u3067\u3059" : "Preset name is required",
-      savePresetError: locale === "zh-CN" ? "\u4fdd\u5b58\u9884\u8bbe\u5931\u8d25" : locale === "ja" ? "\u30d7\u30ea\u30bb\u30c3\u30c8\u306e\u4fdd\u5b58\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to save preset",
-      deletePresetError: locale === "zh-CN" ? "\u5220\u9664\u9884\u8bbe\u5931\u8d25" : locale === "ja" ? "\u30d7\u30ea\u30bb\u30c3\u30c8\u306e\u524a\u9664\u306b\u5931\u6557\u3057\u307e\u3057\u305f" : "Failed to delete preset",
-      notAuthenticated: locale === "zh-CN" ? "\u5c1a\u672a\u767b\u5f55" : locale === "ja" ? "\u672a\u8a8d\u8a3c\u3067\u3059" : "Not authenticated",
-      noMedia: locale === "zh-CN" ? "\u8fd9\u6761\u8bb0\u5f55\u8fd8\u6ca1\u6709\u4e0a\u4f20\u5a92\u4f53\u3002" : locale === "ja" ? "\u3053\u306e\u8a18\u9332\u306b\u306f\u307e\u3060\u30e1\u30c7\u30a3\u30a2\u304c\u3042\u308a\u307e\u305b\u3093\u3002" : "No media uploaded for this record yet.",
-      largestFilePrefix: locale === "zh-CN" ? "\u6700\u5927\u6587\u4ef6" : locale === "ja" ? "\u6700\u5927\u30d5\u30a1\u30a4\u30eb" : "Largest file",
-      reminderSectionTitle: locale === "zh-CN" ? "\u63d0\u9192 V1" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc V1" : "Reminder V1",
-      reminderSectionDescription:
-        locale === "zh-CN"
-          ? "\u4e3a\u8fd9\u6761\u8bb0\u5f55\u4fdd\u5b58\u4e00\u6b21\u6027\u63d0\u9192\u3002\u6295\u9012\u6267\u884c\u4f1a\u5728\u540e\u7eed\u540e\u7aef\u5207\u7247\u4e2d\u7ee7\u7eed\u63a5\u5165\u3002"
-          : locale === "ja"
-            ? "\u3053\u306e\u8a18\u9332\u306b\u5358\u767a\u306e\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u3092\u4fdd\u5b58\u3057\u307e\u3059\u3002\u914d\u4fe1\u5b9f\u884c\u306f\u5f8c\u7d9a\u306e\u30d0\u30c3\u30af\u30a8\u30f3\u30c9\u5207\u7247\u3067\u63a5\u7d9a\u3057\u307e\u3059\u3002"
-            : "Save one-time reminders on this record. Delivery execution will be connected in the next backend step.",
-      reminderTitleLabel: locale === "zh-CN" ? "\u63d0\u9192\u6807\u9898" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u30bf\u30a4\u30c8\u30eb" : "Reminder title",
-      reminderTitlePlaceholder: locale === "zh-CN" ? "\u665a\u9910\u540e\u7eed\u8ddf\u8fdb" : locale === "ja" ? "\u5915\u98df\u5f8c\u306e\u30d5\u30a9\u30ed\u30fc\u30a2\u30c3\u30d7" : "Dinner follow-up",
-      remindAtLabel: locale === "zh-CN" ? "\u63d0\u9192\u65f6\u95f4" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c9\u6642\u523b" : "Remind at",
-      channelLabel: locale === "zh-CN" ? "\u901a\u9053" : locale === "ja" ? "\u30c1\u30e3\u30cd\u30eb" : "Channel",
-      channelInApp: locale === "zh-CN" ? "\u7ad9\u5185" : locale === "ja" ? "\u30a2\u30d7\u30ea\u5185" : "in_app",
-      reminderNoteLabel: locale === "zh-CN" ? "\u63d0\u9192\u8bf4\u660e" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u30e1\u30e2" : "Reminder note",
-      reminderNotePlaceholder:
-        locale === "zh-CN" ? "\u8fd9\u4e2a\u63d0\u9192\u9700\u8981\u544a\u8bc9\u4f60\u4ec0\u4e48\uff1f" : locale === "ja" ? "\u3053\u306e\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u3067\u4f55\u3092\u4f1d\u3048\u305f\u3044\u3067\u3059\u304b\uff1f" : "What should this reminder tell you?",
-      savingReminder: locale === "zh-CN" ? "\u4fdd\u5b58\u63d0\u9192\u4e2d..." : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u4fdd\u5b58\u4e2d..." : "Saving reminder...",
-      createReminder: locale === "zh-CN" ? "\u521b\u5efa\u63d0\u9192" : locale === "ja" ? "\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u3092\u4f5c\u6210" : "Create reminder",
-      untitledReminder: locale === "zh-CN" ? "\u65e0\u6807\u9898\u63d0\u9192" : locale === "ja" ? "\u7121\u984c\u306e\u30ea\u30de\u30a4\u30f3\u30c0\u30fc" : "Untitled reminder",
-      reminderEnabled: locale === "zh-CN" ? "\u5df2\u542f\u7528" : locale === "ja" ? "\u6709\u52b9" : "enabled",
-      reminderPaused: locale === "zh-CN" ? "\u5df2\u6682\u505c" : locale === "ja" ? "\u4e00\u6642\u505c\u6b62" : "paused",
-      pauseReminder: locale === "zh-CN" ? "\u6682\u505c" : locale === "ja" ? "\u4e00\u6642\u505c\u6b62" : "Pause",
-      enableReminder: locale === "zh-CN" ? "\u542f\u7528" : locale === "ja" ? "\u6709\u52b9\u5316" : "Enable",
-      markReminderDone: locale === "zh-CN" ? "\u6807\u8bb0\u5b8c\u6210" : locale === "ja" ? "\u5b8c\u4e86\u306b\u3059\u308b" : "Mark done",
-      deleteReminder: locale === "zh-CN" ? "\u5220\u9664" : locale === "ja" ? "\u524a\u9664" : "Delete",
-      noReminders: locale === "zh-CN" ? "\u8fd9\u6761\u8bb0\u5f55\u8fd8\u6ca1\u6709\u63d0\u9192\u3002" : locale === "ja" ? "\u3053\u306e\u8a18\u9332\u306b\u306f\u307e\u3060\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u304c\u3042\u308a\u307e\u305b\u3093\u3002" : "No reminders for this record yet.",
-      timelineView: locale === "zh-CN" ? "\u65f6\u95f4\u7ebf" : locale === "ja" ? "\u30bf\u30a4\u30e0\u30e9\u30a4\u30f3" : "Timeline",
-      flatListView: locale === "zh-CN" ? "\u5e73\u94fa\u5217\u8868" : locale === "ja" ? "\u30d5\u30e9\u30c3\u30c8\u30ea\u30b9\u30c8" : "Flat list",
-      timelineDayLabel: locale === "zh-CN" ? "\u65f6\u95f4\u7ebf\u65e5" : locale === "ja" ? "\u30bf\u30a4\u30e0\u30e9\u30a4\u30f3\u65e5" : "Timeline day",
-      noRecords:
-        locale === "zh-CN"
-          ? "\u8fd8\u6ca1\u6709\u8bb0\u5f55\u3002\u53ef\u4ee5\u5148\u5728\u804a\u5929\u9762\u677f\u4fdd\u5b58\uff0c\u6216\u5728\u4e0a\u65b9\u624b\u52a8\u521b\u5efa\u4e00\u6761\u3002"
-          : locale === "ja"
-            ? "\u307e\u3060\u8a18\u9332\u304c\u3042\u308a\u307e\u305b\u3093\u3002\u30c1\u30e3\u30c3\u30c8\u30d1\u30cd\u30eb\u304b\u3089\u4fdd\u5b58\u3059\u308b\u304b\u3001\u4e0a\u3067\u624b\u52d5\u4f5c\u6210\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
-            : "No records yet. Save one from the chat panel or create one manually above.",
-    }),
-    [locale],
-  );
-  const formatReviewStatusLabel = (value?: string | null) => {
-    if (value === "confirmed") {
-      return detailCopy.reviewConfirmed;
-    }
-    if (value === "needs_review") {
-      return detailCopy.reviewNeedsReview;
-    }
-    return detailCopy.reviewPending;
-  };
-  const summarizeHistoryActionLabel = (entry: LocationHistoryEntry) => {
-    if (entry.action_code === "set") {
-      return detailCopy.historyInitialLocation;
-    }
-    if (entry.action_code === "moved") {
-      return detailCopy.historyLocationCorrected;
-    }
-    if (entry.action_code === "removed") {
-      return detailCopy.historyLocationRemoved;
-    }
-    if (entry.action_code === "review") {
-      return detailCopy.historyReviewUpdated;
-    }
-    return entry.action_code;
-  };
-  const summarizeRecordFilterLabel = (filter: RecordFilterState) => {
-    const parts: string[] = [];
-    if (filter.query) {
-      parts.push(`${detailCopy.filterText}:${filter.query}`);
-    }
-    if (filter.typeCode !== "all") {
-      parts.push(`${detailCopy.filterType}:${filter.typeCode}`);
-    }
-    if (filter.avoidOnly !== "all") {
-      parts.push(filter.avoidOnly === "avoid" ? detailCopy.filterAvoidOnly : detailCopy.filterNonAvoid);
-    }
-    if (filter.placeQuery) {
-      parts.push(`${detailCopy.filterPlace}:${filter.placeQuery}`);
-    }
-    if (filter.reviewStatus !== "all") {
-      parts.push(`${detailCopy.filterReview}:${formatReviewStatusLabel(filter.reviewStatus)}`);
-    }
-    if (filter.mappedOnly !== "all") {
-      parts.push(filter.mappedOnly === "mapped" ? detailCopy.filterMapped : detailCopy.filterUnmapped);
-    }
-    return parts.length ? parts.join(" | ") : detailCopy.allRecords;
-  };
-  const formatHistoryTimestampLabel = (value?: string | null) => formatHistoryTimestamp(value, locale, detailCopy.unknownTime);
-  const formatReminderTimestampLabel = (value: string) => formatReminderTimestamp(value, locale);
-  const formatRecordTimestampLabel = (record: RecordItem) => formatRecordTimestamp(record, locale);
-  const formatTimelineDateLabel = (value: string) => formatTimelineDate(value, locale);
-  const formatReminderStatusLabel = (status: string) => {
-    if (status === "completed") {
-      return locale === "zh-CN" ? "\u5df2\u5b8c\u6210" : locale === "ja" ? "\u5b8c\u4e86" : "completed";
-    }
-    if (status === "pending") {
-      return locale === "zh-CN" ? "\u5f85\u6267\u884c" : locale === "ja" ? "\u5f85\u6a5f\u4e2d" : "pending";
-    }
-    if (status === "cancelled") {
-      return locale === "zh-CN" ? "\u5df2\u53d6\u6d88" : locale === "ja" ? "\u53d6\u308a\u6d88\u3057" : "cancelled";
-    }
-    if (status === "failed") {
-      return locale === "zh-CN" ? "\u5931\u8d25" : locale === "ja" ? "\u5931\u6557" : "failed";
-    }
-    return status;
-  };
-  const formatReminderEnabledLabel = (isEnabled: boolean) => (isEnabled ? detailCopy.reminderEnabled : detailCopy.reminderPaused);
-  const formatTimelineCountLabel = (count: number) => {
-    if (locale === "zh-CN") {
-      return `\u5f53\u65e5 ${count} \u9879`;
-    }
-    if (locale === "ja") {
-      return `\u5f53\u65e5 ${count} \u4ef6`;
-    }
-    return `${count} item${count === 1 ? "" : "s"} on this day`;
-  };
-  const formatAvoidCountLabel = (count: number) => {
-    if (locale === "zh-CN") {
-      return `${detailCopy.avoidLabel} ${count}`;
-    }
-    if (locale === "ja") {
-      return `${detailCopy.avoidLabel} ${count}`;
-    }
-    return `avoid ${count}`;
-  };
+  const {
+    copy: detailCopy,
+    formatAvoidCountLabel,
+    formatFileCountLabel,
+    formatHistoryTimestampLabel,
+    formatRecordTimestampLabel,
+    formatReminderEnabledLabel,
+    formatReminderStatusLabel,
+    formatReminderTimestampLabel,
+    formatReviewStatusLabel,
+    formatTimelineCountLabel,
+    formatTimelineDateLabel,
+    summarizeHistoryActionLabel,
+    summarizeRecordFilterLabel,
+  } = useMemo(() => getRecordPanelDetailBundle(locale), [locale]);
 
   useEffect(() => {
     setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)));

@@ -250,12 +250,14 @@ Last updated: 2026-03-22
   - the structured results panel now localizes reminder creation, reminder state labels, timeline view toggles, and empty-state guidance
   - record-card timestamps, reminder timestamps, timeline day formatting, and history timestamps now follow the active UI locale consistently
   - remaining reminder, filter-summary, and record-card helper strings are now centralized inside the record panel instead of being spread across inline literals
+- Maintainability and Updateability Hardening V1:
+  - record-panel detail copy and formatting helpers are now extracted into dedicated `apps/web/lib` modules instead of living inline inside the large record panel component
+  - a lightweight `verify:record-panel-detail-copy` regression script now checks locale-key completeness and non-empty critical copy before future updates ship
+  - the structured results panel now consumes a dedicated detail bundle so further locale or formatting changes can be updated in one place with smaller review scope
 
 ## Next
 - Continue the next product slice
-- Maintainability and Updateability Hardening V1:
-  - extract oversized record-panel locale and formatting helpers into dedicated modules with clear ownership boundaries
-  - add lightweight regression checks for key locale paths and critical UI formatting so future updates do not silently reintroduce broken copy
+- Continue record-panel maintainability extraction for the remaining oversized locale sections
 
 ## Delivery Rule
 - Every meaningful slice must update this file

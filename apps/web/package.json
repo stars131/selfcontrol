@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify:record-panel-detail-copy": "node ./scripts/verify-record-panel-detail-copy.mjs"
   },
   "dependencies": {
     "next": "15.4.6",
@@ -20,4 +21,3 @@
     "typescript": "5.9.2"
   }
 }
-
