@@ -504,6 +504,135 @@ export function RecordPanelV2({
     [locale],
   );
   void legacyMediaIssueCopy;
+  const panelCopy = useMemo(
+    () => ({
+      workspace: locale === "zh-CN" ? "工作区" : locale === "ja" ? "ワークスペース" : "Workspace",
+      structuredResults: locale === "zh-CN" ? "结构化结果" : locale === "ja" ? "構造化結果" : "Structured Results",
+      newRecord: locale === "zh-CN" ? "新建记录" : locale === "ja" ? "新規記録" : "New record",
+      visibleRecords: locale === "zh-CN" ? "可见记录" : locale === "ja" ? "表示中の記録" : "Visible records",
+      food: locale === "zh-CN" ? "食物" : locale === "ja" ? "食事" : "Food",
+      avoid: locale === "zh-CN" ? "避雷" : locale === "ja" ? "回避" : "Avoid",
+      advancedSearch: locale === "zh-CN" ? "高级搜索" : locale === "ja" ? "詳細検索" : "Advanced search",
+      textQuery: locale === "zh-CN" ? "文本检索" : locale === "ja" ? "テキスト検索" : "Text query",
+      textQueryPlaceholder:
+        locale === "zh-CN" ? "菜品 / 零食 / 警告" : locale === "ja" ? "料理 / おやつ / 注意点" : "dish / snack / warning",
+      type: locale === "zh-CN" ? "类型" : locale === "ja" ? "種類" : "Type",
+      all: locale === "zh-CN" ? "全部" : locale === "ja" ? "すべて" : "all",
+      memo: locale === "zh-CN" ? "备忘" : locale === "ja" ? "メモ" : "memo",
+      snack: locale === "zh-CN" ? "零食" : locale === "ja" ? "おやつ" : "snack",
+      badExperience: locale === "zh-CN" ? "踩雷记录" : locale === "ja" ? "悪い体験" : "bad_experience",
+      allRecords: locale === "zh-CN" ? "全部记录" : locale === "ja" ? "全記録" : "all records",
+      avoidOnlyOption: locale === "zh-CN" ? "仅避雷" : locale === "ja" ? "回避のみ" : "avoid only",
+      nonAvoidOnly: locale === "zh-CN" ? "仅非避雷" : locale === "ja" ? "通常のみ" : "non-avoid only",
+      filtering: locale === "zh-CN" ? "筛选中..." : locale === "ja" ? "絞り込み中..." : "Filtering...",
+      applyAdvancedFilter:
+        locale === "zh-CN" ? "应用高级筛选" : locale === "ja" ? "詳細フィルターを適用" : "Apply advanced filter",
+      resetList: locale === "zh-CN" ? "重置列表" : locale === "ja" ? "一覧をリセット" : "Reset list",
+      presetName: locale === "zh-CN" ? "预设名称" : locale === "ja" ? "プリセット名" : "Preset name",
+      presetPlaceholder:
+        locale === "zh-CN" ? "已验证美食地点" : locale === "ja" ? "確認済みの食事スポット" : "Confirmed food spots",
+      savingPreset: locale === "zh-CN" ? "保存预设中..." : locale === "ja" ? "プリセット保存中..." : "Saving preset...",
+      saveCurrentFilter:
+        locale === "zh-CN" ? "保存当前筛选" : locale === "ja" ? "現在のフィルターを保存" : "Save current filter",
+      savedPreset: locale === "zh-CN" ? "已保存预设" : locale === "ja" ? "保存済みプリセット" : "Saved preset",
+      applyPreset: locale === "zh-CN" ? "应用预设" : locale === "ja" ? "プリセットを適用" : "Apply preset",
+      deletePreset: locale === "zh-CN" ? "删除预设" : locale === "ja" ? "プリセットを削除" : "Delete preset",
+      noSavedFilters:
+        locale === "zh-CN"
+          ? "还没有保存的筛选。保存当前高级筛选后可重复使用。"
+          : locale === "ja"
+            ? "保存済みフィルターはまだありません。現在の詳細フィルターを保存すると再利用できます。"
+            : "No saved filters yet. Save your current advanced filter to reuse it.",
+      editRecord: locale === "zh-CN" ? "编辑记录" : locale === "ja" ? "記録を編集" : "Edit record",
+      newManualRecord: locale === "zh-CN" ? "手动新建记录" : locale === "ja" ? "手動で新規記録" : "New manual record",
+      title: locale === "zh-CN" ? "标题" : locale === "ja" ? "タイトル" : "Title",
+      optionalTitle: locale === "zh-CN" ? "可选标题" : locale === "ja" ? "任意タイトル" : "Optional title",
+      content: locale === "zh-CN" ? "内容" : locale === "ja" ? "内容" : "Content",
+      contentPlaceholder:
+        locale === "zh-CN"
+          ? "写下备忘、食物评价或提醒"
+          : locale === "ja"
+            ? "メモ、食事レビュー、またはリマインダーを書いてください"
+            : "Write a note, food review, or reminder",
+      rating: locale === "zh-CN" ? "评分" : locale === "ja" ? "評価" : "Rating",
+      occurredAt: locale === "zh-CN" ? "发生时间" : locale === "ja" ? "発生日時" : "Occurred at",
+      placeName: locale === "zh-CN" ? "地点名称" : locale === "ja" ? "場所名" : "Place name",
+      placePlaceholder: locale === "zh-CN" ? "西湖寿司" : locale === "ja" ? "西湖すし" : "West Lake Sushi",
+      address: locale === "zh-CN" ? "地址" : locale === "ja" ? "住所" : "Address",
+      addressPlaceholder:
+        locale === "zh-CN" ? "杭州西湖区" : locale === "ja" ? "杭州・西湖区" : "Hangzhou, West Lake district",
+      avoidItem: locale === "zh-CN" ? "避雷项目" : locale === "ja" ? "回避項目" : "Avoid item",
+      latitude: locale === "zh-CN" ? "纬度" : locale === "ja" ? "緯度" : "Latitude",
+      longitude: locale === "zh-CN" ? "经度" : locale === "ja" ? "経度" : "Longitude",
+      locationSource: locale === "zh-CN" ? "位置来源" : locale === "ja" ? "位置ソース" : "Location source",
+      locationReview: locale === "zh-CN" ? "位置复核" : locale === "ja" ? "位置レビュー" : "Location Review",
+      locationReviewDescription:
+        locale === "zh-CN"
+          ? "在记录进入长期记忆前，先确认可信坐标或标记可疑地点。"
+          : locale === "ja"
+            ? "この記録が長期記憶に入る前に、信頼できる座標を確認するか、疑わしい場所に印を付けます。"
+            : "Confirm trusted coordinates or flag doubtful places before this record enters long-term memory.",
+      reviewStatus: locale === "zh-CN" ? "复核状态" : locale === "ja" ? "レビュー状態" : "Review status",
+      pending: locale === "zh-CN" ? "待处理" : locale === "ja" ? "保留" : "pending",
+      confirmed: locale === "zh-CN" ? "已确认" : locale === "ja" ? "確認済み" : "confirmed",
+      needsReview: locale === "zh-CN" ? "需复核" : locale === "ja" ? "再確認が必要" : "needs_review",
+      reviewNote: locale === "zh-CN" ? "复核备注" : locale === "ja" ? "レビュー備考" : "Review note",
+      reviewNotePlaceholder:
+        locale === "zh-CN"
+          ? "说明该地点为何可信，或为什么需要再次检查"
+          : locale === "ja"
+            ? "この場所が信頼できる理由、または再確認が必要な理由を書いてください"
+            : "Why this place is trusted or needs another check",
+      markConfirmed: locale === "zh-CN" ? "标记为已确认" : locale === "ja" ? "確認済みにする" : "Mark confirmed",
+      markNeedsReview:
+        locale === "zh-CN" ? "标记为需复核" : locale === "ja" ? "再確認が必要にする" : "Mark needs review",
+      resetReview: locale === "zh-CN" ? "重置复核" : locale === "ja" ? "レビューをリセット" : "Reset review",
+      storedStatus: locale === "zh-CN" ? "已存状态" : locale === "ja" ? "保存済み状態" : "Stored status",
+      lastUpdated: locale === "zh-CN" ? "最近更新" : locale === "ja" ? "最終更新" : "Last updated",
+      confirmedAt: locale === "zh-CN" ? "确认时间" : locale === "ja" ? "確認日時" : "Confirmed at",
+      notConfirmed: locale === "zh-CN" ? "未确认" : locale === "ja" ? "未確認" : "Not confirmed",
+      unnamedLocation: locale === "zh-CN" ? "未命名地点" : locale === "ja" ? "名称未設定の場所" : "Unnamed location",
+      noAddress: locale === "zh-CN" ? "无地址" : locale === "ja" ? "住所なし" : "No address",
+      noLocationHistory:
+        locale === "zh-CN"
+          ? "还没有位置历史。先保存一个带地图点位的记录即可开始复核追踪。"
+          : locale === "ja"
+            ? "位置履歴はまだありません。地図上のポイント付き記録を保存すると追跡を開始できます。"
+            : "No location history yet. Save a mapped point to start review tracking.",
+      saving: locale === "zh-CN" ? "保存中..." : locale === "ja" ? "保存中..." : "Saving...",
+      updateRecord: locale === "zh-CN" ? "更新记录" : locale === "ja" ? "記録を更新" : "Update record",
+      createRecord: locale === "zh-CN" ? "创建记录" : locale === "ja" ? "記録を作成" : "Create record",
+      deleting: locale === "zh-CN" ? "删除中..." : locale === "ja" ? "削除中..." : "Deleting...",
+      deleteRecord: locale === "zh-CN" ? "删除记录" : locale === "ja" ? "記録を削除" : "Delete record",
+      uploadAttachment: locale === "zh-CN" ? "上传附件" : locale === "ja" ? "添付をアップロード" : "Upload attachment",
+      uploadingMedia: locale === "zh-CN" ? "媒体上传中..." : locale === "ja" ? "媒体をアップロード中..." : "Uploading media...",
+      thisRecordMedia: locale === "zh-CN" ? "本记录媒体" : locale === "ja" ? "この記録の媒体" : "This record media",
+      workspaceStorage: locale === "zh-CN" ? "工作区存储" : locale === "ja" ? "ワークスペース保存量" : "Workspace storage",
+      storageHealth: locale === "zh-CN" ? "存储健康" : locale === "ja" ? "保存状態" : "Storage health",
+      allTrackedFilesPresent:
+        locale === "zh-CN" ? "所有已跟踪文件均存在" : locale === "ja" ? "追跡中のファイルはすべて存在します" : "All tracked files present",
+      missingFiles:
+        locale === "zh-CN" ? "缺失文件" : locale === "ja" ? "不足ファイル" : "missing file(s)",
+      processingCompleted: locale === "zh-CN" ? "处理完成" : locale === "ja" ? "処理完了" : "Processing completed",
+      needsAttention: locale === "zh-CN" ? "需要关注" : locale === "ja" ? "要対応" : "Needs attention",
+      queueState: locale === "zh-CN" ? "队列状态" : locale === "ja" ? "キュー状態" : "Queue state",
+      queued: locale === "zh-CN" ? "排队中" : locale === "ja" ? "待機中" : "queued",
+      storageMix: locale === "zh-CN" ? "存储构成" : locale === "ja" ? "保存構成" : "Storage mix",
+      local: locale === "zh-CN" ? "本地" : locale === "ja" ? "ローカル" : "local",
+      remote: locale === "zh-CN" ? "远程" : locale === "ja" ? "リモート" : "remote",
+    }),
+    [locale],
+  );
+
+  const formatFileCountLabel = (count: number) => {
+    if (locale === "zh-CN") {
+      return `${count} 个文件`;
+    }
+    if (locale === "ja") {
+      return `${count} 件`;
+    }
+    return `${count} file${count === 1 ? "" : "s"}`;
+  };
 
   useEffect(() => {
     setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)));
@@ -1011,9 +1140,9 @@ export function RecordPanelV2({
     <section className="panel">
       <div className="panel-header">
         <div>
-          <div className="eyebrow">Workspace</div>
+          <div className="eyebrow">{panelCopy.workspace}</div>
           <h2 className="title" style={{ fontSize: 22 }}>
-            Structured Results
+            {panelCopy.structuredResults}
           </h2>
           <div className="muted" style={{ marginTop: 8 }}>
             {workspaceId}
@@ -1021,26 +1150,26 @@ export function RecordPanelV2({
         </div>
         <div className="action-row">
           <button className="button secondary" disabled={!canWriteWorkspace} type="button" onClick={() => onSelectRecord(null)}>
-            New record
+            {panelCopy.newRecord}
           </button>
         </div>
       </div>
       <div className="panel-body">
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="eyebrow">Visible records</div>
+            <div className="eyebrow">{panelCopy.visibleRecords}</div>
             <div className="title" style={{ fontSize: 20 }}>
               {records.length}
             </div>
           </div>
           <div className="stat-card">
-            <div className="eyebrow">Food</div>
+            <div className="eyebrow">{panelCopy.food}</div>
             <div className="title" style={{ fontSize: 20 }}>
               {foodCount}
             </div>
           </div>
           <div className="stat-card">
-            <div className="eyebrow">Avoid</div>
+            <div className="eyebrow">{panelCopy.avoid}</div>
             <div className="title" style={{ fontSize: 20 }}>
               {avoidCount}
             </div>
@@ -1048,10 +1177,10 @@ export function RecordPanelV2({
         </div>
 
         <div className="record-card form-stack" style={{ marginTop: 20 }}>
-          <div className="eyebrow">Advanced search</div>
+          <div className="eyebrow">{panelCopy.advancedSearch}</div>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Text query</span>
+              <span className="field-label">{panelCopy.textQuery}</span>
               <input
                 className="input"
                 value={filterDraft.query}
@@ -1061,11 +1190,11 @@ export function RecordPanelV2({
                     query: event.target.value,
                   }))
                 }
-                placeholder="dish / snack / warning"
+                placeholder={panelCopy.textQueryPlaceholder}
               />
             </label>
             <label className="field">
-              <span className="field-label">Type</span>
+              <span className="field-label">{panelCopy.type}</span>
               <select
                 className="input"
                 value={filterDraft.typeCode}
@@ -1076,15 +1205,15 @@ export function RecordPanelV2({
                   }))
                 }
               >
-                <option value="all">all</option>
-                <option value="memo">memo</option>
-                <option value="food">food</option>
-                <option value="snack">snack</option>
-                <option value="bad_experience">bad_experience</option>
+                <option value="all">{panelCopy.all}</option>
+                <option value="memo">{panelCopy.memo}</option>
+                <option value="food">{panelCopy.food}</option>
+                <option value="snack">{panelCopy.snack}</option>
+                <option value="bad_experience">{panelCopy.badExperience}</option>
               </select>
             </label>
             <label className="field">
-              <span className="field-label">Avoid</span>
+              <span className="field-label">{panelCopy.avoid}</span>
               <select
                 className="input"
                 value={filterDraft.avoidOnly}
@@ -1095,30 +1224,30 @@ export function RecordPanelV2({
                   }))
                 }
               >
-                <option value="all">all records</option>
-                <option value="avoid">avoid only</option>
-                <option value="normal">non-avoid only</option>
+                <option value="all">{panelCopy.allRecords}</option>
+                <option value="avoid">{panelCopy.avoidOnlyOption}</option>
+                <option value="normal">{panelCopy.nonAvoidOnly}</option>
               </select>
             </label>
           </div>
           <div className="action-row">
             <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleApplyFilter()}>
-              {filteringRecords ? "Filtering..." : "Apply advanced filter"}
+              {filteringRecords ? panelCopy.filtering : panelCopy.applyAdvancedFilter}
             </button>
             <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onResetFilter()}>
-              Reset list
+              {panelCopy.resetList}
             </button>
           </div>
           <div className="muted">{summarizeRecordFilter(recordFilter)}</div>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Preset name</span>
+              <span className="field-label">{panelCopy.presetName}</span>
               <input
                 className="input"
                 disabled={!canWriteWorkspace}
                 value={presetName}
                 onChange={(event) => setPresetName(event.target.value)}
-                placeholder="Confirmed food spots"
+                placeholder={panelCopy.presetPlaceholder}
               />
             </label>
             <div className="field" style={{ alignSelf: "end" }}>
@@ -1128,7 +1257,7 @@ export function RecordPanelV2({
                 type="button"
                 onClick={() => void handleSavePreset()}
               >
-                {savingSearchPreset ? "Saving preset..." : "Save current filter"}
+                {savingSearchPreset ? panelCopy.savingPreset : panelCopy.saveCurrentFilter}
               </button>
             </div>
           </div>
@@ -1136,7 +1265,7 @@ export function RecordPanelV2({
             <div className="record-list compact-list">
               {searchPresets.map((preset) => (
                 <article className="record-card" key={preset.id}>
-                  <div className="eyebrow">Saved preset</div>
+                  <div className="eyebrow">{panelCopy.savedPreset}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>{preset.name}</div>
                   <div className="muted" style={{ marginTop: 8 }}>
                     {summarizeRecordFilter(preset.filters)}
@@ -1148,11 +1277,11 @@ export function RecordPanelV2({
                       type="button"
                       onClick={() => void onApplyRecordFilter(preset.filters)}
                     >
-                      Apply preset
+                      {panelCopy.applyPreset}
                     </button>
                     {canWriteWorkspace ? (
                       <button className="button secondary" type="button" onClick={() => void handleDeletePreset(preset.id)}>
-                        Delete preset
+                        {panelCopy.deletePreset}
                       </button>
                     ) : null}
                   </div>
@@ -1160,7 +1289,7 @@ export function RecordPanelV2({
               ))}
             </div>
           ) : (
-            <div className="notice">No saved filters yet. Save your current advanced filter to reuse it.</div>
+            <div className="notice">{panelCopy.noSavedFilters}</div>
           )}
         </div>
 
@@ -1184,44 +1313,44 @@ export function RecordPanelV2({
         />
 
         <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={handleSubmit}>
-          <div className="eyebrow">{selectedRecord ? "Edit record" : "New manual record"}</div>
+          <div className="eyebrow">{selectedRecord ? panelCopy.editRecord : panelCopy.newManualRecord}</div>
           <label className="field">
-            <span className="field-label">Title</span>
+            <span className="field-label">{panelCopy.title}</span>
             <input
               className="input"
               disabled={!canWriteWorkspace}
               value={form.title}
               onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-              placeholder="Optional title"
+              placeholder={panelCopy.optionalTitle}
             />
           </label>
           <label className="field">
-            <span className="field-label">Content</span>
+            <span className="field-label">{panelCopy.content}</span>
             <textarea
               className="textarea"
               disabled={!canWriteWorkspace}
               value={form.content}
               onChange={(event) => setForm((prev) => ({ ...prev, content: event.target.value }))}
-              placeholder="Write a note, food review, or reminder"
+              placeholder={panelCopy.contentPlaceholder}
             />
           </label>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Type</span>
+              <span className="field-label">{panelCopy.type}</span>
               <select
                 className="input"
                 disabled={!canWriteWorkspace}
                 value={form.type_code}
                 onChange={(event) => setForm((prev) => ({ ...prev, type_code: event.target.value }))}
               >
-                <option value="memo">memo</option>
-                <option value="food">food</option>
-                <option value="snack">snack</option>
-                <option value="bad_experience">bad_experience</option>
+                <option value="memo">{panelCopy.memo}</option>
+                <option value="food">{panelCopy.food}</option>
+                <option value="snack">{panelCopy.snack}</option>
+                <option value="bad_experience">{panelCopy.badExperience}</option>
               </select>
             </label>
             <label className="field">
-              <span className="field-label">Rating</span>
+              <span className="field-label">{panelCopy.rating}</span>
               <input
                 className="input"
                 type="number"
@@ -1234,7 +1363,7 @@ export function RecordPanelV2({
               />
             </label>
             <label className="field">
-              <span className="field-label">Occurred at</span>
+              <span className="field-label">{panelCopy.occurredAt}</span>
               <input
                 className="input"
                 type="datetime-local"
@@ -1246,7 +1375,7 @@ export function RecordPanelV2({
           </div>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Place name</span>
+              <span className="field-label">{panelCopy.placeName}</span>
               <input
                 className="input"
                 disabled={!canWriteWorkspace}
@@ -1257,11 +1386,11 @@ export function RecordPanelV2({
                     location: { ...prev.location, place_name: event.target.value, source: "manual" },
                   }))
                 }
-                placeholder="West Lake Sushi"
+                placeholder={panelCopy.placePlaceholder}
               />
             </label>
             <label className="field">
-              <span className="field-label">Address</span>
+              <span className="field-label">{panelCopy.address}</span>
               <input
                 className="input"
                 disabled={!canWriteWorkspace}
@@ -1272,7 +1401,7 @@ export function RecordPanelV2({
                     location: { ...prev.location, address: event.target.value, source: "manual" },
                   }))
                 }
-                placeholder="Hangzhou, West Lake district"
+                placeholder={panelCopy.addressPlaceholder}
               />
             </label>
             <label className="checkbox-field">
@@ -1282,12 +1411,12 @@ export function RecordPanelV2({
                 type="checkbox"
                 onChange={(event) => setForm((prev) => ({ ...prev, is_avoid: event.target.checked }))}
               />
-              <span>Avoid item</span>
+              <span>{panelCopy.avoidItem}</span>
             </label>
           </div>
           <div className="inline-fields">
             <label className="field">
-              <span className="field-label">Latitude</span>
+              <span className="field-label">{panelCopy.latitude}</span>
               <input
                 className="input"
                 inputMode="decimal"
@@ -1303,7 +1432,7 @@ export function RecordPanelV2({
               />
             </label>
             <label className="field">
-              <span className="field-label">Longitude</span>
+              <span className="field-label">{panelCopy.longitude}</span>
               <input
                 className="input"
                 inputMode="decimal"
@@ -1319,18 +1448,18 @@ export function RecordPanelV2({
               />
             </label>
             <label className="field">
-              <span className="field-label">Location source</span>
+              <span className="field-label">{panelCopy.locationSource}</span>
               <input className="input" disabled value={form.location.source || "manual"} />
             </label>
           </div>
           <div className="record-card form-stack">
-            <div className="eyebrow">Location Review</div>
+            <div className="eyebrow">{panelCopy.locationReview}</div>
             <div className="muted">
-              Confirm trusted coordinates or flag doubtful places before this record enters long-term memory.
+              {panelCopy.locationReviewDescription}
             </div>
             <div className="inline-fields">
               <label className="field">
-                <span className="field-label">Review status</span>
+                <span className="field-label">{panelCopy.reviewStatus}</span>
                 <select
                   className="input"
                   disabled={!canWriteWorkspace}
@@ -1342,13 +1471,13 @@ export function RecordPanelV2({
                     }))
                   }
                 >
-                  <option value="pending">pending</option>
-                  <option value="confirmed">confirmed</option>
-                  <option value="needs_review">needs_review</option>
+                  <option value="pending">{panelCopy.pending}</option>
+                  <option value="confirmed">{panelCopy.confirmed}</option>
+                  <option value="needs_review">{panelCopy.needsReview}</option>
                 </select>
               </label>
               <label className="field" style={{ gridColumn: "span 2" }}>
-                <span className="field-label">Review note</span>
+                <span className="field-label">{panelCopy.reviewNote}</span>
                 <input
                   className="input"
                   disabled={!canWriteWorkspace}
@@ -1359,7 +1488,7 @@ export function RecordPanelV2({
                       note: event.target.value,
                     }))
                   }
-                  placeholder="Why this place is trusted or needs another check"
+                  placeholder={panelCopy.reviewNotePlaceholder}
                 />
               </label>
             </div>
@@ -1375,7 +1504,7 @@ export function RecordPanelV2({
                   }))
                 }
               >
-                Mark confirmed
+                {panelCopy.markConfirmed}
               </button>
               <button
                 className="button secondary"
@@ -1388,7 +1517,7 @@ export function RecordPanelV2({
                   }))
                 }
               >
-                Mark needs review
+                {panelCopy.markNeedsReview}
               </button>
               <button
                 className="button secondary"
@@ -1401,29 +1530,29 @@ export function RecordPanelV2({
                   })
                 }
               >
-                Reset review
+                {panelCopy.resetReview}
               </button>
             </div>
             {selectedRecord && selectedLocationReview ? (
               <div className="detail-grid">
                 <div className="subtle-card">
-                  <div className="eyebrow">Stored status</div>
+                  <div className="eyebrow">{panelCopy.storedStatus}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {formatReviewStatus(selectedLocationReview.status)}
                   </div>
                 </div>
                 <div className="subtle-card">
-                  <div className="eyebrow">Last updated</div>
+                  <div className="eyebrow">{panelCopy.lastUpdated}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {formatHistoryTimestamp(selectedLocationReview.updated_at)}
                   </div>
                 </div>
                 <div className="subtle-card">
-                  <div className="eyebrow">Confirmed at</div>
+                  <div className="eyebrow">{panelCopy.confirmedAt}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {selectedLocationReview.confirmed_at
                       ? formatHistoryTimestamp(selectedLocationReview.confirmed_at)
-                      : "Not confirmed"}
+                      : panelCopy.notConfirmed}
                   </div>
                 </div>
               </div>
@@ -1437,13 +1566,13 @@ export function RecordPanelV2({
                         <div>
                           <div className="eyebrow">{summarizeHistoryAction(entry)}</div>
                           <div style={{ marginTop: 8, fontWeight: 600 }}>
-                            {entry.place_name || entry.address || "Unnamed location"}
+                            {entry.place_name || entry.address || panelCopy.unnamedLocation}
                           </div>
                         </div>
                         <div className="muted">{formatHistoryTimestamp(entry.changed_at)}</div>
                       </div>
                       <div className="muted" style={{ marginTop: 8 }}>
-                        {entry.address || "No address"}
+                        {entry.address || panelCopy.noAddress}
                       </div>
                       {(entry.latitude ?? null) !== null && (entry.longitude ?? null) !== null ? (
                         <div className="muted" style={{ marginTop: 8 }}>
@@ -1463,7 +1592,7 @@ export function RecordPanelV2({
                   ))
                 ) : (
                   <div className="notice">
-                    No location history yet. Save a mapped point to start review tracking.
+                    {panelCopy.noLocationHistory}
                   </div>
                 )}
               </div>
@@ -1472,43 +1601,43 @@ export function RecordPanelV2({
           {error ? <div className="notice error">{error}</div> : null}
           <div className="action-row">
             <button className="button" disabled={saving || !canWriteWorkspace} type="submit">
-              {saving ? "Saving..." : selectedRecord ? "Update record" : "Create record"}
+              {saving ? panelCopy.saving : selectedRecord ? panelCopy.updateRecord : panelCopy.createRecord}
             </button>
             {selectedRecord ? (
               <button className="button secondary" disabled={deleting || !canWriteWorkspace} onClick={handleDelete} type="button">
-                {deleting ? "Deleting..." : "Delete record"}
+                {deleting ? panelCopy.deleting : panelCopy.deleteRecord}
               </button>
             ) : null}
           </div>
           {selectedRecord ? (
             <>
               <label className="field">
-                <span className="field-label">Upload attachment</span>
+                <span className="field-label">{panelCopy.uploadAttachment}</span>
                 <input disabled={!canWriteWorkspace} onChange={handleUpload} type="file" />
               </label>
-              {uploading ? <div className="notice">Uploading media...</div> : null}
+              {uploading ? <div className="notice">{panelCopy.uploadingMedia}</div> : null}
               <div className="detail-grid" style={{ marginBottom: 16 }}>
                 <div className="subtle-card">
-                  <div className="eyebrow">This record media</div>
+                  <div className="eyebrow">{panelCopy.thisRecordMedia}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {mediaAssets.length} file{mediaAssets.length === 1 ? "" : "s"} / {formatByteCount(selectedRecordMediaSizeBytes)}
+                    {formatFileCountLabel(mediaAssets.length)} / {formatByteCount(selectedRecordMediaSizeBytes)}
                   </div>
                 </div>
                 <div className="subtle-card">
-                  <div className="eyebrow">Workspace storage</div>
+                  <div className="eyebrow">{panelCopy.workspaceStorage}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {mediaStorageSummary
-                      ? `${mediaStorageSummary.total_count} file${mediaStorageSummary.total_count === 1 ? "" : "s"} / ${mediaStorageSummary.total_size_label}`
+                      ? `${formatFileCountLabel(mediaStorageSummary.total_count)} / ${mediaStorageSummary.total_size_label}`
                       : "-"}
                   </div>
                 </div>
                 <div className="subtle-card">
-                  <div className="eyebrow">Storage health</div>
+                  <div className="eyebrow">{panelCopy.storageHealth}</div>
                   <div style={{ marginTop: 8, fontWeight: 600 }}>
                     {mediaStorageSummary
                       ? mediaStorageSummary.missing_file_count
-                        ? `${mediaStorageSummary.missing_file_count} missing file(s)`
-                        : "All tracked files present"
+                        ? `${mediaStorageSummary.missing_file_count} ${panelCopy.missingFiles}`
+                        : panelCopy.allTrackedFilesPresent
                       : "-"}
                   </div>
                 </div>
@@ -1517,27 +1646,27 @@ export function RecordPanelV2({
                 <>
                   <div className="detail-grid" style={{ marginBottom: 16 }}>
                     <div className="subtle-card">
-                      <div className="eyebrow">Processing completed</div>
+                      <div className="eyebrow">{panelCopy.processingCompleted}</div>
                       <div style={{ marginTop: 8, fontWeight: 600 }}>
                         {mediaProcessingOverview.completed_count}/{mediaProcessingOverview.total_count}
                       </div>
                     </div>
                     <div className="subtle-card">
-                      <div className="eyebrow">Needs attention</div>
+                      <div className="eyebrow">{panelCopy.needsAttention}</div>
                       <div style={{ marginTop: 8, fontWeight: 600 }}>
                         {mediaProcessingOverview.failed_count + mediaProcessingOverview.deferred_count}
                       </div>
                     </div>
                     <div className="subtle-card">
-                      <div className="eyebrow">Queue state</div>
+                      <div className="eyebrow">{panelCopy.queueState}</div>
                       <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.pending_count + mediaProcessingOverview.processing_count} queued
+                        {mediaProcessingOverview.pending_count + mediaProcessingOverview.processing_count} {panelCopy.queued}
                       </div>
                     </div>
                     <div className="subtle-card">
-                      <div className="eyebrow">Storage mix</div>
+                      <div className="eyebrow">{panelCopy.storageMix}</div>
                       <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.local_item_count} local / {mediaProcessingOverview.remote_item_count} remote
+                        {mediaProcessingOverview.local_item_count} {panelCopy.local} / {mediaProcessingOverview.remote_item_count} {panelCopy.remote}
                       </div>
                     </div>
                   </div>

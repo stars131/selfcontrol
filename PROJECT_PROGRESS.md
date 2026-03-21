@@ -242,6 +242,10 @@ Last updated: 2026-03-22
   - the structured results panel now uses clean Chinese and Japanese operator copy for recent media issues and dead-letter recovery guidance
   - media asset cards now localize detail labels and media actions such as dimensions, text counts, download, refresh, retry, and delete
   - the media-issue locale override approach now avoids directly depending on corrupted legacy copy blocks inside the large record panel component
+- Structured Results Search and Editor Locale Cleanup V1:
+  - the structured results header, stats cards, advanced search controls, and saved-filter actions now render clean locale-aware operator copy
+  - the manual record editor now localizes record fields, location review controls, attachment upload prompts, and storage summary labels
+  - media overview cards now use locale-aware labels for queue state, storage mix, and missing-file health summaries while keeping existing behavior unchanged
 
 ## Next
 - Continue the next product slice
