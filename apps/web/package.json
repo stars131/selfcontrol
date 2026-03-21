@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "verify:record-panel-detail-copy": "node ./scripts/verify-record-panel-detail-copy.mjs"
+    "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",
+    "verify:record-panel-detail-copy": "npm run verify:record-panel-copy"
   },
   "dependencies": {
     "next": "15.4.6",

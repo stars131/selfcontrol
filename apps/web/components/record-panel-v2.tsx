@@ -12,6 +12,7 @@ import {
   getRetryStateLabel,
 } from "../lib/media-issue-display";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
@@ -354,7 +355,7 @@ export function RecordPanelV2({
     [locale],
   );
 
-  const mediaIssueCopy = useMemo(
+  const legacyVisibleMediaIssueCopy = useMemo(
     () => ({
       recentIssuesTitle:
         locale === "zh-CN" ? "最近媒体问题" : locale === "ja" ? "最近の媒体問題" : "Recent media issues",
@@ -422,7 +423,8 @@ export function RecordPanelV2({
     [locale],
   );
   void legacyMediaIssueCopy;
-  const panelCopy = useMemo(
+  const { mediaIssueCopy, panelCopy } = useMemo(() => getRecordPanelUiBundle(locale), [locale]);
+  const legacyPanelCopy = useMemo(
     () => ({
       workspace: locale === "zh-CN" ? "工作区" : locale === "ja" ? "ワークスペース" : "Workspace",
       structuredResults: locale === "zh-CN" ? "结构化结果" : locale === "ja" ? "構造化結果" : "Structured Results",

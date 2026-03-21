@@ -252,12 +252,16 @@ Last updated: 2026-03-22
   - remaining reminder, filter-summary, and record-card helper strings are now centralized inside the record panel instead of being spread across inline literals
 - Maintainability and Updateability Hardening V1:
   - record-panel detail copy and formatting helpers are now extracted into dedicated `apps/web/lib` modules instead of living inline inside the large record panel component
-  - a lightweight `verify:record-panel-detail-copy` regression script now checks locale-key completeness and non-empty critical copy before future updates ship
+  - a lightweight record-panel copy verification script now checks locale-key completeness and non-empty critical copy before future updates ship
   - the structured results panel now consumes a dedicated detail bundle so further locale or formatting changes can be updated in one place with smaller review scope
+- Record-Panel UI Copy Extraction V1:
+  - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
+  - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
+  - the structured results panel now reads its active `mediaIssueCopy` and `panelCopy` from a shared bundle loader, reducing the future review surface for locale updates
 
 ## Next
 - Continue the next product slice
-- Continue record-panel maintainability extraction for the remaining oversized locale sections
+- Remove the remaining dead legacy copy blocks from `record-panel-v2` and continue splitting oversized UI logic into smaller modules
 
 ## Delivery Rule
 - Every meaningful slice must update this file
