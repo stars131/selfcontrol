@@ -114,10 +114,16 @@ Last updated: 2026-03-21
   - nginx reverse-proxy config now fronts web and API traffic, exposes `/health`, and raises media upload size limits
   - Linux deployment guide and helper deploy script are now included for server rollout
   - production compose configuration is validated through `docker compose config`
+- Backup, Log Rotation, and Retention Operations V1:
+  - production env templates now define backup and retention knobs for database dumps and runtime temp cleanup
+  - production compose now enables Docker json-file log rotation for api, worker, web, and nginx
+  - operations scripts now cover database backup, database restore, and runtime file pruning
+  - Linux deployment docs now include backup, restore, and cleanup procedures
+  - dedicated operations handbook now includes cron examples and disaster-recovery notes
 
 ## Next
-- Production backups, log rotation, and retention operations
 - HTTPS / TLS deployment path and domain-specific hardening
+- Reverse-proxy trust headers and host validation
 
 ## Delivery Rule
 - Every meaningful slice must update this file

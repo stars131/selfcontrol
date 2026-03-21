@@ -81,6 +81,28 @@ git pull
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 ```
 
+## Backups and Cleanup
+
+- Create a database backup:
+
+```bash
+sh infra/scripts/backup-db.sh .env.production
+```
+
+- Restore a database backup:
+
+```bash
+sh infra/scripts/restore-db.sh .env.production backups/db/selfcontrol_YYYYMMDD_HHMMSS.sql.gz
+```
+
+- Prune old runtime temp files and expired backups:
+
+```bash
+sh infra/scripts/prune-runtime-files.sh .env.production
+```
+
+See [OPERATIONS.md](./OPERATIONS.md) for cron examples and retention details.
+
 ## Notes
 
 - Production should use `AUTO_CREATE_TABLES=false`.
@@ -88,3 +110,4 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d --bui
 - Do not expose PostgreSQL or Redis directly to the public internet.
 - Add TLS at the host or replace the bundled Nginx config with your HTTPS setup.
 - The current Nginx config increases `client_max_body_size` to `256m` for media upload support.
+- The production compose file now enables Docker log rotation for `api`, `worker`, `web`, and `nginx`.

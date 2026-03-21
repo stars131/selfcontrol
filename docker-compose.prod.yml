@@ -34,6 +34,11 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: selfcontrol-api-prod
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
@@ -78,6 +83,11 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: selfcontrol-worker-prod
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
@@ -116,6 +126,11 @@ services:
       dockerfile: apps/web/Dockerfile
     container_name: selfcontrol-web-prod
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     environment:
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
       NEXT_PUBLIC_AMAP_KEY: ${NEXT_PUBLIC_AMAP_KEY}
@@ -128,6 +143,11 @@ services:
     image: nginx:1.27-alpine
     container_name: selfcontrol-nginx-prod
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     depends_on:
       api:
         condition: service_healthy

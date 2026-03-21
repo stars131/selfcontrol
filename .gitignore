@@ -19,6 +19,7 @@ dist/
 # Storage
 storage/uploads/
 storage/tmp/
+backups/
 apps/api/storage/
 .codex-runtime/
 *.db

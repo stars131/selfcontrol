@@ -50,3 +50,4 @@ alembic upgrade head
 - API 与工作流：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
 - 开发环境：[docs/DEVELOPMENT_SETUP.md](./docs/DEVELOPMENT_SETUP.md)
 - Linux 部署：[docs/LINUX_DEPLOYMENT.md](./docs/LINUX_DEPLOYMENT.md)
+- 运维手册：[docs/OPERATIONS.md](./docs/OPERATIONS.md)
