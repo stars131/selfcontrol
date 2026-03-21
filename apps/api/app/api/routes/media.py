@@ -29,6 +29,7 @@ from app.services.media_storage import (
     build_workspace_media_retention_report,
     archive_workspace_media_retention,
     cleanup_workspace_media_retention,
+    media_uses_local_storage,
     remove_storage_file,
     resolve_storage_path,
     summarize_workspace_media_storage,
@@ -186,8 +187,10 @@ def get_media_content(
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
+    if not media_uses_local_storage(media):
+        raise HTTPException(status_code=409, detail="Remote media content is not available for direct download yet")
 
-    file_path = Path(settings.storage_dir).parent / media.storage_key
+    file_path = resolve_storage_path(media)
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Stored file not found")
 

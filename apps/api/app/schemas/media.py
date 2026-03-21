@@ -43,6 +43,7 @@ class MediaRetentionItemRead(BaseModel):
     record_id: str
     original_filename: str
     media_type: str
+    storage_provider: str
     storage_tier: str
     processing_status: str
     size_bytes: int
@@ -65,6 +66,9 @@ class MediaRetentionReportRead(BaseModel):
     archived_item_count: int
     archived_item_size_bytes: int
     archived_item_size_label: str
+    remote_item_count: int
+    remote_item_size_bytes: int
+    remote_item_size_label: str
     missing_file_count: int
     orphan_file_count: int
     orphan_file_size_bytes: int

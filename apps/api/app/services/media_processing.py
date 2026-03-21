@@ -186,6 +186,9 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
     db.refresh(media)
 
     try:
+        if media.storage_provider != "local":
+            raise ValueError("Remote storage media cannot be processed without a local file payload")
+
         file_path = resolve_storage_path(media)
         if not file_path.exists():
             raise FileNotFoundError(f"Stored file not found: {file_path}")

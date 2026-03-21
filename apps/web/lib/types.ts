@@ -30,6 +30,7 @@ export type WorkspaceImportResult = {
   workspace: Workspace;
   imported_record_count: number;
   imported_media_count: number;
+  imported_reference_media_count: number;
   skipped_media_count: number;
 };
 
@@ -162,6 +163,7 @@ export type MediaRetentionItem = {
   record_id: string;
   original_filename: string;
   media_type: string;
+  storage_provider: string;
   storage_tier: string;
   processing_status: string;
   size_bytes: number;
@@ -184,6 +186,9 @@ export type MediaRetentionReport = {
   archived_item_count: number;
   archived_item_size_bytes: number;
   archived_item_size_label: string;
+  remote_item_count: number;
+  remote_item_size_bytes: number;
+  remote_item_size_label: string;
   missing_file_count: number;
   orphan_file_count: number;
   orphan_file_size_bytes: number;

@@ -91,6 +91,24 @@ def build_workspace_import_client(tmp_path, monkeypatch) -> tuple[TestClient, se
                     metadata_json={"preview_kind": "image"},
                     processing_status="completed",
                 ),
+                MediaAsset(
+                    workspace_id=workspace.id,
+                    record_id=record_item.id,
+                    uploaded_by=user.id,
+                    media_type="audio",
+                    storage_provider="s3",
+                    storage_key=f"remote/{workspace.id}/voice-note.m4a",
+                    original_filename="voice-note.m4a",
+                    mime_type="audio/mp4",
+                    size_bytes=512,
+                    metadata_json={
+                        "preview_kind": "audio",
+                        "remote_reference": {"bucket": "voice-notes", "object_key": "voice-note.m4a"},
+                        "signed_url": "https://example.invalid/download?token=secret-value",
+                    },
+                    processing_status="completed",
+                    extracted_text="remote transcript",
+                ),
             ]
         )
         db.commit()
@@ -143,7 +161,8 @@ def test_workspace_import_restores_records_and_available_media(tmp_path, monkeyp
     assert import_response.status_code == 200
     result = import_response.json()["data"]["result"]
     assert result["imported_record_count"] == 1
-    assert result["imported_media_count"] == 1
+    assert result["imported_media_count"] == 2
+    assert result["imported_reference_media_count"] == 1
     assert result["skipped_media_count"] == 1
     assert result["workspace"]["slug"].startswith("source-workspace-import")
     assert result["workspace"]["slug"] != "source-workspace"
@@ -162,10 +181,16 @@ def test_workspace_import_restores_records_and_available_media(tmp_path, monkeyp
         assert records[0].extra_data["category"] == "food"
 
         media_items = db.query(MediaAsset).filter(MediaAsset.workspace_id == imported_workspace_id).all()
-        assert len(media_items) == 1
-        assert media_items[0].original_filename == "keep.txt"
-        imported_file_path = tmp_path / media_items[0].storage_key
+        assert len(media_items) == 2
+        media_by_name = {item.original_filename: item for item in media_items}
+        assert media_by_name["keep.txt"].storage_provider == "local"
+        imported_file_path = tmp_path / media_by_name["keep.txt"].storage_key
         assert imported_file_path.read_bytes() == b"keep me"
+        assert media_by_name["voice-note.m4a"].storage_provider == "s3"
+        assert media_by_name["voice-note.m4a"].storage_key == f"remote/{source_workspace_id}/voice-note.m4a"
+        assert media_by_name["voice-note.m4a"].metadata_json["import_mode"] == "reference_only"
+        assert "signed_url" not in media_by_name["voice-note.m4a"].metadata_json
+        assert media_by_name["voice-note.m4a"].extracted_text == "remote transcript"
 
 
 def test_workspace_import_rejects_invalid_archive(tmp_path, monkeypatch) -> None:

@@ -42,6 +42,7 @@ class WorkspaceImportResultRead(BaseModel):
     workspace: WorkspaceRead
     imported_record_count: int
     imported_media_count: int
+    imported_reference_media_count: int = 0
     skipped_media_count: int
 
 

@@ -23,6 +23,7 @@ const COPY: Record<
     totalTracked: string;
     agedMedia: string;
     archivedMedia: string;
+    remoteMedia?: string;
     storageRisk: string;
     noLargestItems: string;
     noCandidates: string;
@@ -37,6 +38,7 @@ const COPY: Record<
     missing: string;
     archived: string;
     primary: string;
+    remoteReference?: string;
     allHealthy: string;
     days: string;
     loadFailed: string;
@@ -113,6 +115,7 @@ const COPY: Record<
     totalTracked: "Tracked media",
     agedMedia: "Older than threshold",
     archivedMedia: "Archived media",
+    remoteMedia: "Remote references",
     storageRisk: "Storage risk",
     noLargestItems: "No media files found.",
     noCandidates: "No unarchived stale media candidates exceed the current threshold.",
@@ -127,6 +130,7 @@ const COPY: Record<
     missing: "File missing",
     archived: "Archived",
     primary: "Primary",
+    remoteReference: "Remote reference",
     allHealthy: "Tracked files are present",
     days: "days",
     loadFailed: "Failed to load retention report",
@@ -207,6 +211,7 @@ function renderItem(
   locale: LocaleCode,
   copy: (typeof COPY)[LocaleCode],
 ) {
+  const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
   return (
     <article className="message" key={item.media_id}>
       <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -226,7 +231,9 @@ function renderItem(
       </div>
       <div className="tag-row" style={{ marginTop: 12 }}>
         <span className="tag">{item.processing_status}</span>
+        <span className="tag">{item.storage_provider}</span>
         <span className="tag">{item.storage_tier === "archive" ? copy.archived : copy.primary}</span>
+        {item.storage_provider !== "local" ? <span className="tag">{remoteReferenceLabel}</span> : null}
         {item.file_missing ? <span className="tag">{copy.missing}</span> : null}
       </div>
     </article>
@@ -249,6 +256,8 @@ export function WorkspaceMediaRetentionCard({
   role: "owner" | "editor";
 }) {
   const copy = COPY[locale];
+  const remoteMediaLabel = copy.remoteMedia ?? "Remote media";
+  const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
   const [olderThanDays, setOlderThanDays] = useState(90);
   const [report, setReport] = useState<MediaRetentionReport | null>(null);
   const [loading, setLoading] = useState(true);
@@ -285,6 +294,7 @@ export function WorkspaceMediaRetentionCard({
     ? [
         report.missing_file_count ? `${report.missing_file_count} ${copy.missingFiles}` : copy.allHealthy,
         `${report.orphan_file_count} ${copy.orphanFiles}`,
+        `${report.remote_item_count} ${remoteMediaLabel}`,
       ].join(" / ")
     : "-";
 
@@ -408,6 +418,12 @@ export function WorkspaceMediaRetentionCard({
           <div className="eyebrow">{copy.archivedMedia}</div>
           <div style={{ marginTop: 8, fontWeight: 600 }}>
             {report ? `${report.archived_item_count} / ${report.archived_item_size_label}` : "-"}
+          </div>
+        </div>
+        <div className="subtle-card">
+          <div className="eyebrow">{remoteMediaLabel}</div>
+          <div style={{ marginTop: 8, fontWeight: 600 }}>
+            {report ? `${report.remote_item_count} / ${report.remote_item_size_label}` : "-"}
           </div>
         </div>
         <div className="subtle-card">

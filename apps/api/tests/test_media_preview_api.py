@@ -13,7 +13,7 @@ from app.api.routes import media as media_route
 from app.api.routes import records as records_route
 from app.db.base import Base
 from app.db.session import get_db
-from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, share_link  # noqa: F401
+from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, search_preset, share_link  # noqa: F401
 from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
@@ -75,7 +75,6 @@ def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str, ses
         workspace_id = workspace.id
         record_id = db.query(Record).filter(Record.workspace_id == workspace.id).first().id
 
-    monkeypatch.setattr(media_route.settings, "storage_dir", str(tmp_path / "uploads"))
     monkeypatch.setattr("app.services.media_processing.settings.storage_dir", str(tmp_path / "uploads"))
     monkeypatch.setattr("app.services.media_storage.settings.storage_dir", str(tmp_path / "uploads"))
     monkeypatch.setattr("app.services.media_processing.rebuild_record_knowledge", lambda db, record_id: None)
@@ -470,3 +469,65 @@ def test_media_retention_archive_is_owner_only(tmp_path, monkeypatch) -> None:
     )
 
     assert archive_response.status_code == 403
+
+
+def test_remote_media_content_and_retention_actions_are_provider_aware(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="video",
+            storage_provider="s3",
+            storage_key=f"remote/{workspace_id}/clip.mp4",
+            original_filename="clip.mp4",
+            mime_type="video/mp4",
+            size_bytes=1024,
+            metadata_json={"remote_reference": {"bucket": "archive-bucket", "object_key": "clip.mp4"}},
+            processing_status="completed",
+            extracted_text="remote video transcript",
+            created_at=datetime.now(timezone.utc) - timedelta(days=180),
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{remote_media_id}/content")
+    assert content_response.status_code == 409
+
+    report_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/retention-report?older_than_days=90&limit=5")
+    assert report_response.status_code == 200
+    report = report_response.json()["data"]["report"]
+    assert report["remote_item_count"] == 1
+    assert report["remote_item_size_bytes"] == 1024
+    assert report["retention_candidates"] == []
+    assert report["largest_items"][0]["storage_provider"] == "s3"
+
+    archive_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-archive",
+        json={"media_ids": [remote_media_id], "older_than_days": 90, "dry_run": False},
+    )
+    assert archive_response.status_code == 200
+    archive_result = archive_response.json()["data"]["result"]
+    assert archive_result["candidate_media_count"] == 0
+    assert archive_result["skipped_reason_by_media_id"][remote_media_id] == "storage_provider_archive_not_supported"
+
+    cleanup_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-cleanup",
+        json={
+            "media_ids": [remote_media_id],
+            "older_than_days": 90,
+            "purge_orphan_files": False,
+            "dry_run": False,
+        },
+    )
+    assert cleanup_response.status_code == 200
+    cleanup_result = cleanup_response.json()["data"]["result"]
+    assert cleanup_result["candidate_media_count"] == 0
+    assert cleanup_result["skipped_reason_by_media_id"][remote_media_id] == "storage_provider_cleanup_not_supported"
+
+    status_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{remote_media_id}/status")
+    assert status_response.status_code == 200
+    assert status_response.json()["data"]["media"]["storage_provider"] == "s3"

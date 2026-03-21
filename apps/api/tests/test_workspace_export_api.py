@@ -111,7 +111,25 @@ def build_workspace_export_client(tmp_path) -> tuple[TestClient, str, str, dict[
             processing_status="completed",
             extracted_text="missing file",
         )
-        db.add_all([present_media, missing_media])
+        remote_media = MediaAsset(
+            workspace_id=workspace.id,
+            record_id=record_item.id,
+            uploaded_by=owner.id,
+            media_type="video",
+            storage_provider="s3",
+            storage_key=f"remote/{workspace.id}/clip.mp4",
+            original_filename="clip.mp4",
+            mime_type="video/mp4",
+            size_bytes=2048,
+            metadata_json={
+                "preview_kind": "video",
+                "remote_reference": {"bucket": "workspace-exports", "object_key": "clip.mp4"},
+                "signed_url": "https://example.invalid/presigned?token=secret-value",
+            },
+            processing_status="completed",
+            extracted_text="remote clip transcript",
+        )
+        db.add_all([present_media, missing_media, remote_media])
         db.commit()
 
         user_ids = {"owner": owner.id, "editor": editor.id, "viewer": viewer.id}
@@ -176,9 +194,11 @@ def test_workspace_export_returns_zip_with_manifest_and_media(tmp_path, monkeypa
     assert manifest["workspace"]["slug"] == "export-workspace"
     assert manifest["counts"]["member_count"] == 3
     assert manifest["counts"]["record_count"] == 1
-    assert manifest["counts"]["media_count"] == 2
+    assert manifest["counts"]["media_count"] == 3
     assert manifest["counts"]["exported_media_file_count"] == 1
     assert manifest["counts"]["missing_media_file_count"] == 1
+    assert manifest["counts"]["reference_only_media_count"] == 1
+    assert manifest["counts"]["remote_media_count"] == 1
     assert "provider secrets" in manifest["excluded"]
 
     media_by_name = {item["original_filename"]: item for item in manifest["media_assets"]}
@@ -186,6 +206,11 @@ def test_workspace_export_returns_zip_with_manifest_and_media(tmp_path, monkeypa
     assert media_by_name["note.txt"]["archive_path"] is not None
     assert media_by_name["missing.png"]["missing_storage_file"] is True
     assert media_by_name["missing.png"]["archive_path"] is None
+    assert media_by_name["clip.mp4"]["export_mode"] == "reference_only"
+    assert media_by_name["clip.mp4"]["export_skip_reason"] == "remote_storage_reference_only"
+    assert media_by_name["clip.mp4"]["archive_path"] is None
+    assert media_by_name["clip.mp4"]["metadata_json"]["remote_reference"]["bucket"] == "workspace-exports"
+    assert "signed_url" not in media_by_name["clip.mp4"]["metadata_json"]
 
 
 def test_workspace_export_is_owner_only(tmp_path, monkeypatch) -> None:

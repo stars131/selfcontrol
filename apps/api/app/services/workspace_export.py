@@ -6,13 +6,32 @@ import tempfile
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 from sqlalchemy.orm import Session
 
 from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.workspace import Workspace, WorkspaceMember
-from app.services.media_storage import resolve_storage_path
+from app.services.media_storage import media_uses_local_storage, resolve_storage_path
+
+SENSITIVE_METADATA_TOKENS = {
+    "access_token",
+    "api_key",
+    "authorization",
+    "cookie",
+    "credential",
+    "download_url",
+    "headers",
+    "password",
+    "presigned_url",
+    "secret",
+    "session",
+    "signature",
+    "signed_url",
+    "token",
+    "upload_url",
+}
 
 
 def _isoformat(value: datetime | None) -> str | None:
@@ -58,6 +77,24 @@ def _serialize_record(record: Record) -> dict:
     }
 
 
+def _normalize_metadata_key(key: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", key.lower()).strip("_")
+
+
+def _sanitize_metadata_for_export(value: Any) -> Any:
+    if isinstance(value, dict):
+        sanitized: dict[str, Any] = {}
+        for key, item in value.items():
+            normalized_key = _normalize_metadata_key(str(key))
+            if any(token in normalized_key for token in SENSITIVE_METADATA_TOKENS):
+                continue
+            sanitized[str(key)] = _sanitize_metadata_for_export(item)
+        return sanitized
+    if isinstance(value, list):
+        return [_sanitize_metadata_for_export(item) for item in value]
+    return value
+
+
 def build_workspace_export_archive(
     db: Session,
     workspace_id: str,
@@ -85,6 +122,8 @@ def build_workspace_export_archive(
     media_manifest_items: list[dict] = []
     exported_media_files = 0
     missing_media_files = 0
+    reference_only_media_files = 0
+    remote_media_files = 0
 
     temp_file = tempfile.NamedTemporaryFile(prefix=f"workspace-export-{workspace_id}-", suffix=".zip", delete=False)
     archive_path = Path(temp_file.name)
@@ -92,17 +131,24 @@ def build_workspace_export_archive(
 
     with zipfile.ZipFile(archive_path, mode="w", compression=zipfile.ZIP_DEFLATED) as archive:
         for media in media_assets:
-            source_path = resolve_storage_path(media)
-            can_export_file = media.storage_provider == "local" and source_path.exists()
-            file_missing = media.storage_provider == "local" and not source_path.exists()
+            uses_local_storage = media_uses_local_storage(media)
+            source_path = resolve_storage_path(media) if uses_local_storage else None
+            can_export_file = bool(uses_local_storage and source_path and source_path.exists())
+            file_missing = bool(uses_local_storage and source_path and not source_path.exists())
             export_skip_reason = None
             if not can_export_file:
-                export_skip_reason = "missing_storage_file" if file_missing else "storage_provider_not_local"
+                if file_missing:
+                    export_skip_reason = "missing_storage_file"
+                elif uses_local_storage:
+                    export_skip_reason = "storage_file_unavailable"
+                else:
+                    export_skip_reason = "remote_storage_reference_only"
             suffix = Path(media.original_filename or "").suffix
             media_filename = (
                 f"{media.id}_{_safe_filename_part(Path(media.original_filename or '').stem, 'media')}{suffix}"
             )
             archive_member_path = f"media/{media.record_id}/{media_filename}"
+            export_mode = "embedded_file" if can_export_file else "reference_only" if not uses_local_storage else "metadata_only"
             media_manifest_items.append(
                 {
                     "id": media.id,
@@ -114,13 +160,14 @@ def build_workspace_export_archive(
                     "original_filename": media.original_filename,
                     "mime_type": media.mime_type,
                     "size_bytes": media.size_bytes,
-                    "metadata_json": media.metadata_json,
+                    "metadata_json": _sanitize_metadata_for_export(media.metadata_json if isinstance(media.metadata_json, dict) else {}),
                     "processing_status": media.processing_status,
                     "processing_error": media.processing_error,
                     "extracted_text": media.extracted_text,
                     "processed_at": _isoformat(media.processed_at),
                     "created_at": _isoformat(media.created_at),
                     "updated_at": _isoformat(media.updated_at),
+                    "export_mode": export_mode,
                     "archive_path": archive_member_path if can_export_file else None,
                     "export_included": can_export_file,
                     "export_skip_reason": export_skip_reason,
@@ -128,7 +175,12 @@ def build_workspace_export_archive(
                 }
             )
             if not can_export_file:
-                missing_media_files += 1
+                if file_missing:
+                    missing_media_files += 1
+                else:
+                    reference_only_media_files += 1
+                    if not uses_local_storage:
+                        remote_media_files += 1
                 continue
             archive.write(source_path, archive_member_path)
             exported_media_files += 1
@@ -155,6 +207,8 @@ def build_workspace_export_archive(
                 "media_count": len(media_assets),
                 "exported_media_file_count": exported_media_files,
                 "missing_media_file_count": missing_media_files,
+                "reference_only_media_count": reference_only_media_files,
+                "remote_media_count": remote_media_files,
             },
             "excluded": [
                 "provider secrets",

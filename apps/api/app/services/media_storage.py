@@ -10,6 +10,16 @@ from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_processing import format_size_label
 
+LOCAL_STORAGE_PROVIDER = "local"
+
+
+def is_local_storage_provider(provider_code: str | None) -> bool:
+    return (provider_code or "").strip().lower() == LOCAL_STORAGE_PROVIDER
+
+
+def media_uses_local_storage(media: MediaAsset) -> bool:
+    return is_local_storage_provider(media.storage_provider)
+
 
 def resolve_storage_path(media: MediaAsset) -> Path:
     return Path(settings.storage_dir).parent / media.storage_key
@@ -24,6 +34,9 @@ def get_media_storage_tier(media: MediaAsset) -> str:
 
 
 def remove_storage_file(media: MediaAsset) -> bool:
+    if not media_uses_local_storage(media):
+        return False
+
     file_path = resolve_storage_path(media)
     if not file_path.exists():
         return False
@@ -57,7 +70,7 @@ def summarize_workspace_media_storage(db: Session, workspace_id: str) -> dict:
         total_size_bytes += int(item.size_bytes or 0)
         by_media_type[item.media_type] = by_media_type.get(item.media_type, 0) + 1
         by_processing_status[item.processing_status] = by_processing_status.get(item.processing_status, 0) + 1
-        if item.storage_provider == "local" and not resolve_storage_path(item).exists():
+        if media_uses_local_storage(item) and not resolve_storage_path(item).exists():
             missing_file_count += 1
         if largest_item_size_bytes is None or item.size_bytes > largest_item_size_bytes:
             largest_item_size_bytes = item.size_bytes
@@ -106,6 +119,9 @@ def _list_workspace_orphan_files(workspace_id: str, tracked_storage_keys: set[st
 
 
 def archive_workspace_media_item(media: MediaAsset) -> bool:
+    if not media_uses_local_storage(media):
+        return False
+
     file_path = resolve_storage_path(media)
     if not file_path.exists():
         return False
@@ -144,6 +160,8 @@ def build_workspace_media_retention_report(
     oldest_media_age_days: int | None = None
     archived_item_count = 0
     archived_item_size_bytes = 0
+    remote_item_count = 0
+    remote_item_size_bytes = 0
     tracked_storage_keys: set[str] = set()
     report_items: list[dict] = []
 
@@ -151,24 +169,30 @@ def build_workspace_media_retention_report(
         created_at = _coerce_utc(item.created_at)
         age_days = max((now - created_at).days, 0)
         size_bytes = int(item.size_bytes or 0)
-        file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        uses_local_storage = media_uses_local_storage(item)
+        file_missing = uses_local_storage and not resolve_storage_path(item).exists()
         storage_tier = get_media_storage_tier(item)
 
         total_size_bytes += size_bytes
         if file_missing:
             missing_file_count += 1
+        if not uses_local_storage:
+            remote_item_count += 1
+            remote_item_size_bytes += size_bytes
         if storage_tier == "archive":
             archived_item_count += 1
             archived_item_size_bytes += size_bytes
         if oldest_media_age_days is None or age_days > oldest_media_age_days:
             oldest_media_age_days = age_days
-        tracked_storage_keys.add(item.storage_key)
+        if uses_local_storage:
+            tracked_storage_keys.add(item.storage_key)
         report_items.append(
             {
                 "media_id": item.id,
                 "record_id": item.record_id,
                 "original_filename": item.original_filename,
                 "media_type": item.media_type,
+                "storage_provider": item.storage_provider,
                 "storage_tier": storage_tier,
                 "processing_status": item.processing_status,
                 "size_bytes": size_bytes,
@@ -180,7 +204,11 @@ def build_workspace_media_retention_report(
         )
 
     old_items = [item for item in report_items if item["age_days"] >= older_than_days]
-    retention_candidates = [item for item in old_items if item["storage_tier"] != "archive"]
+    retention_candidates = [
+        item
+        for item in old_items
+        if item["storage_tier"] != "archive" and is_local_storage_provider(item["storage_provider"])
+    ]
     orphan_file_count, orphan_file_size_bytes = _scan_workspace_orphan_files(workspace_id, tracked_storage_keys)
     largest_items = sorted(
         report_items,
@@ -205,6 +233,9 @@ def build_workspace_media_retention_report(
         "archived_item_count": archived_item_count,
         "archived_item_size_bytes": archived_item_size_bytes,
         "archived_item_size_label": format_size_label(archived_item_size_bytes),
+        "remote_item_count": remote_item_count,
+        "remote_item_size_bytes": remote_item_size_bytes,
+        "remote_item_size_label": format_size_label(remote_item_size_bytes),
         "missing_file_count": missing_file_count,
         "orphan_file_count": orphan_file_count,
         "orphan_file_size_bytes": orphan_file_size_bytes,
@@ -240,7 +271,11 @@ def cleanup_workspace_media_retention(
 
         created_at = _coerce_utc(item.created_at)
         age_days = max((now - created_at).days, 0)
-        file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        if not media_uses_local_storage(item):
+            skipped_reason_by_media_id[media_id] = "storage_provider_cleanup_not_supported"
+            continue
+
+        file_missing = not resolve_storage_path(item).exists()
         if get_media_storage_tier(item) == "archive":
             skipped_reason_by_media_id[media_id] = "already_archived"
             continue
@@ -257,8 +292,7 @@ def cleanup_workspace_media_retention(
 
     if not dry_run:
         for item in candidate_items:
-            if item.storage_provider == "local":
-                remove_storage_file(item)
+            remove_storage_file(item)
             db.delete(item)
         db.commit()
 
@@ -310,10 +344,13 @@ def archive_workspace_media_retention(
         if get_media_storage_tier(item) == "archive":
             skipped_reason_by_media_id[media_id] = "already_archived"
             continue
+        if not media_uses_local_storage(item):
+            skipped_reason_by_media_id[media_id] = "storage_provider_archive_not_supported"
+            continue
 
         created_at = _coerce_utc(item.created_at)
         age_days = max((now - created_at).days, 0)
-        file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+        file_missing = not resolve_storage_path(item).exists()
         if file_missing:
             skipped_reason_by_media_id[media_id] = "missing_storage_file"
             continue

@@ -164,9 +164,14 @@ Last updated: 2026-03-21
   - transfer jobs persist status, payload, result metadata, download artifact details, and failure messages in the database
   - async execution is dispatched through Celery when runtime media processing is in async mode, with a sync fallback kept for simpler deployments
   - workspace settings now expose export job creation, status review, and artifact download, while the entry page supports queued import jobs and recent transfer tracking
+- Provider-Aware Remote Media Archive and Export V1:
+  - media retention reporting now distinguishes remote-provider attachments from local files and excludes unsupported remote items from archive/delete candidates
+  - cleanup and archive actions now skip non-local storage providers explicitly instead of pretending the local file operations succeeded
+  - workspace export now sanitizes sensitive media metadata and preserves remote media as reference-only manifest entries rather than dropping them silently
+  - workspace import can now restore remote media references with searchable extracted text, while direct content download remains limited to local payloads
 
 ## Next
-- Provider-aware remote media archive/export strategy
+- Remote storage provider upload and secure fetch adapters
 
 ## Delivery Rule
 - Every meaningful slice must update this file

@@ -5,7 +5,7 @@ import re
 import uuid
 import zipfile
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -15,6 +15,7 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.workspace import Workspace, WorkspaceMember
 from app.services.knowledge import rebuild_record_knowledge
+from app.services.media_storage import is_local_storage_provider
 
 
 def _slugify(value: str) -> str:
@@ -39,6 +40,14 @@ def _ensure_unique_workspace_slug(db: Session, slug: str) -> str:
         candidate = f"{base_slug}-{index}"
         index += 1
     return candidate
+
+
+def _build_imported_reference_metadata(metadata_json: dict) -> dict:
+    return {
+        **metadata_json,
+        "import_mode": "reference_only",
+        "reference_only_imported_at": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 def import_workspace_archive(
@@ -126,6 +135,7 @@ def import_workspace_archive(
     target_dir.mkdir(parents=True, exist_ok=True)
 
     imported_media_count = 0
+    imported_reference_media_count = 0
     skipped_media_count = 0
     for item in media_payload:
         if not isinstance(item, dict):
@@ -136,34 +146,67 @@ def import_workspace_archive(
             skipped_media_count += 1
             continue
 
+        original_filename = item.get("original_filename") or "media.bin"
+        metadata_json = item.get("metadata_json") if isinstance(item.get("metadata_json"), dict) else {}
+        storage_provider = str(item.get("storage_provider") or "local")
         archive_path = item.get("archive_path")
-        if not isinstance(archive_path, str) or archive_path not in archive.namelist():
-            skipped_media_count += 1
+        if isinstance(archive_path, str) and archive_path in archive.namelist():
+            target_name = f"{uuid.uuid4().hex}_{Path(str(original_filename)).name}"
+            target_path = target_dir / target_name
+            target_path.write_bytes(archive.read(archive_path))
+
+            media = MediaAsset(
+                workspace_id=workspace.id,
+                record_id=record_id_map[original_record_id],
+                uploaded_by=owner_user_id,
+                media_type=item.get("media_type") or "file",
+                storage_provider="local",
+                storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
+                original_filename=str(original_filename),
+                mime_type=item.get("mime_type") or "application/octet-stream",
+                size_bytes=int(item.get("size_bytes") or target_path.stat().st_size),
+                metadata_json=metadata_json,
+                processing_status=item.get("processing_status") or "completed",
+                processing_error=item.get("processing_error"),
+                extracted_text=item.get("extracted_text"),
+                processed_at=_parse_datetime(item.get("processed_at")),
+            )
+            db.add(media)
+            imported_media_count += 1
             continue
 
-        original_filename = item.get("original_filename") or "media.bin"
-        target_name = f"{uuid.uuid4().hex}_{Path(str(original_filename)).name}"
-        target_path = target_dir / target_name
-        target_path.write_bytes(archive.read(archive_path))
+        storage_key = item.get("storage_key")
+        if not is_local_storage_provider(storage_provider) and isinstance(storage_key, str) and storage_key.strip():
+            extracted_text = item.get("extracted_text")
+            processing_status = item.get("processing_status") or ("completed" if extracted_text else "deferred")
+            processing_error = item.get("processing_error")
+            if not extracted_text and processing_status == "completed":
+                processing_status = "deferred"
+                processing_error = "Reference-only remote media was imported without local file payload"
+            processed_at = _parse_datetime(item.get("processed_at")) if processing_status == "completed" else None
 
-        media = MediaAsset(
-            workspace_id=workspace.id,
-            record_id=record_id_map[original_record_id],
-            uploaded_by=owner_user_id,
-            media_type=item.get("media_type") or "file",
-            storage_provider="local",
-            storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
-            original_filename=str(original_filename),
-            mime_type=item.get("mime_type") or "application/octet-stream",
-            size_bytes=int(item.get("size_bytes") or target_path.stat().st_size),
-            metadata_json=item.get("metadata_json") if isinstance(item.get("metadata_json"), dict) else {},
-            processing_status=item.get("processing_status") or "completed",
-            processing_error=item.get("processing_error"),
-            extracted_text=item.get("extracted_text"),
-            processed_at=_parse_datetime(item.get("processed_at")),
-        )
-        db.add(media)
-        imported_media_count += 1
+            media = MediaAsset(
+                workspace_id=workspace.id,
+                record_id=record_id_map[original_record_id],
+                uploaded_by=owner_user_id,
+                media_type=item.get("media_type") or "file",
+                storage_provider=storage_provider,
+                storage_key=storage_key.strip(),
+                original_filename=str(original_filename),
+                mime_type=item.get("mime_type") or "application/octet-stream",
+                size_bytes=int(item.get("size_bytes") or 0),
+                metadata_json=_build_imported_reference_metadata(metadata_json),
+                processing_status=processing_status,
+                processing_error=processing_error,
+                extracted_text=extracted_text if isinstance(extracted_text, str) else None,
+                processed_at=processed_at,
+            )
+            db.add(media)
+            imported_media_count += 1
+            imported_reference_media_count += 1
+            continue
+
+        skipped_media_count += 1
 
     db.commit()
     db.refresh(workspace)
@@ -174,5 +217,6 @@ def import_workspace_archive(
     return workspace, {
         "imported_record_count": len(created_records),
         "imported_media_count": imported_media_count,
+        "imported_reference_media_count": imported_reference_media_count,
         "skipped_media_count": skipped_media_count,
     }
