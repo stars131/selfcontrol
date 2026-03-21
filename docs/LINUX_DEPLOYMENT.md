@@ -28,6 +28,8 @@ Use `docker-compose.prod.yml` as the production entry point.
    - strong `SECRET_KEY`
    - database password
    - `CORS_ORIGINS`
+   - `ALLOWED_HOSTS`
+   - `FORWARDED_ALLOW_IPS`
    - `NEXT_PUBLIC_API_BASE_URL`
    - AI provider secrets
    - AMap key if the browser needs map features
@@ -107,7 +109,9 @@ See [OPERATIONS.md](./OPERATIONS.md) for cron examples and retention details.
 
 - Production should use `AUTO_CREATE_TABLES=false`.
 - Production should use `MEDIA_PROCESSING_MODE=async`.
+- Production should use explicit `ALLOWED_HOSTS` and should not use `*`.
 - Do not expose PostgreSQL or Redis directly to the public internet.
 - Add TLS at the host or replace the bundled Nginx config with your HTTPS setup.
 - The current Nginx config increases `client_max_body_size` to `256m` for media upload support.
 - The production compose file now enables Docker log rotation for `api`, `worker`, `web`, and `nginx`.
+- `infra/nginx/selfcontrol-ssl.example.conf` provides an HTTPS reverse-proxy starting point for a real domain.

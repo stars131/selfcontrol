@@ -16,6 +16,10 @@ def resolve_project_path(value: str) -> str:
     return str((BASE_DIR / raw_path).resolve())
 
 
+def parse_csv_env(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 @dataclass
 class Settings:
     app_env: str = os.getenv("APP_ENV", "development")
@@ -37,11 +41,19 @@ class Settings:
     processing_tmp_dir: str = resolve_project_path(os.getenv("PROCESSING_TMP_DIR", "storage/tmp"))
     provider_request_timeout_seconds: int = int(os.getenv("PROVIDER_REQUEST_TIMEOUT_SECONDS", "90"))
     cors_origins: list[str] = field(
-        default_factory=lambda: os.getenv(
-            "CORS_ORIGINS",
-            "http://localhost:3000,http://127.0.0.1:3000",
-        ).split(",")
+        default_factory=lambda: parse_csv_env(
+            os.getenv(
+                "CORS_ORIGINS",
+                "http://localhost:3000,http://127.0.0.1:3000",
+            )
+        )
     )
+    allowed_hosts: list[str] = field(
+        default_factory=lambda: parse_csv_env(
+            os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,testserver")
+        )
+    )
+    forwarded_allow_ips: str = os.getenv("FORWARDED_ALLOW_IPS", "127.0.0.1")
 
 
 settings = Settings()
@@ -64,6 +76,7 @@ def runtime_health_snapshot() -> dict[str, Any]:
             and (settings.secret_key == "change-me" or len(settings.secret_key) < 24)
         ),
         "auto_create_tables_ok": not (settings.app_env == "production" and settings.auto_create_tables),
+        "allowed_hosts_ok": bool(settings.allowed_hosts),
     }
     return {
         "status": "ok" if all(checks.values()) else "degraded",
@@ -71,6 +84,8 @@ def runtime_health_snapshot() -> dict[str, Any]:
         "app_env": settings.app_env,
         "media_processing_mode": settings.media_processing_mode,
         "auto_create_tables": settings.auto_create_tables,
+        "allowed_hosts": settings.allowed_hosts,
+        "forwarded_allow_ips": settings.forwarded_allow_ips,
         "storage_dir": str(storage_dir),
         "processing_tmp_dir": str(processing_tmp_dir),
         "redis_url_configured": bool(settings.redis_url),
@@ -83,8 +98,12 @@ def validate_runtime_settings() -> None:
         raise RuntimeError("MEDIA_PROCESSING_MODE must be either 'sync' or 'async'")
     if settings.media_processing_mode == "async" and not settings.redis_url:
         raise RuntimeError("MEDIA_PROCESSING_MODE=async requires REDIS_URL")
+    if not settings.allowed_hosts:
+        raise RuntimeError("ALLOWED_HOSTS must include at least one host")
     if settings.app_env == "production":
         if settings.secret_key == "change-me" or len(settings.secret_key) < 24:
             raise RuntimeError("Production requires a strong SECRET_KEY environment variable")
         if settings.auto_create_tables:
             raise RuntimeError("Production requires AUTO_CREATE_TABLES=false and managed migrations")
+        if "*" in settings.allowed_hosts:
+            raise RuntimeError("Production requires explicit ALLOWED_HOSTS and must not use '*'")

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from app.main import app, create_app
 
 
 def test_health_exposes_runtime_details(tmp_path, monkeypatch) -> None:
@@ -26,3 +26,15 @@ def test_health_exposes_runtime_details(tmp_path, monkeypatch) -> None:
     assert payload["checks"]["auto_create_tables_ok"] is True
     assert (tmp_path / "uploads").exists()
     assert (tmp_path / "tmp").exists()
+
+
+def test_trusted_host_middleware_rejects_unknown_host(monkeypatch) -> None:
+    monkeypatch.setattr("app.main.settings.auto_create_tables", False)
+    monkeypatch.setattr("app.main.settings.allowed_hosts", ["trusted.example", "testserver"])
+    scoped_app = create_app()
+
+    with TestClient(scoped_app) as client:
+        response = client.get("/health", headers={"host": "evil.example"})
+
+    assert response.status_code == 400
+    assert "Invalid host header" in response.text

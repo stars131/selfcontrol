@@ -120,10 +120,17 @@ Last updated: 2026-03-21
   - operations scripts now cover database backup, database restore, and runtime file pruning
   - Linux deployment docs now include backup, restore, and cleanup procedures
   - dedicated operations handbook now includes cron examples and disaster-recovery notes
+- Proxy Trust Headers and Host Validation V1:
+  - API runtime now parses explicit `ALLOWED_HOSTS` and `FORWARDED_ALLOW_IPS` settings
+  - FastAPI now enforces trusted host validation through middleware
+  - production runtime validation now rejects wildcard host rules in production
+  - production compose now starts Uvicorn with proxy-header support and explicit forwarded IP policy
+  - nginx proxy config now forwards host and port headers consistently, and an HTTPS nginx example template is included
+  - health and security tests now cover trusted-host rejection and production host validation rules
 
 ## Next
-- HTTPS / TLS deployment path and domain-specific hardening
-- Reverse-proxy trust headers and host validation
+- TLS certificate automation and HTTPS deployment runbook
+- Media retention policy for long-term storage growth
 
 ## Delivery Rule
 - Every meaningful slice must update this file

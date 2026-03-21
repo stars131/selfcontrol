@@ -184,3 +184,26 @@ def test_validate_runtime_settings_requires_redis_for_async_media() -> None:
     finally:
         settings.media_processing_mode = original_mode
         settings.redis_url = original_redis_url
+
+
+def test_validate_runtime_settings_rejects_wildcard_allowed_hosts_in_production() -> None:
+    original_env = settings.app_env
+    original_secret = settings.secret_key
+    original_auto_create_tables = settings.auto_create_tables
+    original_allowed_hosts = settings.allowed_hosts
+    try:
+        settings.app_env = "production"
+        settings.secret_key = "production-secret-key-with-sufficient-length"
+        settings.auto_create_tables = False
+        settings.allowed_hosts = ["*"]
+        try:
+            validate_runtime_settings()
+        except RuntimeError as exc:
+            assert "ALLOWED_HOSTS" in str(exc)
+        else:
+            raise AssertionError("Expected production wildcard host validation to fail")
+    finally:
+        settings.app_env = original_env
+        settings.secret_key = original_secret
+        settings.auto_create_tables = original_auto_create_tables
+        settings.allowed_hosts = original_allowed_hosts

@@ -59,6 +59,8 @@ services:
       PROCESSING_TMP_DIR: /app/storage/tmp
       PROVIDER_REQUEST_TIMEOUT_SECONDS: ${PROVIDER_REQUEST_TIMEOUT_SECONDS}
       CORS_ORIGINS: ${CORS_ORIGINS}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
@@ -70,7 +72,7 @@ services:
         condition: service_healthy
     volumes:
       - ./storage:/app/storage
-    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=${FORWARDED_ALLOW_IPS}"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 15s
@@ -105,6 +107,8 @@ services:
       RAG_SEARCH_LIMIT: ${RAG_SEARCH_LIMIT}
       PROCESSING_TMP_DIR: /app/storage/tmp
       PROVIDER_REQUEST_TIMEOUT_SECONDS: ${PROVIDER_REQUEST_TIMEOUT_SECONDS}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}

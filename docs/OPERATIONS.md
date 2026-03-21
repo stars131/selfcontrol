@@ -56,3 +56,4 @@ This applies to `api`, `worker`, `web`, and `nginx`.
 - The current backup script performs logical PostgreSQL dumps.
 - Media uploads under `storage/uploads` are not deleted by retention scripts.
 - If you need full disaster recovery, back up both the database dumps and the `storage/` directory.
+- Keep `ALLOWED_HOSTS` aligned with your real public domain and proxy hostnames.
