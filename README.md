@@ -49,3 +49,4 @@ alembic upgrade head
 - ER 与表结构：[docs/ERD_AND_SCHEMA.md](./docs/ERD_AND_SCHEMA.md)
 - API 与工作流：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
 - 开发环境：[docs/DEVELOPMENT_SETUP.md](./docs/DEVELOPMENT_SETUP.md)
+- Linux 部署：[docs/LINUX_DEPLOYMENT.md](./docs/LINUX_DEPLOYMENT.md)

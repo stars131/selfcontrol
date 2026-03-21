@@ -108,10 +108,16 @@ Last updated: 2026-03-21
   - production validation now rejects weak secrets, implicit auto-create-table startup, and async media mode without Redis
   - health responses now expose readiness checks for storage, temp directories, Redis requirement, and startup-safe table policy
   - provider-config security tests now cover the new production readiness rules
+- Linux Deployment and Reverse-Proxy Hardening V1:
+  - production stack now has a dedicated `docker-compose.prod.yml` separated from the development compose file
+  - production env template now captures strong-secret, async-media, CORS, and public API URL requirements
+  - nginx reverse-proxy config now fronts web and API traffic, exposes `/health`, and raises media upload size limits
+  - Linux deployment guide and helper deploy script are now included for server rollout
+  - production compose configuration is validated through `docker compose config`
 
 ## Next
-- Deployment hardening and production operations pass
-- Linux deployment playbook and reverse-proxy/runtime hardening
+- Production backups, log rotation, and retention operations
+- HTTPS / TLS deployment path and domain-specific hardening
 
 ## Delivery Rule
 - Every meaningful slice must update this file
