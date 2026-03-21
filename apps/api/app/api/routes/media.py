@@ -4,7 +4,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_role, require_workspace_write_access
@@ -34,6 +34,12 @@ from app.services.media_storage import (
     resolve_storage_path,
     summarize_workspace_media_storage,
 )
+from app.services.media_remote_storage import (
+    delete_remote_media_via_provider,
+    download_remote_media_via_provider,
+    upload_media_via_provider,
+)
+from app.services.media_provider import DeferredMediaProcessingError
 
 
 router = APIRouter()
@@ -188,7 +194,19 @@ def get_media_content(
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
     if not media_uses_local_storage(media):
-        raise HTTPException(status_code=409, detail="Remote media content is not available for direct download yet")
+        try:
+            remote_content = download_remote_media_via_provider(db, media)
+        except DeferredMediaProcessingError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        return Response(
+            content=remote_content.content,
+            media_type=remote_content.media_type or media.mime_type or "application/octet-stream",
+            headers={"Content-Disposition": f'inline; filename="{media.original_filename}"'},
+        )
 
     file_path = resolve_storage_path(media)
     if not file_path.exists():
@@ -215,31 +233,65 @@ async def upload_media(
         raise HTTPException(status_code=404, detail="Record not found")
 
     target_dir = Path(settings.storage_dir) / workspace_id
-    target_dir.mkdir(parents=True, exist_ok=True)
-    target_name = f"{uuid.uuid4().hex}_{file.filename}"
-    target_path = target_dir / target_name
-
     content = await file.read()
-    target_path.write_bytes(content)
+    original_filename = file.filename or "upload.bin"
+    mime_type = file.content_type or "application/octet-stream"
+    media_type = mime_type.split("/")[0]
+    try:
+        remote_upload = await upload_media_via_provider(
+            db,
+            workspace_id=workspace_id,
+            record_id=record_id,
+            filename=original_filename,
+            mime_type=mime_type,
+            content=content,
+        )
+    except DeferredMediaProcessingError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
 
-    media = MediaAsset(
-        workspace_id=workspace_id,
-        record_id=record_id,
-        uploaded_by=current_user.id,
-        media_type=(file.content_type or "application/octet-stream").split("/")[0],
-        storage_provider="local",
-        storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
-        original_filename=file.filename or target_name,
-        mime_type=file.content_type or "application/octet-stream",
-        size_bytes=len(content),
-        metadata_json={},
-        processing_status="pending",
-    )
+    processing_mode = "remote_deferred"
+    if remote_upload is not None:
+        media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=current_user.id,
+            media_type=media_type,
+            storage_provider=remote_upload.storage_provider,
+            storage_key=remote_upload.storage_key,
+            original_filename=original_filename,
+            mime_type=mime_type,
+            size_bytes=remote_upload.size_bytes,
+            metadata_json=remote_upload.metadata_json,
+            processing_status="deferred",
+            processing_error="Remote media storage is configured without background extraction yet",
+        )
+    else:
+        target_dir.mkdir(parents=True, exist_ok=True)
+        target_name = f"{uuid.uuid4().hex}_{original_filename}"
+        target_path = target_dir / target_name
+        target_path.write_bytes(content)
+
+        media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=current_user.id,
+            media_type=media_type,
+            storage_provider="local",
+            storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
+            original_filename=original_filename,
+            mime_type=mime_type,
+            size_bytes=len(content),
+            metadata_json={},
+            processing_status="pending",
+        )
     db.add(media)
     db.commit()
     db.refresh(media)
 
-    media, processing_mode = dispatch_media_processing(db, media.id)
+    if media_uses_local_storage(media):
+        media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -269,6 +321,8 @@ def retry_media_processing(
     media = db.get(MediaAsset, media_id)
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
+    if not media_uses_local_storage(media):
+        raise HTTPException(status_code=400, detail="Remote media retry is not available until remote extraction is supported")
 
     media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
@@ -303,7 +357,15 @@ def delete_media(
     record_id = media.record_id
     original_filename = media.original_filename
     storage_key = media.storage_key
-    remove_storage_file(media)
+    if media_uses_local_storage(media):
+        remove_storage_file(media)
+    else:
+        try:
+            delete_remote_media_via_provider(db, media)
+        except DeferredMediaProcessingError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
     db.delete(media)
     db.commit()
     rebuild_record_knowledge(db, record_id)

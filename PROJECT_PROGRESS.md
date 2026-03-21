@@ -169,9 +169,14 @@ Last updated: 2026-03-21
   - cleanup and archive actions now skip non-local storage providers explicitly instead of pretending the local file operations succeeded
   - workspace export now sanitizes sensitive media metadata and preserves remote media as reference-only manifest entries rather than dropping them silently
   - workspace import can now restore remote media references with searchable extracted text, while direct content download remains limited to local payloads
+- Remote Storage Provider Upload and Secure Fetch V1:
+  - provider settings now expose a dedicated `media_storage` feature with local and custom webhook modes
+  - media upload can now hand off binaries to a custom remote storage webhook and persist remote storage keys instead of always writing local files
+  - media preview and download now proxy remote content through the server for custom webhook storage, and remote deletes also call the configured provider
+  - remote-uploaded media is marked deferred intentionally so future remote extraction work can be added without breaking current upload and fetch flows
 
 ## Next
-- Remote storage provider upload and secure fetch adapters
+- Remote media extraction bridge for custom storage providers
 
 ## Delivery Rule
 - Every meaningful slice must update this file

@@ -45,6 +45,11 @@ FEATURE_DEFINITIONS: dict[str, dict] = {
         "description": "Map lookup, reverse geocoding, and place resolution.",
         "providers": ["amap", "google_maps", "mapbox", "custom"],
     },
+    "media_storage": {
+        "label": "Media storage",
+        "description": "Upload and fetch attachment binaries from local disk or a remote storage webhook.",
+        "providers": ["local", "custom"],
+    },
 }
 
 
@@ -178,6 +183,10 @@ def build_default_feature_config(feature_code: str) -> ProviderFeatureConfig:
     elif feature_code == "maps_geocoding":
         provider_code = "amap"
         model_name = "web-js"
+        is_enabled = True
+    elif feature_code == "media_storage":
+        provider_code = "local"
+        model_name = "disk-v1"
         is_enabled = True
 
     return ProviderFeatureConfig(

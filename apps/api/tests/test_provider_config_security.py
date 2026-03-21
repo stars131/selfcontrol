@@ -129,6 +129,19 @@ def test_provider_config_rejects_dangerous_env_names_and_urls(monkeypatch) -> No
     assert "must not embed credentials" in bad_url_response.json()["detail"]
 
 
+def test_provider_config_lists_media_storage_feature(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.get(f"/api/v1/workspaces/{workspace_id}/provider-configs")
+
+    assert response.status_code == 200
+    items = response.json()["data"]["items"]
+    media_storage = next(item for item in items if item["feature_code"] == "media_storage")
+    assert media_storage["provider_code"] == "local"
+    assert media_storage["is_enabled"] is True
+    assert media_storage["providers"] == ["local", "custom"]
+
+
 def test_validate_runtime_settings_requires_strong_secret_in_production(monkeypatch) -> None:
     original_env = settings.app_env
     original_secret = settings.secret_key

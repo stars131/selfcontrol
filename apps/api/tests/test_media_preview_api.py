@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from datetime import datetime, timedelta, timezone
 
 from fastapi import FastAPI
@@ -15,9 +16,12 @@ from app.db.base import Base
 from app.db.session import get_db
 from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, search_preset, share_link  # noqa: F401
 from app.models.media import MediaAsset
+from app.models.provider_config import ProviderConfig
 from app.models.record import Record
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
+from app.services import media_remote_storage as media_remote_storage_service
+from app.services.media_remote_storage import RemoteMediaContentResult, RemoteMediaUploadResult
 
 
 PNG_1X1 = (
@@ -531,3 +535,131 @@ def test_remote_media_content_and_retention_actions_are_provider_aware(tmp_path,
     status_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{remote_media_id}/status")
     assert status_response.status_code == 200
     assert status_response.json()["data"]["media"]["storage_provider"] == "s3"
+
+
+def test_custom_remote_storage_upload_fetch_and_delete_flow(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    upload_calls: list[tuple[str, str, str]] = []
+    delete_calls: list[str] = []
+
+    async def fake_remote_upload(db, *, workspace_id: str, record_id: str, filename: str, mime_type: str, content: bytes):
+        upload_calls.append((workspace_id, record_id, filename))
+        return RemoteMediaUploadResult(
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/{filename}",
+            size_bytes=len(content),
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+        )
+
+    def fake_remote_download(db, media: MediaAsset) -> RemoteMediaContentResult:
+        return RemoteMediaContentResult(content=b"remote-audio", media_type=media.mime_type)
+
+    def fake_remote_delete(db, media: MediaAsset) -> None:
+        delete_calls.append(media.storage_key)
+
+    monkeypatch.setattr(media_route, "upload_media_via_provider", fake_remote_upload)
+    monkeypatch.setattr(media_route, "download_remote_media_via_provider", fake_remote_download)
+    monkeypatch.setattr(media_route, "delete_remote_media_via_provider", fake_remote_delete)
+
+    upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("voice-note.m4a", b"remote-audio", "audio/mp4")},
+    )
+
+    assert upload_response.status_code == 200
+    media_payload = upload_response.json()["data"]["media"]
+    assert media_payload["storage_provider"] == "custom"
+    assert media_payload["processing_status"] == "deferred"
+    assert media_payload["processing_error"] == "Remote media storage is configured without background extraction yet"
+    assert upload_calls == [(workspace_id, record_id, "voice-note.m4a")]
+
+    content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/content")
+    assert content_response.status_code == 200
+    assert content_response.content == b"remote-audio"
+    assert content_response.headers["content-type"] == "audio/mp4"
+
+    retry_response = client.post(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/retry")
+    assert retry_response.status_code == 400
+
+    delete_response = client.delete(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}")
+    assert delete_response.status_code == 200
+    assert delete_calls == [f"remote/{workspace_id}/voice-note.m4a"]
+
+    with session_local() as db:
+        assert db.get(MediaAsset, media_payload["id"]) is None
+
+
+def test_custom_remote_storage_service_uses_workspace_provider_config(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    del client, record_id
+
+    with session_local() as db:
+        db.add(
+            ProviderConfig(
+                workspace_id=workspace_id,
+                feature_code="media_storage",
+                provider_code="custom",
+                is_enabled=True,
+                api_base_url="https://storage.example.test/api",
+                api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+                options_json={},
+            )
+        )
+        db.commit()
+
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+
+    async def fake_perform_upload(config, **kwargs):
+        assert config.feature_code == "media_storage"
+        assert config.provider_code == "custom"
+        assert config.api_base_url == "https://storage.example.test/api"
+        return RemoteMediaUploadResult(
+            storage_provider="custom",
+            storage_key="remote/workspace/asset.bin",
+            size_bytes=len(kwargs["content"]),
+            metadata_json={"checked": True},
+        )
+
+    def fake_perform_download(config, *, storage_key: str):
+        assert config.provider_code == "custom"
+        assert storage_key == "remote/workspace/asset.bin"
+        return RemoteMediaContentResult(content=b"fetched", media_type="application/octet-stream")
+
+    def fake_perform_delete(config, *, storage_key: str):
+        assert config.provider_code == "custom"
+        assert storage_key == "remote/workspace/asset.bin"
+
+    monkeypatch.setattr(media_remote_storage_service, "_perform_custom_upload", fake_perform_upload)
+    monkeypatch.setattr(media_remote_storage_service, "_perform_custom_download", fake_perform_download)
+    monkeypatch.setattr(media_remote_storage_service, "_perform_custom_delete", fake_perform_delete)
+
+    with session_local() as db:
+        upload_result = asyncio.run(
+            media_remote_storage_service.upload_media_via_provider(
+                db,
+                workspace_id=workspace_id,
+                record_id="record-1",
+                filename="asset.bin",
+                mime_type="application/octet-stream",
+                content=b"payload",
+            )
+        )
+        assert upload_result is not None
+        assert upload_result.storage_key == "remote/workspace/asset.bin"
+
+        media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id="record-1",
+            uploaded_by=db.query(User).first().id,
+            media_type="file",
+            storage_provider="custom",
+            storage_key="remote/workspace/asset.bin",
+            original_filename="asset.bin",
+            mime_type="application/octet-stream",
+            size_bytes=7,
+            metadata_json={},
+            processing_status="deferred",
+        )
+        content_result = media_remote_storage_service.download_remote_media_via_provider(db, media)
+        assert content_result.content == b"fetched"
+        media_remote_storage_service.delete_remote_media_via_provider(db, media)
