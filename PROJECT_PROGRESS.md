@@ -238,6 +238,10 @@ Last updated: 2026-03-22
   - the control-center entry page now overrides garbled locale strings with clean operator copy for create, import, join, listing, and job-management actions
   - the landing, login, and register pages now render readable Chinese, English, and Japanese UI text without relying on the broken encoded literals
   - the language switcher now uses local display labels for locale names so users can reliably switch languages even if shared source text is corrupted
+- Structured Results Media Locale Cleanup V1:
+  - the structured results panel now uses clean Chinese and Japanese operator copy for recent media issues and dead-letter recovery guidance
+  - media asset cards now localize detail labels and media actions such as dimensions, text counts, download, refresh, retry, and delete
+  - the media-issue locale override approach now avoids directly depending on corrupted legacy copy blocks inside the large record panel component
 
 ## Next
 - Continue the next product slice

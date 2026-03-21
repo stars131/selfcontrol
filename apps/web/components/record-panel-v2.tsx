@@ -378,7 +378,7 @@ export function RecordPanelV2({
     [mediaDeadLetterOverview],
   );
 
-  const mediaIssueCopy = useMemo(
+  const legacyMediaIssueCopy = useMemo(
     () => ({
       recentIssuesTitle:
         locale === "zh-CN" ? "最近媒体问题" : locale === "ja" ? "最近の媒体問題" : "Recent media issues",
@@ -435,6 +435,75 @@ export function RecordPanelV2({
     }),
     [locale],
   );
+
+  const mediaIssueCopy = useMemo(
+    () => ({
+      recentIssuesTitle:
+        locale === "zh-CN" ? "最近媒体问题" : locale === "ja" ? "最近の媒体問題" : "Recent media issues",
+      recentIssuesDescription:
+        locale === "zh-CN"
+          ? "显示工作区最近失败或延后的媒体条目，并附带远程拉取状态。"
+          : locale === "ja"
+            ? "ワークスペース内で最近失敗または保留になった媒体項目と、リモート取得状態を表示します。"
+            : "Recent failed or deferred items across the workspace, including remote fetch state.",
+      noRecentIssues:
+        locale === "zh-CN"
+          ? "当前没有最近的媒体处理问题。"
+          : locale === "ja"
+            ? "最近の媒体処理の問題はありません。"
+            : "No recent media processing issues.",
+      deadLetterTitle:
+        locale === "zh-CN" ? "死信恢复" : locale === "ja" ? "デッドレター復旧" : "Dead-letter recovery",
+      deadLetterDescription:
+        locale === "zh-CN"
+          ? "这些远程媒体因为重试停止或本就不适合自动重试，需要人工介入。"
+          : locale === "ja"
+            ? "これらのリモート媒体は再試行が停止したか、自動再試行の対象外のため、手動対応が必要です。"
+            : "Remote media items that need manual recovery after retries stopped or were never eligible for auto-retry.",
+      noDeadLetter:
+        locale === "zh-CN"
+          ? "当前没有死信媒体项目。"
+          : locale === "ja"
+            ? "現在デッドレター媒体項目はありません。"
+            : "No dead-letter media items right now.",
+      openSettings:
+        locale === "zh-CN" ? "打开设置" : locale === "ja" ? "設定を開く" : "Open settings",
+      retryNow:
+        locale === "zh-CN" ? "立即重试" : locale === "ja" ? "今すぐ再試行" : "Retry now",
+      retrying:
+        locale === "zh-CN" ? "重试中..." : locale === "ja" ? "再試行中..." : "Retrying...",
+      selectVisible:
+        locale === "zh-CN" ? "选择可见项" : locale === "ja" ? "表示項目を選択" : "Select visible",
+      clearSelection:
+        locale === "zh-CN" ? "清空选择" : locale === "ja" ? "選択を解除" : "Clear selection",
+      retrySelectedPrefix:
+        locale === "zh-CN" ? "重试已选" : locale === "ja" ? "選択分を再試行" : "Retry selected",
+      retryAll:
+        locale === "zh-CN" ? "重试全部可操作项" : locale === "ja" ? "実行可能な項目をすべて再試行" : "Retry all actionable",
+      itemSuffix: locale === "zh-CN" ? "项" : locale === "ja" ? "件" : "item(s)",
+      lastAttempt: locale === "zh-CN" ? "最近尝试" : locale === "ja" ? "最終試行" : "Last attempt",
+      lastFailure: locale === "zh-CN" ? "最近失败" : locale === "ja" ? "最終失敗" : "Last failure",
+      nextRetry: locale === "zh-CN" ? "下一次重试" : locale === "ja" ? "次回再試行" : "Next retry",
+      retryBudgetUsed:
+        locale === "zh-CN" ? "已使用重试额度" : locale === "ja" ? "使用済み再試行枠" : "Retry budget used",
+      retries: locale === "zh-CN" ? "重试" : locale === "ja" ? "再試行" : "retries",
+      retryStatePrefix:
+        locale === "zh-CN" ? "恢复" : locale === "ja" ? "復旧" : "retry",
+      fetchPrefix: locale === "zh-CN" ? "拉取" : locale === "ja" ? "取得" : "fetch",
+      dimensions: locale === "zh-CN" ? "尺寸" : locale === "ja" ? "寸法" : "Dimensions",
+      textChars: locale === "zh-CN" ? "文本字符" : locale === "ja" ? "文字数" : "Text chars",
+      textLines: locale === "zh-CN" ? "文本行数" : locale === "ja" ? "行数" : "Text lines",
+      download: locale === "zh-CN" ? "下载" : locale === "ja" ? "ダウンロード" : "Download",
+      downloading: locale === "zh-CN" ? "下载中..." : locale === "ja" ? "ダウンロード中..." : "Downloading...",
+      refreshStatus: locale === "zh-CN" ? "刷新状态" : locale === "ja" ? "状態を更新" : "Refresh status",
+      refreshing: locale === "zh-CN" ? "刷新中..." : locale === "ja" ? "更新中..." : "Refreshing...",
+      retry: locale === "zh-CN" ? "重试" : locale === "ja" ? "再試行" : "Retry",
+      deleteMedia: locale === "zh-CN" ? "删除媒体" : locale === "ja" ? "媒体を削除" : "Delete media",
+      deleting: locale === "zh-CN" ? "删除中..." : locale === "ja" ? "削除中..." : "Deleting...",
+    }),
+    [locale],
+  );
+  void legacyMediaIssueCopy;
 
   useEffect(() => {
     setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)));
@@ -847,7 +916,7 @@ export function RecordPanelV2({
           {typeof asset.metadata_json.width === "number" &&
           typeof asset.metadata_json.height === "number" ? (
             <div className="subtle-card">
-              <div className="eyebrow">Dimensions</div>
+              <div className="eyebrow">{mediaIssueCopy.dimensions}</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {asset.metadata_json.width} x {asset.metadata_json.height}
               </div>
@@ -855,7 +924,7 @@ export function RecordPanelV2({
           ) : null}
           {typeof asset.metadata_json.text_char_count === "number" ? (
             <div className="subtle-card">
-              <div className="eyebrow">Text chars</div>
+              <div className="eyebrow">{mediaIssueCopy.textChars}</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {asset.metadata_json.text_char_count}
               </div>
@@ -863,7 +932,7 @@ export function RecordPanelV2({
           ) : null}
           {typeof asset.metadata_json.text_line_count === "number" ? (
             <div className="subtle-card">
-              <div className="eyebrow">Text lines</div>
+              <div className="eyebrow">{mediaIssueCopy.textLines}</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {asset.metadata_json.text_line_count}
               </div>
@@ -871,7 +940,7 @@ export function RecordPanelV2({
           ) : null}
           {lastAttemptAt ? (
             <div className="subtle-card">
-              <div className="eyebrow">Last attempt</div>
+              <div className="eyebrow">{mediaIssueCopy.lastAttempt}</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {formatHistoryTimestamp(lastAttemptAt)}
               </div>
@@ -879,7 +948,7 @@ export function RecordPanelV2({
           ) : null}
           {nextRetryAt ? (
             <div className="subtle-card">
-              <div className="eyebrow">Next retry</div>
+              <div className="eyebrow">{mediaIssueCopy.nextRetry}</div>
               <div style={{ marginTop: 8, fontWeight: 600 }}>
                 {formatHistoryTimestamp(nextRetryAt)}
               </div>
@@ -905,7 +974,7 @@ export function RecordPanelV2({
             disabled={downloadingMediaId === asset.id}
             onClick={() => void handleDownloadMedia(asset)}
           >
-            {downloadingMediaId === asset.id ? "Downloading..." : "Download"}
+            {downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}
           </button>
           <button
             className="button secondary"
@@ -913,7 +982,7 @@ export function RecordPanelV2({
             disabled={refreshingMediaId === asset.id}
             onClick={() => void handleRefreshMedia(asset.id)}
           >
-            {refreshingMediaId === asset.id ? "Refreshing..." : "Refresh status"}
+            {refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}
           </button>
           {asset.processing_status !== "completed" ? (
             <button
@@ -922,7 +991,7 @@ export function RecordPanelV2({
               disabled={retryingMediaId === asset.id}
               onClick={() => void handleRetryMediaProcessing(asset.id)}
             >
-              {retryingMediaId === asset.id ? "Retrying..." : "Retry"}
+              {retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}
             </button>
           ) : null}
           <button
@@ -931,7 +1000,7 @@ export function RecordPanelV2({
             disabled={deletingMediaId === asset.id || !canWriteWorkspace}
             onClick={() => void handleDeleteMediaAsset(asset.id)}
           >
-            {deletingMediaId === asset.id ? "Deleting..." : "Delete media"}
+            {deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}
           </button>
         </div>
       </article>
