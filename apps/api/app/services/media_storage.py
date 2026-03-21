@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -60,4 +61,102 @@ def summarize_workspace_media_storage(db: Session, workspace_id: str) -> dict:
         "largest_item_name": largest_item_name,
         "largest_item_size_bytes": largest_item_size_bytes,
         "largest_item_size_label": format_size_label(largest_item_size_bytes or 0) if largest_item_size_bytes else None,
+    }
+
+
+def _coerce_utc(value: datetime) -> datetime:
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
+
+
+def _scan_workspace_orphan_files(workspace_id: str, tracked_storage_keys: set[str]) -> tuple[int, int]:
+    workspace_dir = Path(settings.storage_dir) / workspace_id
+    if not workspace_dir.exists():
+        return 0, 0
+
+    orphan_file_count = 0
+    orphan_file_size_bytes = 0
+    storage_root = Path(settings.storage_dir).parent
+    for file_path in workspace_dir.rglob("*"):
+        if not file_path.is_file():
+            continue
+        relative_key = str(file_path.relative_to(storage_root))
+        if relative_key in tracked_storage_keys:
+            continue
+        orphan_file_count += 1
+        orphan_file_size_bytes += file_path.stat().st_size
+    return orphan_file_count, orphan_file_size_bytes
+
+
+def build_workspace_media_retention_report(
+    db: Session,
+    workspace_id: str,
+    *,
+    older_than_days: int = 90,
+    limit: int = 5,
+) -> dict:
+    items = db.query(MediaAsset).filter(MediaAsset.workspace_id == workspace_id).all()
+    now = datetime.now(timezone.utc)
+    total_size_bytes = 0
+    missing_file_count = 0
+    oldest_media_age_days: int | None = None
+    tracked_storage_keys: set[str] = set()
+    report_items: list[dict] = []
+
+    for item in items:
+        created_at = _coerce_utc(item.created_at)
+        age_days = max((now - created_at).days, 0)
+        size_bytes = int(item.size_bytes or 0)
+        file_missing = item.storage_provider == "local" and not resolve_storage_path(item).exists()
+
+        total_size_bytes += size_bytes
+        if file_missing:
+            missing_file_count += 1
+        if oldest_media_age_days is None or age_days > oldest_media_age_days:
+            oldest_media_age_days = age_days
+        tracked_storage_keys.add(item.storage_key)
+        report_items.append(
+            {
+                "media_id": item.id,
+                "record_id": item.record_id,
+                "original_filename": item.original_filename,
+                "media_type": item.media_type,
+                "processing_status": item.processing_status,
+                "size_bytes": size_bytes,
+                "size_label": format_size_label(size_bytes),
+                "created_at": item.created_at,
+                "age_days": age_days,
+                "file_missing": file_missing,
+            }
+        )
+
+    old_items = [item for item in report_items if item["age_days"] >= older_than_days]
+    orphan_file_count, orphan_file_size_bytes = _scan_workspace_orphan_files(workspace_id, tracked_storage_keys)
+    largest_items = sorted(
+        report_items,
+        key=lambda item: (-item["size_bytes"], -item["age_days"], item["original_filename"].lower()),
+    )[:limit]
+    retention_candidates = sorted(
+        old_items,
+        key=lambda item: (-item["size_bytes"], -item["age_days"], item["original_filename"].lower()),
+    )[:limit]
+    old_item_size_bytes = sum(item["size_bytes"] for item in old_items)
+
+    return {
+        "workspace_id": workspace_id,
+        "older_than_days": older_than_days,
+        "total_count": len(report_items),
+        "total_size_bytes": total_size_bytes,
+        "total_size_label": format_size_label(total_size_bytes),
+        "oldest_media_age_days": oldest_media_age_days,
+        "old_item_count": len(old_items),
+        "old_item_size_bytes": old_item_size_bytes,
+        "old_item_size_label": format_size_label(old_item_size_bytes),
+        "missing_file_count": missing_file_count,
+        "orphan_file_count": orphan_file_count,
+        "orphan_file_size_bytes": orphan_file_size_bytes,
+        "orphan_file_size_label": format_size_label(orphan_file_size_bytes),
+        "largest_items": largest_items,
+        "retention_candidates": retention_candidates,
     }

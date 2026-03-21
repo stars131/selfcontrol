@@ -36,3 +36,34 @@ class MediaStorageSummaryRead(BaseModel):
     largest_item_name: str | None = None
     largest_item_size_bytes: int | None = None
     largest_item_size_label: str | None = None
+
+
+class MediaRetentionItemRead(BaseModel):
+    media_id: str
+    record_id: str
+    original_filename: str
+    media_type: str
+    processing_status: str
+    size_bytes: int
+    size_label: str
+    created_at: datetime
+    age_days: int
+    file_missing: bool
+
+
+class MediaRetentionReportRead(BaseModel):
+    workspace_id: str
+    older_than_days: int
+    total_count: int
+    total_size_bytes: int
+    total_size_label: str
+    oldest_media_age_days: int | None = None
+    old_item_count: int
+    old_item_size_bytes: int
+    old_item_size_label: str
+    missing_file_count: int
+    orphan_file_count: int
+    orphan_file_size_bytes: int
+    orphan_file_size_label: str
+    largest_items: list[MediaRetentionItemRead]
+    retention_candidates: list[MediaRetentionItemRead]

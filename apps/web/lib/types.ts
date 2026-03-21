@@ -135,6 +135,37 @@ export type MediaStorageSummary = {
   largest_item_size_label?: string | null;
 };
 
+export type MediaRetentionItem = {
+  media_id: string;
+  record_id: string;
+  original_filename: string;
+  media_type: string;
+  processing_status: string;
+  size_bytes: number;
+  size_label: string;
+  created_at: string;
+  age_days: number;
+  file_missing: boolean;
+};
+
+export type MediaRetentionReport = {
+  workspace_id: string;
+  older_than_days: number;
+  total_count: number;
+  total_size_bytes: number;
+  total_size_label: string;
+  oldest_media_age_days?: number | null;
+  old_item_count: number;
+  old_item_size_bytes: number;
+  old_item_size_label: string;
+  missing_file_count: number;
+  orphan_file_count: number;
+  orphan_file_size_bytes: number;
+  orphan_file_size_label: string;
+  largest_items: MediaRetentionItem[];
+  retention_candidates: MediaRetentionItem[];
+};
+
 export type ReminderItem = {
   id: string;
   workspace_id: string;

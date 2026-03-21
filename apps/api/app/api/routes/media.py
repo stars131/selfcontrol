@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
@@ -13,11 +13,16 @@ from app.db.session import get_db
 from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
-from app.schemas.media import MediaRead, MediaStorageSummaryRead
+from app.schemas.media import MediaRead, MediaRetentionReportRead, MediaStorageSummaryRead
 from app.services.audit import log_audit_event
 from app.services.background_tasks import dispatch_media_processing
 from app.services.knowledge import rebuild_record_knowledge
-from app.services.media_storage import remove_storage_file, resolve_storage_path, summarize_workspace_media_storage
+from app.services.media_storage import (
+    build_workspace_media_retention_report,
+    remove_storage_file,
+    resolve_storage_path,
+    summarize_workspace_media_storage,
+)
 
 
 router = APIRouter()
@@ -49,6 +54,24 @@ def get_media_storage_summary(
     require_workspace_member(workspace_id, current_user, db)
     summary = summarize_workspace_media_storage(db, workspace_id)
     return {"success": True, "data": {"summary": MediaStorageSummaryRead.model_validate(summary).model_dump()}}
+
+
+@router.get("/{workspace_id}/media/retention-report")
+def get_media_retention_report(
+    workspace_id: str,
+    older_than_days: int = Query(90, ge=1, le=3650),
+    limit: int = Query(5, ge=1, le=20),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_write_access(workspace_id, current_user, db)
+    report = build_workspace_media_retention_report(
+        db,
+        workspace_id,
+        older_than_days=older_than_days,
+        limit=limit,
+    )
+    return {"success": True, "data": {"report": MediaRetentionReportRead.model_validate(report).model_dump()}}
 
 
 @router.get("/{workspace_id}/media/{media_id}/status")

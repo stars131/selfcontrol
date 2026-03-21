@@ -134,11 +134,15 @@ Last updated: 2026-03-21
   - issue, renew, and render helper scripts now automate the certificate workflow on Linux
   - TLS deployment docs now describe first issuance, renewal, and combined compose startup
   - TLS shell scripts pass syntax checks under Git `sh`, and production+TLS compose config validates cleanly
+- Media Retention Reporting V1:
+  - media API now exposes a read-only retention report for owner/editor roles with configurable age thresholds
+  - the report summarizes stale attachment counts and size, oldest tracked media, missing tracked files, and local orphan files
+  - workspace settings now include a retention card with largest-file and cleanup-candidate lists
+  - media API coverage now verifies retention counts, missing-file detection, and orphan-file detection
 
 ## Next
-- Media retention policy for long-term storage growth
-- Media retention policy for long-term storage growth
 - Workspace and attachment export/import strategy
+- Archive and cleanup actions for stale media
 
 ## Delivery Rule
 - Every meaningful slice must update this file

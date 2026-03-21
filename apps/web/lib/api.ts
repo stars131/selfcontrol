@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaRetentionReport,
   MediaStorageSummary,
   NotificationItem,
   ProviderFeatureConfig,
@@ -463,6 +464,25 @@ export async function getMediaStorageSummary(token: string, workspaceId: string)
     { method: "GET" },
     token,
   );
+}
+
+export async function getMediaRetentionReport(
+  token: string,
+  workspaceId: string,
+  params?: { olderThanDays?: number; limit?: number },
+) {
+  const searchParams = new URLSearchParams();
+  if (params?.olderThanDays) {
+    searchParams.set("older_than_days", String(params.olderThanDays));
+  }
+  if (params?.limit) {
+    searchParams.set("limit", String(params.limit));
+  }
+  const query = searchParams.toString();
+  const path = query
+    ? `/workspaces/${workspaceId}/media/retention-report?${query}`
+    : `/workspaces/${workspaceId}/media/retention-report`;
+  return request<{ report: MediaRetentionReport }>(path, { method: "GET" }, token);
 }
 
 export async function fetchMediaBlob(token: string, workspaceId: string, mediaId: string) {

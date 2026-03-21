@@ -25,6 +25,7 @@ import type {
 } from "../lib/types";
 import { LanguageSwitcher } from "./language-switcher";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
+import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
 
 const COPY: Record<
   LocaleCode,
@@ -338,6 +339,9 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
               </section>
             )}
           </div>
+          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+            token ? <WorkspaceMediaRetentionCard locale={locale} token={token} workspaceId={workspaceId} /> : null
+          ) : null}
           {workspace?.role === "owner" || workspace?.role === "editor" ? (
             <section className="record-card" style={{ marginTop: 24 }}>
               <div className="eyebrow">{copy.membersTitle}</div>

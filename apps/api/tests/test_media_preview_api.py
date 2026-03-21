@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -12,6 +14,7 @@ from app.api.routes import records as records_route
 from app.db.base import Base
 from app.db.session import get_db
 from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, share_link  # noqa: F401
+from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
@@ -24,7 +27,7 @@ PNG_1X1 = (
 )
 
 
-def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str]:
+def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str, sessionmaker]:
     engine = create_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
@@ -99,11 +102,11 @@ def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str]:
 
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_user] = override_get_current_user
-    return TestClient(app), workspace_id, record_id
+    return TestClient(app), workspace_id, record_id, session_local
 
 
 def test_media_upload_returns_preview_metadata_and_content(tmp_path, monkeypatch) -> None:
-    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+    client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
 
     response = client.post(
         f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
@@ -127,7 +130,7 @@ def test_media_upload_returns_preview_metadata_and_content(tmp_path, monkeypatch
 
 
 def test_media_delete_cleans_file_and_updates_storage_summary(tmp_path, monkeypatch) -> None:
-    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+    client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
 
     upload_response = client.post(
         f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
@@ -156,7 +159,7 @@ def test_media_delete_cleans_file_and_updates_storage_summary(tmp_path, monkeypa
 
 
 def test_record_delete_cleans_attached_media_files(tmp_path, monkeypatch) -> None:
-    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+    client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
 
     upload_response = client.post(
         f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
@@ -178,7 +181,7 @@ def test_record_delete_cleans_attached_media_files(tmp_path, monkeypatch) -> Non
 
 
 def test_media_upload_can_be_dispatched_async(tmp_path, monkeypatch) -> None:
-    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+    client, workspace_id, record_id, _session_local = build_media_client(tmp_path, monkeypatch)
     queued_media_ids: list[str] = []
 
     monkeypatch.setattr("app.services.background_tasks.settings.media_processing_mode", "async")
@@ -206,3 +209,61 @@ def test_media_upload_can_be_dispatched_async(tmp_path, monkeypatch) -> None:
     retry_payload = retry_response.json()["data"]["media"]
     assert retry_payload["processing_status"] == "pending"
     assert queued_media_ids == [media_payload["id"], media_payload["id"]]
+
+
+def test_media_retention_report_counts_old_missing_and_orphan_files(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    old_upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("old-note.txt", b"old snack note", "text/plain")},
+    )
+    assert old_upload_response.status_code == 200
+    old_media_payload = old_upload_response.json()["data"]["media"]
+
+    large_upload_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("large-video.txt", b"v" * 4096, "text/plain")},
+    )
+    assert large_upload_response.status_code == 200
+    large_media_payload = large_upload_response.json()["data"]["media"]
+
+    with session_local() as db:
+        old_media = db.get(MediaAsset, old_media_payload["id"])
+        assert old_media is not None
+        old_media.created_at = datetime.now(timezone.utc) - timedelta(days=180)
+        db.add(old_media)
+        db.commit()
+
+    missing_file_path = tmp_path / large_media_payload["storage_key"]
+    assert missing_file_path.exists()
+    missing_file_path.unlink()
+
+    orphan_file_path = tmp_path / "uploads" / workspace_id / "orphan.bin"
+    orphan_file_path.parent.mkdir(parents=True, exist_ok=True)
+    orphan_file_path.write_bytes(b"orphan-file")
+
+    retention_response = client.get(
+        f"/api/v1/workspaces/{workspace_id}/media/retention-report?older_than_days=90&limit=5"
+    )
+
+    assert retention_response.status_code == 200
+    report = retention_response.json()["data"]["report"]
+    assert report["workspace_id"] == workspace_id
+    assert report["older_than_days"] == 90
+    assert report["total_count"] == 2
+    assert report["old_item_count"] == 1
+    assert report["old_item_size_bytes"] == len(b"old snack note")
+    assert report["missing_file_count"] == 1
+    assert report["orphan_file_count"] == 1
+    assert report["orphan_file_size_bytes"] == len(b"orphan-file")
+    assert report["oldest_media_age_days"] >= 179
+
+    assert [item["original_filename"] for item in report["largest_items"]] == [
+        "large-video.txt",
+        "old-note.txt",
+    ]
+    assert report["largest_items"][0]["file_missing"] is True
+
+    assert [item["original_filename"] for item in report["retention_candidates"]] == ["old-note.txt"]
+    assert report["retention_candidates"][0]["age_days"] >= 179
