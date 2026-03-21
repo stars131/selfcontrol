@@ -14,6 +14,7 @@ from app.db.session import get_db
 from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, search_preset, share_link  # noqa: F401
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
+from app.services import media_remote_storage as media_remote_storage_service
 
 
 def build_provider_config_client(monkeypatch) -> tuple[TestClient, str]:
@@ -140,6 +141,88 @@ def test_provider_config_lists_media_storage_feature(monkeypatch) -> None:
     assert media_storage["provider_code"] == "local"
     assert media_storage["is_enabled"] is True
     assert media_storage["providers"] == ["local", "custom"]
+
+
+def test_media_storage_health_defaults_to_local_ready(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.get(f"/api/v1/workspaces/{workspace_id}/provider-configs/media-storage-health")
+
+    assert response.status_code == 200
+    health = response.json()["data"]["health"]
+    assert health["provider_code"] == "local"
+    assert health["status"] == "ready"
+    assert health["reachable"] is True
+    assert health["capabilities"] == {"upload": True, "download": True, "delete": True}
+    assert health["service_name"] == "local-disk"
+
+
+def test_media_storage_health_reports_custom_capabilities(monkeypatch) -> None:
+    monkeypatch.setenv("REMOTE_MEDIA_STORAGE_KEY", "secret-value")
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    update_response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": "https://storage.example.test/api",
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {},
+        },
+    )
+    assert update_response.status_code == 200
+
+    class FakeResponse:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "status": "ready",
+                "message": "storage online",
+                "service_name": "remote-media-gateway",
+                "service_version": "1.2.3",
+                "contract_version": media_remote_storage_service.WEBHOOK_CONTRACT_VERSION,
+                "capabilities": {
+                    "upload": True,
+                    "download": True,
+                    "delete": False,
+                },
+            }
+
+    class FakeClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def get(self, url, *, headers, params):
+            assert url == "https://storage.example.test/api/media/health"
+            assert headers["X-SelfControl-Media-Storage-Operation"] == "health"
+            assert params["contract_version"] == media_remote_storage_service.WEBHOOK_CONTRACT_VERSION
+            return FakeResponse()
+
+    monkeypatch.setattr(media_remote_storage_service.httpx, "Client", FakeClient)
+
+    response = client.get(f"/api/v1/workspaces/{workspace_id}/provider-configs/media-storage-health")
+
+    assert response.status_code == 200
+    health = response.json()["data"]["health"]
+    assert health["provider_code"] == "custom"
+    assert health["status"] == "ready"
+    assert health["reachable"] is True
+    assert health["message"] == "storage online"
+    assert health["service_name"] == "remote-media-gateway"
+    assert health["service_version"] == "1.2.3"
+    assert health["capabilities"]["upload"] is True
+    assert health["capabilities"]["download"] is True
+    assert health["capabilities"]["delete"] is False
 
 
 def test_media_storage_config_requires_service_root_base_url(monkeypatch) -> None:

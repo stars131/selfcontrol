@@ -123,6 +123,42 @@ Special responses:
 
 - HTTP `404`: treated as already deleted
 
+## Health Endpoint
+
+Request:
+
+- `GET {api_base_url}/media/health`
+- query params:
+- `contract_version`
+
+Successful response:
+
+- HTTP `200`
+- JSON object
+
+Recommended response shape:
+
+```json
+{
+  "status": "ready",
+  "message": "storage online",
+  "service_name": "remote-media-gateway",
+  "service_version": "1.2.3",
+  "contract_version": "selfcontrol-media-storage-v1",
+  "capabilities": {
+    "upload": true,
+    "download": true,
+    "delete": true
+  }
+}
+```
+
+Notes:
+
+- `status` should ideally be `ok` or `ready` for a healthy service
+- `capabilities` should report whether upload, download, and delete are currently supported
+- if this endpoint returns HTTP `404`, SelfControl marks the provider health check as unsupported
+
 ## Failure Handling
 
 SelfControl treats these cases as remote storage failures:

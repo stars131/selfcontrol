@@ -8,6 +8,7 @@ from app.api.deps import get_current_user, require_workspace_write_access
 from app.db.session import get_db
 from app.models.user import User
 from app.services.audit import log_audit_event
+from app.services.media_remote_storage import get_media_storage_provider_health
 from app.services.provider_configs import list_provider_configs, upsert_provider_config
 
 
@@ -32,6 +33,17 @@ def get_provider_configs(
     require_workspace_write_access(workspace_id, current_user, db)
     items = list_provider_configs(db, workspace_id)
     return {"success": True, "data": {"items": [item.to_dict() for item in items]}}
+
+
+@router.get("/{workspace_id}/provider-configs/media-storage-health")
+def get_workspace_media_storage_health(
+    workspace_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_write_access(workspace_id, current_user, db)
+    health = get_media_storage_provider_health(db, workspace_id)
+    return {"success": True, "data": {"health": health.to_dict()}}
 
 
 @router.put("/{workspace_id}/provider-configs/{feature_code}")

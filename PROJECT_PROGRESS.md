@@ -190,9 +190,14 @@ Last updated: 2026-03-21
   - transport failures and timeouts for upload, download, and delete now surface as stable remote-storage errors instead of leaking raw client exceptions
   - media storage provider config now rejects endpoint-level base URLs and enabled custom configs without a service-root base URL
   - a dedicated remote media webhook contract document is now included for Linux deployment and third-party storage integration
+- Remote Media Provider Capability Health Check V1:
+  - workspace settings now expose a dedicated media storage health snapshot for owner and editor roles instead of relying on the global process health endpoint
+  - the backend now checks local-vs-remote media storage readiness, secret status, endpoint reachability, reported provider capabilities, and response latency
+  - custom remote storage services can now implement `GET /media/health` to advertise upload, download, and delete capability status back to SelfControl
+  - provider settings now include a refreshable health card for the `media_storage` feature so remote storage issues can be diagnosed before users upload files
 
 ## Next
-- Remote media provider capability health check
+- Remote media provider fallback and graceful degradation
 
 ## Delivery Rule
 - Every meaningful slice must update this file

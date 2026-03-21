@@ -8,6 +8,7 @@ import {
   deleteWorkspaceMember,
   getCurrentUser,
   getKnowledgeStats,
+  getMediaStorageProviderHealth,
   getWorkspace,
   listProviderConfigs,
   listWorkspaceMembers,
@@ -18,6 +19,7 @@ import { clearStoredSession, getStoredToken } from "../lib/auth";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import type {
   KnowledgeStats,
+  MediaStorageProviderHealth,
   ProviderFeatureConfig,
   User,
   Workspace,
@@ -149,10 +151,12 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
   const [user, setUser] = useState<User | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
+  const [mediaStorageHealth, setMediaStorageHealth] = useState<MediaStorageProviderHealth | null>(null);
   const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
   const [members, setMembers] = useState<WorkspaceMemberItem[]>([]);
   const [savingMemberId, setSavingMemberId] = useState("");
   const [removingMemberId, setRemovingMemberId] = useState("");
+  const [refreshingMediaStorageHealth, setRefreshingMediaStorageHealth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -176,15 +180,18 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
         setKnowledgeStats(knowledgeResult.stats);
 
         if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
-          const [providerResult, memberResult] = await Promise.all([
+          const [providerResult, memberResult, mediaStorageHealthResult] = await Promise.all([
             listProviderConfigs(activeToken, workspaceId),
             listWorkspaceMembers(activeToken, workspaceId),
+            getMediaStorageProviderHealth(activeToken, workspaceId),
           ]);
           setProviderConfigs(providerResult.items);
           setMembers(memberResult.items);
+          setMediaStorageHealth(mediaStorageHealthResult.health);
         } else {
           setProviderConfigs([]);
           setMembers([]);
+          setMediaStorageHealth(null);
         }
       } catch (caught) {
         clearStoredSession();
@@ -197,6 +204,19 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
 
     void load();
   }, [router, workspaceId]);
+
+  const refreshMediaStorageHealthState = async (activeToken: string) => {
+    setRefreshingMediaStorageHealth(true);
+    try {
+      const result = await getMediaStorageProviderHealth(activeToken, workspaceId);
+      setMediaStorageHealth(result.health);
+      setError("");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to load media storage health");
+    } finally {
+      setRefreshingMediaStorageHealth(false);
+    }
+  };
 
   const handleSaveProviderConfig = async (
     featureCode: string,
@@ -219,6 +239,9 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
     setProviderConfigs((current) =>
       current.map((item) => (item.feature_code === featureCode ? result.config : item)),
     );
+    if (featureCode === "media_storage") {
+      await refreshMediaStorageHealthState(token);
+    }
   };
 
   const handleUpdateMemberRole = async (memberId: string, role: "viewer" | "editor") => {
@@ -329,8 +352,13 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             </section>
             {workspace?.role === "owner" || workspace?.role === "editor" ? (
               <ProviderSettingsPanel
+                mediaStorageHealth={mediaStorageHealth}
+                onRefreshMediaStorageHealth={
+                  token ? async () => refreshMediaStorageHealthState(token) : null
+                }
                 onSaveProviderConfig={handleSaveProviderConfig}
                 providerConfigs={providerConfigs}
+                refreshingMediaStorageHealth={refreshingMediaStorageHealth}
               />
             ) : (
               <section className="record-card">

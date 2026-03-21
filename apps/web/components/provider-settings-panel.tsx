@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import type { ProviderFeatureConfig } from "../lib/types";
+import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 
 type ProviderDraft = {
   provider_code: string;
@@ -14,9 +14,15 @@ type ProviderDraft = {
 
 export function ProviderSettingsPanel({
   providerConfigs,
+  mediaStorageHealth = null,
+  refreshingMediaStorageHealth = false,
+  onRefreshMediaStorageHealth,
   onSaveProviderConfig,
 }: {
   providerConfigs: ProviderFeatureConfig[];
+  mediaStorageHealth?: MediaStorageProviderHealth | null;
+  refreshingMediaStorageHealth?: boolean;
+  onRefreshMediaStorageHealth?: (() => Promise<void>) | null;
   onSaveProviderConfig: (
     featureCode: string,
     input: {
@@ -168,6 +174,82 @@ export function ProviderSettingsPanel({
               {item.config_warnings.length ? (
                 <div className="notice" style={{ marginTop: 10 }}>
                   {item.config_warnings.join(" ")}
+                </div>
+              ) : null}
+              {item.feature_code === "media_storage" && mediaStorageHealth ? (
+                <div className="record-card form-stack" style={{ marginTop: 12 }}>
+                  <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <div className="eyebrow">Storage health</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaStorageHealth.status}
+                      </div>
+                    </div>
+                    {onRefreshMediaStorageHealth ? (
+                      <button
+                        className="button secondary"
+                        disabled={refreshingMediaStorageHealth}
+                        type="button"
+                        onClick={() => void onRefreshMediaStorageHealth()}
+                      >
+                        {refreshingMediaStorageHealth ? "Refreshing..." : "Refresh health"}
+                      </button>
+                    ) : null}
+                  </div>
+                  <div className="muted" style={{ lineHeight: 1.6 }}>
+                    {mediaStorageHealth.message}
+                  </div>
+                  <div className="tag-row">
+                    <span className="tag">provider {mediaStorageHealth.provider_code}</span>
+                    <span className="tag">secret {mediaStorageHealth.secret_status}</span>
+                    {typeof mediaStorageHealth.reachable === "boolean" ? (
+                      <span className="tag">
+                        {mediaStorageHealth.reachable ? "reachable" : "unreachable"}
+                      </span>
+                    ) : null}
+                    {mediaStorageHealth.service_name ? (
+                      <span className="tag">
+                        {mediaStorageHealth.service_name}
+                        {mediaStorageHealth.service_version ? ` ${mediaStorageHealth.service_version}` : ""}
+                      </span>
+                    ) : null}
+                    {typeof mediaStorageHealth.response_time_ms === "number" ? (
+                      <span className="tag">{mediaStorageHealth.response_time_ms} ms</span>
+                    ) : null}
+                  </div>
+                  <div className="detail-grid">
+                    <div className="subtle-card">
+                      <div className="eyebrow">Upload</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaStorageHealth.capabilities.upload ? "Available" : "Unavailable"}
+                      </div>
+                    </div>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Download</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaStorageHealth.capabilities.download ? "Available" : "Unavailable"}
+                      </div>
+                    </div>
+                    <div className="subtle-card">
+                      <div className="eyebrow">Delete</div>
+                      <div style={{ marginTop: 8, fontWeight: 600 }}>
+                        {mediaStorageHealth.capabilities.delete ? "Available" : "Unavailable"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="muted">
+                    Checked at {new Date(mediaStorageHealth.checked_at).toLocaleString()}
+                  </div>
+                  {mediaStorageHealth.api_base_url ? (
+                    <div className="muted" style={{ wordBreak: "break-all" }}>
+                      Endpoint root: {mediaStorageHealth.api_base_url}
+                    </div>
+                  ) : null}
+                  {mediaStorageHealth.warnings.length ? (
+                    <div className="notice">
+                      {mediaStorageHealth.warnings.join(" ")}
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
               <div className="action-row" style={{ marginTop: 10 }}>

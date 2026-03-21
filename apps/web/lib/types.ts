@@ -337,6 +337,29 @@ export type ProviderFeatureConfig = {
   config_warnings: string[];
 };
 
+export type MediaStorageProviderHealth = {
+  feature_code: string;
+  provider_code: string;
+  is_enabled: boolean;
+  status: string;
+  reachable?: boolean | null;
+  checked_at: string;
+  api_base_url?: string | null;
+  message: string;
+  contract_version: string;
+  secret_status: "configured" | "missing" | "not_required";
+  service_status?: string | null;
+  service_name?: string | null;
+  service_version?: string | null;
+  response_time_ms?: number | null;
+  capabilities: {
+    upload: boolean;
+    download: boolean;
+    delete: boolean;
+  };
+  warnings: string[];
+};
+
 export type AuditLogItem = {
   id: string;
   workspace_id: string;

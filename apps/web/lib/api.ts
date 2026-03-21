@@ -4,6 +4,7 @@ import type {
   Conversation,
   KnowledgeStats,
   MediaAsset,
+  MediaStorageProviderHealth,
   MediaProcessingOverview,
   MediaRetentionArchiveResult,
   MediaRetentionCleanupResult,
@@ -740,6 +741,14 @@ export async function updateProviderConfig(
       method: "PUT",
       body: JSON.stringify(input),
     },
+    token,
+  );
+}
+
+export async function getMediaStorageProviderHealth(token: string, workspaceId: string) {
+  return request<{ health: MediaStorageProviderHealth }>(
+    `/workspaces/${workspaceId}/provider-configs/media-storage-health`,
+    { method: "GET" },
     token,
   );
 }
