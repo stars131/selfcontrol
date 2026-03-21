@@ -12,6 +12,9 @@ from app.models.provider_config import ProviderConfig
 
 ENV_NAME_PATTERN = re.compile(r"^[A-Z][A-Z0-9_]{1,127}$")
 SECRETLESS_PROVIDERS = {"builtin", "local", "none", "amap"}
+MAX_MEDIA_STORAGE_RETRY_ATTEMPTS = 20
+MAX_MEDIA_STORAGE_BACKOFF_ITEMS = 8
+MAX_MEDIA_STORAGE_BACKOFF_SECONDS = 604800
 
 
 FEATURE_DEFINITIONS: dict[str, dict] = {
@@ -125,6 +128,79 @@ def normalize_api_base_url(value: str | None) -> str | None:
     return normalized.rstrip("/")
 
 
+def _coerce_bool_option(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "on", "enabled"}:
+            return True
+        if normalized in {"false", "0", "no", "off", "disabled"}:
+            return False
+    raise ValueError("Boolean option must be true/false")
+
+
+def _coerce_int_option(value: object, *, field_name: str, min_value: int, max_value: int) -> int:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{field_name} must be an integer") from exc
+    if parsed < min_value or parsed > max_value:
+        raise ValueError(f"{field_name} must be between {min_value} and {max_value}")
+    return parsed
+
+
+def _coerce_backoff_list(value: object) -> list[int]:
+    if value is None or value == "":
+        return []
+    raw_items: list[object]
+    if isinstance(value, str):
+        raw_items = [item.strip() for item in value.split(",") if item.strip()]
+    elif isinstance(value, list):
+        raw_items = value
+    else:
+        raise ValueError("remote_retry_backoff_seconds must be a list of integers or a comma-separated string")
+
+    if len(raw_items) > MAX_MEDIA_STORAGE_BACKOFF_ITEMS:
+        raise ValueError(f"remote_retry_backoff_seconds must contain at most {MAX_MEDIA_STORAGE_BACKOFF_ITEMS} items")
+
+    normalized: list[int] = []
+    for item in raw_items:
+        normalized.append(
+            _coerce_int_option(
+                item,
+                field_name="remote_retry_backoff_seconds item",
+                min_value=1,
+                max_value=MAX_MEDIA_STORAGE_BACKOFF_SECONDS,
+            )
+        )
+    return normalized
+
+
+def normalize_media_storage_options(options_json: dict | None) -> dict:
+    normalized = dict(options_json or {})
+    if "fallback_to_local_on_upload_failure" in normalized:
+        normalized["fallback_to_local_on_upload_failure"] = _coerce_bool_option(
+            normalized["fallback_to_local_on_upload_failure"]
+        )
+    if "auto_retry_enabled" in normalized:
+        normalized["auto_retry_enabled"] = _coerce_bool_option(normalized["auto_retry_enabled"])
+    if "remote_retry_max_attempts" in normalized:
+        normalized["remote_retry_max_attempts"] = _coerce_int_option(
+            normalized["remote_retry_max_attempts"],
+            field_name="remote_retry_max_attempts",
+            min_value=0,
+            max_value=MAX_MEDIA_STORAGE_RETRY_ATTEMPTS,
+        )
+    if "remote_retry_backoff_seconds" in normalized:
+        normalized["remote_retry_backoff_seconds"] = _coerce_backoff_list(
+            normalized["remote_retry_backoff_seconds"]
+        )
+    return normalized
+
+
 def resolve_secret_env_name(config: ProviderFeatureConfig) -> str | None:
     return normalize_api_key_env_name(config.api_key_env_name) or default_secret_env_name(config.provider_code)
 
@@ -213,6 +289,17 @@ def build_default_feature_config(feature_code: str) -> ProviderFeatureConfig:
         model_name = "disk-v1"
         is_enabled = True
 
+    options_json: dict = {}
+    if feature_code == "media_storage":
+        options_json = normalize_media_storage_options(
+            {
+                "fallback_to_local_on_upload_failure": False,
+                "auto_retry_enabled": settings.remote_media_retry_max_attempts > 0,
+                "remote_retry_max_attempts": settings.remote_media_retry_max_attempts,
+                "remote_retry_backoff_seconds": settings.remote_media_retry_backoff_seconds,
+            }
+        )
+
     return ProviderFeatureConfig(
         feature_code=feature_code,
         feature_label=definition["label"],
@@ -223,7 +310,7 @@ def build_default_feature_config(feature_code: str) -> ProviderFeatureConfig:
         is_enabled=is_enabled,
         api_base_url=None,
         api_key_env_name=None,
-        options_json={},
+        options_json=options_json,
         is_default=True,
         updated_at=None,
         requires_secret=provider_requires_secret(provider_code),
@@ -247,6 +334,11 @@ def merge_provider_config(item: ProviderConfig | None, feature_code: str) -> Pro
         )
         return default_config
 
+    merged_options_json = dict(default_config.options_json)
+    merged_options_json.update(item.options_json or {})
+    if feature_code == "media_storage":
+        merged_options_json = normalize_media_storage_options(merged_options_json)
+
     merged = ProviderFeatureConfig(
         feature_code=feature_code,
         feature_label=default_config.feature_label,
@@ -257,7 +349,7 @@ def merge_provider_config(item: ProviderConfig | None, feature_code: str) -> Pro
         is_enabled=item.is_enabled,
         api_base_url=item.api_base_url,
         api_key_env_name=item.api_key_env_name,
-        options_json=item.options_json or {},
+        options_json=merged_options_json,
         is_default=False,
         updated_at=item.updated_at.isoformat() if item.updated_at else None,
         requires_secret=provider_requires_secret(item.provider_code),
@@ -322,6 +414,10 @@ def upsert_provider_config(
         api_base_url=normalized_api_base_url,
     )
 
+    normalized_options_json = options_json or {}
+    if feature_code == "media_storage":
+        normalized_options_json = normalize_media_storage_options(normalized_options_json)
+
     item = (
         db.query(ProviderConfig)
         .filter(ProviderConfig.workspace_id == workspace_id, ProviderConfig.feature_code == feature_code)
@@ -335,7 +431,7 @@ def upsert_provider_config(
     item.is_enabled = is_enabled
     item.api_base_url = normalized_api_base_url
     item.api_key_env_name = normalized_api_key_env_name
-    item.options_json = options_json or {}
+    item.options_json = normalized_options_json
     db.add(item)
     db.commit()
     db.refresh(item)

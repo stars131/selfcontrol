@@ -141,6 +141,8 @@ def test_provider_config_lists_media_storage_feature(monkeypatch) -> None:
     assert media_storage["provider_code"] == "local"
     assert media_storage["is_enabled"] is True
     assert media_storage["providers"] == ["local", "custom"]
+    assert media_storage["options_json"]["auto_retry_enabled"] is True
+    assert isinstance(media_storage["options_json"]["remote_retry_backoff_seconds"], list)
 
 
 def test_media_storage_health_defaults_to_local_ready(monkeypatch) -> None:
@@ -245,6 +247,53 @@ def test_media_storage_config_persists_options_json(monkeypatch) -> None:
     assert response.status_code == 200
     config = response.json()["data"]["config"]
     assert config["options_json"]["fallback_to_local_on_upload_failure"] is True
+
+
+def test_media_storage_config_normalizes_retry_policy_options(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": "https://storage.example.test/api",
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {
+                "auto_retry_enabled": "true",
+                "remote_retry_max_attempts": "5",
+                "remote_retry_backoff_seconds": "15,60,300",
+            },
+        },
+    )
+
+    assert response.status_code == 200
+    config = response.json()["data"]["config"]
+    assert config["options_json"]["auto_retry_enabled"] is True
+    assert config["options_json"]["remote_retry_max_attempts"] == 5
+    assert config["options_json"]["remote_retry_backoff_seconds"] == [15, 60, 300]
+
+
+def test_media_storage_config_rejects_invalid_retry_policy_options(monkeypatch) -> None:
+    client, workspace_id = build_provider_config_client(monkeypatch)
+
+    response = client.put(
+        f"/api/v1/workspaces/{workspace_id}/provider-configs/media_storage",
+        json={
+            "provider_code": "custom",
+            "model_name": None,
+            "is_enabled": True,
+            "api_base_url": "https://storage.example.test/api",
+            "api_key_env_name": "REMOTE_MEDIA_STORAGE_KEY",
+            "options_json": {
+                "remote_retry_max_attempts": "-1",
+            },
+        },
+    )
+
+    assert response.status_code == 400
+    assert "remote_retry_max_attempts" in response.json()["detail"]
 
 
 def test_media_storage_config_requires_service_root_base_url(monkeypatch) -> None:

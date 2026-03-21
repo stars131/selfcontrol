@@ -1307,6 +1307,127 @@ def test_remote_media_processing_schedules_background_retry_for_transient_remote
     ]
 
 
+def test_remote_media_processing_uses_workspace_retry_policy_override(tmp_path, monkeypatch) -> None:
+    _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+    monkeypatch.setattr("app.services.media_processing.settings.media_processing_mode", "async")
+
+    with session_local() as db:
+        user_id = db.query(User).first().id
+        db.add(
+            ProviderConfig(
+                workspace_id=workspace_id,
+                feature_code="media_storage",
+                provider_code="custom",
+                is_enabled=True,
+                api_base_url="https://storage.example.test/api",
+                api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+                options_json={
+                    "auto_retry_enabled": True,
+                    "remote_retry_max_attempts": 5,
+                    "remote_retry_backoff_seconds": [12, 34, 56],
+                },
+            )
+        )
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=user_id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-policy.m4a",
+            original_filename="voice-policy.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="pending",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    temp_remote_file = tmp_path / "tmp" / "voice-policy.m4a"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"audio bytes")
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: temp_remote_file,
+    )
+    monkeypatch.setattr(
+        "app.services.media_processing.extract_text_via_provider",
+        lambda db, media, file_path: (_ for _ in ()).throw(DeferredMediaProcessingError("provider processing is not ready")),
+    )
+
+    with session_local() as db:
+        media = background_tasks_service.process_media_asset(db, remote_media_id)
+        metadata = media.metadata_json
+        assert media.processing_status == "deferred"
+        assert metadata["processing_retry_state"] == "scheduled"
+        assert metadata["processing_retry_count"] == 1
+        assert metadata["processing_retry_max_attempts"] == 5
+        assert metadata["processing_retry_delay_seconds"] == 12
+
+
+def test_remote_media_processing_workspace_policy_can_disable_auto_retry(tmp_path, monkeypatch) -> None:
+    _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        user_id = db.query(User).first().id
+        db.add(
+            ProviderConfig(
+                workspace_id=workspace_id,
+                feature_code="media_storage",
+                provider_code="custom",
+                is_enabled=True,
+                api_base_url="https://storage.example.test/api",
+                api_key_env_name="REMOTE_MEDIA_STORAGE_KEY",
+                options_json={
+                    "auto_retry_enabled": False,
+                    "remote_retry_max_attempts": 5,
+                    "remote_retry_backoff_seconds": [12, 34, 56],
+                },
+            )
+        )
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=user_id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/voice-disabled.m4a",
+            original_filename="voice-disabled.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="pending",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    temp_remote_file = tmp_path / "tmp" / "voice-disabled.m4a"
+    temp_remote_file.parent.mkdir(parents=True, exist_ok=True)
+    temp_remote_file.write_bytes(b"audio bytes")
+
+    monkeypatch.setattr(
+        "app.services.media_processing.download_remote_media_to_temp_file",
+        lambda db, media: temp_remote_file,
+    )
+    monkeypatch.setattr(
+        "app.services.media_processing.extract_text_via_provider",
+        lambda db, media, file_path: (_ for _ in ()).throw(DeferredMediaProcessingError("provider processing is not ready")),
+    )
+
+    with session_local() as db:
+        media = background_tasks_service.process_media_asset(db, remote_media_id)
+        metadata = media.metadata_json
+        assert media.processing_status == "deferred"
+        assert metadata["processing_retry_state"] == "disabled"
+        assert metadata["processing_retry_count"] == 0
+        assert metadata["processing_retry_max_attempts"] == 0
+        assert metadata["processing_retry_next_attempt_at"] is None
+
+
 def test_remote_media_processing_uses_manual_recovery_for_non_retriable_errors(tmp_path, monkeypatch) -> None:
     _client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
     monkeypatch.setattr("app.services.media_processing.settings.media_processing_mode", "async")

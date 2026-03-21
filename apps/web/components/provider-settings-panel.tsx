@@ -14,9 +14,26 @@ type ProviderDraft = {
 };
 
 const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
+const MEDIA_STORAGE_AUTO_RETRY_OPTION = "auto_retry_enabled";
+const MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION = "remote_retry_max_attempts";
+const MEDIA_STORAGE_RETRY_BACKOFF_OPTION = "remote_retry_backoff_seconds";
 
 function readBooleanOption(options: Record<string, unknown>, key: string) {
   return options[key] === true;
+}
+
+function readTextOption(options: Record<string, unknown>, key: string): string {
+  const value = options[key];
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+  return "";
 }
 
 export function ProviderSettingsPanel({
@@ -173,22 +190,71 @@ export function ProviderSettingsPanel({
                 }
               />
               {item.feature_code === "media_storage" ? (
-                <label className="muted" style={{ display: "block", marginTop: 10 }}>
+                <>
+                  <label className="muted" style={{ display: "block", marginTop: 10 }}>
+                    <input
+                      checked={readBooleanOption(draftItem.options_json, MEDIA_STORAGE_FALLBACK_OPTION)}
+                      onChange={(event) =>
+                        handleProviderDraftChange(item.feature_code, {
+                          options_json: {
+                            ...draftItem.options_json,
+                            [MEDIA_STORAGE_FALLBACK_OPTION]: event.target.checked,
+                          },
+                        })
+                      }
+                      style={{ marginRight: 8 }}
+                      type="checkbox"
+                    />
+                    Fallback to local storage if remote upload fails
+                  </label>
+                  <label className="muted" style={{ display: "block", marginTop: 10 }}>
+                    <input
+                      checked={readBooleanOption(draftItem.options_json, MEDIA_STORAGE_AUTO_RETRY_OPTION)}
+                      onChange={(event) =>
+                        handleProviderDraftChange(item.feature_code, {
+                          options_json: {
+                            ...draftItem.options_json,
+                            [MEDIA_STORAGE_AUTO_RETRY_OPTION]: event.target.checked,
+                          },
+                        })
+                      }
+                      style={{ marginRight: 8 }}
+                      type="checkbox"
+                    />
+                    Enable automatic remote processing retries
+                  </label>
                   <input
-                    checked={readBooleanOption(draftItem.options_json, MEDIA_STORAGE_FALLBACK_OPTION)}
+                    className="input"
+                    placeholder="Max remote retry attempts"
+                    style={{ marginTop: 10 }}
+                    value={readTextOption(draftItem.options_json, MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION)}
                     onChange={(event) =>
                       handleProviderDraftChange(item.feature_code, {
                         options_json: {
                           ...draftItem.options_json,
-                          [MEDIA_STORAGE_FALLBACK_OPTION]: event.target.checked,
+                          [MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION]: event.target.value,
                         },
                       })
                     }
-                    style={{ marginRight: 8 }}
-                    type="checkbox"
                   />
-                  Fallback to local storage if remote upload fails
-                </label>
+                  <input
+                    className="input"
+                    placeholder="Retry backoff seconds, e.g. 60,300,900"
+                    style={{ marginTop: 10 }}
+                    value={readTextOption(draftItem.options_json, MEDIA_STORAGE_RETRY_BACKOFF_OPTION)}
+                    onChange={(event) =>
+                      handleProviderDraftChange(item.feature_code, {
+                        options_json: {
+                          ...draftItem.options_json,
+                          [MEDIA_STORAGE_RETRY_BACKOFF_OPTION]: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <div className="muted" style={{ marginTop: 8 }}>
+                    Retry settings apply to remote media extraction recovery in this workspace.
+                  </div>
+                </>
               ) : null}
               <div className="muted" style={{ marginTop: 8 }}>
                 {item.is_default ? "Using default profile" : "Workspace override saved"}

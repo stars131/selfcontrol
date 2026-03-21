@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from hashlib import sha256
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_provider import DeferredMediaProcessingError, extract_text_via_provider
 from app.services.media_remote_storage import download_remote_media_to_temp_file
+from app.services.provider_configs import get_effective_provider_config
 
 
 TEXT_MIME_PREFIXES = ("text/",)
@@ -67,6 +69,13 @@ NON_RETRIABLE_REMOTE_RETRY_MARKERS = (
 )
 
 
+@dataclass(frozen=True)
+class RemoteMediaRetryPolicy:
+    auto_retry_enabled: bool
+    max_attempts: int
+    backoff_seconds: list[int]
+
+
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -86,7 +95,55 @@ def _coerce_metadata_int(metadata: dict, key: str, *, default: int = 0) -> int:
         return default
 
 
-def reset_media_retry_tracking(media: MediaAsset, *, reset_count: bool) -> dict:
+def get_remote_media_retry_policy(db: Session, workspace_id: str) -> RemoteMediaRetryPolicy:
+    config = get_effective_provider_config(db, workspace_id, "media_storage")
+    options = config.options_json if isinstance(config.options_json, dict) else {}
+
+    auto_retry_enabled = settings.remote_media_retry_max_attempts > 0
+    if "auto_retry_enabled" in options:
+        auto_retry_enabled = options["auto_retry_enabled"] is True
+
+    max_attempts = max(int(settings.remote_media_retry_max_attempts), 0)
+    if "remote_retry_max_attempts" in options:
+        try:
+            max_attempts = max(int(options["remote_retry_max_attempts"]), 0)
+        except (TypeError, ValueError):
+            max_attempts = max(int(settings.remote_media_retry_max_attempts), 0)
+
+    backoff_seconds = list(settings.remote_media_retry_backoff_seconds or [60])
+    configured_backoff = options.get("remote_retry_backoff_seconds")
+    if isinstance(configured_backoff, list):
+        normalized_backoff: list[int] = []
+        for item in configured_backoff:
+            try:
+                parsed = int(item)
+            except (TypeError, ValueError):
+                continue
+            if parsed > 0:
+                normalized_backoff.append(parsed)
+        if normalized_backoff:
+            backoff_seconds = normalized_backoff
+
+    if not auto_retry_enabled:
+        max_attempts = 0
+    return RemoteMediaRetryPolicy(
+        auto_retry_enabled=auto_retry_enabled,
+        max_attempts=max_attempts,
+        backoff_seconds=backoff_seconds or [60],
+    )
+
+
+def reset_media_retry_tracking(
+    media: MediaAsset,
+    *,
+    reset_count: bool,
+    retry_policy: RemoteMediaRetryPolicy | None = None,
+) -> dict:
+    effective_retry_policy = retry_policy or RemoteMediaRetryPolicy(
+        auto_retry_enabled=settings.remote_media_retry_max_attempts > 0,
+        max_attempts=max(int(settings.remote_media_retry_max_attempts), 0),
+        backoff_seconds=list(settings.remote_media_retry_backoff_seconds or [60]),
+    )
     metadata = dict(media.metadata_json or {})
     if reset_count:
         metadata["processing_retry_count"] = 0
@@ -96,7 +153,7 @@ def reset_media_retry_tracking(media: MediaAsset, *, reset_count: bool) -> dict:
     metadata["processing_retry_next_attempt_at"] = None
     metadata["processing_retry_delay_seconds"] = None
     metadata["processing_retry_last_scheduled_at"] = None
-    metadata["processing_retry_max_attempts"] = settings.remote_media_retry_max_attempts
+    metadata["processing_retry_max_attempts"] = effective_retry_policy.max_attempts
     media.metadata_json = metadata
     return metadata
 
@@ -114,10 +171,15 @@ def _should_schedule_remote_retry(media: MediaAsset, reason: str) -> bool:
     return False
 
 
-def build_remote_retry_metadata(media: MediaAsset, reason: str) -> dict:
+def build_remote_retry_metadata(
+    media: MediaAsset,
+    reason: str,
+    *,
+    retry_policy: RemoteMediaRetryPolicy,
+) -> dict:
     metadata = dict(media.metadata_json or {})
     retry_count = _coerce_metadata_int(metadata, "processing_retry_count", default=0)
-    max_attempts = max(int(settings.remote_media_retry_max_attempts), 0)
+    max_attempts = max(int(retry_policy.max_attempts), 0)
     patch: dict[str, str | int | None] = {
         "processing_retry_count": retry_count,
         "processing_retry_max_attempts": max_attempts,
@@ -137,7 +199,7 @@ def build_remote_retry_metadata(media: MediaAsset, reason: str) -> dict:
         patch["processing_retry_state"] = "exhausted"
         return patch
 
-    delays = settings.remote_media_retry_backoff_seconds or [60]
+    delays = retry_policy.backoff_seconds or [60]
     next_retry_count = retry_count + 1
     delay_seconds = delays[min(next_retry_count - 1, len(delays) - 1)]
     scheduled_at = datetime.now(timezone.utc)
@@ -153,10 +215,20 @@ def build_remote_retry_metadata(media: MediaAsset, reason: str) -> dict:
     return patch
 
 
-def mark_media_retry_recovered(media: MediaAsset, *, recovered_at: str) -> dict:
+def mark_media_retry_recovered(
+    media: MediaAsset,
+    *,
+    recovered_at: str,
+    retry_policy: RemoteMediaRetryPolicy | None = None,
+) -> dict:
+    effective_retry_policy = retry_policy or RemoteMediaRetryPolicy(
+        auto_retry_enabled=settings.remote_media_retry_max_attempts > 0,
+        max_attempts=max(int(settings.remote_media_retry_max_attempts), 0),
+        backoff_seconds=list(settings.remote_media_retry_backoff_seconds or [60]),
+    )
     metadata = dict(media.metadata_json or {})
     retry_count = _coerce_metadata_int(metadata, "processing_retry_count", default=0)
-    metadata["processing_retry_max_attempts"] = settings.remote_media_retry_max_attempts
+    metadata["processing_retry_max_attempts"] = effective_retry_policy.max_attempts
     metadata["processing_retry_next_attempt_at"] = None
     metadata["processing_retry_delay_seconds"] = None
     metadata["processing_retry_last_scheduled_at"] = None
@@ -293,11 +365,25 @@ def normalize_extracted_text(media: MediaAsset, raw_text: str) -> str:
     return text[:MAX_EXTRACTED_TEXT_LENGTH]
 
 
-def mark_media_deferred(media: MediaAsset, reason: str, metadata_patch: dict | None = None) -> None:
+def mark_media_deferred(
+    media: MediaAsset,
+    reason: str,
+    metadata_patch: dict | None = None,
+    *,
+    retry_policy: RemoteMediaRetryPolicy | None = None,
+) -> None:
     media.processing_status = "deferred"
     media.processing_error = reason
     media.processed_at = None
-    retry_patch = build_remote_retry_metadata(media, reason) if media.storage_provider != "local" else {}
+    retry_patch = (
+        build_remote_retry_metadata(media, reason, retry_policy=retry_policy or RemoteMediaRetryPolicy(
+            auto_retry_enabled=settings.remote_media_retry_max_attempts > 0,
+            max_attempts=max(int(settings.remote_media_retry_max_attempts), 0),
+            backoff_seconds=list(settings.remote_media_retry_backoff_seconds or [60]),
+        ))
+        if media.storage_provider != "local"
+        else {}
+    )
     merge_media_metadata(
         media,
         {
@@ -314,6 +400,7 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
     media = db.get(MediaAsset, media_id)
     if not media:
         raise ValueError("Media asset not found")
+    retry_policy = get_remote_media_retry_policy(db, media.workspace_id)
 
     media.processing_status = "processing"
     media.processing_error = None
@@ -361,7 +448,11 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
             metadata["processing_last_success_at"] = media.processed_at.isoformat()
             media.metadata_json = metadata
             if media.storage_provider != "local":
-                mark_media_retry_recovered(media, recovered_at=media.processed_at.isoformat())
+                mark_media_retry_recovered(
+                    media,
+                    recovered_at=media.processed_at.isoformat(),
+                    retry_policy=retry_policy,
+                )
         else:
             try:
                 extraction = extract_text_via_provider(db, media, file_path)
@@ -374,6 +465,7 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
                     media,
                     str(exc),
                     metadata_patch={"extraction_mode": "provider_deferred"},
+                    retry_policy=retry_policy,
                 )
                 media.metadata_json = collect_media_metadata(media, file_path, media.extracted_text)
                 media.metadata_json["extraction_mode"] = "provider_deferred"
@@ -393,7 +485,11 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
                     metadata["model_name"] = extraction.model_name
                 media.metadata_json = metadata
                 if media.storage_provider != "local":
-                    mark_media_retry_recovered(media, recovered_at=media.processed_at.isoformat())
+                    mark_media_retry_recovered(
+                        media,
+                        recovered_at=media.processed_at.isoformat(),
+                        retry_policy=retry_policy,
+                    )
 
         db.add(media)
         db.commit()
@@ -413,7 +509,7 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
         if media.storage_provider != "local":
             metadata_patch["remote_fetch_status"] = "failed"
             metadata_patch["remote_fetch_error"] = str(exc)
-            metadata_patch.update(build_remote_retry_metadata(media, str(exc)))
+            metadata_patch.update(build_remote_retry_metadata(media, str(exc), retry_policy=retry_policy))
         if "file_path" in locals() and file_path.exists():
             media.metadata_json = collect_media_metadata(media, file_path, media.extracted_text)
             merge_media_metadata(media, metadata_patch)

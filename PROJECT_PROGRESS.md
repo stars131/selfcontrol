@@ -210,9 +210,14 @@ Last updated: 2026-03-21
   - owner and editor users can now trigger bulk dead-letter recovery for selected or automatically targeted remote media items instead of retrying one attachment at a time
   - bulk recovery actions reset retry tracking safely, reuse the normal processing dispatch path, and write dedicated audit events for later investigation
   - the structured results panel now includes a dead-letter recovery card with selection controls, retry-state counts, and one-click bulk recovery actions
+- Remote Media Provider Recovery Policy Tuning and Operator Controls V1:
+  - `media_storage` provider options now support workspace-level control of automatic remote retry enablement, retry budget, and retry backoff sequence instead of relying only on server-global defaults
+  - provider config responses now merge sane media-storage retry defaults into workspace settings so operators can see the effective baseline before saving overrides
+  - remote media processing and manual requeue flows now read the workspace retry policy consistently, including disabled-auto-retry workspaces
+  - the workspace settings provider panel now exposes retry policy controls beside fallback settings for media storage operations
 
 ## Next
-- Remote media provider recovery policy tuning and operator controls
+- Remote media provider issue classification and action recommendations
 
 ## Delivery Rule
 - Every meaningful slice must update this file

@@ -4,7 +4,11 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
-from app.services.media_processing import process_media_asset, reset_media_retry_tracking
+from app.services.media_processing import (
+    get_remote_media_retry_policy,
+    process_media_asset,
+    reset_media_retry_tracking,
+)
 
 
 def queue_media_retry_if_needed(media: MediaAsset) -> str | None:
@@ -40,7 +44,11 @@ def dispatch_media_processing(db: Session, media_id: str) -> tuple[MediaAsset, s
         raise ValueError("Media not found")
 
     if media.storage_provider != "local":
-        reset_media_retry_tracking(media, reset_count=True)
+        reset_media_retry_tracking(
+            media,
+            reset_count=True,
+            retry_policy=get_remote_media_retry_policy(db, media.workspace_id),
+        )
 
     if settings.media_processing_mode == "async":
         media.processing_status = "pending"
