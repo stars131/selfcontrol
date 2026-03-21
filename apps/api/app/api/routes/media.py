@@ -4,6 +4,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member
@@ -49,6 +50,29 @@ def get_media_status(
     if not media or media.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Media not found")
     return {"success": True, "data": {"media": MediaRead.model_validate(media).model_dump()}}
+
+
+@router.get("/{workspace_id}/media/{media_id}/content")
+def get_media_content(
+    workspace_id: str,
+    media_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_workspace_member(workspace_id, current_user, db)
+    media = db.get(MediaAsset, media_id)
+    if not media or media.workspace_id != workspace_id:
+        raise HTTPException(status_code=404, detail="Media not found")
+
+    file_path = Path(settings.storage_dir).parent / media.storage_key
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Stored file not found")
+
+    return FileResponse(
+        path=file_path,
+        media_type=media.mime_type or "application/octet-stream",
+        filename=media.original_filename,
+    )
 
 
 @router.post("/{workspace_id}/records/{record_id}/media")

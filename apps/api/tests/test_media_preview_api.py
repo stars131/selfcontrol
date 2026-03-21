@@ -1,0 +1,122 @@
+from __future__ import annotations
+
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
+
+from app.api.deps import get_current_user
+from app.api.routes import media as media_route
+from app.db.base import Base
+from app.db.session import get_db
+from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, share_link  # noqa: F401
+from app.models.record import Record
+from app.models.user import User
+from app.models.workspace import Workspace, WorkspaceMember
+
+
+PNG_1X1 = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+    b"\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xcf\xc0\x00\x00\x03\x01"
+    b"\x01\x00\xc9\xfe\x92\xef\x00\x00\x00\x00IEND\xaeB`\x82"
+)
+
+
+def build_media_client(tmp_path, monkeypatch) -> tuple[TestClient, str, str]:
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+        future=True,
+    )
+    session_local = sessionmaker(bind=engine, autoflush=False, autocommit=False, class_=Session)
+    Base.metadata.create_all(bind=engine)
+
+    with session_local() as db:
+        user = User(
+            username="media-user",
+            email="media@example.com",
+            password_hash="test-hash",
+            display_name="Media User",
+        )
+        db.add(user)
+        db.flush()
+
+        workspace = Workspace(
+            name="Media Workspace",
+            slug="media-workspace",
+            owner_id=user.id,
+            visibility="private",
+        )
+        db.add(workspace)
+        db.flush()
+
+        db.add(WorkspaceMember(workspace_id=workspace.id, user_id=user.id, role="owner"))
+        db.add(
+            Record(
+                workspace_id=workspace.id,
+                creator_id=user.id,
+                type_code="memo",
+                title="Media record",
+                content="Has file",
+                source_type="manual",
+                status="active",
+                extra_data={},
+            )
+        )
+        db.commit()
+
+        user_id = user.id
+        workspace_id = workspace.id
+        record_id = db.query(Record).filter(Record.workspace_id == workspace.id).first().id
+
+    monkeypatch.setattr(media_route.settings, "storage_dir", str(tmp_path / "uploads"))
+    monkeypatch.setattr("app.services.media_processing.settings.storage_dir", str(tmp_path / "uploads"))
+    monkeypatch.setattr("app.services.media_processing.rebuild_record_knowledge", lambda db, record_id: None)
+    monkeypatch.setattr(media_route, "log_audit_event", lambda *args, **kwargs: None)
+
+    app = FastAPI()
+    app.include_router(media_route.router, prefix="/api/v1/workspaces")
+
+    def override_get_db():
+        db = session_local()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    def override_get_current_user():
+        db = session_local()
+        try:
+            return db.get(User, user_id)
+        finally:
+            db.close()
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    return TestClient(app), workspace_id, record_id
+
+
+def test_media_upload_returns_preview_metadata_and_content(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id = build_media_client(tmp_path, monkeypatch)
+
+    response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/records/{record_id}/media",
+        files={"file": ("pixel.png", PNG_1X1, "image/png")},
+    )
+
+    assert response.status_code == 200
+    media_payload = response.json()["data"]["media"]
+    assert media_payload["processing_status"] in {"completed", "deferred"}
+    assert media_payload["metadata_json"]["preview_kind"] == "image"
+    assert media_payload["metadata_json"]["width"] == 1
+    assert media_payload["metadata_json"]["height"] == 1
+    assert media_payload["metadata_json"]["file_extension"] == ".png"
+    assert media_payload["metadata_json"]["size_label"].endswith("B")
+
+    content_response = client.get(f"/api/v1/workspaces/{workspace_id}/media/{media_payload['id']}/content")
+
+    assert content_response.status_code == 200
+    assert content_response.headers["content-type"] == "image/png"
+    assert content_response.content == PNG_1X1

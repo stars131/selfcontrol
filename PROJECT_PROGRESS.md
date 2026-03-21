@@ -53,11 +53,17 @@ Last updated: 2026-03-21
   - review state supports `pending`, `confirmed`, and `needs_review` with confirmation timestamps
   - record editor now exposes location review controls and recent correction history
   - map panel shows mapped / confirmed / needs-review counts for faster workspace triage
+- Media Preview and Metadata V1:
+  - authenticated media content endpoint for secure browser preview and download
+  - image, audio, and video attachments now render inline previews in the record panel
+  - media processing now records base file metadata including size labels, extension, checksum, and image dimensions
+  - text extraction metadata now includes character and line counts for quick review
+  - media preview API behavior is covered by dedicated tests
 
 ## Next
-- Media preview and richer metadata extraction
 - Security hardening: audit logs, share permission boundaries, secret management
 - Location-aware filtering and richer map drill-down
+- Deeper media metadata extraction and storage lifecycle controls
 
 ## Delivery Rule
 - Every meaningful slice must update this file

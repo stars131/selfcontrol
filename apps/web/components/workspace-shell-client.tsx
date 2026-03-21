@@ -509,6 +509,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
           workspaceId={workspaceId}
         />
         <RecordPanelV2
+          authToken={token}
           mediaAssets={mediaAssets}
           onCreateReminder={handleCreateReminder}
           onDeleteRecord={handleDeleteRecord}

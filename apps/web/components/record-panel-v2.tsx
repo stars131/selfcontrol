@@ -2,7 +2,9 @@
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
+import { fetchMediaBlob } from "../lib/api";
 import { MapPanel, type LocationDraft } from "./map-panel";
+import { MediaPreview } from "./media-preview";
 import { readLocationHistory, readLocationInfo, readLocationReview } from "../lib/location";
 import type {
   LocationHistoryEntry,
@@ -159,6 +161,7 @@ function summarizeHistoryAction(entry: LocationHistoryEntry): string {
 }
 
 export function RecordPanelV2({
+  authToken,
   workspaceId,
   records,
   selectedRecordId,
@@ -176,6 +179,7 @@ export function RecordPanelV2({
   onUploadMedia,
   onResetFilter,
 }: {
+  authToken: string | null;
   workspaceId: string;
   records: RecordItem[];
   timelineDays: TimelineDay[];
@@ -229,6 +233,7 @@ export function RecordPanelV2({
   const [uploading, setUploading] = useState(false);
   const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null);
   const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
+  const [downloadingMediaId, setDownloadingMediaId] = useState<string | null>(null);
   const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
   const [savingReminder, setSavingReminder] = useState(false);
   const [locationReviewForm, setLocationReviewForm] = useState<LocationReviewFormState>({
@@ -434,6 +439,45 @@ export function RecordPanelV2({
     } finally {
       setRetryingMediaId(null);
     }
+  };
+
+  const handleDownloadMedia = async (asset: MediaAsset) => {
+    if (!authToken) {
+      setError("Not authenticated");
+      return;
+    }
+
+    setDownloadingMediaId(asset.id);
+    setError("");
+    try {
+      const blob = await fetchMediaBlob(authToken, workspaceId, asset.id);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = asset.original_filename || `${asset.id}.bin`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to download media");
+    } finally {
+      setDownloadingMediaId(null);
+    }
+  };
+
+  const formatMediaSize = (asset: MediaAsset): string => {
+    const stored = asset.metadata_json.size_label;
+    if (typeof stored === "string" && stored.trim()) {
+      return stored;
+    }
+
+    const units = ["B", "KB", "MB", "GB"];
+    let value = asset.size_bytes;
+    let unitIndex = 0;
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
+      unitIndex += 1;
+    }
+    return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
   };
 
   const renderRecordCard = (record: RecordItem) => {
@@ -827,6 +871,43 @@ export function RecordPanelV2({
                       <div className="tag-row">
                         <span className="tag">{asset.processing_status}</span>
                         <span className="tag">{asset.storage_provider}</span>
+                        <span className="tag">{formatMediaSize(asset)}</span>
+                        {typeof asset.metadata_json.file_extension === "string" &&
+                        asset.metadata_json.file_extension ? (
+                          <span className="tag">{String(asset.metadata_json.file_extension)}</span>
+                        ) : null}
+                      </div>
+                      {authToken ? (
+                        <div style={{ marginTop: 12 }}>
+                          <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
+                        </div>
+                      ) : null}
+                      <div className="detail-grid" style={{ marginTop: 12 }}>
+                        {typeof asset.metadata_json.width === "number" &&
+                        typeof asset.metadata_json.height === "number" ? (
+                          <div className="subtle-card">
+                            <div className="eyebrow">Dimensions</div>
+                            <div style={{ marginTop: 8, fontWeight: 600 }}>
+                              {asset.metadata_json.width} x {asset.metadata_json.height}
+                            </div>
+                          </div>
+                        ) : null}
+                        {typeof asset.metadata_json.text_char_count === "number" ? (
+                          <div className="subtle-card">
+                            <div className="eyebrow">Text chars</div>
+                            <div style={{ marginTop: 8, fontWeight: 600 }}>
+                              {asset.metadata_json.text_char_count}
+                            </div>
+                          </div>
+                        ) : null}
+                        {typeof asset.metadata_json.text_line_count === "number" ? (
+                          <div className="subtle-card">
+                            <div className="eyebrow">Text lines</div>
+                            <div style={{ marginTop: 8, fontWeight: 600 }}>
+                              {asset.metadata_json.text_line_count}
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                       {asset.extracted_text ? (
                         <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
@@ -841,6 +922,14 @@ export function RecordPanelV2({
                         </div>
                       ) : null}
                       <div className="action-row" style={{ marginTop: 12 }}>
+                        <button
+                          className="button secondary"
+                          type="button"
+                          disabled={downloadingMediaId === asset.id}
+                          onClick={() => void handleDownloadMedia(asset)}
+                        >
+                          {downloadingMediaId === asset.id ? "Downloading..." : "Download"}
+                        </button>
                         <button
                           className="button secondary"
                           type="button"

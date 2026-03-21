@@ -65,6 +65,28 @@ async function request<T>(path: string, init: RequestInit = {}, token?: string):
   return payload.data;
 }
 
+async function requestBlob(path: string, token: string): Promise<Blob> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    let message = "Request failed";
+    try {
+      const payload = (await response.json()) as { error?: { message?: string }; detail?: string };
+      message = payload.error?.message || payload.detail || message;
+    } catch {
+      message = response.statusText || message;
+    }
+    throw new Error(message);
+  }
+
+  return response.blob();
+}
+
 export async function register(input: {
   username: string;
   email?: string;
@@ -277,6 +299,10 @@ export async function getMediaStatus(token: string, workspaceId: string, mediaId
     { method: "GET" },
     token,
   );
+}
+
+export async function fetchMediaBlob(token: string, workspaceId: string, mediaId: string) {
+  return requestBlob(`/workspaces/${workspaceId}/media/${mediaId}/content`, token);
 }
 
 export async function retryMediaProcessing(token: string, workspaceId: string, mediaId: string) {
