@@ -233,10 +233,14 @@ Last updated: 2026-03-22
 - Workspace Settings Locale Text Cleanup V1:
   - the workspace settings page now uses cleaner Chinese and Japanese operator copy for provider, API, member, and browser-key explanations
   - member joined-time rendering on the settings page now respects the active UI locale instead of using the browser default only
-  - the shared language switcher now labels itself in the currently selected language (`语言`, `Language`, `言語`) for clearer cross-language navigation
+  - the shared language switcher now labels itself in the active locale for clearer cross-language navigation
+- Control-Center Locale Text Cleanup V1:
+  - the control-center entry page now overrides garbled locale strings with clean operator copy for create, import, join, listing, and job-management actions
+  - the landing, login, and register pages now render readable Chinese, English, and Japanese UI text without relying on the broken encoded literals
+  - the language switcher now uses local display labels for locale names so users can reliably switch languages even if shared source text is corrupted
 
 ## Next
-- Control-center locale text cleanup
+- Continue the next product slice
 
 ## Delivery Rule
 - Every meaningful slice must update this file

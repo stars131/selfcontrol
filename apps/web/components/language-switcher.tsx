@@ -1,12 +1,18 @@
 "use client";
 
-import { LOCALE_OPTIONS, type LocaleCode } from "../lib/locale";
+import type { LocaleCode } from "../lib/locale";
 
 const LABEL_BY_LOCALE: Record<LocaleCode, string> = {
   "zh-CN": "语言",
   en: "Language",
   ja: "言語",
 };
+
+const DISPLAY_OPTIONS: Array<{ value: LocaleCode; label: string }> = [
+  { value: "zh-CN", label: "简体中文" },
+  { value: "en", label: "English" },
+  { value: "ja", label: "日本語" },
+];
 
 export function LanguageSwitcher({
   locale,
@@ -23,7 +29,7 @@ export function LanguageSwitcher({
         value={locale}
         onChange={(event) => onChange(event.target.value as LocaleCode)}
       >
-        {LOCALE_OPTIONS.map((item) => (
+        {DISPLAY_OPTIONS.map((item) => (
           <option key={item.value} value={item.value}>
             {item.label}
           </option>

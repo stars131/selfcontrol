@@ -58,10 +58,59 @@ const COPY: Record<
   },
 };
 
+const DISPLAY_COPY: Record<
+  LocaleCode,
+  {
+    eyebrow: string;
+    title: string;
+    register: string;
+    account: string;
+    password: string;
+    accountPlaceholder: string;
+    passwordPlaceholder: string;
+    loading: string;
+    submit: string;
+  }
+> = {
+  "zh-CN": {
+    eyebrow: "访问",
+    title: "登录",
+    register: "注册",
+    account: "用户名或邮箱",
+    password: "密码",
+    accountPlaceholder: "demo 或 demo@example.com",
+    passwordPlaceholder: "输入密码",
+    loading: "登录中...",
+    submit: "登录",
+  },
+  en: {
+    eyebrow: "Access",
+    title: "Sign In",
+    register: "Register",
+    account: "Username or email",
+    password: "Password",
+    accountPlaceholder: "demo or demo@example.com",
+    passwordPlaceholder: "password",
+    loading: "Signing in...",
+    submit: "Sign In",
+  },
+  ja: {
+    eyebrow: "アクセス",
+    title: "ログイン",
+    register: "登録",
+    account: "ユーザー名またはメール",
+    password: "パスワード",
+    accountPlaceholder: "demo または demo@example.com",
+    passwordPlaceholder: "パスワード",
+    loading: "ログイン中...",
+    submit: "ログイン",
+  },
+};
+
 export function LoginForm() {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
-  const copy = COPY[locale];
+  const copy = { ...COPY[locale], ...DISPLAY_COPY[locale] };
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
