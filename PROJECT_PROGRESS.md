@@ -262,6 +262,10 @@ Last updated: 2026-03-22
   - the repository now defines `docs/ENTERPRISE_ENGINEERING_STANDARD.md` as the baseline delivery standard for future work
   - all future slices are required to meet enterprise-grade expectations for security, observability, migrations, testing, rollback safety, maintainability, and updateability
   - the standard is written as a practical repository policy so new features and refactors can be evaluated against the same long-term bar
+- Record-Panel Media Helper Extraction V1:
+  - record-panel media metadata readers and media-issue action helpers are now extracted into `apps/web/lib/record-panel-media.ts`
+  - the large structured-results component now imports these helpers instead of carrying additional provider and metadata logic inline
+  - this keeps future media diagnostics and settings-link changes reviewable in a smaller, isolated module under the maintainability standard
 
 ## Next
 - Continue the next product slice
