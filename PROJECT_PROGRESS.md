@@ -159,9 +159,13 @@ Last updated: 2026-03-21
   - archived media remains readable through the existing secure content endpoint because `storage_key` is updated in place
   - retention reports now distinguish archived media from unarchived stale candidates
   - workspace retention UI now supports archive-before-delete flows for safer long-term storage management
+- Async Workspace Transfer Jobs V1:
+  - workspace export and import now support additive background-job APIs for large transfers without blocking the client session
+  - transfer jobs persist status, payload, result metadata, download artifact details, and failure messages in the database
+  - async execution is dispatched through Celery when runtime media processing is in async mode, with a sync fallback kept for simpler deployments
+  - workspace settings now expose export job creation, status review, and artifact download, while the entry page supports queued import jobs and recent transfer tracking
 
 ## Next
-- Async export and import jobs for large workspaces
 - Provider-aware remote media archive/export strategy
 
 ## Delivery Rule

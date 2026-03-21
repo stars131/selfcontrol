@@ -15,16 +15,23 @@ from app.api.deps import (
 from app.db.session import get_db
 from app.models.user import User
 from app.models.workspace import Workspace, WorkspaceMember
+from app.models.workspace_transfer_job import WorkspaceTransferJob
 from app.schemas.workspace import (
     WorkspaceCreate,
     WorkspaceImportResultRead,
     WorkspaceMemberRead,
     WorkspaceMemberUpdate,
+    WorkspaceTransferJobRead,
     WorkspaceRead,
 )
 from app.services.audit import log_audit_event
 from app.services.workspace_export import build_workspace_export_archive
 from app.services.workspace_import import import_workspace_archive
+from app.services.workspace_transfer_jobs import (
+    create_workspace_export_job,
+    create_workspace_import_job,
+    dispatch_workspace_transfer_job,
+)
 
 
 router = APIRouter()
@@ -60,6 +67,23 @@ def _cleanup_export_archive(path: Path) -> None:
         path.unlink(missing_ok=True)
     except Exception:  # noqa: BLE001
         return
+
+
+def serialize_workspace_transfer_job(job: WorkspaceTransferJob) -> dict:
+    return {
+        "id": job.id,
+        "workspace_id": job.workspace_id,
+        "created_by": job.created_by,
+        "job_type": job.job_type,
+        "status": job.status,
+        "payload_json": job.payload_json,
+        "result_json": job.result_json,
+        "artifact_filename": job.artifact_filename,
+        "error_message": job.error_message,
+        "created_at": job.created_at,
+        "updated_at": job.updated_at,
+        "completed_at": job.completed_at,
+    }
 
 
 @router.get("")
@@ -177,6 +201,33 @@ async def import_workspace(
     }
 
 
+@router.post("/import-jobs")
+async def create_workspace_import_job_route(
+    file: UploadFile = File(...),
+    name: str | None = Form(default=None),
+    slug: str | None = Form(default=None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    archive_bytes = await file.read()
+    job = create_workspace_import_job(
+        db,
+        created_by=current_user.id,
+        archive_bytes=archive_bytes,
+        original_filename=file.filename or "workspace-import.zip",
+        workspace_name=name,
+        workspace_slug=slug,
+    )
+    job, dispatch_mode = dispatch_workspace_transfer_job(db, job.id)
+    return {
+        "success": True,
+        "data": {
+            "job": WorkspaceTransferJobRead.model_validate(serialize_workspace_transfer_job(job)).model_dump(),
+            "dispatch_mode": dispatch_mode,
+        },
+    }
+
+
 @router.get("/{workspace_id}")
 def get_workspace(
     workspace_id: str,
@@ -220,6 +271,78 @@ def export_workspace_archive(
     )
     filename = f"{workspace.slug or workspace.id}-export.zip"
     return FileResponse(path=archive_path, media_type="application/zip", filename=filename)
+
+
+@router.post("/{workspace_id}/export-jobs")
+def create_workspace_export_job_route(
+    workspace_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
+    job = create_workspace_export_job(db, workspace_id=workspace_id, created_by=current_user.id)
+    job, dispatch_mode = dispatch_workspace_transfer_job(db, job.id)
+    return {
+        "success": True,
+        "data": {
+            "job": WorkspaceTransferJobRead.model_validate(serialize_workspace_transfer_job(job)).model_dump(),
+            "dispatch_mode": dispatch_mode,
+        },
+    }
+ 
+
+@router.get("/jobs/transfer")
+def list_workspace_transfer_jobs(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    items = (
+        db.query(WorkspaceTransferJob)
+        .filter(WorkspaceTransferJob.created_by == current_user.id)
+        .order_by(WorkspaceTransferJob.created_at.desc())
+        .limit(20)
+        .all()
+    )
+    return {
+        "success": True,
+        "data": {
+            "items": [WorkspaceTransferJobRead.model_validate(serialize_workspace_transfer_job(item)).model_dump() for item in items]
+        },
+    }
+
+
+@router.get("/jobs/transfer/{job_id}")
+def get_workspace_transfer_job(
+    job_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    job = db.get(WorkspaceTransferJob, job_id)
+    if not job or job.created_by != current_user.id:
+        raise HTTPException(status_code=404, detail="Workspace transfer job not found")
+    return {
+        "success": True,
+        "data": {"job": WorkspaceTransferJobRead.model_validate(serialize_workspace_transfer_job(job)).model_dump()},
+    }
+
+
+@router.get("/jobs/transfer/{job_id}/download")
+def download_workspace_transfer_job_artifact(
+    job_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    job = db.get(WorkspaceTransferJob, job_id)
+    if not job or job.created_by != current_user.id:
+        raise HTTPException(status_code=404, detail="Workspace transfer job not found")
+    if job.job_type != "export" or job.status != "completed" or not job.artifact_path:
+        raise HTTPException(status_code=400, detail="Job artifact is not available")
+
+    artifact_path = Path(job.artifact_path)
+    if not artifact_path.exists():
+        raise HTTPException(status_code=404, detail="Job artifact file not found")
+    filename = job.artifact_filename or f"workspace-transfer-{job.id}.zip"
+    return FileResponse(path=artifact_path, media_type="application/zip", filename=filename)
 
 
 @router.get("/{workspace_id}/members")

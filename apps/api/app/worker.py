@@ -5,6 +5,7 @@ from app.db.session import SessionLocal
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_processing import process_media_asset
 from app.services.reminders import dispatch_due_reminders
+from app.services.workspace_transfer_jobs import process_workspace_transfer_job
 
 
 celery_app = Celery("selfcontrol", broker=settings.redis_url, backend=settings.redis_url)
@@ -40,5 +41,15 @@ def rebuild_record_knowledge_task(record_id: str) -> int:
     try:
         result = rebuild_record_knowledge(db, record_id)
         return result.chunk_count
+    finally:
+        db.close()
+
+
+@celery_app.task
+def process_workspace_transfer_job_task(job_id: str) -> str:
+    db = SessionLocal()
+    try:
+        job = process_workspace_transfer_job(db, job_id)
+        return job.status
     finally:
         db.close()

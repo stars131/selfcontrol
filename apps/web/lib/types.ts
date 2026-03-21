@@ -33,6 +33,21 @@ export type WorkspaceImportResult = {
   skipped_media_count: number;
 };
 
+export type WorkspaceTransferJob = {
+  id: string;
+  workspace_id?: string | null;
+  created_by: string;
+  job_type: "export" | "import";
+  status: "pending" | "running" | "completed" | "failed";
+  payload_json: Record<string, unknown>;
+  result_json: Record<string, unknown>;
+  artifact_filename?: string | null;
+  error_message?: string | null;
+  created_at: string;
+  updated_at: string;
+  completed_at?: string | null;
+};
+
 export type RecordItem = {
   id: string;
   workspace_id: string;

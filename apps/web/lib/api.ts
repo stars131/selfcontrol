@@ -20,6 +20,7 @@ import type {
   User,
   Workspace,
   WorkspaceImportResult,
+  WorkspaceTransferJob,
   WorkspaceMemberItem,
 } from "./types";
 
@@ -196,6 +197,62 @@ export async function importWorkspaceArchive(
     },
     token,
   );
+}
+
+export async function createWorkspaceImportJob(
+  token: string,
+  input: {
+    file: File;
+    name?: string;
+    slug?: string;
+  },
+) {
+  const formData = new FormData();
+  formData.append("file", input.file);
+  if (input.name?.trim()) {
+    formData.append("name", input.name.trim());
+  }
+  if (input.slug?.trim()) {
+    formData.append("slug", input.slug.trim());
+  }
+  return request<{ job: WorkspaceTransferJob; dispatch_mode: string }>(
+    "/workspaces/import-jobs",
+    {
+      method: "POST",
+      body: formData,
+    },
+    token,
+  );
+}
+
+export async function createWorkspaceExportJob(token: string, workspaceId: string) {
+  return request<{ job: WorkspaceTransferJob; dispatch_mode: string }>(
+    `/workspaces/${workspaceId}/export-jobs`,
+    {
+      method: "POST",
+    },
+    token,
+  );
+}
+
+export async function listWorkspaceTransferJobs(token: string) {
+  return request<{ items: WorkspaceTransferJob[] }>(
+    "/workspaces/jobs/transfer",
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function getWorkspaceTransferJob(token: string, jobId: string) {
+  return request<{ job: WorkspaceTransferJob }>(
+    `/workspaces/jobs/transfer/${jobId}`,
+    { method: "GET" },
+    token,
+  );
+}
+
+export async function downloadWorkspaceTransferJob(token: string, jobId: string) {
+  return requestDownload(`/workspaces/jobs/transfer/${jobId}/download`, token);
 }
 
 export async function listWorkspaceMembers(token: string, workspaceId: string) {
