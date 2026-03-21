@@ -127,10 +127,18 @@ Last updated: 2026-03-21
   - production compose now starts Uvicorn with proxy-header support and explicit forwarded IP policy
   - nginx proxy config now forwards host and port headers consistently, and an HTTPS nginx example template is included
   - health and security tests now cover trusted-host rejection and production host validation rules
+- TLS Automation and Certificate Runbook V1:
+  - production env templates now include `DOMAIN_NAME` and `CERTBOT_EMAIL`
+  - a dedicated `docker-compose.tls.yml` override now adds certbot and shared ACME/certificate volumes
+  - nginx ACME and HTTPS templates can now be rendered into a generated runtime config
+  - issue, renew, and render helper scripts now automate the certificate workflow on Linux
+  - TLS deployment docs now describe first issuance, renewal, and combined compose startup
+  - TLS shell scripts pass syntax checks under Git `sh`, and production+TLS compose config validates cleanly
 
 ## Next
-- TLS certificate automation and HTTPS deployment runbook
 - Media retention policy for long-term storage growth
+- Media retention policy for long-term storage growth
+- Workspace and attachment export/import strategy
 
 ## Delivery Rule
 - Every meaningful slice must update this file

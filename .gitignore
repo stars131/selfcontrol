@@ -15,6 +15,7 @@ dist/
 # Env
 .env
 .env.local
+infra/nginx/*.generated.conf
 
 # Storage
 storage/uploads/

@@ -45,6 +45,12 @@ mkdir -p storage/uploads storage/tmp
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 ```
 
+For HTTPS automation with Certbot:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml -f docker-compose.tls.yml up -d --build
+```
+
 ## Verify Runtime
 
 Check containers:
@@ -104,6 +110,10 @@ sh infra/scripts/prune-runtime-files.sh .env.production
 ```
 
 See [OPERATIONS.md](./OPERATIONS.md) for cron examples and retention details.
+
+## TLS
+
+See [TLS_DEPLOYMENT.md](./TLS_DEPLOYMENT.md) for certificate issuance and renewal.
 
 ## Notes
 

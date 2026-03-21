@@ -42,6 +42,12 @@ Daily cleanup at 04:00:
 0 4 * * * cd /srv/selfcontrol && /bin/sh infra/scripts/prune-runtime-files.sh .env.production >> /var/log/selfcontrol-prune.log 2>&1
 ```
 
+Weekly certificate renewal check at 04:30:
+
+```cron
+30 4 * * 1 cd /srv/selfcontrol && /bin/sh infra/scripts/renew-certificates.sh .env.production >> /var/log/selfcontrol-certbot.log 2>&1
+```
+
 ## Log Rotation
 
 `docker-compose.prod.yml` now configures `json-file` log rotation with:
