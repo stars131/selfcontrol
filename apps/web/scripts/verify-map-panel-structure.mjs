@@ -29,6 +29,10 @@ if (!mapPanelSource.includes('import { MapStatusNotices } from "./map-status-not
   throw new Error("map-panel.tsx must import MapStatusNotices");
 }
 
+if (!mapPanelSource.includes('import { MapPanelHeader } from "./map-panel-header";')) {
+  throw new Error("map-panel.tsx must import MapPanelHeader");
+}
+
 if (!mapPanelSource.includes("useMapPanelController({")) {
   throw new Error("map-panel.tsx must delegate map search and filter orchestration to useMapPanelController");
 }
@@ -47,6 +51,10 @@ if (!mapPanelSource.includes("<MapSearchForm")) {
 
 if (!mapPanelSource.includes("<MapStatusNotices")) {
   throw new Error("map-panel.tsx must delegate status rendering to MapStatusNotices");
+}
+
+if (!mapPanelSource.includes("<MapPanelHeader")) {
+  throw new Error("map-panel.tsx must delegate header rendering to MapPanelHeader");
 }
 
 for (const forbiddenToken of [
@@ -73,13 +81,15 @@ for (const forbiddenToken of [
   'value={searchQuery}',
   'Current point:',
   'No location selected yet.',
+  '{mappedRecords.length} mapped',
+  '{confirmedCount} confirmed',
 ]) {
   if (mapPanelSource.includes(forbiddenToken)) {
     throw new Error(`map-panel.tsx must not reintroduce extracted helper logic: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 255;
+const maxAllowedLines = 250;
 if (mapPanelLineCount > maxAllowedLines) {
   throw new Error(`map-panel.tsx exceeded ${maxAllowedLines} lines: ${mapPanelLineCount}`);
 }

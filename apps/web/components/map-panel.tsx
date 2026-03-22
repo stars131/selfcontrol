@@ -15,6 +15,7 @@ import {
 } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
 import { MapDrilldownCard } from "./map-drilldown-card";
+import { MapPanelHeader } from "./map-panel-header";
 import { MapSearchForm } from "./map-search-form";
 import { MapStatusNotices } from "./map-status-notices";
 import { MappedRecordsList } from "./mapped-records-list";
@@ -204,17 +205,12 @@ export function MapPanel({
 
   return (
     <section className="record-card" style={{ marginTop: 20 }}>
-      <div className="eyebrow">Map</div>
-      <div className="muted" style={{ marginTop: 8 }}>
-        {isEditable
-          ? "Search an address or click the map to fill place details for the current record."
-          : "Records with latitude and longitude appear here."}
-      </div>
-      <div className="tag-row">
-        <span className="tag">{mappedRecords.length} mapped</span>
-        <span className="tag">{confirmedCount} confirmed</span>
-        <span className="tag">{needsReviewCount} need review</span>
-      </div>
+      <MapPanelHeader
+        confirmedCount={confirmedCount}
+        isEditable={isEditable}
+        mappedCount={mappedRecords.length}
+        needsReviewCount={needsReviewCount}
+      />
       <MapDrilldownCard
         filterDraft={filterDraft}
         filteringRecords={filteringRecords}
