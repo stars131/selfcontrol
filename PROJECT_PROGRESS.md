@@ -454,10 +454,14 @@ Last updated: 2026-03-22
   - map-panel filter draft state, search state, mapped-record stats, draft-coordinate derivation, and location search/filter action orchestration now live in `apps/web/components/use-map-panel-controller.ts`
   - `apps/web/components/map-panel.tsx` now focuses more narrowly on AMap lifecycle wiring and result rendering while the dedicated hook owns local operator state and filter/search behavior
   - this trims another mixed-responsibility frontend module and reduces future review scope for map-side search and drill-down updates
+- Map Panel Controller Guard V1:
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now additionally enforces that `map-panel.tsx` must wire search and filter behavior through `use-map-panel-controller.ts`
+  - the guard now fails if local `useState`/`useMemo` map UI state or inline filter/search handlers are reintroduced into the main map component
+  - this makes the map-panel behavior boundary executable while preserving the existing helper-boundary checks for AMap integration logic
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the map-panel controller hook extraction
+- Continue simplifying remaining large UI module boundaries after the map-panel controller guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

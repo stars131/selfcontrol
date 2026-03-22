@@ -9,6 +9,14 @@ if (!mapPanelSource.includes('from "../lib/map-panel";')) {
   throw new Error("map-panel.tsx must import shared helpers from ../lib/map-panel");
 }
 
+if (!mapPanelSource.includes('import { useMapPanelController } from "./use-map-panel-controller";')) {
+  throw new Error("map-panel.tsx must import useMapPanelController");
+}
+
+if (!mapPanelSource.includes("useMapPanelController({")) {
+  throw new Error("map-panel.tsx must delegate map search and filter orchestration to useMapPanelController");
+}
+
 for (const forbiddenToken of [
   "function loadAmapScript",
   "function escapeHtml",
@@ -20,6 +28,12 @@ for (const forbiddenToken of [
   "function parseDraftCoordinates",
   "let amapLoaderPromise",
   "interface Window",
+  "useState(",
+  "useMemo(",
+  "const handleSearch =",
+  "const handleApplyFilter =",
+  "const handleUseMappedOnly =",
+  "const handleClearFilter =",
 ]) {
   if (mapPanelSource.includes(forbiddenToken)) {
     throw new Error(`map-panel.tsx must not reintroduce extracted helper logic: ${forbiddenToken}`);
