@@ -330,10 +330,14 @@ Last updated: 2026-03-22
   - the main record editor field set now lives in `apps/web/components/record-editor-fields.tsx` instead of being embedded inline inside `record-panel-v2`
   - the parent panel now keeps mutation state and persistence callbacks while the dedicated editor-fields component owns the stable form input layout
   - this further reduces the oversized panel review surface and keeps future record-form changes on a smaller enterprise-grade module boundary
+- Record Media Tools Extraction V1:
+  - save/delete actions plus upload and media diagnostics now live in `apps/web/components/record-media-tools.tsx` instead of being rendered inline inside `record-panel-v2`
+  - the parent panel now passes media state, operator actions, and formatted labels while the dedicated media-tools component owns the selected-record media support layout
+  - this removes another orchestration-heavy UI block from the oversized panel and keeps future storage and retry updates on a narrower module boundary
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the editor-fields extraction
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the media-tools extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -19,11 +19,8 @@ import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { LocationReviewPanel } from "./location-review-panel";
-import { DeadLetterRecoveryPanel } from "./dead-letter-recovery-panel";
-import { MediaAssetSection } from "./media-asset-section";
-import { MediaStorageOverview } from "./media-storage-overview";
-import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
 import { RecordEditorFields } from "./record-editor-fields";
+import { RecordMediaTools } from "./record-media-tools";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordResultsView } from "./record-results-view";
 import { RecordPanelStats } from "./record-panel-stats";
@@ -712,96 +709,62 @@ export function RecordPanelV2({
             selectedLocationReview={selectedLocationReview}
             summarizeHistoryActionLabel={summarizeHistoryActionLabel}
           />
-          {error ? <div className="notice error">{error}</div> : null}
-          <div className="action-row">
-            <button className="button" disabled={saving || !canWriteWorkspace} type="submit">
-              {saving ? panelCopy.saving : selectedRecord ? panelCopy.updateRecord : panelCopy.createRecord}
-            </button>
-            {selectedRecord ? (
-              <button className="button secondary" disabled={deleting || !canWriteWorkspace} onClick={handleDelete} type="button">
-                {deleting ? panelCopy.deleting : panelCopy.deleteRecord}
-              </button>
-            ) : null}
-          </div>
+          <RecordMediaTools
+            allTrackedFilesPresentLabel={panelCopy.allTrackedFilesPresent}
+            authToken={authToken}
+            bulkRetryingDeadLetter={bulkRetryingDeadLetter}
+            canWriteWorkspace={canWriteWorkspace}
+            deleteButtonLabel={deleting ? panelCopy.deleting : panelCopy.deleteRecord}
+            deleting={deleting}
+            deletingMediaId={deletingMediaId}
+            downloadingMediaId={downloadingMediaId}
+            error={error}
+            formatFileCountLabel={formatFileCountLabel}
+            formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+            hasSelectedRecord={Boolean(selectedRecord)}
+            largestFilePrefixLabel={detailCopy.largestFilePrefix}
+            localLabel={panelCopy.local}
+            locale={locale}
+            mediaAssets={mediaAssets}
+            mediaDeadLetterOverview={mediaDeadLetterOverview}
+            mediaIssueCopy={mediaIssueCopy}
+            mediaProcessingOverview={mediaProcessingOverview}
+            mediaStorageSummary={mediaStorageSummary}
+            missingFilesLabel={panelCopy.missingFiles}
+            needsAttentionLabel={panelCopy.needsAttention}
+            noMediaLabel={detailCopy.noMedia}
+            onBulkRetryAllDeadLetter={() => handleBulkRetryDeadLetter("all")}
+            onBulkRetrySelectedDeadLetter={() => handleBulkRetryDeadLetter("selected")}
+            onClearDeadLetterSelection={handleClearDeadLetterSelection}
+            onDelete={handleDelete}
+            onDeleteMediaAsset={handleDeleteMediaAsset}
+            onDownloadMedia={handleDownloadMedia}
+            onRefreshMedia={handleRefreshMedia}
+            onRetryMediaProcessing={handleRetryMediaProcessing}
+            onSelectAllDeadLetter={handleSelectAllDeadLetter}
+            onToggleDeadLetterSelection={handleToggleDeadLetterSelection}
+            onUpload={handleUpload}
+            processingCompletedLabel={panelCopy.processingCompleted}
+            queuedLabel={panelCopy.queued}
+            queueStateLabel={panelCopy.queueState}
+            refreshingMediaId={refreshingMediaId}
+            remoteLabel={panelCopy.remote}
+            retryingMediaId={retryingMediaId}
+            saveButtonLabel={saving ? panelCopy.saving : selectedRecord ? panelCopy.updateRecord : panelCopy.createRecord}
+            saving={saving}
+            selectedDeadLetterIds={selectedDeadLetterIds}
+            selectedRecordMediaSizeLabel={formatByteCount(selectedRecordMediaSizeBytes)}
+            storageHealthLabel={panelCopy.storageHealth}
+            storageMixLabel={panelCopy.storageMix}
+            thisRecordMediaLabel={panelCopy.thisRecordMedia}
+            uploadAttachmentLabel={panelCopy.uploadAttachment}
+            uploading={uploading}
+            uploadingMediaLabel={panelCopy.uploadingMedia}
+            workspaceId={workspaceId}
+            workspaceStorageLabel={panelCopy.workspaceStorage}
+          />
           {selectedRecord ? (
-            <>
-              <label className="field">
-                <span className="field-label">{panelCopy.uploadAttachment}</span>
-                <input disabled={!canWriteWorkspace} onChange={handleUpload} type="file" />
-              </label>
-              {uploading ? <div className="notice">{panelCopy.uploadingMedia}</div> : null}
-              <MediaStorageOverview
-                allTrackedFilesPresentLabel={panelCopy.allTrackedFilesPresent}
-                formatFileCountLabel={formatFileCountLabel}
-                localLabel={panelCopy.local}
-                mediaAssetCount={mediaAssets.length}
-                mediaProcessingOverview={mediaProcessingOverview}
-                mediaStorageSummary={mediaStorageSummary}
-                missingFilesLabel={panelCopy.missingFiles}
-                needsAttentionLabel={panelCopy.needsAttention}
-                processingCompletedLabel={panelCopy.processingCompleted}
-                queuedLabel={panelCopy.queued}
-                queueStateLabel={panelCopy.queueState}
-                remoteLabel={panelCopy.remote}
-                selectedRecordMediaSizeLabel={formatByteCount(selectedRecordMediaSizeBytes)}
-                storageHealthLabel={panelCopy.storageHealth}
-                storageMixLabel={panelCopy.storageMix}
-                thisRecordMediaLabel={panelCopy.thisRecordMedia}
-                workspaceStorageLabel={panelCopy.workspaceStorage}
-              />
-              {mediaProcessingOverview ? (
-                <>
-                  <RecentMediaIssuesPanel
-                    canWriteWorkspace={canWriteWorkspace}
-                    formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-                    locale={locale}
-                    mediaIssueCopy={mediaIssueCopy}
-                    mediaProcessingOverview={mediaProcessingOverview}
-                    onRetryMediaProcessing={handleRetryMediaProcessing}
-                    retryingMediaId={retryingMediaId}
-                    workspaceId={workspaceId}
-                  />
-                  <DeadLetterRecoveryPanel
-                    bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-                    canWriteWorkspace={canWriteWorkspace}
-                    formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-                    locale={locale}
-                    mediaDeadLetterOverview={mediaDeadLetterOverview}
-                    mediaIssueCopy={mediaIssueCopy}
-                    onBulkRetryAll={() => handleBulkRetryDeadLetter("all")}
-                    onBulkRetrySelected={() => handleBulkRetryDeadLetter("selected")}
-                    onClearSelection={handleClearDeadLetterSelection}
-                    onRetryMediaProcessing={handleRetryMediaProcessing}
-                    onSelectAll={handleSelectAllDeadLetter}
-                    onToggleSelection={handleToggleDeadLetterSelection}
-                    retryingMediaId={retryingMediaId}
-                    selectedDeadLetterIds={selectedDeadLetterIds}
-                    workspaceId={workspaceId}
-                  />
-                </>
-              ) : null}
-              <MediaAssetSection
-                authToken={authToken}
-                canWriteWorkspace={canWriteWorkspace}
-                deletingMediaId={deletingMediaId}
-                downloadingMediaId={downloadingMediaId}
-                formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-                largestFilePrefixLabel={detailCopy.largestFilePrefix}
-                largestItemName={mediaStorageSummary?.largest_item_name ?? null}
-                largestItemSizeLabel={mediaStorageSummary?.largest_item_size_label ?? null}
-                mediaAssets={mediaAssets}
-                mediaIssueCopy={mediaIssueCopy}
-                noMediaLabel={detailCopy.noMedia}
-                onDeleteMediaAsset={handleDeleteMediaAsset}
-                onDownloadMedia={handleDownloadMedia}
-                onRefreshMedia={handleRefreshMedia}
-                onRetryMediaProcessing={handleRetryMediaProcessing}
-                refreshingMediaId={refreshingMediaId}
-                retryingMediaId={retryingMediaId}
-                workspaceId={workspaceId}
-              />
-
-              <RecordReminderPanel
+            <RecordReminderPanel
                 canWriteWorkspace={canWriteWorkspace}
                 channelInApp={detailCopy.channelInApp}
                 channelLabel={detailCopy.channelLabel}
@@ -859,7 +822,6 @@ export function RecordPanelV2({
                 selectedRecordTitle={selectedRecord?.title ?? null}
                 untitledReminderLabel={detailCopy.untitledReminder}
               />
-            </>
           ) : null}
         </form>
         <RecordResultsView
