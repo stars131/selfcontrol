@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
-import { LanguageSwitcher } from "./language-switcher";
 import { WorkspaceCreateSection } from "./workspace-create-section";
+import { WorkspaceEntryHeader } from "./workspace-entry-header";
 import { WorkspaceImportSection } from "./workspace-import-section";
 import { WorkspaceJoinSection } from "./workspace-join-section";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
@@ -365,21 +365,13 @@ export function WorkspaceEntryClient() {
   return (
     <main className="page-shell">
       <section className="panel" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        <div className="panel-header">
-          <div>
-            <div className="eyebrow">{copy.eyebrow}</div>
-            <h1 className="title">{copy.title}</h1>
-            <div className="muted" style={{ marginTop: 8 }}>
-              {user ? `${copy.signedInAs} ${user.username}` : copy.signedIn}
-            </div>
-          </div>
-          <div className="hero-actions">
-            <LanguageSwitcher locale={locale} onChange={setLocale} />
-            <button className="button secondary" type="button" onClick={handleLogout}>
-              {copy.signOut}
-            </button>
-          </div>
-        </div>
+        <WorkspaceEntryHeader
+          copy={copy}
+          locale={locale}
+          onLocaleChange={setLocale}
+          onLogout={handleLogout}
+          username={user?.username}
+        />
         <div className="panel-body">
           {error ? <div className="notice error">{error}</div> : null}
           <div className="two-column-grid">

@@ -482,10 +482,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now additionally enforces that `workspace-entry-client.tsx` must keep composing `WorkspaceCreateSection`, `WorkspaceJoinSection`, `WorkspaceImportSection`, `WorkspaceListSection`, and `WorkspaceTransferJobsSection`
   - the guard now also lowers the control-center page size ceiling so future changes keep shrinking the oversized entry screen instead of regressing toward a monolith
   - this makes the newly extracted control-center display boundaries executable without touching the locale-constant migration risk area
+- Workspace Entry Header Extraction V1:
+  - control-center header rendering now lives in `apps/web/components/workspace-entry-header.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
+  - the entry page now passes shared copy, locale switching, logout action, and current username while the dedicated header component owns top-of-page presentation
+  - this trims another stable display block from the control-center page without changing controller behavior or locale-resource risk
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry section guard tightening
+- Continue simplifying remaining large UI module boundaries after the workspace-entry header extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
