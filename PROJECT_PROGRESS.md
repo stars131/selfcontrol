@@ -478,10 +478,14 @@ Last updated: 2026-03-22
   - workspace import form rendering now lives in `apps/web/components/workspace-import-section.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
   - the entry page now passes shared copy, file input ref, controlled import state, and import/job handlers while the dedicated section component owns import-form presentation
   - this trims another stable control-center block without touching the existing import controller behavior or the higher-risk locale constant bundle
+- Workspace Entry Section Guard Tightening V1:
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now additionally enforces that `workspace-entry-client.tsx` must keep composing `WorkspaceCreateSection`, `WorkspaceJoinSection`, `WorkspaceImportSection`, `WorkspaceListSection`, and `WorkspaceTransferJobsSection`
+  - the guard now also lowers the control-center page size ceiling so future changes keep shrinking the oversized entry screen instead of regressing toward a monolith
+  - this makes the newly extracted control-center display boundaries executable without touching the locale-constant migration risk area
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry import section extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-entry section guard tightening
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -13,6 +13,30 @@ if (!source.includes("useWorkspaceEntryController(router)")) {
   throw new Error("workspace-entry-client.tsx must delegate behavior orchestration to useWorkspaceEntryController");
 }
 
+for (const requiredImport of [
+  'import { WorkspaceCreateSection } from "./workspace-create-section";',
+  'import { WorkspaceJoinSection } from "./workspace-join-section";',
+  'import { WorkspaceImportSection } from "./workspace-import-section";',
+  'import { WorkspaceListSection } from "./workspace-list-section";',
+  'import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";',
+]) {
+  if (!source.includes(requiredImport)) {
+    throw new Error(`workspace-entry-client.tsx must keep using extracted entry sections: ${requiredImport}`);
+  }
+}
+
+for (const requiredUsage of [
+  "<WorkspaceCreateSection",
+  "<WorkspaceJoinSection",
+  "<WorkspaceImportSection",
+  "<WorkspaceListSection",
+  "<WorkspaceTransferJobsSection",
+]) {
+  if (!source.includes(requiredUsage)) {
+    throw new Error(`workspace-entry-client.tsx must compose the extracted entry sections: ${requiredUsage}`);
+  }
+}
+
 for (const forbiddenToken of [
   'from "../lib/api"',
   'from "../lib/auth"',
@@ -36,7 +60,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 620;
+const maxAllowedLines = 500;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-entry-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
