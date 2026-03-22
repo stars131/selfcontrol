@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import { LanguageSwitcher } from "./language-switcher";
 import { WorkspaceCreateSection } from "./workspace-create-section";
+import { WorkspaceJoinSection } from "./workspace-join-section";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
 import { WorkspaceListSection } from "./workspace-list-section";
 import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";
@@ -390,46 +391,16 @@ export function WorkspaceEntryClient() {
               suggestedSlug={suggestedSlug}
             />
 
-            <section className="record-card">
-              <div className="eyebrow">{copy.joinEyebrow}</div>
-              <h2 style={{ margin: "8px 0 12px" }}>{copy.joinTitle}</h2>
-              <div className="form-stack">
-                <input
-                  className="input"
-                  placeholder={copy.sharePlaceholder}
-                  value={shareTokenInput}
-                  onChange={(event) => setShareTokenInput(event.target.value)}
-                />
-                <div className="action-row">
-                  <button
-                    className="button secondary"
-                    type="button"
-                    disabled={previewing}
-                    onClick={() => void handlePreviewShare()}
-                  >
-                    {previewing ? `${copy.previewShare}...` : copy.previewShare}
-                  </button>
-                  <button
-                    className="button"
-                    type="button"
-                    disabled={joining || !sharePreview}
-                    onClick={() => void handleAcceptShare()}
-                  >
-                    {joining ? `${copy.joinWorkspace}...` : copy.joinWorkspace}
-                  </button>
-                </div>
-                {sharePreview ? (
-                  <article className="message assistant">
-                    <div className="eyebrow">{sharePreview.permission_code}</div>
-                    <div style={{ marginTop: 8, fontWeight: 600 }}>{sharePreview.workspace_name}</div>
-                    <div style={{ marginTop: 8 }}>{sharePreview.name}</div>
-                    <div className="muted" style={{ marginTop: 8 }}>
-                      {sharePreview.workspace_slug}
-                    </div>
-                  </article>
-                ) : null}
-              </div>
-            </section>
+            <WorkspaceJoinSection
+              copy={copy}
+              joining={joining}
+              onAcceptShare={handleAcceptShare}
+              onPreviewShare={handlePreviewShare}
+              onShareTokenInputChange={setShareTokenInput}
+              previewing={previewing}
+              sharePreview={sharePreview}
+              shareTokenInput={shareTokenInput}
+            />
 
             <section className="record-card">
               <div className="eyebrow">{copy.importEyebrow}</div>

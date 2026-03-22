@@ -470,10 +470,14 @@ Last updated: 2026-03-22
   - workspace creation form rendering now lives in `apps/web/components/workspace-create-section.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
   - the entry page now passes shared copy, controlled form state, and submit behavior while the dedicated section component owns create-form presentation
   - this trims another stable control-center block without touching the higher-risk locale constant payload
+- Workspace Entry Join Section Extraction V1:
+  - shared-workspace join form and preview rendering now live in `apps/web/components/workspace-join-section.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
+  - the entry page now passes shared copy, controlled share-token state, preview data, and join handlers while the dedicated section component owns join-flow presentation
+  - this removes another stable display block from the control-center page without changing the controller-layer join behavior
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry create section extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-entry join section extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
