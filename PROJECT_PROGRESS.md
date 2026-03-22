@@ -532,10 +532,14 @@ Last updated: 2026-03-23
   - control-center locale copy maps and copy selection now live in `apps/web/components/workspace-entry-copy.ts` instead of remaining inline inside `workspace-entry-client.tsx`
   - the main workspace entry client now focuses more narrowly on router wiring, locale state, controller orchestration, and loading-state rendering while the dedicated copy module owns localized text payloads
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces the copy-helper boundary, blocks reintroduction of inline copy maps, and lowers the entry-client size ceiling again
+- Provider Settings Copy Extraction V1:
+  - provider-settings locale copy and copy typing now live in `apps/web/components/provider-settings-copy.ts` instead of remaining inline inside `provider-settings-panel.tsx`
+  - the provider settings panel now focuses more narrowly on controller wiring, anchor state, and feature-card composition while the dedicated copy module owns localized text payloads shared across panel and feature cards
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces the copy-helper boundary, blocks reintroduction of inline copy maps, and lowers the provider-settings panel size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace entry copy extraction
+- Continue simplifying remaining large UI module boundaries after the provider settings copy extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

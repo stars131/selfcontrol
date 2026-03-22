@@ -11,6 +11,10 @@ if (!source.includes('import { useProviderSettingsController } from "./use-provi
   throw new Error("provider-settings-panel.tsx must import useProviderSettingsController");
 }
 
+if (!source.includes('import { getProviderSettingsCopy } from "./provider-settings-copy";')) {
+  throw new Error("provider-settings-panel.tsx must import getProviderSettingsCopy");
+}
+
 if (!source.includes('import { ProviderFeatureCard } from "./provider-feature-card";')) {
   throw new Error("provider-settings-panel.tsx must import ProviderFeatureCard");
 }
@@ -21,6 +25,10 @@ if (!source.includes("useProviderSettingsController({")) {
 
 if (!source.includes("<ProviderFeatureCard")) {
   throw new Error("provider-settings-panel.tsx must delegate feature form rendering to ProviderFeatureCard");
+}
+
+if (!source.includes("getProviderSettingsCopy(locale)")) {
+  throw new Error("provider-settings-panel.tsx must delegate locale copy lookup to getProviderSettingsCopy");
 }
 
 if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
@@ -44,13 +52,14 @@ for (const forbiddenToken of [
   'id={`provider-${item.feature_code}`}',
   "draftItem.is_enabled",
   "MEDIA_STORAGE_FALLBACK_OPTION",
+  "const COPY:",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`provider-settings-panel.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 500;
+const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

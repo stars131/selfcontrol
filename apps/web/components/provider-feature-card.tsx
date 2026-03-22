@@ -2,6 +2,7 @@
 
 import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
+import type { ProviderSettingsCopy } from "./provider-settings-copy";
 import type { ProviderDraft } from "./use-provider-settings-controller";
 import { MediaStorageHealthCard } from "./media-storage-health-card";
 
@@ -9,40 +10,6 @@ const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
 const MEDIA_STORAGE_AUTO_RETRY_OPTION = "auto_retry_enabled";
 const MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION = "remote_retry_max_attempts";
 const MEDIA_STORAGE_RETRY_BACKOFF_OPTION = "remote_retry_backoff_seconds";
-
-type ProviderSettingsCopy = {
-  enabled: string;
-  provider: string;
-  modelName: string;
-  apiBaseUrl: string;
-  apiKeyEnvName: string;
-  fallbackToLocal: string;
-  autoRetry: string;
-  retryAttempts: string;
-  retryBackoff: string;
-  retryHint: string;
-  defaultProfile: string;
-  workspaceOverride: string;
-  secret: string;
-  customEndpoint: string;
-  defaultEndpoint: string;
-  storageHealth: string;
-  refreshHealth: string;
-  refreshing: string;
-  saveProvider: string;
-  saving: string;
-  reachable: string;
-  unreachable: string;
-  available: string;
-  unavailable: string;
-  upload: string;
-  download: string;
-  delete: string;
-  checkedAt: string;
-  endpointRoot: string;
-  reset: string;
-  unsavedChanges: string;
-};
 
 function readBooleanOption(options: Record<string, unknown>, key: string) {
   return options[key] === true;
