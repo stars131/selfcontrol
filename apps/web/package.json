@@ -13,6 +13,7 @@
     "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",
     "verify:record-panel-structure": "node ./scripts/verify-record-panel-structure.mjs",
     "verify:record-workspaces": "node ./scripts/verify-record-workspaces.mjs",
+    "verify:workspace-export-jobs-structure": "node ./scripts/verify-workspace-export-jobs-structure.mjs",
     "verify:workspace-entry-structure": "node ./scripts/verify-workspace-entry-structure.mjs",
     "verify:workspace-media-retention-structure": "node ./scripts/verify-workspace-media-retention-structure.mjs",
     "verify:workspace-settings-structure": "node ./scripts/verify-workspace-settings-structure.mjs",
