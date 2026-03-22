@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   bulkRetryMediaDeadLetter,
@@ -15,8 +15,6 @@ import {
   deleteRecord,
   deleteReminder,
   getMediaStatus,
-  getWorkspace,
-  listConversations,
   reindexKnowledge,
   retryMediaProcessing,
   sendMessage,
@@ -27,7 +25,6 @@ import {
   updateShareLink,
   uploadMedia,
 } from "../lib/api";
-import { clearStoredSession, getStoredToken } from "../lib/auth";
 import type {
   AuditLogItem,
   ChatMessage,
@@ -67,6 +64,7 @@ import {
 import { buildTimelineDays } from "../lib/timeline";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
+import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
@@ -167,93 +165,35 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await loadConversationMessagesForWorkspace(activeToken, workspaceId, conversationId, setMessages);
   };
 
-  useEffect(() => {
-    const activeToken = getStoredToken();
-    if (!activeToken) {
-      router.replace("/login");
-      return;
-    }
-
-    const load = async () => {
-      try {
-        setToken(activeToken);
-        const workspaceResult = await getWorkspace(activeToken, workspaceId);
-        setWorkspace(workspaceResult.workspace);
-        await refreshRecords(activeToken, INITIAL_RECORD_FILTER);
-
-        const conversationResult = await listConversations(activeToken, workspaceId);
-        let items = conversationResult.items;
-        if (!items.length && (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor")) {
-          const created = await createConversation(activeToken, workspaceId, "Workspace chat");
-          items = [created.conversation];
-        }
-
-        setConversations(items);
-        setActiveConversationId(items[0]?.id ?? null);
-        if (items[0]) {
-          await loadConversationMessages(activeToken, items[0].id);
-        } else {
-          setMessages([]);
-        }
-        await refreshNotifications(activeToken);
-        await refreshKnowledge(activeToken);
-        await refreshMediaStorageSummary(activeToken);
-        await refreshMediaProcessingOverview(activeToken);
-        if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
-          await refreshMediaDeadLetterOverview(activeToken);
-          await refreshProviderConfigs(activeToken);
-          if (workspaceResult.workspace.role === "owner") {
-            await refreshShareLinks(activeToken);
-          } else {
-            setShareLinks([]);
-            setLatestSharePath("");
-          }
-        } else {
-          setMediaDeadLetterOverview(null);
-          setProviderConfigs([]);
-          setShareLinks([]);
-          setLatestSharePath("");
-        }
-        await refreshSearchPresets(activeToken);
-        await refreshAuditLogs(activeToken);
-      } catch (caught) {
-        clearStoredSession();
-        setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
-        router.replace("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void load();
-  }, [router, workspaceId]);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    void refreshMedia(token, selectedRecordId);
-  }, [token, selectedRecordId, workspaceId]);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    void refreshReminders(token, selectedRecordId);
-  }, [token, selectedRecordId, workspaceId]);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-
-    void syncDueNotifications(token);
-    const timer = window.setInterval(() => {
-      void syncDueNotifications(token);
-    }, 30_000);
-
-    return () => window.clearInterval(timer);
-  }, [token, workspaceId]);
+  useWorkspaceShellEffects({
+    router,
+    workspaceId,
+    token,
+    selectedRecordId,
+    setToken,
+    setWorkspace,
+    setRecords,
+    setVisibleRecords,
+    setTimelineDays,
+    setConversations,
+    setActiveConversationId,
+    setMessages,
+    setSelectedRecordId,
+    setMediaAssets,
+    setMediaDeadLetterOverview,
+    setMediaProcessingOverview,
+    setMediaStorageSummary,
+    setReminders,
+    setNotifications,
+    setKnowledgeStats,
+    setProviderConfigs,
+    setSearchPresets,
+    setShareLinks,
+    setLatestSharePath,
+    setAuditLogs,
+    setError,
+    setLoading,
+  });
 
   const handleSendMessage = async (message: string) => {
     if (!canWriteWorkspace) {

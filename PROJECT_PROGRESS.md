@@ -378,10 +378,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces that `workspace-shell-client.tsx` keeps using `apps/web/lib/workspace-shell-refresh.ts` for API-level refresh operations
   - the guard blocks reintroduction of inline refresh API calls in the workspace shell and caps file length to keep the boundary reviewable
   - `apps/web/package.json` now exposes `npm run verify:workspace-shell-structure` so this maintainability rule can run in every future slice
+- Workspace Shell Effects Hook Extraction V1:
+  - workspace-shell initial load, selected-record dependent refreshes, and notification polling now live in `apps/web/components/use-workspace-shell-effects.ts`
+  - the main workspace shell now focuses more narrowly on action handlers and rendering while the dedicated effects hook owns lifecycle synchronization
+  - this reduces lifecycle complexity in `workspace-shell-client.tsx` and makes future shell loading changes safer under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-shell structure guard extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-shell effects hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
