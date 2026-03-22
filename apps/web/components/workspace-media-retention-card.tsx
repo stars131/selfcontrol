@@ -5,6 +5,7 @@ import type {
 } from "../lib/types";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
+import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
 import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
 import {
   useWorkspaceMediaRetentionController,
@@ -325,39 +326,15 @@ export function WorkspaceMediaRetentionCard({
         selectAllLabel={copy.selectAll}
       />
 
-      <div className="two-column-grid" style={{ marginTop: 16 }}>
-        <section className="subtle-card">
-          <div className="eyebrow">{copy.largestTitle}</div>
-          <div className="record-list compact-list" style={{ marginTop: 12 }}>
-            {report?.largest_items.length
-              ? report.largest_items.map((item) => (
-                <MediaRetentionItemCard copy={copy} item={item} key={item.media_id} locale={locale} />
-              ))
-              : <div className="notice">{copy.noLargestItems}</div>}
-          </div>
-        </section>
-        <section className="subtle-card">
-          <div className="eyebrow">{copy.candidatesTitle}</div>
-          <div className="record-list compact-list" style={{ marginTop: 12 }}>
-            {report?.retention_candidates.length ? (
-              report.retention_candidates.map((item) => (
-                <MediaRetentionItemCard
-                  actionLoading={actionLoading}
-                  copy={copy}
-                  item={item}
-                  key={item.media_id}
-                  locale={locale}
-                  onToggleSelected={toggleSelectedMedia}
-                  selectable={role === "owner"}
-                  selected={selectedMediaIds.includes(item.media_id)}
-                />
-              ))
-            ) : (
-              <div className="notice">{copy.noCandidates}</div>
-            )}
-          </div>
-        </section>
-      </div>
+      <WorkspaceMediaRetentionLists
+        actionLoading={actionLoading}
+        copy={copy}
+        locale={locale}
+        onToggleSelected={toggleSelectedMedia}
+        report={report}
+        role={role}
+        selectedMediaIds={selectedMediaIds}
+      />
     </section>
   );
 }
