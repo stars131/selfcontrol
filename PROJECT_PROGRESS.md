@@ -390,10 +390,14 @@ Last updated: 2026-03-22
   - workspace-shell action handlers for chat, records, media, reminders, notifications, sharing, and provider updates now live in `apps/web/components/use-workspace-shell-actions.ts`
   - the main workspace shell now focuses more narrowly on state declaration, permission derivation, and component composition while the dedicated actions hook owns business-action orchestration
   - this drops the shell component size again and significantly lowers the review surface for future workspace interaction changes
+- Workspace Shell Actions Guard V1:
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now additionally enforces that `workspace-shell-client.tsx` must wire business actions through `use-workspace-shell-actions.ts`
+  - the guard now fails if `const handle...` style action handlers are reintroduced directly into the workspace shell, keeping both lifecycle and action orchestration outside the main shell component
+  - this makes the workspace-shell thin-shell boundary executable and keeps future refactors aligned with the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-shell actions hook extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-shell actions guard extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

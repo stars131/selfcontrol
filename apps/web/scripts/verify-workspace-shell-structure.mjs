@@ -13,12 +13,21 @@ if (!source.includes('import { useWorkspaceShellEffects } from "./use-workspace-
   throw new Error("workspace-shell-client.tsx must import useWorkspaceShellEffects");
 }
 
+if (!source.includes('import { useWorkspaceShellActions } from "./use-workspace-shell-actions";')) {
+  throw new Error("workspace-shell-client.tsx must import useWorkspaceShellActions");
+}
+
 if (!source.includes("useWorkspaceShellEffects({")) {
   throw new Error("workspace-shell-client.tsx must delegate lifecycle synchronization to useWorkspaceShellEffects");
 }
 
+if (!source.includes("useWorkspaceShellActions({")) {
+  throw new Error("workspace-shell-client.tsx must delegate action orchestration to useWorkspaceShellActions");
+}
+
 for (const forbiddenToken of [
   "useEffect(",
+  "const handle",
   "listRecords(",
   "listMedia(",
   "listMessages(",
