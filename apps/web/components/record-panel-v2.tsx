@@ -24,7 +24,7 @@ import { RecordMediaTools } from "./record-media-tools";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordResultsView } from "./record-results-view";
 import { RecordPanelStats } from "./record-panel-stats";
-import { RecordReminderPanel } from "./record-reminder-panel";
+import { RecordReminderTools } from "./record-reminder-tools";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
@@ -763,66 +763,38 @@ export function RecordPanelV2({
             workspaceId={workspaceId}
             workspaceStorageLabel={panelCopy.workspaceStorage}
           />
-          {selectedRecord ? (
-            <RecordReminderPanel
-                canWriteWorkspace={canWriteWorkspace}
-                channelInApp={detailCopy.channelInApp}
-                channelLabel={detailCopy.channelLabel}
-                createReminderLabel={detailCopy.createReminder}
-                deleteReminderLabel={detailCopy.deleteReminder}
-                enableReminderLabel={detailCopy.enableReminder}
-                formatReminderEnabledLabel={formatReminderEnabledLabel}
-                formatReminderStatusLabel={formatReminderStatusLabel}
-                formatReminderTimestampLabel={formatReminderTimestampLabel}
-                markReminderDoneLabel={detailCopy.markReminderDone}
-                noRemindersLabel={detailCopy.noReminders}
-                onCreateReminder={handleCreateReminderSubmit}
-                onDeleteReminder={onDeleteReminder}
-                onMarkReminderDone={(reminder) =>
-                  onUpdateReminder(reminder.id, {
-                    status: "completed",
-                    is_enabled: false,
-                  })
-                }
-                onMessageChange={(value) =>
-                  setReminderForm((prev) => ({
-                    ...prev,
-                    message: value,
-                  }))
-                }
-                onRemindAtChange={(value) =>
-                  setReminderForm((prev) => ({
-                    ...prev,
-                    remind_at: value,
-                  }))
-                }
-                onTitleChange={(value) =>
-                  setReminderForm((prev) => ({
-                    ...prev,
-                    title: value,
-                  }))
-                }
-                onToggleReminderEnabled={(reminder) =>
-                  onUpdateReminder(reminder.id, {
-                    is_enabled: !reminder.is_enabled,
-                  })
-                }
-                pauseReminderLabel={detailCopy.pauseReminder}
-                reminderForm={reminderForm}
-                reminderNoteLabel={detailCopy.reminderNoteLabel}
-                reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
-                reminderSectionDescription={detailCopy.reminderSectionDescription}
-                reminderSectionTitle={detailCopy.reminderSectionTitle}
-                reminderTitleLabel={detailCopy.reminderTitleLabel}
-                reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
-                remindAtLabel={detailCopy.remindAtLabel}
-                reminders={reminders}
-                savingReminder={savingReminder}
-                savingReminderLabel={detailCopy.savingReminder}
-                selectedRecordTitle={selectedRecord?.title ?? null}
-                untitledReminderLabel={detailCopy.untitledReminder}
-              />
-          ) : null}
+          <RecordReminderTools
+            canWriteWorkspace={canWriteWorkspace}
+            channelInApp={detailCopy.channelInApp}
+            channelLabel={detailCopy.channelLabel}
+            createReminderLabel={detailCopy.createReminder}
+            deleteReminderLabel={detailCopy.deleteReminder}
+            enableReminderLabel={detailCopy.enableReminder}
+            formatReminderEnabledLabel={formatReminderEnabledLabel}
+            formatReminderStatusLabel={formatReminderStatusLabel}
+            formatReminderTimestampLabel={formatReminderTimestampLabel}
+            hasSelectedRecord={Boolean(selectedRecord)}
+            markReminderDoneLabel={detailCopy.markReminderDone}
+            noRemindersLabel={detailCopy.noReminders}
+            onCreateReminder={handleCreateReminderSubmit}
+            onDeleteReminder={onDeleteReminder}
+            onUpdateReminder={onUpdateReminder}
+            pauseReminderLabel={detailCopy.pauseReminder}
+            reminderForm={reminderForm}
+            reminderNoteLabel={detailCopy.reminderNoteLabel}
+            reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
+            reminderSectionDescription={detailCopy.reminderSectionDescription}
+            reminderSectionTitle={detailCopy.reminderSectionTitle}
+            reminderTitleLabel={detailCopy.reminderTitleLabel}
+            reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
+            remindAtLabel={detailCopy.remindAtLabel}
+            reminders={reminders}
+            savingReminder={savingReminder}
+            savingReminderLabel={detailCopy.savingReminder}
+            selectedRecordTitle={selectedRecord?.title ?? null}
+            setReminderForm={setReminderForm}
+            untitledReminderLabel={detailCopy.untitledReminder}
+          />
         </form>
         <RecordResultsView
           avoidLabel={detailCopy.avoidLabel}

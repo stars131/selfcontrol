@@ -334,10 +334,14 @@ Last updated: 2026-03-22
   - save/delete actions plus upload and media diagnostics now live in `apps/web/components/record-media-tools.tsx` instead of being rendered inline inside `record-panel-v2`
   - the parent panel now passes media state, operator actions, and formatted labels while the dedicated media-tools component owns the selected-record media support layout
   - this removes another orchestration-heavy UI block from the oversized panel and keeps future storage and retry updates on a narrower module boundary
+- Record Reminder Tools Extraction V1:
+  - reminder orchestration for the selected record now lives in `apps/web/components/record-reminder-tools.tsx` instead of being assembled inline inside `record-panel-v2`
+  - the parent panel now passes reminder state, update actions, and locale labels while the dedicated reminder-tools component owns the reminder container wiring
+  - this trims another callback-heavy block from the oversized panel and improves reviewability for future reminder behavior changes
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the media-tools extraction
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the reminder-tools extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
