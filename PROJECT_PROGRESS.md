@@ -374,10 +374,14 @@ Last updated: 2026-03-22
   - record/media/reminder/notification/provider/share/audit refresh helpers now live in `apps/web/lib/workspace-shell-refresh.ts` instead of remaining inline inside `workspace-shell-client.tsx`
   - the workspace shell now keeps more of its focus on load flow and user actions while the dedicated refresh helper module owns repetitive fetch-and-set state logic
   - this reduces the top-level shell review surface and makes future workspace data-refresh changes safer under the enterprise maintainability requirement
+- Workspace Shell Structure Guard V1:
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces that `workspace-shell-client.tsx` keeps using `apps/web/lib/workspace-shell-refresh.ts` for API-level refresh operations
+  - the guard blocks reintroduction of inline refresh API calls in the workspace shell and caps file length to keep the boundary reviewable
+  - `apps/web/package.json` now exposes `npm run verify:workspace-shell-structure` so this maintainability rule can run in every future slice
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-shell refresh helper extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-shell structure guard extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
