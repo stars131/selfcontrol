@@ -418,10 +418,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces that `provider-settings-panel.tsx` must wire draft state and save/reset orchestration through `use-provider-settings-controller.ts`
   - the guard blocks reintroduction of inline hook state, initialization effects, and save/reset controller helpers into the main provider settings panel component
   - `apps/web/package.json` now exposes `npm run verify:provider-settings-structure` so this provider-settings module boundary remains executable in future slices
+- Workspace Settings Controller Hook Extraction V1:
+  - workspace-settings authentication load, anchor synchronization, media-storage-health refresh, provider save flow, and member role/removal actions now live in `apps/web/components/use-workspace-settings-controller.ts`
+  - `apps/web/components/workspace-settings-client.tsx` now focuses more narrowly on settings-page copy, card composition, and per-section rendering while the dedicated hook owns behavioral orchestration
+  - this removes another large cluster of effects and async mutations from an oversized settings screen and reduces future enterprise maintenance risk
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider-settings structure guard
+- Continue simplifying remaining large UI module boundaries after the workspace-settings controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
