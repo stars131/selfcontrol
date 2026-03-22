@@ -394,10 +394,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now additionally enforces that `workspace-shell-client.tsx` must wire business actions through `use-workspace-shell-actions.ts`
   - the guard now fails if `const handle...` style action handlers are reintroduced directly into the workspace shell, keeping both lifecycle and action orchestration outside the main shell component
   - this makes the workspace-shell thin-shell boundary executable and keeps future refactors aligned with the enterprise maintainability standard
+- Chat Panel Actions Hook Extraction V1:
+  - chat-panel local draft state, share-link form state, async loading flags, and action error handling now live in `apps/web/components/use-chat-panel-actions.ts`
+  - `apps/web/components/chat-panel.tsx` now focuses more narrowly on agent UI composition while the dedicated hook owns send, sync, reindex, audit refresh, and share-link orchestration
+  - this reduces another callback-heavy UI module and keeps future chat-side operator changes on a smaller enterprise-grade review surface
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-shell actions guard extraction
+- Continue simplifying remaining large UI module boundaries after the chat-panel actions hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

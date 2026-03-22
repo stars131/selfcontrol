@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
 
 import { useStoredLocale } from "../lib/locale";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
+import { useChatPanelActions } from "./use-chat-panel-actions";
 import type {
   AuditLogItem,
   ChatMessage,
@@ -14,13 +14,6 @@ import type {
   ProviderFeatureConfig,
   ShareLinkItem,
 } from "../lib/types";
-
-function buildShareUrl(path: string) {
-  if (typeof window === "undefined") {
-    return path;
-  }
-  return `${window.location.origin}${path}`;
-}
 
 export function ChatPanel({
   workspaceId,
@@ -88,110 +81,40 @@ export function ChatPanel({
   onSendMessage: (message: string) => Promise<void>;
 }) {
   const { locale } = useStoredLocale();
-  const [draft, setDraft] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [syncing, setSyncing] = useState(false);
-  const [reindexing, setReindexing] = useState(false);
-  const [refreshingAudit, setRefreshingAudit] = useState(false);
-  const [creatingShare, setCreatingShare] = useState(false);
-  const [disablingShareId, setDisablingShareId] = useState("");
-  const [shareName, setShareName] = useState("");
-  const [sharePermission, setSharePermission] = useState("viewer");
-  const [shareMaxUses, setShareMaxUses] = useState("");
-  const [error, setError] = useState("");
-  const unreadCount = notifications.filter((item) => !item.is_read).length;
-  const latestShareUrl = useMemo(() => (latestSharePath ? buildShareUrl(latestSharePath) : ""), [latestSharePath]);
-
-  const handleSend = async () => {
-    const value = draft.trim();
-    if (!value) {
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setDraft("");
-
-    try {
-      await onSendMessage(value);
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Request failed";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSyncNotifications = async () => {
-    setSyncing(true);
-    setError("");
-    try {
-      await onSyncNotifications();
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Sync failed";
-      setError(message);
-    } finally {
-      setSyncing(false);
-    }
-  };
-
-  const handleReindexKnowledge = async () => {
-    setReindexing(true);
-    setError("");
-    try {
-      await onReindexKnowledge();
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Reindex failed";
-      setError(message);
-    } finally {
-      setReindexing(false);
-    }
-  };
-
-  const handleRefreshAuditLogs = async () => {
-    setRefreshingAudit(true);
-    setError("");
-    try {
-      await onRefreshAuditLogs();
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Audit refresh failed";
-      setError(message);
-    } finally {
-      setRefreshingAudit(false);
-    }
-  };
-
-  const handleCreateShareLink = async () => {
-    setCreatingShare(true);
-    setError("");
-    try {
-      await onCreateShareLink({
-        name: shareName || undefined,
-        permission_code: sharePermission,
-        max_uses: shareMaxUses ? Number(shareMaxUses) : null,
-      });
-      setShareName("");
-      setShareMaxUses("");
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Share creation failed";
-      setError(message);
-    } finally {
-      setCreatingShare(false);
-    }
-  };
-
-  const handleDisableShareLink = async (shareLinkId: string) => {
-    setDisablingShareId(shareLinkId);
-    setError("");
-    try {
-      await onDisableShareLink(shareLinkId);
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Share update failed";
-      setError(message);
-    } finally {
-      setDisablingShareId("");
-    }
-  };
+  const {
+    draft,
+    loading,
+    syncing,
+    reindexing,
+    refreshingAudit,
+    creatingShare,
+    disablingShareId,
+    shareName,
+    sharePermission,
+    shareMaxUses,
+    error,
+    unreadCount,
+    latestShareUrl,
+    setDraft,
+    setShareName,
+    setSharePermission,
+    setShareMaxUses,
+    handleSend,
+    handleSyncNotifications,
+    handleReindexKnowledge,
+    handleRefreshAuditLogs,
+    handleCreateShareLink,
+    handleDisableShareLink,
+  } = useChatPanelActions({
+    latestSharePath,
+    notifications,
+    onCreateShareLink,
+    onDisableShareLink,
+    onRefreshAuditLogs,
+    onReindexKnowledge,
+    onSyncNotifications,
+    onSendMessage,
+  });
 
   return (
     <section className="panel">
