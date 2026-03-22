@@ -17,8 +17,16 @@ if (!source.includes('import { MediaRetentionItemCard } from "./media-retention-
   throw new Error("workspace-media-retention-card.tsx must import MediaRetentionItemCard");
 }
 
+if (!source.includes('import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";')) {
+  throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionActions");
+}
+
 if (!source.includes("<MediaRetentionItemCard")) {
   throw new Error("workspace-media-retention-card.tsx must delegate media item rendering to MediaRetentionItemCard");
+}
+
+if (!source.includes("<WorkspaceMediaRetentionActions")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate owner action rendering to WorkspaceMediaRetentionActions");
 }
 
 for (const forbiddenToken of [
@@ -39,7 +47,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 460;
+const maxAllowedLines = 405;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

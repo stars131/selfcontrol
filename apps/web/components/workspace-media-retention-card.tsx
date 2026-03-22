@@ -5,6 +5,7 @@ import type {
   MediaRetentionItem,
 } from "../lib/types";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
+import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
 import {
   useWorkspaceMediaRetentionController,
 } from "./use-workspace-media-retention-controller";
@@ -324,70 +325,40 @@ export function WorkspaceMediaRetentionCard({
           : copy.cleanupNote}
       </div>
 
-      <section className="subtle-card" style={{ marginTop: 16 }}>
-        <div className="eyebrow">{copy.ownerActions}</div>
-        {role === "owner" ? (
-          <div className="form-stack" style={{ marginTop: 12 }}>
-            <div className="muted">{copy.selectedSummary}: {selectedMediaIds.length}</div>
-            <div className="action-row">
-              <button
-                className="button secondary"
-                disabled={actionLoading || !report?.retention_candidates.length}
-                type="button"
-                onClick={selectAllCandidates}
-              >
-                {copy.selectAll}
-              </button>
-              <button
-                className="button secondary"
-                disabled={actionLoading || !selectedMediaIds.length}
-                type="button"
-                onClick={clearSelection}
-              >
-                {copy.clearSelection}
-              </button>
-              <button
-                className="button secondary"
-                disabled={actionLoading || !selectedMediaIds.length}
-                type="button"
-                onClick={() => void handleArchive(copy.archiveConfirmSelected)}
-              >
-                {actionLoading ? copy.processing : copy.archiveSelected}
-              </button>
-              <button
-                className="button secondary"
-                disabled={actionLoading || !selectedMediaIds.length}
-                type="button"
-                onClick={() =>
-                  void handleCleanup({
-                    mediaIds: selectedMediaIds,
-                    purgeOrphanFiles: false,
-                    confirmMessage: copy.cleanupConfirmSelected,
-                  })
-                }
-              >
-                {actionLoading ? copy.processing : copy.deleteSelected}
-              </button>
-              <button
-                className="button secondary"
-                disabled={actionLoading || !report?.orphan_file_count}
-                type="button"
-                onClick={() =>
-                  void handleCleanup({
-                    mediaIds: [],
-                    purgeOrphanFiles: true,
-                    confirmMessage: copy.cleanupConfirmOrphans,
-                  })
-                }
-              >
-                {actionLoading ? copy.processing : copy.deleteOrphans}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="notice" style={{ marginTop: 12 }}>{copy.editorReadOnly}</div>
-        )}
-      </section>
+      <WorkspaceMediaRetentionActions
+        actionLoading={actionLoading}
+        archiveConfirmSelected={copy.archiveConfirmSelected}
+        archiveSelectedLabel={copy.archiveSelected}
+        canDeleteOrphans={Boolean(report?.orphan_file_count)}
+        canSelectAll={Boolean(report?.retention_candidates.length)}
+        clearSelectionLabel={copy.clearSelection}
+        deleteOrphansLabel={copy.deleteOrphans}
+        deleteSelectedLabel={copy.deleteSelected}
+        editorReadOnly={copy.editorReadOnly}
+        onArchive={handleArchive}
+        onCleanupOrphans={() =>
+          handleCleanup({
+            mediaIds: [],
+            purgeOrphanFiles: true,
+            confirmMessage: copy.cleanupConfirmOrphans,
+          })
+        }
+        onCleanupSelected={() =>
+          handleCleanup({
+            mediaIds: selectedMediaIds,
+            purgeOrphanFiles: false,
+            confirmMessage: copy.cleanupConfirmSelected,
+          })
+        }
+        onClearSelection={clearSelection}
+        onSelectAllCandidates={selectAllCandidates}
+        ownerActions={copy.ownerActions}
+        processingLabel={copy.processing}
+        role={role}
+        selectedCount={selectedMediaIds.length}
+        selectedSummary={copy.selectedSummary}
+        selectAllLabel={copy.selectAll}
+      />
 
       <div className="two-column-grid" style={{ marginTop: 16 }}>
         <section className="subtle-card">
