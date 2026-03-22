@@ -560,10 +560,14 @@ Last updated: 2026-03-23
   - workspace-shell panel prop typing now lives in `apps/web/components/workspace-shell-panels.types.ts` instead of remaining inline inside `workspace-shell-panels.tsx`
   - the panel-composition component now focuses more narrowly on chat/right-panel composition while the dedicated types module owns its large cross-panel contract
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now also enforces the panel-type boundary and adds a size ceiling for `workspace-shell-panels.tsx`
+- Record Editor Workspace Type Extraction V1:
+  - record-editor workspace prop typing now lives in `apps/web/components/record-editor-workspace.types.ts` instead of remaining inline inside `record-editor-workspace.tsx`
+  - the editor workspace component now focuses more narrowly on field/review/media/reminder composition while the dedicated types module owns its large editor contract
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the type-boundary and lowers the editor workspace size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell panels type extraction
+- Continue simplifying remaining large UI module boundaries after the record editor workspace type extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
