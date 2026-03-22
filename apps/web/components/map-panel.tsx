@@ -15,6 +15,7 @@ import {
 } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
 import { MapDrilldownCard } from "./map-drilldown-card";
+import { MapSearchForm } from "./map-search-form";
 import { MappedRecordsList } from "./mapped-records-list";
 import { useMapPanelController } from "./use-map-panel-controller";
 
@@ -222,24 +223,12 @@ export function MapPanel({
         onUseMappedOnly={handleUseMappedOnly}
       />
       {isEditable ? (
-        <form className="composer" style={{ marginTop: 12 }} onSubmit={handleSearch}>
-          <div className="inline-fields">
-            <label className="field" style={{ gridColumn: "span 2" }}>
-              <span className="field-label">Location search</span>
-              <input
-                className="input"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search by shop name, address, or landmark"
-              />
-            </label>
-            <div className="field" style={{ alignSelf: "end" }}>
-              <button className="button secondary" disabled={searching || !searchQuery.trim()} type="submit">
-                {searching ? "Searching..." : "Search place"}
-              </button>
-            </div>
-          </div>
-        </form>
+        <MapSearchForm
+          onSearchQueryChange={setSearchQuery}
+          onSubmit={handleSearch}
+          searchQuery={searchQuery}
+          searching={searching}
+        />
       ) : null}
       {loadError ? (
         <div className="notice error" style={{ marginTop: 12 }}>
