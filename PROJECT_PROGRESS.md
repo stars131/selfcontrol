@@ -410,10 +410,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces that `workspace-entry-client.tsx` must wire behavior through `use-workspace-entry-controller.ts`
   - the guard blocks reintroduction of inline auth loading, state hooks, API imports, slug/share-token helpers, and workspace entry action handlers into the main control-center component
   - `apps/web/package.json` now exposes `npm run verify:workspace-entry-structure` so this maintainability boundary remains executable in future slices
+- Provider Settings Controller Hook Extraction V1:
+  - provider-settings draft initialization, dirty-state calculation, save/reset orchestration, and local error state now live in `apps/web/components/use-provider-settings-controller.ts`
+  - `apps/web/components/provider-settings-panel.tsx` now focuses more narrowly on provider-setting copy and form rendering while the dedicated hook owns state synchronization and save behavior
+  - this trims another oversized operator-facing panel and reduces future review scope for provider configuration changes under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry structure guard
+- Continue simplifying remaining large UI module boundaries after the provider-settings controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
