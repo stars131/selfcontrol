@@ -31,6 +31,7 @@ import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { LocationReviewPanel } from "./location-review-panel";
 import { MediaAssetCard } from "./media-asset-card";
+import { MediaStorageOverview } from "./media-storage-overview";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordPanelStats } from "./record-panel-stats";
 import { RecordReminderPanel } from "./record-reminder-panel";
@@ -810,68 +811,28 @@ export function RecordPanelV2({
                 <input disabled={!canWriteWorkspace} onChange={handleUpload} type="file" />
               </label>
               {uploading ? <div className="notice">{panelCopy.uploadingMedia}</div> : null}
-              <div className="detail-grid" style={{ marginBottom: 16 }}>
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.thisRecordMedia}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {formatFileCountLabel(mediaAssets.length)} / {formatByteCount(selectedRecordMediaSizeBytes)}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.workspaceStorage}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {mediaStorageSummary
-                      ? `${formatFileCountLabel(mediaStorageSummary.total_count)} / ${mediaStorageSummary.total_size_label}`
-                      : "-"}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.storageHealth}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {mediaStorageSummary
-                      ? mediaStorageSummary.missing_file_count
-                        ? `${mediaStorageSummary.missing_file_count} ${panelCopy.missingFiles}`
-                        : panelCopy.allTrackedFilesPresent
-                      : "-"}
-                  </div>
-                </div>
-              </div>
+              <MediaStorageOverview
+                allTrackedFilesPresentLabel={panelCopy.allTrackedFilesPresent}
+                formatFileCountLabel={formatFileCountLabel}
+                localLabel={panelCopy.local}
+                mediaAssetCount={mediaAssets.length}
+                mediaProcessingOverview={mediaProcessingOverview}
+                mediaStorageSummary={mediaStorageSummary}
+                missingFilesLabel={panelCopy.missingFiles}
+                needsAttentionLabel={panelCopy.needsAttention}
+                processingCompletedLabel={panelCopy.processingCompleted}
+                queuedLabel={panelCopy.queued}
+                queueStateLabel={panelCopy.queueState}
+                remoteLabel={panelCopy.remote}
+                selectedRecordMediaSizeLabel={formatByteCount(selectedRecordMediaSizeBytes)}
+                storageHealthLabel={panelCopy.storageHealth}
+                storageMixLabel={panelCopy.storageMix}
+                thisRecordMediaLabel={panelCopy.thisRecordMedia}
+                workspaceStorageLabel={panelCopy.workspaceStorage}
+              />
               {mediaProcessingOverview ? (
                 <>
-                  <div className="detail-grid" style={{ marginBottom: 16 }}>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{panelCopy.processingCompleted}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.completed_count}/{mediaProcessingOverview.total_count}
-                      </div>
-                    </div>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{panelCopy.needsAttention}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.failed_count + mediaProcessingOverview.deferred_count}
-                      </div>
-                    </div>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{panelCopy.queueState}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.pending_count + mediaProcessingOverview.processing_count} {panelCopy.queued}
-                      </div>
-                    </div>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{panelCopy.storageMix}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaProcessingOverview.local_item_count} {panelCopy.local} / {mediaProcessingOverview.remote_item_count} {panelCopy.remote}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="tag-row" style={{ marginBottom: 16 }}>
-                    {Object.entries(mediaProcessingOverview.by_storage_provider).map(([providerCode, count]) => (
-                      <span className="tag" key={providerCode}>
-                        {providerCode}: {count}
-                      </span>
-                    ))}
-                  </div>
-                    <div className="record-card form-stack" style={{ marginBottom: 16 }}>
+                  <div className="record-card form-stack" style={{ marginBottom: 16 }}>
                     <div className="eyebrow">{mediaIssueCopy.recentIssuesTitle}</div>
                     <div className="muted">
                       {mediaIssueCopy.recentIssuesDescription}

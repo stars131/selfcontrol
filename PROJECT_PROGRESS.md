@@ -306,6 +306,10 @@ Last updated: 2026-03-22
   - reminder creation form and per-record reminder list rendering now live in `apps/web/components/record-reminder-panel.tsx`
   - the parent panel now supplies reminder state, formatting, and mutation callbacks while the reminder UI owns the detailed reminder presentation
   - this removes another sizable inline section from `record-panel-v2` and continues the enterprise-grade modularization path
+- Media Storage Overview Extraction V1:
+  - media storage summary cards and processing overview tags now render through `apps/web/components/media-storage-overview.tsx`
+  - the parent panel now passes storage and processing summary data while the overview component owns the summary presentation layout
+  - this trims another stable display block from `record-panel-v2` without changing media-processing behavior
 
 ## Next
 - Continue the next product slice
