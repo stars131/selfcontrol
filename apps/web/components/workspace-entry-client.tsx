@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import { LanguageSwitcher } from "./language-switcher";
 import { WorkspaceCreateSection } from "./workspace-create-section";
+import { WorkspaceImportSection } from "./workspace-import-section";
 import { WorkspaceJoinSection } from "./workspace-join-section";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
 import { WorkspaceListSection } from "./workspace-list-section";
@@ -402,54 +403,20 @@ export function WorkspaceEntryClient() {
               shareTokenInput={shareTokenInput}
             />
 
-            <section className="record-card">
-              <div className="eyebrow">{copy.importEyebrow}</div>
-              <h2 style={{ margin: "8px 0 12px" }}>{copy.importTitle}</h2>
-              <div className="form-stack">
-                <label className="field">
-                  <span className="field-label">{copy.importArchive}</span>
-                  <input
-                    ref={fileInputRef}
-                    className="input"
-                    type="file"
-                    accept=".zip,application/zip"
-                    onChange={(event) => setImportFile(event.target.files?.[0] ?? null)}
-                  />
-                </label>
-                <label className="field">
-                  <span className="field-label">{copy.importName}</span>
-                  <input
-                    className="input"
-                    value={importName}
-                    onChange={(event) => setImportName(event.target.value)}
-                  />
-                </label>
-                <label className="field">
-                  <span className="field-label">{copy.importSlug}</span>
-                  <input
-                    className="input"
-                    value={importSlug}
-                    onChange={(event) => setImportSlug(event.target.value)}
-                  />
-                </label>
-                <button
-                  className="button"
-                  type="button"
-                  disabled={importing || !importFile}
-                  onClick={() => void handleImportWorkspace()}
-                >
-                  {importing ? `${copy.importWorkspace}...` : copy.importWorkspace}
-                </button>
-                <button
-                  className="button secondary"
-                  type="button"
-                  disabled={queueingImportJob || !importFile}
-                  onClick={() => void handleQueueImportJob()}
-                >
-                  {queueingImportJob ? `${copy.queueImportJob}...` : copy.queueImportJob}
-                </button>
-              </div>
-            </section>
+            <WorkspaceImportSection
+              copy={copy}
+              fileInputRef={fileInputRef}
+              importFile={importFile}
+              importName={importName}
+              importSlug={importSlug}
+              importing={importing}
+              onImportFileChange={setImportFile}
+              onImportNameChange={setImportName}
+              onImportSlugChange={setImportSlug}
+              onImportWorkspace={handleImportWorkspace}
+              onQueueImportJob={handleQueueImportJob}
+              queueingImportJob={queueingImportJob}
+            />
 
             <WorkspaceListSection copy={copy} workspaces={workspaces} />
 
