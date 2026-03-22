@@ -18,13 +18,10 @@ import {
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
-import { LocationReviewPanel } from "./location-review-panel";
-import { RecordEditorFields } from "./record-editor-fields";
-import { RecordMediaTools } from "./record-media-tools";
+import { RecordEditorWorkspace } from "./record-editor-workspace";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordResultsView } from "./record-results-view";
 import { RecordPanelStats } from "./record-panel-stats";
-import { RecordReminderTools } from "./record-reminder-tools";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
@@ -601,201 +598,81 @@ export function RecordPanelV2({
           }
         />
 
-        <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={handleSubmit}>
-          <RecordEditorFields
-            canWriteWorkspace={canWriteWorkspace}
-            editorLabel={selectedRecord ? panelCopy.editRecord : panelCopy.newManualRecord}
-            form={form}
-            onAddressChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                location: { ...prev.location, address: value, source: "manual" },
-              }))
-            }
-            onAvoidChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                is_avoid: value,
-              }))
-            }
-            onContentChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                content: value,
-              }))
-            }
-            onLatitudeChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                location: { ...prev.location, latitude: value, source: "manual" },
-              }))
-            }
-            onLongitudeChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                location: { ...prev.location, longitude: value, source: "manual" },
-              }))
-            }
-            onOccurredAtChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                occurred_at: value,
-              }))
-            }
-            onPlaceNameChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                location: { ...prev.location, place_name: value, source: "manual" },
-              }))
-            }
-            onRatingChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                rating: value,
-              }))
-            }
-            onTitleChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                title: value,
-              }))
-            }
-            onTypeCodeChange={(value) =>
-              setForm((prev) => ({
-                ...prev,
-                type_code: value,
-              }))
-            }
-            panelCopy={panelCopy}
-          />
-          <LocationReviewPanel
-            canWriteWorkspace={canWriteWorkspace}
-            formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-            formatReviewStatusLabel={formatReviewStatusLabel}
-            hasSelectedRecord={Boolean(selectedRecord)}
-            onMarkConfirmed={() =>
-              setLocationReviewForm((prev) => ({
-                ...prev,
-                status: "confirmed",
-              }))
-            }
-            onMarkNeedsReview={() =>
-              setLocationReviewForm((prev) => ({
-                ...prev,
-                status: "needs_review",
-              }))
-            }
-            onNoteChange={(value) =>
-              setLocationReviewForm((prev) => ({
-                ...prev,
-                note: value,
-              }))
-            }
-            onResetReview={() =>
-              setLocationReviewForm({
-                status: "pending",
-                note: "",
-              })
-            }
-            onStatusChange={(value) =>
-              setLocationReviewForm((prev) => ({
-                ...prev,
-                status: value,
-              }))
-            }
-            panelCopy={panelCopy}
-            reviewForm={locationReviewForm}
-            selectedLocationHistory={selectedLocationHistory}
-            selectedLocationReview={selectedLocationReview}
-            summarizeHistoryActionLabel={summarizeHistoryActionLabel}
-          />
-          <RecordMediaTools
-            allTrackedFilesPresentLabel={panelCopy.allTrackedFilesPresent}
-            authToken={authToken}
-            bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-            canWriteWorkspace={canWriteWorkspace}
-            deleteButtonLabel={deleting ? panelCopy.deleting : panelCopy.deleteRecord}
-            deleting={deleting}
-            deletingMediaId={deletingMediaId}
-            downloadingMediaId={downloadingMediaId}
-            error={error}
-            formatFileCountLabel={formatFileCountLabel}
-            formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-            hasSelectedRecord={Boolean(selectedRecord)}
-            largestFilePrefixLabel={detailCopy.largestFilePrefix}
-            localLabel={panelCopy.local}
-            locale={locale}
-            mediaAssets={mediaAssets}
-            mediaDeadLetterOverview={mediaDeadLetterOverview}
-            mediaIssueCopy={mediaIssueCopy}
-            mediaProcessingOverview={mediaProcessingOverview}
-            mediaStorageSummary={mediaStorageSummary}
-            missingFilesLabel={panelCopy.missingFiles}
-            needsAttentionLabel={panelCopy.needsAttention}
-            noMediaLabel={detailCopy.noMedia}
-            onBulkRetryAllDeadLetter={() => handleBulkRetryDeadLetter("all")}
-            onBulkRetrySelectedDeadLetter={() => handleBulkRetryDeadLetter("selected")}
-            onClearDeadLetterSelection={handleClearDeadLetterSelection}
-            onDelete={handleDelete}
-            onDeleteMediaAsset={handleDeleteMediaAsset}
-            onDownloadMedia={handleDownloadMedia}
-            onRefreshMedia={handleRefreshMedia}
-            onRetryMediaProcessing={handleRetryMediaProcessing}
-            onSelectAllDeadLetter={handleSelectAllDeadLetter}
-            onToggleDeadLetterSelection={handleToggleDeadLetterSelection}
-            onUpload={handleUpload}
-            processingCompletedLabel={panelCopy.processingCompleted}
-            queuedLabel={panelCopy.queued}
-            queueStateLabel={panelCopy.queueState}
-            refreshingMediaId={refreshingMediaId}
-            remoteLabel={panelCopy.remote}
-            retryingMediaId={retryingMediaId}
-            saveButtonLabel={saving ? panelCopy.saving : selectedRecord ? panelCopy.updateRecord : panelCopy.createRecord}
-            saving={saving}
-            selectedDeadLetterIds={selectedDeadLetterIds}
-            selectedRecordMediaSizeLabel={formatByteCount(selectedRecordMediaSizeBytes)}
-            storageHealthLabel={panelCopy.storageHealth}
-            storageMixLabel={panelCopy.storageMix}
-            thisRecordMediaLabel={panelCopy.thisRecordMedia}
-            uploadAttachmentLabel={panelCopy.uploadAttachment}
-            uploading={uploading}
-            uploadingMediaLabel={panelCopy.uploadingMedia}
-            workspaceId={workspaceId}
-            workspaceStorageLabel={panelCopy.workspaceStorage}
-          />
-          <RecordReminderTools
-            canWriteWorkspace={canWriteWorkspace}
-            channelInApp={detailCopy.channelInApp}
-            channelLabel={detailCopy.channelLabel}
-            createReminderLabel={detailCopy.createReminder}
-            deleteReminderLabel={detailCopy.deleteReminder}
-            enableReminderLabel={detailCopy.enableReminder}
-            formatReminderEnabledLabel={formatReminderEnabledLabel}
-            formatReminderStatusLabel={formatReminderStatusLabel}
-            formatReminderTimestampLabel={formatReminderTimestampLabel}
-            hasSelectedRecord={Boolean(selectedRecord)}
-            markReminderDoneLabel={detailCopy.markReminderDone}
-            noRemindersLabel={detailCopy.noReminders}
-            onCreateReminder={handleCreateReminderSubmit}
-            onDeleteReminder={onDeleteReminder}
-            onUpdateReminder={onUpdateReminder}
-            pauseReminderLabel={detailCopy.pauseReminder}
-            reminderForm={reminderForm}
-            reminderNoteLabel={detailCopy.reminderNoteLabel}
-            reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
-            reminderSectionDescription={detailCopy.reminderSectionDescription}
-            reminderSectionTitle={detailCopy.reminderSectionTitle}
-            reminderTitleLabel={detailCopy.reminderTitleLabel}
-            reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
-            remindAtLabel={detailCopy.remindAtLabel}
-            reminders={reminders}
-            savingReminder={savingReminder}
-            savingReminderLabel={detailCopy.savingReminder}
-            selectedRecordTitle={selectedRecord?.title ?? null}
-            setReminderForm={setReminderForm}
-            untitledReminderLabel={detailCopy.untitledReminder}
-          />
-        </form>
+        <RecordEditorWorkspace
+          authToken={authToken}
+          bulkRetryingDeadLetter={bulkRetryingDeadLetter}
+          canWriteWorkspace={canWriteWorkspace}
+          channelInAppLabel={detailCopy.channelInApp}
+          channelLabel={detailCopy.channelLabel}
+          createReminderLabel={detailCopy.createReminder}
+          deleteReminderLabel={detailCopy.deleteReminder}
+          deleting={deleting}
+          deletingMediaId={deletingMediaId}
+          downloadingMediaId={downloadingMediaId}
+          enableReminderLabel={detailCopy.enableReminder}
+          error={error}
+          form={form}
+          formatFileCountLabel={formatFileCountLabel}
+          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+          formatReminderEnabledLabel={formatReminderEnabledLabel}
+          formatReminderStatusLabel={formatReminderStatusLabel}
+          formatReminderTimestampLabel={formatReminderTimestampLabel}
+          formatReviewStatusLabel={formatReviewStatusLabel}
+          largestFilePrefixLabel={detailCopy.largestFilePrefix}
+          locale={locale}
+          locationReviewForm={locationReviewForm}
+          markReminderDoneLabel={detailCopy.markReminderDone}
+          mediaAssets={mediaAssets}
+          mediaDeadLetterOverview={mediaDeadLetterOverview}
+          mediaIssueCopy={mediaIssueCopy}
+          mediaProcessingOverview={mediaProcessingOverview}
+          mediaStorageSummary={mediaStorageSummary}
+          noMediaLabel={detailCopy.noMedia}
+          noRemindersLabel={detailCopy.noReminders}
+          onBulkRetryAllDeadLetter={() => handleBulkRetryDeadLetter("all")}
+          onBulkRetrySelectedDeadLetter={() => handleBulkRetryDeadLetter("selected")}
+          onClearDeadLetterSelection={handleClearDeadLetterSelection}
+          onCreateReminder={handleCreateReminderSubmit}
+          onDelete={handleDelete}
+          onDeleteMediaAsset={handleDeleteMediaAsset}
+          onDeleteReminder={onDeleteReminder}
+          onDownloadMedia={handleDownloadMedia}
+          onRefreshMedia={handleRefreshMedia}
+          onRetryMediaProcessing={handleRetryMediaProcessing}
+          onSelectAllDeadLetter={handleSelectAllDeadLetter}
+          onSubmit={handleSubmit}
+          onToggleDeadLetterSelection={handleToggleDeadLetterSelection}
+          onUpdateReminder={onUpdateReminder}
+          onUpload={handleUpload}
+          panelCopy={panelCopy}
+          pauseReminderLabel={detailCopy.pauseReminder}
+          refreshingMediaId={refreshingMediaId}
+          reminderForm={reminderForm}
+          reminderNoteLabel={detailCopy.reminderNoteLabel}
+          reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
+          reminderSectionDescription={detailCopy.reminderSectionDescription}
+          reminderSectionTitle={detailCopy.reminderSectionTitle}
+          reminderTitleLabel={detailCopy.reminderTitleLabel}
+          reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
+          remindAtLabel={detailCopy.remindAtLabel}
+          reminders={reminders}
+          retryingMediaId={retryingMediaId}
+          saving={saving}
+          savingReminder={savingReminder}
+          savingReminderLabel={detailCopy.savingReminder}
+          selectedDeadLetterIds={selectedDeadLetterIds}
+          selectedLocationHistory={selectedLocationHistory}
+          selectedLocationReview={selectedLocationReview}
+          selectedRecord={selectedRecord}
+          selectedRecordMediaSizeLabel={formatByteCount(selectedRecordMediaSizeBytes)}
+          setForm={setForm}
+          setLocationReviewForm={setLocationReviewForm}
+          setReminderForm={setReminderForm}
+          summarizeHistoryActionLabel={summarizeHistoryActionLabel}
+          untitledReminderLabel={detailCopy.untitledReminder}
+          uploading={uploading}
+          workspaceId={workspaceId}
+        />
         <RecordResultsView
           avoidLabel={detailCopy.avoidLabel}
           flatListViewLabel={detailCopy.flatListView}

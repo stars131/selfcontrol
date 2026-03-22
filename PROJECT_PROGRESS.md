@@ -338,10 +338,14 @@ Last updated: 2026-03-22
   - reminder orchestration for the selected record now lives in `apps/web/components/record-reminder-tools.tsx` instead of being assembled inline inside `record-panel-v2`
   - the parent panel now passes reminder state, update actions, and locale labels while the dedicated reminder-tools component owns the reminder container wiring
   - this trims another callback-heavy block from the oversized panel and improves reviewability for future reminder behavior changes
+- Record Editor Workspace Extraction V1:
+  - the record edit form shell now lives in `apps/web/components/record-editor-workspace.tsx` instead of keeping the editor, review, media, and reminder assembly inline inside `record-panel-v2`
+  - the parent panel now focuses on state, derived data, and async handlers while the dedicated workspace component owns the form composition boundary
+  - this drops the main panel file size again and keeps future record-edit UI changes on a smaller enterprise-grade review surface
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the reminder-tools extraction
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the editor-workspace extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
