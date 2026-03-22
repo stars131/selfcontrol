@@ -568,10 +568,14 @@ Last updated: 2026-03-23
   - chat conversation switching and reminder-sync controls now live in `apps/web/components/chat-conversation-bar.tsx` instead of remaining inline inside `chat-panel.tsx`
   - the chat panel now focuses more narrowly on operator cards, message thread composition, and composer controls while the dedicated conversation-bar component owns conversation list rendering
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the conversation-bar boundary and lowers the chat-panel size ceiling again
+- Record Panel Workspace Props Helper Extraction V1:
+  - record-panel browse/editor workspace prop shaping now lives in `apps/web/components/record-panel-v2-workspace-props.ts` instead of remaining inline inside `record-panel-v2.tsx`
+  - `record-panel-v2.tsx` now focuses more narrowly on controller wiring, header rendering, and two workspace mounts while the dedicated helper module owns large child-prop adaptation
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the workspace-props helper boundary and lowers the record-panel shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat conversation bar extraction
+- Continue simplifying remaining large UI module boundaries after the record panel workspace props helper extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

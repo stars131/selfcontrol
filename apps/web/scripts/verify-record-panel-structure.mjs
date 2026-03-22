@@ -9,8 +9,20 @@ if (!source.includes('import { useRecordPanelController } from "./use-record-pan
   throw new Error("record-panel-v2.tsx must import useRecordPanelController");
 }
 
+if (!source.includes('from "./record-panel-v2-workspace-props";')) {
+  throw new Error("record-panel-v2.tsx must import record-panel-v2-workspace-props");
+}
+
 if (!source.includes("useRecordPanelController({")) {
   throw new Error("record-panel-v2.tsx must delegate controller logic to useRecordPanelController");
+}
+
+if (!source.includes("buildRecordBrowseWorkspaceProps({")) {
+  throw new Error("record-panel-v2.tsx must delegate browse workspace prop shaping to buildRecordBrowseWorkspaceProps");
+}
+
+if (!source.includes("buildRecordEditorWorkspaceProps({")) {
+  throw new Error("record-panel-v2.tsx must delegate editor workspace prop shaping to buildRecordEditorWorkspaceProps");
 }
 
 for (const forbiddenToken of [
@@ -20,13 +32,15 @@ for (const forbiddenToken of [
   "useStoredLocale(",
   "fetchMediaBlob(",
   "const handle",
+  "<RecordBrowseWorkspace\n          applyPresetLabel=",
+  "<RecordEditorWorkspace\n          authToken=",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`record-panel-v2.tsx must remain a thin shell; found forbidden token: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 320;
+const maxAllowedLines = 245;
 if (normalizedLines.length > maxAllowedLines) {
   throw new Error(`record-panel-v2.tsx exceeded ${maxAllowedLines} lines: ${normalizedLines.length}`);
 }

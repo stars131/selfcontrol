@@ -3,6 +3,10 @@
 import { RecordBrowseWorkspace } from "./record-browse-workspace";
 import { RecordEditorWorkspace } from "./record-editor-workspace";
 import type { RecordPanelV2Props } from "./record-panel-v2.types";
+import {
+  buildRecordBrowseWorkspaceProps,
+  buildRecordEditorWorkspaceProps,
+} from "./record-panel-v2-workspace-props";
 import { useRecordPanelController } from "./use-record-panel-controller";
 
 export function RecordPanelV2({
@@ -119,6 +123,97 @@ export function RecordPanelV2({
     onUploadMedia,
     recordFilter,
   });
+  const browseWorkspaceProps = buildRecordBrowseWorkspaceProps({
+    canWriteWorkspace,
+    records,
+    timelineDays,
+    selectedRecordId,
+    recordFilter,
+    searchPresets,
+    onApplyLocationFilter,
+    onApplyRecordFilter,
+    onResetFilter,
+    onSelectRecord,
+    avoidCount,
+    detailCopy,
+    filterDraft,
+    filteringRecords,
+    foodCount,
+    form,
+    formatAvoidCountLabel,
+    formatRecordTimestampLabel,
+    formatReviewStatusLabel,
+    formatTimelineCountLabel,
+    formatTimelineDateLabel,
+    handleApplyFilter,
+    handleDeletePreset,
+    handleSavePreset,
+    panelCopy,
+    presetName,
+    savingSearchPreset,
+    setFilterDraft,
+    setForm,
+    setPresetName,
+    setViewMode,
+    summarizeRecordFilterLabel,
+    viewMode,
+  });
+  const editorWorkspaceProps = buildRecordEditorWorkspaceProps({
+    authToken,
+    canWriteWorkspace,
+    workspaceId,
+    mediaAssets,
+    mediaDeadLetterOverview,
+    mediaProcessingOverview,
+    mediaStorageSummary,
+    reminders,
+    onDeleteReminder,
+    onUpdateReminder,
+    bulkRetryingDeadLetter,
+    deleting,
+    deletingMediaId,
+    detailCopy,
+    downloadingMediaId,
+    error,
+    form,
+    formatFileCountLabel,
+    formatHistoryTimestampLabel,
+    formatReminderEnabledLabel,
+    formatReminderStatusLabel,
+    formatReminderTimestampLabel,
+    formatReviewStatusLabel,
+    handleBulkRetryDeadLetter,
+    handleClearDeadLetterSelection,
+    handleCreateReminderSubmit,
+    handleDelete,
+    handleDeleteMediaAsset,
+    handleDownloadMedia,
+    handleRefreshMedia,
+    handleRetryMediaProcessing,
+    handleSelectAllDeadLetter,
+    handleSubmit,
+    handleToggleDeadLetterSelection,
+    handleUpload,
+    locale,
+    locationReviewForm,
+    mediaIssueCopy,
+    panelCopy,
+    refreshingMediaId,
+    reminderForm,
+    retryingMediaId,
+    saving,
+    savingReminder,
+    selectedDeadLetterIds,
+    selectedLocationHistory,
+    selectedLocationReview,
+    selectedRecord,
+    selectedRecordMediaSizeLabel,
+    setForm,
+    setLocationReviewForm,
+    setReminderForm,
+    summarizeHistoryActionLabel,
+    uploading,
+  });
 
   return (
     <section className="panel">
@@ -139,143 +234,8 @@ export function RecordPanelV2({
         </div>
       </div>
       <div className="panel-body">
-        <RecordBrowseWorkspace
-          applyPresetLabel={panelCopy.applyPreset}
-          avoidCount={avoidCount}
-          avoidRecordLabel={detailCopy.avoidLabel}
-          avoidStatsLabel={panelCopy.avoid}
-          canWriteWorkspace={canWriteWorkspace}
-          currentFilterSummary={summarizeRecordFilterLabel(recordFilter)}
-          deletePresetLabel={panelCopy.deletePreset}
-          draftLocation={canWriteWorkspace ? form.location : null}
-          filteringRecords={filteringRecords}
-          filterDraft={filterDraft}
-          flatListViewLabel={detailCopy.flatListView}
-          foodCount={foodCount}
-          foodLabel={panelCopy.food}
-          formatAvoidCountLabel={formatAvoidCountLabel}
-          formatRecordTimestampLabel={formatRecordTimestampLabel}
-          formatReviewStatusLabel={formatReviewStatusLabel}
-          formatTimelineCountLabel={formatTimelineCountLabel}
-          formatTimelineDateLabel={formatTimelineDateLabel}
-          mapPrefixLabel={detailCopy.mapPrefix}
-          noContentLabel={detailCopy.noContent}
-          noRecordsLabel={detailCopy.noRecords}
-          noSavedFiltersLabel={panelCopy.noSavedFilters}
-          onApplyFilter={handleApplyFilter}
-          onApplyLocationFilter={onApplyLocationFilter}
-          onApplyPreset={onApplyRecordFilter}
-          onDeletePreset={handleDeletePreset}
-          onDraftLocationChange={
-            canWriteWorkspace
-              ? (nextLocation) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: nextLocation,
-                  }))
-              : undefined
-          }
-          onResetFilter={onResetFilter}
-          onSavePreset={handleSavePreset}
-          onSelectRecord={onSelectRecord}
-          panelCopy={panelCopy}
-          presetName={presetName}
-          ratingPrefixLabel={detailCopy.ratingPrefix}
-          recordFilter={recordFilter}
-          records={records}
-          savedPresetLabel={panelCopy.savedPreset}
-          savingSearchPreset={savingSearchPreset}
-          searchPresets={searchPresets}
-          selectedRecordId={selectedRecordId}
-          setFilterDraft={setFilterDraft}
-          setPresetName={setPresetName}
-          setViewMode={setViewMode}
-          summarizeRecordFilterLabel={summarizeRecordFilterLabel}
-          timelineDayLabel={detailCopy.timelineDayLabel}
-          timelineDays={timelineDays}
-          timelineViewLabel={detailCopy.timelineView}
-          unknownPlaceLabel={detailCopy.unknownPlace}
-          untitledRecordLabel={detailCopy.untitledRecord}
-          viewMode={viewMode}
-          visibleRecordCount={records.length}
-          visibleRecordsLabel={panelCopy.visibleRecords}
-        />
-
-        <RecordEditorWorkspace
-          authToken={authToken}
-          bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-          canWriteWorkspace={canWriteWorkspace}
-          channelInAppLabel={detailCopy.channelInApp}
-          channelLabel={detailCopy.channelLabel}
-          createReminderLabel={detailCopy.createReminder}
-          deleteReminderLabel={detailCopy.deleteReminder}
-          deleting={deleting}
-          deletingMediaId={deletingMediaId}
-          downloadingMediaId={downloadingMediaId}
-          enableReminderLabel={detailCopy.enableReminder}
-          error={error}
-          form={form}
-          formatFileCountLabel={formatFileCountLabel}
-          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-          formatReminderEnabledLabel={formatReminderEnabledLabel}
-          formatReminderStatusLabel={formatReminderStatusLabel}
-          formatReminderTimestampLabel={formatReminderTimestampLabel}
-          formatReviewStatusLabel={formatReviewStatusLabel}
-          largestFilePrefixLabel={detailCopy.largestFilePrefix}
-          locale={locale}
-          locationReviewForm={locationReviewForm}
-          markReminderDoneLabel={detailCopy.markReminderDone}
-          mediaAssets={mediaAssets}
-          mediaDeadLetterOverview={mediaDeadLetterOverview}
-          mediaIssueCopy={mediaIssueCopy}
-          mediaProcessingOverview={mediaProcessingOverview}
-          mediaStorageSummary={mediaStorageSummary}
-          noMediaLabel={detailCopy.noMedia}
-          noRemindersLabel={detailCopy.noReminders}
-          onBulkRetryAllDeadLetter={() => handleBulkRetryDeadLetter("all")}
-          onBulkRetrySelectedDeadLetter={() => handleBulkRetryDeadLetter("selected")}
-          onClearDeadLetterSelection={handleClearDeadLetterSelection}
-          onCreateReminder={handleCreateReminderSubmit}
-          onDelete={handleDelete}
-          onDeleteMediaAsset={handleDeleteMediaAsset}
-          onDeleteReminder={onDeleteReminder}
-          onDownloadMedia={handleDownloadMedia}
-          onRefreshMedia={handleRefreshMedia}
-          onRetryMediaProcessing={handleRetryMediaProcessing}
-          onSelectAllDeadLetter={handleSelectAllDeadLetter}
-          onSubmit={handleSubmit}
-          onToggleDeadLetterSelection={handleToggleDeadLetterSelection}
-          onUpdateReminder={onUpdateReminder}
-          onUpload={handleUpload}
-          panelCopy={panelCopy}
-          pauseReminderLabel={detailCopy.pauseReminder}
-          refreshingMediaId={refreshingMediaId}
-          reminderForm={reminderForm}
-          reminderNoteLabel={detailCopy.reminderNoteLabel}
-          reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
-          reminderSectionDescription={detailCopy.reminderSectionDescription}
-          reminderSectionTitle={detailCopy.reminderSectionTitle}
-          reminderTitleLabel={detailCopy.reminderTitleLabel}
-          reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
-          remindAtLabel={detailCopy.remindAtLabel}
-          reminders={reminders}
-          retryingMediaId={retryingMediaId}
-          saving={saving}
-          savingReminder={savingReminder}
-          savingReminderLabel={detailCopy.savingReminder}
-          selectedDeadLetterIds={selectedDeadLetterIds}
-          selectedLocationHistory={selectedLocationHistory}
-          selectedLocationReview={selectedLocationReview}
-          selectedRecord={selectedRecord}
-          selectedRecordMediaSizeLabel={selectedRecordMediaSizeLabel}
-          setForm={setForm}
-          setLocationReviewForm={setLocationReviewForm}
-          setReminderForm={setReminderForm}
-          summarizeHistoryActionLabel={summarizeHistoryActionLabel}
-          untitledReminderLabel={detailCopy.untitledReminder}
-          uploading={uploading}
-          workspaceId={workspaceId}
-        />
+        <RecordBrowseWorkspace {...browseWorkspaceProps} />
+        <RecordEditorWorkspace {...editorWorkspaceProps} />
       </div>
     </section>
   );
