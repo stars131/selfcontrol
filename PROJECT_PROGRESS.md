@@ -231,6 +231,7 @@ Last updated: 2026-03-22
   - workspace media retention file lists now live in a dedicated lists component so report overview, actions, and per-item rendering stay independently maintainable
   - workspace media retention header and threshold filter now live in a dedicated header component so report framing stays separate from action and summary rendering
   - map drill-down filtering controls now live in a dedicated card component so map canvas logic stays separate from filter form rendering
+  - map mapped-record drill-down results now live in a dedicated list component so map marker lifecycle and result-card rendering stay independently maintainable
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 - Remote Media Provider Action Shortcuts and Settings Deep Links V1:

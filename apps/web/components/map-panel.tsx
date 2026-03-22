@@ -15,6 +15,7 @@ import {
 } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
 import { MapDrilldownCard } from "./map-drilldown-card";
+import { MappedRecordsList } from "./mapped-records-list";
 import { useMapPanelController } from "./use-map-panel-controller";
 
 export type { LocationDraft } from "../lib/map-panel";
@@ -251,29 +252,11 @@ export function MapPanel({
         </div>
       ) : null}
       <div className="map-canvas" ref={containerRef} />
-      {mappedRecords.length ? (
-        <div className="record-list compact-list" style={{ marginTop: 12 }}>
-          {mappedRecords.slice(0, 8).map((record) => (
-            <button
-              className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
-              key={record.id}
-              type="button"
-              onClick={() => onSelectRecord(record.id)}
-            >
-              <div className="eyebrow">{record.reviewStatus}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>{record.placeName}</div>
-              {record.address ? (
-                <div className="muted" style={{ marginTop: 8 }}>
-                  {record.address}
-                </div>
-              ) : null}
-              <div className="muted" style={{ marginTop: 8 }}>
-                {record.latitude.toFixed(5)}, {record.longitude.toFixed(5)}
-              </div>
-            </button>
-          ))}
-        </div>
-      ) : null}
+      <MappedRecordsList
+        mappedRecords={mappedRecords}
+        onSelectRecord={onSelectRecord}
+        selectedRecordId={selectedRecordId}
+      />
       {draftLocation?.latitude && draftLocation?.longitude ? (
         <div className="muted" style={{ marginTop: 12 }}>
           Current point: {draftLocation.latitude}, {draftLocation.longitude}

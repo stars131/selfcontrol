@@ -17,12 +17,20 @@ if (!mapPanelSource.includes('import { MapDrilldownCard } from "./map-drilldown-
   throw new Error("map-panel.tsx must import MapDrilldownCard");
 }
 
+if (!mapPanelSource.includes('import { MappedRecordsList } from "./mapped-records-list";')) {
+  throw new Error("map-panel.tsx must import MappedRecordsList");
+}
+
 if (!mapPanelSource.includes("useMapPanelController({")) {
   throw new Error("map-panel.tsx must delegate map search and filter orchestration to useMapPanelController");
 }
 
 if (!mapPanelSource.includes("<MapDrilldownCard")) {
   throw new Error("map-panel.tsx must delegate drill-down filter rendering to MapDrilldownCard");
+}
+
+if (!mapPanelSource.includes("<MappedRecordsList")) {
+  throw new Error("map-panel.tsx must delegate mapped-record rendering to MappedRecordsList");
 }
 
 for (const forbiddenToken of [
@@ -45,13 +53,14 @@ for (const forbiddenToken of [
   'value={filterDraft.placeQuery}',
   'value={filterDraft.mappedOnly}',
   'value={filterDraft.reviewStatus}',
+  'mappedRecords.slice(0, 8).map((record)',
 ]) {
   if (mapPanelSource.includes(forbiddenToken)) {
     throw new Error(`map-panel.tsx must not reintroduce extracted helper logic: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 300;
+const maxAllowedLines = 280;
 if (mapPanelLineCount > maxAllowedLines) {
   throw new Error(`map-panel.tsx exceeded ${maxAllowedLines} lines: ${mapPanelLineCount}`);
 }
