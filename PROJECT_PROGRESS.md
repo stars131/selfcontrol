@@ -600,10 +600,14 @@ Last updated: 2026-03-23
   - chat panel header and composer now live in `apps/web/components/chat-panel-header.tsx` and `apps/web/components/chat-panel-composer.tsx` instead of remaining inline inside `chat-panel.tsx`
   - the chat panel now focuses more narrowly on assistant workspace composition while dedicated presentation components own top-level navigation entry and chat input rendering
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces both boundaries and lowers the `chat-panel.tsx` size ceiling again under the enterprise maintainability standard
+- Dead Letter Recovery Structure Extraction V1:
+  - dead-letter overview summary, bulk action toolbar, and per-item recovery card now live in dedicated components and types instead of remaining inline inside `apps/web/components/dead-letter-recovery-panel.tsx`
+  - the dead-letter recovery shell now focuses more narrowly on recovery-state composition while dedicated modules own summary rendering and per-item retry/settings behavior
+  - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` and `apps/web/package.json` now make this media recovery boundary executable under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat panel header and composer extraction
+- Continue simplifying remaining large UI module boundaries after the dead-letter recovery extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
