@@ -386,10 +386,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now additionally enforces that `workspace-shell-client.tsx` must wire lifecycle logic through `use-workspace-shell-effects.ts`
   - the guard now fails if `useEffect` is reintroduced directly into the workspace shell, keeping lifecycle complexity out of the main shell component
   - this makes the workspace-shell lifecycle boundary executable and keeps future large-shell changes aligned with the enterprise maintainability standard
+- Workspace Shell Actions Hook Extraction V1:
+  - workspace-shell action handlers for chat, records, media, reminders, notifications, sharing, and provider updates now live in `apps/web/components/use-workspace-shell-actions.ts`
+  - the main workspace shell now focuses more narrowly on state declaration, permission derivation, and component composition while the dedicated actions hook owns business-action orchestration
+  - this drops the shell component size again and significantly lowers the review surface for future workspace interaction changes
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-shell effects guard extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-shell actions hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
