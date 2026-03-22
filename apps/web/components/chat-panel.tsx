@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useStoredLocale } from "../lib/locale";
+import { ChatAuditLogsCard } from "./chat-audit-logs-card";
 import { ChatKnowledgeCard } from "./chat-knowledge-card";
 import { ChatShareLinksCard } from "./chat-share-links-card";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
@@ -202,38 +203,11 @@ export function ChatPanel({
             </div>
           </>
         ) : null}
-        <div className="record-card" style={{ marginBottom: 16 }}>
-          <div className="action-row" style={{ justifyContent: "space-between" }}>
-            <div className="eyebrow">Audit Logs</div>
-            <button
-              className="button secondary"
-              disabled={refreshingAudit}
-              type="button"
-              onClick={() => void handleRefreshAuditLogs()}
-            >
-              {refreshingAudit ? "Refreshing..." : "Refresh logs"}
-            </button>
-          </div>
-          <div className="record-list compact-list" style={{ marginTop: 12 }}>
-            {auditLogs.length ? (
-              auditLogs.map((item) => (
-                <article className="message" key={item.id}>
-                  <div className="eyebrow">
-                    {item.action_code} / {item.status}
-                  </div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>{item.message ?? item.resource_type}</div>
-                  {item.created_at ? (
-                    <div className="muted" style={{ marginTop: 8 }}>
-                      {new Date(item.created_at).toLocaleString()}
-                    </div>
-                  ) : null}
-                </article>
-              ))
-            ) : (
-              <div className="notice">No audit logs yet.</div>
-            )}
-          </div>
-        </div>
+        <ChatAuditLogsCard
+          auditLogs={auditLogs}
+          onRefreshAuditLogs={handleRefreshAuditLogs}
+          refreshingAudit={refreshingAudit}
+        />
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="eyebrow">Notifications</div>
           <div className="muted" style={{ marginTop: 8 }}>
