@@ -548,10 +548,14 @@ Last updated: 2026-03-23
   - the `media_storage` retry and fallback controls now live in `apps/web/components/provider-feature-media-storage-options.tsx` instead of remaining inline inside `provider-feature-card.tsx`
   - the provider feature card now focuses more narrowly on shared provider form fields, health-card composition, and save/reset controls while the dedicated subcomponent owns storage-specific option wiring
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this subcomponent boundary and adds a size ceiling for `provider-feature-card.tsx` itself
+- Chat Message Thread Extraction V1:
+  - assistant and user message rendering, source rendering, and the empty-thread assistant prompt now live in `apps/web/components/chat-message-thread.tsx` instead of remaining inline inside `chat-panel.tsx`
+  - the chat panel now focuses more narrowly on action wiring, operator cards, and composer controls while the dedicated thread component owns conversation rendering
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the thread boundary, keeps source rendering checks active there, and lowers the chat-panel size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider feature media storage options extraction
+- Continue simplifying remaining large UI module boundaries after the chat message thread extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

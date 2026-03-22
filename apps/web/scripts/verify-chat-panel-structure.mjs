@@ -4,6 +4,8 @@ import path from "node:path";
 const chatPanelPath = path.resolve(process.cwd(), "components/chat-panel.tsx");
 const source = fs.readFileSync(chatPanelPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
+const chatMessageThreadSource = fs.readFileSync(chatMessageThreadPath, "utf8");
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -37,12 +39,20 @@ if (!source.includes("<ChatNotificationsCard")) {
   throw new Error("chat-panel.tsx must delegate notification rendering to ChatNotificationsCard");
 }
 
-if (!source.includes('import { ChatMessageSources } from "./chat-message-sources";')) {
-  throw new Error("chat-panel.tsx must import ChatMessageSources");
+if (!source.includes('import { ChatMessageThread } from "./chat-message-thread";')) {
+  throw new Error("chat-panel.tsx must import ChatMessageThread");
 }
 
-if (!source.includes("<ChatMessageSources")) {
-  throw new Error("chat-panel.tsx must delegate assistant source rendering to ChatMessageSources");
+if (!source.includes("<ChatMessageThread")) {
+  throw new Error("chat-panel.tsx must delegate message-thread rendering to ChatMessageThread");
+}
+
+if (!chatMessageThreadSource.includes('import { ChatMessageSources } from "./chat-message-sources";')) {
+  throw new Error("chat-message-thread.tsx must import ChatMessageSources");
+}
+
+if (!chatMessageThreadSource.includes("<ChatMessageSources")) {
+  throw new Error("chat-message-thread.tsx must delegate assistant source rendering to ChatMessageSources");
 }
 
 if (!source.includes('import { ChatShareLinksCard } from "./chat-share-links-card";')) {
@@ -68,13 +78,14 @@ for (const forbiddenToken of [
   "shareLinks.map((item)",
   "notifications.slice(0, 6).map((notification)",
   "metadata_json.sources.slice(0, 3).map((source, index)",
+  'className={`message ${message.role === "assistant" ? "assistant" : ""}`}',
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`chat-panel.tsx must keep action state and handler logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 270;
+const maxAllowedLines = 245;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
