@@ -9,7 +9,16 @@ if (!source.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("workspace-shell-client.tsx must import shared refresh helpers from ../lib/workspace-shell-refresh");
 }
 
+if (!source.includes('import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";')) {
+  throw new Error("workspace-shell-client.tsx must import useWorkspaceShellEffects");
+}
+
+if (!source.includes("useWorkspaceShellEffects({")) {
+  throw new Error("workspace-shell-client.tsx must delegate lifecycle synchronization to useWorkspaceShellEffects");
+}
+
 for (const forbiddenToken of [
+  "useEffect(",
   "listRecords(",
   "listMedia(",
   "listMessages(",
