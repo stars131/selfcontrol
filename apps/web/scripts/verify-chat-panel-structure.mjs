@@ -8,6 +8,10 @@ const chatConversationBarPath = path.resolve(process.cwd(), "components/chat-con
 const chatConversationBarSource = fs.readFileSync(chatConversationBarPath, "utf8");
 const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
 const chatMessageThreadSource = fs.readFileSync(chatMessageThreadPath, "utf8");
+const chatPanelHeaderPath = path.resolve(process.cwd(), "components/chat-panel-header.tsx");
+const chatPanelHeaderSource = fs.readFileSync(chatPanelHeaderPath, "utf8");
+const chatPanelComposerPath = path.resolve(process.cwd(), "components/chat-panel-composer.tsx");
+const chatPanelComposerSource = fs.readFileSync(chatPanelComposerPath, "utf8");
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -31,6 +35,22 @@ if (!source.includes("<ChatKnowledgeCard")) {
 
 if (!source.includes("<ChatConversationBar")) {
   throw new Error("chat-panel.tsx must delegate conversation-bar rendering to ChatConversationBar");
+}
+
+if (!source.includes('import { ChatPanelHeader } from "./chat-panel-header";')) {
+  throw new Error("chat-panel.tsx must import ChatPanelHeader");
+}
+
+if (!source.includes('import type { ChatPanelProps } from "./chat-panel.types";')) {
+  throw new Error("chat-panel.tsx must import ChatPanelProps");
+}
+
+if (!source.includes("<ChatPanelHeader")) {
+  throw new Error("chat-panel.tsx must delegate header rendering to ChatPanelHeader");
+}
+
+if (!chatPanelHeaderSource.includes('href={`/app/workspaces/${workspaceId}/settings`}')) {
+  throw new Error("chat-panel-header.tsx must keep the workspace settings entry");
 }
 
 if (!chatConversationBarSource.includes("className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}")) {
@@ -59,6 +79,22 @@ if (!source.includes('import { ChatMessageThread } from "./chat-message-thread";
 
 if (!source.includes("<ChatMessageThread")) {
   throw new Error("chat-panel.tsx must delegate message-thread rendering to ChatMessageThread");
+}
+
+if (!source.includes('import { ChatPanelComposer } from "./chat-panel-composer";')) {
+  throw new Error("chat-panel.tsx must import ChatPanelComposer");
+}
+
+if (!source.includes("<ChatPanelComposer")) {
+  throw new Error("chat-panel.tsx must delegate composer rendering to ChatPanelComposer");
+}
+
+if (!chatPanelComposerSource.includes("Examples: save this snack note")) {
+  throw new Error("chat-panel-composer.tsx must keep the write-mode placeholder");
+}
+
+if (!chatPanelComposerSource.includes("Viewer mode: chat creation is disabled for this shared workspace.")) {
+  throw new Error("chat-panel-composer.tsx must keep the viewer-mode placeholder");
 }
 
 if (!chatMessageThreadSource.includes('import { ChatMessageSources } from "./chat-message-sources";')) {
@@ -94,13 +130,15 @@ for (const forbiddenToken of [
   "metadata_json.sources.slice(0, 3).map((source, index)",
   'className={`message ${message.role === "assistant" ? "assistant" : ""}`}',
   "className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}",
+  'href={`/app/workspaces/${workspaceId}/settings`}',
+  'placeholder={',
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`chat-panel.tsx must keep action state and handler logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 220;
+const maxAllowedLines = 190;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

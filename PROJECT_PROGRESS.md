@@ -596,10 +596,14 @@ Last updated: 2026-03-23
   - landing-page locale copy now lives in `apps/web/components/landing-page-copy.ts` instead of remaining inline inside `landing-page-client.tsx`
   - the landing page now focuses more narrowly on locale state and page composition while the dedicated copy module owns localized marketing text payloads
   - `apps/web/scripts/verify-landing-page-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce a tighter size ceiling for `landing-page-client.tsx`
+- Chat Panel Header + Composer Extraction V1:
+  - chat panel header and composer now live in `apps/web/components/chat-panel-header.tsx` and `apps/web/components/chat-panel-composer.tsx` instead of remaining inline inside `chat-panel.tsx`
+  - the chat panel now focuses more narrowly on assistant workspace composition while dedicated presentation components own top-level navigation entry and chat input rendering
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces both boundaries and lowers the `chat-panel.tsx` size ceiling again under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the landing page copy extraction
+- Continue simplifying remaining large UI module boundaries after the chat panel header and composer extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

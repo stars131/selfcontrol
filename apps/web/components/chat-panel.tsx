@@ -1,25 +1,17 @@
 "use client";
 
-import Link from "next/link";
-
 import { useStoredLocale } from "../lib/locale";
 import { ChatAuditLogsCard } from "./chat-audit-logs-card";
+import { ChatPanelComposer } from "./chat-panel-composer";
 import { ChatConversationBar } from "./chat-conversation-bar";
 import { ChatKnowledgeCard } from "./chat-knowledge-card";
 import { ChatMessageThread } from "./chat-message-thread";
 import { ChatNotificationsCard } from "./chat-notifications-card";
+import { ChatPanelHeader } from "./chat-panel-header";
 import { ChatShareLinksCard } from "./chat-share-links-card";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
+import type { ChatPanelProps } from "./chat-panel.types";
 import { useChatPanelActions } from "./use-chat-panel-actions";
-import type {
-  AuditLogItem,
-  ChatMessage,
-  Conversation,
-  KnowledgeStats,
-  NotificationItem,
-  ProviderFeatureConfig,
-  ShareLinkItem,
-} from "../lib/types";
 
 export function ChatPanel({
   workspaceId,
@@ -46,46 +38,7 @@ export function ChatPanel({
   onSaveProviderConfig,
   onSyncNotifications,
   onSendMessage,
-}: {
-  workspaceId: string;
-  workspaceRole: "owner" | "editor" | "viewer";
-  canWriteWorkspace: boolean;
-  canManageWorkspace: boolean;
-  canManageSharing: boolean;
-  conversations: Conversation[];
-  activeConversationId: string | null;
-  messages: ChatMessage[];
-  notifications: NotificationItem[];
-  knowledgeStats: KnowledgeStats | null;
-  providerConfigs: ProviderFeatureConfig[];
-  shareLinks: ShareLinkItem[];
-  latestSharePath: string;
-  auditLogs: AuditLogItem[];
-  onSelectConversation: (conversationId: string) => void;
-  onCreateConversation: () => Promise<void>;
-  onMarkNotificationRead: (notificationId: string) => Promise<void>;
-  onReindexKnowledge: () => Promise<void>;
-  onRefreshAuditLogs: () => Promise<void>;
-  onCreateShareLink: (input: {
-    name?: string;
-    permission_code: string;
-    max_uses?: number | null;
-  }) => Promise<void>;
-  onDisableShareLink: (shareLinkId: string) => Promise<void>;
-  onSaveProviderConfig: (
-    featureCode: string,
-    input: {
-      provider_code: string;
-      model_name?: string | null;
-      is_enabled: boolean;
-      api_base_url?: string | null;
-      api_key_env_name?: string | null;
-      options_json?: Record<string, unknown>;
-    },
-  ) => Promise<void>;
-  onSyncNotifications: () => Promise<void>;
-  onSendMessage: (message: string) => Promise<void>;
-}) {
+}: ChatPanelProps) {
   const { locale } = useStoredLocale();
   const {
     draft,
@@ -124,22 +77,11 @@ export function ChatPanel({
 
   return (
     <section className="panel">
-      <div className="panel-header">
-        <div>
-          <div className="eyebrow">Agent</div>
-          <h2 className="title" style={{ fontSize: 22 }}>
-            Chat Assistant
-          </h2>
-          <div className="muted" style={{ marginTop: 8 }}>
-            Workspace {workspaceId} / {workspaceRole}
-          </div>
-        </div>
-        {canManageWorkspace ? (
-          <Link className="button secondary" href={`/app/workspaces/${workspaceId}/settings`}>
-            Settings
-          </Link>
-        ) : null}
-      </div>
+      <ChatPanelHeader
+        canManageWorkspace={canManageWorkspace}
+        workspaceId={workspaceId}
+        workspaceRole={workspaceRole}
+      />
       <div className="panel-body">
         <ChatConversationBar
           activeConversationId={activeConversationId}
@@ -194,24 +136,14 @@ export function ChatPanel({
           unreadCount={unreadCount}
         />
         <ChatMessageThread messages={messages} />
-
-        <div className="composer">
-          <textarea
-            className="textarea"
-            disabled={!canWriteWorkspace}
-            placeholder={
-              canWriteWorkspace
-                ? "Examples: save this snack note..., bad hotpot in Hangzhou, ramen near last summer trip"
-                : "Viewer mode: chat creation is disabled for this shared workspace."
-            }
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-          />
-          {error ? <div className="notice error">{error}</div> : null}
-          <button className="button" type="button" onClick={handleSend} disabled={loading || !canWriteWorkspace}>
-            {loading ? "Working..." : "Send"}
-          </button>
-        </div>
+        <ChatPanelComposer
+          canWriteWorkspace={canWriteWorkspace}
+          draft={draft}
+          error={error}
+          loading={loading}
+          onSend={handleSend}
+          setDraft={setDraft}
+        />
       </div>
     </section>
   );
