@@ -362,10 +362,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces that `record-editor-workspace.tsx` stays wired through `record-editor-workspace-bindings.ts` and that both workspaces remain thin composition shells
   - the guard blocks reintroduction of inline state-update closures into the editor workspace and caps both workspace file lengths to preserve maintainability
   - `apps/web/package.json` now exposes `npm run verify:record-workspaces` so future slices can keep these workspace boundaries stable automatically
+- Map Panel Helper Extraction V1:
+  - AMap loader logic, coordinate parsing, mapped-record parsing, and address extraction now live in `apps/web/lib/map-panel.ts` instead of staying inside `apps/web/components/map-panel.tsx`
+  - the map component now consumes a dedicated helper boundary for browser-map integration details while keeping its UI and effects focused in the component layer
+  - this reduces the size and review surface of the map component and makes future map-provider or geocoder changes safer under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining record-panel module boundaries after the workspaces structure guard extraction
+- Continue simplifying remaining large UI module boundaries after the map-panel helper extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
