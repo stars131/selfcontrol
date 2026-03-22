@@ -2,18 +2,7 @@
 
 import type { LocaleCode } from "../lib/locale";
 import type { WorkspaceMemberItem } from "../lib/types";
-
-type WorkspaceMembersCopy = {
-  membersTitle: string;
-  membersDescription: string;
-  membersReadOnly: string;
-  membersEmpty: string;
-  roleLabel: string;
-  joinedLabel: string;
-  removeLabel: string;
-  removingLabel: string;
-  ownerProtected: string;
-};
+import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";
 
 export function WorkspaceMembersSection({
   copy,
@@ -26,7 +15,7 @@ export function WorkspaceMembersSection({
   userId,
   workspaceRole,
 }: {
-  copy: WorkspaceMembersCopy;
+  copy: WorkspaceSettingsCopy;
   locale: LocaleCode;
   members: WorkspaceMemberItem[];
   onRemoveMember: (memberId: string) => Promise<void>;
