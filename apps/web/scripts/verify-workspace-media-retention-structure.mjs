@@ -31,6 +31,10 @@ if (!source.includes('import { WorkspaceMediaRetentionLists } from "./workspace-
   throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionLists");
 }
 
+if (!source.includes('import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";')) {
+  throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionHeader");
+}
+
 if (!retentionListsSource.includes('import { MediaRetentionItemCard } from "./media-retention-item-card";')) {
   throw new Error("workspace-media-retention-lists.tsx must import MediaRetentionItemCard");
 }
@@ -51,6 +55,10 @@ if (!source.includes("<WorkspaceMediaRetentionLists")) {
   throw new Error("workspace-media-retention-card.tsx must delegate file-list rendering to WorkspaceMediaRetentionLists");
 }
 
+if (!source.includes("<WorkspaceMediaRetentionHeader")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate header rendering to WorkspaceMediaRetentionHeader");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -67,13 +75,15 @@ for (const forbiddenToken of [
   "report.total_count",
   "report.largest_items.map((item)",
   "report.retention_candidates.map((item)",
+  'copy.eyebrow',
+  "setOlderThanDays(Number(event.target.value))",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-media-retention-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 345;
+const maxAllowedLines = 330;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

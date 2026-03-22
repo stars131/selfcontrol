@@ -5,6 +5,7 @@ import type {
 } from "../lib/types";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
+import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";
 import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
 import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
 import {
@@ -253,32 +254,13 @@ export function WorkspaceMediaRetentionCard({
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
-      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
-        <div>
-          <div className="eyebrow">{copy.eyebrow}</div>
-          <div style={{ fontSize: "1.1rem", fontWeight: 700, marginTop: 8 }}>{copy.title}</div>
-          <div className="muted" style={{ marginTop: 8, lineHeight: 1.7 }}>{copy.description}</div>
-        </div>
-        <div className="form-stack" style={{ minWidth: 220 }}>
-          <label className="field">
-            <span className="field-label">{copy.threshold}</span>
-            <select
-              className="input"
-              disabled={loading}
-              value={olderThanDays}
-              onChange={(event) => setOlderThanDays(Number(event.target.value))}
-            >
-              <option value={30}>30 {copy.days}</option>
-              <option value={90}>90 {copy.days}</option>
-              <option value={180}>180 {copy.days}</option>
-              <option value={365}>365 {copy.days}</option>
-            </select>
-          </label>
-          <button className="button secondary" disabled={loading} type="button" onClick={() => void loadReport(olderThanDays)}>
-            {loading ? copy.refreshing : copy.refresh}
-          </button>
-        </div>
-      </div>
+      <WorkspaceMediaRetentionHeader
+        copy={copy}
+        loading={loading}
+        olderThanDays={olderThanDays}
+        onOlderThanDaysChange={setOlderThanDays}
+        onRefresh={() => loadReport(olderThanDays)}
+      />
 
       {error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null}
       {actionError ? <div className="notice error" style={{ marginTop: 16 }}>{actionError}</div> : null}
