@@ -1,21 +1,10 @@
 "use client";
-
-import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
 import { useStoredLocale } from "../lib/locale";
 import { formatByteCount } from "../lib/record-panel-format";
-import {
-  getMediaIssueAction,
-  getMediaIssueLabel,
-  getProcessingStatusLabel,
-  getRetryStateLabel,
-} from "../lib/media-issue-display";
-import {
-  buildMediaIssueSettingsHref,
-  canRetryMediaIssue,
-} from "../lib/record-panel-media";
+import { canRetryMediaIssue } from "../lib/record-panel-media";
 import {
   createEmptyForm,
   createEmptyReminderForm,
@@ -30,6 +19,7 @@ import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { LocationReviewPanel } from "./location-review-panel";
+import { DeadLetterRecoveryPanel } from "./dead-letter-recovery-panel";
 import { MediaAssetSection } from "./media-asset-section";
 import { MediaStorageOverview } from "./media-storage-overview";
 import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
@@ -843,160 +833,23 @@ export function RecordPanelV2({
                     retryingMediaId={retryingMediaId}
                     workspaceId={workspaceId}
                   />
-                  <div className="record-card form-stack" style={{ marginBottom: 16 }}>
-                    <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div>
-                        <div className="eyebrow">{mediaIssueCopy.deadLetterTitle}</div>
-                        <div className="muted" style={{ marginTop: 8 }}>
-                          {mediaIssueCopy.deadLetterDescription}
-                        </div>
-                      </div>
-                      <div className="tag-row">
-                        <span className="tag">
-                          {mediaDeadLetterOverview?.total_count ?? 0} {mediaIssueCopy.itemSuffix}
-                        </span>
-                        {mediaDeadLetterOverview
-                          ? Object.entries(mediaDeadLetterOverview.by_retry_state).map(([retryState, count]) => (
-                              <span className="tag" key={retryState}>
-                                {getRetryStateLabel(locale, retryState)}: {count}
-                              </span>
-                            ))
-                          : null}
-                        {mediaDeadLetterOverview
-                          ? Object.entries(mediaDeadLetterOverview.by_issue_category).map(([issueCategory, count]) => (
-                              <span className="tag" key={issueCategory}>
-                                {getMediaIssueLabel(locale, { issue_category: issueCategory, issue_label: null })}: {count}
-                              </span>
-                            ))
-                          : null}
-                      </div>
-                    </div>
-                    {mediaDeadLetterOverview?.items.length ? (
-                      <>
-                        <div className="action-row">
-                          <button
-                            className="button secondary"
-                            disabled={bulkRetryingDeadLetter}
-                            type="button"
-                            onClick={handleSelectAllDeadLetter}
-                          >
-                            {mediaIssueCopy.selectVisible}
-                          </button>
-                          <button
-                            className="button secondary"
-                            disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length}
-                            type="button"
-                            onClick={handleClearDeadLetterSelection}
-                          >
-                            {mediaIssueCopy.clearSelection}
-                          </button>
-                          <button
-                            className="button secondary"
-                            disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length}
-                            type="button"
-                            onClick={() => void handleBulkRetryDeadLetter("selected")}
-                          >
-                            {bulkRetryingDeadLetter
-                              ? mediaIssueCopy.retrying
-                              : `${mediaIssueCopy.retrySelectedPrefix} (${selectedDeadLetterIds.length})`}
-                          </button>
-                          <button
-                            className="button secondary"
-                            disabled={bulkRetryingDeadLetter}
-                            type="button"
-                            onClick={() => void handleBulkRetryDeadLetter("all")}
-                          >
-                            {bulkRetryingDeadLetter ? mediaIssueCopy.retrying : mediaIssueCopy.retryAll}
-                          </button>
-                        </div>
-                        <div className="record-list compact-list">
-                          {mediaDeadLetterOverview.items.map((item) => (
-                            <article className="record-card" key={item.media_id}>
-                              <label className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
-                                <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                                  <input
-                                    checked={selectedDeadLetterIds.includes(item.media_id)}
-                                    disabled={bulkRetryingDeadLetter || !canRetryMediaIssue(item)}
-                                    type="checkbox"
-                                    onChange={(event) =>
-                                      handleToggleDeadLetterSelection(item.media_id, event.target.checked)
-                                    }
-                                  />
-                                  <div>
-                                    <div className="eyebrow">{item.media_type}</div>
-                                    <div>{item.original_filename}</div>
-                                  </div>
-                                </div>
-                                <div className="tag-row">
-                                  <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
-                                  <span className="tag">{item.storage_provider}</span>
-                                  {item.processing_retry_state ? (
-                                    <span className="tag">
-                                      {mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, item.processing_retry_state)}
-                                    </span>
-                                  ) : null}
-                                  {getMediaIssueLabel(locale, item) ? (
-                                    <span className="tag">{getMediaIssueLabel(locale, item)}</span>
-                                  ) : null}
-                                </div>
-                              </label>
-                              <div className="muted" style={{ marginTop: 8 }}>
-                                {mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(item.processing_last_attempt_at)}
-                              </div>
-                              {item.processing_last_failure_at ? (
-                                <div className="muted" style={{ marginTop: 6 }}>
-                                  {mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(item.processing_last_failure_at)}
-                                </div>
-                              ) : null}
-                              {typeof item.processing_retry_count === "number" ? (
-                                <div className="muted" style={{ marginTop: 6 }}>
-                                  {mediaIssueCopy.retryBudgetUsed}: {item.processing_retry_count}
-                                  {typeof item.processing_retry_max_attempts === "number"
-                                    ? ` / ${item.processing_retry_max_attempts}`
-                                    : ""}
-                                </div>
-                              ) : null}
-                              {getMediaIssueAction(locale, item).label ? (
-                                <div className="notice" style={{ marginTop: 10 }}>
-                                  {getMediaIssueAction(locale, item).label}
-                                  {getMediaIssueAction(locale, item).detail ? `: ${getMediaIssueAction(locale, item).detail}` : ""}
-                                </div>
-                              ) : null}
-                              {canWriteWorkspace || buildMediaIssueSettingsHref(workspaceId, item) ? (
-                                <div className="action-row" style={{ marginTop: 10 }}>
-                                  {canWriteWorkspace && canRetryMediaIssue(item) ? (
-                                    <button
-                                      className="button secondary"
-                                      disabled={retryingMediaId === item.media_id}
-                                      type="button"
-                                      onClick={() => void handleRetryMediaProcessing(item.media_id)}
-                                    >
-                                      {retryingMediaId === item.media_id ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
-                                    </button>
-                                  ) : null}
-                                  {buildMediaIssueSettingsHref(workspaceId, item) ? (
-                                    <Link
-                                      className="button secondary"
-                                      href={buildMediaIssueSettingsHref(workspaceId, item) ?? "#"}
-                                    >
-                                      {mediaIssueCopy.openSettings}
-                                    </Link>
-                                  ) : null}
-                                </div>
-                              ) : null}
-                              {item.processing_error ? (
-                                <div className="notice error" style={{ marginTop: 10 }}>
-                                  {item.processing_error}
-                                </div>
-                              ) : null}
-                            </article>
-                          ))}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="notice">{mediaIssueCopy.noDeadLetter}</div>
-                    )}
-                  </div>
+                  <DeadLetterRecoveryPanel
+                    bulkRetryingDeadLetter={bulkRetryingDeadLetter}
+                    canWriteWorkspace={canWriteWorkspace}
+                    formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+                    locale={locale}
+                    mediaDeadLetterOverview={mediaDeadLetterOverview}
+                    mediaIssueCopy={mediaIssueCopy}
+                    onBulkRetryAll={() => handleBulkRetryDeadLetter("all")}
+                    onBulkRetrySelected={() => handleBulkRetryDeadLetter("selected")}
+                    onClearSelection={handleClearDeadLetterSelection}
+                    onRetryMediaProcessing={handleRetryMediaProcessing}
+                    onSelectAll={handleSelectAllDeadLetter}
+                    onToggleSelection={handleToggleDeadLetterSelection}
+                    retryingMediaId={retryingMediaId}
+                    selectedDeadLetterIds={selectedDeadLetterIds}
+                    workspaceId={workspaceId}
+                  />
                 </>
               ) : null}
               <MediaAssetSection

@@ -318,6 +318,10 @@ Last updated: 2026-03-22
   - recent media issue rendering now lives in `apps/web/components/recent-media-issues-panel.tsx`
   - the parent panel now passes locale, retry state, and settings-link context while the recent-issue panel owns operator-facing issue presentation
   - this removes another heavy media-operations block from `record-panel-v2` and leaves dead-letter recovery as the next major split
+- Dead-Letter Recovery Panel Extraction V1:
+  - dead-letter recovery rendering now lives in `apps/web/components/dead-letter-recovery-panel.tsx`
+  - selection controls, bulk retry actions, and per-item operator actions now sit behind a dedicated recovery component instead of inline inside `record-panel-v2`
+  - this removes the last major media-operations block from the structured-results panel and leaves the parent component closer to a pure orchestration role
 
 ## Next
 - Continue the next product slice
