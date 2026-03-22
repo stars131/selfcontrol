@@ -282,6 +282,10 @@ Last updated: 2026-03-22
   - media attachment rendering now uses a dedicated `apps/web/components/media-asset-card.tsx` component instead of inline JSX inside `record-panel-v2`
   - media preview, metadata chips, retry state details, and media action buttons are now isolated from the parent orchestration layer
   - `apps/web/lib/record-panel-ui.ts` now exports the media UI copy type so future media-card work can keep strong typing outside the main panel component
+- Record-Panel Shared Formatting Helper Extraction V1:
+  - byte-count and media-size formatting now live in `apps/web/lib/record-panel-format.ts` instead of staying inline inside `record-panel-v2`
+  - the media card and workspace storage summary now share the same formatting rules through a dedicated helper boundary
+  - this removes another display-logic cluster from the main panel and improves consistency for future UI updates
 
 ## Next
 - Continue the next product slice

@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaPreview } from "./media-preview";
+import { formatMediaSize } from "../lib/record-panel-format";
 import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";
 import type { MediaAsset } from "../lib/types";
 import type { MediaIssueCopy } from "../lib/record-panel-ui";
@@ -15,7 +16,6 @@ type MediaAssetCardProps = {
   refreshingMediaId: string | null;
   retryingMediaId: string | null;
   deletingMediaId: string | null;
-  formatMediaSize: (asset: MediaAsset) => string;
   formatHistoryTimestampLabel: (value?: string | null) => string;
   onDownloadMedia: (asset: MediaAsset) => Promise<void>;
   onRefreshMedia: (mediaId: string) => Promise<void>;
@@ -33,7 +33,6 @@ export function MediaAssetCard({
   refreshingMediaId,
   retryingMediaId,
   deletingMediaId,
-  formatMediaSize,
   formatHistoryTimestampLabel,
   onDownloadMedia,
   onRefreshMedia,

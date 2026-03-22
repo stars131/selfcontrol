@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
 import { useStoredLocale } from "../lib/locale";
+import { formatByteCount } from "../lib/record-panel-format";
 import {
   getMediaIssueAction,
   getMediaIssueLabel,
@@ -512,33 +513,6 @@ export function RecordPanelV2({
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : detailCopy.deletePresetError);
     }
-  };
-
-  const formatMediaSize = (asset: MediaAsset): string => {
-    const stored = asset.metadata_json.size_label;
-    if (typeof stored === "string" && stored.trim()) {
-      return stored;
-    }
-
-    const units = ["B", "KB", "MB", "GB"];
-    let value = asset.size_bytes;
-    let unitIndex = 0;
-    while (value >= 1024 && unitIndex < units.length - 1) {
-      value /= 1024;
-      unitIndex += 1;
-    }
-    return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
-  };
-
-  const formatByteCount = (sizeBytes: number): string => {
-    const units = ["B", "KB", "MB", "GB", "TB"];
-    let value = sizeBytes;
-    let unitIndex = 0;
-    while (value >= 1024 && unitIndex < units.length - 1) {
-      value /= 1024;
-      unitIndex += 1;
-    }
-    return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
   };
 
   return (
@@ -1344,7 +1318,6 @@ export function RecordPanelV2({
                       deletingMediaId={deletingMediaId}
                       downloadingMediaId={downloadingMediaId}
                       formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-                      formatMediaSize={formatMediaSize}
                       key={asset.id}
                       mediaIssueCopy={mediaIssueCopy}
                       onDeleteMediaAsset={handleDeleteMediaAsset}
