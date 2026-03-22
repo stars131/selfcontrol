@@ -1,0 +1,61 @@
+import type { Dispatch, SetStateAction } from "react";
+
+import type { RecordFilterState, RecordItem, SearchPresetItem, TimelineDay } from "../lib/types";
+import type { PanelCopy } from "../lib/record-panel-ui";
+import type { LocationDraft } from "./map-panel";
+
+export type RecordBrowseWorkspaceProps = {
+  canWriteWorkspace: boolean;
+  filteringRecords: boolean;
+  savingSearchPreset: boolean;
+  records: RecordItem[];
+  timelineDays: TimelineDay[];
+  selectedRecordId: string | null;
+  recordFilter: RecordFilterState;
+  filterDraft: RecordFilterState;
+  setFilterDraft: Dispatch<SetStateAction<RecordFilterState>>;
+  presetName: string;
+  setPresetName: Dispatch<SetStateAction<string>>;
+  searchPresets: SearchPresetItem[];
+  viewMode: "timeline" | "list";
+  setViewMode: Dispatch<SetStateAction<"timeline" | "list">>;
+  draftLocation: LocationDraft | null;
+  onDraftLocationChange?: (nextLocation: LocationDraft) => void;
+  panelCopy: PanelCopy;
+  applyPresetLabel: string;
+  deletePresetLabel: string;
+  noSavedFiltersLabel: string;
+  savedPresetLabel: string;
+  currentFilterSummary: string;
+  avoidCount: number;
+  foodCount: number;
+  visibleRecordCount: number;
+  visibleRecordsLabel: string;
+  foodLabel: string;
+  avoidStatsLabel: string;
+  avoidRecordLabel: string;
+  flatListViewLabel: string;
+  mapPrefixLabel: string;
+  noContentLabel: string;
+  noRecordsLabel: string;
+  ratingPrefixLabel: string;
+  timelineDayLabel: string;
+  timelineViewLabel: string;
+  unknownPlaceLabel: string;
+  untitledRecordLabel: string;
+  formatAvoidCountLabel: (count: number) => string;
+  formatRecordTimestampLabel: (record: RecordItem) => string;
+  formatReviewStatusLabel: (value?: string | null) => string;
+  formatTimelineCountLabel: (count: number) => string;
+  formatTimelineDateLabel: (value: string) => string;
+  summarizeRecordFilterLabel: (filter: RecordFilterState) => string;
+  onApplyFilter: () => Promise<void>;
+  onApplyLocationFilter: (
+    nextFilter: Pick<RecordFilterState, "placeQuery" | "reviewStatus" | "mappedOnly">,
+  ) => Promise<void>;
+  onApplyPreset: (nextFilter: RecordFilterState) => Promise<void>;
+  onDeletePreset: (presetId: string) => Promise<void>;
+  onResetFilter: () => Promise<void>;
+  onSavePreset: () => Promise<void>;
+  onSelectRecord: (recordId: string | null) => void;
+};

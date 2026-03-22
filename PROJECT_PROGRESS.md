@@ -584,10 +584,14 @@ Last updated: 2026-03-23
   - login/register locale copy now lives in `apps/web/components/auth-form-copy.ts` instead of remaining inline inside `login-form.tsx` and `register-form.tsx`
   - both auth screens now focus more narrowly on form state, submit behavior, and page composition while the dedicated copy module owns localized auth text payloads
   - `apps/web/scripts/verify-auth-forms-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce tighter size ceilings for both auth forms
+- Record Browse Workspace Type Extraction V1:
+  - record-browse workspace prop typing now lives in `apps/web/components/record-browse-workspace.types.ts` instead of remaining inline inside `record-browse-workspace.tsx`
+  - the browse workspace component now focuses more narrowly on stats/search/map/results composition while the dedicated types module owns its large composition contract
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the type-boundary and lowers the browse workspace size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the auth form copy extraction
+- Continue simplifying remaining large UI module boundaries after the record browse workspace type extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -40,12 +40,22 @@ verifyLineLimit(editorWorkspacePath, 220);
 const browseWorkspacePath = "components/record-browse-workspace.tsx";
 const browseWorkspaceSource = readSource(browseWorkspacePath);
 
+if (!browseWorkspaceSource.includes('import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types";')) {
+  throw new Error("record-browse-workspace.tsx must import RecordBrowseWorkspaceProps from record-browse-workspace.types");
+}
+
 for (const forbiddenToken of ["useState(", "useEffect(", "useMemo(", "fetchMediaBlob(", "const handle"]) {
   if (browseWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-browse-workspace.tsx must remain a composition shell: ${forbiddenToken}`);
   }
 }
 
-verifyLineLimit(browseWorkspacePath, 240);
+for (const forbiddenToken of ["type RecordBrowseWorkspaceProps = {", "Dispatch<SetStateAction<"]) {
+  if (browseWorkspaceSource.includes(forbiddenToken)) {
+    throw new Error(`record-browse-workspace.tsx must keep its props contract delegated: ${forbiddenToken}`);
+  }
+}
+
+verifyLineLimit(browseWorkspacePath, 170);
 
 console.log("record workspaces verification passed");
