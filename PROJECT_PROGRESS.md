@@ -540,10 +540,14 @@ Last updated: 2026-03-23
   - workspace-settings locale copy and copy typing now live in `apps/web/components/workspace-settings-copy.ts` instead of remaining inline inside `workspace-settings-client.tsx`
   - the workspace settings screen now focuses more narrowly on router wiring, locale state, controller orchestration, and settings-card composition while the dedicated copy module owns localized text payloads shared with the members section
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces the copy-helper boundary, blocks reintroduction of inline copy maps, and lowers the workspace-settings client size ceiling again
+- Workspace Media Retention Copy Extraction V1:
+  - retention locale copy now lives in `apps/web/components/workspace-media-retention-copy.ts` instead of remaining inline inside `workspace-media-retention-card.tsx`
+  - the retention card now focuses more narrowly on controller orchestration, action wiring, and section composition while the dedicated copy module owns localized report and cleanup text
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces the copy-helper boundary, blocks reintroduction of inline copy maps, and lowers the retention-card size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace settings copy extraction
+- Continue simplifying remaining large UI module boundaries after the workspace media retention copy extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

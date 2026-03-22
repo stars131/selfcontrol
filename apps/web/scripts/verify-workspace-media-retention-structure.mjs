@@ -11,6 +11,10 @@ if (!source.includes('useWorkspaceMediaRetentionController')) {
   throw new Error("workspace-media-retention-card.tsx must use useWorkspaceMediaRetentionController");
 }
 
+if (!source.includes('import { getWorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";')) {
+  throw new Error("workspace-media-retention-card.tsx must import getWorkspaceMediaRetentionCopy");
+}
+
 if (!source.includes("useWorkspaceMediaRetentionController({")) {
   throw new Error("workspace-media-retention-card.tsx must delegate retention orchestration to useWorkspaceMediaRetentionController");
 }
@@ -59,6 +63,10 @@ if (!source.includes("<WorkspaceMediaRetentionHeader")) {
   throw new Error("workspace-media-retention-card.tsx must delegate header rendering to WorkspaceMediaRetentionHeader");
 }
 
+if (!source.includes("getWorkspaceMediaRetentionCopy(locale)")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate locale copy lookup to getWorkspaceMediaRetentionCopy");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -77,13 +85,14 @@ for (const forbiddenToken of [
   "report.retention_candidates.map((item)",
   'copy.eyebrow',
   "setOlderThanDays(Number(event.target.value))",
+  "const COPY:",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-media-retention-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 330;
+const maxAllowedLines = 150;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
