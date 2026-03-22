@@ -12,6 +12,7 @@
     "verify:dead-letter-recovery-structure": "node ./scripts/verify-dead-letter-recovery-structure.mjs",
     "verify:landing-page-structure": "node ./scripts/verify-landing-page-structure.mjs",
     "verify:map-panel-structure": "node ./scripts/verify-map-panel-structure.mjs",
+    "verify:media-asset-card-structure": "node ./scripts/verify-media-asset-card-structure.mjs",
     "verify:provider-settings-structure": "node ./scripts/verify-provider-settings-structure.mjs",
     "verify:record-media-tools-structure": "node ./scripts/verify-record-media-tools-structure.mjs",
     "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",

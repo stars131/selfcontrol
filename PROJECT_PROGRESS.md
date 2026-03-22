@@ -604,10 +604,14 @@ Last updated: 2026-03-23
   - dead-letter overview summary, bulk action toolbar, and per-item recovery card now live in dedicated components and types instead of remaining inline inside `apps/web/components/dead-letter-recovery-panel.tsx`
   - the dead-letter recovery shell now focuses more narrowly on recovery-state composition while dedicated modules own summary rendering and per-item retry/settings behavior
   - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` and `apps/web/package.json` now make this media recovery boundary executable under the enterprise maintainability standard
+- Media Asset Card Structure Extraction V1:
+  - media asset metadata display, action controls, and props contract now live in dedicated components and types instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
+  - the media asset card now focuses more narrowly on attachment card composition while dedicated modules own metadata extraction and action-button behavior
+  - `apps/web/scripts/verify-media-asset-card-structure.mjs` and `apps/web/package.json` now make this attachment-card maintainability boundary executable
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the dead-letter recovery extraction
+- Continue simplifying remaining large UI module boundaries after the media asset card extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
