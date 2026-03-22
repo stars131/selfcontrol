@@ -13,8 +13,16 @@ if (!mapPanelSource.includes('import { useMapPanelController } from "./use-map-p
   throw new Error("map-panel.tsx must import useMapPanelController");
 }
 
+if (!mapPanelSource.includes('import { MapDrilldownCard } from "./map-drilldown-card";')) {
+  throw new Error("map-panel.tsx must import MapDrilldownCard");
+}
+
 if (!mapPanelSource.includes("useMapPanelController({")) {
   throw new Error("map-panel.tsx must delegate map search and filter orchestration to useMapPanelController");
+}
+
+if (!mapPanelSource.includes("<MapDrilldownCard")) {
+  throw new Error("map-panel.tsx must delegate drill-down filter rendering to MapDrilldownCard");
 }
 
 for (const forbiddenToken of [
@@ -34,13 +42,16 @@ for (const forbiddenToken of [
   "const handleApplyFilter =",
   "const handleUseMappedOnly =",
   "const handleClearFilter =",
+  'value={filterDraft.placeQuery}',
+  'value={filterDraft.mappedOnly}',
+  'value={filterDraft.reviewStatus}',
 ]) {
   if (mapPanelSource.includes(forbiddenToken)) {
     throw new Error(`map-panel.tsx must not reintroduce extracted helper logic: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 460;
+const maxAllowedLines = 300;
 if (mapPanelLineCount > maxAllowedLines) {
   throw new Error(`map-panel.tsx exceeded ${maxAllowedLines} lines: ${mapPanelLineCount}`);
 }

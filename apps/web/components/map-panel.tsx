@@ -14,6 +14,7 @@ import {
   type LocationDraft,
 } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
+import { MapDrilldownCard } from "./map-drilldown-card";
 import { useMapPanelController } from "./use-map-panel-controller";
 
 export type { LocationDraft } from "../lib/map-panel";
@@ -211,71 +212,14 @@ export function MapPanel({
         <span className="tag">{confirmedCount} confirmed</span>
         <span className="tag">{needsReviewCount} need review</span>
       </div>
-      <div className="record-card form-stack" style={{ marginTop: 12 }}>
-        <div className="eyebrow">Map drill-down</div>
-        <div className="inline-fields">
-          <label className="field">
-            <span className="field-label">Place query</span>
-            <input
-              className="input"
-              value={filterDraft.placeQuery}
-              onChange={(event) =>
-                setFilterDraft((current) => ({
-                  ...current,
-                  placeQuery: event.target.value,
-                }))
-              }
-              placeholder="Soup House / address / landmark"
-            />
-          </label>
-          <label className="field">
-            <span className="field-label">Map status</span>
-            <select
-              className="input"
-              value={filterDraft.mappedOnly}
-              onChange={(event) =>
-                setFilterDraft((current) => ({
-                  ...current,
-                  mappedOnly: event.target.value as LocationFilterState["mappedOnly"],
-                }))
-              }
-            >
-              <option value="all">all records</option>
-              <option value="mapped">mapped only</option>
-              <option value="unmapped">unmapped only</option>
-            </select>
-          </label>
-          <label className="field">
-            <span className="field-label">Review</span>
-            <select
-              className="input"
-              value={filterDraft.reviewStatus}
-              onChange={(event) =>
-                setFilterDraft((current) => ({
-                  ...current,
-                  reviewStatus: event.target.value as LocationFilterState["reviewStatus"],
-                }))
-              }
-            >
-              <option value="all">all</option>
-              <option value="pending">pending</option>
-              <option value="confirmed">confirmed</option>
-              <option value="needs_review">needs_review</option>
-            </select>
-          </label>
-        </div>
-        <div className="action-row">
-          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleApplyFilter()}>
-            {filteringRecords ? "Filtering..." : "Apply location filter"}
-          </button>
-          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleUseMappedOnly()}>
-            Mapped only
-          </button>
-          <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleClearFilter()}>
-            Clear location filter
-          </button>
-        </div>
-      </div>
+      <MapDrilldownCard
+        filterDraft={filterDraft}
+        filteringRecords={filteringRecords}
+        onApplyFilter={handleApplyFilter}
+        onClearFilter={handleClearFilter}
+        onFilterDraftChange={setFilterDraft}
+        onUseMappedOnly={handleUseMappedOnly}
+      />
       {isEditable ? (
         <form className="composer" style={{ marginTop: 12 }} onSubmit={handleSearch}>
           <div className="inline-fields">
