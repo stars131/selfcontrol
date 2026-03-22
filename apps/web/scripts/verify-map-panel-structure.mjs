@@ -13,6 +13,10 @@ if (!mapPanelSource.includes('import { useMapPanelController } from "./use-map-p
   throw new Error("map-panel.tsx must import useMapPanelController");
 }
 
+if (!mapPanelSource.includes('import { useMapPanelAmap } from "./use-map-panel-amap";')) {
+  throw new Error("map-panel.tsx must import useMapPanelAmap");
+}
+
 if (!mapPanelSource.includes('import { MapDrilldownCard } from "./map-drilldown-card";')) {
   throw new Error("map-panel.tsx must import MapDrilldownCard");
 }
@@ -35,6 +39,10 @@ if (!mapPanelSource.includes('import { MapPanelHeader } from "./map-panel-header
 
 if (!mapPanelSource.includes("useMapPanelController({")) {
   throw new Error("map-panel.tsx must delegate map search and filter orchestration to useMapPanelController");
+}
+
+if (!mapPanelSource.includes("useMapPanelAmap({")) {
+  throw new Error("map-panel.tsx must delegate AMap lifecycle wiring to useMapPanelAmap");
 }
 
 if (!mapPanelSource.includes("<MapDrilldownCard")) {
@@ -68,6 +76,7 @@ for (const forbiddenToken of [
   "function parseDraftCoordinates",
   "let amapLoaderPromise",
   "interface Window",
+  "useEffect(",
   "useState(",
   "useMemo(",
   "const handleSearch =",
@@ -89,7 +98,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 250;
+const maxAllowedLines = 150;
 if (mapPanelLineCount > maxAllowedLines) {
   throw new Error(`map-panel.tsx exceeded ${maxAllowedLines} lines: ${mapPanelLineCount}`);
 }

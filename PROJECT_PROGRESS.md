@@ -576,10 +576,14 @@ Last updated: 2026-03-23
   - record-media tools prop typing now lives in `apps/web/components/record-media-tools.types.ts` instead of remaining inline inside `record-media-tools.tsx`
   - the media-tools composition component now focuses more narrowly on media section orchestration while the dedicated types module owns its large contract surface
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce a tighter size ceiling for `record-media-tools.tsx`
+- Map Panel AMap Lifecycle Hook Extraction V1:
+  - AMap loader, click-to-location wiring, marker rendering, viewport sync, and teardown now live in `apps/web/components/use-map-panel-amap.ts` instead of remaining inline inside `map-panel.tsx`
+  - the map panel now focuses more narrowly on controller wiring, missing-key fallback, and UI section composition while the dedicated hook owns browser-map lifecycle behavior
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces the AMap hook boundary, blocks direct `useEffect` and `useRef` reintroduction into `map-panel.tsx`, and lowers the map-panel size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record media tools type extraction
+- Continue simplifying remaining large UI module boundaries after the map panel AMap lifecycle hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
