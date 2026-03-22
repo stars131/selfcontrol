@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import { LanguageSwitcher } from "./language-switcher";
+import { WorkspaceCreateSection } from "./workspace-create-section";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
 import { WorkspaceListSection } from "./workspace-list-section";
 import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";
@@ -380,28 +381,14 @@ export function WorkspaceEntryClient() {
         <div className="panel-body">
           {error ? <div className="notice error">{error}</div> : null}
           <div className="two-column-grid">
-            <section className="record-card">
-              <div className="eyebrow">{copy.createEyebrow}</div>
-              <h2 style={{ margin: "8px 0 12px" }}>{copy.createTitle}</h2>
-              <form className="form-stack" onSubmit={handleCreate}>
-                <label className="field">
-                  <span className="field-label">{copy.name}</span>
-                  <input
-                    className="input"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    placeholder="Food memory"
-                  />
-                </label>
-                <label className="field">
-                  <span className="field-label">{copy.slugPreview}</span>
-                  <input className="input" value={suggestedSlug} readOnly />
-                </label>
-                <button className="button" type="submit" disabled={creating}>
-                  {creating ? `${copy.createWorkspace}...` : copy.createWorkspace}
-                </button>
-              </form>
-            </section>
+            <WorkspaceCreateSection
+              copy={copy}
+              creating={creating}
+              name={name}
+              onNameChange={setName}
+              onSubmit={handleCreate}
+              suggestedSlug={suggestedSlug}
+            />
 
             <section className="record-card">
               <div className="eyebrow">{copy.joinEyebrow}</div>

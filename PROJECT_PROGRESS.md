@@ -466,10 +466,14 @@ Last updated: 2026-03-22
   - transfer-job list rendering now lives in `apps/web/components/workspace-transfer-jobs-section.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
   - the entry page now passes shared copy, locale, and handlers while the dedicated section component owns import/export job presentation and result actions
   - this removes another large stable display block from the control-center screen without increasing risk in the encoded locale constant area
+- Workspace Entry Create Section Extraction V1:
+  - workspace creation form rendering now lives in `apps/web/components/workspace-create-section.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
+  - the entry page now passes shared copy, controlled form state, and submit behavior while the dedicated section component owns create-form presentation
+  - this trims another stable control-center block without touching the higher-risk locale constant payload
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry transfer jobs section extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-entry create section extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
