@@ -19,8 +19,16 @@ if (!source.includes('import { WorkspaceEntryMainPanel } from "./workspace-entry
   throw new Error("workspace-entry-client.tsx must import WorkspaceEntryMainPanel");
 }
 
+if (!source.includes('import { getWorkspaceEntryCopy } from "./workspace-entry-copy";')) {
+  throw new Error("workspace-entry-client.tsx must import getWorkspaceEntryCopy");
+}
+
 if (!source.includes("<WorkspaceEntryMainPanel")) {
   throw new Error("workspace-entry-client.tsx must delegate main panel composition to WorkspaceEntryMainPanel");
+}
+
+if (!source.includes("getWorkspaceEntryCopy(locale)")) {
+  throw new Error("workspace-entry-client.tsx must delegate locale copy lookup to getWorkspaceEntryCopy");
 }
 
 for (const requiredImport of [
@@ -66,13 +74,15 @@ for (const forbiddenToken of [
   "const handleAcceptShare =",
   "const handleLogout =",
   "const handleDownloadTransferJob =",
+  "const COPY:",
+  "const DISPLAY_COPY:",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-entry-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 350;
+const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-entry-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
