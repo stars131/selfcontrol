@@ -350,10 +350,14 @@ Last updated: 2026-03-22
   - record-panel state, derived data, side effects, and async action handlers now live in `apps/web/components/use-record-panel-controller.ts` instead of remaining inline inside `record-panel-v2`
   - shared prop and mutation types now live in `apps/web/components/record-panel-v2.types.ts`, reducing duplicate signatures across the panel boundary
   - the main panel component is now a thin orchestration shell, significantly reducing maintenance risk and review surface under the enterprise standard
+- Record Panel Structure Guard V1:
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that `record-panel-v2.tsx` stays a thin shell built around `useRecordPanelController`
+  - the guard blocks reintroduction of local state/effect/controller logic into the main panel and caps the file length to keep the maintainability bar explicit
+  - `apps/web/package.json` now exposes `npm run verify:record-panel-structure` so future slices can preserve this module boundary automatically
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining record-panel module boundaries after the controller-hook extraction
+- Continue simplifying remaining record-panel module boundaries after the structure guard extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

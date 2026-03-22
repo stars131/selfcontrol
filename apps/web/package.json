@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",
+    "verify:record-panel-structure": "node ./scripts/verify-record-panel-structure.mjs",
     "verify:record-panel-detail-copy": "npm run verify:record-panel-copy"
   },
   "dependencies": {
