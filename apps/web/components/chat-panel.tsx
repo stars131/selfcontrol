@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useStoredLocale } from "../lib/locale";
 import { ChatAuditLogsCard } from "./chat-audit-logs-card";
 import { ChatKnowledgeCard } from "./chat-knowledge-card";
+import { ChatMessageSources } from "./chat-message-sources";
 import { ChatNotificationsCard } from "./chat-notifications-card";
 import { ChatShareLinksCard } from "./chat-share-links-card";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
@@ -224,39 +225,7 @@ export function ChatPanel({
                 <div className="eyebrow">{message.role === "assistant" ? "assistant" : "you"}</div>
                 <div style={{ marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{message.content}</div>
                 {message.role === "assistant" && Array.isArray(message.metadata_json.sources) ? (
-                  <div className="record-list compact-list" style={{ marginTop: 12 }}>
-                    {message.metadata_json.sources.slice(0, 3).map((source, index) => {
-                      if (!source || typeof source !== "object") {
-                        return null;
-                      }
-
-                      const sourceItem = source as {
-                        record_title?: string;
-                        source_label?: string;
-                        source_type?: string;
-                        snippet?: string;
-                        score?: number;
-                      };
-                      return (
-                        <article className="message" key={`${message.id}-source-${index}`}>
-                          <div className="eyebrow">
-                            {sourceItem.source_type ?? "source"} / {sourceItem.source_label ?? "memory"}
-                          </div>
-                          <div style={{ marginTop: 8, fontWeight: 600 }}>
-                            {sourceItem.record_title ?? "Related record"}
-                          </div>
-                          {sourceItem.snippet ? (
-                            <div style={{ marginTop: 8, lineHeight: 1.6 }}>{sourceItem.snippet}</div>
-                          ) : null}
-                          {typeof sourceItem.score === "number" ? (
-                            <div className="muted" style={{ marginTop: 8 }}>
-                              score {sourceItem.score.toFixed(3)}
-                            </div>
-                          ) : null}
-                        </article>
-                      );
-                    })}
-                  </div>
+                  <ChatMessageSources messageId={message.id} sources={message.metadata_json.sources} />
                 ) : null}
               </article>
             ))
