@@ -358,10 +358,14 @@ Last updated: 2026-03-22
   - record-editor field mutation handlers and location-review form handlers now live in `apps/web/components/record-editor-workspace-bindings.ts` instead of being defined inline inside `record-editor-workspace`
   - the editor workspace now focuses more narrowly on composing child panels while the binding helper owns repetitive state-update closures
   - this reduces callback noise inside the editor workspace and prepares that boundary for its own structure guard in a later slice
+- Record Workspaces Structure Guard V1:
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces that `record-editor-workspace.tsx` stays wired through `record-editor-workspace-bindings.ts` and that both workspaces remain thin composition shells
+  - the guard blocks reintroduction of inline state-update closures into the editor workspace and caps both workspace file lengths to preserve maintainability
+  - `apps/web/package.json` now exposes `npm run verify:record-workspaces` so future slices can keep these workspace boundaries stable automatically
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining record-panel module boundaries after the editor-workspace binding extraction
+- Continue simplifying remaining record-panel module boundaries after the workspaces structure guard extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
