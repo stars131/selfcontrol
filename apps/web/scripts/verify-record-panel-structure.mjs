@@ -13,6 +13,10 @@ if (!source.includes('from "./record-panel-v2-workspace-props";')) {
   throw new Error("record-panel-v2.tsx must import record-panel-v2-workspace-props");
 }
 
+if (!source.includes('import { RecordPanelHeader } from "./record-panel-header";')) {
+  throw new Error("record-panel-v2.tsx must import RecordPanelHeader");
+}
+
 if (!source.includes("useRecordPanelController({")) {
   throw new Error("record-panel-v2.tsx must delegate controller logic to useRecordPanelController");
 }
@@ -25,6 +29,10 @@ if (!source.includes("buildRecordEditorWorkspaceProps({")) {
   throw new Error("record-panel-v2.tsx must delegate editor workspace prop shaping to buildRecordEditorWorkspaceProps");
 }
 
+if (!source.includes("<RecordPanelHeader")) {
+  throw new Error("record-panel-v2.tsx must delegate top header rendering to RecordPanelHeader");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -34,13 +42,16 @@ for (const forbiddenToken of [
   "const handle",
   "<RecordBrowseWorkspace\n          applyPresetLabel=",
   "<RecordEditorWorkspace\n          authToken=",
+  '<div className="eyebrow">{panelCopy.workspace}</div>',
+  "{panelCopy.structuredResults}",
+  "{panelCopy.newRecord}",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`record-panel-v2.tsx must remain a thin shell; found forbidden token: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 245;
+const maxAllowedLines = 235;
 if (normalizedLines.length > maxAllowedLines) {
   throw new Error(`record-panel-v2.tsx exceeded ${maxAllowedLines} lines: ${normalizedLines.length}`);
 }

@@ -588,10 +588,14 @@ Last updated: 2026-03-23
   - record-browse workspace prop typing now lives in `apps/web/components/record-browse-workspace.types.ts` instead of remaining inline inside `record-browse-workspace.tsx`
   - the browse workspace component now focuses more narrowly on stats/search/map/results composition while the dedicated types module owns its large composition contract
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the type-boundary and lowers the browse workspace size ceiling again
+- Record Panel Header Extraction V1:
+  - record-panel top header and new-record action now live in `apps/web/components/record-panel-header.tsx` instead of remaining inline inside `record-panel-v2.tsx`
+  - the record panel shell now focuses more narrowly on controller wiring and workspace mount composition while the dedicated header component owns top-of-panel presentation
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header boundary and lowers the record-panel shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record browse workspace type extraction
+- Continue simplifying remaining large UI module boundaries after the record panel header extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

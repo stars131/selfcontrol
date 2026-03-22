@@ -2,6 +2,7 @@
 
 import { RecordBrowseWorkspace } from "./record-browse-workspace";
 import { RecordEditorWorkspace } from "./record-editor-workspace";
+import { RecordPanelHeader } from "./record-panel-header";
 import type { RecordPanelV2Props } from "./record-panel-v2.types";
 import {
   buildRecordBrowseWorkspaceProps,
@@ -217,22 +218,12 @@ export function RecordPanelV2({
 
   return (
     <section className="panel">
-      <div className="panel-header">
-        <div>
-          <div className="eyebrow">{panelCopy.workspace}</div>
-          <h2 className="title" style={{ fontSize: 22 }}>
-            {panelCopy.structuredResults}
-          </h2>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {workspaceId}
-          </div>
-        </div>
-        <div className="action-row">
-          <button className="button secondary" disabled={!canWriteWorkspace} type="button" onClick={() => onSelectRecord(null)}>
-            {panelCopy.newRecord}
-          </button>
-        </div>
-      </div>
+      <RecordPanelHeader
+        canWriteWorkspace={canWriteWorkspace}
+        onCreateRecord={() => onSelectRecord(null)}
+        panelCopy={panelCopy}
+        workspaceId={workspaceId}
+      />
       <div className="panel-body">
         <RecordBrowseWorkspace {...browseWorkspaceProps} />
         <RecordEditorWorkspace {...editorWorkspaceProps} />
