@@ -274,6 +274,10 @@ Last updated: 2026-03-22
   - record-panel form state types and initialization helpers are now extracted into `apps/web/lib/record-panel-forms.ts`
   - datetime input normalization plus location and review form readers no longer live inline inside the oversized structured-results component
   - this keeps future editor and reminder form changes isolated in a smaller module and improves maintainability under the enterprise standard
+- Record-Panel Record Card Extraction V1:
+  - record list and timeline item rendering now use a dedicated `apps/web/components/record-summary-card.tsx` component instead of inline JSX inside `record-panel-v2`
+  - record card display logic now owns its own location and review lookup while the parent panel stays focused on orchestration and state
+  - this further reduces the review surface of the oversized panel and prepares the remaining list/media sections for the same modularization path
 
 ## Next
 - Continue the next product slice

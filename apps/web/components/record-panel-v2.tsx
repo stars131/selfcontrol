@@ -31,6 +31,7 @@ import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaPreview } from "./media-preview";
+import { RecordSummaryCard } from "./record-summary-card";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
   LocationReview,
@@ -540,42 +541,6 @@ export function RecordPanelV2({
       unitIndex += 1;
     }
     return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
-  };
-
-  const renderRecordCard = (record: RecordItem) => {
-    const location = readLocationForm(record);
-    const review = readLocationReview(record.extra_data);
-
-    return (
-      <article
-        className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
-        key={record.id}
-        onClick={() => onSelectRecord(record.id)}
-      >
-        <div className="eyebrow">{record.type_code}</div>
-        <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>
-          {record.title || detailCopy.untitledRecord}
-        </h3>
-        <div className="muted">
-          {formatRecordTimestampLabel(record)} | {record.source_type}
-        </div>
-        <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>{record.content || detailCopy.noContent}</p>
-        {location.place_name || location.address ? (
-          <div className="muted" style={{ marginTop: 10 }}>
-            {location.place_name || detailCopy.unknownPlace}
-            {location.address ? ` | ${location.address}` : ""}
-          </div>
-        ) : null}
-        <div className="tag-row">
-          <span className="tag">{record.status}</span>
-          {record.rating ? <span className="tag">{detailCopy.ratingPrefix} {record.rating}</span> : null}
-          {record.is_avoid ? <span className="tag">{detailCopy.avoidLabel}</span> : null}
-          {location.latitude && location.longitude ? (
-            <span className="tag">{detailCopy.mapPrefix} {formatReviewStatusLabel(review?.status)}</span>
-          ) : null}
-        </div>
-      </article>
-    );
   };
 
   const renderMediaAssetCard = (asset: MediaAsset) => {
@@ -1689,7 +1654,22 @@ export function RecordPanelV2({
                     </div>
                   ) : null}
                   <div className="record-list compact-list" style={{ marginTop: 14 }}>
-                    {day.items.map((record) => renderRecordCard(record))}
+                    {day.items.map((record) => (
+                      <RecordSummaryCard
+                        avoidLabel={detailCopy.avoidLabel}
+                        formatRecordTimestampLabel={formatRecordTimestampLabel}
+                        formatReviewStatusLabel={formatReviewStatusLabel}
+                        isSelected={record.id === selectedRecordId}
+                        key={record.id}
+                        mapPrefixLabel={detailCopy.mapPrefix}
+                        noContentLabel={detailCopy.noContent}
+                        onSelectRecord={onSelectRecord}
+                        ratingPrefixLabel={detailCopy.ratingPrefix}
+                        record={record}
+                        unknownPlaceLabel={detailCopy.unknownPlace}
+                        untitledRecordLabel={detailCopy.untitledRecord}
+                      />
+                    ))}
                   </div>
                 </section>
               ))
@@ -1702,7 +1682,22 @@ export function RecordPanelV2({
         ) : (
           <div style={{ marginTop: 20 }} className="record-list">
             {records.length ? (
-              records.map((record) => renderRecordCard(record))
+              records.map((record) => (
+                <RecordSummaryCard
+                  avoidLabel={detailCopy.avoidLabel}
+                  formatRecordTimestampLabel={formatRecordTimestampLabel}
+                  formatReviewStatusLabel={formatReviewStatusLabel}
+                  isSelected={record.id === selectedRecordId}
+                  key={record.id}
+                  mapPrefixLabel={detailCopy.mapPrefix}
+                  noContentLabel={detailCopy.noContent}
+                  onSelectRecord={onSelectRecord}
+                  ratingPrefixLabel={detailCopy.ratingPrefix}
+                  record={record}
+                  unknownPlaceLabel={detailCopy.unknownPlace}
+                  untitledRecordLabel={detailCopy.untitledRecord}
+                />
+              ))
             ) : (
               <div className="notice">
                 {detailCopy.noRecords}
