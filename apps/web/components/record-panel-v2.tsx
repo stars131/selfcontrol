@@ -30,7 +30,7 @@ import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { LocationReviewPanel } from "./location-review-panel";
-import { MediaAssetCard } from "./media-asset-card";
+import { MediaAssetSection } from "./media-asset-section";
 import { MediaStorageOverview } from "./media-storage-overview";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordPanelStats } from "./record-panel-stats";
@@ -1079,36 +1079,26 @@ export function RecordPanelV2({
                   </div>
                 </>
               ) : null}
-              {mediaStorageSummary?.largest_item_name ? (
-                <div className="muted" style={{ marginBottom: 16 }}>
-                  {detailCopy.largestFilePrefix}: {mediaStorageSummary.largest_item_name} ({mediaStorageSummary.largest_item_size_label})
-                </div>
-              ) : null}
-              <div className="record-list compact-list">
-                {mediaAssets.length ? (
-                  mediaAssets.map((asset) => (
-                    <MediaAssetCard
-                      asset={asset}
-                      authToken={authToken}
-                      canWriteWorkspace={canWriteWorkspace}
-                      deletingMediaId={deletingMediaId}
-                      downloadingMediaId={downloadingMediaId}
-                      formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-                      key={asset.id}
-                      mediaIssueCopy={mediaIssueCopy}
-                      onDeleteMediaAsset={handleDeleteMediaAsset}
-                      onDownloadMedia={handleDownloadMedia}
-                      onRefreshMedia={handleRefreshMedia}
-                      onRetryMediaProcessing={handleRetryMediaProcessing}
-                      refreshingMediaId={refreshingMediaId}
-                      retryingMediaId={retryingMediaId}
-                      workspaceId={workspaceId}
-                    />
-                  ))
-                ) : (
-                  <div className="notice">{detailCopy.noMedia}</div>
-                )}
-              </div>
+              <MediaAssetSection
+                authToken={authToken}
+                canWriteWorkspace={canWriteWorkspace}
+                deletingMediaId={deletingMediaId}
+                downloadingMediaId={downloadingMediaId}
+                formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+                largestFilePrefixLabel={detailCopy.largestFilePrefix}
+                largestItemName={mediaStorageSummary?.largest_item_name ?? null}
+                largestItemSizeLabel={mediaStorageSummary?.largest_item_size_label ?? null}
+                mediaAssets={mediaAssets}
+                mediaIssueCopy={mediaIssueCopy}
+                noMediaLabel={detailCopy.noMedia}
+                onDeleteMediaAsset={handleDeleteMediaAsset}
+                onDownloadMedia={handleDownloadMedia}
+                onRefreshMedia={handleRefreshMedia}
+                onRetryMediaProcessing={handleRetryMediaProcessing}
+                refreshingMediaId={refreshingMediaId}
+                retryingMediaId={retryingMediaId}
+                workspaceId={workspaceId}
+              />
 
               <RecordReminderPanel
                 canWriteWorkspace={canWriteWorkspace}

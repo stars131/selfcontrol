@@ -310,6 +310,10 @@ Last updated: 2026-03-22
   - media storage summary cards and processing overview tags now render through `apps/web/components/media-storage-overview.tsx`
   - the parent panel now passes storage and processing summary data while the overview component owns the summary presentation layout
   - this trims another stable display block from `record-panel-v2` without changing media-processing behavior
+- Media Asset Section Extraction V1:
+  - largest-file hint and attachment-list rendering now live in `apps/web/components/media-asset-section.tsx`
+  - the parent panel now passes attachment actions and media copy while the section component owns the attachment-list presentation boundary
+  - this further reduces the media-display surface inside `record-panel-v2` ahead of splitting recent-issue and dead-letter panels
 
 ## Next
 - Continue the next product slice
