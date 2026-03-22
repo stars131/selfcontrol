@@ -24,9 +24,9 @@ import { MediaAssetSection } from "./media-asset-section";
 import { MediaStorageOverview } from "./media-storage-overview";
 import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
 import { RecordSearchPanel } from "./record-search-panel";
+import { RecordResultsView } from "./record-results-view";
 import { RecordPanelStats } from "./record-panel-stats";
 import { RecordReminderPanel } from "./record-reminder-panel";
-import { RecordSummaryCard } from "./record-summary-card";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
@@ -934,103 +934,29 @@ export function RecordPanelV2({
             </>
           ) : null}
         </form>
-
-        <div style={{ marginTop: 20 }} className="action-row">
-          <button
-            className={viewMode === "timeline" ? "button" : "button secondary"}
-            type="button"
-            onClick={() => setViewMode("timeline")}
-          >
-            {detailCopy.timelineView}
-          </button>
-          <button
-            className={viewMode === "list" ? "button" : "button secondary"}
-            type="button"
-            onClick={() => setViewMode("list")}
-          >
-            {detailCopy.flatListView}
-          </button>
-        </div>
-
-        {viewMode === "timeline" ? (
-          <div style={{ marginTop: 20 }} className="record-list">
-            {timelineDays.length ? (
-              timelineDays.map((day) => (
-                <section className="record-card" key={day.date}>
-                  <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div>
-                      <div className="eyebrow">{detailCopy.timelineDayLabel}</div>
-                      <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>{formatTimelineDateLabel(day.date)}</h3>
-                      <div className="muted">
-                        {formatTimelineCountLabel(day.count)}
-                      </div>
-                    </div>
-                    <div className="tag-row" style={{ marginTop: 0, justifyContent: "flex-end" }}>
-                      <span className="tag">{day.date}</span>
-                      {day.avoid_count ? <span className="tag">{formatAvoidCountLabel(day.avoid_count)}</span> : null}
-                    </div>
-                  </div>
-                  {day.top_places.length ? (
-                    <div className="tag-row" style={{ marginTop: 14 }}>
-                      {day.top_places.map((place) => (
-                        <span className="tag" key={place}>
-                          {place}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                  <div className="record-list compact-list" style={{ marginTop: 14 }}>
-                    {day.items.map((record) => (
-                      <RecordSummaryCard
-                        avoidLabel={detailCopy.avoidLabel}
-                        formatRecordTimestampLabel={formatRecordTimestampLabel}
-                        formatReviewStatusLabel={formatReviewStatusLabel}
-                        isSelected={record.id === selectedRecordId}
-                        key={record.id}
-                        mapPrefixLabel={detailCopy.mapPrefix}
-                        noContentLabel={detailCopy.noContent}
-                        onSelectRecord={onSelectRecord}
-                        ratingPrefixLabel={detailCopy.ratingPrefix}
-                        record={record}
-                        unknownPlaceLabel={detailCopy.unknownPlace}
-                        untitledRecordLabel={detailCopy.untitledRecord}
-                      />
-                    ))}
-                  </div>
-                </section>
-              ))
-            ) : (
-              <div className="notice">
-                {detailCopy.noRecords}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div style={{ marginTop: 20 }} className="record-list">
-            {records.length ? (
-              records.map((record) => (
-                <RecordSummaryCard
-                  avoidLabel={detailCopy.avoidLabel}
-                  formatRecordTimestampLabel={formatRecordTimestampLabel}
-                  formatReviewStatusLabel={formatReviewStatusLabel}
-                  isSelected={record.id === selectedRecordId}
-                  key={record.id}
-                  mapPrefixLabel={detailCopy.mapPrefix}
-                  noContentLabel={detailCopy.noContent}
-                  onSelectRecord={onSelectRecord}
-                  ratingPrefixLabel={detailCopy.ratingPrefix}
-                  record={record}
-                  unknownPlaceLabel={detailCopy.unknownPlace}
-                  untitledRecordLabel={detailCopy.untitledRecord}
-                />
-              ))
-            ) : (
-              <div className="notice">
-                {detailCopy.noRecords}
-              </div>
-            )}
-          </div>
-        )}
+        <RecordResultsView
+          avoidLabel={detailCopy.avoidLabel}
+          flatListViewLabel={detailCopy.flatListView}
+          formatAvoidCountLabel={formatAvoidCountLabel}
+          formatRecordTimestampLabel={formatRecordTimestampLabel}
+          formatReviewStatusLabel={formatReviewStatusLabel}
+          formatTimelineCountLabel={formatTimelineCountLabel}
+          formatTimelineDateLabel={formatTimelineDateLabel}
+          mapPrefixLabel={detailCopy.mapPrefix}
+          noContentLabel={detailCopy.noContent}
+          noRecordsLabel={detailCopy.noRecords}
+          onSelectRecord={onSelectRecord}
+          onViewModeChange={setViewMode}
+          ratingPrefixLabel={detailCopy.ratingPrefix}
+          records={records}
+          selectedRecordId={selectedRecordId}
+          timelineDayLabel={detailCopy.timelineDayLabel}
+          timelineDays={timelineDays}
+          timelineViewLabel={detailCopy.timelineView}
+          unknownPlaceLabel={detailCopy.unknownPlace}
+          untitledRecordLabel={detailCopy.untitledRecord}
+          viewMode={viewMode}
+        />
       </div>
     </section>
   );

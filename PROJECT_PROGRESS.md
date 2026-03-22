@@ -322,10 +322,14 @@ Last updated: 2026-03-22
   - dead-letter recovery rendering now lives in `apps/web/components/dead-letter-recovery-panel.tsx`
   - selection controls, bulk retry actions, and per-item operator actions now sit behind a dedicated recovery component instead of inline inside `record-panel-v2`
   - this removes the last major media-operations block from the structured-results panel and leaves the parent component closer to a pure orchestration role
+- Record Results View Extraction V1:
+  - timeline and flat-list result rendering now live in `apps/web/components/record-results-view.tsx` instead of staying inline inside `record-panel-v2`
+  - the parent panel now passes selection state, locale labels, and formatting helpers while the dedicated results view owns the timeline/list presentation boundary
+  - this removes another repeated rendering block from the oversized panel and continues the maintainability-first enterprise refactor path
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the dead-copy cleanup
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the results-view extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
