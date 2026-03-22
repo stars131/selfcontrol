@@ -398,10 +398,14 @@ Last updated: 2026-03-22
   - chat-panel local draft state, share-link form state, async loading flags, and action error handling now live in `apps/web/components/use-chat-panel-actions.ts`
   - `apps/web/components/chat-panel.tsx` now focuses more narrowly on agent UI composition while the dedicated hook owns send, sync, reindex, audit refresh, and share-link orchestration
   - this reduces another callback-heavy UI module and keeps future chat-side operator changes on a smaller enterprise-grade review surface
+- Chat Panel Structure Guard V1:
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces that `chat-panel.tsx` must wire local async state and handler orchestration through `use-chat-panel-actions.ts`
+  - the guard blocks reintroduction of inline `useState`, `useMemo`, share-url helpers, and `const handle...` action handlers into the main chat panel component
+  - `apps/web/package.json` now exposes `npm run verify:chat-panel-structure` so this boundary stays executable in future slices
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat-panel actions hook extraction
+- Continue simplifying remaining large UI module boundaries after the chat-panel structure guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

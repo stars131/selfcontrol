@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "verify:chat-panel-structure": "node ./scripts/verify-chat-panel-structure.mjs",
     "verify:map-panel-structure": "node ./scripts/verify-map-panel-structure.mjs",
     "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",
     "verify:record-panel-structure": "node ./scripts/verify-record-panel-structure.mjs",
