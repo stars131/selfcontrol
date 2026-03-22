@@ -552,10 +552,14 @@ Last updated: 2026-03-23
   - assistant and user message rendering, source rendering, and the empty-thread assistant prompt now live in `apps/web/components/chat-message-thread.tsx` instead of remaining inline inside `chat-panel.tsx`
   - the chat panel now focuses more narrowly on action wiring, operator cards, and composer controls while the dedicated thread component owns conversation rendering
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the thread boundary, keeps source rendering checks active there, and lowers the chat-panel size ceiling again
+- Workspace Shell State Hook Extraction V1:
+  - workspace-shell local state registration and permission derivation now live in `apps/web/components/use-workspace-shell-state.ts` instead of remaining inline inside `workspace-shell-client.tsx`
+  - the main workspace shell now focuses more narrowly on refresh wiring, lifecycle hooks, action hooks, and panel composition while the dedicated state hook owns state setup
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the state-hook boundary, blocks direct `useState` reintroduction, and lowers the workspace-shell client size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat message thread extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell state hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

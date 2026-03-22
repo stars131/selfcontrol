@@ -17,6 +17,10 @@ if (!source.includes('import { useWorkspaceShellActions } from "./use-workspace-
   throw new Error("workspace-shell-client.tsx must import useWorkspaceShellActions");
 }
 
+if (!source.includes('import { useWorkspaceShellState } from "./use-workspace-shell-state";')) {
+  throw new Error("workspace-shell-client.tsx must import useWorkspaceShellState");
+}
+
 if (!source.includes('import { WorkspaceShellFrame } from "./workspace-shell-frame";')) {
   throw new Error("workspace-shell-client.tsx must import WorkspaceShellFrame");
 }
@@ -33,6 +37,10 @@ if (!source.includes("useWorkspaceShellActions({")) {
   throw new Error("workspace-shell-client.tsx must delegate action orchestration to useWorkspaceShellActions");
 }
 
+if (!source.includes("useWorkspaceShellState()")) {
+  throw new Error("workspace-shell-client.tsx must delegate local state registration to useWorkspaceShellState");
+}
+
 if (!source.includes("<WorkspaceShellPanels")) {
   throw new Error("workspace-shell-client.tsx must delegate panel composition to WorkspaceShellPanels");
 }
@@ -42,6 +50,7 @@ if (!source.includes("<WorkspaceShellFrame")) {
 }
 
 for (const forbiddenToken of [
+  "useState(",
   "useEffect(",
   "const handle",
   "listRecords(",
@@ -68,7 +77,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 300;
+const maxAllowedLines = 250;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-shell-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

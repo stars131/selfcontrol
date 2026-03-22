@@ -1,27 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-import type {
-  AuditLogItem,
-  ChatMessage,
-  Conversation,
-  KnowledgeStats,
-  MediaAsset,
-  MediaDeadLetterOverview,
-  MediaProcessingOverview,
-  MediaStorageSummary,
-  NotificationItem,
-  ProviderFeatureConfig,
-  RecordFilterState,
-  RecordItem,
-  ReminderItem,
-  SearchPresetItem,
-  ShareLinkItem,
-  TimelineDay,
-  Workspace,
-} from "../lib/types";
 import {
   INITIAL_RECORD_FILTER,
   loadConversationMessagesForWorkspace,
@@ -43,43 +23,24 @@ import { WorkspaceShellFrame } from "./workspace-shell-frame";
 import { WorkspaceShellPanels } from "./workspace-shell-panels";
 import { useWorkspaceShellActions } from "./use-workspace-shell-actions";
 import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";
+import { useWorkspaceShellState } from "./use-workspace-shell-state";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
-  const [workspace, setWorkspace] = useState<Workspace | null>(null);
-  const [records, setRecords] = useState<RecordItem[]>([]);
-  const [visibleRecords, setVisibleRecords] = useState<RecordItem[]>([]);
-  const [timelineDays, setTimelineDays] = useState<TimelineDay[]>([]);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
-  const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
-  const [mediaDeadLetterOverview, setMediaDeadLetterOverview] = useState<MediaDeadLetterOverview | null>(null);
-  const [mediaProcessingOverview, setMediaProcessingOverview] = useState<MediaProcessingOverview | null>(null);
-  const [mediaStorageSummary, setMediaStorageSummary] = useState<MediaStorageSummary | null>(null);
-  const [reminders, setReminders] = useState<ReminderItem[]>([]);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [knowledgeStats, setKnowledgeStats] = useState<KnowledgeStats | null>(null);
-  const [providerConfigs, setProviderConfigs] = useState<ProviderFeatureConfig[]>([]);
-  const [shareLinks, setShareLinks] = useState<ShareLinkItem[]>([]);
-  const [latestSharePath, setLatestSharePath] = useState("");
-  const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
-  const [recordFilter, setRecordFilter] = useState<RecordFilterState>(INITIAL_RECORD_FILTER);
-  const [searchPresets, setSearchPresets] = useState<SearchPresetItem[]>([]);
-  const [filteringRecords, setFilteringRecords] = useState(false);
-  const [savingSearchPreset, setSavingSearchPreset] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const canWriteWorkspace = workspace?.role === "owner" || workspace?.role === "editor";
-  const canManageWorkspace = canWriteWorkspace;
-  const canManageSharing = workspace?.role === "owner";
+  const {
+    token, setToken, workspace, setWorkspace, records, setRecords, visibleRecords, setVisibleRecords,
+    timelineDays, setTimelineDays, conversations, setConversations, activeConversationId, setActiveConversationId,
+    messages, setMessages, selectedRecordId, setSelectedRecordId, mediaAssets, setMediaAssets,
+    mediaDeadLetterOverview, setMediaDeadLetterOverview, mediaProcessingOverview, setMediaProcessingOverview,
+    mediaStorageSummary, setMediaStorageSummary, reminders, setReminders, notifications, setNotifications,
+    knowledgeStats, setKnowledgeStats, providerConfigs, setProviderConfigs, shareLinks, setShareLinks,
+    latestSharePath, setLatestSharePath, auditLogs, setAuditLogs, recordFilter, setRecordFilter,
+    searchPresets, setSearchPresets, filteringRecords, setFilteringRecords, savingSearchPreset,
+    setSavingSearchPreset, loading, setLoading, error, setError, canWriteWorkspace,
+    canManageWorkspace, canManageSharing,
+  } = useWorkspaceShellState();
 
-  const refreshRecords = async (
-    activeToken: string,
-    nextRecordFilter: RecordFilterState = INITIAL_RECORD_FILTER,
-  ) => {
+  const refreshRecords = async (activeToken: string, nextRecordFilter = INITIAL_RECORD_FILTER) => {
     await refreshRecordCollection({
       token: activeToken,
       workspaceId,
@@ -95,53 +56,33 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     await refreshMediaAssets(activeToken, workspaceId, recordId, setMediaAssets);
   };
 
-  const refreshMediaStorageSummary = async (activeToken: string) => {
-    await refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
-  };
-
-  const refreshMediaProcessingOverview = async (activeToken: string) => {
-    await refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
-  };
-
-  const refreshMediaDeadLetterOverview = async (activeToken: string) => {
-    await refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
-  };
+  const refreshMediaStorageSummary = async (activeToken: string) =>
+    refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
+  const refreshMediaProcessingOverview = async (activeToken: string) =>
+    refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
+  const refreshMediaDeadLetterOverview = async (activeToken: string) =>
+    refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
 
   const refreshReminders = async (activeToken: string, recordId: string | null) => {
     await refreshReminderItems(activeToken, workspaceId, recordId, setReminders);
   };
 
-  const refreshNotifications = async (activeToken: string) => {
-    await refreshNotificationItems(activeToken, workspaceId, setNotifications);
-  };
-
-  const refreshKnowledge = async (activeToken: string) => {
-    await refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
-  };
-
-  const refreshProviderConfigs = async (activeToken: string) => {
-    await refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
-  };
-
-  const refreshShareLinks = async (activeToken: string) => {
-    await refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
-  };
-
-  const refreshSearchPresets = async (activeToken: string) => {
-    await refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
-  };
-
-  const refreshAuditLogs = async (activeToken: string) => {
-    await refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
-  };
-
-  const syncDueNotifications = async (activeToken: string) => {
-    await syncDueNotificationsAndRefresh(activeToken, workspaceId, setNotifications);
-  };
-
-  const loadConversationMessages = async (activeToken: string, conversationId: string) => {
-    await loadConversationMessagesForWorkspace(activeToken, workspaceId, conversationId, setMessages);
-  };
+  const refreshNotifications = async (activeToken: string) =>
+    refreshNotificationItems(activeToken, workspaceId, setNotifications);
+  const refreshKnowledge = async (activeToken: string) =>
+    refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
+  const refreshProviderConfigs = async (activeToken: string) =>
+    refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
+  const refreshShareLinks = async (activeToken: string) =>
+    refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
+  const refreshSearchPresets = async (activeToken: string) =>
+    refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
+  const refreshAuditLogs = async (activeToken: string) =>
+    refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
+  const syncDueNotifications = async (activeToken: string) =>
+    syncDueNotificationsAndRefresh(activeToken, workspaceId, setNotifications);
+  const loadConversationMessages = async (activeToken: string, conversationId: string) =>
+    loadConversationMessagesForWorkspace(activeToken, workspaceId, conversationId, setMessages);
 
   useWorkspaceShellEffects({
     router,
