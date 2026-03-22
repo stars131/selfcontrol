@@ -29,6 +29,7 @@ import {
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
+import { LocationReviewPanel } from "./location-review-panel";
 import { MediaAssetCard } from "./media-asset-card";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordPanelStats } from "./record-panel-stats";
@@ -749,152 +750,47 @@ export function RecordPanelV2({
               <input className="input" disabled value={form.location.source || "manual"} />
             </label>
           </div>
-          <div className="record-card form-stack">
-            <div className="eyebrow">{panelCopy.locationReview}</div>
-            <div className="muted">
-              {panelCopy.locationReviewDescription}
-            </div>
-            <div className="inline-fields">
-              <label className="field">
-                <span className="field-label">{panelCopy.reviewStatus}</span>
-                <select
-                  className="input"
-                  disabled={!canWriteWorkspace}
-                  value={locationReviewForm.status}
-                  onChange={(event) =>
-                    setLocationReviewForm((prev) => ({
-                      ...prev,
-                      status: event.target.value,
-                    }))
-                  }
-                >
-                  <option value="pending">{panelCopy.pending}</option>
-                  <option value="confirmed">{panelCopy.confirmed}</option>
-                  <option value="needs_review">{panelCopy.needsReview}</option>
-                </select>
-              </label>
-              <label className="field" style={{ gridColumn: "span 2" }}>
-                <span className="field-label">{panelCopy.reviewNote}</span>
-                <input
-                  className="input"
-                  disabled={!canWriteWorkspace}
-                  value={locationReviewForm.note}
-                  onChange={(event) =>
-                    setLocationReviewForm((prev) => ({
-                      ...prev,
-                      note: event.target.value,
-                    }))
-                  }
-                  placeholder={panelCopy.reviewNotePlaceholder}
-                />
-              </label>
-            </div>
-            <div className="action-row">
-              <button
-                className="button secondary"
-                type="button"
-                disabled={!canWriteWorkspace}
-                onClick={() =>
-                  setLocationReviewForm((prev) => ({
-                    ...prev,
-                    status: "confirmed",
-                  }))
-                }
-              >
-                {panelCopy.markConfirmed}
-              </button>
-              <button
-                className="button secondary"
-                type="button"
-                disabled={!canWriteWorkspace}
-                onClick={() =>
-                  setLocationReviewForm((prev) => ({
-                    ...prev,
-                    status: "needs_review",
-                  }))
-                }
-              >
-                {panelCopy.markNeedsReview}
-              </button>
-              <button
-                className="button secondary"
-                type="button"
-                disabled={!canWriteWorkspace}
-                onClick={() =>
-                  setLocationReviewForm({
-                    status: "pending",
-                    note: "",
-                  })
-                }
-              >
-                {panelCopy.resetReview}
-              </button>
-            </div>
-            {selectedRecord && selectedLocationReview ? (
-              <div className="detail-grid">
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.storedStatus}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {formatReviewStatusLabel(selectedLocationReview.status)}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.lastUpdated}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {formatHistoryTimestampLabel(selectedLocationReview.updated_at)}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{panelCopy.confirmedAt}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {selectedLocationReview.confirmed_at
-                      ? formatHistoryTimestampLabel(selectedLocationReview.confirmed_at)
-                      : panelCopy.notConfirmed}
-                  </div>
-                </div>
-              </div>
-            ) : null}
-            {selectedRecord ? (
-              <div className="history-list">
-                {selectedLocationHistory.length ? (
-                  selectedLocationHistory.slice(0, 6).map((entry) => (
-                    <article className="history-item" key={`${entry.changed_at}-${entry.action_code}`}>
-                      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <div>
-                          <div className="eyebrow">{summarizeHistoryActionLabel(entry)}</div>
-                          <div style={{ marginTop: 8, fontWeight: 600 }}>
-                            {entry.place_name || entry.address || panelCopy.unnamedLocation}
-                          </div>
-                        </div>
-                        <div className="muted">{formatHistoryTimestampLabel(entry.changed_at)}</div>
-                      </div>
-                      <div className="muted" style={{ marginTop: 8 }}>
-                        {entry.address || panelCopy.noAddress}
-                      </div>
-                      {(entry.latitude ?? null) !== null && (entry.longitude ?? null) !== null ? (
-                        <div className="muted" style={{ marginTop: 8 }}>
-                          {entry.latitude}, {entry.longitude}
-                        </div>
-                      ) : null}
-                      <div className="tag-row">
-                        {entry.source ? <span className="tag">{entry.source}</span> : null}
-                        {entry.review_status ? <span className="tag">{formatReviewStatusLabel(entry.review_status)}</span> : null}
-                      </div>
-                      {entry.review_note ? (
-                        <div className="muted" style={{ marginTop: 8 }}>
-                          {entry.review_note}
-                        </div>
-                      ) : null}
-                    </article>
-                  ))
-                ) : (
-                  <div className="notice">
-                    {panelCopy.noLocationHistory}
-                  </div>
-                )}
-              </div>
-            ) : null}
-          </div>
+          <LocationReviewPanel
+            canWriteWorkspace={canWriteWorkspace}
+            formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+            formatReviewStatusLabel={formatReviewStatusLabel}
+            hasSelectedRecord={Boolean(selectedRecord)}
+            onMarkConfirmed={() =>
+              setLocationReviewForm((prev) => ({
+                ...prev,
+                status: "confirmed",
+              }))
+            }
+            onMarkNeedsReview={() =>
+              setLocationReviewForm((prev) => ({
+                ...prev,
+                status: "needs_review",
+              }))
+            }
+            onNoteChange={(value) =>
+              setLocationReviewForm((prev) => ({
+                ...prev,
+                note: value,
+              }))
+            }
+            onResetReview={() =>
+              setLocationReviewForm({
+                status: "pending",
+                note: "",
+              })
+            }
+            onStatusChange={(value) =>
+              setLocationReviewForm((prev) => ({
+                ...prev,
+                status: value,
+              }))
+            }
+            panelCopy={panelCopy}
+            reviewForm={locationReviewForm}
+            selectedLocationHistory={selectedLocationHistory}
+            selectedLocationReview={selectedLocationReview}
+            summarizeHistoryActionLabel={summarizeHistoryActionLabel}
+          />
           {error ? <div className="notice error">{error}</div> : null}
           <div className="action-row">
             <button className="button" disabled={saving || !canWriteWorkspace} type="submit">

@@ -298,6 +298,10 @@ Last updated: 2026-03-22
   - the structured-results summary stats now render through `apps/web/components/record-panel-stats.tsx` instead of inline JSX inside `record-panel-v2`
   - top-level count cards for visible records, food items, and avoid items now sit behind a small dedicated presentation component
   - this keeps the main panel focused on state orchestration and trims another repeated presentation block
+- Record-Panel Location Review Extraction V1:
+  - location review form controls, stored review summary, and location history rendering now live in `apps/web/components/location-review-panel.tsx`
+  - the parent panel now passes review state and callbacks while the location-review UI owns the detailed review and history presentation
+  - this removes another large inline block from `record-panel-v2` and keeps the long-term map review workflow on a smaller module boundary
 
 ## Next
 - Continue the next product slice
