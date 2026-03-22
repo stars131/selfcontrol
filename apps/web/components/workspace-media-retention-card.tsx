@@ -6,7 +6,6 @@ import type {
 } from "../lib/types";
 import {
   useWorkspaceMediaRetentionController,
-  type MediaRetentionActionResult,
 } from "./use-workspace-media-retention-controller";
 
 const COPY: Record<

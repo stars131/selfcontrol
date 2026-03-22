@@ -430,10 +430,14 @@ Last updated: 2026-03-22
   - media-retention report loading, threshold state, selection state, storage-risk derivation, and archive/cleanup action orchestration now live in `apps/web/components/use-workspace-media-retention-controller.ts`
   - `apps/web/components/workspace-media-retention-card.tsx` now focuses more narrowly on retention-report copy and result rendering while the dedicated hook owns data refresh and destructive-action flow
   - this reduces another callback-heavy operator card and narrows future review scope for retention operations under the enterprise maintainability standard
+- Workspace Media Retention Structure Guard V1:
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces that `workspace-media-retention-card.tsx` must wire report loading, selection state, and archive/cleanup actions through `use-workspace-media-retention-controller.ts`
+  - the guard blocks reintroduction of inline retention API calls, hook state, and controller-style action declarations into the main retention card component
+  - `apps/web/package.json` now exposes `npm run verify:workspace-media-retention-structure` so this retention-operations boundary remains executable in future slices
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-media-retention controller hook extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-media-retention structure guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
