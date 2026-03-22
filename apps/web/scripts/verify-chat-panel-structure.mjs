@@ -29,6 +29,14 @@ if (!source.includes("<ChatAuditLogsCard")) {
   throw new Error("chat-panel.tsx must delegate audit-log rendering to ChatAuditLogsCard");
 }
 
+if (!source.includes('import { ChatNotificationsCard } from "./chat-notifications-card";')) {
+  throw new Error("chat-panel.tsx must import ChatNotificationsCard");
+}
+
+if (!source.includes("<ChatNotificationsCard")) {
+  throw new Error("chat-panel.tsx must delegate notification rendering to ChatNotificationsCard");
+}
+
 if (!source.includes('import { ChatShareLinksCard } from "./chat-share-links-card";')) {
   throw new Error("chat-panel.tsx must import ChatShareLinksCard");
 }
@@ -50,13 +58,14 @@ for (const forbiddenToken of [
   "knowledgeStats.chunk_count",
   "auditLogs.map((item)",
   "shareLinks.map((item)",
+  "notifications.slice(0, 6).map((notification)",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`chat-panel.tsx must keep action state and handler logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 325;
+const maxAllowedLines = 295;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

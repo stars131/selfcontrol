@@ -224,6 +224,7 @@ Last updated: 2026-03-22
   - chat workspace administration now delegates share-link creation and listing into a dedicated card component to reduce coupling inside the main chat panel
   - chat knowledge-base status and reindex controls now live in a dedicated card component so assistant admin tools can evolve without inflating the main chat shell
   - chat audit-log review now lives in a dedicated card component so assistant operations panels stay modular and easier to extend safely
+  - chat notifications now live in a dedicated card component so reminder review stays isolated from the core message timeline
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 - Remote Media Provider Action Shortcuts and Settings Deep Links V1:
