@@ -342,10 +342,14 @@ Last updated: 2026-03-22
   - the record edit form shell now lives in `apps/web/components/record-editor-workspace.tsx` instead of keeping the editor, review, media, and reminder assembly inline inside `record-panel-v2`
   - the parent panel now focuses on state, derived data, and async handlers while the dedicated workspace component owns the form composition boundary
   - this drops the main panel file size again and keeps future record-edit UI changes on a smaller enterprise-grade review surface
+- Record Browse Workspace Extraction V1:
+  - the browse and discovery composition now lives in `apps/web/components/record-browse-workspace.tsx` instead of assembling stats, search, presets, map, and result views inline inside `record-panel-v2`
+  - the parent panel now keeps filter state and handlers while the dedicated browse workspace owns the search and browsing composition boundary
+  - this trims the main panel again and keeps future browse-flow changes on a smaller enterprise-grade module surface
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the editor-workspace extraction
+- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the browse-workspace extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

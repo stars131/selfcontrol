@@ -12,17 +12,12 @@ import {
   readLocationForm,
   readLocationReviewForm,
   type LocationReviewFormState,
-  type RecordFormState,
   type ReminderFormState,
 } from "../lib/record-panel-forms";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
-import { MapPanel, type LocationDraft } from "./map-panel";
+import { RecordBrowseWorkspace } from "./record-browse-workspace";
 import { RecordEditorWorkspace } from "./record-editor-workspace";
-import { RecordSearchPanel } from "./record-search-panel";
-import { RecordResultsView } from "./record-results-view";
-import { RecordPanelStats } from "./record-panel-stats";
-import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
   LocationReview,
@@ -141,7 +136,7 @@ export function RecordPanelV2({
     () => records.find((record) => record.id === selectedRecordId) ?? null,
     [records, selectedRecordId],
   );
-  const [form, setForm] = useState<RecordFormState>(createEmptyForm);
+  const [form, setForm] = useState(createEmptyForm);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -526,67 +521,33 @@ export function RecordPanelV2({
         </div>
       </div>
       <div className="panel-body">
-        <RecordPanelStats
+        <RecordBrowseWorkspace
+          applyPresetLabel={panelCopy.applyPreset}
           avoidCount={avoidCount}
-          avoidLabel={panelCopy.avoid}
-          foodCount={foodCount}
-          foodLabel={panelCopy.food}
-          visibleRecordCount={records.length}
-          visibleRecordsLabel={panelCopy.visibleRecords}
-        />
-
-        <RecordSearchPanel
+          avoidRecordLabel={detailCopy.avoidLabel}
+          avoidStatsLabel={panelCopy.avoid}
           canWriteWorkspace={canWriteWorkspace}
           currentFilterSummary={summarizeRecordFilterLabel(recordFilter)}
-          filterDraft={filterDraft}
-          filteringRecords={filteringRecords}
-          onApplyFilter={handleApplyFilter}
-          onAvoidOnlyChange={(value) =>
-            setFilterDraft((current) => ({
-              ...current,
-              avoidOnly: value,
-            }))
-          }
-          onPresetNameChange={setPresetName}
-          onQueryChange={(value) =>
-            setFilterDraft((current) => ({
-              ...current,
-              query: value,
-            }))
-          }
-          onResetFilter={onResetFilter}
-          onSavePreset={handleSavePreset}
-          onTypeCodeChange={(value) =>
-            setFilterDraft((current) => ({
-              ...current,
-              typeCode: value,
-            }))
-          }
-          panelCopy={panelCopy}
-          presetName={presetName}
-          savingSearchPreset={savingSearchPreset}
-        />
-        <SearchPresetList
-          applyPresetLabel={panelCopy.applyPreset}
-          canWriteWorkspace={canWriteWorkspace}
           deletePresetLabel={panelCopy.deletePreset}
-          emptyLabel={panelCopy.noSavedFilters}
+          draftLocation={canWriteWorkspace ? form.location : null}
           filteringRecords={filteringRecords}
+          filterDraft={filterDraft}
+          flatListViewLabel={detailCopy.flatListView}
+          foodCount={foodCount}
+          foodLabel={panelCopy.food}
+          formatAvoidCountLabel={formatAvoidCountLabel}
+          formatRecordTimestampLabel={formatRecordTimestampLabel}
+          formatReviewStatusLabel={formatReviewStatusLabel}
+          formatTimelineCountLabel={formatTimelineCountLabel}
+          formatTimelineDateLabel={formatTimelineDateLabel}
+          mapPrefixLabel={detailCopy.mapPrefix}
+          noContentLabel={detailCopy.noContent}
+          noRecordsLabel={detailCopy.noRecords}
+          noSavedFiltersLabel={panelCopy.noSavedFilters}
+          onApplyFilter={handleApplyFilter}
+          onApplyLocationFilter={onApplyLocationFilter}
           onApplyPreset={onApplyRecordFilter}
           onDeletePreset={handleDeletePreset}
-          presets={searchPresets}
-          savedPresetLabel={panelCopy.savedPreset}
-          summarizeRecordFilterLabel={summarizeRecordFilterLabel}
-        />
-
-        <MapPanel
-          records={records}
-          selectedRecordId={selectedRecordId}
-          onSelectRecord={onSelectRecord}
-          filteringRecords={filteringRecords}
-          locationFilter={recordFilter}
-          onApplyLocationFilter={onApplyLocationFilter}
-          draftLocation={canWriteWorkspace ? form.location : null}
           onDraftLocationChange={
             canWriteWorkspace
               ? (nextLocation) =>
@@ -596,6 +557,30 @@ export function RecordPanelV2({
                   }))
               : undefined
           }
+          onResetFilter={onResetFilter}
+          onSavePreset={handleSavePreset}
+          onSelectRecord={onSelectRecord}
+          panelCopy={panelCopy}
+          presetName={presetName}
+          ratingPrefixLabel={detailCopy.ratingPrefix}
+          recordFilter={recordFilter}
+          records={records}
+          savedPresetLabel={panelCopy.savedPreset}
+          savingSearchPreset={savingSearchPreset}
+          searchPresets={searchPresets}
+          selectedRecordId={selectedRecordId}
+          setFilterDraft={setFilterDraft}
+          setPresetName={setPresetName}
+          setViewMode={setViewMode}
+          summarizeRecordFilterLabel={summarizeRecordFilterLabel}
+          timelineDayLabel={detailCopy.timelineDayLabel}
+          timelineDays={timelineDays}
+          timelineViewLabel={detailCopy.timelineView}
+          unknownPlaceLabel={detailCopy.unknownPlace}
+          untitledRecordLabel={detailCopy.untitledRecord}
+          viewMode={viewMode}
+          visibleRecordCount={records.length}
+          visibleRecordsLabel={panelCopy.visibleRecords}
         />
 
         <RecordEditorWorkspace
@@ -672,29 +657,6 @@ export function RecordPanelV2({
           untitledReminderLabel={detailCopy.untitledReminder}
           uploading={uploading}
           workspaceId={workspaceId}
-        />
-        <RecordResultsView
-          avoidLabel={detailCopy.avoidLabel}
-          flatListViewLabel={detailCopy.flatListView}
-          formatAvoidCountLabel={formatAvoidCountLabel}
-          formatRecordTimestampLabel={formatRecordTimestampLabel}
-          formatReviewStatusLabel={formatReviewStatusLabel}
-          formatTimelineCountLabel={formatTimelineCountLabel}
-          formatTimelineDateLabel={formatTimelineDateLabel}
-          mapPrefixLabel={detailCopy.mapPrefix}
-          noContentLabel={detailCopy.noContent}
-          noRecordsLabel={detailCopy.noRecords}
-          onSelectRecord={onSelectRecord}
-          onViewModeChange={setViewMode}
-          ratingPrefixLabel={detailCopy.ratingPrefix}
-          records={records}
-          selectedRecordId={selectedRecordId}
-          timelineDayLabel={detailCopy.timelineDayLabel}
-          timelineDays={timelineDays}
-          timelineViewLabel={detailCopy.timelineView}
-          unknownPlaceLabel={detailCopy.unknownPlace}
-          untitledRecordLabel={detailCopy.untitledRecord}
-          viewMode={viewMode}
         />
       </div>
     </section>
