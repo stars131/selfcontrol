@@ -4,6 +4,7 @@ import type { LocaleCode } from "../lib/locale";
 import type {
   MediaRetentionItem,
 } from "../lib/types";
+import { MediaRetentionItemCard } from "./media-retention-item-card";
 import {
   useWorkspaceMediaRetentionController,
 } from "./use-workspace-media-retention-controller";
@@ -199,44 +200,6 @@ const COPY: Record<
   },
 };
 
-function formatCreatedAt(value: string, locale: LocaleCode) {
-  return new Date(value).toLocaleString(locale);
-}
-
-function renderItem(
-  item: MediaRetentionItem,
-  locale: LocaleCode,
-  copy: (typeof COPY)[LocaleCode],
-) {
-  const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
-  return (
-    <article className="message" key={item.media_id}>
-      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div style={{ minWidth: 0 }}>
-          <div className="eyebrow">{item.media_type}</div>
-          <div style={{ marginTop: 8, fontWeight: 600, wordBreak: "break-word" }}>{item.original_filename}</div>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {copy.createdAt} {formatCreatedAt(item.created_at, locale)}
-          </div>
-        </div>
-        <div style={{ textAlign: "right", marginLeft: 16 }}>
-          <div style={{ fontWeight: 600 }}>{item.size_label}</div>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {copy.ageDays} {item.age_days} {copy.days}
-          </div>
-        </div>
-      </div>
-      <div className="tag-row" style={{ marginTop: 12 }}>
-        <span className="tag">{item.processing_status}</span>
-        <span className="tag">{item.storage_provider}</span>
-        <span className="tag">{item.storage_tier === "archive" ? copy.archived : copy.primary}</span>
-        {item.storage_provider !== "local" ? <span className="tag">{remoteReferenceLabel}</span> : null}
-        {item.file_missing ? <span className="tag">{copy.missing}</span> : null}
-      </div>
-    </article>
-  );
-}
-
 export function WorkspaceMediaRetentionCard({
   token,
   workspaceId,
@@ -431,7 +394,9 @@ export function WorkspaceMediaRetentionCard({
           <div className="eyebrow">{copy.largestTitle}</div>
           <div className="record-list compact-list" style={{ marginTop: 12 }}>
             {report?.largest_items.length
-              ? report.largest_items.map((item) => renderItem(item, locale, copy))
+              ? report.largest_items.map((item) => (
+                <MediaRetentionItemCard copy={copy} item={item} key={item.media_id} locale={locale} />
+              ))
               : <div className="notice">{copy.noLargestItems}</div>}
           </div>
         </section>
@@ -440,21 +405,16 @@ export function WorkspaceMediaRetentionCard({
           <div className="record-list compact-list" style={{ marginTop: 12 }}>
             {report?.retention_candidates.length ? (
               report.retention_candidates.map((item) => (
-                <div key={item.media_id}>
-                  {role === "owner" ? (
-                    <label className="muted" style={{ display: "block", marginBottom: 8 }}>
-                      <input
-                        checked={selectedMediaIds.includes(item.media_id)}
-                        disabled={actionLoading}
-                        onChange={() => toggleSelectedMedia(item.media_id)}
-                        style={{ marginRight: 8 }}
-                        type="checkbox"
-                      />
-                      {copy.selectLabel}
-                    </label>
-                  ) : null}
-                  {renderItem(item, locale, copy)}
-                </div>
+                <MediaRetentionItemCard
+                  actionLoading={actionLoading}
+                  copy={copy}
+                  item={item}
+                  key={item.media_id}
+                  locale={locale}
+                  onToggleSelected={toggleSelectedMedia}
+                  selectable={role === "owner"}
+                  selected={selectedMediaIds.includes(item.media_id)}
+                />
               ))
             ) : (
               <div className="notice">{copy.noCandidates}</div>

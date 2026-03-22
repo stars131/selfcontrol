@@ -13,6 +13,14 @@ if (!source.includes("useWorkspaceMediaRetentionController({")) {
   throw new Error("workspace-media-retention-card.tsx must delegate retention orchestration to useWorkspaceMediaRetentionController");
 }
 
+if (!source.includes('import { MediaRetentionItemCard } from "./media-retention-item-card";')) {
+  throw new Error("workspace-media-retention-card.tsx must import MediaRetentionItemCard");
+}
+
+if (!source.includes("<MediaRetentionItemCard")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate media item rendering to MediaRetentionItemCard");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -24,13 +32,14 @@ for (const forbiddenToken of [
   "const toggleSelectedMedia =",
   "const handleArchive =",
   "const handleCleanup =",
+  "function renderItem(",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-media-retention-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 500;
+const maxAllowedLines = 460;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
