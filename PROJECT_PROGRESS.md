@@ -494,10 +494,14 @@ Last updated: 2026-03-22
   - media-storage provider health rendering now lives in `apps/web/components/media-storage-health-card.tsx` instead of remaining inline inside `provider-settings-panel.tsx`
   - the provider settings panel now passes locale copy, anchor highlight state, refresh behavior, and status-format helpers while the dedicated card owns health presentation
   - this removes another stable operator-facing display block from the largest settings component and narrows future review scope
+- Provider Settings Media Storage Health Guard V1:
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now additionally enforces that `provider-settings-panel.tsx` must import and render `MediaStorageHealthCard`
+  - the guard now also blocks reintroduction of the inline media-storage health container markup and lowers the main provider-settings file-size ceiling again
+  - this makes the new health-card boundary executable while preserving the existing controller-hook guard for provider draft and save behavior
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider-settings media storage health card extraction
+- Continue simplifying remaining large UI module boundaries after the provider-settings media storage health guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

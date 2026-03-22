@@ -9,8 +9,16 @@ if (!source.includes('import { useProviderSettingsController } from "./use-provi
   throw new Error("provider-settings-panel.tsx must import useProviderSettingsController");
 }
 
+if (!source.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
+  throw new Error("provider-settings-panel.tsx must import MediaStorageHealthCard");
+}
+
 if (!source.includes("useProviderSettingsController({")) {
   throw new Error("provider-settings-panel.tsx must delegate draft and save orchestration to useProviderSettingsController");
+}
+
+if (!source.includes("<MediaStorageHealthCard")) {
+  throw new Error("provider-settings-panel.tsx must render MediaStorageHealthCard for media storage health presentation");
 }
 
 for (const forbiddenToken of [
@@ -23,13 +31,14 @@ for (const forbiddenToken of [
   "function getActionErrorMessage",
   "const handleSaveProviderConfig =",
   "const handleResetProviderConfig =",
+  'id="provider-media_storage-health"',
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`provider-settings-panel.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 560;
+const maxAllowedLines = 500;
 if (lineCount > maxAllowedLines) {
   throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
