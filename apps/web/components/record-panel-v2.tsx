@@ -14,8 +14,6 @@ import {
 import {
   buildMediaIssueSettingsHref,
   canRetryMediaIssue,
-  readMetadataNumber,
-  readMetadataText,
 } from "../lib/record-panel-media";
 import {
   createEmptyForm,
@@ -30,7 +28,7 @@ import {
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
-import { MediaPreview } from "./media-preview";
+import { MediaAssetCard } from "./media-asset-card";
 import { RecordSummaryCard } from "./record-summary-card";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
@@ -541,139 +539,6 @@ export function RecordPanelV2({
       unitIndex += 1;
     }
     return unitIndex === 0 ? `${value} ${units[unitIndex]}` : `${value.toFixed(1)} ${units[unitIndex]}`;
-  };
-
-  const renderMediaAssetCard = (asset: MediaAsset) => {
-    const extractionMode = readMetadataText(asset.metadata_json, "extraction_mode");
-    const processingSource = readMetadataText(asset.metadata_json, "processing_source");
-    const lastAttemptAt = readMetadataText(asset.metadata_json, "processing_last_attempt_at");
-    const remoteFetchStatus = readMetadataText(asset.metadata_json, "remote_fetch_status");
-    const retryState = readMetadataText(asset.metadata_json, "processing_retry_state");
-    const retryCount = readMetadataNumber(asset.metadata_json, "processing_retry_count");
-    const retryMaxAttempts = readMetadataNumber(asset.metadata_json, "processing_retry_max_attempts");
-    const nextRetryAt = readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at");
-
-    return (
-      <article className="record-card" key={asset.id}>
-        <div className="eyebrow">{asset.media_type}</div>
-        <div>{asset.original_filename}</div>
-        <div className="muted">{asset.mime_type}</div>
-        <div className="tag-row">
-          <span className="tag">{asset.processing_status}</span>
-          <span className="tag">{asset.storage_provider}</span>
-          <span className="tag">{formatMediaSize(asset)}</span>
-          {processingSource ? <span className="tag">{processingSource}</span> : null}
-          {extractionMode ? <span className="tag">{extractionMode}</span> : null}
-          {remoteFetchStatus ? <span className="tag">fetch {remoteFetchStatus}</span> : null}
-          {retryState && retryState !== "idle" ? <span className="tag">retry {retryState}</span> : null}
-          {retryCount !== null ? (
-            <span className="tag">
-              retries {retryCount}
-              {retryMaxAttempts !== null ? `/${retryMaxAttempts}` : ""}
-            </span>
-          ) : null}
-          {typeof asset.metadata_json.file_extension === "string" && asset.metadata_json.file_extension ? (
-            <span className="tag">{String(asset.metadata_json.file_extension)}</span>
-          ) : null}
-        </div>
-        {authToken ? (
-          <div style={{ marginTop: 12 }}>
-            <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
-          </div>
-        ) : null}
-        <div className="detail-grid" style={{ marginTop: 12 }}>
-          {typeof asset.metadata_json.width === "number" &&
-          typeof asset.metadata_json.height === "number" ? (
-            <div className="subtle-card">
-              <div className="eyebrow">{mediaIssueCopy.dimensions}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>
-                {asset.metadata_json.width} x {asset.metadata_json.height}
-              </div>
-            </div>
-          ) : null}
-          {typeof asset.metadata_json.text_char_count === "number" ? (
-            <div className="subtle-card">
-              <div className="eyebrow">{mediaIssueCopy.textChars}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>
-                {asset.metadata_json.text_char_count}
-              </div>
-            </div>
-          ) : null}
-          {typeof asset.metadata_json.text_line_count === "number" ? (
-            <div className="subtle-card">
-              <div className="eyebrow">{mediaIssueCopy.textLines}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>
-                {asset.metadata_json.text_line_count}
-              </div>
-            </div>
-          ) : null}
-          {lastAttemptAt ? (
-            <div className="subtle-card">
-              <div className="eyebrow">{mediaIssueCopy.lastAttempt}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>
-                {formatHistoryTimestampLabel(lastAttemptAt)}
-              </div>
-            </div>
-          ) : null}
-          {nextRetryAt ? (
-            <div className="subtle-card">
-              <div className="eyebrow">{mediaIssueCopy.nextRetry}</div>
-              <div style={{ marginTop: 8, fontWeight: 600 }}>
-                {formatHistoryTimestampLabel(nextRetryAt)}
-              </div>
-            </div>
-          ) : null}
-        </div>
-        {asset.extracted_text ? (
-          <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-            {asset.extracted_text.length > 280
-              ? `${asset.extracted_text.slice(0, 280)}...`
-              : asset.extracted_text}
-          </p>
-        ) : null}
-        {asset.processing_error ? (
-          <div className="notice error" style={{ marginTop: 10 }}>
-            {asset.processing_error}
-          </div>
-        ) : null}
-        <div className="action-row" style={{ marginTop: 12 }}>
-          <button
-            className="button secondary"
-            type="button"
-            disabled={downloadingMediaId === asset.id}
-            onClick={() => void handleDownloadMedia(asset)}
-          >
-            {downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}
-          </button>
-          <button
-            className="button secondary"
-            type="button"
-            disabled={refreshingMediaId === asset.id}
-            onClick={() => void handleRefreshMedia(asset.id)}
-          >
-            {refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}
-          </button>
-          {asset.processing_status !== "completed" ? (
-            <button
-              className="button secondary"
-              type="button"
-              disabled={retryingMediaId === asset.id}
-              onClick={() => void handleRetryMediaProcessing(asset.id)}
-            >
-              {retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}
-            </button>
-          ) : null}
-          <button
-            className="button secondary"
-            type="button"
-            disabled={deletingMediaId === asset.id || !canWriteWorkspace}
-            onClick={() => void handleDeleteMediaAsset(asset.id)}
-          >
-            {deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}
-          </button>
-        </div>
-      </article>
-    );
   };
 
   return (
@@ -1471,7 +1336,26 @@ export function RecordPanelV2({
               ) : null}
               <div className="record-list compact-list">
                 {mediaAssets.length ? (
-                  mediaAssets.map((asset) => renderMediaAssetCard(asset))
+                  mediaAssets.map((asset) => (
+                    <MediaAssetCard
+                      asset={asset}
+                      authToken={authToken}
+                      canWriteWorkspace={canWriteWorkspace}
+                      deletingMediaId={deletingMediaId}
+                      downloadingMediaId={downloadingMediaId}
+                      formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+                      formatMediaSize={formatMediaSize}
+                      key={asset.id}
+                      mediaIssueCopy={mediaIssueCopy}
+                      onDeleteMediaAsset={handleDeleteMediaAsset}
+                      onDownloadMedia={handleDownloadMedia}
+                      onRefreshMedia={handleRefreshMedia}
+                      onRetryMediaProcessing={handleRetryMediaProcessing}
+                      refreshingMediaId={refreshingMediaId}
+                      retryingMediaId={retryingMediaId}
+                      workspaceId={workspaceId}
+                    />
+                  ))
                 ) : (
                   <div className="notice">{detailCopy.noMedia}</div>
                 )}

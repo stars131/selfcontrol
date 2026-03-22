@@ -278,6 +278,10 @@ Last updated: 2026-03-22
   - record list and timeline item rendering now use a dedicated `apps/web/components/record-summary-card.tsx` component instead of inline JSX inside `record-panel-v2`
   - record card display logic now owns its own location and review lookup while the parent panel stays focused on orchestration and state
   - this further reduces the review surface of the oversized panel and prepares the remaining list/media sections for the same modularization path
+- Record-Panel Media Card Extraction V1:
+  - media attachment rendering now uses a dedicated `apps/web/components/media-asset-card.tsx` component instead of inline JSX inside `record-panel-v2`
+  - media preview, metadata chips, retry state details, and media action buttons are now isolated from the parent orchestration layer
+  - `apps/web/lib/record-panel-ui.ts` now exports the media UI copy type so future media-card work can keep strong typing outside the main panel component
 
 ## Next
 - Continue the next product slice
