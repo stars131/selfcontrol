@@ -498,10 +498,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now additionally enforces that `provider-settings-panel.tsx` must import and render `MediaStorageHealthCard`
   - the guard now also blocks reintroduction of the inline media-storage health container markup and lowers the main provider-settings file-size ceiling again
   - this makes the new health-card boundary executable while preserving the existing controller-hook guard for provider draft and save behavior
+- Provider Settings Jump Nav Extraction V1:
+  - provider-settings jump-link rendering now lives in `apps/web/components/provider-settings-jump-nav.tsx` instead of remaining inline inside `provider-settings-panel.tsx`
+  - the main provider settings panel now passes the shared labels and provider config list while the dedicated jump-nav component owns anchor-link presentation
+  - this removes another stable display block from the largest settings component and keeps future navigation-copy changes on a narrower review surface
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider-settings media storage health guard
+- Continue simplifying remaining large UI module boundaries after the provider-settings jump nav extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

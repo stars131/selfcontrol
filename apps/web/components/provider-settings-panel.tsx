@@ -3,6 +3,7 @@
 import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 import { MediaStorageHealthCard } from "./media-storage-health-card";
+import { ProviderSettingsJumpNav } from "./provider-settings-jump-nav";
 import { useProviderSettingsController } from "./use-provider-settings-controller";
 
 const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
@@ -258,21 +259,11 @@ export function ProviderSettingsPanel({
         {copy.subtitle}
       </div>
       {error ? <div className="notice error" style={{ marginTop: 12 }}>{error}</div> : null}
-      <div className="form-stack" style={{ marginTop: 12 }}>
-        <div className="eyebrow">{copy.jumpTo}</div>
-        <div className="tag-row" style={{ marginTop: 0 }}>
-          {providerConfigs.map((item) => (
-            <a className="tag" href={`#provider-${item.feature_code}`} key={item.feature_code}>
-              {item.feature_label}
-            </a>
-          ))}
-          {providerConfigs.some((item) => item.feature_code === "media_storage") ? (
-            <a className="tag" href="#provider-media_storage-health">
-              {copy.healthSection}
-            </a>
-          ) : null}
-        </div>
-      </div>
+      <ProviderSettingsJumpNav
+        healthSectionLabel={copy.healthSection}
+        jumpToLabel={copy.jumpTo}
+        providerConfigs={providerConfigs}
+      />
       <div className="record-list compact-list" style={{ marginTop: 12 }}>
         {providerConfigs.map((item) => {
           const draftItem = providerDrafts[item.feature_code];
