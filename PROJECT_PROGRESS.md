@@ -294,6 +294,10 @@ Last updated: 2026-03-22
   - advanced search controls and preset-save form rendering now live in `apps/web/components/record-search-panel.tsx`
   - the parent panel now keeps search state and callbacks while the search form owns the filter and preset input UI layout
   - this reduces another large inline JSX block inside `record-panel-v2` and continues the enterprise-grade modularization path
+- Record-Panel Stats Extraction V1:
+  - the structured-results summary stats now render through `apps/web/components/record-panel-stats.tsx` instead of inline JSX inside `record-panel-v2`
+  - top-level count cards for visible records, food items, and avoid items now sit behind a small dedicated presentation component
+  - this keeps the main panel focused on state orchestration and trims another repeated presentation block
 
 ## Next
 - Continue the next product slice

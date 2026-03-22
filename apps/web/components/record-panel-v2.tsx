@@ -31,6 +31,7 @@ import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaAssetCard } from "./media-asset-card";
 import { RecordSearchPanel } from "./record-search-panel";
+import { RecordPanelStats } from "./record-panel-stats";
 import { RecordSummaryCard } from "./record-summary-card";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
@@ -536,26 +537,14 @@ export function RecordPanelV2({
         </div>
       </div>
       <div className="panel-body">
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="eyebrow">{panelCopy.visibleRecords}</div>
-            <div className="title" style={{ fontSize: 20 }}>
-              {records.length}
-            </div>
-          </div>
-          <div className="stat-card">
-            <div className="eyebrow">{panelCopy.food}</div>
-            <div className="title" style={{ fontSize: 20 }}>
-              {foodCount}
-            </div>
-          </div>
-          <div className="stat-card">
-            <div className="eyebrow">{panelCopy.avoid}</div>
-            <div className="title" style={{ fontSize: 20 }}>
-              {avoidCount}
-            </div>
-          </div>
-        </div>
+        <RecordPanelStats
+          avoidCount={avoidCount}
+          avoidLabel={panelCopy.avoid}
+          foodCount={foodCount}
+          foodLabel={panelCopy.food}
+          visibleRecordCount={records.length}
+          visibleRecordsLabel={panelCopy.visibleRecords}
+        />
 
         <RecordSearchPanel
           canWriteWorkspace={canWriteWorkspace}
