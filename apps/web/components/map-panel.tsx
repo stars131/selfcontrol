@@ -16,6 +16,7 @@ import {
 import type { LocationFilterState, RecordItem } from "../lib/types";
 import { MapDrilldownCard } from "./map-drilldown-card";
 import { MapSearchForm } from "./map-search-form";
+import { MapStatusNotices } from "./map-status-notices";
 import { MappedRecordsList } from "./mapped-records-list";
 import { useMapPanelController } from "./use-map-panel-controller";
 
@@ -230,35 +231,20 @@ export function MapPanel({
           searching={searching}
         />
       ) : null}
-      {loadError ? (
-        <div className="notice error" style={{ marginTop: 12 }}>
-          {loadError}
-        </div>
-      ) : null}
-      {searchError ? (
-        <div className="notice error" style={{ marginTop: 12 }}>
-          {searchError}
-        </div>
-      ) : null}
+      <MapStatusNotices
+        draftCoordinates={draftCoordinates}
+        draftLocation={draftLocation}
+        isEditable={isEditable}
+        loadError={loadError}
+        mappedRecordCount={mappedRecords.length}
+        searchError={searchError}
+      />
       <div className="map-canvas" ref={containerRef} />
       <MappedRecordsList
         mappedRecords={mappedRecords}
         onSelectRecord={onSelectRecord}
         selectedRecordId={selectedRecordId}
       />
-      {draftLocation?.latitude && draftLocation?.longitude ? (
-        <div className="muted" style={{ marginTop: 12 }}>
-          Current point: {draftLocation.latitude}, {draftLocation.longitude}
-          {draftLocation.source ? ` | ${draftLocation.source}` : ""}
-        </div>
-      ) : null}
-      {!mappedRecords.length && !draftCoordinates ? (
-        <div className="notice" style={{ marginTop: 12 }}>
-          {isEditable
-            ? "No location selected yet. Search a place or click on the map to set one."
-            : "No mapped records yet. Add latitude and longitude in the record editor."}
-        </div>
-      ) : null}
     </section>
   );
 }
