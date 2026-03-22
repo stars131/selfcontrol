@@ -406,10 +406,14 @@ Last updated: 2026-03-22
   - workspace-entry authentication load, workspace listing, transfer-job refresh, share-token normalization, and create/import/join/download actions now live in `apps/web/components/use-workspace-entry-controller.ts`
   - `apps/web/components/workspace-entry-client.tsx` now focuses more narrowly on control-center composition, locale copy, and card rendering while the dedicated hook owns behavioral orchestration
   - this removes another large cluster of side effects and async handlers from an oversized UI module and reduces future review risk under the enterprise maintainability standard
+- Workspace Entry Structure Guard V1:
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces that `workspace-entry-client.tsx` must wire behavior through `use-workspace-entry-controller.ts`
+  - the guard blocks reintroduction of inline auth loading, state hooks, API imports, slug/share-token helpers, and workspace entry action handlers into the main control-center component
+  - `apps/web/package.json` now exposes `npm run verify:workspace-entry-structure` so this maintainability boundary remains executable in future slices
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry controller hook extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-entry structure guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
