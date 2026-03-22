@@ -450,10 +450,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-export-structure.mjs` now enforces that `workspace-export-card.tsx` must wire synchronous export download flow through `use-workspace-export-controller.ts`
   - the guard blocks reintroduction of inline export API calls, local hook state, and controller-style download handlers into the export card
   - `apps/web/package.json` now exposes `npm run verify:workspace-export-structure` so this direct-export boundary remains executable in future slices
+- Map Panel Controller Hook Extraction V1:
+  - map-panel filter draft state, search state, mapped-record stats, draft-coordinate derivation, and location search/filter action orchestration now live in `apps/web/components/use-map-panel-controller.ts`
+  - `apps/web/components/map-panel.tsx` now focuses more narrowly on AMap lifecycle wiring and result rendering while the dedicated hook owns local operator state and filter/search behavior
+  - this trims another mixed-responsibility frontend module and reduces future review scope for map-side search and drill-down updates
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-export structure guard
+- Continue simplifying remaining large UI module boundaries after the map-panel controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
