@@ -402,10 +402,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces that `chat-panel.tsx` must wire local async state and handler orchestration through `use-chat-panel-actions.ts`
   - the guard blocks reintroduction of inline `useState`, `useMemo`, share-url helpers, and `const handle...` action handlers into the main chat panel component
   - `apps/web/package.json` now exposes `npm run verify:chat-panel-structure` so this boundary stays executable in future slices
+- Workspace Entry Controller Hook Extraction V1:
+  - workspace-entry authentication load, workspace listing, transfer-job refresh, share-token normalization, and create/import/join/download actions now live in `apps/web/components/use-workspace-entry-controller.ts`
+  - `apps/web/components/workspace-entry-client.tsx` now focuses more narrowly on control-center composition, locale copy, and card rendering while the dedicated hook owns behavioral orchestration
+  - this removes another large cluster of side effects and async handlers from an oversized UI module and reduces future review risk under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat-panel structure guard
+- Continue simplifying remaining large UI module boundaries after the workspace-entry controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
