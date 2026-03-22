@@ -556,10 +556,14 @@ Last updated: 2026-03-23
   - workspace-shell local state registration and permission derivation now live in `apps/web/components/use-workspace-shell-state.ts` instead of remaining inline inside `workspace-shell-client.tsx`
   - the main workspace shell now focuses more narrowly on refresh wiring, lifecycle hooks, action hooks, and panel composition while the dedicated state hook owns state setup
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the state-hook boundary, blocks direct `useState` reintroduction, and lowers the workspace-shell client size ceiling again
+- Workspace Shell Panels Type Extraction V1:
+  - workspace-shell panel prop typing now lives in `apps/web/components/workspace-shell-panels.types.ts` instead of remaining inline inside `workspace-shell-panels.tsx`
+  - the panel-composition component now focuses more narrowly on chat/right-panel composition while the dedicated types module owns its large cross-panel contract
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now also enforces the panel-type boundary and adds a size ceiling for `workspace-shell-panels.tsx`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell state hook extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell panels type extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

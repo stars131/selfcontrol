@@ -2,8 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 const workspaceShellPath = path.resolve(process.cwd(), "components/workspace-shell-client.tsx");
+const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
 const source = fs.readFileSync(workspaceShellPath, "utf8");
+const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const panelsLineCount = panelsSource.split(/\r?\n/).length;
 
 if (!source.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("workspace-shell-client.tsx must import shared refresh helpers from ../lib/workspace-shell-refresh");
@@ -29,6 +32,10 @@ if (!source.includes('import { WorkspaceShellPanels } from "./workspace-shell-pa
   throw new Error("workspace-shell-client.tsx must import WorkspaceShellPanels");
 }
 
+if (!panelsSource.includes('import type { WorkspaceShellPanelsProps } from "./workspace-shell-panels.types";')) {
+  throw new Error("workspace-shell-panels.tsx must import WorkspaceShellPanelsProps from workspace-shell-panels.types");
+}
+
 if (!source.includes("useWorkspaceShellEffects({")) {
   throw new Error("workspace-shell-client.tsx must delegate lifecycle synchronization to useWorkspaceShellEffects");
 }
@@ -43,6 +50,14 @@ if (!source.includes("useWorkspaceShellState()")) {
 
 if (!source.includes("<WorkspaceShellPanels")) {
   throw new Error("workspace-shell-client.tsx must delegate panel composition to WorkspaceShellPanels");
+}
+
+if (!panelsSource.includes("<ChatPanel")) {
+  throw new Error("workspace-shell-panels.tsx must keep composing ChatPanel");
+}
+
+if (!panelsSource.includes("<RecordPanelV2")) {
+  throw new Error("workspace-shell-panels.tsx must keep composing RecordPanelV2");
 }
 
 if (!source.includes("<WorkspaceShellFrame")) {
@@ -80,6 +95,11 @@ for (const forbiddenToken of [
 const maxAllowedLines = 250;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-shell-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+const maxPanelsLines = 130;
+if (panelsLineCount > maxPanelsLines) {
+  throw new Error(`workspace-shell-panels.tsx exceeded ${maxPanelsLines} lines: ${panelsLineCount}`);
 }
 
 console.log("workspace-shell structure verification passed");
