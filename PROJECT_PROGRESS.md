@@ -592,10 +592,14 @@ Last updated: 2026-03-23
   - record-panel top header and new-record action now live in `apps/web/components/record-panel-header.tsx` instead of remaining inline inside `record-panel-v2.tsx`
   - the record panel shell now focuses more narrowly on controller wiring and workspace mount composition while the dedicated header component owns top-of-panel presentation
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header boundary and lowers the record-panel shell size ceiling again
+- Landing Page Copy Extraction V1:
+  - landing-page locale copy now lives in `apps/web/components/landing-page-copy.ts` instead of remaining inline inside `landing-page-client.tsx`
+  - the landing page now focuses more narrowly on locale state and page composition while the dedicated copy module owns localized marketing text payloads
+  - `apps/web/scripts/verify-landing-page-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce a tighter size ceiling for `landing-page-client.tsx`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record panel header extraction
+- Continue simplifying remaining large UI module boundaries after the landing page copy extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
