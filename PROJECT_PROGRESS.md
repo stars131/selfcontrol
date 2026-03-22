@@ -572,10 +572,14 @@ Last updated: 2026-03-23
   - record-panel browse/editor workspace prop shaping now lives in `apps/web/components/record-panel-v2-workspace-props.ts` instead of remaining inline inside `record-panel-v2.tsx`
   - `record-panel-v2.tsx` now focuses more narrowly on controller wiring, header rendering, and two workspace mounts while the dedicated helper module owns large child-prop adaptation
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the workspace-props helper boundary and lowers the record-panel shell size ceiling again
+- Record Media Tools Type Extraction V1:
+  - record-media tools prop typing now lives in `apps/web/components/record-media-tools.types.ts` instead of remaining inline inside `record-media-tools.tsx`
+  - the media-tools composition component now focuses more narrowly on media section orchestration while the dedicated types module owns its large contract surface
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce a tighter size ceiling for `record-media-tools.tsx`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record panel workspace props helper extraction
+- Continue simplifying remaining large UI module boundaries after the record media tools type extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

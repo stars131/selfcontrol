@@ -1,69 +1,10 @@
 "use client";
 
-import type { ChangeEventHandler } from "react";
-
 import { DeadLetterRecoveryPanel } from "./dead-letter-recovery-panel";
 import { MediaAssetSection } from "./media-asset-section";
 import { MediaStorageOverview } from "./media-storage-overview";
 import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
-import type { LocaleCode } from "../lib/locale";
-import type { MediaIssueCopy } from "../lib/record-panel-ui";
-import type { MediaAsset, MediaDeadLetterOverview, MediaProcessingOverview, MediaStorageSummary } from "../lib/types";
-
-type RecordMediaToolsProps = {
-  authToken: string | null;
-  canWriteWorkspace: boolean;
-  hasSelectedRecord: boolean;
-  workspaceId: string;
-  locale: LocaleCode;
-  error: string;
-  saving: boolean;
-  deleting: boolean;
-  uploading: boolean;
-  saveButtonLabel: string;
-  deleteButtonLabel: string;
-  uploadAttachmentLabel: string;
-  uploadingMediaLabel: string;
-  allTrackedFilesPresentLabel: string;
-  localLabel: string;
-  missingFilesLabel: string;
-  needsAttentionLabel: string;
-  processingCompletedLabel: string;
-  queuedLabel: string;
-  queueStateLabel: string;
-  remoteLabel: string;
-  storageHealthLabel: string;
-  storageMixLabel: string;
-  thisRecordMediaLabel: string;
-  workspaceStorageLabel: string;
-  selectedRecordMediaSizeLabel: string;
-  largestFilePrefixLabel: string;
-  noMediaLabel: string;
-  mediaIssueCopy: MediaIssueCopy;
-  mediaAssets: MediaAsset[];
-  mediaDeadLetterOverview: MediaDeadLetterOverview | null;
-  mediaProcessingOverview: MediaProcessingOverview | null;
-  mediaStorageSummary: MediaStorageSummary | null;
-  downloadingMediaId: string | null;
-  refreshingMediaId: string | null;
-  retryingMediaId: string | null;
-  deletingMediaId: string | null;
-  bulkRetryingDeadLetter: boolean;
-  selectedDeadLetterIds: string[];
-  formatFileCountLabel: (count: number) => string;
-  formatHistoryTimestampLabel: (value?: string | null) => string;
-  onDelete: () => void;
-  onUpload: ChangeEventHandler<HTMLInputElement>;
-  onDeleteMediaAsset: (mediaId: string) => Promise<void>;
-  onDownloadMedia: (asset: MediaAsset) => Promise<void>;
-  onRefreshMedia: (mediaId: string) => Promise<void>;
-  onRetryMediaProcessing: (mediaId: string) => Promise<void>;
-  onSelectAllDeadLetter: () => void;
-  onClearDeadLetterSelection: () => void;
-  onBulkRetrySelectedDeadLetter: () => Promise<void>;
-  onBulkRetryAllDeadLetter: () => Promise<void>;
-  onToggleDeadLetterSelection: (mediaId: string, checked: boolean) => void;
-};
+import type { RecordMediaToolsProps } from "./record-media-tools.types";
 
 export function RecordMediaTools({
   authToken,
