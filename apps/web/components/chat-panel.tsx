@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useStoredLocale } from "../lib/locale";
+import { ChatShareLinksCard } from "./chat-share-links-card";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { useChatPanelActions } from "./use-chat-panel-actions";
 import type {
@@ -168,109 +169,60 @@ export function ChatPanel({
           </div>
         </div>
         {canManageWorkspace ? (
-        <>
-        <div className="record-card" style={{ marginBottom: 16 }}>
-          <div className="eyebrow">Knowledge Base</div>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {knowledgeStats
-              ? `${knowledgeStats.chunk_count} chunks across ${knowledgeStats.record_count} record(s)`
-              : "Knowledge stats unavailable."}
-          </div>
-          {knowledgeStats ? (
-            <div className="muted" style={{ marginTop: 8 }}>
-              {knowledgeStats.embedding_provider} / {knowledgeStats.embedding_model} / dim{" "}
-              {knowledgeStats.embedding_dimensions}
+          <>
+            <div className="record-card" style={{ marginBottom: 16 }}>
+              <div className="eyebrow">Knowledge Base</div>
+              <div className="muted" style={{ marginTop: 8 }}>
+                {knowledgeStats
+                  ? `${knowledgeStats.chunk_count} chunks across ${knowledgeStats.record_count} record(s)`
+                  : "Knowledge stats unavailable."}
+              </div>
+              {knowledgeStats ? (
+                <div className="muted" style={{ marginTop: 8 }}>
+                  {knowledgeStats.embedding_provider} / {knowledgeStats.embedding_model} / dim{" "}
+                  {knowledgeStats.embedding_dimensions}
+                </div>
+              ) : null}
+              {knowledgeStats?.latest_indexed_at ? (
+                <div className="muted" style={{ marginTop: 8 }}>
+                  Updated {new Date(knowledgeStats.latest_indexed_at).toLocaleString()}
+                </div>
+              ) : null}
+              <div className="action-row" style={{ marginTop: 12 }}>
+                <button
+                  className="button secondary"
+                  disabled={reindexing || !canManageWorkspace}
+                  type="button"
+                  onClick={() => void handleReindexKnowledge()}
+                >
+                  {reindexing ? "Reindexing..." : "Rebuild knowledge index"}
+                </button>
+              </div>
             </div>
-          ) : null}
-          {knowledgeStats?.latest_indexed_at ? (
-            <div className="muted" style={{ marginTop: 8 }}>
-              Updated {new Date(knowledgeStats.latest_indexed_at).toLocaleString()}
-            </div>
-          ) : null}
-          <div className="action-row" style={{ marginTop: 12 }}>
-            <button
-              className="button secondary"
-              disabled={reindexing || !canManageWorkspace}
-              type="button"
-              onClick={() => void handleReindexKnowledge()}
-            >
-              {reindexing ? "Reindexing..." : "Rebuild knowledge index"}
-            </button>
-          </div>
-        </div>
-        {canManageSharing ? (
-        <div className="record-card" style={{ marginBottom: 16 }}>
-          <div className="eyebrow">Share Links</div>
-          <div className="form-stack" style={{ marginTop: 12 }}>
-            <input
-              className="input"
-              placeholder="Share name"
-              value={shareName}
-              onChange={(event) => setShareName(event.target.value)}
-            />
-            <div className="action-row">
-              <select
-                className="input"
-                value={sharePermission}
-                onChange={(event) => setSharePermission(event.target.value)}
-              >
-                <option value="viewer">viewer</option>
-                <option value="editor">editor</option>
-              </select>
-              <input
-                className="input"
-                placeholder="Max uses"
-                value={shareMaxUses}
-                onChange={(event) => setShareMaxUses(event.target.value.replace(/[^0-9]/g, ""))}
+            {canManageSharing ? (
+              <ChatShareLinksCard
+                creatingShare={creatingShare}
+                disablingShareId={disablingShareId}
+                latestShareUrl={latestShareUrl}
+                onCreateShareLink={handleCreateShareLink}
+                onDisableShareLink={handleDisableShareLink}
+                setShareMaxUses={setShareMaxUses}
+                setShareName={setShareName}
+                setSharePermission={setSharePermission}
+                shareLinks={shareLinks}
+                shareMaxUses={shareMaxUses}
+                shareName={shareName}
+                sharePermission={sharePermission}
+              />
+            ) : null}
+            <div style={{ marginBottom: 16 }}>
+              <ProviderSettingsPanel
+                locale={locale}
+                onSaveProviderConfig={onSaveProviderConfig}
+                providerConfigs={providerConfigs}
               />
             </div>
-            <button className="button secondary" disabled={creatingShare} type="button" onClick={() => void handleCreateShareLink()}>
-              {creatingShare ? "Creating..." : "Create share link"}
-            </button>
-            {latestShareUrl ? (
-              <article className="message assistant">
-                <div className="eyebrow">Latest link</div>
-                <div style={{ marginTop: 8, wordBreak: "break-all" }}>{latestShareUrl}</div>
-              </article>
-            ) : null}
-            <div className="record-list compact-list">
-              {shareLinks.length ? (
-                shareLinks.map((item) => (
-                  <article className="message" key={item.id}>
-                    <div className="eyebrow">
-                      {item.permission_code} / {item.is_enabled ? "enabled" : "disabled"}
-                    </div>
-                    <div style={{ marginTop: 8, fontWeight: 600 }}>{item.name}</div>
-                    <div className="muted" style={{ marginTop: 8 }}>
-                      token hint {item.token_hint} · used {item.use_count}
-                    </div>
-                    <div className="action-row" style={{ marginTop: 10 }}>
-                      <button
-                        className="button secondary"
-                        disabled={!item.is_enabled || disablingShareId === item.id}
-                        type="button"
-                        onClick={() => void handleDisableShareLink(item.id)}
-                      >
-                        {disablingShareId === item.id ? "Updating..." : "Disable"}
-                      </button>
-                    </div>
-                  </article>
-                ))
-              ) : (
-                <div className="notice">No share links yet.</div>
-              )}
-            </div>
-          </div>
-        </div>
-        ) : null}
-        <div style={{ marginBottom: 16 }}>
-          <ProviderSettingsPanel
-            locale={locale}
-            onSaveProviderConfig={onSaveProviderConfig}
-            providerConfigs={providerConfigs}
-          />
-        </div>
-        </>
+          </>
         ) : null}
         <div className="record-card" style={{ marginBottom: 16 }}>
           <div className="action-row" style={{ justifyContent: "space-between" }}>
