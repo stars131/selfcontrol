@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useStoredLocale } from "../lib/locale";
 import { ChatAuditLogsCard } from "./chat-audit-logs-card";
+import { ChatConversationBar } from "./chat-conversation-bar";
 import { ChatKnowledgeCard } from "./chat-knowledge-card";
 import { ChatMessageThread } from "./chat-message-thread";
 import { ChatNotificationsCard } from "./chat-notifications-card";
@@ -140,38 +141,15 @@ export function ChatPanel({
         ) : null}
       </div>
       <div className="panel-body">
-        <div className="conversation-bar">
-          <div className="action-row">
-            <button
-              className="button secondary"
-              disabled={!canWriteWorkspace}
-              type="button"
-              onClick={() => void onCreateConversation()}
-            >
-              New conversation
-            </button>
-            <button
-              className="button secondary"
-              disabled={syncing}
-              type="button"
-              onClick={() => void handleSyncNotifications()}
-            >
-              {syncing ? "Syncing..." : "Sync reminders"}
-            </button>
-          </div>
-          <div className="conversation-list">
-            {conversations.map((conversation) => (
-              <button
-                className={`conversation-pill ${conversation.id === activeConversationId ? "active" : ""}`}
-                key={conversation.id}
-                type="button"
-                onClick={() => onSelectConversation(conversation.id)}
-              >
-                {conversation.title}
-              </button>
-            ))}
-          </div>
-        </div>
+        <ChatConversationBar
+          activeConversationId={activeConversationId}
+          canWriteWorkspace={canWriteWorkspace}
+          conversations={conversations}
+          onCreateConversation={onCreateConversation}
+          onSelectConversation={onSelectConversation}
+          onSyncNotifications={handleSyncNotifications}
+          syncing={syncing}
+        />
         {canManageWorkspace ? (
           <>
             <ChatKnowledgeCard

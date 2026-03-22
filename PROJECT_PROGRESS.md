@@ -564,10 +564,14 @@ Last updated: 2026-03-23
   - record-editor workspace prop typing now lives in `apps/web/components/record-editor-workspace.types.ts` instead of remaining inline inside `record-editor-workspace.tsx`
   - the editor workspace component now focuses more narrowly on field/review/media/reminder composition while the dedicated types module owns its large editor contract
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the type-boundary and lowers the editor workspace size ceiling again
+- Chat Conversation Bar Extraction V1:
+  - chat conversation switching and reminder-sync controls now live in `apps/web/components/chat-conversation-bar.tsx` instead of remaining inline inside `chat-panel.tsx`
+  - the chat panel now focuses more narrowly on operator cards, message thread composition, and composer controls while the dedicated conversation-bar component owns conversation list rendering
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the conversation-bar boundary and lowers the chat-panel size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor workspace type extraction
+- Continue simplifying remaining large UI module boundaries after the chat conversation bar extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

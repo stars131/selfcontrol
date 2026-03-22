@@ -4,6 +4,8 @@ import path from "node:path";
 const chatPanelPath = path.resolve(process.cwd(), "components/chat-panel.tsx");
 const source = fs.readFileSync(chatPanelPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const chatConversationBarPath = path.resolve(process.cwd(), "components/chat-conversation-bar.tsx");
+const chatConversationBarSource = fs.readFileSync(chatConversationBarPath, "utf8");
 const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
 const chatMessageThreadSource = fs.readFileSync(chatMessageThreadPath, "utf8");
 
@@ -19,8 +21,20 @@ if (!source.includes('import { ChatKnowledgeCard } from "./chat-knowledge-card";
   throw new Error("chat-panel.tsx must import ChatKnowledgeCard");
 }
 
+if (!source.includes('import { ChatConversationBar } from "./chat-conversation-bar";')) {
+  throw new Error("chat-panel.tsx must import ChatConversationBar");
+}
+
 if (!source.includes("<ChatKnowledgeCard")) {
   throw new Error("chat-panel.tsx must delegate knowledge card rendering to ChatKnowledgeCard");
+}
+
+if (!source.includes("<ChatConversationBar")) {
+  throw new Error("chat-panel.tsx must delegate conversation-bar rendering to ChatConversationBar");
+}
+
+if (!chatConversationBarSource.includes("className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}")) {
+  throw new Error("chat-conversation-bar.tsx must keep conversation pill rendering");
 }
 
 if (!source.includes('import { ChatAuditLogsCard } from "./chat-audit-logs-card";')) {
@@ -79,13 +93,14 @@ for (const forbiddenToken of [
   "notifications.slice(0, 6).map((notification)",
   "metadata_json.sources.slice(0, 3).map((source, index)",
   'className={`message ${message.role === "assistant" ? "assistant" : ""}`}',
+  "className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`chat-panel.tsx must keep action state and handler logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 245;
+const maxAllowedLines = 220;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
