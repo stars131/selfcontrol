@@ -286,6 +286,10 @@ Last updated: 2026-03-22
   - byte-count and media-size formatting now live in `apps/web/lib/record-panel-format.ts` instead of staying inline inside `record-panel-v2`
   - the media card and workspace storage summary now share the same formatting rules through a dedicated helper boundary
   - this removes another display-logic cluster from the main panel and improves consistency for future UI updates
+- Record-Panel Search Preset List Extraction V1:
+  - saved search preset rendering now lives in `apps/web/components/search-preset-list.tsx` instead of staying inline inside `record-panel-v2`
+  - preset empty-state, apply action, and delete action UI are now isolated from the main panel orchestration layer
+  - this keeps the search area moving toward smaller enterprise-grade UI boundaries without changing preset behavior
 
 ## Next
 - Continue the next product slice

@@ -31,6 +31,7 @@ import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaAssetCard } from "./media-asset-card";
 import { RecordSummaryCard } from "./record-summary-card";
+import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import type {
   LocationReview,
@@ -640,36 +641,18 @@ export function RecordPanelV2({
               </button>
             </div>
           </div>
-          {searchPresets.length ? (
-            <div className="record-list compact-list">
-              {searchPresets.map((preset) => (
-                <article className="record-card" key={preset.id}>
-                  <div className="eyebrow">{panelCopy.savedPreset}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>{preset.name}</div>
-                  <div className="muted" style={{ marginTop: 8 }}>
-                    {summarizeRecordFilterLabel(preset.filters)}
-                  </div>
-                  <div className="action-row" style={{ marginTop: 12 }}>
-                    <button
-                      className="button secondary"
-                      disabled={filteringRecords}
-                      type="button"
-                      onClick={() => void onApplyRecordFilter(preset.filters)}
-                    >
-                      {panelCopy.applyPreset}
-                    </button>
-                    {canWriteWorkspace ? (
-                      <button className="button secondary" type="button" onClick={() => void handleDeletePreset(preset.id)}>
-                        {panelCopy.deletePreset}
-                      </button>
-                    ) : null}
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="notice">{panelCopy.noSavedFilters}</div>
-          )}
+          <SearchPresetList
+            applyPresetLabel={panelCopy.applyPreset}
+            canWriteWorkspace={canWriteWorkspace}
+            deletePresetLabel={panelCopy.deletePreset}
+            emptyLabel={panelCopy.noSavedFilters}
+            filteringRecords={filteringRecords}
+            onApplyPreset={onApplyRecordFilter}
+            onDeletePreset={handleDeletePreset}
+            presets={searchPresets}
+            savedPresetLabel={panelCopy.savedPreset}
+            summarizeRecordFilterLabel={summarizeRecordFilterLabel}
+          />
         </div>
 
         <MapPanel
