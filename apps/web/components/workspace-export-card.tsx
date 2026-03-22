@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
-import { downloadWorkspaceExport } from "../lib/api";
 import type { LocaleCode } from "../lib/locale";
+import { useWorkspaceExportController } from "./use-workspace-export-controller";
 
 const COPY: Record<
   LocaleCode,
@@ -70,31 +68,13 @@ export function WorkspaceExportCard({
   role: "owner" | "editor";
 }) {
   const copy = COPY[locale];
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  const handleDownload = async () => {
-    setLoading(true);
-    setError("");
-    setSuccess("");
-    try {
-      const result = await downloadWorkspaceExport(token, workspaceId);
-      const objectUrl = window.URL.createObjectURL(result.blob);
-      const link = document.createElement("a");
-      link.href = objectUrl;
-      link.download = result.filename ?? `${workspaceSlug || workspaceId}-export.zip`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(objectUrl);
-      setSuccess(copy.success);
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.failed);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { loading, error, success, handleDownload } = useWorkspaceExportController({
+    token,
+    workspaceId,
+    workspaceSlug,
+    successMessage: copy.success,
+    failedMessage: copy.failed,
+  });
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>

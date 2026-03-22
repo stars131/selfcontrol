@@ -442,10 +442,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-export-jobs-structure.mjs` now enforces that `workspace-export-jobs-card.tsx` must wire job loading, job creation, and artifact download flow through `use-workspace-export-jobs-controller.ts`
   - the guard blocks reintroduction of inline export-job API calls, hook state, and controller-style action declarations into the async export jobs card
   - `apps/web/package.json` now exposes `npm run verify:workspace-export-jobs-structure` so this async-export boundary remains executable in future slices
+- Workspace Export Controller Hook Extraction V1:
+  - direct workspace export download flow and local loading/error/success state now live in `apps/web/components/use-workspace-export-controller.ts`
+  - `apps/web/components/workspace-export-card.tsx` now focuses more narrowly on export copy and owner-only rendering while the dedicated hook owns synchronous export download orchestration
+  - this removes another action-handling cluster from an operator-facing card and keeps future export behavior changes on a smaller review surface
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-export-jobs structure guard
+- Continue simplifying remaining large UI module boundaries after the workspace-export controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
