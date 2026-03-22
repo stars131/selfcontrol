@@ -346,10 +346,14 @@ Last updated: 2026-03-22
   - the browse and discovery composition now lives in `apps/web/components/record-browse-workspace.tsx` instead of assembling stats, search, presets, map, and result views inline inside `record-panel-v2`
   - the parent panel now keeps filter state and handlers while the dedicated browse workspace owns the search and browsing composition boundary
   - this trims the main panel again and keeps future browse-flow changes on a smaller enterprise-grade module surface
+- Record Panel Controller Hook Extraction V1:
+  - record-panel state, derived data, side effects, and async action handlers now live in `apps/web/components/use-record-panel-controller.ts` instead of remaining inline inside `record-panel-v2`
+  - shared prop and mutation types now live in `apps/web/components/record-panel-v2.types.ts`, reducing duplicate signatures across the panel boundary
+  - the main panel component is now a thin orchestration shell, significantly reducing maintenance risk and review surface under the enterprise standard
 
 ## Next
 - Continue the next product slice
-- Continue splitting oversized UI logic in `record-panel-v2` into smaller modules after the browse-workspace extraction
+- Continue simplifying remaining record-panel module boundaries after the controller-hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
