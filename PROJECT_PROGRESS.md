@@ -354,10 +354,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that `record-panel-v2.tsx` stays a thin shell built around `useRecordPanelController`
   - the guard blocks reintroduction of local state/effect/controller logic into the main panel and caps the file length to keep the maintainability bar explicit
   - `apps/web/package.json` now exposes `npm run verify:record-panel-structure` so future slices can preserve this module boundary automatically
+- Record Editor Workspace Binding Extraction V1:
+  - record-editor field mutation handlers and location-review form handlers now live in `apps/web/components/record-editor-workspace-bindings.ts` instead of being defined inline inside `record-editor-workspace`
+  - the editor workspace now focuses more narrowly on composing child panels while the binding helper owns repetitive state-update closures
+  - this reduces callback noise inside the editor workspace and prepares that boundary for its own structure guard in a later slice
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining record-panel module boundaries after the structure guard extraction
+- Continue simplifying remaining record-panel module boundaries after the editor-workspace binding extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

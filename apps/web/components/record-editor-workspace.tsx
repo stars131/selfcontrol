@@ -4,6 +4,10 @@ import type { Dispatch, FormEventHandler, SetStateAction } from "react";
 
 import { LocationReviewPanel } from "./location-review-panel";
 import { RecordEditorFields } from "./record-editor-fields";
+import {
+  createLocationReviewBindings,
+  createRecordEditorFieldBindings,
+} from "./record-editor-workspace-bindings";
 import { RecordMediaTools } from "./record-media-tools";
 import { RecordReminderTools } from "./record-reminder-tools";
 import type { LocationReviewFormState, RecordFormState, ReminderFormState } from "../lib/record-panel-forms";
@@ -180,72 +184,25 @@ export function RecordEditorWorkspace({
   onSelectAllDeadLetter,
   onToggleDeadLetterSelection,
 }: RecordEditorWorkspaceProps) {
+  const fieldBindings = createRecordEditorFieldBindings(setForm);
+  const locationReviewBindings = createLocationReviewBindings(setLocationReviewForm);
+
   return (
     <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={onSubmit}>
       <RecordEditorFields
         canWriteWorkspace={canWriteWorkspace}
         editorLabel={selectedRecord ? panelCopy.editRecord : panelCopy.newManualRecord}
         form={form}
-        onAddressChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            location: { ...prev.location, address: value, source: "manual" },
-          }))
-        }
-        onAvoidChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            is_avoid: value,
-          }))
-        }
-        onContentChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            content: value,
-          }))
-        }
-        onLatitudeChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            location: { ...prev.location, latitude: value, source: "manual" },
-          }))
-        }
-        onLongitudeChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            location: { ...prev.location, longitude: value, source: "manual" },
-          }))
-        }
-        onOccurredAtChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            occurred_at: value,
-          }))
-        }
-        onPlaceNameChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            location: { ...prev.location, place_name: value, source: "manual" },
-          }))
-        }
-        onRatingChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            rating: value,
-          }))
-        }
-        onTitleChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            title: value,
-          }))
-        }
-        onTypeCodeChange={(value) =>
-          setForm((prev) => ({
-            ...prev,
-            type_code: value,
-          }))
-        }
+        onAddressChange={fieldBindings.onAddressChange}
+        onAvoidChange={fieldBindings.onAvoidChange}
+        onContentChange={fieldBindings.onContentChange}
+        onLatitudeChange={fieldBindings.onLatitudeChange}
+        onLongitudeChange={fieldBindings.onLongitudeChange}
+        onOccurredAtChange={fieldBindings.onOccurredAtChange}
+        onPlaceNameChange={fieldBindings.onPlaceNameChange}
+        onRatingChange={fieldBindings.onRatingChange}
+        onTitleChange={fieldBindings.onTitleChange}
+        onTypeCodeChange={fieldBindings.onTypeCodeChange}
         panelCopy={panelCopy}
       />
       <LocationReviewPanel
@@ -253,36 +210,11 @@ export function RecordEditorWorkspace({
         formatHistoryTimestampLabel={formatHistoryTimestampLabel}
         formatReviewStatusLabel={formatReviewStatusLabel}
         hasSelectedRecord={Boolean(selectedRecord)}
-        onMarkConfirmed={() =>
-          setLocationReviewForm((prev) => ({
-            ...prev,
-            status: "confirmed",
-          }))
-        }
-        onMarkNeedsReview={() =>
-          setLocationReviewForm((prev) => ({
-            ...prev,
-            status: "needs_review",
-          }))
-        }
-        onNoteChange={(value) =>
-          setLocationReviewForm((prev) => ({
-            ...prev,
-            note: value,
-          }))
-        }
-        onResetReview={() =>
-          setLocationReviewForm({
-            status: "pending",
-            note: "",
-          })
-        }
-        onStatusChange={(value) =>
-          setLocationReviewForm((prev) => ({
-            ...prev,
-            status: value,
-          }))
-        }
+        onMarkConfirmed={locationReviewBindings.onMarkConfirmed}
+        onMarkNeedsReview={locationReviewBindings.onMarkNeedsReview}
+        onNoteChange={locationReviewBindings.onNoteChange}
+        onResetReview={locationReviewBindings.onResetReview}
+        onStatusChange={locationReviewBindings.onStatusChange}
         panelCopy={panelCopy}
         reviewForm={locationReviewForm}
         selectedLocationHistory={selectedLocationHistory}
