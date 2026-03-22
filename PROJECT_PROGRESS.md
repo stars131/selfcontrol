@@ -414,10 +414,14 @@ Last updated: 2026-03-22
   - provider-settings draft initialization, dirty-state calculation, save/reset orchestration, and local error state now live in `apps/web/components/use-provider-settings-controller.ts`
   - `apps/web/components/provider-settings-panel.tsx` now focuses more narrowly on provider-setting copy and form rendering while the dedicated hook owns state synchronization and save behavior
   - this trims another oversized operator-facing panel and reduces future review scope for provider configuration changes under the enterprise maintainability standard
+- Provider Settings Structure Guard V1:
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces that `provider-settings-panel.tsx` must wire draft state and save/reset orchestration through `use-provider-settings-controller.ts`
+  - the guard blocks reintroduction of inline hook state, initialization effects, and save/reset controller helpers into the main provider settings panel component
+  - `apps/web/package.json` now exposes `npm run verify:provider-settings-structure` so this provider-settings module boundary remains executable in future slices
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider-settings controller hook extraction
+- Continue simplifying remaining large UI module boundaries after the provider-settings structure guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
