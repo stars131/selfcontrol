@@ -1,55 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStoredLocale, type LocaleCode } from "../lib/locale";
-import { WorkspaceCreateSection } from "./workspace-create-section";
-import { WorkspaceEntryHeader } from "./workspace-entry-header";
-import { WorkspaceImportSection } from "./workspace-import-section";
-import { WorkspaceJoinSection } from "./workspace-join-section";
+import type { WorkspaceEntryCopyMap } from "./workspace-entry-copy";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
-import { WorkspaceListSection } from "./workspace-list-section";
-import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";
+import { WorkspaceEntryMainPanel } from "./workspace-entry-main-panel";
 
-const COPY: Record<
-  LocaleCode,
-  {
-    eyebrow: string;
-    title: string;
-    signedInAs: string;
-    signedIn: string;
-    signOut: string;
-    createEyebrow: string;
-    createTitle: string;
-    name: string;
-    slugPreview: string;
-    createWorkspace: string;
-    importEyebrow: string;
-    importTitle: string;
-    importArchive: string;
-    importName: string;
-    importSlug: string;
-    importWorkspace: string;
-    queueImportJob: string;
-    joinEyebrow: string;
-    joinTitle: string;
-    sharePlaceholder: string;
-    previewShare: string;
-    joinWorkspace: string;
-    listEyebrow: string;
-    listTitle: string;
-    openWorkspace: string;
-    settings: string;
-    jobsEyebrow: string;
-    jobsTitle: string;
-    refreshJobs: string;
-    openImportedWorkspace: string;
-    downloadExportJob: string;
-    noJobs: string;
-    noWorkspace: string;
-    loading: string;
-  }
-> = {
+const COPY: WorkspaceEntryCopyMap = {
   "zh-CN": {
     eyebrow: "工作区",
     title: "控制中心",
@@ -160,45 +117,7 @@ const COPY: Record<
   },
 };
 
-const DISPLAY_COPY: Record<
-  LocaleCode,
-  {
-    eyebrow: string;
-    title: string;
-    signedInAs: string;
-    signedIn: string;
-    signOut: string;
-    createEyebrow: string;
-    createTitle: string;
-    name: string;
-    slugPreview: string;
-    createWorkspace: string;
-    importEyebrow: string;
-    importTitle: string;
-    importArchive: string;
-    importName: string;
-    importSlug: string;
-    importWorkspace: string;
-    queueImportJob: string;
-    joinEyebrow: string;
-    joinTitle: string;
-    sharePlaceholder: string;
-    previewShare: string;
-    joinWorkspace: string;
-    listEyebrow: string;
-    listTitle: string;
-    openWorkspace: string;
-    settings: string;
-    jobsEyebrow: string;
-    jobsTitle: string;
-    refreshJobs: string;
-    openImportedWorkspace: string;
-    downloadExportJob: string;
-    noJobs: string;
-    noWorkspace: string;
-    loading: string;
-  }
-> = {
+const DISPLAY_COPY: WorkspaceEntryCopyMap = {
   "zh-CN": {
     eyebrow: "工作区",
     title: "控制中心",
@@ -334,7 +253,6 @@ export function WorkspaceEntryClient() {
     previewing,
     jobsLoading,
     suggestedSlug,
-    normalizedShareToken,
     setName,
     setShareTokenInput,
     setImportName,
@@ -363,67 +281,42 @@ export function WorkspaceEntryClient() {
   }
 
   return (
-    <main className="page-shell">
-      <section className="panel" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        <WorkspaceEntryHeader
-          copy={copy}
-          locale={locale}
-          onLocaleChange={setLocale}
-          onLogout={handleLogout}
-          username={user?.username}
-        />
-        <div className="panel-body">
-          {error ? <div className="notice error">{error}</div> : null}
-          <div className="two-column-grid">
-            <WorkspaceCreateSection
-              copy={copy}
-              creating={creating}
-              name={name}
-              onNameChange={setName}
-              onSubmit={handleCreate}
-              suggestedSlug={suggestedSlug}
-            />
-
-            <WorkspaceJoinSection
-              copy={copy}
-              joining={joining}
-              onAcceptShare={handleAcceptShare}
-              onPreviewShare={handlePreviewShare}
-              onShareTokenInputChange={setShareTokenInput}
-              previewing={previewing}
-              sharePreview={sharePreview}
-              shareTokenInput={shareTokenInput}
-            />
-
-            <WorkspaceImportSection
-              copy={copy}
-              fileInputRef={fileInputRef}
-              importFile={importFile}
-              importName={importName}
-              importSlug={importSlug}
-              importing={importing}
-              onImportFileChange={setImportFile}
-              onImportNameChange={setImportName}
-              onImportSlugChange={setImportSlug}
-              onImportWorkspace={handleImportWorkspace}
-              onQueueImportJob={handleQueueImportJob}
-              queueingImportJob={queueingImportJob}
-            />
-
-            <WorkspaceListSection copy={copy} workspaces={workspaces} />
-
-            <WorkspaceTransferJobsSection
-              copy={copy}
-              jobsLoading={jobsLoading}
-              locale={locale}
-              token={token}
-              transferJobs={transferJobs}
-              onDownloadTransferJob={handleDownloadTransferJob}
-              onRefreshJobs={() => (token ? loadTransferJobs(token) : Promise.resolve())}
-            />
-          </div>
-        </div>
-      </section>
-    </main>
+    <WorkspaceEntryMainPanel
+      copy={copy}
+      creating={creating}
+      error={error}
+      fileInputRef={fileInputRef}
+      importFile={importFile}
+      importName={importName}
+      importSlug={importSlug}
+      importing={importing}
+      jobsLoading={jobsLoading}
+      joining={joining}
+      locale={locale}
+      name={name}
+      onAcceptShare={handleAcceptShare}
+      onCreate={handleCreate}
+      onDownloadTransferJob={handleDownloadTransferJob}
+      onImportFileChange={setImportFile}
+      onImportNameChange={setImportName}
+      onImportSlugChange={setImportSlug}
+      onImportWorkspace={handleImportWorkspace}
+      onLocaleChange={setLocale}
+      onLogout={handleLogout}
+      onNameChange={setName}
+      onPreviewShare={handlePreviewShare}
+      onQueueImportJob={handleQueueImportJob}
+      onRefreshJobs={() => (token ? loadTransferJobs(token) : Promise.resolve())}
+      onShareTokenInputChange={setShareTokenInput}
+      previewing={previewing}
+      queueingImportJob={queueingImportJob}
+      sharePreview={sharePreview}
+      shareTokenInput={shareTokenInput}
+      suggestedSlug={suggestedSlug}
+      token={token}
+      transferJobs={transferJobs}
+      username={user?.username}
+      workspaces={workspaces}
+    />
   );
 }

@@ -1,0 +1,40 @@
+import type { LocaleCode } from "../lib/locale";
+
+export type WorkspaceEntryCopy = {
+  eyebrow: string;
+  title: string;
+  signedInAs: string;
+  signedIn: string;
+  signOut: string;
+  createEyebrow: string;
+  createTitle: string;
+  name: string;
+  slugPreview: string;
+  createWorkspace: string;
+  importEyebrow: string;
+  importTitle: string;
+  importArchive: string;
+  importName: string;
+  importSlug: string;
+  importWorkspace: string;
+  queueImportJob: string;
+  joinEyebrow: string;
+  joinTitle: string;
+  sharePlaceholder: string;
+  previewShare: string;
+  joinWorkspace: string;
+  listEyebrow: string;
+  listTitle: string;
+  openWorkspace: string;
+  settings: string;
+  jobsEyebrow: string;
+  jobsTitle: string;
+  refreshJobs: string;
+  openImportedWorkspace: string;
+  downloadExportJob: string;
+  noJobs: string;
+  noWorkspace: string;
+  loading: string;
+};
+
+export type WorkspaceEntryCopyMap = Record<LocaleCode, WorkspaceEntryCopy>;

@@ -524,10 +524,14 @@ Last updated: 2026-03-23
   - workspace-shell loading placeholder and top-level error notice rendering now live in `apps/web/components/workspace-shell-frame.tsx` instead of remaining inline inside `workspace-shell-client.tsx`
   - the main workspace shell now focuses more narrowly on state wiring, permission derivation, and panel composition while the dedicated frame component owns outer shell status presentation
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the frame boundary and lowers the shell size ceiling again so the enterprise maintainability guard keeps tightening over time
+- Workspace Entry Main Panel Extraction V1:
+  - control-center header, error banner, and section-grid composition now live in `apps/web/components/workspace-entry-main-panel.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
+  - the main workspace entry client now focuses more narrowly on locale copy, controller wiring, and loading-state branching while the dedicated main-panel component owns stable page composition
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces the new main-panel boundary, keeps section composition checks active there, and lowers the oversized entry-client line ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell frame extraction
+- Continue simplifying remaining large UI module boundaries after the workspace entry main panel extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
