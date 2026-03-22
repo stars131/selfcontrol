@@ -4,21 +4,31 @@ import path from "node:path";
 const providerSettingsPath = path.resolve(process.cwd(), "components/provider-settings-panel.tsx");
 const source = fs.readFileSync(providerSettingsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
+const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
 
 if (!source.includes('import { useProviderSettingsController } from "./use-provider-settings-controller";')) {
   throw new Error("provider-settings-panel.tsx must import useProviderSettingsController");
 }
 
-if (!source.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
-  throw new Error("provider-settings-panel.tsx must import MediaStorageHealthCard");
+if (!source.includes('import { ProviderFeatureCard } from "./provider-feature-card";')) {
+  throw new Error("provider-settings-panel.tsx must import ProviderFeatureCard");
 }
 
 if (!source.includes("useProviderSettingsController({")) {
   throw new Error("provider-settings-panel.tsx must delegate draft and save orchestration to useProviderSettingsController");
 }
 
-if (!source.includes("<MediaStorageHealthCard")) {
-  throw new Error("provider-settings-panel.tsx must render MediaStorageHealthCard for media storage health presentation");
+if (!source.includes("<ProviderFeatureCard")) {
+  throw new Error("provider-settings-panel.tsx must delegate feature form rendering to ProviderFeatureCard");
+}
+
+if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
+  throw new Error("provider-feature-card.tsx must import MediaStorageHealthCard");
+}
+
+if (!providerFeatureCardSource.includes("<MediaStorageHealthCard")) {
+  throw new Error("provider-feature-card.tsx must render MediaStorageHealthCard for media storage health presentation");
 }
 
 for (const forbiddenToken of [
@@ -31,7 +41,9 @@ for (const forbiddenToken of [
   "function getActionErrorMessage",
   "const handleSaveProviderConfig =",
   "const handleResetProviderConfig =",
-  'id="provider-media_storage-health"',
+  'id={`provider-${item.feature_code}`}',
+  "draftItem.is_enabled",
+  "MEDIA_STORAGE_FALLBACK_OPTION",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`provider-settings-panel.tsx must keep controller logic delegated: ${forbiddenToken}`);
