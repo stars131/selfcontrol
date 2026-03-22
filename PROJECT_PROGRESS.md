@@ -426,10 +426,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces that `workspace-settings-client.tsx` must wire auth loading, anchor sync, provider save flow, and member actions through `use-workspace-settings-controller.ts`
   - the guard blocks reintroduction of inline state hooks, settings API imports, auth helpers, and controller-style action declarations into the main settings page component
   - `apps/web/package.json` now exposes `npm run verify:workspace-settings-structure` so this settings-page module boundary remains executable in future slices
+- Workspace Media Retention Controller Hook Extraction V1:
+  - media-retention report loading, threshold state, selection state, storage-risk derivation, and archive/cleanup action orchestration now live in `apps/web/components/use-workspace-media-retention-controller.ts`
+  - `apps/web/components/workspace-media-retention-card.tsx` now focuses more narrowly on retention-report copy and result rendering while the dedicated hook owns data refresh and destructive-action flow
+  - this reduces another callback-heavy operator card and narrows future review scope for retention operations under the enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-settings structure guard
+- Continue simplifying remaining large UI module boundaries after the workspace-media-retention controller hook extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

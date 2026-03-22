@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { archiveMediaRetention, cleanupMediaRetention, getMediaRetentionReport } from "../lib/api";
 import type { LocaleCode } from "../lib/locale";
 import type {
-  MediaRetentionArchiveResult,
-  MediaRetentionCleanupResult,
   MediaRetentionItem,
-  MediaRetentionReport,
 } from "../lib/types";
+import {
+  useWorkspaceMediaRetentionController,
+  type MediaRetentionActionResult,
+} from "./use-workspace-media-retention-controller";
 
 const COPY: Record<
   LocaleCode,
@@ -240,10 +238,6 @@ function renderItem(
   );
 }
 
-type ActionResult =
-  | { kind: "archive"; result: MediaRetentionArchiveResult }
-  | { kind: "cleanup"; result: MediaRetentionCleanupResult };
-
 export function WorkspaceMediaRetentionCard({
   token,
   workspaceId,
@@ -258,103 +252,33 @@ export function WorkspaceMediaRetentionCard({
   const copy = COPY[locale];
   const remoteMediaLabel = copy.remoteMedia ?? "Remote media";
   const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
-  const [olderThanDays, setOlderThanDays] = useState(90);
-  const [report, setReport] = useState<MediaRetentionReport | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedMediaIds, setSelectedMediaIds] = useState<string[]>([]);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [actionError, setActionError] = useState("");
-  const [actionResult, setActionResult] = useState<ActionResult | null>(null);
-
-  const loadReport = async (threshold: number) => {
-    setLoading(true);
-    setError("");
-    try {
-      const result = await getMediaRetentionReport(token, workspaceId, {
-        olderThanDays: threshold,
-        limit: 5,
-      });
-      setReport(result.report);
-      setSelectedMediaIds((current) =>
-        current.filter((mediaId) => result.report.retention_candidates.some((item) => item.media_id === mediaId)),
-      );
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.loadFailed);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void loadReport(olderThanDays);
-  }, [olderThanDays, token, workspaceId]);
-
-  const storageRiskLabel = report
-    ? [
-        report.missing_file_count ? `${report.missing_file_count} ${copy.missingFiles}` : copy.allHealthy,
-        `${report.orphan_file_count} ${copy.orphanFiles}`,
-        `${report.remote_item_count} ${remoteMediaLabel}`,
-      ].join(" / ")
-    : "-";
-
-  const toggleSelectedMedia = (mediaId: string) => {
-    setSelectedMediaIds((current) =>
-      current.includes(mediaId) ? current.filter((item) => item !== mediaId) : [...current, mediaId],
-    );
-  };
-
-  const handleArchive = async () => {
-    if (!selectedMediaIds.length || !window.confirm(copy.archiveConfirmSelected)) {
-      return;
-    }
-    setActionLoading(true);
-    setActionError("");
-    try {
-      const result = await archiveMediaRetention(token, workspaceId, {
-        mediaIds: selectedMediaIds,
-        olderThanDays,
-        dryRun: false,
-      });
-      setActionResult({ kind: "archive", result: result.result });
-      await loadReport(olderThanDays);
-    } catch (caught) {
-      setActionError(caught instanceof Error ? caught.message : copy.actionFailed);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleCleanup = async ({
-    mediaIds,
-    purgeOrphanFiles,
-    confirmMessage,
-  }: {
-    mediaIds: string[];
-    purgeOrphanFiles: boolean;
-    confirmMessage: string;
-  }) => {
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    setActionLoading(true);
-    setActionError("");
-    try {
-      const result = await cleanupMediaRetention(token, workspaceId, {
-        mediaIds,
-        olderThanDays,
-        purgeOrphanFiles,
-        dryRun: false,
-      });
-      setActionResult({ kind: "cleanup", result: result.result });
-      await loadReport(olderThanDays);
-    } catch (caught) {
-      setActionError(caught instanceof Error ? caught.message : copy.actionFailed);
-    } finally {
-      setActionLoading(false);
-    }
-  };
+  const {
+    olderThanDays,
+    report,
+    loading,
+    error,
+    selectedMediaIds,
+    actionLoading,
+    actionError,
+    actionResult,
+    storageRiskLabel,
+    setOlderThanDays,
+    loadReport,
+    toggleSelectedMedia,
+    selectAllCandidates,
+    clearSelection,
+    handleArchive,
+    handleCleanup,
+  } = useWorkspaceMediaRetentionController({
+    token,
+    workspaceId,
+    remoteMediaLabel,
+    missingFilesLabel: copy.missingFiles,
+    orphanFilesLabel: copy.orphanFiles,
+    allHealthyLabel: copy.allHealthy,
+    loadFailedMessage: copy.loadFailed,
+    actionFailedMessage: copy.actionFailed,
+  });
 
   const actionMessage =
     actionResult?.kind === "archive"
@@ -448,7 +372,7 @@ export function WorkspaceMediaRetentionCard({
                 className="button secondary"
                 disabled={actionLoading || !report?.retention_candidates.length}
                 type="button"
-                onClick={() => setSelectedMediaIds(report?.retention_candidates.map((item) => item.media_id) ?? [])}
+                onClick={selectAllCandidates}
               >
                 {copy.selectAll}
               </button>
@@ -456,7 +380,7 @@ export function WorkspaceMediaRetentionCard({
                 className="button secondary"
                 disabled={actionLoading || !selectedMediaIds.length}
                 type="button"
-                onClick={() => setSelectedMediaIds([])}
+                onClick={clearSelection}
               >
                 {copy.clearSelection}
               </button>
@@ -464,7 +388,7 @@ export function WorkspaceMediaRetentionCard({
                 className="button secondary"
                 disabled={actionLoading || !selectedMediaIds.length}
                 type="button"
-                onClick={() => void handleArchive()}
+                onClick={() => void handleArchive(copy.archiveConfirmSelected)}
               >
                 {actionLoading ? copy.processing : copy.archiveSelected}
               </button>
