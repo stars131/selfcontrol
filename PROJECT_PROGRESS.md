@@ -490,10 +490,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now additionally enforces that `workspace-entry-client.tsx` must keep composing `WorkspaceEntryHeader` alongside the already extracted entry sections
   - the guard also lowers the page-size ceiling again so future control-center work keeps shrinking the main entry component instead of drifting back toward a monolith
   - this keeps the newly extracted header boundary executable while preserving the existing controller-boundary checks
+- Provider Settings Media Storage Health Card Extraction V1:
+  - media-storage provider health rendering now lives in `apps/web/components/media-storage-health-card.tsx` instead of remaining inline inside `provider-settings-panel.tsx`
+  - the provider settings panel now passes locale copy, anchor highlight state, refresh behavior, and status-format helpers while the dedicated card owns health presentation
+  - this removes another stable operator-facing display block from the largest settings component and narrows future review scope
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry header guard tightening
+- Continue simplifying remaining large UI module boundaries after the provider-settings media storage health card extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

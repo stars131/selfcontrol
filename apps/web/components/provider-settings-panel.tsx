@@ -2,6 +2,7 @@
 
 import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
+import { MediaStorageHealthCard } from "./media-storage-health-card";
 import { useProviderSettingsController } from "./use-provider-settings-controller";
 
 const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
@@ -425,84 +426,16 @@ export function ProviderSettingsPanel({
                 </div>
               ) : null}
               {item.feature_code === "media_storage" && mediaStorageHealth ? (
-                <div
-                  className={`record-card form-stack${readAnchorHighlightClass("provider-media_storage-health", highlightedAnchor)}`}
-                  id="provider-media_storage-health"
-                  style={{ marginTop: 12 }}
-                >
-                  <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div>
-                      <div className="eyebrow">{copy.storageHealth}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaStorageHealth.status}
-                      </div>
-                    </div>
-                    {onRefreshMediaStorageHealth ? (
-                      <button
-                        className="button secondary"
-                        disabled={refreshingMediaStorageHealth}
-                        type="button"
-                        onClick={() => void onRefreshMediaStorageHealth()}
-                      >
-                        {refreshingMediaStorageHealth ? copy.refreshing : copy.refreshHealth}
-                      </button>
-                    ) : null}
-                  </div>
-                  <div className="muted" style={{ lineHeight: 1.6 }}>
-                    {mediaStorageHealth.message}
-                  </div>
-                  <div className="tag-row">
-                    <span className="tag">provider {mediaStorageHealth.provider_code}</span>
-                    <span className="tag">{copy.secret} {formatSecretStatus(mediaStorageHealth.secret_status)}</span>
-                    {typeof mediaStorageHealth.reachable === "boolean" ? (
-                      <span className="tag">
-                        {mediaStorageHealth.reachable ? copy.reachable : copy.unreachable}
-                      </span>
-                    ) : null}
-                    {mediaStorageHealth.service_name ? (
-                      <span className="tag">
-                        {mediaStorageHealth.service_name}
-                        {mediaStorageHealth.service_version ? ` ${mediaStorageHealth.service_version}` : ""}
-                      </span>
-                    ) : null}
-                    {typeof mediaStorageHealth.response_time_ms === "number" ? (
-                      <span className="tag">{mediaStorageHealth.response_time_ms} ms</span>
-                    ) : null}
-                  </div>
-                  <div className="detail-grid">
-                    <div className="subtle-card">
-                      <div className="eyebrow">{copy.upload}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaStorageHealth.capabilities.upload ? copy.available : copy.unavailable}
-                      </div>
-                    </div>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{copy.download}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaStorageHealth.capabilities.download ? copy.available : copy.unavailable}
-                      </div>
-                    </div>
-                    <div className="subtle-card">
-                      <div className="eyebrow">{copy.delete}</div>
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        {mediaStorageHealth.capabilities.delete ? copy.available : copy.unavailable}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="muted">
-                    {copy.checkedAt} {new Date(mediaStorageHealth.checked_at).toLocaleString(locale)}
-                  </div>
-                  {mediaStorageHealth.api_base_url ? (
-                    <div className="muted" style={{ wordBreak: "break-all" }}>
-                      {copy.endpointRoot}: {mediaStorageHealth.api_base_url}
-                    </div>
-                  ) : null}
-                  {mediaStorageHealth.warnings.length ? (
-                    <div className="notice">
-                      {mediaStorageHealth.warnings.join(" ")}
-                    </div>
-                  ) : null}
-                </div>
+                <MediaStorageHealthCard
+                  copy={copy}
+                  formatSecretStatus={formatSecretStatus}
+                  highlightedAnchor={highlightedAnchor}
+                  locale={locale}
+                  mediaStorageHealth={mediaStorageHealth}
+                  onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
+                  readAnchorHighlightClass={readAnchorHighlightClass}
+                  refreshingMediaStorageHealth={refreshingMediaStorageHealth}
+                />
               ) : null}
               <div className="action-row" style={{ marginTop: 10 }}>
                 <button
