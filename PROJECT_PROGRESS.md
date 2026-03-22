@@ -314,6 +314,10 @@ Last updated: 2026-03-22
   - largest-file hint and attachment-list rendering now live in `apps/web/components/media-asset-section.tsx`
   - the parent panel now passes attachment actions and media copy while the section component owns the attachment-list presentation boundary
   - this further reduces the media-display surface inside `record-panel-v2` ahead of splitting recent-issue and dead-letter panels
+- Recent Media Issues Panel Extraction V1:
+  - recent media issue rendering now lives in `apps/web/components/recent-media-issues-panel.tsx`
+  - the parent panel now passes locale, retry state, and settings-link context while the recent-issue panel owns operator-facing issue presentation
+  - this removes another heavy media-operations block from `record-panel-v2` and leaves dead-letter recovery as the next major split
 
 ## Next
 - Continue the next product slice
