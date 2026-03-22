@@ -39,8 +39,7 @@ import {
   refreshShareLinkItems,
   syncDueNotificationsAndRefresh,
 } from "../lib/workspace-shell-refresh";
-import { ChatPanel } from "./chat-panel";
-import { RecordPanelV2 } from "./record-panel-v2";
+import { WorkspaceShellPanels } from "./workspace-shell-panels";
 import { useWorkspaceShellActions } from "./use-workspace-shell-actions";
 import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";
 
@@ -252,67 +251,61 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   return (
     <main className="page-shell">
       {error ? <div className="notice error">{error}</div> : null}
-      <div className="workspace-shell">
-        <ChatPanel
-          activeConversationId={activeConversationId}
-          auditLogs={auditLogs}
-          canManageSharing={canManageSharing}
-          canManageWorkspace={canManageWorkspace}
-          canWriteWorkspace={canWriteWorkspace}
-          conversations={conversations}
-          knowledgeStats={knowledgeStats}
-          latestSharePath={latestSharePath}
-          messages={messages}
-          notifications={notifications}
-          onCreateConversation={handleCreateConversation}
-          onCreateShareLink={handleCreateShareLink}
-          onDisableShareLink={handleDisableShareLink}
-          onMarkNotificationRead={handleMarkNotificationRead}
-          onRefreshAuditLogs={handleRefreshAuditLogs}
-          onReindexKnowledge={handleReindexKnowledge}
-          onSaveProviderConfig={handleSaveProviderConfig}
-          onSelectConversation={handleSelectConversation}
-          onSendMessage={handleSendMessage}
-          onSyncNotifications={handleSyncNotifications}
-          providerConfigs={providerConfigs}
-          shareLinks={shareLinks}
-          workspaceId={workspaceId}
-          workspaceRole={workspace?.role ?? "viewer"}
-        />
-        <RecordPanelV2
-          authToken={token}
-          canWriteWorkspace={canWriteWorkspace}
-          mediaAssets={mediaAssets}
-          mediaDeadLetterOverview={mediaDeadLetterOverview}
-          mediaProcessingOverview={mediaProcessingOverview}
-          mediaStorageSummary={mediaStorageSummary}
-          onBulkRetryMediaDeadLetter={handleBulkRetryMediaDeadLetter}
-          onCreateReminder={handleCreateReminder}
-          onDeleteMedia={handleDeleteMedia}
-          onDeleteRecord={handleDeleteRecord}
-          onDeleteReminder={handleDeleteReminder}
-          onRefreshMediaStatus={handleRefreshMediaStatus}
-          onApplyRecordFilter={handleApplyRecordFilter}
-          onApplyLocationFilter={handleApplyLocationFilter}
-          onCreateSearchPreset={handleCreateSearchPreset}
-          onDeleteSearchPreset={handleDeleteSearchPreset}
-          onResetFilter={handleResetFilter}
-          filteringRecords={filteringRecords}
-          recordFilter={recordFilter}
-          searchPresets={searchPresets}
-          savingSearchPreset={savingSearchPreset}
-          onRetryMedia={handleRetryMedia}
-          onSaveRecord={handleSaveRecord}
-          onSelectRecord={setSelectedRecordId}
-          onUpdateReminder={handleUpdateReminder}
-          onUploadMedia={handleUploadMedia}
-          records={visibleRecords}
-          reminders={reminders}
-          selectedRecordId={selectedRecordId}
-          timelineDays={timelineDays}
-          workspaceId={workspaceId}
-        />
-      </div>
+      <WorkspaceShellPanels
+        activeConversationId={activeConversationId}
+        auditLogs={auditLogs}
+        authToken={token}
+        canManageSharing={canManageSharing}
+        canManageWorkspace={canManageWorkspace}
+        canWriteWorkspace={canWriteWorkspace}
+        conversations={conversations}
+        filteringRecords={filteringRecords}
+        knowledgeStats={knowledgeStats}
+        latestSharePath={latestSharePath}
+        mediaAssets={mediaAssets}
+        mediaDeadLetterOverview={mediaDeadLetterOverview}
+        mediaProcessingOverview={mediaProcessingOverview}
+        mediaStorageSummary={mediaStorageSummary}
+        messages={messages}
+        notifications={notifications}
+        onApplyLocationFilter={handleApplyLocationFilter}
+        onApplyRecordFilter={handleApplyRecordFilter}
+        onBulkRetryMediaDeadLetter={handleBulkRetryMediaDeadLetter}
+        onCreateConversation={handleCreateConversation}
+        onCreateReminder={handleCreateReminder}
+        onCreateSearchPreset={handleCreateSearchPreset}
+        onCreateShareLink={handleCreateShareLink}
+        onDeleteMedia={handleDeleteMedia}
+        onDeleteRecord={handleDeleteRecord}
+        onDeleteReminder={handleDeleteReminder}
+        onDeleteSearchPreset={handleDeleteSearchPreset}
+        onDisableShareLink={handleDisableShareLink}
+        onMarkNotificationRead={handleMarkNotificationRead}
+        onRefreshAuditLogs={handleRefreshAuditLogs}
+        onRefreshMediaStatus={handleRefreshMediaStatus}
+        onReindexKnowledge={handleReindexKnowledge}
+        onResetFilter={handleResetFilter}
+        onRetryMedia={handleRetryMedia}
+        onSaveProviderConfig={handleSaveProviderConfig}
+        onSaveRecord={handleSaveRecord}
+        onSelectConversation={handleSelectConversation}
+        onSelectRecord={setSelectedRecordId}
+        onSendMessage={handleSendMessage}
+        onSyncNotifications={handleSyncNotifications}
+        onUpdateReminder={handleUpdateReminder}
+        onUploadMedia={handleUploadMedia}
+        providerConfigs={providerConfigs}
+        recordFilter={recordFilter}
+        records={visibleRecords}
+        reminders={reminders}
+        savingSearchPreset={savingSearchPreset}
+        searchPresets={searchPresets}
+        selectedRecordId={selectedRecordId}
+        shareLinks={shareLinks}
+        timelineDays={timelineDays}
+        workspaceId={workspaceId}
+        workspaceRole={workspace?.role ?? "viewer"}
+      />
     </main>
   );
 }

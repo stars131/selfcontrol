@@ -235,6 +235,7 @@ Last updated: 2026-03-22
   - map place-search form now lives in a dedicated component so map search input rendering stays separate from map lifecycle effects
   - map status and empty-state notices now live in a dedicated component so map lifecycle, search controls, and status feedback stay independently maintainable
   - map header copy and status tags now live in a dedicated component so map lifecycle code stays separate from summary presentation
+  - workspace shell now delegates the left-right panel composition into a dedicated component so shell state orchestration stays separate from UI assembly
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 - Remote Media Provider Action Shortcuts and Settings Deep Links V1:
