@@ -33,6 +33,7 @@ import { LocationReviewPanel } from "./location-review-panel";
 import { MediaAssetCard } from "./media-asset-card";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordPanelStats } from "./record-panel-stats";
+import { RecordReminderPanel } from "./record-reminder-panel";
 import { RecordSummaryCard } from "./record-summary-card";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
@@ -1148,134 +1149,64 @@ export function RecordPanelV2({
                 )}
               </div>
 
-              <div className="record-card form-stack">
-                <div className="eyebrow">{detailCopy.reminderSectionTitle}</div>
-                <div className="muted">
-                  {detailCopy.reminderSectionDescription}
-                </div>
-                <div className="form-stack">
-                  <div className="inline-fields">
-                    <label className="field">
-                      <span className="field-label">{detailCopy.reminderTitleLabel}</span>
-                      <input
-                        className="input"
-                        disabled={!canWriteWorkspace}
-                        value={reminderForm.title}
-                        onChange={(event) =>
-                          setReminderForm((prev) => ({
-                            ...prev,
-                            title: event.target.value,
-                          }))
-                        }
-                        placeholder={detailCopy.reminderTitlePlaceholder}
-                      />
-                    </label>
-                    <label className="field">
-                      <span className="field-label">{detailCopy.remindAtLabel}</span>
-                      <input
-                        className="input"
-                        type="datetime-local"
-                        disabled={!canWriteWorkspace}
-                        value={reminderForm.remind_at}
-                        onChange={(event) =>
-                          setReminderForm((prev) => ({
-                            ...prev,
-                            remind_at: event.target.value,
-                          }))
-                        }
-                      />
-                    </label>
-                    <label className="field">
-                      <span className="field-label">{detailCopy.channelLabel}</span>
-                      <input className="input" disabled value={detailCopy.channelInApp} />
-                    </label>
-                  </div>
-                  <label className="field">
-                    <span className="field-label">{detailCopy.reminderNoteLabel}</span>
-                    <textarea
-                      className="textarea"
-                      disabled={!canWriteWorkspace}
-                      value={reminderForm.message}
-                      onChange={(event) =>
-                        setReminderForm((prev) => ({
-                          ...prev,
-                          message: event.target.value,
-                        }))
-                      }
-                      placeholder={detailCopy.reminderNotePlaceholder}
-                    />
-                  </label>
-                  <div className="action-row">
-                    <button
-                      className="button secondary"
-                      disabled={savingReminder || !canWriteWorkspace}
-                      type="button"
-                      onClick={() => void handleCreateReminderSubmit()}
-                    >
-                      {savingReminder ? detailCopy.savingReminder : detailCopy.createReminder}
-                    </button>
-                  </div>
-                </div>
-                <div className="record-list compact-list">
-                  {reminders.length ? (
-                    reminders.map((reminder) => (
-                      <article className="record-card" key={reminder.id}>
-                        <div className="eyebrow">{reminder.channel_code}</div>
-                        <h4 style={{ margin: "8px 0 6px", fontSize: 18 }}>
-                          {reminder.title || selectedRecord.title || detailCopy.untitledReminder}
-                        </h4>
-                        <div className="muted">{formatReminderTimestampLabel(reminder.remind_at)}</div>
-                        {reminder.message ? (
-                          <p style={{ margin: "10px 0 0", lineHeight: 1.6 }}>{reminder.message}</p>
-                        ) : null}
-                        <div className="tag-row">
-                          <span className="tag">{formatReminderStatusLabel(reminder.status)}</span>
-                          <span className="tag">{formatReminderEnabledLabel(reminder.is_enabled)}</span>
-                        </div>
-                        <div className="action-row" style={{ marginTop: 12 }}>
-                          <button
-                            className="button secondary"
-                            type="button"
-                            disabled={!canWriteWorkspace}
-                            onClick={() =>
-                              void onUpdateReminder(reminder.id, {
-                                is_enabled: !reminder.is_enabled,
-                              })
-                            }
-                          >
-                            {reminder.is_enabled ? detailCopy.pauseReminder : detailCopy.enableReminder}
-                          </button>
-                          {reminder.status !== "completed" ? (
-                            <button
-                              className="button secondary"
-                              type="button"
-                              disabled={!canWriteWorkspace}
-                              onClick={() =>
-                                void onUpdateReminder(reminder.id, {
-                                  status: "completed",
-                                  is_enabled: false,
-                                })
-                              }
-                            >
-                              {detailCopy.markReminderDone}
-                            </button>
-                          ) : null}
-                          <button
-                            className="button secondary"
-                            type="button"
-                            disabled={!canWriteWorkspace}
-                            onClick={() => void onDeleteReminder(reminder.id)}
-                          >
-                            {detailCopy.deleteReminder}
-                          </button>
-                        </div>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="notice">{detailCopy.noReminders}</div>
-                  )}
-                </div>
-              </div>
+              <RecordReminderPanel
+                canWriteWorkspace={canWriteWorkspace}
+                channelInApp={detailCopy.channelInApp}
+                channelLabel={detailCopy.channelLabel}
+                createReminderLabel={detailCopy.createReminder}
+                deleteReminderLabel={detailCopy.deleteReminder}
+                enableReminderLabel={detailCopy.enableReminder}
+                formatReminderEnabledLabel={formatReminderEnabledLabel}
+                formatReminderStatusLabel={formatReminderStatusLabel}
+                formatReminderTimestampLabel={formatReminderTimestampLabel}
+                markReminderDoneLabel={detailCopy.markReminderDone}
+                noRemindersLabel={detailCopy.noReminders}
+                onCreateReminder={handleCreateReminderSubmit}
+                onDeleteReminder={onDeleteReminder}
+                onMarkReminderDone={(reminder) =>
+                  onUpdateReminder(reminder.id, {
+                    status: "completed",
+                    is_enabled: false,
+                  })
+                }
+                onMessageChange={(value) =>
+                  setReminderForm((prev) => ({
+                    ...prev,
+                    message: value,
+                  }))
+                }
+                onRemindAtChange={(value) =>
+                  setReminderForm((prev) => ({
+                    ...prev,
+                    remind_at: value,
+                  }))
+                }
+                onTitleChange={(value) =>
+                  setReminderForm((prev) => ({
+                    ...prev,
+                    title: value,
+                  }))
+                }
+                onToggleReminderEnabled={(reminder) =>
+                  onUpdateReminder(reminder.id, {
+                    is_enabled: !reminder.is_enabled,
+                  })
+                }
+                pauseReminderLabel={detailCopy.pauseReminder}
+                reminderForm={reminderForm}
+                reminderNoteLabel={detailCopy.reminderNoteLabel}
+                reminderNotePlaceholder={detailCopy.reminderNotePlaceholder}
+                reminderSectionDescription={detailCopy.reminderSectionDescription}
+                reminderSectionTitle={detailCopy.reminderSectionTitle}
+                reminderTitleLabel={detailCopy.reminderTitleLabel}
+                reminderTitlePlaceholder={detailCopy.reminderTitlePlaceholder}
+                remindAtLabel={detailCopy.remindAtLabel}
+                reminders={reminders}
+                savingReminder={savingReminder}
+                savingReminderLabel={detailCopy.savingReminder}
+                selectedRecordTitle={selectedRecord?.title ?? null}
+                untitledReminderLabel={detailCopy.untitledReminder}
+              />
             </>
           ) : null}
         </form>

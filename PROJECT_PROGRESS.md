@@ -302,6 +302,10 @@ Last updated: 2026-03-22
   - location review form controls, stored review summary, and location history rendering now live in `apps/web/components/location-review-panel.tsx`
   - the parent panel now passes review state and callbacks while the location-review UI owns the detailed review and history presentation
   - this removes another large inline block from `record-panel-v2` and keeps the long-term map review workflow on a smaller module boundary
+- Record-Panel Reminder Panel Extraction V1:
+  - reminder creation form and per-record reminder list rendering now live in `apps/web/components/record-reminder-panel.tsx`
+  - the parent panel now supplies reminder state, formatting, and mutation callbacks while the reminder UI owns the detailed reminder presentation
+  - this removes another sizable inline section from `record-panel-v2` and continues the enterprise-grade modularization path
 
 ## Next
 - Continue the next product slice
