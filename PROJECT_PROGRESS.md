@@ -370,10 +370,14 @@ Last updated: 2026-03-22
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces that `map-panel.tsx` keeps using the extracted helper module instead of reintroducing AMap loader and coordinate helper logic inline
   - the guard also caps `map-panel.tsx` line count so the component can keep shrinking while helper logic stays centralized in `apps/web/lib/map-panel.ts`
   - `apps/web/package.json` now exposes `npm run verify:map-panel-structure` to make this maintainability boundary executable in future slices
+- Workspace Shell Refresh Helper Extraction V1:
+  - record/media/reminder/notification/provider/share/audit refresh helpers now live in `apps/web/lib/workspace-shell-refresh.ts` instead of remaining inline inside `workspace-shell-client.tsx`
+  - the workspace shell now keeps more of its focus on load flow and user actions while the dedicated refresh helper module owns repetitive fetch-and-set state logic
+  - this reduces the top-level shell review surface and makes future workspace data-refresh changes safer under the enterprise maintainability requirement
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the map-panel structure guard extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-shell refresh helper extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

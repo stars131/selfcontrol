@@ -14,26 +14,12 @@ import {
   deleteSearchPreset,
   deleteRecord,
   deleteReminder,
-  getKnowledgeStats,
-  getMediaDeadLetterOverview,
-  getMediaProcessingOverview,
   getMediaStatus,
-  getMediaStorageSummary,
   getWorkspace,
-  listAuditLogs,
   listConversations,
-  listMedia,
-  listMessages,
-  listNotifications,
-  listProviderConfigs,
-  listRecords,
-  listReminders,
-  listSearchPresets,
-  listShareLinks,
   reindexKnowledge,
   retryMediaProcessing,
   sendMessage,
-  syncNotifications,
   updateNotification,
   updateProviderConfig,
   updateRecord,
@@ -61,19 +47,28 @@ import type {
   TimelineDay,
   Workspace,
 } from "../lib/types";
+import {
+  INITIAL_RECORD_FILTER,
+  loadConversationMessagesForWorkspace,
+  refreshAuditLogItems,
+  refreshKnowledgeStatsData,
+  refreshMediaAssets,
+  refreshMediaDeadLetterOverviewData,
+  refreshMediaProcessingOverviewData,
+  refreshMediaStorageSummaryData,
+  refreshNotificationItems,
+  refreshProviderConfigItems,
+  refreshRecordCollection,
+  refreshReminderItems,
+  refreshSearchPresetItems,
+  refreshShareLinkItems,
+  syncDueNotificationsAndRefresh,
+} from "../lib/workspace-shell-refresh";
 import { buildTimelineDays } from "../lib/timeline";
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
-  const initialRecordFilter: RecordFilterState = {
-    query: "",
-    typeCode: "all",
-    avoidOnly: "all",
-    placeQuery: "",
-    reviewStatus: "all",
-    mappedOnly: "all",
-  };
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
@@ -95,7 +90,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
   const [shareLinks, setShareLinks] = useState<ShareLinkItem[]>([]);
   const [latestSharePath, setLatestSharePath] = useState("");
   const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
-  const [recordFilter, setRecordFilter] = useState<RecordFilterState>(initialRecordFilter);
+  const [recordFilter, setRecordFilter] = useState<RecordFilterState>(INITIAL_RECORD_FILTER);
   const [searchPresets, setSearchPresets] = useState<SearchPresetItem[]>([]);
   const [filteringRecords, setFilteringRecords] = useState(false);
   const [savingSearchPreset, setSavingSearchPreset] = useState(false);
@@ -107,88 +102,69 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
 
   const refreshRecords = async (
     activeToken: string,
-    nextRecordFilter: RecordFilterState = initialRecordFilter,
+    nextRecordFilter: RecordFilterState = INITIAL_RECORD_FILTER,
   ) => {
-    const result = await listRecords(activeToken, workspaceId, nextRecordFilter);
-    setRecords(result.items);
-    setVisibleRecords(result.items);
-    setTimelineDays(buildTimelineDays(result.items));
-    setSelectedRecordId((current) =>
-      current && result.items.some((item) => item.id === current) ? current : result.items[0]?.id ?? null,
-    );
+    await refreshRecordCollection({
+      token: activeToken,
+      workspaceId,
+      nextRecordFilter,
+      setRecords,
+      setVisibleRecords,
+      setTimelineDays,
+      setSelectedRecordId,
+    });
   };
 
   const refreshMedia = async (activeToken: string, recordId: string | null) => {
-    if (!recordId) {
-      setMediaAssets([]);
-      return;
-    }
-    const result = await listMedia(activeToken, workspaceId, recordId);
-    setMediaAssets(result.items);
+    await refreshMediaAssets(activeToken, workspaceId, recordId, setMediaAssets);
   };
 
   const refreshMediaStorageSummary = async (activeToken: string) => {
-    const result = await getMediaStorageSummary(activeToken, workspaceId);
-    setMediaStorageSummary(result.summary);
+    await refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
   };
 
   const refreshMediaProcessingOverview = async (activeToken: string) => {
-    const result = await getMediaProcessingOverview(activeToken, workspaceId, { issueLimit: 6 });
-    setMediaProcessingOverview(result.overview);
+    await refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
   };
 
   const refreshMediaDeadLetterOverview = async (activeToken: string) => {
-    const result = await getMediaDeadLetterOverview(activeToken, workspaceId, { limit: 12 });
-    setMediaDeadLetterOverview(result.overview);
+    await refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
   };
 
   const refreshReminders = async (activeToken: string, recordId: string | null) => {
-    if (!recordId) {
-      setReminders([]);
-      return;
-    }
-    const result = await listReminders(activeToken, workspaceId, { recordId });
-    setReminders(result.items);
+    await refreshReminderItems(activeToken, workspaceId, recordId, setReminders);
   };
 
   const refreshNotifications = async (activeToken: string) => {
-    const result = await listNotifications(activeToken, workspaceId);
-    setNotifications(result.items);
+    await refreshNotificationItems(activeToken, workspaceId, setNotifications);
   };
 
   const refreshKnowledge = async (activeToken: string) => {
-    const result = await getKnowledgeStats(activeToken, workspaceId);
-    setKnowledgeStats(result.stats);
+    await refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
   };
 
   const refreshProviderConfigs = async (activeToken: string) => {
-    const result = await listProviderConfigs(activeToken, workspaceId);
-    setProviderConfigs(result.items);
+    await refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
   };
 
   const refreshShareLinks = async (activeToken: string) => {
-    const result = await listShareLinks(activeToken, workspaceId);
-    setShareLinks(result.items);
+    await refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
   };
 
   const refreshSearchPresets = async (activeToken: string) => {
-    const result = await listSearchPresets(activeToken, workspaceId);
-    setSearchPresets(result.items);
+    await refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
   };
 
   const refreshAuditLogs = async (activeToken: string) => {
-    const result = await listAuditLogs(activeToken, workspaceId, { limit: 8 });
-    setAuditLogs(result.items);
+    await refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
   };
 
   const syncDueNotifications = async (activeToken: string) => {
-    await syncNotifications(activeToken, workspaceId);
-    await refreshNotifications(activeToken);
+    await syncDueNotificationsAndRefresh(activeToken, workspaceId, setNotifications);
   };
 
   const loadConversationMessages = async (activeToken: string, conversationId: string) => {
-    const result = await listMessages(activeToken, workspaceId, conversationId);
-    setMessages(result.items);
+    await loadConversationMessagesForWorkspace(activeToken, workspaceId, conversationId, setMessages);
   };
 
   useEffect(() => {
@@ -203,7 +179,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         setToken(activeToken);
         const workspaceResult = await getWorkspace(activeToken, workspaceId);
         setWorkspace(workspaceResult.workspace);
-        await refreshRecords(activeToken, initialRecordFilter);
+        await refreshRecords(activeToken, INITIAL_RECORD_FILTER);
 
         const conversationResult = await listConversations(activeToken, workspaceId);
         let items = conversationResult.items;
@@ -477,8 +453,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     if (!canWriteWorkspace) {
       throw new Error("Viewer access is read-only");
     }
-    setRecordFilter(initialRecordFilter);
-    await refreshRecords(token, initialRecordFilter);
+    setRecordFilter(INITIAL_RECORD_FILTER);
+    await refreshRecords(token, INITIAL_RECORD_FILTER);
   };
 
   const handleApplyRecordFilter = async (nextFilter: RecordFilterState) => {
