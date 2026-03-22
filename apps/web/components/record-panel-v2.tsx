@@ -23,6 +23,7 @@ import { DeadLetterRecoveryPanel } from "./dead-letter-recovery-panel";
 import { MediaAssetSection } from "./media-asset-section";
 import { MediaStorageOverview } from "./media-storage-overview";
 import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
+import { RecordEditorFields } from "./record-editor-fields";
 import { RecordSearchPanel } from "./record-search-panel";
 import { RecordResultsView } from "./record-results-view";
 import { RecordPanelStats } from "./record-panel-stats";
@@ -604,145 +605,72 @@ export function RecordPanelV2({
         />
 
         <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={handleSubmit}>
-          <div className="eyebrow">{selectedRecord ? panelCopy.editRecord : panelCopy.newManualRecord}</div>
-          <label className="field">
-            <span className="field-label">{panelCopy.title}</span>
-            <input
-              className="input"
-              disabled={!canWriteWorkspace}
-              value={form.title}
-              onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-              placeholder={panelCopy.optionalTitle}
-            />
-          </label>
-          <label className="field">
-            <span className="field-label">{panelCopy.content}</span>
-            <textarea
-              className="textarea"
-              disabled={!canWriteWorkspace}
-              value={form.content}
-              onChange={(event) => setForm((prev) => ({ ...prev, content: event.target.value }))}
-              placeholder={panelCopy.contentPlaceholder}
-            />
-          </label>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">{panelCopy.type}</span>
-              <select
-                className="input"
-                disabled={!canWriteWorkspace}
-                value={form.type_code}
-                onChange={(event) => setForm((prev) => ({ ...prev, type_code: event.target.value }))}
-              >
-                <option value="memo">{panelCopy.memo}</option>
-                <option value="food">{panelCopy.food}</option>
-                <option value="snack">{panelCopy.snack}</option>
-                <option value="bad_experience">{panelCopy.badExperience}</option>
-              </select>
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.rating}</span>
-              <input
-                className="input"
-                type="number"
-                disabled={!canWriteWorkspace}
-                min="1"
-                max="5"
-                value={form.rating}
-                onChange={(event) => setForm((prev) => ({ ...prev, rating: event.target.value }))}
-                placeholder="1-5"
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.occurredAt}</span>
-              <input
-                className="input"
-                type="datetime-local"
-                disabled={!canWriteWorkspace}
-                value={form.occurred_at}
-                onChange={(event) => setForm((prev) => ({ ...prev, occurred_at: event.target.value }))}
-              />
-            </label>
-          </div>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">{panelCopy.placeName}</span>
-              <input
-                className="input"
-                disabled={!canWriteWorkspace}
-                value={form.location.place_name}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, place_name: event.target.value, source: "manual" },
-                  }))
-                }
-                placeholder={panelCopy.placePlaceholder}
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.address}</span>
-              <input
-                className="input"
-                disabled={!canWriteWorkspace}
-                value={form.location.address}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, address: event.target.value, source: "manual" },
-                  }))
-                }
-                placeholder={panelCopy.addressPlaceholder}
-              />
-            </label>
-            <label className="checkbox-field">
-              <input
-                checked={form.is_avoid}
-                disabled={!canWriteWorkspace}
-                type="checkbox"
-                onChange={(event) => setForm((prev) => ({ ...prev, is_avoid: event.target.checked }))}
-              />
-              <span>{panelCopy.avoidItem}</span>
-            </label>
-          </div>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">{panelCopy.latitude}</span>
-              <input
-                className="input"
-                inputMode="decimal"
-                disabled={!canWriteWorkspace}
-                value={form.location.latitude}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, latitude: event.target.value, source: "manual" },
-                  }))
-                }
-                placeholder="30.274100"
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.longitude}</span>
-              <input
-                className="input"
-                inputMode="decimal"
-                disabled={!canWriteWorkspace}
-                value={form.location.longitude}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    location: { ...prev.location, longitude: event.target.value, source: "manual" },
-                  }))
-                }
-                placeholder="120.155100"
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.locationSource}</span>
-              <input className="input" disabled value={form.location.source || "manual"} />
-            </label>
-          </div>
+          <RecordEditorFields
+            canWriteWorkspace={canWriteWorkspace}
+            editorLabel={selectedRecord ? panelCopy.editRecord : panelCopy.newManualRecord}
+            form={form}
+            onAddressChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                location: { ...prev.location, address: value, source: "manual" },
+              }))
+            }
+            onAvoidChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                is_avoid: value,
+              }))
+            }
+            onContentChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                content: value,
+              }))
+            }
+            onLatitudeChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                location: { ...prev.location, latitude: value, source: "manual" },
+              }))
+            }
+            onLongitudeChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                location: { ...prev.location, longitude: value, source: "manual" },
+              }))
+            }
+            onOccurredAtChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                occurred_at: value,
+              }))
+            }
+            onPlaceNameChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                location: { ...prev.location, place_name: value, source: "manual" },
+              }))
+            }
+            onRatingChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                rating: value,
+              }))
+            }
+            onTitleChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                title: value,
+              }))
+            }
+            onTypeCodeChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                type_code: value,
+              }))
+            }
+            panelCopy={panelCopy}
+          />
           <LocationReviewPanel
             canWriteWorkspace={canWriteWorkspace}
             formatHistoryTimestampLabel={formatHistoryTimestampLabel}
