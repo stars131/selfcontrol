@@ -30,6 +30,7 @@ import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapPanel, type LocationDraft } from "./map-panel";
 import { MediaAssetCard } from "./media-asset-card";
+import { RecordSearchPanel } from "./record-search-panel";
 import { RecordSummaryCard } from "./record-summary-card";
 import { SearchPresetList } from "./search-preset-list";
 import { readLocationHistory, readLocationReview } from "../lib/location";
@@ -556,104 +557,49 @@ export function RecordPanelV2({
           </div>
         </div>
 
-        <div className="record-card form-stack" style={{ marginTop: 20 }}>
-          <div className="eyebrow">{panelCopy.advancedSearch}</div>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">{panelCopy.textQuery}</span>
-              <input
-                className="input"
-                value={filterDraft.query}
-                onChange={(event) =>
-                  setFilterDraft((current) => ({
-                    ...current,
-                    query: event.target.value,
-                  }))
-                }
-                placeholder={panelCopy.textQueryPlaceholder}
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.type}</span>
-              <select
-                className="input"
-                value={filterDraft.typeCode}
-                onChange={(event) =>
-                  setFilterDraft((current) => ({
-                    ...current,
-                    typeCode: event.target.value,
-                  }))
-                }
-              >
-                <option value="all">{panelCopy.all}</option>
-                <option value="memo">{panelCopy.memo}</option>
-                <option value="food">{panelCopy.food}</option>
-                <option value="snack">{panelCopy.snack}</option>
-                <option value="bad_experience">{panelCopy.badExperience}</option>
-              </select>
-            </label>
-            <label className="field">
-              <span className="field-label">{panelCopy.avoid}</span>
-              <select
-                className="input"
-                value={filterDraft.avoidOnly}
-                onChange={(event) =>
-                  setFilterDraft((current) => ({
-                    ...current,
-                    avoidOnly: event.target.value as RecordFilterState["avoidOnly"],
-                  }))
-                }
-              >
-                <option value="all">{panelCopy.allRecords}</option>
-                <option value="avoid">{panelCopy.avoidOnlyOption}</option>
-                <option value="normal">{panelCopy.nonAvoidOnly}</option>
-              </select>
-            </label>
-          </div>
-          <div className="action-row">
-            <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void handleApplyFilter()}>
-              {filteringRecords ? panelCopy.filtering : panelCopy.applyAdvancedFilter}
-            </button>
-            <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onResetFilter()}>
-              {panelCopy.resetList}
-            </button>
-          </div>
-          <div className="muted">{summarizeRecordFilterLabel(recordFilter)}</div>
-          <div className="inline-fields">
-            <label className="field">
-              <span className="field-label">{panelCopy.presetName}</span>
-              <input
-                className="input"
-                disabled={!canWriteWorkspace}
-                value={presetName}
-                onChange={(event) => setPresetName(event.target.value)}
-                placeholder={panelCopy.presetPlaceholder}
-              />
-            </label>
-            <div className="field" style={{ alignSelf: "end" }}>
-              <button
-                className="button secondary"
-                disabled={savingSearchPreset || !canWriteWorkspace}
-                type="button"
-                onClick={() => void handleSavePreset()}
-              >
-                {savingSearchPreset ? panelCopy.savingPreset : panelCopy.saveCurrentFilter}
-              </button>
-            </div>
-          </div>
-          <SearchPresetList
-            applyPresetLabel={panelCopy.applyPreset}
-            canWriteWorkspace={canWriteWorkspace}
-            deletePresetLabel={panelCopy.deletePreset}
-            emptyLabel={panelCopy.noSavedFilters}
-            filteringRecords={filteringRecords}
-            onApplyPreset={onApplyRecordFilter}
-            onDeletePreset={handleDeletePreset}
-            presets={searchPresets}
-            savedPresetLabel={panelCopy.savedPreset}
-            summarizeRecordFilterLabel={summarizeRecordFilterLabel}
-          />
-        </div>
+        <RecordSearchPanel
+          canWriteWorkspace={canWriteWorkspace}
+          currentFilterSummary={summarizeRecordFilterLabel(recordFilter)}
+          filterDraft={filterDraft}
+          filteringRecords={filteringRecords}
+          onApplyFilter={handleApplyFilter}
+          onAvoidOnlyChange={(value) =>
+            setFilterDraft((current) => ({
+              ...current,
+              avoidOnly: value,
+            }))
+          }
+          onPresetNameChange={setPresetName}
+          onQueryChange={(value) =>
+            setFilterDraft((current) => ({
+              ...current,
+              query: value,
+            }))
+          }
+          onResetFilter={onResetFilter}
+          onSavePreset={handleSavePreset}
+          onTypeCodeChange={(value) =>
+            setFilterDraft((current) => ({
+              ...current,
+              typeCode: value,
+            }))
+          }
+          panelCopy={panelCopy}
+          presetName={presetName}
+          savingSearchPreset={savingSearchPreset}
+        />
+        <SearchPresetList
+          applyPresetLabel={panelCopy.applyPreset}
+          canWriteWorkspace={canWriteWorkspace}
+          deletePresetLabel={panelCopy.deletePreset}
+          emptyLabel={panelCopy.noSavedFilters}
+          filteringRecords={filteringRecords}
+          onApplyPreset={onApplyRecordFilter}
+          onDeletePreset={handleDeletePreset}
+          presets={searchPresets}
+          savedPresetLabel={panelCopy.savedPreset}
+          summarizeRecordFilterLabel={summarizeRecordFilterLabel}
+        />
 
         <MapPanel
           records={records}

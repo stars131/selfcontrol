@@ -290,6 +290,10 @@ Last updated: 2026-03-22
   - saved search preset rendering now lives in `apps/web/components/search-preset-list.tsx` instead of staying inline inside `record-panel-v2`
   - preset empty-state, apply action, and delete action UI are now isolated from the main panel orchestration layer
   - this keeps the search area moving toward smaller enterprise-grade UI boundaries without changing preset behavior
+- Record-Panel Search Form Extraction V1:
+  - advanced search controls and preset-save form rendering now live in `apps/web/components/record-search-panel.tsx`
+  - the parent panel now keeps search state and callbacks while the search form owns the filter and preset input UI layout
+  - this reduces another large inline JSX block inside `record-panel-v2` and continues the enterprise-grade modularization path
 
 ## Next
 - Continue the next product slice
