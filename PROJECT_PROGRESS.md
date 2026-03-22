@@ -544,10 +544,14 @@ Last updated: 2026-03-23
   - retention locale copy now lives in `apps/web/components/workspace-media-retention-copy.ts` instead of remaining inline inside `workspace-media-retention-card.tsx`
   - the retention card now focuses more narrowly on controller orchestration, action wiring, and section composition while the dedicated copy module owns localized report and cleanup text
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces the copy-helper boundary, blocks reintroduction of inline copy maps, and lowers the retention-card size ceiling again
+- Provider Feature Media Storage Options Extraction V1:
+  - the `media_storage` retry and fallback controls now live in `apps/web/components/provider-feature-media-storage-options.tsx` instead of remaining inline inside `provider-feature-card.tsx`
+  - the provider feature card now focuses more narrowly on shared provider form fields, health-card composition, and save/reset controls while the dedicated subcomponent owns storage-specific option wiring
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this subcomponent boundary and adds a size ceiling for `provider-feature-card.tsx` itself
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace media retention copy extraction
+- Continue simplifying remaining large UI module boundaries after the provider feature media storage options extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

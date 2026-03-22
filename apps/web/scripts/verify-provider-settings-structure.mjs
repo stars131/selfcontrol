@@ -6,6 +6,7 @@ const source = fs.readFileSync(providerSettingsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
+const providerFeatureCardLineCount = providerFeatureCardSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useProviderSettingsController } from "./use-provider-settings-controller";')) {
   throw new Error("provider-settings-panel.tsx must import useProviderSettingsController");
@@ -35,8 +36,16 @@ if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from 
   throw new Error("provider-feature-card.tsx must import MediaStorageHealthCard");
 }
 
+if (!providerFeatureCardSource.includes('import { ProviderFeatureMediaStorageOptions } from "./provider-feature-media-storage-options";')) {
+  throw new Error("provider-feature-card.tsx must import ProviderFeatureMediaStorageOptions");
+}
+
 if (!providerFeatureCardSource.includes("<MediaStorageHealthCard")) {
   throw new Error("provider-feature-card.tsx must render MediaStorageHealthCard for media storage health presentation");
+}
+
+if (!providerFeatureCardSource.includes("<ProviderFeatureMediaStorageOptions")) {
+  throw new Error("provider-feature-card.tsx must delegate media-storage option rendering to ProviderFeatureMediaStorageOptions");
 }
 
 for (const forbiddenToken of [
@@ -62,6 +71,13 @@ for (const forbiddenToken of [
 const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+const maxProviderFeatureCardLines = 170;
+if (providerFeatureCardLineCount > maxProviderFeatureCardLines) {
+  throw new Error(
+    `provider-feature-card.tsx exceeded ${maxProviderFeatureCardLines} lines: ${providerFeatureCardLineCount}`,
+  );
 }
 
 console.log("provider-settings structure verification passed");
