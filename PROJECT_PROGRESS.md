@@ -222,6 +222,7 @@ Last updated: 2026-03-22
   - workspace media retention UI now delegates per-media rendering and owner selection controls into a dedicated item card component for safer maintenance
   - workspace settings now delegates member-management rendering into a dedicated section component so permission UI can evolve independently from the page shell
   - chat workspace administration now delegates share-link creation and listing into a dedicated card component to reduce coupling inside the main chat panel
+  - chat knowledge-base status and reindex controls now live in a dedicated card component so assistant admin tools can evolve without inflating the main chat shell
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 - Remote Media Provider Action Shortcuts and Settings Deep Links V1:
