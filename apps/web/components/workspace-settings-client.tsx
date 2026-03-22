@@ -6,6 +6,7 @@ import { useStoredLocale, type LocaleCode } from "../lib/locale";
 import { LanguageSwitcher } from "./language-switcher";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";
+import { WorkspaceMembersSection } from "./workspace-members-section";
 import { WorkspaceExportCard } from "./workspace-export-card";
 import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";
 import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
@@ -273,70 +274,17 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             ) : null
           ) : null}
           {workspace?.role === "owner" || workspace?.role === "editor" ? (
-            <section className="record-card" style={{ marginTop: 24 }}>
-              <div className="eyebrow">{copy.membersTitle}</div>
-              <div className="muted" style={{ marginTop: 8, lineHeight: 1.7 }}>
-                {workspace.role === "owner" ? copy.membersDescription : copy.membersReadOnly}
-              </div>
-              <div className="record-list compact-list" style={{ marginTop: 16 }}>
-                {members.length ? (
-                  members.map((member) => {
-                    const isProtected = member.role === "owner" || member.user_id === user?.id;
-                    return (
-                      <article className="message" key={member.id}>
-                        <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                          <div>
-                            <div className="eyebrow">{member.username}</div>
-                            <div style={{ marginTop: 8, fontWeight: 600 }}>
-                              {member.display_name || member.email || member.user_id}
-                            </div>
-                            <div className="muted" style={{ marginTop: 8 }}>
-                              {copy.joinedLabel} {new Date(member.created_at).toLocaleString(locale)}
-                            </div>
-                          </div>
-                          <div style={{ minWidth: 220 }}>
-                            <div className="eyebrow">{copy.roleLabel}</div>
-                            {workspace.role === "owner" && !isProtected ? (
-                              <div className="form-stack" style={{ marginTop: 8 }}>
-                                <select
-                                  className="input"
-                                  disabled={savingMemberId === member.id}
-                                  value={member.role}
-                                  onChange={(event) =>
-                                    void handleUpdateMemberRole(
-                                      member.id,
-                                      event.target.value as "viewer" | "editor",
-                                    )
-                                  }
-                                >
-                                  <option value="editor">editor</option>
-                                  <option value="viewer">viewer</option>
-                                </select>
-                                <button
-                                  className="button secondary"
-                                  disabled={removingMemberId === member.id}
-                                  type="button"
-                                  onClick={() => void handleRemoveMember(member.id)}
-                                >
-                                  {removingMemberId === member.id ? copy.removingLabel : copy.removeLabel}
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="form-stack" style={{ marginTop: 8 }}>
-                                <div style={{ fontWeight: 600 }}>{member.role}</div>
-                                {isProtected ? <div className="muted">{copy.ownerProtected}</div> : null}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })
-                ) : (
-                  <div className="notice">{copy.membersEmpty}</div>
-                )}
-              </div>
-            </section>
+            <WorkspaceMembersSection
+              copy={copy}
+              locale={locale}
+              members={members}
+              onRemoveMember={handleRemoveMember}
+              onUpdateMemberRole={handleUpdateMemberRole}
+              removingMemberId={removingMemberId}
+              savingMemberId={savingMemberId}
+              userId={user?.id}
+              workspaceRole={workspace.role}
+            />
           ) : null}
         </div>
       </section>

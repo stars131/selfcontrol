@@ -13,6 +13,14 @@ if (!source.includes("useWorkspaceSettingsController(router, workspaceId)")) {
   throw new Error("workspace-settings-client.tsx must delegate settings orchestration to useWorkspaceSettingsController");
 }
 
+if (!source.includes('import { WorkspaceMembersSection } from "./workspace-members-section";')) {
+  throw new Error("workspace-settings-client.tsx must import WorkspaceMembersSection");
+}
+
+if (!source.includes("<WorkspaceMembersSection")) {
+  throw new Error("workspace-settings-client.tsx must delegate member management rendering to WorkspaceMembersSection");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -23,13 +31,14 @@ for (const forbiddenToken of [
   "const handleSaveProviderConfig =",
   "const handleUpdateMemberRole =",
   "const handleRemoveMember =",
+  "members.map((member)",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-settings-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 380;
+const maxAllowedLines = 300;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-settings-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
