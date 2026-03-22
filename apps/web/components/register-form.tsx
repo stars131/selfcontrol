@@ -6,143 +6,14 @@ import { FormEvent, useState } from "react";
 
 import { login, register } from "../lib/api";
 import { setStoredSession } from "../lib/auth";
-import { useStoredLocale, type LocaleCode } from "../lib/locale";
+import { useStoredLocale } from "../lib/locale";
+import { getRegisterFormCopy } from "./auth-form-copy";
 import { LanguageSwitcher } from "./language-switcher";
-
-const COPY: Record<
-  LocaleCode,
-  {
-    eyebrow: string;
-    title: string;
-    signIn: string;
-    username: string;
-    email: string;
-    displayName: string;
-    password: string;
-    usernamePlaceholder: string;
-    emailPlaceholder: string;
-    displayNamePlaceholder: string;
-    passwordPlaceholder: string;
-    loading: string;
-    submit: string;
-  }
-> = {
-  "zh-CN": {
-    eyebrow: "访问",
-    title: "创建账号",
-    signIn: "登录",
-    username: "用户名",
-    email: "邮箱",
-    displayName: "显示名称",
-    password: "密码",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "请使用更长的密码",
-    loading: "创建中...",
-    submit: "创建账号",
-  },
-  en: {
-    eyebrow: "Access",
-    title: "Create Account",
-    signIn: "Sign In",
-    username: "Username",
-    email: "Email",
-    displayName: "Display name",
-    password: "Password",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "Use a long password",
-    loading: "Creating...",
-    submit: "Create Account",
-  },
-  ja: {
-    eyebrow: "アクセス",
-    title: "アカウント作成",
-    signIn: "ログイン",
-    username: "ユーザー名",
-    email: "メール",
-    displayName: "表示名",
-    password: "パスワード",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "長めのパスワードを使用してください",
-    loading: "作成中...",
-    submit: "アカウント作成",
-  },
-};
-
-const DISPLAY_COPY: Record<
-  LocaleCode,
-  {
-    eyebrow: string;
-    title: string;
-    signIn: string;
-    username: string;
-    email: string;
-    displayName: string;
-    password: string;
-    usernamePlaceholder: string;
-    emailPlaceholder: string;
-    displayNamePlaceholder: string;
-    passwordPlaceholder: string;
-    loading: string;
-    submit: string;
-  }
-> = {
-  "zh-CN": {
-    eyebrow: "访问",
-    title: "创建账号",
-    signIn: "登录",
-    username: "用户名",
-    email: "邮箱",
-    displayName: "显示名称",
-    password: "密码",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "请使用更长的密码",
-    loading: "创建中...",
-    submit: "创建账号",
-  },
-  en: {
-    eyebrow: "Access",
-    title: "Create Account",
-    signIn: "Sign In",
-    username: "Username",
-    email: "Email",
-    displayName: "Display name",
-    password: "Password",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "Use a long password",
-    loading: "Creating...",
-    submit: "Create Account",
-  },
-  ja: {
-    eyebrow: "アクセス",
-    title: "アカウント作成",
-    signIn: "ログイン",
-    username: "ユーザー名",
-    email: "メール",
-    displayName: "表示名",
-    password: "パスワード",
-    usernamePlaceholder: "stars131",
-    emailPlaceholder: "name@example.com",
-    displayNamePlaceholder: "Stars",
-    passwordPlaceholder: "長めのパスワードを使用してください",
-    loading: "作成中...",
-    submit: "アカウント作成",
-  },
-};
 
 export function RegisterForm() {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
-  const copy = { ...COPY[locale], ...DISPLAY_COPY[locale] };
+  const copy = getRegisterFormCopy(locale);
   const [form, setForm] = useState({
     username: "",
     email: "",

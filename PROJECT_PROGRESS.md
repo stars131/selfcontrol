@@ -580,10 +580,14 @@ Last updated: 2026-03-23
   - AMap loader, click-to-location wiring, marker rendering, viewport sync, and teardown now live in `apps/web/components/use-map-panel-amap.ts` instead of remaining inline inside `map-panel.tsx`
   - the map panel now focuses more narrowly on controller wiring, missing-key fallback, and UI section composition while the dedicated hook owns browser-map lifecycle behavior
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces the AMap hook boundary, blocks direct `useEffect` and `useRef` reintroduction into `map-panel.tsx`, and lowers the map-panel size ceiling again
+- Auth Form Copy Extraction V1:
+  - login/register locale copy now lives in `apps/web/components/auth-form-copy.ts` instead of remaining inline inside `login-form.tsx` and `register-form.tsx`
+  - both auth screens now focus more narrowly on form state, submit behavior, and page composition while the dedicated copy module owns localized auth text payloads
+  - `apps/web/scripts/verify-auth-forms-structure.mjs` and `apps/web/package.json` now make this boundary executable and enforce tighter size ceilings for both auth forms
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the map panel AMap lifecycle hook extraction
+- Continue simplifying remaining large UI module boundaries after the auth form copy extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
