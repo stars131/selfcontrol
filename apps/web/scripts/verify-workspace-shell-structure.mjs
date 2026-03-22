@@ -17,6 +17,10 @@ if (!source.includes('import { useWorkspaceShellActions } from "./use-workspace-
   throw new Error("workspace-shell-client.tsx must import useWorkspaceShellActions");
 }
 
+if (!source.includes('import { WorkspaceShellFrame } from "./workspace-shell-frame";')) {
+  throw new Error("workspace-shell-client.tsx must import WorkspaceShellFrame");
+}
+
 if (!source.includes('import { WorkspaceShellPanels } from "./workspace-shell-panels";')) {
   throw new Error("workspace-shell-client.tsx must import WorkspaceShellPanels");
 }
@@ -31,6 +35,10 @@ if (!source.includes("useWorkspaceShellActions({")) {
 
 if (!source.includes("<WorkspaceShellPanels")) {
   throw new Error("workspace-shell-client.tsx must delegate panel composition to WorkspaceShellPanels");
+}
+
+if (!source.includes("<WorkspaceShellFrame")) {
+  throw new Error("workspace-shell-client.tsx must delegate loading and error shell rendering to WorkspaceShellFrame");
 }
 
 for (const forbiddenToken of [
@@ -52,13 +60,15 @@ for (const forbiddenToken of [
   "syncNotifications(",
   "<ChatPanel",
   "<RecordPanelV2",
+  "Loading workspace...",
+  "notice error",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-shell-client.tsx must keep refresh logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 320;
+const maxAllowedLines = 300;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-shell-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

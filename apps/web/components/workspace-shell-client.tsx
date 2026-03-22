@@ -39,6 +39,7 @@ import {
   refreshShareLinkItems,
   syncDueNotificationsAndRefresh,
 } from "../lib/workspace-shell-refresh";
+import { WorkspaceShellFrame } from "./workspace-shell-frame";
 import { WorkspaceShellPanels } from "./workspace-shell-panels";
 import { useWorkspaceShellActions } from "./use-workspace-shell-actions";
 import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";
@@ -236,21 +237,8 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     initialRecordFilter: INITIAL_RECORD_FILTER,
   });
 
-  if (loading) {
-    return (
-      <main className="page-shell">
-        <section className="panel auth-panel">
-          <div className="panel-body">
-            <div className="notice">Loading workspace...</div>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
   return (
-    <main className="page-shell">
-      {error ? <div className="notice error">{error}</div> : null}
+    <WorkspaceShellFrame error={error} loading={loading}>
       <WorkspaceShellPanels
         activeConversationId={activeConversationId}
         auditLogs={auditLogs}
@@ -306,6 +294,6 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
         workspaceId={workspaceId}
         workspaceRole={workspace?.role ?? "viewer"}
       />
-    </main>
+    </WorkspaceShellFrame>
   );
 }

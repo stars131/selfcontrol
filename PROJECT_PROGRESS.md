@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-22
+Last updated: 2026-03-23
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -520,10 +520,14 @@ Last updated: 2026-03-22
   - provider-settings jump-link rendering now lives in `apps/web/components/provider-settings-jump-nav.tsx` instead of remaining inline inside `provider-settings-panel.tsx`
   - the main provider settings panel now passes the shared labels and provider config list while the dedicated jump-nav component owns anchor-link presentation
   - this removes another stable display block from the largest settings component and keeps future navigation-copy changes on a narrower review surface
+- Workspace Shell Frame Extraction V1:
+  - workspace-shell loading placeholder and top-level error notice rendering now live in `apps/web/components/workspace-shell-frame.tsx` instead of remaining inline inside `workspace-shell-client.tsx`
+  - the main workspace shell now focuses more narrowly on state wiring, permission derivation, and panel composition while the dedicated frame component owns outer shell status presentation
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the frame boundary and lowers the shell size ceiling again so the enterprise maintainability guard keeps tightening over time
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider-settings jump nav extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell frame extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
