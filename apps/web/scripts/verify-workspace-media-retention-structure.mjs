@@ -21,12 +21,20 @@ if (!source.includes('import { WorkspaceMediaRetentionActions } from "./workspac
   throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionActions");
 }
 
+if (!source.includes('import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";')) {
+  throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionSummary");
+}
+
 if (!source.includes("<MediaRetentionItemCard")) {
   throw new Error("workspace-media-retention-card.tsx must delegate media item rendering to MediaRetentionItemCard");
 }
 
 if (!source.includes("<WorkspaceMediaRetentionActions")) {
   throw new Error("workspace-media-retention-card.tsx must delegate owner action rendering to WorkspaceMediaRetentionActions");
+}
+
+if (!source.includes("<WorkspaceMediaRetentionSummary")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate summary rendering to WorkspaceMediaRetentionSummary");
 }
 
 for (const forbiddenToken of [
@@ -41,13 +49,15 @@ for (const forbiddenToken of [
   "const handleArchive =",
   "const handleCleanup =",
   "function renderItem(",
+  'copy.totalTracked',
+  "report.total_count",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-media-retention-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 405;
+const maxAllowedLines = 370;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

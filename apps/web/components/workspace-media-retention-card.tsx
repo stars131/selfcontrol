@@ -2,10 +2,10 @@
 
 import type { LocaleCode } from "../lib/locale";
 import type {
-  MediaRetentionItem,
 } from "../lib/types";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
+import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
 import {
   useWorkspaceMediaRetentionController,
 } from "./use-workspace-media-retention-controller";
@@ -283,47 +283,12 @@ export function WorkspaceMediaRetentionCard({
       {actionError ? <div className="notice error" style={{ marginTop: 16 }}>{actionError}</div> : null}
       {actionMessage ? <div className="notice" style={{ marginTop: 16 }}>{actionMessage}</div> : null}
 
-      <div className="detail-grid" style={{ marginTop: 16 }}>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.totalTracked}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.total_count} / ${report.total_size_label}` : "-"}
-          </div>
-          {report?.oldest_media_age_days != null ? (
-            <div className="muted" style={{ marginTop: 8 }}>
-              {copy.oldestMedia} {report.oldest_media_age_days} {copy.days}
-            </div>
-          ) : null}
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.agedMedia}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.old_item_count} / ${report.old_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.archivedMedia}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.archived_item_count} / ${report.archived_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{remoteMediaLabel}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.remote_item_count} / ${report.remote_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.storageRisk}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>{storageRiskLabel}</div>
-        </div>
-      </div>
-
-      <div className="muted" style={{ marginTop: 16 }}>
-        {report
-          ? `${copy.orphanFiles}: ${report.orphan_file_count} / ${report.orphan_file_size_label}. ${copy.cleanupNote}`
-          : copy.cleanupNote}
-      </div>
+      <WorkspaceMediaRetentionSummary
+        copy={copy}
+        remoteMediaLabel={remoteMediaLabel}
+        report={report}
+        storageRiskLabel={storageRiskLabel}
+      />
 
       <WorkspaceMediaRetentionActions
         actionLoading={actionLoading}

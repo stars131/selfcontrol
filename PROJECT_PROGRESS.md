@@ -227,6 +227,7 @@ Last updated: 2026-03-22
   - chat notifications now live in a dedicated card component so reminder review stays isolated from the core message timeline
   - assistant source rendering now lives in a dedicated message-sources component so retrieval evidence formatting can evolve independently from the chat shell
   - workspace media retention owner actions now live in a dedicated actions component so destructive retention flows stay isolated from report layout rendering
+  - workspace media retention summary stats now live in a dedicated summary component so report overview and action flows can evolve independently
   - issue aggregations now include per-category counts so operators can spot the dominant failure mode across a workspace quickly
   - the structured results panel now surfaces issue labels and recommended next actions directly inside recent issue and dead-letter cards
 - Remote Media Provider Action Shortcuts and Settings Deep Links V1:
