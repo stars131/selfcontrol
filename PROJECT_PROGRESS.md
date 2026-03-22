@@ -422,10 +422,14 @@ Last updated: 2026-03-22
   - workspace-settings authentication load, anchor synchronization, media-storage-health refresh, provider save flow, and member role/removal actions now live in `apps/web/components/use-workspace-settings-controller.ts`
   - `apps/web/components/workspace-settings-client.tsx` now focuses more narrowly on settings-page copy, card composition, and per-section rendering while the dedicated hook owns behavioral orchestration
   - this removes another large cluster of effects and async mutations from an oversized settings screen and reduces future enterprise maintenance risk
+- Workspace Settings Structure Guard V1:
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces that `workspace-settings-client.tsx` must wire auth loading, anchor sync, provider save flow, and member actions through `use-workspace-settings-controller.ts`
+  - the guard blocks reintroduction of inline state hooks, settings API imports, auth helpers, and controller-style action declarations into the main settings page component
+  - `apps/web/package.json` now exposes `npm run verify:workspace-settings-structure` so this settings-page module boundary remains executable in future slices
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-settings controller hook extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-settings structure guard
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
