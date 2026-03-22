@@ -486,10 +486,14 @@ Last updated: 2026-03-22
   - control-center header rendering now lives in `apps/web/components/workspace-entry-header.tsx` instead of remaining inline inside `workspace-entry-client.tsx`
   - the entry page now passes shared copy, locale switching, logout action, and current username while the dedicated header component owns top-of-page presentation
   - this trims another stable display block from the control-center page without changing controller behavior or locale-resource risk
+- Workspace Entry Header Guard Tightening V1:
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now additionally enforces that `workspace-entry-client.tsx` must keep composing `WorkspaceEntryHeader` alongside the already extracted entry sections
+  - the guard also lowers the page-size ceiling again so future control-center work keeps shrinking the main entry component instead of drifting back toward a monolith
+  - this keeps the newly extracted header boundary executable while preserving the existing controller-boundary checks
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace-entry header extraction
+- Continue simplifying remaining large UI module boundaries after the workspace-entry header guard tightening
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

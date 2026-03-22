@@ -14,6 +14,7 @@ if (!source.includes("useWorkspaceEntryController(router)")) {
 }
 
 for (const requiredImport of [
+  'import { WorkspaceEntryHeader } from "./workspace-entry-header";',
   'import { WorkspaceCreateSection } from "./workspace-create-section";',
   'import { WorkspaceJoinSection } from "./workspace-join-section";',
   'import { WorkspaceImportSection } from "./workspace-import-section";',
@@ -26,6 +27,7 @@ for (const requiredImport of [
 }
 
 for (const requiredUsage of [
+  "<WorkspaceEntryHeader",
   "<WorkspaceCreateSection",
   "<WorkspaceJoinSection",
   "<WorkspaceImportSection",
@@ -60,7 +62,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 500;
+const maxAllowedLines = 460;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-entry-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
