@@ -6,6 +6,7 @@ const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/work
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceEntryController } from "./use-workspace-entry-controller";')) {
   throw new Error("workspace-entry-client.tsx must import useWorkspaceEntryController");
@@ -33,11 +34,8 @@ if (!source.includes("getWorkspaceEntryCopy(locale)")) {
 
 for (const requiredImport of [
   'import { WorkspaceEntryHeader } from "./workspace-entry-header";',
-  'import { WorkspaceCreateSection } from "./workspace-create-section";',
-  'import { WorkspaceJoinSection } from "./workspace-join-section";',
-  'import { WorkspaceImportSection } from "./workspace-import-section";',
-  'import { WorkspaceListSection } from "./workspace-list-section";',
-  'import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";',
+  'import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types";',
+  'import { WorkspaceEntrySectionsGrid } from "./workspace-entry-sections-grid";',
 ]) {
   if (!mainPanelSource.includes(requiredImport)) {
     throw new Error(`workspace-entry-main-panel.tsx must keep using extracted entry sections: ${requiredImport}`);
@@ -46,14 +44,22 @@ for (const requiredImport of [
 
 for (const requiredUsage of [
   "<WorkspaceEntryHeader",
+  "<WorkspaceEntrySectionsGrid",
+]) {
+  if (!mainPanelSource.includes(requiredUsage)) {
+    throw new Error(`workspace-entry-main-panel.tsx must compose the extracted entry sections: ${requiredUsage}`);
+  }
+}
+
+for (const forbiddenMainPanelToken of [
   "<WorkspaceCreateSection",
   "<WorkspaceJoinSection",
   "<WorkspaceImportSection",
   "<WorkspaceListSection",
   "<WorkspaceTransferJobsSection",
 ]) {
-  if (!mainPanelSource.includes(requiredUsage)) {
-    throw new Error(`workspace-entry-main-panel.tsx must compose the extracted entry sections: ${requiredUsage}`);
+  if (mainPanelSource.includes(forbiddenMainPanelToken)) {
+    throw new Error(`workspace-entry-main-panel.tsx must keep entry sections delegated: ${forbiddenMainPanelToken}`);
   }
 }
 
@@ -85,6 +91,11 @@ for (const forbiddenToken of [
 const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-entry-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+const maxMainPanelLines = 110;
+if (mainPanelLineCount > maxMainPanelLines) {
+  throw new Error(`workspace-entry-main-panel.tsx exceeded ${maxMainPanelLines} lines: ${mainPanelLineCount}`);
 }
 
 console.log("workspace-entry structure verification passed");

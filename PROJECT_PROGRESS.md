@@ -616,10 +616,14 @@ Last updated: 2026-03-23
   - record reminder form, reminder item card, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-reminder-panel.tsx`
   - the reminder panel now focuses more narrowly on reminder workflow composition while dedicated modules own reminder form controls and per-reminder action rendering
   - `apps/web/scripts/verify-record-reminder-panel-structure.mjs` and `apps/web/package.json` now make this reminder-panel boundary executable
+- Workspace Entry Main Panel Structure Extraction V1:
+  - workspace entry main panel props contract and section grid now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-entry-main-panel.tsx`
+  - the workspace entry main panel now focuses more narrowly on page shell composition while the dedicated grid module owns create/join/import/list/job section layout
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now tightens the main panel size ceiling and enforces the new entry-grid boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record reminder panel extraction
+- Continue simplifying remaining large UI module boundaries after the workspace entry main panel extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
