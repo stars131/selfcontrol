@@ -908,6 +908,10 @@ Last updated: 2026-03-23
   - chat-panel action handler input shaping and final action-result assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/use-chat-panel-actions.ts`
   - the top-level chat action hook now focuses more narrowly on composing state, derived data, and grouped handlers while the helper module owns mapping between those layers
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this action helper boundary and tighter size ceilings for `use-chat-panel-actions.ts`
+- Workspace Media Retention Helper Re-export Split V1:
+  - retention-card copy/controller-input helpers and action/message helpers now live in separate dedicated modules instead of remaining combined inside `apps/web/components/workspace-media-retention-card-helpers.ts`
+  - the top-level retention helper file now focuses more narrowly on acting as a stable re-export boundary while specialized helper modules own copy mapping and action wiring logic
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces this helper re-export boundary and separate size ceilings for the new helper modules
 
 ## Next
 - Continue the next product slice

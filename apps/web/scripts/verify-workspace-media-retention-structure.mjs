@@ -18,16 +18,30 @@ const retentionNoticesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-notices.tsx",
 );
+const retentionCardCopyHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-copy-helpers.ts",
+);
+const retentionCardActionHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-action-helpers.ts",
+);
 const source = fs.readFileSync(retentionCardPath, "utf8");
 const controllerSource = fs.readFileSync(retentionControllerPath, "utf8");
 const copySource = fs.readFileSync(retentionCopyPath, "utf8");
 const retentionActionsSource = fs.readFileSync(retentionActionsPath, "utf8");
 const retentionNoticesSource = fs.readFileSync(retentionNoticesPath, "utf8");
+const retentionCardCopyHelpersSource = fs.readFileSync(retentionCardCopyHelpersPath, "utf8");
+const retentionCardActionHelpersSource = fs.readFileSync(retentionCardActionHelpersPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const retentionActionsLineCount = retentionActionsSource.split(/\r?\n/).length;
 const retentionNoticesLineCount = retentionNoticesSource.split(/\r?\n/).length;
+const retentionCardCopyHelpersLineCount =
+  retentionCardCopyHelpersSource.split(/\r?\n/).length;
+const retentionCardActionHelpersLineCount =
+  retentionCardActionHelpersSource.split(/\r?\n/).length;
 const retentionListsPath = path.resolve(process.cwd(), "components/workspace-media-retention-lists.tsx");
 const retentionListsSource = fs.readFileSync(retentionListsPath, "utf8");
 
@@ -220,25 +234,95 @@ const retentionCardHelpersPath = path.resolve(
 );
 const retentionCardHelpersSource = fs.readFileSync(retentionCardHelpersPath, "utf8");
 
-for (const requiredHelpersImport of ['from "./workspace-media-retention-actions";']) {
-  if (!retentionCardHelpersSource.includes(requiredHelpersImport)) {
+for (const requiredHelpersUsage of [
+  'export {',
+  'from "./workspace-media-retention-card-copy-helpers";',
+  'from "./workspace-media-retention-card-action-helpers";',
+]) {
+  if (!retentionCardHelpersSource.includes(requiredHelpersUsage)) {
     throw new Error(
-      `workspace-media-retention-card-helpers.ts must import delegated action props typing: ${requiredHelpersImport}`,
+      `workspace-media-retention-card-helpers.ts must remain a thin re-export boundary: ${requiredHelpersUsage}`,
     );
   }
 }
 
-for (const requiredHelpersUsage of [
+for (const forbiddenHelpersToken of [
+  'from "./workspace-media-retention-actions";',
+  'from "./workspace-media-retention-copy";',
+  "buildWorkspaceMediaRetentionActionsProps({",
+  "buildWorkspaceMediaRetentionCopyBundle(locale)",
+]) {
+  if (retentionCardHelpersSource.includes(forbiddenHelpersToken)) {
+    throw new Error(
+      `workspace-media-retention-card-helpers.ts must keep helper internals delegated: ${forbiddenHelpersToken}`,
+    );
+  }
+}
+
+const maxRetentionCardHelpersLines = 10;
+const retentionCardHelpersLineCount = retentionCardHelpersSource.split(/\r?\n/).length;
+if (retentionCardHelpersLineCount > maxRetentionCardHelpersLines) {
+  throw new Error(
+    `workspace-media-retention-card-helpers.ts exceeded ${maxRetentionCardHelpersLines} lines: ${retentionCardHelpersLineCount}`,
+  );
+}
+
+for (const requiredCopyHelpersImport of [
+  'from "./workspace-media-retention-copy";',
+]) {
+  if (!retentionCardCopyHelpersSource.includes(requiredCopyHelpersImport)) {
+    throw new Error(
+      `workspace-media-retention-card-copy-helpers.ts must import delegated copy modules: ${requiredCopyHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredCopyHelpersUsage of [
+  "export function buildWorkspaceMediaRetentionCopyBundle(locale: LocaleCode)",
+  "export function buildWorkspaceMediaRetentionControllerInput({",
+  'copy.remoteMedia ?? "Remote media"',
+]) {
+  if (!retentionCardCopyHelpersSource.includes(requiredCopyHelpersUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-copy-helpers.ts must own copy/controller input helpers: ${requiredCopyHelpersUsage}`,
+    );
+  }
+}
+
+const maxRetentionCardCopyHelpersLines = 55;
+if (retentionCardCopyHelpersLineCount > maxRetentionCardCopyHelpersLines) {
+  throw new Error(
+    `workspace-media-retention-card-copy-helpers.ts exceeded ${maxRetentionCardCopyHelpersLines} lines: ${retentionCardCopyHelpersLineCount}`,
+  );
+}
+
+for (const requiredActionHelpersImport of ['from "./workspace-media-retention-actions";']) {
+  if (!retentionCardActionHelpersSource.includes(requiredActionHelpersImport)) {
+    throw new Error(
+      `workspace-media-retention-card-action-helpers.ts must import delegated action props typing: ${requiredActionHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredActionHelpersUsage of [
+  "buildWorkspaceMediaRetentionActionMessage({",
   "buildWorkspaceMediaRetentionActionsProps({",
   "onCleanupOrphans: () =>",
   "onCleanupSelected: () =>",
   "selectedCount: selectedMediaIds.length",
 ]) {
-  if (!retentionCardHelpersSource.includes(requiredHelpersUsage)) {
+  if (!retentionCardActionHelpersSource.includes(requiredActionHelpersUsage)) {
     throw new Error(
-      `workspace-media-retention-card-helpers.ts must own retention action prop assembly: ${requiredHelpersUsage}`,
+      `workspace-media-retention-card-action-helpers.ts must own action message and prop assembly: ${requiredActionHelpersUsage}`,
     );
   }
+}
+
+const maxRetentionCardActionHelpersLines = 90;
+if (retentionCardActionHelpersLineCount > maxRetentionCardActionHelpersLines) {
+  throw new Error(
+    `workspace-media-retention-card-action-helpers.ts exceeded ${maxRetentionCardActionHelpersLines} lines: ${retentionCardActionHelpersLineCount}`,
+  );
 }
 
 for (const requiredActionsUsage of [
