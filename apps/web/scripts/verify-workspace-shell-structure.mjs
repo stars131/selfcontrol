@@ -10,17 +10,23 @@ const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspa
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const workspaceShellActionsPath = path.resolve(process.cwd(), "components/use-workspace-shell-actions.ts");
 const workspaceShellEffectsPath = path.resolve(process.cwd(), "components/use-workspace-shell-effects.ts");
+const workspaceShellInitialLoadPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-initial-load.ts",
+);
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
 const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
+const initialLoadSource = fs.readFileSync(workspaceShellInitialLoadPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const effectsLineCount = effectsSource.split(/\r?\n/).length;
+const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
 
 if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
@@ -279,6 +285,44 @@ for (const forbiddenEffectsToken of [
 const maxEffectsLines = 25;
 if (effectsLineCount > maxEffectsLines) {
   throw new Error(`use-workspace-shell-effects.ts exceeded ${maxEffectsLines} lines: ${effectsLineCount}`);
+}
+
+for (const requiredInitialLoadImport of [
+  'from "./workspace-shell-effects.types";',
+  'from "./workspace-shell-initial-load-helpers";',
+]) {
+  if (!initialLoadSource.includes(requiredInitialLoadImport)) {
+    throw new Error(`use-workspace-shell-initial-load.ts must import delegated initial-load helpers: ${requiredInitialLoadImport}`);
+  }
+}
+
+for (const requiredInitialLoadUsage of [
+  "loadWorkspaceShellConversationState({",
+  "loadWorkspaceShellManagedState({",
+]) {
+  if (!initialLoadSource.includes(requiredInitialLoadUsage)) {
+    throw new Error(`use-workspace-shell-initial-load.ts must delegate initial-load flow: ${requiredInitialLoadUsage}`);
+  }
+}
+
+for (const forbiddenInitialLoadToken of [
+  "createConversation(",
+  "listConversations(",
+  "loadConversationMessagesForWorkspace(",
+  "refreshMediaDeadLetterOverviewData(",
+  "refreshProviderConfigItems(",
+  "refreshShareLinkItems(",
+]) {
+  if (initialLoadSource.includes(forbiddenInitialLoadToken)) {
+    throw new Error(`use-workspace-shell-initial-load.ts must keep detailed load steps delegated: ${forbiddenInitialLoadToken}`);
+  }
+}
+
+const maxInitialLoadLines = 135;
+if (initialLoadLineCount > maxInitialLoadLines) {
+  throw new Error(
+    `use-workspace-shell-initial-load.ts exceeded ${maxInitialLoadLines} lines: ${initialLoadLineCount}`,
+  );
 }
 
 console.log("workspace-shell structure verification passed");

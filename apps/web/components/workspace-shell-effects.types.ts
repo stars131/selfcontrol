@@ -56,3 +56,30 @@ export type UseWorkspaceShellEffectsProps = {
   setError: StateSetter<string>;
   setLoading: StateSetter<boolean>;
 };
+
+export type WorkspaceShellInitialLoadProps = Pick<
+  UseWorkspaceShellEffectsProps,
+  | "router"
+  | "workspaceId"
+  | "setActiveConversationId"
+  | "setAuditLogs"
+  | "setConversations"
+  | "setError"
+  | "setKnowledgeStats"
+  | "setLatestSharePath"
+  | "setLoading"
+  | "setMediaDeadLetterOverview"
+  | "setMediaProcessingOverview"
+  | "setMediaStorageSummary"
+  | "setMessages"
+  | "setNotifications"
+  | "setProviderConfigs"
+  | "setRecords"
+  | "setSearchPresets"
+  | "setSelectedRecordId"
+  | "setShareLinks"
+  | "setTimelineDays"
+  | "setToken"
+  | "setVisibleRecords"
+  | "setWorkspace"
+>;

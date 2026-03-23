@@ -760,6 +760,10 @@ Last updated: 2026-03-23
   - workspace-entry transfer-job, workspace create/import, and share/join actions now live in dedicated action-group modules instead of remaining inline inside `apps/web/components/workspace-entry-controller-actions.ts`
   - the workspace-entry action assembly module now focuses more narrowly on composing grouped action sets while specialized helpers own each entry workflow
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these action-group boundaries and a size ceiling for `workspace-entry-controller-actions.ts`
+- Workspace Shell Initial Load Helper Extraction V1:
+  - workspace-shell conversation bootstrap and role-gated managed-surface loading now live in dedicated helper functions instead of remaining inline inside `apps/web/components/use-workspace-shell-initial-load.ts`
+  - the initial-load hook now focuses more narrowly on auth gatekeeping, base workspace bootstrap, and high-level load sequencing while helpers own detailed startup branches
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these initial-load helper boundaries and a size ceiling for `use-workspace-shell-initial-load.ts`
 
 ## Next
 - Continue the next product slice

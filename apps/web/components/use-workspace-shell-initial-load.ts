@@ -2,23 +2,23 @@
 
 import { useEffect } from "react";
 
-import { createConversation, getWorkspace, listConversations } from "../lib/api";
+import { getWorkspace } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
 import {
   INITIAL_RECORD_FILTER,
-  loadConversationMessagesForWorkspace,
   refreshAuditLogItems,
   refreshKnowledgeStatsData,
-  refreshMediaDeadLetterOverviewData,
   refreshMediaProcessingOverviewData,
   refreshMediaStorageSummaryData,
   refreshNotificationItems,
-  refreshProviderConfigItems,
   refreshRecordCollection,
   refreshSearchPresetItems,
-  refreshShareLinkItems,
 } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
+import type { WorkspaceShellInitialLoadProps } from "./workspace-shell-effects.types";
+import {
+  loadWorkspaceShellConversationState,
+  loadWorkspaceShellManagedState,
+} from "./workspace-shell-initial-load-helpers";
 
 export function useWorkspaceShellInitialLoad({
   router,
@@ -44,32 +44,7 @@ export function useWorkspaceShellInitialLoad({
   setToken,
   setVisibleRecords,
   setWorkspace,
-}: Pick<
-  UseWorkspaceShellEffectsProps,
-  | "router"
-  | "workspaceId"
-  | "setActiveConversationId"
-  | "setAuditLogs"
-  | "setConversations"
-  | "setError"
-  | "setKnowledgeStats"
-  | "setLatestSharePath"
-  | "setLoading"
-  | "setMediaDeadLetterOverview"
-  | "setMediaProcessingOverview"
-  | "setMediaStorageSummary"
-  | "setMessages"
-  | "setNotifications"
-  | "setProviderConfigs"
-  | "setRecords"
-  | "setSearchPresets"
-  | "setSelectedRecordId"
-  | "setShareLinks"
-  | "setTimelineDays"
-  | "setToken"
-  | "setVisibleRecords"
-  | "setWorkspace"
->) {
+}: WorkspaceShellInitialLoadProps) {
   useEffect(() => {
     const activeToken = getStoredToken();
     if (!activeToken) {
@@ -93,44 +68,29 @@ export function useWorkspaceShellInitialLoad({
           setSelectedRecordId,
         });
 
-        const conversationResult = await listConversations(activeToken, workspaceId);
-        let items = conversationResult.items;
-        if (
-          !items.length &&
-          (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor")
-        ) {
-          const created = await createConversation(activeToken, workspaceId, "Workspace chat");
-          items = [created.conversation];
-        }
-
-        setConversations(items);
-        setActiveConversationId(items[0]?.id ?? null);
-        if (items[0]) {
-          await loadConversationMessagesForWorkspace(activeToken, workspaceId, items[0].id, setMessages);
-        } else {
-          setMessages([]);
-        }
+        await loadWorkspaceShellConversationState({
+          activeToken,
+          role: workspaceResult.workspace.role,
+          setActiveConversationId,
+          setConversations,
+          setMessages,
+          workspaceId,
+        });
 
         await refreshNotificationItems(activeToken, workspaceId, setNotifications);
         await refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
         await refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
         await refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
 
-        if (workspaceResult.workspace.role === "owner" || workspaceResult.workspace.role === "editor") {
-          await refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
-          await refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
-          if (workspaceResult.workspace.role === "owner") {
-            await refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
-          } else {
-            setShareLinks([]);
-            setLatestSharePath("");
-          }
-        } else {
-          setMediaDeadLetterOverview(null);
-          setProviderConfigs([]);
-          setShareLinks([]);
-          setLatestSharePath("");
-        }
+        await loadWorkspaceShellManagedState({
+          activeToken,
+          role: workspaceResult.workspace.role,
+          setLatestSharePath,
+          setMediaDeadLetterOverview,
+          setProviderConfigs,
+          setShareLinks,
+          workspaceId,
+        });
 
         await refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
         await refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
