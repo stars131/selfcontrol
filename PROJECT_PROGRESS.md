@@ -888,6 +888,10 @@ Last updated: 2026-03-23
   - retention-card notice rendering and owner-action prop assembly now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-media-retention-card.tsx`
   - the retention card now focuses more narrowly on controller composition and section layout while helper and notice modules own action wiring and status rendering boundaries
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these retention notice/action boundaries and updated size ceilings
+- Record Panel Controller Result Assembly Split V1:
+  - record-panel controller final return-shape assembly now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
+  - the top-level record-panel controller hook now focuses more narrowly on composing view data, state, sync wiring, and grouped handlers while the result helper owns the exposed controller contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this result-assembly boundary and tighter size ceilings for the controller hook
 
 ## Next
 - Continue the next product slice

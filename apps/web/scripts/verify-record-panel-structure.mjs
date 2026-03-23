@@ -16,6 +16,10 @@ const recordPanelShellPropsPath = path.resolve(
   "components/record-panel-v2-shell-props.ts",
 );
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
+const recordPanelControllerResultPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-result.ts",
+);
 const recordPanelRecordHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handlers.ts",
@@ -42,6 +46,7 @@ const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf
 const editorWorkspacePropsSource = fs.readFileSync(recordPanelEditorWorkspacePropsPath, "utf8");
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
+const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
@@ -53,6 +58,7 @@ const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const editorWorkspacePropsLines = editorWorkspacePropsSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
+const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
@@ -214,6 +220,7 @@ if (shellPropsLines > maxShellPropsLines) {
 for (const requiredControllerImport of [
   'from "./record-panel-controller.types";',
   'from "./record-panel-controller-handler-groups";',
+  'from "./record-panel-controller-result";',
   'from "./use-record-panel-controller-sync";',
   'from "./use-record-panel-controller-state";',
   'from "./use-record-panel-controller-view-data";',
@@ -229,8 +236,7 @@ for (const requiredControllerUsage of [
   "useRecordPanelControllerState(recordFilter)",
   "createRecordPanelControllerHandlerGroups({",
   "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups({",
-  "...recordHandlers",
-  "...mediaHandlers",
+  "buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData })",
 ]) {
   if (!controllerSource.includes(requiredControllerUsage)) {
     throw new Error(`use-record-panel-controller.ts must delegate controller orchestration: ${requiredControllerUsage}`);
@@ -247,15 +253,66 @@ for (const forbiddenControllerToken of [
   "event.preventDefault()",
   "URL.createObjectURL(",
   "setSelectedDeadLetterIds((current)",
+  "locale,",
+  "...recordHandlers",
+  "...mediaHandlers",
 ]) {
   if (controllerSource.includes(forbiddenControllerToken)) {
     throw new Error(`use-record-panel-controller.ts must keep sync and handler details delegated: ${forbiddenControllerToken}`);
   }
 }
 
-const maxControllerLines = 200;
+const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredControllerResultImport of [
+  'from "./record-panel-controller-handler-groups";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerResultSource.includes(requiredControllerResultImport)) {
+    throw new Error(
+      `record-panel-controller-result.ts must import delegated controller result types: ${requiredControllerResultImport}`,
+    );
+  }
+}
+
+for (const requiredControllerResultUsage of [
+  "export function buildRecordPanelControllerResult({",
+  "locale: viewData.locale,",
+  "form: state.form,",
+  "detailCopy: viewData.detailCopy,",
+  "...recordHandlers",
+  "...mediaHandlers",
+]) {
+  if (!controllerResultSource.includes(requiredControllerResultUsage)) {
+    throw new Error(
+      `record-panel-controller-result.ts must own final controller result assembly: ${requiredControllerResultUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerResultToken of [
+  "useEffect(",
+  "useMemo(",
+  "useState(",
+  "createRecordPanelControllerHandlerGroups(",
+  "useRecordPanelControllerSync(",
+]) {
+  if (controllerResultSource.includes(forbiddenControllerResultToken)) {
+    throw new Error(
+      `record-panel-controller-result.ts must keep orchestration delegated: ${forbiddenControllerResultToken}`,
+    );
+  }
+}
+
+const maxControllerResultLines = 80;
+if (controllerResultLines > maxControllerResultLines) {
+  throw new Error(
+    `record-panel-controller-result.ts exceeded ${maxControllerResultLines} lines: ${controllerResultLines}`,
+  );
 }
 
 for (const requiredRecordHandlersImport of [
