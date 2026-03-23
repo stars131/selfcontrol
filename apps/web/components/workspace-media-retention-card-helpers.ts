@@ -3,6 +3,7 @@ import type { LocaleCode } from "../lib/locale";
 import { getWorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
 import type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
 import type { MediaRetentionActionResult } from "./workspace-media-retention-controller.types";
+import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions";
 
 export function buildWorkspaceMediaRetentionCopyBundle(locale: LocaleCode): {
   copy: WorkspaceMediaRetentionCopy;
@@ -67,4 +68,66 @@ export function buildWorkspaceMediaRetentionActionMessage({
   }
 
   return "";
+}
+
+export function buildWorkspaceMediaRetentionActionsProps({
+  actionLoading,
+  clearSelection,
+  copy,
+  handleArchive,
+  handleCleanup,
+  report,
+  role,
+  selectAllCandidates,
+  selectedMediaIds,
+}: {
+  actionLoading: boolean;
+  clearSelection: () => void;
+  copy: WorkspaceMediaRetentionCopy;
+  handleArchive: WorkspaceMediaRetentionActionsProps["onArchive"];
+  handleCleanup: (input: {
+    mediaIds: string[];
+    purgeOrphanFiles: boolean;
+    confirmMessage: string;
+  }) => Promise<void>;
+  report: {
+    orphan_file_count?: number;
+    retention_candidates: Array<{ media_id: string }>;
+  } | null;
+  role: WorkspaceMediaRetentionActionsProps["role"];
+  selectAllCandidates: () => void;
+  selectedMediaIds: string[];
+}): WorkspaceMediaRetentionActionsProps {
+  return {
+    actionLoading,
+    archiveConfirmSelected: copy.archiveConfirmSelected,
+    archiveSelectedLabel: copy.archiveSelected,
+    canDeleteOrphans: Boolean(report?.orphan_file_count),
+    canSelectAll: Boolean(report?.retention_candidates.length),
+    clearSelectionLabel: copy.clearSelection,
+    deleteOrphansLabel: copy.deleteOrphans,
+    deleteSelectedLabel: copy.deleteSelected,
+    editorReadOnly: copy.editorReadOnly,
+    onArchive: handleArchive,
+    onCleanupOrphans: () =>
+      handleCleanup({
+        mediaIds: [],
+        purgeOrphanFiles: true,
+        confirmMessage: copy.cleanupConfirmOrphans,
+      }),
+    onCleanupSelected: () =>
+      handleCleanup({
+        mediaIds: selectedMediaIds,
+        purgeOrphanFiles: false,
+        confirmMessage: copy.cleanupConfirmSelected,
+      }),
+    onClearSelection: clearSelection,
+    onSelectAllCandidates: selectAllCandidates,
+    ownerActions: copy.ownerActions,
+    processingLabel: copy.processing,
+    role,
+    selectedCount: selectedMediaIds.length,
+    selectedSummary: copy.selectedSummary,
+    selectAllLabel: copy.selectAll,
+  };
 }

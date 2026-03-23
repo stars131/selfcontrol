@@ -5,11 +5,13 @@ import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
 import {
   buildWorkspaceMediaRetentionActionMessage,
+  buildWorkspaceMediaRetentionActionsProps,
   buildWorkspaceMediaRetentionControllerInput,
   buildWorkspaceMediaRetentionCopyBundle,
 } from "./workspace-media-retention-card-helpers";
 import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";
 import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
+import { WorkspaceMediaRetentionNotices } from "./workspace-media-retention-notices";
 import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
 import {
   useWorkspaceMediaRetentionController,
@@ -59,6 +61,17 @@ export function WorkspaceMediaRetentionCard({
     archiveCompleted: copy.archiveCompleted,
     cleanupCompleted: copy.cleanupCompleted,
   });
+  const actionProps = buildWorkspaceMediaRetentionActionsProps({
+    actionLoading,
+    clearSelection,
+    copy,
+    handleArchive,
+    handleCleanup,
+    report,
+    role,
+    selectAllCandidates,
+    selectedMediaIds,
+  });
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
@@ -70,9 +83,11 @@ export function WorkspaceMediaRetentionCard({
         onRefresh={() => loadReport(olderThanDays)}
       />
 
-      {error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null}
-      {actionError ? <div className="notice error" style={{ marginTop: 16 }}>{actionError}</div> : null}
-      {actionMessage ? <div className="notice" style={{ marginTop: 16 }}>{actionMessage}</div> : null}
+      <WorkspaceMediaRetentionNotices
+        actionError={actionError}
+        actionMessage={actionMessage}
+        error={error}
+      />
 
       <WorkspaceMediaRetentionSummary
         copy={copy}
@@ -81,40 +96,7 @@ export function WorkspaceMediaRetentionCard({
         storageRiskLabel={storageRiskLabel}
       />
 
-      <WorkspaceMediaRetentionActions
-        actionLoading={actionLoading}
-        archiveConfirmSelected={copy.archiveConfirmSelected}
-        archiveSelectedLabel={copy.archiveSelected}
-        canDeleteOrphans={Boolean(report?.orphan_file_count)}
-        canSelectAll={Boolean(report?.retention_candidates.length)}
-        clearSelectionLabel={copy.clearSelection}
-        deleteOrphansLabel={copy.deleteOrphans}
-        deleteSelectedLabel={copy.deleteSelected}
-        editorReadOnly={copy.editorReadOnly}
-        onArchive={handleArchive}
-        onCleanupOrphans={() =>
-          handleCleanup({
-            mediaIds: [],
-            purgeOrphanFiles: true,
-            confirmMessage: copy.cleanupConfirmOrphans,
-          })
-        }
-        onCleanupSelected={() =>
-          handleCleanup({
-            mediaIds: selectedMediaIds,
-            purgeOrphanFiles: false,
-            confirmMessage: copy.cleanupConfirmSelected,
-          })
-        }
-        onClearSelection={clearSelection}
-        onSelectAllCandidates={selectAllCandidates}
-        ownerActions={copy.ownerActions}
-        processingLabel={copy.processing}
-        role={role}
-        selectedCount={selectedMediaIds.length}
-        selectedSummary={copy.selectedSummary}
-        selectAllLabel={copy.selectAll}
-      />
+      <WorkspaceMediaRetentionActions {...actionProps} />
 
       <WorkspaceMediaRetentionLists
         actionLoading={actionLoading}

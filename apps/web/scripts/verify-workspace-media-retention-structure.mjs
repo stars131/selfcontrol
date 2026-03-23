@@ -10,12 +10,24 @@ const retentionCopyPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-copy.ts",
 );
+const retentionActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-actions.tsx",
+);
+const retentionNoticesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-notices.tsx",
+);
 const source = fs.readFileSync(retentionCardPath, "utf8");
 const controllerSource = fs.readFileSync(retentionControllerPath, "utf8");
 const copySource = fs.readFileSync(retentionCopyPath, "utf8");
+const retentionActionsSource = fs.readFileSync(retentionActionsPath, "utf8");
+const retentionNoticesSource = fs.readFileSync(retentionNoticesPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
+const retentionActionsLineCount = retentionActionsSource.split(/\r?\n/).length;
+const retentionNoticesLineCount = retentionNoticesSource.split(/\r?\n/).length;
 const retentionListsPath = path.resolve(process.cwd(), "components/workspace-media-retention-lists.tsx");
 const retentionListsSource = fs.readFileSync(retentionListsPath, "utf8");
 
@@ -37,6 +49,10 @@ if (!source.includes('import { MediaRetentionItemCard } from "./media-retention-
 
 if (!source.includes('import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";')) {
   throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionActions");
+}
+
+if (!source.includes('import { WorkspaceMediaRetentionNotices } from "./workspace-media-retention-notices";')) {
+  throw new Error("workspace-media-retention-card.tsx must import WorkspaceMediaRetentionNotices");
 }
 
 if (!source.includes('import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";')) {
@@ -63,6 +79,10 @@ if (!source.includes("<WorkspaceMediaRetentionActions")) {
   throw new Error("workspace-media-retention-card.tsx must delegate owner action rendering to WorkspaceMediaRetentionActions");
 }
 
+if (!source.includes("<WorkspaceMediaRetentionNotices")) {
+  throw new Error("workspace-media-retention-card.tsx must delegate notice rendering to WorkspaceMediaRetentionNotices");
+}
+
 if (!source.includes("<WorkspaceMediaRetentionSummary")) {
   throw new Error("workspace-media-retention-card.tsx must delegate summary rendering to WorkspaceMediaRetentionSummary");
 }
@@ -79,6 +99,7 @@ for (const requiredHelperUsage of [
   "buildWorkspaceMediaRetentionCopyBundle(locale)",
   "buildWorkspaceMediaRetentionControllerInput({",
   "buildWorkspaceMediaRetentionActionMessage({",
+  "buildWorkspaceMediaRetentionActionsProps({",
 ]) {
   if (!source.includes(requiredHelperUsage)) {
     throw new Error(`workspace-media-retention-card.tsx must delegate helper logic: ${requiredHelperUsage}`);
@@ -103,6 +124,11 @@ for (const forbiddenToken of [
   "report.retention_candidates.map((item)",
   'copy.eyebrow',
   "setOlderThanDays(Number(event.target.value))",
+  "handleCleanup({",
+  "copy.archiveConfirmSelected",
+  "copy.cleanupConfirmOrphans",
+  "copy.cleanupConfirmSelected",
+  "copy.ownerActions",
   "const COPY:",
   'copy.remoteMedia ?? "Remote media"',
   "actionResult?.kind === \"archive\"",
@@ -113,7 +139,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 150;
+const maxAllowedLines = 120;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-media-retention-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
@@ -185,6 +211,71 @@ if (!retentionDerivedDataSource.includes('from "./workspace-media-retention-cont
 if (!retentionDerivedDataSource.includes("buildWorkspaceMediaRetentionRiskLabel({")) {
   throw new Error(
     "use-workspace-media-retention-derived-data.ts must delegate risk label construction through buildWorkspaceMediaRetentionRiskLabel",
+  );
+}
+
+const retentionCardHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-helpers.ts",
+);
+const retentionCardHelpersSource = fs.readFileSync(retentionCardHelpersPath, "utf8");
+
+for (const requiredHelpersImport of ['from "./workspace-media-retention-actions";']) {
+  if (!retentionCardHelpersSource.includes(requiredHelpersImport)) {
+    throw new Error(
+      `workspace-media-retention-card-helpers.ts must import delegated action props typing: ${requiredHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredHelpersUsage of [
+  "buildWorkspaceMediaRetentionActionsProps({",
+  "onCleanupOrphans: () =>",
+  "onCleanupSelected: () =>",
+  "selectedCount: selectedMediaIds.length",
+]) {
+  if (!retentionCardHelpersSource.includes(requiredHelpersUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-helpers.ts must own retention action prop assembly: ${requiredHelpersUsage}`,
+    );
+  }
+}
+
+for (const requiredActionsUsage of [
+  "export type WorkspaceMediaRetentionActionsProps = {",
+  "export function WorkspaceMediaRetentionActions({",
+]) {
+  if (!retentionActionsSource.includes(requiredActionsUsage)) {
+    throw new Error(
+      `workspace-media-retention-actions.tsx must export shared action props and component: ${requiredActionsUsage}`,
+    );
+  }
+}
+
+const maxRetentionActionsLines = 110;
+if (retentionActionsLineCount > maxRetentionActionsLines) {
+  throw new Error(
+    `workspace-media-retention-actions.tsx exceeded ${maxRetentionActionsLines} lines: ${retentionActionsLineCount}`,
+  );
+}
+
+for (const requiredNoticesUsage of [
+  "export function WorkspaceMediaRetentionNotices({",
+  "actionError",
+  "actionMessage",
+  "error",
+]) {
+  if (!retentionNoticesSource.includes(requiredNoticesUsage)) {
+    throw new Error(
+      `workspace-media-retention-notices.tsx must own notice rendering: ${requiredNoticesUsage}`,
+    );
+  }
+}
+
+const maxRetentionNoticesLines = 25;
+if (retentionNoticesLineCount > maxRetentionNoticesLines) {
+  throw new Error(
+    `workspace-media-retention-notices.tsx exceeded ${maxRetentionNoticesLines} lines: ${retentionNoticesLineCount}`,
   );
 }
 

@@ -1,5 +1,28 @@
 "use client";
 
+export type WorkspaceMediaRetentionActionsProps = {
+  actionLoading: boolean;
+  archiveConfirmSelected: string;
+  archiveSelectedLabel: string;
+  canDeleteOrphans: boolean;
+  canSelectAll: boolean;
+  clearSelectionLabel: string;
+  deleteOrphansLabel: string;
+  deleteSelectedLabel: string;
+  editorReadOnly: string;
+  onArchive: (confirmMessage: string) => Promise<void>;
+  onCleanupOrphans: () => Promise<void>;
+  onCleanupSelected: () => Promise<void>;
+  onClearSelection: () => void;
+  onSelectAllCandidates: () => void;
+  ownerActions: string;
+  processingLabel: string;
+  role: "owner" | "editor";
+  selectedCount: number;
+  selectedSummary: string;
+  selectAllLabel: string;
+};
+
 export function WorkspaceMediaRetentionActions({
   actionLoading,
   archiveConfirmSelected,
@@ -21,28 +44,7 @@ export function WorkspaceMediaRetentionActions({
   selectAllLabel,
   canDeleteOrphans,
   canSelectAll,
-}: {
-  actionLoading: boolean;
-  archiveConfirmSelected: string;
-  archiveSelectedLabel: string;
-  canDeleteOrphans: boolean;
-  canSelectAll: boolean;
-  clearSelectionLabel: string;
-  deleteOrphansLabel: string;
-  deleteSelectedLabel: string;
-  editorReadOnly: string;
-  onArchive: (confirmMessage: string) => Promise<void>;
-  onCleanupOrphans: () => Promise<void>;
-  onCleanupSelected: () => Promise<void>;
-  onClearSelection: () => void;
-  onSelectAllCandidates: () => void;
-  ownerActions: string;
-  processingLabel: string;
-  role: "owner" | "editor";
-  selectedCount: number;
-  selectedSummary: string;
-  selectAllLabel: string;
-}) {
+}: WorkspaceMediaRetentionActionsProps) {
   return (
     <section className="subtle-card" style={{ marginTop: 16 }}>
       <div className="eyebrow">{ownerActions}</div>

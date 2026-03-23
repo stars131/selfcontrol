@@ -884,6 +884,10 @@ Last updated: 2026-03-23
   - chat-panel shared content prop contracts and content composition now live in dedicated type and section modules instead of remaining combined inside `apps/web/components/chat-panel-content.tsx`
   - the chat-panel content shell now focuses more narrowly on composing management surfaces and conversation surfaces while extracted modules own each section's rendering boundary
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these chat content boundaries and a size ceiling for the shell component
+- Workspace Media Retention Notice and Action Prop Split V1:
+  - retention-card notice rendering and owner-action prop assembly now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-media-retention-card.tsx`
+  - the retention card now focuses more narrowly on controller composition and section layout while helper and notice modules own action wiring and status rendering boundaries
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these retention notice/action boundaries and updated size ceilings
 
 ## Next
 - Continue the next product slice
