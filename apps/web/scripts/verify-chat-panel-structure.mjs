@@ -4,6 +4,12 @@ import path from "node:path";
 const chatPanelPath = path.resolve(process.cwd(), "components/chat-panel.tsx");
 const source = fs.readFileSync(chatPanelPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const chatPanelContentPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content-props.ts",
+);
+const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
+const chatPanelContentPropsLineCount = chatPanelContentPropsSource.split(/\r?\n/).length;
 const chatPanelContentPath = path.resolve(process.cwd(), "components/chat-panel-content.tsx");
 const chatPanelContentSource = fs.readFileSync(chatPanelContentPath, "utf8");
 const chatPanelContentLineCount = chatPanelContentSource.split(/\r?\n/).length;
@@ -48,6 +54,10 @@ if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-acti
   throw new Error("chat-panel.tsx must import useChatPanelActions");
 }
 
+if (!source.includes('import { buildChatPanelContentProps } from "./chat-panel-content-props";')) {
+  throw new Error("chat-panel.tsx must import buildChatPanelContentProps");
+}
+
 if (!source.includes("useChatPanelActions({")) {
   throw new Error("chat-panel.tsx must delegate local async action orchestration to useChatPanelActions");
 }
@@ -60,6 +70,10 @@ if (!source.includes('import { ChatPanelManagementSection } from "./chat-panel-m
 
 if (!source.includes("<ChatPanelContent")) {
   throw new Error("chat-panel.tsx must delegate body rendering to ChatPanelContent");
+}
+
+if (!source.includes("buildChatPanelContentProps({ actions, props })")) {
+  throw new Error("chat-panel.tsx must delegate content prop shaping to buildChatPanelContentProps");
 }
 
 for (const requiredContentImport of [
@@ -269,6 +283,26 @@ for (const forbiddenToken of [
   "<ChatNotificationsCard",
   "<ChatMessageThread",
   "<ChatPanelComposer",
+  "creatingShare={",
+  "disablingShareId={",
+  "handleCreateShareLink={",
+  "handleDisableShareLink={",
+  "handleRefreshAuditLogs={",
+  "handleReindexKnowledge={",
+  "handleSend={",
+  "handleSyncNotifications={",
+  "latestShareUrl={",
+  "refreshingAudit={",
+  "reindexing={",
+  "setDraft={",
+  "setShareMaxUses={",
+  "setShareName={",
+  "setSharePermission={",
+  "shareMaxUses={",
+  "shareName={",
+  "sharePermission={",
+  "syncing={",
+  "unreadCount={",
   "knowledgeStats.chunk_count",
   "auditLogs.map((item)",
   "shareLinks.map((item)",
@@ -291,9 +325,44 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 140;
+const maxAllowedLines = 80;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredContentPropsUsage of [
+  "export function buildChatPanelContentProps({",
+  "actions: ChatPanelActions;",
+  "props: ChatPanelProps;",
+  "creatingShare: actions.creatingShare,",
+  "activeConversationId: props.activeConversationId,",
+  "unreadCount: actions.unreadCount,",
+]) {
+  if (!chatPanelContentPropsSource.includes(requiredContentPropsUsage)) {
+    throw new Error(
+      `chat-panel-content-props.ts must own content prop assembly: ${requiredContentPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenContentPropsToken of [
+  "<ChatPanelContent",
+  "useChatPanelActions(",
+  "useState(",
+  "useMemo(",
+]) {
+  if (chatPanelContentPropsSource.includes(forbiddenContentPropsToken)) {
+    throw new Error(
+      `chat-panel-content-props.ts must keep rendering and action orchestration delegated: ${forbiddenContentPropsToken}`,
+    );
+  }
+}
+
+const maxContentPropsLines = 70;
+if (chatPanelContentPropsLineCount > maxContentPropsLines) {
+  throw new Error(
+    `chat-panel-content-props.ts exceeded ${maxContentPropsLines} lines: ${chatPanelContentPropsLineCount}`,
+  );
 }
 
 const maxActionsLines = 120;

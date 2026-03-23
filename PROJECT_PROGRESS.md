@@ -892,6 +892,10 @@ Last updated: 2026-03-23
   - record-panel controller final return-shape assembly now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
   - the top-level record-panel controller hook now focuses more narrowly on composing view data, state, sync wiring, and grouped handlers while the result helper owns the exposed controller contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this result-assembly boundary and tighter size ceilings for the controller hook
+- Chat Panel Content Prop Builder Split V1:
+  - chat-panel content prop mapping now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/chat-panel.tsx`
+  - the top-level chat panel now focuses more narrowly on header rendering, action-hook composition, and content mounting while the prop builder owns the shell-to-content contract
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this content-prop assembly boundary and a tighter size ceiling for `chat-panel.tsx`
 
 ## Next
 - Continue the next product slice
