@@ -1,32 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { archiveMediaRetention, cleanupMediaRetention, getMediaRetentionReport } from "../lib/api";
+import type { MediaRetentionReport } from "../lib/types";
+import { buildWorkspaceMediaRetentionRiskLabel } from "./workspace-media-retention-controller-helpers";
 import type {
-  MediaRetentionArchiveResult,
-  MediaRetentionCleanupResult,
-  MediaRetentionReport,
-} from "../lib/types";
-
-export type MediaRetentionActionResult =
-  | { kind: "archive"; result: MediaRetentionArchiveResult }
-  | { kind: "cleanup"; result: MediaRetentionCleanupResult };
-
-type UseWorkspaceMediaRetentionControllerProps = {
-  token: string;
-  workspaceId: string;
-  remoteMediaLabel: string;
-  missingFilesLabel: string;
-  orphanFilesLabel: string;
-  allHealthyLabel: string;
-  loadFailedMessage: string;
-  actionFailedMessage: string;
-};
-
-function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
+  MediaRetentionActionResult,
+  UseWorkspaceMediaRetentionControllerProps,
+  WorkspaceMediaRetentionControllerState,
+} from "./workspace-media-retention-controller.types";
+import { createWorkspaceMediaRetentionControllerActions } from "./workspace-media-retention-controller-actions";
+import { useWorkspaceMediaRetentionReport } from "./use-workspace-media-retention-report";
 
 export function useWorkspaceMediaRetentionController({
   token,
@@ -47,122 +31,64 @@ export function useWorkspaceMediaRetentionController({
   const [actionError, setActionError] = useState("");
   const [actionResult, setActionResult] = useState<MediaRetentionActionResult | null>(null);
 
-  const loadReport = async (threshold: number) => {
-    setLoading(true);
-    setError("");
-    try {
-      const result = await getMediaRetentionReport(token, workspaceId, {
-        olderThanDays: threshold,
-        limit: 5,
-      });
-      setReport(result.report);
-      setSelectedMediaIds((current) =>
-        current.filter((mediaId) => result.report.retention_candidates.some((item) => item.media_id === mediaId)),
-      );
-    } catch (caught) {
-      setError(getActionErrorMessage(caught, loadFailedMessage));
-    } finally {
-      setLoading(false);
-    }
+  const state: WorkspaceMediaRetentionControllerState = {
+    olderThanDays,
+    setOlderThanDays,
+    report,
+    setReport,
+    loading,
+    setLoading,
+    error,
+    setError,
+    selectedMediaIds,
+    setSelectedMediaIds,
+    actionLoading,
+    setActionLoading,
+    actionError,
+    setActionError,
+    actionResult,
+    setActionResult,
   };
 
-  useEffect(() => {
-    void loadReport(olderThanDays);
-  }, [olderThanDays, token, workspaceId]);
-
-  const storageRiskLabel = useMemo(() => {
-    if (!report) {
-      return "-";
-    }
-    return [
-      report.missing_file_count ? `${report.missing_file_count} ${missingFilesLabel}` : allHealthyLabel,
-      `${report.orphan_file_count} ${orphanFilesLabel}`,
-      `${report.remote_item_count} ${remoteMediaLabel}`,
-    ].join(" / ");
-  }, [allHealthyLabel, missingFilesLabel, orphanFilesLabel, remoteMediaLabel, report]);
-
-  const toggleSelectedMedia = (mediaId: string) => {
-    setSelectedMediaIds((current) =>
-      current.includes(mediaId) ? current.filter((item) => item !== mediaId) : [...current, mediaId],
-    );
-  };
-
-  const selectAllCandidates = () => {
-    setSelectedMediaIds(report?.retention_candidates.map((item) => item.media_id) ?? []);
-  };
-
-  const clearSelection = () => {
-    setSelectedMediaIds([]);
-  };
-
-  const handleArchive = async (confirmMessage: string) => {
-    if (!selectedMediaIds.length || !window.confirm(confirmMessage)) {
-      return;
-    }
-    setActionLoading(true);
-    setActionError("");
-    try {
-      const result = await archiveMediaRetention(token, workspaceId, {
-        mediaIds: selectedMediaIds,
-        olderThanDays,
-        dryRun: false,
-      });
-      setActionResult({ kind: "archive", result: result.result });
-      await loadReport(olderThanDays);
-    } catch (caught) {
-      setActionError(getActionErrorMessage(caught, actionFailedMessage));
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleCleanup = async ({
-    mediaIds,
-    purgeOrphanFiles,
-    confirmMessage,
-  }: {
-    mediaIds: string[];
-    purgeOrphanFiles: boolean;
-    confirmMessage: string;
-  }) => {
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    setActionLoading(true);
-    setActionError("");
-    try {
-      const result = await cleanupMediaRetention(token, workspaceId, {
-        mediaIds,
-        olderThanDays,
-        purgeOrphanFiles,
-        dryRun: false,
-      });
-      setActionResult({ kind: "cleanup", result: result.result });
-      await loadReport(olderThanDays);
-    } catch (caught) {
-      setActionError(getActionErrorMessage(caught, actionFailedMessage));
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  return {
+  const { loadReport } = useWorkspaceMediaRetentionReport({
+    loadFailedMessage,
+    olderThanDays,
+    setError,
+    setLoading,
+    setReport,
+    setSelectedMediaIds,
+    token,
+    workspaceId,
+  });
+  const storageRiskLabel = useMemo(
+    () =>
+      buildWorkspaceMediaRetentionRiskLabel({
+        allHealthyLabel,
+        missingFilesLabel,
+        orphanFilesLabel,
+        remoteMediaLabel,
+        report,
+      }),
+    [allHealthyLabel, missingFilesLabel, orphanFilesLabel, remoteMediaLabel, report],
+  );
+  const actions = createWorkspaceMediaRetentionControllerActions({
+    actionFailedMessage,
+    loadReport,
     olderThanDays,
     report,
-    loading,
-    error,
     selectedMediaIds,
-    actionLoading,
-    actionError,
-    actionResult,
+    setActionError,
+    setActionLoading,
+    setActionResult,
+    setSelectedMediaIds,
+    token,
+    workspaceId,
+  });
+
+  return {
+    ...state,
     storageRiskLabel,
-    setOlderThanDays,
     loadReport,
-    toggleSelectedMedia,
-    selectAllCandidates,
-    clearSelection,
-    handleArchive,
-    handleCleanup,
+    ...actions,
   };
 }

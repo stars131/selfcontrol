@@ -752,6 +752,10 @@ Last updated: 2026-03-23
   - workspace-entry string helpers, initial-load flow, and create/import/share action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-entry-controller.ts`
   - the workspace-entry controller now focuses more narrowly on state registration, memoized derived values, and helper assembly while shared controller types own its contract
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-entry-controller.ts`
+- Workspace Media Retention Controller Extraction V1:
+  - workspace-media-retention risk-label helper, report-loading hook, and archive/cleanup action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-media-retention-controller.ts`
+  - the retention controller now focuses more narrowly on local state registration, derived label assembly, and helper composition while shared controller types own its contract
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-media-retention-controller.ts`
 
 ## Next
 - Continue the next product slice
