@@ -2,27 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-import {
-  INITIAL_RECORD_FILTER,
-  loadConversationMessagesForWorkspace,
-  refreshAuditLogItems,
-  refreshKnowledgeStatsData,
-  refreshMediaAssets,
-  refreshMediaDeadLetterOverviewData,
-  refreshMediaProcessingOverviewData,
-  refreshMediaStorageSummaryData,
-  refreshNotificationItems,
-  refreshProviderConfigItems,
-  refreshRecordCollection,
-  refreshReminderItems,
-  refreshSearchPresetItems,
-  refreshShareLinkItems,
-  syncDueNotificationsAndRefresh,
-} from "../lib/workspace-shell-refresh";
 import { WorkspaceShellFrame } from "./workspace-shell-frame";
 import { WorkspaceShellPanels } from "./workspace-shell-panels";
 import { useWorkspaceShellActions } from "./use-workspace-shell-actions";
 import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";
+import { createWorkspaceShellRefreshers } from "./use-workspace-shell-refreshers";
 import { useWorkspaceShellState } from "./use-workspace-shell-state";
 
 export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
@@ -40,49 +24,41 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     canManageWorkspace, canManageSharing,
   } = useWorkspaceShellState();
 
-  const refreshRecords = async (activeToken: string, nextRecordFilter = INITIAL_RECORD_FILTER) => {
-    await refreshRecordCollection({
-      token: activeToken,
-      workspaceId,
-      nextRecordFilter,
-      setRecords,
-      setVisibleRecords,
-      setTimelineDays,
-      setSelectedRecordId,
-    });
-  };
-
-  const refreshMedia = async (activeToken: string, recordId: string | null) => {
-    await refreshMediaAssets(activeToken, workspaceId, recordId, setMediaAssets);
-  };
-
-  const refreshMediaStorageSummary = async (activeToken: string) =>
-    refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
-  const refreshMediaProcessingOverview = async (activeToken: string) =>
-    refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
-  const refreshMediaDeadLetterOverview = async (activeToken: string) =>
-    refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
-
-  const refreshReminders = async (activeToken: string, recordId: string | null) => {
-    await refreshReminderItems(activeToken, workspaceId, recordId, setReminders);
-  };
-
-  const refreshNotifications = async (activeToken: string) =>
-    refreshNotificationItems(activeToken, workspaceId, setNotifications);
-  const refreshKnowledge = async (activeToken: string) =>
-    refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
-  const refreshProviderConfigs = async (activeToken: string) =>
-    refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
-  const refreshShareLinks = async (activeToken: string) =>
-    refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
-  const refreshSearchPresets = async (activeToken: string) =>
-    refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
-  const refreshAuditLogs = async (activeToken: string) =>
-    refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
-  const syncDueNotifications = async (activeToken: string) =>
-    syncDueNotificationsAndRefresh(activeToken, workspaceId, setNotifications);
-  const loadConversationMessages = async (activeToken: string, conversationId: string) =>
-    loadConversationMessagesForWorkspace(activeToken, workspaceId, conversationId, setMessages);
+  const {
+    initialRecordFilter,
+    loadConversationMessages,
+    refreshAuditLogs,
+    refreshKnowledge,
+    refreshMedia,
+    refreshMediaDeadLetterOverview,
+    refreshMediaProcessingOverview,
+    refreshMediaStorageSummary,
+    refreshNotifications,
+    refreshProviderConfigs,
+    refreshRecords,
+    refreshReminders,
+    refreshSearchPresets,
+    refreshShareLinks,
+    syncDueNotifications,
+  } = createWorkspaceShellRefreshers({
+    workspaceId,
+    setAuditLogs,
+    setKnowledgeStats,
+    setMediaAssets,
+    setMediaDeadLetterOverview,
+    setMediaProcessingOverview,
+    setMediaStorageSummary,
+    setMessages,
+    setNotifications,
+    setProviderConfigs,
+    setRecords,
+    setReminders,
+    setSearchPresets,
+    setSelectedRecordId,
+    setShareLinks,
+    setTimelineDays,
+    setVisibleRecords,
+  });
 
   useWorkspaceShellEffects({
     router,
@@ -175,7 +151,7 @@ export function WorkspaceShellClient({ workspaceId }: { workspaceId: string }) {
     setKnowledgeStats,
     setProviderConfigs,
     setLatestSharePath,
-    initialRecordFilter: INITIAL_RECORD_FILTER,
+    initialRecordFilter,
   });
 
   return (

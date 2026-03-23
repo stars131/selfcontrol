@@ -3,13 +3,19 @@ import path from "node:path";
 
 const workspaceShellPath = path.resolve(process.cwd(), "components/workspace-shell-client.tsx");
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
+const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
+const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
 
-if (!source.includes('from "../lib/workspace-shell-refresh";')) {
-  throw new Error("workspace-shell-client.tsx must import shared refresh helpers from ../lib/workspace-shell-refresh");
+if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
+  throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
+}
+
+if (!source.includes('import { createWorkspaceShellRefreshers } from "./use-workspace-shell-refreshers";')) {
+  throw new Error("workspace-shell-client.tsx must import createWorkspaceShellRefreshers");
 }
 
 if (!source.includes('import { useWorkspaceShellEffects } from "./use-workspace-shell-effects";')) {
@@ -46,6 +52,10 @@ if (!source.includes("useWorkspaceShellActions({")) {
 
 if (!source.includes("useWorkspaceShellState()")) {
   throw new Error("workspace-shell-client.tsx must delegate local state registration to useWorkspaceShellState");
+}
+
+if (!source.includes("createWorkspaceShellRefreshers({")) {
+  throw new Error("workspace-shell-client.tsx must delegate refresh helper composition to createWorkspaceShellRefreshers");
 }
 
 if (!source.includes("<WorkspaceShellPanels")) {
@@ -86,13 +96,17 @@ for (const forbiddenToken of [
   "<RecordPanelV2",
   "Loading workspace...",
   "notice error",
+  "const refreshRecords = async",
+  "const refreshMedia = async",
+  "const refreshNotifications = async",
+  "const refreshKnowledge = async",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-shell-client.tsx must keep refresh logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 250;
+const maxAllowedLines = 220;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-shell-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

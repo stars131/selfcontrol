@@ -636,10 +636,14 @@ Last updated: 2026-03-23
   - record editor main sections and support tools now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-workspace.tsx`
   - the editor workspace shell now focuses more narrowly on bindings and workspace form composition while dedicated modules own main editor sections and support-tool composition
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces both boundaries and lowers the editor workspace size ceiling again
+- Workspace Shell Refreshers Extraction V1:
+  - workspace shell refresh helper composition now lives in `apps/web/components/use-workspace-shell-refreshers.ts` instead of remaining inline inside `apps/web/components/workspace-shell-client.tsx`
+  - the workspace shell client now focuses more narrowly on state, effects, actions, and panel composition while the dedicated refreshers module owns refresh helper wiring
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this refresher boundary and lowers the shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor workspace section extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell refreshers extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
