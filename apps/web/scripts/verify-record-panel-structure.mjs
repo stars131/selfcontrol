@@ -12,16 +12,22 @@ const recordPanelShellPropsPath = path.resolve(
   "components/record-panel-v2-shell-props.ts",
 );
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
+const recordPanelMediaHandlersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-handlers.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
+const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
+const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
   throw new Error("record-panel-v2.tsx must import useRecordPanelController");
@@ -177,6 +183,46 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 220;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredMediaHandlersImport of [
+  'from "./record-panel-controller-dead-letter-actions";',
+  'from "./record-panel-controller-media-asset-actions";',
+]) {
+  if (!mediaHandlersSource.includes(requiredMediaHandlersImport)) {
+    throw new Error(`record-panel-controller-media-handlers.ts must import delegated media helpers: ${requiredMediaHandlersImport}`);
+  }
+}
+
+for (const requiredMediaHandlersUsage of [
+  "createRecordPanelControllerMediaAssetActions(props)",
+  "createRecordPanelControllerDeadLetterActions(props)",
+  "...mediaAssetActions",
+  "...deadLetterActions",
+]) {
+  if (!mediaHandlersSource.includes(requiredMediaHandlersUsage)) {
+    throw new Error(`record-panel-controller-media-handlers.ts must delegate media handler assembly: ${requiredMediaHandlersUsage}`);
+  }
+}
+
+for (const forbiddenMediaHandlersToken of [
+  'from "../lib/api";',
+  'from "../lib/record-panel-media";',
+  "const handleUpload",
+  "const handleToggleDeadLetterSelection",
+  "fetchMediaBlob(",
+  "canRetryMediaIssue(",
+]) {
+  if (mediaHandlersSource.includes(forbiddenMediaHandlersToken)) {
+    throw new Error(`record-panel-controller-media-handlers.ts must keep media internals delegated: ${forbiddenMediaHandlersToken}`);
+  }
+}
+
+const maxMediaHandlersLines = 20;
+if (mediaHandlersLines > maxMediaHandlersLines) {
+  throw new Error(
+    `record-panel-controller-media-handlers.ts exceeded ${maxMediaHandlersLines} lines: ${mediaHandlersLines}`,
+  );
 }
 
 for (const requiredLegacyImport of [
