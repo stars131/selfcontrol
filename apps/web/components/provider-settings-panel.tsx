@@ -4,12 +4,13 @@ import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 import { getProviderSettingsCopy } from "./provider-settings-copy";
 import { ProviderFeatureCard } from "./provider-feature-card";
+import {
+  buildProviderFeatureCardProps,
+  buildProviderSettingsSecretStatusFormatter,
+  readProviderSettingsAnchorHighlightClass,
+} from "./provider-settings-panel-helpers";
 import { ProviderSettingsJumpNav } from "./provider-settings-jump-nav";
 import { useProviderSettingsController } from "./use-provider-settings-controller";
-
-function readAnchorHighlightClass(targetId: string, highlightedAnchor?: string | null): string {
-  return highlightedAnchor === targetId ? " anchor-highlight" : "";
-}
 
 export function ProviderSettingsPanel({
   locale,
@@ -39,6 +40,7 @@ export function ProviderSettingsPanel({
   ) => Promise<void>;
 }) {
   const copy = getProviderSettingsCopy(locale);
+  const formatSecretStatus = buildProviderSettingsSecretStatusFormatter(copy);
   const {
     providerSavingCode,
     providerDrafts,
@@ -52,19 +54,9 @@ export function ProviderSettingsPanel({
     onSaveProviderConfig,
   });
 
-  const formatSecretStatus = (status: ProviderFeatureConfig["secret_status"]) => {
-    if (status === "configured") {
-      return copy.configured;
-    }
-    if (status === "missing") {
-      return copy.missing;
-    }
-    return copy.notRequired;
-  };
-
   return (
     <section
-      className={`record-card${readAnchorHighlightClass("provider-settings", highlightedAnchor)}`}
+      className={`record-card${readProviderSettingsAnchorHighlightClass("provider-settings", highlightedAnchor)}`}
       id="provider-settings"
     >
       <div className="eyebrow">{copy.title}</div>
@@ -87,21 +79,23 @@ export function ProviderSettingsPanel({
 
           return (
             <ProviderFeatureCard
-              copy={copy}
-              draftItem={draftItem}
-              formatSecretStatus={formatSecretStatus}
-              highlightedAnchor={highlightedAnchor}
-              isDirty={isDirty}
+              {...buildProviderFeatureCardProps({
+                copy,
+                draftItem,
+                formatSecretStatus,
+                highlightedAnchor,
+                isDirty,
+                item,
+                locale,
+                mediaStorageHealth,
+                onProviderDraftChange: handleProviderDraftChange,
+                onRefreshMediaStorageHealth,
+                onReset: handleResetProviderConfig,
+                onSave: handleSaveProviderConfig,
+                providerSavingCode,
+                refreshingMediaStorageHealth,
+              })}
               key={item.feature_code}
-              item={item}
-              locale={locale}
-              mediaStorageHealth={mediaStorageHealth}
-              onProviderDraftChange={handleProviderDraftChange}
-              onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
-              onReset={handleResetProviderConfig}
-              onSave={handleSaveProviderConfig}
-              providerSavingCode={providerSavingCode}
-              refreshingMediaStorageHealth={refreshingMediaStorageHealth}
             />
           );
         })}

@@ -6,12 +6,18 @@ const providerSettingsControllerPath = path.resolve(
   process.cwd(),
   "components/use-provider-settings-controller.ts",
 );
+const providerSettingsPanelHelpersPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-helpers.ts",
+);
 const providerSettingsCopyPath = path.resolve(process.cwd(), "components/provider-settings-copy.ts");
 const source = fs.readFileSync(providerSettingsPath, "utf8");
 const controllerSource = fs.readFileSync(providerSettingsControllerPath, "utf8");
+const panelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "utf8");
 const copySource = fs.readFileSync(providerSettingsCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const panelHelpersLineCount = panelHelpersSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
@@ -31,6 +37,10 @@ if (!source.includes('import { ProviderFeatureCard } from "./provider-feature-ca
   throw new Error("provider-settings-panel.tsx must import ProviderFeatureCard");
 }
 
+if (!source.includes('from "./provider-settings-panel-helpers";')) {
+  throw new Error("provider-settings-panel.tsx must import provider-settings-panel-helpers");
+}
+
 if (!source.includes("useProviderSettingsController({")) {
   throw new Error("provider-settings-panel.tsx must delegate draft and save orchestration to useProviderSettingsController");
 }
@@ -41,6 +51,16 @@ if (!source.includes("<ProviderFeatureCard")) {
 
 if (!source.includes("getProviderSettingsCopy(locale)")) {
   throw new Error("provider-settings-panel.tsx must delegate locale copy lookup to getProviderSettingsCopy");
+}
+
+for (const requiredPanelUsage of [
+  "buildProviderSettingsSecretStatusFormatter(copy)",
+  'readProviderSettingsAnchorHighlightClass("provider-settings", highlightedAnchor)',
+  "buildProviderFeatureCardProps({",
+]) {
+  if (!source.includes(requiredPanelUsage)) {
+    throw new Error(`provider-settings-panel.tsx must delegate view helper logic: ${requiredPanelUsage}`);
+  }
 }
 
 if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
@@ -85,6 +105,10 @@ for (const forbiddenToken of [
   "function getActionErrorMessage",
   "const handleSaveProviderConfig =",
   "const handleResetProviderConfig =",
+  "function readAnchorHighlightClass",
+  'highlightedAnchor === targetId ? " anchor-highlight" : ""',
+  'status === "configured"',
+  "copy.configured",
   'id={`provider-${item.feature_code}`}',
   "draftItem.is_enabled",
   "MEDIA_STORAGE_FALLBACK_OPTION",
@@ -98,6 +122,52 @@ for (const forbiddenToken of [
 const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredPanelHelpersImport of [
+  'from "./provider-feature-card.types";',
+  'from "./provider-settings-controller.types";',
+  'from "./provider-settings-copy";',
+]) {
+  if (!panelHelpersSource.includes(requiredPanelHelpersImport)) {
+    throw new Error(
+      `provider-settings-panel-helpers.ts must import shared provider helper types: ${requiredPanelHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredPanelHelpersUsage of [
+  "export function readProviderSettingsAnchorHighlightClass(",
+  "export function buildProviderSettingsSecretStatusFormatter(copy: ProviderSettingsCopy)",
+  "export function buildProviderFeatureCardProps({",
+  "return highlightedAnchor === targetId ? \" anchor-highlight\" : \"\";",
+  "return copy.notRequired;",
+]) {
+  if (!panelHelpersSource.includes(requiredPanelHelpersUsage)) {
+    throw new Error(
+      `provider-settings-panel-helpers.ts must own panel helper logic: ${requiredPanelHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenPanelHelpersToken of [
+  "<ProviderFeatureCard",
+  "useProviderSettingsController(",
+  "useState(",
+  "useEffect(",
+]) {
+  if (panelHelpersSource.includes(forbiddenPanelHelpersToken)) {
+    throw new Error(
+      `provider-settings-panel-helpers.ts must keep rendering and controller orchestration delegated: ${forbiddenPanelHelpersToken}`,
+    );
+  }
+}
+
+const maxPanelHelpersLines = 80;
+if (panelHelpersLineCount > maxPanelHelpersLines) {
+  throw new Error(
+    `provider-settings-panel-helpers.ts exceeded ${maxPanelHelpersLines} lines: ${panelHelpersLineCount}`,
+  );
 }
 
 const maxProviderFeatureCardLines = 120;

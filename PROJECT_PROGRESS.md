@@ -900,6 +900,10 @@ Last updated: 2026-03-23
   - record-panel handler-group record/media input shaping now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/record-panel-controller-handler-groups.ts`
   - the handler-group assembly module now focuses more narrowly on composing record/media handler sets while the new helper owns the shared input contract and mapping surface
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this handler-group input boundary and a tighter size ceiling for `record-panel-controller-handler-groups.ts`
+- Provider Settings Panel Helper Split V1:
+  - provider-settings anchor highlight logic, secret-status formatter, and feature-card prop mapping now live in a dedicated helper module instead of remaining inline inside `apps/web/components/provider-settings-panel.tsx`
+  - the provider-settings panel now focuses more narrowly on copy lookup, controller composition, and section layout while the helper module owns view-level mapping concerns
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this panel-helper boundary and a helper size ceiling
 
 ## Next
 - Continue the next product slice
