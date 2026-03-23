@@ -728,6 +728,10 @@ Last updated: 2026-03-23
   - workspace-shell chat/record, media/filter, and admin/share action builders now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-shell-actions.ts`
   - the workspace-shell action hook now focuses more narrowly on action-module assembly while shared types and guard helpers own permission checks and handler contracts
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these action boundaries and a size ceiling for `use-workspace-shell-actions.ts`
+- Record Panel Controller Handler Extraction V1:
+  - record-panel controller sync logic plus record/media handler builders now live in dedicated modules instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
+  - the controller hook now focuses more narrowly on state registration, derived data, and final return-shape assembly while helper modules own effect synchronization and imperative UI actions
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-record-panel-controller.ts`
 
 ## Next
 - Continue the next product slice

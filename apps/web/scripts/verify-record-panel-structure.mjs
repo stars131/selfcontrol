@@ -6,10 +6,13 @@ const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props.ts",
 );
+const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
+const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
+const controllerLines = controllerSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
   throw new Error("record-panel-v2.tsx must import useRecordPanelController");
@@ -105,6 +108,48 @@ if (workspacePropsLines > maxWorkspacePropsLines) {
   throw new Error(
     `record-panel-v2-workspace-props.ts exceeded ${maxWorkspacePropsLines} lines: ${workspacePropsLines}`,
   );
+}
+
+for (const requiredControllerImport of [
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-record-handlers";',
+  'from "./record-panel-controller-media-handlers";',
+  'from "./use-record-panel-controller-sync";',
+]) {
+  if (!controllerSource.includes(requiredControllerImport)) {
+    throw new Error(`use-record-panel-controller.ts must import delegated controller helpers: ${requiredControllerImport}`);
+  }
+}
+
+for (const requiredControllerUsage of [
+  "useRecordPanelControllerSync({",
+  "createRecordPanelControllerRecordHandlers({",
+  "createRecordPanelControllerMediaHandlers({",
+  "...recordHandlers",
+  "...mediaHandlers",
+]) {
+  if (!controllerSource.includes(requiredControllerUsage)) {
+    throw new Error(`use-record-panel-controller.ts must delegate controller orchestration: ${requiredControllerUsage}`);
+  }
+}
+
+for (const forbiddenControllerToken of [
+  'from "../lib/api";',
+  "useEffect(",
+  "const handle",
+  "fetchMediaBlob(",
+  "event.preventDefault()",
+  "URL.createObjectURL(",
+  "setSelectedDeadLetterIds((current)",
+]) {
+  if (controllerSource.includes(forbiddenControllerToken)) {
+    throw new Error(`use-record-panel-controller.ts must keep sync and handler details delegated: ${forbiddenControllerToken}`);
+  }
+}
+
+const maxControllerLines = 220;
+if (controllerLines > maxControllerLines) {
+  throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
 }
 
 console.log("record-panel structure verification passed");
