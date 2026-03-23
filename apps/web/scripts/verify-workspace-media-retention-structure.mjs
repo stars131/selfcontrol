@@ -23,11 +23,11 @@ if (!source.includes('useWorkspaceMediaRetentionController')) {
   throw new Error("workspace-media-retention-card.tsx must use useWorkspaceMediaRetentionController");
 }
 
-if (!source.includes('import { getWorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";')) {
-  throw new Error("workspace-media-retention-card.tsx must import getWorkspaceMediaRetentionCopy");
+if (!source.includes('from "./workspace-media-retention-card-helpers";')) {
+  throw new Error("workspace-media-retention-card.tsx must import workspace-media-retention-card-helpers");
 }
 
-if (!source.includes("useWorkspaceMediaRetentionController({")) {
+if (!source.includes("useWorkspaceMediaRetentionController(buildWorkspaceMediaRetentionControllerInput({")) {
   throw new Error("workspace-media-retention-card.tsx must delegate retention orchestration to useWorkspaceMediaRetentionController");
 }
 
@@ -75,8 +75,14 @@ if (!source.includes("<WorkspaceMediaRetentionHeader")) {
   throw new Error("workspace-media-retention-card.tsx must delegate header rendering to WorkspaceMediaRetentionHeader");
 }
 
-if (!source.includes("getWorkspaceMediaRetentionCopy(locale)")) {
-  throw new Error("workspace-media-retention-card.tsx must delegate locale copy lookup to getWorkspaceMediaRetentionCopy");
+for (const requiredHelperUsage of [
+  "buildWorkspaceMediaRetentionCopyBundle(locale)",
+  "buildWorkspaceMediaRetentionControllerInput({",
+  "buildWorkspaceMediaRetentionActionMessage({",
+]) {
+  if (!source.includes(requiredHelperUsage)) {
+    throw new Error(`workspace-media-retention-card.tsx must delegate helper logic: ${requiredHelperUsage}`);
+  }
 }
 
 for (const forbiddenToken of [
@@ -98,6 +104,9 @@ for (const forbiddenToken of [
   'copy.eyebrow',
   "setOlderThanDays(Number(event.target.value))",
   "const COPY:",
+  'copy.remoteMedia ?? "Remote media"',
+  "actionResult?.kind === \"archive\"",
+  "getWorkspaceMediaRetentionCopy(locale)",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-media-retention-card.tsx must keep controller logic delegated: ${forbiddenToken}`);

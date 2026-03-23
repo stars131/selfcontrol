@@ -860,6 +860,10 @@ Last updated: 2026-03-23
   - retention controller local state registration and derived storage-risk labeling now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-workspace-media-retention-controller.ts`
   - the retention controller now focuses more narrowly on composing report loading, derived data, and action handlers
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these controller helper boundaries and a tighter size ceiling for `use-workspace-media-retention-controller.ts`
+- Workspace Media Retention Card Helper Split V1:
+  - retention card copy bundle lookup, controller input shaping, and action message formatting now live in a dedicated helper module instead of remaining inline inside `apps/web/components/workspace-media-retention-card.tsx`
+  - the retention card now focuses more narrowly on controller invocation and section composition while helper functions own derived view setup
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these retention-card helper boundaries
 
 ## Next
 - Continue the next product slice

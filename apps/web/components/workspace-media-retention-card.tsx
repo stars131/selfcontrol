@@ -1,9 +1,13 @@
 "use client";
 
 import type { LocaleCode } from "../lib/locale";
-import { getWorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
+import {
+  buildWorkspaceMediaRetentionActionMessage,
+  buildWorkspaceMediaRetentionControllerInput,
+  buildWorkspaceMediaRetentionCopyBundle,
+} from "./workspace-media-retention-card-helpers";
 import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";
 import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
 import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
@@ -22,9 +26,7 @@ export function WorkspaceMediaRetentionCard({
   locale: LocaleCode;
   role: "owner" | "editor";
 }) {
-  const copy = getWorkspaceMediaRetentionCopy(locale);
-  const remoteMediaLabel = copy.remoteMedia ?? "Remote media";
-  const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
+  const { copy, remoteMediaLabel, remoteReferenceLabel } = buildWorkspaceMediaRetentionCopyBundle(locale);
   const {
     olderThanDays,
     report,
@@ -42,23 +44,21 @@ export function WorkspaceMediaRetentionCard({
     clearSelection,
     handleArchive,
     handleCleanup,
-  } = useWorkspaceMediaRetentionController({
-    token,
-    workspaceId,
-    remoteMediaLabel,
-    missingFilesLabel: copy.missingFiles,
-    orphanFilesLabel: copy.orphanFiles,
+  } = useWorkspaceMediaRetentionController(buildWorkspaceMediaRetentionControllerInput({
+    actionFailedMessage: copy.actionFailed,
     allHealthyLabel: copy.allHealthy,
     loadFailedMessage: copy.loadFailed,
-    actionFailedMessage: copy.actionFailed,
+    missingFilesLabel: copy.missingFiles,
+    orphanFilesLabel: copy.orphanFiles,
+    remoteMediaLabel,
+    token,
+    workspaceId,
+  }));
+  const actionMessage = buildWorkspaceMediaRetentionActionMessage({
+    actionResult,
+    archiveCompleted: copy.archiveCompleted,
+    cleanupCompleted: copy.cleanupCompleted,
   });
-
-  const actionMessage =
-    actionResult?.kind === "archive"
-      ? `${copy.archiveCompleted}: ${actionResult.result.candidate_media_count} / ${actionResult.result.candidate_media_size_label}`
-      : actionResult?.kind === "cleanup"
-        ? `${copy.cleanupCompleted}: ${actionResult.result.candidate_media_count} / ${actionResult.result.candidate_media_size_label}, ${actionResult.result.orphan_file_count} / ${actionResult.result.orphan_file_size_label}`
-        : "";
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
