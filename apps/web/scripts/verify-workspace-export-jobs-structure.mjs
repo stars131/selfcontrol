@@ -13,6 +13,22 @@ if (!source.includes("useWorkspaceExportJobsController({")) {
   throw new Error("workspace-export-jobs-card.tsx must delegate export-job orchestration to useWorkspaceExportJobsController");
 }
 
+if (!source.includes('import { getWorkspaceExportJobsCopy } from "./workspace-export-jobs-copy";')) {
+  throw new Error("workspace-export-jobs-card.tsx must import getWorkspaceExportJobsCopy");
+}
+
+if (!source.includes('import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";')) {
+  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsList");
+}
+
+if (!source.includes("getWorkspaceExportJobsCopy(locale)")) {
+  throw new Error("workspace-export-jobs-card.tsx must delegate locale copy lookup");
+}
+
+if (!source.includes("<WorkspaceExportJobsList")) {
+  throw new Error("workspace-export-jobs-card.tsx must delegate export-job list rendering");
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -23,13 +39,15 @@ for (const forbiddenToken of [
   "const loadJobs =",
   "const handleCreateJob =",
   "const handleDownload =",
+  "const COPY:",
+  "jobs.map((job) =>",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-export-jobs-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 180;
+const maxAllowedLines = 100;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-export-jobs-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

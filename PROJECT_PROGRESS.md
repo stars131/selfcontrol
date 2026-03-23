@@ -684,10 +684,14 @@ Last updated: 2026-03-23
   - map content composition, missing-key fallback, and top-level map props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/map-panel.tsx`
   - the map panel shell now focuses more narrowly on refs, controller wiring, and AMap lifecycle while dedicated components own main layout rendering and unavailable-state presentation
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these boundaries and lowers the map panel shell size ceiling again
+- Workspace Export Jobs Structure Extraction V1:
+  - export-jobs locale copy and job-list rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-export-jobs-card.tsx`
+  - the export-jobs card now focuses more narrowly on controller wiring, header actions, and message display while dedicated modules own localized copy and per-job list rendering
+  - `apps/web/scripts/verify-workspace-export-jobs-structure.mjs` now enforces these boundaries and lowers the export-jobs card size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the map panel content extraction
+- Continue simplifying remaining large UI module boundaries after the workspace export jobs structure extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
