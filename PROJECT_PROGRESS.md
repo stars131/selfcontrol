@@ -688,10 +688,14 @@ Last updated: 2026-03-23
   - export-jobs locale copy and job-list rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-export-jobs-card.tsx`
   - the export-jobs card now focuses more narrowly on controller wiring, header actions, and message display while dedicated modules own localized copy and per-job list rendering
   - `apps/web/scripts/verify-workspace-export-jobs-structure.mjs` now enforces these boundaries and lowers the export-jobs card size ceiling again
+- Workspace Export Structure Extraction V1:
+  - export-card locale copy and owner-only action rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-export-card.tsx`
+  - the export card now focuses more narrowly on controller wiring and top-level export summary while dedicated modules own localized copy and role-gated control rendering
+  - `apps/web/scripts/verify-workspace-export-structure.mjs` now enforces these boundaries and lowers the export card size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace export jobs structure extraction
+- Continue simplifying remaining large UI module boundaries after the workspace export structure extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
