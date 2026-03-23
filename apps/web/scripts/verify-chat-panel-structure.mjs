@@ -4,6 +4,9 @@ import path from "node:path";
 const chatPanelPath = path.resolve(process.cwd(), "components/chat-panel.tsx");
 const source = fs.readFileSync(chatPanelPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const chatPanelContentPath = path.resolve(process.cwd(), "components/chat-panel-content.tsx");
+const chatPanelContentSource = fs.readFileSync(chatPanelContentPath, "utf8");
+const chatPanelContentLineCount = chatPanelContentSource.split(/\r?\n/).length;
 const chatConversationBarPath = path.resolve(process.cwd(), "components/chat-conversation-bar.tsx");
 const chatConversationBarSource = fs.readFileSync(chatConversationBarPath, "utf8");
 const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
@@ -17,6 +20,27 @@ const chatPanelManagementSectionPath = path.resolve(
   "components/chat-panel-management-section.tsx",
 );
 const chatPanelManagementSectionSource = fs.readFileSync(chatPanelManagementSectionPath, "utf8");
+const chatPanelConversationContentPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-conversation-content.tsx",
+);
+const chatPanelConversationContentSource = fs.readFileSync(
+  chatPanelConversationContentPath,
+  "utf8",
+);
+const chatPanelManagementContentPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-management-content.tsx",
+);
+const chatPanelManagementContentSource = fs.readFileSync(
+  chatPanelManagementContentPath,
+  "utf8",
+);
+const chatPanelContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content.types.ts",
+);
+const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
 const chatPanelActionsPath = path.resolve(process.cwd(), "components/use-chat-panel-actions.ts");
 const chatPanelActionsSource = fs.readFileSync(chatPanelActionsPath, "utf8");
 
@@ -36,6 +60,118 @@ if (!source.includes('import { ChatPanelManagementSection } from "./chat-panel-m
 
 if (!source.includes("<ChatPanelContent")) {
   throw new Error("chat-panel.tsx must delegate body rendering to ChatPanelContent");
+}
+
+for (const requiredContentImport of [
+  'import { ChatPanelConversationContent } from "./chat-panel-conversation-content";',
+  'import { ChatPanelManagementContent } from "./chat-panel-management-content";',
+  'import type { ChatPanelContentProps } from "./chat-panel-content.types";',
+]) {
+  if (!chatPanelContentSource.includes(requiredContentImport)) {
+    throw new Error(
+      `chat-panel-content.tsx must import delegated chat content boundaries: ${requiredContentImport}`,
+    );
+  }
+}
+
+for (const requiredContentUsage of [
+  "<ChatPanelConversationContent",
+  "<ChatPanelManagementContent",
+]) {
+  if (!chatPanelContentSource.includes(requiredContentUsage)) {
+    throw new Error(
+      `chat-panel-content.tsx must compose delegated chat content sections: ${requiredContentUsage}`,
+    );
+  }
+}
+
+for (const forbiddenContentToken of [
+  'import { ChatAuditLogsCard } from "./chat-audit-logs-card";',
+  'import { ChatPanelComposer } from "./chat-panel-composer";',
+  'import { ChatConversationBar } from "./chat-conversation-bar";',
+  'import { ChatPanelManagementSection } from "./chat-panel-management-section";',
+  'import { ChatMessageThread } from "./chat-message-thread";',
+  'import { ChatNotificationsCard } from "./chat-notifications-card";',
+  "<ChatConversationBar",
+  "<ChatPanelManagementSection",
+  "<ChatAuditLogsCard",
+  "<ChatNotificationsCard",
+  "<ChatMessageThread",
+  "<ChatPanelComposer",
+]) {
+  if (chatPanelContentSource.includes(forbiddenContentToken)) {
+    throw new Error(
+      `chat-panel-content.tsx must keep subsection rendering delegated: ${forbiddenContentToken}`,
+    );
+  }
+}
+
+const maxContentLines = 100;
+if (chatPanelContentLineCount > maxContentLines) {
+  throw new Error(`chat-panel-content.tsx exceeded ${maxContentLines} lines: ${chatPanelContentLineCount}`);
+}
+
+for (const requiredContentTypeUsage of [
+  'type ChatPanelActionBindings = ReturnType<',
+  "export type ChatPanelContentProps = Pick<",
+  "export type ChatPanelManagementContentProps = Pick<",
+  "export type ChatPanelConversationContentProps = Pick<",
+]) {
+  if (!chatPanelContentTypesSource.includes(requiredContentTypeUsage)) {
+    throw new Error(
+      `chat-panel-content.types.ts must own shared chat content prop contracts: ${requiredContentTypeUsage}`,
+    );
+  }
+}
+
+for (const requiredConversationContentImport of [
+  'import { ChatConversationBar } from "./chat-conversation-bar";',
+  'import { ChatMessageThread } from "./chat-message-thread";',
+  'import { ChatPanelComposer } from "./chat-panel-composer";',
+  'import type { ChatPanelConversationContentProps } from "./chat-panel-content.types";',
+]) {
+  if (!chatPanelConversationContentSource.includes(requiredConversationContentImport)) {
+    throw new Error(
+      `chat-panel-conversation-content.tsx must import delegated thread boundaries: ${requiredConversationContentImport}`,
+    );
+  }
+}
+
+for (const requiredConversationContentUsage of [
+  "<ChatConversationBar",
+  "<ChatMessageThread",
+  "<ChatPanelComposer",
+]) {
+  if (!chatPanelConversationContentSource.includes(requiredConversationContentUsage)) {
+    throw new Error(
+      `chat-panel-conversation-content.tsx must compose delegated thread surfaces: ${requiredConversationContentUsage}`,
+    );
+  }
+}
+
+for (const requiredManagementContentImport of [
+  'import { ChatAuditLogsCard } from "./chat-audit-logs-card";',
+  'import { ChatNotificationsCard } from "./chat-notifications-card";',
+  'import { ChatPanelManagementSection } from "./chat-panel-management-section";',
+  'import type { ChatPanelManagementContentProps } from "./chat-panel-content.types";',
+]) {
+  if (!chatPanelManagementContentSource.includes(requiredManagementContentImport)) {
+    throw new Error(
+      `chat-panel-management-content.tsx must import delegated management boundaries: ${requiredManagementContentImport}`,
+    );
+  }
+}
+
+for (const requiredManagementContentUsage of [
+  "<ChatPanelManagementSection",
+  "<ChatAuditLogsCard",
+  "<ChatNotificationsCard",
+]) {
+  if (!chatPanelManagementContentSource.includes(requiredManagementContentUsage)) {
+    throw new Error(
+      `chat-panel-management-content.tsx must compose delegated management surfaces: ${requiredManagementContentUsage}`,
+    );
+  }
 }
 
 if (!chatPanelManagementSectionSource.includes('import { useStoredLocale } from "../lib/locale";')) {

@@ -1,39 +1,8 @@
 "use client";
 
-import { ChatAuditLogsCard } from "./chat-audit-logs-card";
-import { ChatPanelComposer } from "./chat-panel-composer";
-import { ChatConversationBar } from "./chat-conversation-bar";
-import { ChatPanelManagementSection } from "./chat-panel-management-section";
-import { ChatMessageThread } from "./chat-message-thread";
-import { ChatNotificationsCard } from "./chat-notifications-card";
-import type { ChatPanelProps } from "./chat-panel.types";
-
-type ChatPanelContentProps = Pick<
-  ChatPanelProps,
-  | "activeConversationId"
-  | "auditLogs"
-  | "canManageSharing"
-  | "canManageWorkspace"
-  | "canWriteWorkspace"
-  | "conversations"
-  | "knowledgeStats"
-  | "latestSharePath"
-  | "messages"
-  | "notifications"
-  | "onCreateConversation"
-  | "onCreateShareLink"
-  | "onDisableShareLink"
-  | "onMarkNotificationRead"
-  | "onRefreshAuditLogs"
-  | "onReindexKnowledge"
-  | "onSaveProviderConfig"
-  | "onSelectConversation"
-  | "onSendMessage"
-  | "onSyncNotifications"
-  | "providerConfigs"
-  | "shareLinks"
-> &
-  ReturnType<typeof import("./use-chat-panel-actions").useChatPanelActions>;
+import { ChatPanelConversationContent } from "./chat-panel-conversation-content";
+import { ChatPanelManagementContent } from "./chat-panel-management-content";
+import type { ChatPanelContentProps } from "./chat-panel-content.types";
 
 export function ChatPanelContent({
   activeConversationId,
@@ -77,28 +46,39 @@ export function ChatPanelContent({
 }: ChatPanelContentProps) {
   return (
     <div className="panel-body">
-      <ChatConversationBar
+      <ChatPanelConversationContent
         activeConversationId={activeConversationId}
         canWriteWorkspace={canWriteWorkspace}
         conversations={conversations}
+        draft={draft}
+        error={error}
+        handleSend={handleSend}
+        handleSyncNotifications={handleSyncNotifications}
+        loading={loading}
+        messages={messages}
         onCreateConversation={onCreateConversation}
         onSelectConversation={onSelectConversation}
-        onSyncNotifications={handleSyncNotifications}
+        setDraft={setDraft}
         syncing={syncing}
       />
-      <ChatPanelManagementSection
+      <ChatPanelManagementContent
+        auditLogs={auditLogs}
         canManageSharing={canManageSharing}
         canManageWorkspace={canManageWorkspace}
         creatingShare={creatingShare}
         disablingShareId={disablingShareId}
+        handleCreateShareLink={handleCreateShareLink}
+        handleDisableShareLink={handleDisableShareLink}
+        handleRefreshAuditLogs={handleRefreshAuditLogs}
+        handleReindexKnowledge={handleReindexKnowledge}
         knowledgeStats={knowledgeStats}
         latestShareUrl={latestShareUrl}
-        onCreateShareLink={handleCreateShareLink}
-        onDisableShareLink={handleDisableShareLink}
-        onReindexKnowledge={handleReindexKnowledge}
+        notifications={notifications}
+        onMarkNotificationRead={onMarkNotificationRead}
         onSaveProviderConfig={onSaveProviderConfig}
         providerConfigs={providerConfigs}
         reindexing={reindexing}
+        refreshingAudit={refreshingAudit}
         setShareMaxUses={setShareMaxUses}
         setShareName={setShareName}
         setSharePermission={setSharePermission}
@@ -106,25 +86,7 @@ export function ChatPanelContent({
         shareMaxUses={shareMaxUses}
         shareName={shareName}
         sharePermission={sharePermission}
-      />
-      <ChatAuditLogsCard
-        auditLogs={auditLogs}
-        onRefreshAuditLogs={handleRefreshAuditLogs}
-        refreshingAudit={refreshingAudit}
-      />
-      <ChatNotificationsCard
-        notifications={notifications}
-        onMarkNotificationRead={onMarkNotificationRead}
         unreadCount={unreadCount}
-      />
-      <ChatMessageThread messages={messages} />
-      <ChatPanelComposer
-        canWriteWorkspace={canWriteWorkspace}
-        draft={draft}
-        error={error}
-        loading={loading}
-        onSend={handleSend}
-        setDraft={setDraft}
       />
     </div>
   );

@@ -880,6 +880,10 @@ Last updated: 2026-03-23
   - recent-media-issues panel list composition and per-issue rendering now live in separate modules instead of remaining combined inside `apps/web/components/recent-media-issues-panel.tsx`
   - the media-issues panel now focuses more narrowly on list-level empty-state and mapping behavior while the extracted card owns issue-specific status, retry, and settings rendering
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces these recent-media-issues boundaries and size ceilings for both modules
+- Chat Panel Content Section Split V1:
+  - chat-panel shared content prop contracts and content composition now live in dedicated type and section modules instead of remaining combined inside `apps/web/components/chat-panel-content.tsx`
+  - the chat-panel content shell now focuses more narrowly on composing management surfaces and conversation surfaces while extracted modules own each section's rendering boundary
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these chat content boundaries and a size ceiling for the shell component
 
 ## Next
 - Continue the next product slice
