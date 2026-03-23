@@ -11,6 +11,14 @@ const recordPanelEditorWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-props.ts",
 );
+const recordPanelEditorWorkspaceBasePropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-props.ts",
+);
+const recordPanelEditorWorkspaceBasePropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-props.types.ts",
+);
 const recordPanelShellPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-props.ts",
@@ -52,6 +60,14 @@ const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const editorWorkspacePropsSource = fs.readFileSync(recordPanelEditorWorkspacePropsPath, "utf8");
+const editorWorkspaceBasePropsSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBasePropsPath,
+  "utf8",
+);
+const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBasePropsTypesPath,
+  "utf8",
+);
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
@@ -65,6 +81,9 @@ const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const editorWorkspacePropsLines = editorWorkspacePropsSource.split(/\r?\n/).length;
+const editorWorkspaceBasePropsLines = editorWorkspaceBasePropsSource.split(/\r?\n/).length;
+const editorWorkspaceBasePropsTypesLines =
+  editorWorkspaceBasePropsTypesSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
@@ -174,6 +193,7 @@ if (workspacePropsLines > maxWorkspacePropsLines) {
 for (const requiredEditorWorkspacePropsImport of [
   'from "./record-panel-v2-workspace-props.types";',
   'from "./record-panel-v2-editor-workspace-action-props";',
+  'from "./record-panel-v2-editor-workspace-base-props";',
   'from "./record-panel-v2-editor-workspace-copy-props";',
 ]) {
   if (!editorWorkspacePropsSource.includes(requiredEditorWorkspacePropsImport)) {
@@ -182,8 +202,10 @@ for (const requiredEditorWorkspacePropsImport of [
 }
 
 for (const requiredEditorWorkspacePropsUsage of [
+  "buildRecordEditorWorkspaceBaseProps({",
   "buildRecordEditorWorkspaceCopyProps({ detailCopy })",
   "buildRecordEditorWorkspaceActionProps({",
+  "...baseProps",
   "...copyProps",
   "...actionProps",
 ]) {
@@ -206,6 +228,68 @@ const maxEditorWorkspacePropsLines = 130;
 if (editorWorkspacePropsLines > maxEditorWorkspacePropsLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-props.ts exceeded ${maxEditorWorkspacePropsLines} lines: ${editorWorkspacePropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBasePropsImport of [
+  'from "./record-panel-v2-editor-workspace-base-props.types";',
+]) {
+  if (!editorWorkspaceBasePropsSource.includes(requiredEditorWorkspaceBasePropsImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props.ts must import shared editor prop types: ${requiredEditorWorkspaceBasePropsImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBasePropsUsage of [
+  "export function buildRecordEditorWorkspaceBaseProps({",
+  "authToken,",
+  "mediaAssets,",
+  "selectedRecordMediaSizeLabel,",
+  "workspaceId,",
+]) {
+  if (!editorWorkspaceBasePropsSource.includes(requiredEditorWorkspaceBasePropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props.ts must own base editor prop assembly: ${requiredEditorWorkspaceBasePropsUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBasePropsLines = 95;
+if (editorWorkspaceBasePropsLines > maxEditorWorkspaceBasePropsLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-props.ts exceeded ${maxEditorWorkspaceBasePropsLines} lines: ${editorWorkspaceBasePropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBasePropsTypesImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBasePropsTypesSource.includes(requiredEditorWorkspaceBasePropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props.types.ts must import shared workspace prop types: ${requiredEditorWorkspaceBasePropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBasePropsTypesUsage of [
+  "export type BuildRecordEditorWorkspaceBasePropsInput = Pick<",
+  "export type RecordEditorWorkspaceBaseProps = Pick<",
+  '"authToken"',
+  '"selectedRecordMediaSizeLabel"',
+  '"workspaceId"',
+]) {
+  if (!editorWorkspaceBasePropsTypesSource.includes(requiredEditorWorkspaceBasePropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props.types.ts must own base prop type contracts: ${requiredEditorWorkspaceBasePropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBasePropsTypesLines = 95;
+if (editorWorkspaceBasePropsTypesLines > maxEditorWorkspaceBasePropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-props.types.ts exceeded ${maxEditorWorkspaceBasePropsTypesLines} lines: ${editorWorkspaceBasePropsTypesLines}`,
   );
 }
 

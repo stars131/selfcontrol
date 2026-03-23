@@ -3,6 +3,7 @@ import type {
   RecordEditorWorkspaceProps,
 } from "./record-panel-v2-workspace-props.types";
 import { buildRecordEditorWorkspaceActionProps } from "./record-panel-v2-editor-workspace-action-props";
+import { buildRecordEditorWorkspaceBaseProps } from "./record-panel-v2-editor-workspace-base-props";
 import { buildRecordEditorWorkspaceCopyProps } from "./record-panel-v2-editor-workspace-copy-props";
 
 export function buildRecordEditorWorkspaceProps({
@@ -62,28 +63,10 @@ export function buildRecordEditorWorkspaceProps({
   uploading,
 }: BuildRecordEditorWorkspacePropsInput): RecordEditorWorkspaceProps {
   const copyProps = buildRecordEditorWorkspaceCopyProps({ detailCopy });
-  const actionProps = buildRecordEditorWorkspaceActionProps({
-    handleBulkRetryDeadLetter,
-    handleClearDeadLetterSelection,
-    handleCreateReminderSubmit,
-    handleDelete,
-    handleDeleteMediaAsset,
-    handleDownloadMedia,
-    handleRefreshMedia,
-    handleRetryMediaProcessing,
-    handleSelectAllDeadLetter,
-    handleSubmit,
-    handleToggleDeadLetterSelection,
-    handleUpload,
-    onDeleteReminder,
-    onUpdateReminder,
-  });
-
-  return {
+  const baseProps = buildRecordEditorWorkspaceBaseProps({
     authToken,
     bulkRetryingDeadLetter,
     canWriteWorkspace,
-    ...copyProps,
     deleting,
     deletingMediaId,
     downloadingMediaId,
@@ -102,7 +85,6 @@ export function buildRecordEditorWorkspaceProps({
     mediaIssueCopy,
     mediaProcessingOverview,
     mediaStorageSummary,
-    ...actionProps,
     panelCopy,
     refreshingMediaId,
     reminderForm,
@@ -121,5 +103,27 @@ export function buildRecordEditorWorkspaceProps({
     summarizeHistoryActionLabel,
     uploading,
     workspaceId,
+  });
+  const actionProps = buildRecordEditorWorkspaceActionProps({
+    handleBulkRetryDeadLetter,
+    handleClearDeadLetterSelection,
+    handleCreateReminderSubmit,
+    handleDelete,
+    handleDeleteMediaAsset,
+    handleDownloadMedia,
+    handleRefreshMedia,
+    handleRetryMediaProcessing,
+    handleSelectAllDeadLetter,
+    handleSubmit,
+    handleToggleDeadLetterSelection,
+    handleUpload,
+    onDeleteReminder,
+    onUpdateReminder,
+  });
+
+  return {
+    ...baseProps,
+    ...copyProps,
+    ...actionProps,
   };
 }

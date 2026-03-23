@@ -920,6 +920,10 @@ Last updated: 2026-03-23
   - retention controller selection actions and archive/cleanup execution actions now live in separate dedicated modules instead of remaining combined inside `apps/web/components/workspace-media-retention-controller-actions.ts`
   - the retention controller action assembly module now focuses more narrowly on composing grouped action sets while specialized helpers own selection state transitions and destructive execution paths
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces this action-group boundary and dedicated size ceilings for the grouped helpers
+- Record Panel Editor Workspace Base Prop Split V1:
+  - record-panel editor-workspace base prop mapping and its shared type contracts now live in dedicated modules instead of remaining inline inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
+  - the editor-workspace prop builder now focuses more narrowly on composing base, copy, and action prop groups while the new modules own the large base mapping surface and its contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these editor-workspace base-prop boundaries and dedicated size ceilings
 
 ## Next
 - Continue the next product slice
