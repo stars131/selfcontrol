@@ -8,13 +8,16 @@ const workspaceShellClientPropsPath = path.resolve(
 );
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
+const workspaceShellActionsPath = path.resolve(process.cwd(), "components/use-workspace-shell-actions.ts");
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
+const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
+const actionsLineCount = actionsSource.split(/\r?\n/).length;
 
 if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
@@ -172,6 +175,66 @@ if (clientPropsLineCount > maxClientPropsLines) {
   throw new Error(
     `workspace-shell-client-props.ts exceeded ${maxClientPropsLines} lines: ${clientPropsLineCount}`,
   );
+}
+
+for (const requiredActionsImport of [
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-chat-record-actions";',
+  'from "./workspace-shell-media-filter-actions";',
+  'from "./workspace-shell-admin-actions";',
+]) {
+  if (!actionsSource.includes(requiredActionsImport)) {
+    throw new Error(`use-workspace-shell-actions.ts must import delegated action modules: ${requiredActionsImport}`);
+  }
+}
+
+for (const requiredActionsUsage of [
+  "createWorkspaceShellChatRecordActions(props)",
+  "createWorkspaceShellMediaFilterActions(props)",
+  "createWorkspaceShellAdminActions(props)",
+  "...chatRecordActions",
+  "...mediaFilterActions",
+  "...adminActions",
+]) {
+  if (!actionsSource.includes(requiredActionsUsage)) {
+    throw new Error(`use-workspace-shell-actions.ts must delegate action assembly: ${requiredActionsUsage}`);
+  }
+}
+
+for (const forbiddenActionsToken of [
+  'from "../lib/api";',
+  'from "../lib/timeline";',
+  "const handle",
+  "sendMessage(",
+  "createConversation(",
+  "createRecord(",
+  "updateRecord(",
+  "deleteRecord(",
+  "uploadMedia(",
+  "deleteMedia(",
+  "retryMediaProcessing(",
+  "getMediaStatus(",
+  "bulkRetryMediaDeadLetter(",
+  "createSearchPreset(",
+  "deleteSearchPreset(",
+  "createReminder(",
+  "updateReminder(",
+  "deleteReminder(",
+  "syncDueNotifications(",
+  "updateNotification(",
+  "reindexKnowledge(",
+  "updateProviderConfig(",
+  "createShareLink(",
+  "updateShareLink(",
+]) {
+  if (actionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(`use-workspace-shell-actions.ts must keep action internals delegated: ${forbiddenActionsToken}`);
+  }
+}
+
+const maxActionsLines = 40;
+if (actionsLineCount > maxActionsLines) {
+  throw new Error(`use-workspace-shell-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`);
 }
 
 console.log("workspace-shell structure verification passed");

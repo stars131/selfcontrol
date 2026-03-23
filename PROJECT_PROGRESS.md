@@ -724,6 +724,10 @@ Last updated: 2026-03-23
   - chat-panel share-url/error helpers and operator/share action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-chat-panel-actions.ts`
   - the chat action hook now focuses more narrowly on state registration and handler assembly while dedicated helpers own share payload shaping and async action flows
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these action-helper boundaries and a size ceiling for `use-chat-panel-actions.ts`
+- Workspace Shell Actions Extraction V1:
+  - workspace-shell chat/record, media/filter, and admin/share action builders now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-shell-actions.ts`
+  - the workspace-shell action hook now focuses more narrowly on action-module assembly while shared types and guard helpers own permission checks and handler contracts
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these action boundaries and a size ceiling for `use-workspace-shell-actions.ts`
 
 ## Next
 - Continue the next product slice
