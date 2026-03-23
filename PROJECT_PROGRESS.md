@@ -668,10 +668,14 @@ Last updated: 2026-03-23
   - workspace shell chat-panel and record-panel prop builders now live in `apps/web/components/workspace-shell-panels-props.ts` instead of remaining inline inside `workspace-shell-panels.tsx`
   - the workspace shell panels module now focuses more narrowly on two-panel composition while dedicated helper builders own chat-panel and record-panel prop assembly
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this panels-props boundary
+- Record Media Selected Content Props Extraction V1:
+  - selected media content prop typing and child-prop builders now live in dedicated modules instead of remaining inline inside `apps/web/components/record-media-selected-content.tsx`
+  - the selected-media composition shell now focuses more narrowly on media overview, issue-panel, and asset-section composition while dedicated helpers own child prop assembly
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces this helper boundary and adds a size ceiling for `record-media-selected-content.tsx`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell panels props extraction
+- Continue simplifying remaining large UI module boundaries after the record media selected content props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
