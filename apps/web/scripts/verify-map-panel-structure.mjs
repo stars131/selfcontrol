@@ -3,10 +3,13 @@ import path from "node:path";
 
 const mapPanelPath = path.resolve(process.cwd(), "components/map-panel.tsx");
 const mapPanelControllerPath = path.resolve(process.cwd(), "components/use-map-panel-controller.ts");
+const mapPanelAmapPath = path.resolve(process.cwd(), "components/use-map-panel-amap.ts");
 const mapPanelSource = fs.readFileSync(mapPanelPath, "utf8");
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
+const mapPanelAmapSource = fs.readFileSync(mapPanelAmapPath, "utf8");
 const mapPanelLineCount = mapPanelSource.split(/\r?\n/).length;
 const mapPanelControllerLineCount = mapPanelControllerSource.split(/\r?\n/).length;
+const mapPanelAmapLineCount = mapPanelAmapSource.split(/\r?\n/).length;
 
 if (!mapPanelSource.includes('from "../lib/map-panel";')) {
   throw new Error("map-panel.tsx must import shared helpers from ../lib/map-panel");
@@ -125,6 +128,51 @@ if (mapPanelControllerLineCount > maxControllerLines) {
   throw new Error(
     `use-map-panel-controller.ts exceeded ${maxControllerLines} lines: ${mapPanelControllerLineCount}`,
   );
+}
+
+for (const requiredAmapImport of [
+  'from "./use-map-panel-amap.types";',
+  'from "./use-map-panel-amap-init";',
+  'from "./use-map-panel-amap-markers";',
+]) {
+  if (!mapPanelAmapSource.includes(requiredAmapImport)) {
+    throw new Error(`use-map-panel-amap.ts must import delegated AMap helpers: ${requiredAmapImport}`);
+  }
+}
+
+for (const requiredAmapUsage of [
+  "useMapPanelAmapInit(props)",
+  "useMapPanelAmapMarkers(props)",
+  "props.mapRef.current?.destroy?.()",
+  "props.geocoderRef.current = null",
+]) {
+  if (!mapPanelAmapSource.includes(requiredAmapUsage)) {
+    throw new Error(`use-map-panel-amap.ts must delegate AMap orchestration: ${requiredAmapUsage}`);
+  }
+}
+
+for (const forbiddenAmapToken of [
+  'from "../lib/map-panel";',
+  "useRef(",
+  "loadAmapScript(",
+  "extractAddress(",
+  "formatCoordinate(",
+  "readLatitudeValue(",
+  "readLongitudeValue(",
+  "escapeHtml(",
+  "new window.AMap.Map(",
+  "new window.AMap.Marker(",
+  "mapRef.current.clearMap?.()",
+  'mapInstance.on?.("click"',
+]) {
+  if (mapPanelAmapSource.includes(forbiddenAmapToken)) {
+    throw new Error(`use-map-panel-amap.ts must keep init and marker details delegated: ${forbiddenAmapToken}`);
+  }
+}
+
+const maxAmapLines = 30;
+if (mapPanelAmapLineCount > maxAmapLines) {
+  throw new Error(`use-map-panel-amap.ts exceeded ${maxAmapLines} lines: ${mapPanelAmapLineCount}`);
 }
 
 console.log("map-panel structure verification passed");

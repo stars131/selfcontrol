@@ -796,6 +796,10 @@ Last updated: 2026-03-23
   - record-panel controller state registration and derived locale/view data now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-record-panel-controller.ts`
   - the controller hook now focuses more narrowly on orchestration between sync, state, derived view data, and grouped action builders
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these helper boundaries and further lowers the controller size ceiling
+- Map Panel AMap Lifecycle Split V1:
+  - AMap initialization/click geocoding and marker/render-viewport updates now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-map-panel-amap.ts`
+  - the top-level AMap hook now focuses more narrowly on helper composition and final cleanup behavior
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these delegated AMap helper boundaries and a size ceiling for `use-map-panel-amap.ts`
 
 ## Next
 - Continue the next product slice
