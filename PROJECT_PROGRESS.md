@@ -780,6 +780,10 @@ Last updated: 2026-03-23
   - provider-settings locale payload data and shared copy typing now live in dedicated payload and types modules instead of remaining inline inside `apps/web/components/provider-settings-copy.ts`
   - the provider-settings copy module now focuses more narrowly on acting as a thin locale wrapper while delegated modules own large static copy payloads
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this copy-wrapper boundary and a size ceiling for `provider-settings-copy.ts`
+- Workspace Media Retention Copy Payload Extraction V1:
+  - workspace-media-retention locale payload data and shared copy typing now live in dedicated payload and types modules instead of remaining inline inside `apps/web/components/workspace-media-retention-copy.ts`
+  - the workspace-media-retention copy module now focuses more narrowly on acting as a thin locale wrapper while delegated modules own large static copy payloads
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces this copy-wrapper boundary and a size ceiling for `workspace-media-retention-copy.ts`
 
 ## Next
 - Continue the next product slice

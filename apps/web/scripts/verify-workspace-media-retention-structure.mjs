@@ -6,10 +6,16 @@ const retentionControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-media-retention-controller.ts",
 );
+const retentionCopyPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-copy.ts",
+);
 const source = fs.readFileSync(retentionCardPath, "utf8");
 const controllerSource = fs.readFileSync(retentionControllerPath, "utf8");
+const copySource = fs.readFileSync(retentionCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const copyLineCount = copySource.split(/\r?\n/).length;
 const retentionListsPath = path.resolve(process.cwd(), "components/workspace-media-retention-lists.tsx");
 const retentionListsSource = fs.readFileSync(retentionListsPath, "utf8");
 
@@ -147,6 +153,42 @@ const maxControllerLines = 95;
 if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-workspace-media-retention-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
+  );
+}
+
+for (const requiredCopyImport of [
+  'from "./workspace-media-retention-copy.payload";',
+  'from "./workspace-media-retention-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyImport)) {
+    throw new Error(`workspace-media-retention-copy.ts must import delegated copy modules: ${requiredCopyImport}`);
+  }
+}
+
+for (const requiredCopyUsage of [
+  "WORKSPACE_MEDIA_RETENTION_COPY[locale]",
+  'export type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyUsage)) {
+    throw new Error(`workspace-media-retention-copy.ts must remain a thin copy wrapper: ${requiredCopyUsage}`);
+  }
+}
+
+for (const forbiddenCopyToken of [
+  "const COPY:",
+  '"zh-CN": {',
+  'en: {',
+  'ja: {',
+]) {
+  if (copySource.includes(forbiddenCopyToken)) {
+    throw new Error(`workspace-media-retention-copy.ts must keep locale payload delegated: ${forbiddenCopyToken}`);
+  }
+}
+
+const maxCopyLines = 15;
+if (copyLineCount > maxCopyLines) {
+  throw new Error(
+    `workspace-media-retention-copy.ts exceeded ${maxCopyLines} lines: ${copyLineCount}`,
   );
 }
 
