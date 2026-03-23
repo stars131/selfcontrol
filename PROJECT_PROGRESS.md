@@ -844,6 +844,10 @@ Last updated: 2026-03-23
   - legacy record-panel local state, selected-record form sync, and save/delete/upload actions now live in dedicated helpers instead of remaining combined inside `apps/web/components/record-panel.tsx`
   - the legacy panel shell now focuses more narrowly on derived counts, selected-record lookup, and section composition while helper modules own stateful behavior
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy helper boundaries for `record-panel.tsx`
+- Record Panel Editor Workspace Copy and Action Prop Split V1:
+  - editor-workspace copy label mapping and action callback mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
+  - the editor-workspace prop builder now focuses more narrowly on top-level prop assembly while delegated helpers own copy and action group mapping
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these editor prop-helper boundaries for `record-panel-v2-editor-workspace-props.ts`
 
 ## Next
 - Continue the next product slice
