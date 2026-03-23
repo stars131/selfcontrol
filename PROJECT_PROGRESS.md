@@ -708,10 +708,14 @@ Last updated: 2026-03-23
   - record-panel browse/editor workspace prop builders and their shared typing now live in dedicated browse, editor, and types modules instead of staying combined inside `apps/web/components/record-panel-v2-workspace-props.ts`
   - the stable workspace-props module now acts as a narrow re-export boundary while dedicated helpers own each large prop-mapping surface
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the re-export boundary and a size ceiling for `record-panel-v2-workspace-props.ts`
+- Record Editor Support Tool Props Split V1:
+  - record-editor support-tool media and reminder prop builders now live in dedicated modules instead of staying combined inside `apps/web/components/record-editor-support-tools-props.ts`
+  - the stable support-tools props module now acts as a narrow re-export boundary while dedicated builders own each large prop-mapping surface
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the re-export boundary and a size ceiling for `record-editor-support-tools-props.ts`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record panel workspace props split
+- Continue simplifying remaining large UI module boundaries after the record editor support tool props split
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

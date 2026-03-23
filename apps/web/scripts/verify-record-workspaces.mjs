@@ -16,6 +16,8 @@ const editorWorkspacePath = "components/record-editor-workspace.tsx";
 const editorWorkspaceSource = readSource(editorWorkspacePath);
 const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
 const editorSupportToolsSource = readSource(editorSupportToolsPath);
+const editorSupportToolsPropsPath = "components/record-editor-support-tools-props.ts";
+const editorSupportToolsPropsSource = readSource(editorSupportToolsPropsPath);
 const reminderToolsPath = "components/record-reminder-tools.tsx";
 const reminderToolsSource = readSource(reminderToolsPath);
 
@@ -100,6 +102,15 @@ if (!editorSupportToolsSource.includes("buildRecordReminderToolsProps(props)")) 
   throw new Error("record-editor-support-tools.tsx must delegate reminder tool prop assembly");
 }
 
+for (const requiredPropsExport of [
+  'export { buildRecordMediaToolsProps } from "./record-editor-support-tools-media-props";',
+  'export { buildRecordReminderToolsProps } from "./record-editor-support-tools-reminder-props";',
+]) {
+  if (!editorSupportToolsPropsSource.includes(requiredPropsExport)) {
+    throw new Error(`record-editor-support-tools-props.ts must remain a stable re-export boundary: ${requiredPropsExport}`);
+  }
+}
+
 for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresentLabel", "<RecordReminderTools\n        canWriteWorkspace"]) {
   if (editorSupportToolsSource.includes(forbiddenToken)) {
     throw new Error(`record-editor-support-tools.tsx must keep child prop assembly delegated: ${forbiddenToken}`);
@@ -107,6 +118,7 @@ for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresent
 }
 
 verifyLineLimit(editorSupportToolsPath, 120);
+verifyLineLimit(editorSupportToolsPropsPath, 20);
 
 if (!reminderToolsSource.includes('import type { RecordReminderToolsProps } from "./record-reminder-tools.types";')) {
   throw new Error("record-reminder-tools.tsx must import RecordReminderToolsProps from record-reminder-tools.types");
