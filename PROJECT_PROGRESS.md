@@ -768,6 +768,10 @@ Last updated: 2026-03-23
   - workspace-shell media actions and record-filter/search-preset actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-shell-media-filter-actions.ts`
   - the media-filter action module now focuses more narrowly on composing grouped action sets while specialized helpers own each workflow
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these media/filter action boundaries and a size ceiling for `workspace-shell-media-filter-actions.ts`
+- Record Panel Shell Props Split V1:
+  - record-panel browse/editor workspace input builders, controller input builder, and header prop builder now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-v2-shell-props.ts`
+  - the shell-props module now focuses more narrowly on acting as a stable re-export boundary while specialized helpers own each shell-level mapping surface
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this shell-props re-export boundary and a size ceiling for `record-panel-v2-shell-props.ts`
 
 ## Next
 - Continue the next product slice

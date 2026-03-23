@@ -7,14 +7,20 @@ const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props.ts",
 );
+const recordPanelShellPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-shell-props.ts",
+);
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
+const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
+const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
@@ -110,6 +116,24 @@ const maxWorkspacePropsLines = 20;
 if (workspacePropsLines > maxWorkspacePropsLines) {
   throw new Error(
     `record-panel-v2-workspace-props.ts exceeded ${maxWorkspacePropsLines} lines: ${workspacePropsLines}`,
+  );
+}
+
+for (const requiredShellPropsExport of [
+  'export { buildRecordBrowseWorkspaceInput } from "./record-panel-v2-browse-workspace-input";',
+  'export { buildRecordPanelControllerInput } from "./record-panel-v2-controller-input";',
+  'export { buildRecordEditorWorkspaceInput } from "./record-panel-v2-editor-workspace-input";',
+  'export { buildRecordPanelHeaderProps } from "./record-panel-v2-header-props";',
+]) {
+  if (!shellPropsSource.includes(requiredShellPropsExport)) {
+    throw new Error(`record-panel-v2-shell-props.ts must remain a stable re-export boundary: ${requiredShellPropsExport}`);
+  }
+}
+
+const maxShellPropsLines = 10;
+if (shellPropsLines > maxShellPropsLines) {
+  throw new Error(
+    `record-panel-v2-shell-props.ts exceeded ${maxShellPropsLines} lines: ${shellPropsLines}`,
   );
 }
 
