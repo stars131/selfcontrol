@@ -1,52 +1,8 @@
 "use client";
 
-import type { Dispatch, SetStateAction } from "react";
-
 import { RecordReminderPanel } from "./record-reminder-panel";
-import type { ReminderFormState } from "../lib/record-panel-forms";
-import type { ReminderItem } from "../lib/types";
-
-type RecordReminderToolsProps = {
-  canWriteWorkspace: boolean;
-  hasSelectedRecord: boolean;
-  selectedRecordTitle: string | null;
-  reminderForm: ReminderFormState;
-  reminders: ReminderItem[];
-  savingReminder: boolean;
-  channelInApp: string;
-  channelLabel: string;
-  createReminderLabel: string;
-  deleteReminderLabel: string;
-  enableReminderLabel: string;
-  markReminderDoneLabel: string;
-  noRemindersLabel: string;
-  pauseReminderLabel: string;
-  reminderNoteLabel: string;
-  reminderNotePlaceholder: string;
-  reminderSectionDescription: string;
-  reminderSectionTitle: string;
-  reminderTitleLabel: string;
-  reminderTitlePlaceholder: string;
-  remindAtLabel: string;
-  savingReminderLabel: string;
-  untitledReminderLabel: string;
-  formatReminderEnabledLabel: (value: boolean) => string;
-  formatReminderStatusLabel: (value: string) => string;
-  formatReminderTimestampLabel: (value: string) => string;
-  onCreateReminder: () => Promise<void>;
-  onDeleteReminder: (reminderId: string) => Promise<void>;
-  onUpdateReminder: (
-    reminderId: string,
-    input: Partial<{
-      title: string | null;
-      message: string | null;
-      remind_at: string | null;
-      status: string;
-      is_enabled: boolean;
-    }>,
-  ) => Promise<void>;
-  setReminderForm: Dispatch<SetStateAction<ReminderFormState>>;
-};
+import { createRecordReminderBindings } from "./record-reminder-tools-bindings";
+import type { RecordReminderToolsProps } from "./record-reminder-tools.types";
 
 export function RecordReminderTools({
   canWriteWorkspace,
@@ -80,6 +36,8 @@ export function RecordReminderTools({
   onUpdateReminder,
   setReminderForm,
 }: RecordReminderToolsProps) {
+  const bindings = createRecordReminderBindings({ onUpdateReminder, setReminderForm });
+
   if (!hasSelectedRecord) {
     return null;
   }
@@ -99,35 +57,11 @@ export function RecordReminderTools({
       noRemindersLabel={noRemindersLabel}
       onCreateReminder={onCreateReminder}
       onDeleteReminder={onDeleteReminder}
-      onMarkReminderDone={(reminder) =>
-        onUpdateReminder(reminder.id, {
-          status: "completed",
-          is_enabled: false,
-        })
-      }
-      onMessageChange={(value) =>
-        setReminderForm((prev) => ({
-          ...prev,
-          message: value,
-        }))
-      }
-      onRemindAtChange={(value) =>
-        setReminderForm((prev) => ({
-          ...prev,
-          remind_at: value,
-        }))
-      }
-      onTitleChange={(value) =>
-        setReminderForm((prev) => ({
-          ...prev,
-          title: value,
-        }))
-      }
-      onToggleReminderEnabled={(reminder) =>
-        onUpdateReminder(reminder.id, {
-          is_enabled: !reminder.is_enabled,
-        })
-      }
+      onMarkReminderDone={bindings.onMarkReminderDone}
+      onMessageChange={bindings.onMessageChange}
+      onRemindAtChange={bindings.onRemindAtChange}
+      onTitleChange={bindings.onTitleChange}
+      onToggleReminderEnabled={bindings.onToggleReminderEnabled}
       pauseReminderLabel={pauseReminderLabel}
       reminderForm={reminderForm}
       reminderNoteLabel={reminderNoteLabel}

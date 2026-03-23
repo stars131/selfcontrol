@@ -652,10 +652,14 @@ Last updated: 2026-03-23
   - record panel v2 now keeps top-level props and controller state grouped behind object boundaries instead of destructuring the entire shell inline
   - the panel shell now focuses more narrowly on controller invocation, workspace prop shaping, and final panel composition while grouped objects reduce top-level churn
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the grouped controller boundary and lowers the record-panel shell size ceiling again
+- Record Reminder Tools Bindings Extraction V1:
+  - record reminder tool props contract and reminder bindings now live in dedicated modules instead of remaining inline inside `apps/web/components/record-reminder-tools.tsx`
+  - the reminder-tools shell now focuses more narrowly on selected-record gating and reminder panel composition while the dedicated bindings module owns reminder form and status-update closures
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder binding boundary and lowers the reminder-tools size ceiling
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record panel v2 object boundary extraction
+- Continue simplifying remaining large UI module boundaries after the record reminder tools bindings extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

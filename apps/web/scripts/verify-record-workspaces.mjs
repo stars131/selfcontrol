@@ -16,6 +16,8 @@ const editorWorkspacePath = "components/record-editor-workspace.tsx";
 const editorWorkspaceSource = readSource(editorWorkspacePath);
 const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
 const editorSupportToolsSource = readSource(editorSupportToolsPath);
+const reminderToolsPath = "components/record-reminder-tools.tsx";
+const reminderToolsSource = readSource(reminderToolsPath);
 
 if (!editorWorkspaceSource.includes('from "./record-editor-workspace-bindings";')) {
   throw new Error("record-editor-workspace.tsx must import record-editor-workspace-bindings");
@@ -84,6 +86,26 @@ for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresent
 }
 
 verifyLineLimit(editorSupportToolsPath, 120);
+
+if (!reminderToolsSource.includes('import type { RecordReminderToolsProps } from "./record-reminder-tools.types";')) {
+  throw new Error("record-reminder-tools.tsx must import RecordReminderToolsProps from record-reminder-tools.types");
+}
+
+if (!reminderToolsSource.includes('import { createRecordReminderBindings } from "./record-reminder-tools-bindings";')) {
+  throw new Error("record-reminder-tools.tsx must import createRecordReminderBindings");
+}
+
+if (!reminderToolsSource.includes("createRecordReminderBindings({ onUpdateReminder, setReminderForm })")) {
+  throw new Error("record-reminder-tools.tsx must delegate reminder form bindings");
+}
+
+for (const forbiddenToken of ["onMarkReminderDone={(reminder)", "onMessageChange={(value)", "onRemindAtChange={(value)", "onTitleChange={(value)"]) {
+  if (reminderToolsSource.includes(forbiddenToken)) {
+    throw new Error(`record-reminder-tools.tsx must keep reminder bindings delegated: ${forbiddenToken}`);
+  }
+}
+
+verifyLineLimit(reminderToolsPath, 110);
 
 const browseWorkspacePath = "components/record-browse-workspace.tsx";
 const browseWorkspaceSource = readSource(browseWorkspacePath);
