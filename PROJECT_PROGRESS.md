@@ -756,6 +756,10 @@ Last updated: 2026-03-23
   - workspace-media-retention risk-label helper, report-loading hook, and archive/cleanup action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-media-retention-controller.ts`
   - the retention controller now focuses more narrowly on local state registration, derived label assembly, and helper composition while shared controller types own its contract
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-media-retention-controller.ts`
+- Workspace Entry Action Groups Extraction V1:
+  - workspace-entry transfer-job, workspace create/import, and share/join actions now live in dedicated action-group modules instead of remaining inline inside `apps/web/components/workspace-entry-controller-actions.ts`
+  - the workspace-entry action assembly module now focuses more narrowly on composing grouped action sets while specialized helpers own each entry workflow
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these action-group boundaries and a size ceiling for `workspace-entry-controller-actions.ts`
 
 ## Next
 - Continue the next product slice

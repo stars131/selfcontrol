@@ -7,12 +7,18 @@ const workspaceEntryControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-entry-controller.ts",
 );
+const workspaceEntryActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-controller-actions.ts",
+);
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
+const actionsSource = fs.readFileSync(workspaceEntryActionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const actionsLineCount = actionsSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceEntryController } from "./use-workspace-entry-controller";')) {
   throw new Error("workspace-entry-client.tsx must import useWorkspaceEntryController");
@@ -151,6 +157,54 @@ const maxControllerLines = 130;
 if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-workspace-entry-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
+  );
+}
+
+for (const requiredActionsImport of [
+  'from "./workspace-entry-job-actions";',
+  'from "./workspace-entry-share-actions";',
+  'from "./workspace-entry-controller.types";',
+  'from "./workspace-entry-workspace-actions";',
+]) {
+  if (!actionsSource.includes(requiredActionsImport)) {
+    throw new Error(`workspace-entry-controller-actions.ts must import delegated action groups: ${requiredActionsImport}`);
+  }
+}
+
+for (const requiredActionsUsage of [
+  "createWorkspaceEntryJobActions({",
+  "createWorkspaceEntryWorkspaceActions({",
+  "createWorkspaceEntryShareActions({ router, state })",
+  "...jobActions",
+  "...workspaceActions",
+  "...shareActions",
+]) {
+  if (!actionsSource.includes(requiredActionsUsage)) {
+    throw new Error(`workspace-entry-controller-actions.ts must delegate grouped actions: ${requiredActionsUsage}`);
+  }
+}
+
+for (const forbiddenActionsToken of [
+  'from "../lib/api";',
+  'from "../lib/auth";',
+  "const loadTransferJobs =",
+  "const handleCreate =",
+  "const handleImportWorkspace =",
+  "const handleQueueImportJob =",
+  "const handlePreviewShare =",
+  "const handleAcceptShare =",
+  "const handleLogout =",
+  "const handleDownloadTransferJob =",
+]) {
+  if (actionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(`workspace-entry-controller-actions.ts must keep action internals delegated: ${forbiddenActionsToken}`);
+  }
+}
+
+const maxActionsLines = 40;
+if (actionsLineCount > maxActionsLines) {
+  throw new Error(
+    `workspace-entry-controller-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`,
   );
 }
 

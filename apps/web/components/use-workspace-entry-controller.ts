@@ -102,7 +102,7 @@ export function useWorkspaceEntryController(router: RouterLike) {
     suggestedSlug,
     normalizedShareToken,
     handleCreate: (event: FormEvent<HTMLFormElement>) =>
-      actions.handleCreate(event, suggestedSlug, setName),
+      actions.handleCreate(event, suggestedSlug),
     handleImportWorkspace: actions.handleImportWorkspace,
     handleQueueImportJob: actions.handleQueueImportJob,
     handlePreviewShare: () => actions.handlePreviewShare(shareTokenInput),
