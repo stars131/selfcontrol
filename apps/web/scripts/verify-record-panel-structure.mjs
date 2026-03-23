@@ -20,9 +20,17 @@ const recordPanelControllerResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-result.ts",
 );
+const recordPanelControllerHandlerGroupsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-groups.ts",
+);
 const recordPanelRecordHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handlers.ts",
+);
+const recordPanelHandlerGroupInputsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-group-inputs.ts",
 );
 const recordPanelFormActionsPath = path.resolve(
   process.cwd(),
@@ -48,6 +56,7 @@ const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
+const handlerGroupInputsSource = fs.readFileSync(recordPanelHandlerGroupInputsPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
@@ -60,6 +69,7 @@ const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
+const handlerGroupInputsLines = handlerGroupInputsSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
@@ -230,6 +240,18 @@ for (const requiredControllerImport of [
   }
 }
 
+for (const requiredHandlerGroupsImport of [
+  'from "./record-panel-controller-handler-group-inputs";',
+  'from "./record-panel-controller-media-handlers";',
+  'from "./record-panel-controller-record-handlers";',
+]) {
+  if (!fs.readFileSync(recordPanelControllerHandlerGroupsPath, "utf8").includes(requiredHandlerGroupsImport)) {
+    throw new Error(
+      `record-panel-controller-handler-groups.ts must import delegated handler-group helpers: ${requiredHandlerGroupsImport}`,
+    );
+  }
+}
+
 for (const requiredControllerUsage of [
   "useRecordPanelControllerSync({",
   "useRecordPanelControllerViewData({",
@@ -265,6 +287,76 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+const handlerGroupsSource = fs.readFileSync(recordPanelControllerHandlerGroupsPath, "utf8");
+const handlerGroupsLines = handlerGroupsSource.split(/\r?\n/).length;
+
+for (const requiredHandlerGroupUsage of [
+  "buildRecordPanelControllerRecordHandlerInput(input)",
+  "buildRecordPanelControllerMediaHandlerInput(input)",
+  "createRecordPanelControllerRecordHandlers(",
+  "createRecordPanelControllerMediaHandlers(",
+]) {
+  if (!handlerGroupsSource.includes(requiredHandlerGroupUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-groups.ts must delegate handler input assembly: ${requiredHandlerGroupUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHandlerGroupToken of [
+  "detailCopy,",
+  "filterDraft,",
+  "locationReviewForm,",
+  "selectedDeadLetterIds,",
+  "setBulkRetryingDeadLetter,",
+  "setRetryingMediaId,",
+]) {
+  if (handlerGroupsSource.includes(forbiddenHandlerGroupToken)) {
+    throw new Error(
+      `record-panel-controller-handler-groups.ts must keep handler input details delegated: ${forbiddenHandlerGroupToken}`,
+    );
+  }
+}
+const maxHandlerGroupsLines = 35;
+if (handlerGroupsLines > maxHandlerGroupsLines) {
+  throw new Error(
+    `record-panel-controller-handler-groups.ts exceeded ${maxHandlerGroupsLines} lines: ${handlerGroupsLines}`,
+  );
+}
+
+for (const requiredHandlerGroupInputsImport of [
+  'from "./record-panel-controller.types";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!handlerGroupInputsSource.includes(requiredHandlerGroupInputsImport)) {
+    throw new Error(
+      `record-panel-controller-handler-group-inputs.ts must import shared controller types: ${requiredHandlerGroupInputsImport}`,
+    );
+  }
+}
+
+for (const requiredHandlerGroupInputsUsage of [
+  "export type RecordPanelControllerHandlerGroupInput = Pick<",
+  "export function buildRecordPanelControllerRecordHandlerInput(",
+  "export function buildRecordPanelControllerMediaHandlerInput(",
+  "detailCopy: input.detailCopy,",
+  "authToken: input.authToken,",
+]) {
+  if (!handlerGroupInputsSource.includes(requiredHandlerGroupInputsUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-group-inputs.ts must own handler input shaping: ${requiredHandlerGroupInputsUsage}`,
+    );
+  }
+}
+
+const maxHandlerGroupInputsLines = 110;
+if (handlerGroupInputsLines > maxHandlerGroupInputsLines) {
+  throw new Error(
+    `record-panel-controller-handler-group-inputs.ts exceeded ${maxHandlerGroupInputsLines} lines: ${handlerGroupInputsLines}`,
+  );
 }
 
 for (const requiredControllerResultImport of [

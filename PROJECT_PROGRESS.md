@@ -896,6 +896,10 @@ Last updated: 2026-03-23
   - chat-panel content prop mapping now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/chat-panel.tsx`
   - the top-level chat panel now focuses more narrowly on header rendering, action-hook composition, and content mounting while the prop builder owns the shell-to-content contract
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this content-prop assembly boundary and a tighter size ceiling for `chat-panel.tsx`
+- Record Panel Handler Group Input Split V1:
+  - record-panel handler-group record/media input shaping now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/record-panel-controller-handler-groups.ts`
+  - the handler-group assembly module now focuses more narrowly on composing record/media handler sets while the new helper owns the shared input contract and mapping surface
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this handler-group input boundary and a tighter size ceiling for `record-panel-controller-handler-groups.ts`
 
 ## Next
 - Continue the next product slice
