@@ -828,6 +828,10 @@ Last updated: 2026-03-23
   - record-media-tools child prop assembly now lives in a dedicated builder module instead of remaining inline inside `apps/web/components/record-media-tools.tsx`
   - the media-tools shell now focuses more narrowly on section composition and selected-record gating while the builder module owns child prop mapping
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces this prop-builder boundary for `record-media-tools.tsx`
+- Workspace Shell Initial Data Helper Split V1:
+  - workspace-shell initial workspace bootstrap, core refreshes, and role-aware startup loading now flow through a dedicated helper instead of remaining inline inside `apps/web/components/use-workspace-shell-initial-load.ts`
+  - the initial-load hook now focuses more narrowly on effect lifecycle, auth token gating, and failure handling while helper modules own startup data orchestration
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this initial-data helper boundary for `use-workspace-shell-initial-load.ts`
 
 ## Next
 - Continue the next product slice

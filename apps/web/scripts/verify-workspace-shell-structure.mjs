@@ -378,8 +378,7 @@ for (const requiredInitialLoadImport of [
 }
 
 for (const requiredInitialLoadUsage of [
-  "loadWorkspaceShellConversationState({",
-  "loadWorkspaceShellManagedState({",
+  "loadWorkspaceShellInitialData({",
 ]) {
   if (!initialLoadSource.includes(requiredInitialLoadUsage)) {
     throw new Error(`use-workspace-shell-initial-load.ts must delegate initial-load flow: ${requiredInitialLoadUsage}`);
@@ -388,11 +387,18 @@ for (const requiredInitialLoadUsage of [
 
 for (const forbiddenInitialLoadToken of [
   "createConversation(",
+  "getWorkspace(",
   "listConversations(",
-  "loadConversationMessagesForWorkspace(",
+  "refreshRecordCollection(",
+  "refreshNotificationItems(",
+  "refreshKnowledgeStatsData(",
+  "refreshMediaStorageSummaryData(",
+  "refreshMediaProcessingOverviewData(",
   "refreshMediaDeadLetterOverviewData(",
   "refreshProviderConfigItems(",
   "refreshShareLinkItems(",
+  "refreshSearchPresetItems(",
+  "refreshAuditLogItems(",
 ]) {
   if (initialLoadSource.includes(forbiddenInitialLoadToken)) {
     throw new Error(`use-workspace-shell-initial-load.ts must keep detailed load steps delegated: ${forbiddenInitialLoadToken}`);

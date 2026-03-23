@@ -2,22 +2,10 @@
 
 import { useEffect } from "react";
 
-import { getWorkspace } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
-import {
-  INITIAL_RECORD_FILTER,
-  refreshAuditLogItems,
-  refreshKnowledgeStatsData,
-  refreshMediaProcessingOverviewData,
-  refreshMediaStorageSummaryData,
-  refreshNotificationItems,
-  refreshRecordCollection,
-  refreshSearchPresetItems,
-} from "../lib/workspace-shell-refresh";
 import type { WorkspaceShellInitialLoadProps } from "./workspace-shell-effects.types";
 import {
-  loadWorkspaceShellConversationState,
-  loadWorkspaceShellManagedState,
+  loadWorkspaceShellInitialData,
 } from "./workspace-shell-initial-load-helpers";
 
 export function useWorkspaceShellInitialLoad({
@@ -55,45 +43,28 @@ export function useWorkspaceShellInitialLoad({
     const load = async () => {
       try {
         setToken(activeToken);
-        const workspaceResult = await getWorkspace(activeToken, workspaceId);
-        setWorkspace(workspaceResult.workspace);
-
-        await refreshRecordCollection({
-          token: activeToken,
-          workspaceId,
-          nextRecordFilter: INITIAL_RECORD_FILTER,
-          setRecords,
-          setVisibleRecords,
-          setTimelineDays,
-          setSelectedRecordId,
-        });
-
-        await loadWorkspaceShellConversationState({
+        await loadWorkspaceShellInitialData({
           activeToken,
-          role: workspaceResult.workspace.role,
           setActiveConversationId,
+          setAuditLogs,
           setConversations,
-          setMessages,
-          workspaceId,
-        });
-
-        await refreshNotificationItems(activeToken, workspaceId, setNotifications);
-        await refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
-        await refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
-        await refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
-
-        await loadWorkspaceShellManagedState({
-          activeToken,
-          role: workspaceResult.workspace.role,
+          setKnowledgeStats,
           setLatestSharePath,
           setMediaDeadLetterOverview,
+          setMediaProcessingOverview,
+          setMediaStorageSummary,
+          setMessages,
+          setNotifications,
           setProviderConfigs,
+          setRecords,
+          setSearchPresets,
+          setSelectedRecordId,
           setShareLinks,
+          setTimelineDays,
+          setVisibleRecords,
+          setWorkspace,
           workspaceId,
         });
-
-        await refreshSearchPresetItems(activeToken, workspaceId, setSearchPresets);
-        await refreshAuditLogItems(activeToken, workspaceId, setAuditLogs);
       } catch (caught) {
         clearStoredSession();
         setError(caught instanceof Error ? caught.message : "Failed to load workspace data");
