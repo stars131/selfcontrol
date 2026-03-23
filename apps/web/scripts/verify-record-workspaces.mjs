@@ -128,11 +128,27 @@ if (!reminderToolsSource.includes('import { createRecordReminderBindings } from 
   throw new Error("record-reminder-tools.tsx must import createRecordReminderBindings");
 }
 
+if (!reminderToolsSource.includes('import { buildRecordReminderPanelProps } from "./record-reminder-tools-panel-props";')) {
+  throw new Error("record-reminder-tools.tsx must import buildRecordReminderPanelProps");
+}
+
 if (!reminderToolsSource.includes("createRecordReminderBindings({ onUpdateReminder, setReminderForm })")) {
   throw new Error("record-reminder-tools.tsx must delegate reminder form bindings");
 }
 
-for (const forbiddenToken of ["onMarkReminderDone={(reminder)", "onMessageChange={(value)", "onRemindAtChange={(value)", "onTitleChange={(value)"]) {
+if (!reminderToolsSource.includes("buildRecordReminderPanelProps({ bindings, props })")) {
+  throw new Error("record-reminder-tools.tsx must delegate reminder panel prop assembly");
+}
+
+for (const forbiddenToken of [
+  "onMarkReminderDone={(reminder)",
+  "onMessageChange={(value)",
+  "onRemindAtChange={(value)",
+  "onTitleChange={(value)",
+  "canWriteWorkspace={canWriteWorkspace}",
+  "channelInApp={channelInApp}",
+  "createReminderLabel={createReminderLabel}",
+]) {
   if (reminderToolsSource.includes(forbiddenToken)) {
     throw new Error(`record-reminder-tools.tsx must keep reminder bindings delegated: ${forbiddenToken}`);
   }

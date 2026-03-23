@@ -836,6 +836,10 @@ Last updated: 2026-03-23
   - chat-panel body composition for conversations, management surfaces, audit logs, notifications, messages, and composer now lives in a dedicated content component instead of remaining inline inside `apps/web/components/chat-panel.tsx`
   - the chat-panel shell now focuses more narrowly on action wiring, header rendering, and top-level body delegation
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this body-content boundary for `chat-panel.tsx`
+- Record Reminder Tools Panel Prop Builder Split V1:
+  - record-reminder-tools panel prop assembly now lives in a dedicated builder module instead of remaining inline inside `apps/web/components/record-reminder-tools.tsx`
+  - the reminder-tools shell now focuses more narrowly on record gating, bindings creation, and panel composition while the builder owns prop mapping
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder panel prop-builder boundary for `record-reminder-tools.tsx`
 
 ## Next
 - Continue the next product slice
