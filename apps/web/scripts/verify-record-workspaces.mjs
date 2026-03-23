@@ -114,18 +114,42 @@ if (!browseWorkspaceSource.includes('import type { RecordBrowseWorkspaceProps } 
   throw new Error("record-browse-workspace.tsx must import RecordBrowseWorkspaceProps from record-browse-workspace.types");
 }
 
+if (!browseWorkspaceSource.includes('from "./record-browse-workspace-props";')) {
+  throw new Error("record-browse-workspace.tsx must import record-browse-workspace-props");
+}
+
+if (!browseWorkspaceSource.includes("buildRecordSearchPanelProps(props)")) {
+  throw new Error("record-browse-workspace.tsx must delegate search panel prop assembly");
+}
+
+if (!browseWorkspaceSource.includes("buildMapPanelProps(props)")) {
+  throw new Error("record-browse-workspace.tsx must delegate map panel prop assembly");
+}
+
+if (!browseWorkspaceSource.includes("buildRecordResultsViewProps(props)")) {
+  throw new Error("record-browse-workspace.tsx must delegate results view prop assembly");
+}
+
 for (const forbiddenToken of ["useState(", "useEffect(", "useMemo(", "fetchMediaBlob(", "const handle"]) {
   if (browseWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-browse-workspace.tsx must remain a composition shell: ${forbiddenToken}`);
   }
 }
 
-for (const forbiddenToken of ["type RecordBrowseWorkspaceProps = {", "Dispatch<SetStateAction<"]) {
+for (const forbiddenToken of [
+  "type RecordBrowseWorkspaceProps = {",
+  "Dispatch<SetStateAction<",
+  "onAvoidOnlyChange={(value)",
+  "onQueryChange={(value)",
+  "onTypeCodeChange={(value)",
+  "<MapPanel\n        records=",
+  "<RecordResultsView\n        avoidLabel=",
+]) {
   if (browseWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-browse-workspace.tsx must keep its props contract delegated: ${forbiddenToken}`);
   }
 }
 
-verifyLineLimit(browseWorkspacePath, 170);
+verifyLineLimit(browseWorkspacePath, 120);
 
 console.log("record workspaces verification passed");

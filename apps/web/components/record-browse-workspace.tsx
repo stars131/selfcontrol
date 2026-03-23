@@ -5,150 +5,46 @@ import { RecordPanelStats } from "./record-panel-stats";
 import { RecordResultsView } from "./record-results-view";
 import { RecordSearchPanel } from "./record-search-panel";
 import { SearchPresetList } from "./search-preset-list";
+import {
+  buildMapPanelProps,
+  buildRecordResultsViewProps,
+  buildRecordSearchPanelProps,
+} from "./record-browse-workspace-props";
 import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types";
 
-export function RecordBrowseWorkspace({
-  canWriteWorkspace,
-  filteringRecords,
-  savingSearchPreset,
-  records,
-  timelineDays,
-  selectedRecordId,
-  recordFilter,
-  filterDraft,
-  setFilterDraft,
-  presetName,
-  setPresetName,
-  searchPresets,
-  viewMode,
-  setViewMode,
-  draftLocation,
-  onDraftLocationChange,
-  panelCopy,
-  applyPresetLabel,
-  deletePresetLabel,
-  noSavedFiltersLabel,
-  savedPresetLabel,
-  currentFilterSummary,
-  avoidCount,
-  foodCount,
-  visibleRecordCount,
-  visibleRecordsLabel,
-  foodLabel,
-  avoidStatsLabel,
-  avoidRecordLabel,
-  flatListViewLabel,
-  mapPrefixLabel,
-  noContentLabel,
-  noRecordsLabel,
-  ratingPrefixLabel,
-  timelineDayLabel,
-  timelineViewLabel,
-  unknownPlaceLabel,
-  untitledRecordLabel,
-  formatAvoidCountLabel,
-  formatRecordTimestampLabel,
-  formatReviewStatusLabel,
-  formatTimelineCountLabel,
-  formatTimelineDateLabel,
-  summarizeRecordFilterLabel,
-  onApplyFilter,
-  onApplyLocationFilter,
-  onApplyPreset,
-  onDeletePreset,
-  onResetFilter,
-  onSavePreset,
-  onSelectRecord,
-}: RecordBrowseWorkspaceProps) {
+export function RecordBrowseWorkspace(props: RecordBrowseWorkspaceProps) {
+  const searchPanelProps = buildRecordSearchPanelProps(props);
+  const mapPanelProps = buildMapPanelProps(props);
+  const resultsViewProps = buildRecordResultsViewProps(props);
+
   return (
     <>
       <RecordPanelStats
-        avoidCount={avoidCount}
-        avoidLabel={avoidStatsLabel}
-        foodCount={foodCount}
-        foodLabel={foodLabel}
-        visibleRecordCount={visibleRecordCount}
-        visibleRecordsLabel={visibleRecordsLabel}
+        avoidCount={props.avoidCount}
+        avoidLabel={props.avoidStatsLabel}
+        foodCount={props.foodCount}
+        foodLabel={props.foodLabel}
+        visibleRecordCount={props.visibleRecordCount}
+        visibleRecordsLabel={props.visibleRecordsLabel}
       />
 
-      <RecordSearchPanel
-        canWriteWorkspace={canWriteWorkspace}
-        currentFilterSummary={currentFilterSummary}
-        filterDraft={filterDraft}
-        filteringRecords={filteringRecords}
-        onApplyFilter={onApplyFilter}
-        onAvoidOnlyChange={(value) =>
-          setFilterDraft((current) => ({
-            ...current,
-            avoidOnly: value,
-          }))
-        }
-        onPresetNameChange={setPresetName}
-        onQueryChange={(value) =>
-          setFilterDraft((current) => ({
-            ...current,
-            query: value,
-          }))
-        }
-        onResetFilter={onResetFilter}
-        onSavePreset={onSavePreset}
-        onTypeCodeChange={(value) =>
-          setFilterDraft((current) => ({
-            ...current,
-            typeCode: value,
-          }))
-        }
-        panelCopy={panelCopy}
-        presetName={presetName}
-        savingSearchPreset={savingSearchPreset}
-      />
+      <RecordSearchPanel {...searchPanelProps} />
       <SearchPresetList
-        applyPresetLabel={applyPresetLabel}
-        canWriteWorkspace={canWriteWorkspace}
-        deletePresetLabel={deletePresetLabel}
-        emptyLabel={noSavedFiltersLabel}
-        filteringRecords={filteringRecords}
-        onApplyPreset={onApplyPreset}
-        onDeletePreset={onDeletePreset}
-        presets={searchPresets}
-        savedPresetLabel={savedPresetLabel}
-        summarizeRecordFilterLabel={summarizeRecordFilterLabel}
+        applyPresetLabel={props.applyPresetLabel}
+        canWriteWorkspace={props.canWriteWorkspace}
+        deletePresetLabel={props.deletePresetLabel}
+        emptyLabel={props.noSavedFiltersLabel}
+        filteringRecords={props.filteringRecords}
+        onApplyPreset={props.onApplyPreset}
+        onDeletePreset={props.onDeletePreset}
+        presets={props.searchPresets}
+        savedPresetLabel={props.savedPresetLabel}
+        summarizeRecordFilterLabel={props.summarizeRecordFilterLabel}
       />
 
-      <MapPanel
-        records={records}
-        selectedRecordId={selectedRecordId}
-        onSelectRecord={onSelectRecord}
-        filteringRecords={filteringRecords}
-        locationFilter={recordFilter}
-        onApplyLocationFilter={onApplyLocationFilter}
-        draftLocation={draftLocation}
-        onDraftLocationChange={onDraftLocationChange}
-      />
+      <MapPanel {...mapPanelProps} />
 
-      <RecordResultsView
-        avoidLabel={avoidRecordLabel}
-        flatListViewLabel={flatListViewLabel}
-        formatAvoidCountLabel={formatAvoidCountLabel}
-        formatRecordTimestampLabel={formatRecordTimestampLabel}
-        formatReviewStatusLabel={formatReviewStatusLabel}
-        formatTimelineCountLabel={formatTimelineCountLabel}
-        formatTimelineDateLabel={formatTimelineDateLabel}
-        mapPrefixLabel={mapPrefixLabel}
-        noContentLabel={noContentLabel}
-        noRecordsLabel={noRecordsLabel}
-        onSelectRecord={(recordId) => onSelectRecord(recordId)}
-        onViewModeChange={setViewMode}
-        ratingPrefixLabel={ratingPrefixLabel}
-        records={records}
-        selectedRecordId={selectedRecordId}
-        timelineDayLabel={timelineDayLabel}
-        timelineDays={timelineDays}
-        timelineViewLabel={timelineViewLabel}
-        unknownPlaceLabel={unknownPlaceLabel}
-        untitledRecordLabel={untitledRecordLabel}
-        viewMode={viewMode}
-      />
+      <RecordResultsView {...resultsViewProps} />
     </>
   );
 }

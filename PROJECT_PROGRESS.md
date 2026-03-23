@@ -660,10 +660,14 @@ Last updated: 2026-03-23
   - record results switcher, timeline view, flat list view, shared card renderer, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-results-view.tsx`
   - the record results shell now focuses more narrowly on shared-card props assembly and view-mode switching while dedicated modules own switcher UI and result rendering modes
   - `apps/web/scripts/verify-record-results-view-structure.mjs` and `apps/web/package.json` now make this results-view boundary executable
+- Record Browse Workspace Props Extraction V1:
+  - record browse workspace search/map/results prop builders now live in `apps/web/components/record-browse-workspace-props.ts` instead of remaining inline inside `record-browse-workspace.tsx`
+  - the browse workspace shell now focuses more narrowly on section composition while dedicated helper builders own search panel, map panel, and results view prop assembly
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this browse-workspace prop boundary and lowers the browse workspace size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record results view extraction
+- Continue simplifying remaining large UI module boundaries after the record browse workspace props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
