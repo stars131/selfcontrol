@@ -7,6 +7,14 @@ const workspaceEntryControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-entry-controller.ts",
 );
+const workspaceEntryControllerStatePath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-controller-state.ts",
+);
+const workspaceEntryControllerDerivedDataPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-controller-derived-data.ts",
+);
 const workspaceEntryActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-controller-actions.ts",
@@ -19,12 +27,19 @@ const workspaceEntryCopyPath = path.resolve(process.cwd(), "components/workspace
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
+const controllerStateSource = fs.readFileSync(workspaceEntryControllerStatePath, "utf8");
+const controllerDerivedDataSource = fs.readFileSync(
+  workspaceEntryControllerDerivedDataPath,
+  "utf8",
+);
 const actionsSource = fs.readFileSync(workspaceEntryActionsPath, "utf8");
 const workspaceActionsSource = fs.readFileSync(workspaceEntryWorkspaceActionsPath, "utf8");
 const copySource = fs.readFileSync(workspaceEntryCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const controllerStateLineCount = controllerStateSource.split(/\r?\n/).length;
+const controllerDerivedDataLineCount = controllerDerivedDataSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const workspaceActionsLineCount = workspaceActionsSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
@@ -121,9 +136,10 @@ if (mainPanelLineCount > maxMainPanelLines) {
 
 for (const requiredControllerImport of [
   'from "./workspace-entry-controller-actions";',
-  'from "./workspace-entry-controller-helpers";',
   'from "./workspace-entry-controller.types";',
   'from "./use-workspace-entry-load";',
+  'from "./use-workspace-entry-controller-derived-data";',
+  'from "./use-workspace-entry-controller-state";',
 ]) {
   if (!controllerSource.includes(requiredControllerImport)) {
     throw new Error(`use-workspace-entry-controller.ts must import delegated helpers: ${requiredControllerImport}`);
@@ -131,10 +147,10 @@ for (const requiredControllerImport of [
 }
 
 for (const requiredControllerUsage of [
+  "useWorkspaceEntryControllerState()",
+  "useWorkspaceEntryControllerDerivedData({",
   "createWorkspaceEntryControllerActions({ router, state })",
   "useWorkspaceEntryLoad({",
-  "slugifyWorkspaceName(name)",
-  "extractWorkspaceShareToken(shareTokenInput)",
   "...state",
 ]) {
   if (!controllerSource.includes(requiredControllerUsage)) {
@@ -146,6 +162,9 @@ for (const forbiddenControllerToken of [
   'from "../lib/api";',
   'from "../lib/auth";',
   "useEffect(",
+  "useMemo(",
+  "useRef(",
+  "useState(",
   "function slugify",
   "function extractShareToken",
   "const loadTransferJobs =",
@@ -162,10 +181,95 @@ for (const forbiddenControllerToken of [
   }
 }
 
-const maxControllerLines = 130;
+const maxControllerLines = 80;
 if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-workspace-entry-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
+  );
+}
+
+for (const requiredControllerStateImport of ['from "./workspace-entry-controller.types";']) {
+  if (!controllerStateSource.includes(requiredControllerStateImport)) {
+    throw new Error(
+      `use-workspace-entry-controller-state.ts must import shared controller state types: ${requiredControllerStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerStateUsage of [
+  "useRef<",
+  "useState(",
+  "fileInputRef",
+  "jobsLoading",
+  "setJobsLoading",
+]) {
+  if (!controllerStateSource.includes(requiredControllerStateUsage)) {
+    throw new Error(
+      `use-workspace-entry-controller-state.ts must own controller state registration: ${requiredControllerStateUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerStateToken of [
+  "useMemo(",
+  "slugifyWorkspaceName(",
+  "extractWorkspaceShareToken(",
+  "createWorkspaceEntryControllerActions(",
+  "useWorkspaceEntryLoad(",
+]) {
+  if (controllerStateSource.includes(forbiddenControllerStateToken)) {
+    throw new Error(
+      `use-workspace-entry-controller-state.ts must keep orchestration delegated: ${forbiddenControllerStateToken}`,
+    );
+  }
+}
+
+const maxControllerStateLines = 80;
+if (controllerStateLineCount > maxControllerStateLines) {
+  throw new Error(
+    `use-workspace-entry-controller-state.ts exceeded ${maxControllerStateLines} lines: ${controllerStateLineCount}`,
+  );
+}
+
+for (const requiredControllerDerivedDataImport of [
+  'from "./workspace-entry-controller-helpers";',
+]) {
+  if (!controllerDerivedDataSource.includes(requiredControllerDerivedDataImport)) {
+    throw new Error(
+      `use-workspace-entry-controller-derived-data.ts must import controller helpers: ${requiredControllerDerivedDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerDerivedDataUsage of [
+  "useMemo(",
+  "slugifyWorkspaceName(name)",
+  "extractWorkspaceShareToken(shareTokenInput)",
+]) {
+  if (!controllerDerivedDataSource.includes(requiredControllerDerivedDataUsage)) {
+    throw new Error(
+      `use-workspace-entry-controller-derived-data.ts must own memoized derived values: ${requiredControllerDerivedDataUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerDerivedDataToken of [
+  "useRef(",
+  "useState(",
+  "createWorkspaceEntryControllerActions(",
+  "useWorkspaceEntryLoad(",
+]) {
+  if (controllerDerivedDataSource.includes(forbiddenControllerDerivedDataToken)) {
+    throw new Error(
+      `use-workspace-entry-controller-derived-data.ts must keep orchestration delegated: ${forbiddenControllerDerivedDataToken}`,
+    );
+  }
+}
+
+const maxControllerDerivedDataLines = 35;
+if (controllerDerivedDataLineCount > maxControllerDerivedDataLines) {
+  throw new Error(
+    `use-workspace-entry-controller-derived-data.ts exceeded ${maxControllerDerivedDataLines} lines: ${controllerDerivedDataLineCount}`,
   );
 }
 

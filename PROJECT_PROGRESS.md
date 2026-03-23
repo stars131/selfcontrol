@@ -872,6 +872,10 @@ Last updated: 2026-03-23
   - workspace-shell initial-data bootstrap loading and post-bootstrap managed follow-up loading now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-shell-initial-load-helpers.ts`
   - the initial-load helper now focuses more narrowly on sequencing startup phases while delegated helpers own bootstrap and follow-up loading details
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these startup helper boundaries and a size ceiling for `workspace-shell-initial-load-helpers.ts`
+- Workspace Entry Controller State and Derived Data Split V1:
+  - workspace-entry controller state registration and memoized slug/share-token derivation now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-workspace-entry-controller.ts`
+  - the top-level workspace-entry controller hook now focuses more narrowly on composing state, derived data, initial-load wiring, and action handlers
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these controller helper boundaries and tighter size ceilings for the top-level hook
 
 ## Next
 - Continue the next product slice

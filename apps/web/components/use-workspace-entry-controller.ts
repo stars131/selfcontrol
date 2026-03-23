@@ -1,100 +1,28 @@
 "use client";
 
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import type { FormEvent } from "react";
 
-import type {
-  SharePreview,
-  User,
-  Workspace,
-  WorkspaceTransferJob,
-} from "../lib/types";
 import { createWorkspaceEntryControllerActions } from "./workspace-entry-controller-actions";
-import {
-  extractWorkspaceShareToken,
-  slugifyWorkspaceName,
-} from "./workspace-entry-controller-helpers";
-import type {
-  RouterLike,
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { RouterLike } from "./workspace-entry-controller.types";
 import { useWorkspaceEntryLoad } from "./use-workspace-entry-load";
+import { useWorkspaceEntryControllerDerivedData } from "./use-workspace-entry-controller-derived-data";
+import { useWorkspaceEntryControllerState } from "./use-workspace-entry-controller-state";
 
 export function useWorkspaceEntryController(router: RouterLike) {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
-  const [name, setName] = useState("");
-  const [shareTokenInput, setShareTokenInput] = useState("");
-  const [importName, setImportName] = useState("");
-  const [importSlug, setImportSlug] = useState("");
-  const [importFile, setImportFile] = useState<File | null>(null);
-  const [transferJobs, setTransferJobs] = useState<WorkspaceTransferJob[]>([]);
-  const [sharePreview, setSharePreview] = useState<SharePreview | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [creating, setCreating] = useState(false);
-  const [importing, setImporting] = useState(false);
-  const [queueingImportJob, setQueueingImportJob] = useState(false);
-  const [joining, setJoining] = useState(false);
-  const [previewing, setPreviewing] = useState(false);
-  const [jobsLoading, setJobsLoading] = useState(false);
-
-  const suggestedSlug = useMemo(() => slugifyWorkspaceName(name), [name]);
-  const normalizedShareToken = useMemo(
-    () => extractWorkspaceShareToken(shareTokenInput),
-    [shareTokenInput],
-  );
-
-  const state: WorkspaceEntryControllerState = {
-    fileInputRef,
-    token,
-    setToken,
-    user,
-    setUser,
-    workspaces,
-    setWorkspaces,
-    name,
-    setName,
-    shareTokenInput,
-    setShareTokenInput,
-    importName,
-    setImportName,
-    importSlug,
-    setImportSlug,
-    importFile,
-    setImportFile,
-    transferJobs,
-    setTransferJobs,
-    sharePreview,
-    setSharePreview,
-    loading,
-    setLoading,
-    error,
-    setError,
-    creating,
-    setCreating,
-    importing,
-    setImporting,
-    queueingImportJob,
-    setQueueingImportJob,
-    joining,
-    setJoining,
-    previewing,
-    setPreviewing,
-    jobsLoading,
-    setJobsLoading,
-  };
-
+  const state = useWorkspaceEntryControllerState();
+  const { normalizedShareToken, suggestedSlug } = useWorkspaceEntryControllerDerivedData({
+    name: state.name,
+    shareTokenInput: state.shareTokenInput,
+  });
   const actions = createWorkspaceEntryControllerActions({ router, state });
   useWorkspaceEntryLoad({
     loadTransferJobs: actions.loadTransferJobs,
     router,
-    setError,
-    setLoading,
-    setToken,
-    setUser,
-    setWorkspaces,
+    setError: state.setError,
+    setLoading: state.setLoading,
+    setToken: state.setToken,
+    setUser: state.setUser,
+    setWorkspaces: state.setWorkspaces,
   });
 
   return {
@@ -105,8 +33,8 @@ export function useWorkspaceEntryController(router: RouterLike) {
       actions.handleCreate(event, suggestedSlug),
     handleImportWorkspace: actions.handleImportWorkspace,
     handleQueueImportJob: actions.handleQueueImportJob,
-    handlePreviewShare: () => actions.handlePreviewShare(shareTokenInput),
-    handleAcceptShare: () => actions.handleAcceptShare(shareTokenInput),
+    handlePreviewShare: () => actions.handlePreviewShare(state.shareTokenInput),
+    handleAcceptShare: () => actions.handleAcceptShare(state.shareTokenInput),
     handleLogout: actions.handleLogout,
     handleDownloadTransferJob: actions.handleDownloadTransferJob,
     loadTransferJobs: actions.loadTransferJobs,
