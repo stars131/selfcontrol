@@ -27,6 +27,8 @@ type UseMapPanelControllerProps = {
   mapRef: { current: AMapMapInstance | null };
 };
 
+export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;
+
 function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
   return caught instanceof Error ? caught.message : fallbackMessage;
 }
@@ -35,6 +37,7 @@ export function useMapPanelController({
   records,
   selectedRecordId,
   locationFilter,
+  filteringRecords,
   onApplyLocationFilter,
   draftLocation,
   onDraftLocationChange,
@@ -152,6 +155,7 @@ export function useMapPanelController({
     searching,
     searchQuery,
     filterDraft,
+    filteringRecords,
     mappedRecords,
     confirmedCount,
     needsReviewCount,

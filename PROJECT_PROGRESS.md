@@ -680,10 +680,14 @@ Last updated: 2026-03-23
   - provider settings branching and owner/editor follow-up sections now live in dedicated provider and managed section components instead of remaining inline inside `apps/web/components/workspace-settings-client.tsx`
   - the workspace settings shell now focuses more narrowly on routing, locale, controller wiring, and top-level page composition while dedicated sections own viewer gating and owner/editor-only settings surfaces
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces both section boundaries and lowers the workspace settings shell size ceiling again
+- Map Panel Content Extraction V1:
+  - map content composition, missing-key fallback, and top-level map props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/map-panel.tsx`
+  - the map panel shell now focuses more narrowly on refs, controller wiring, and AMap lifecycle while dedicated components own main layout rendering and unavailable-state presentation
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these boundaries and lowers the map panel shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace settings sections extraction
+- Continue simplifying remaining large UI module boundaries after the map panel content extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
