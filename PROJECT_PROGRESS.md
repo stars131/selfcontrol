@@ -912,6 +912,10 @@ Last updated: 2026-03-23
   - retention-card copy/controller-input helpers and action/message helpers now live in separate dedicated modules instead of remaining combined inside `apps/web/components/workspace-media-retention-card-helpers.ts`
   - the top-level retention helper file now focuses more narrowly on acting as a stable re-export boundary while specialized helper modules own copy mapping and action wiring logic
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces this helper re-export boundary and separate size ceilings for the new helper modules
+- Media Storage Health Card Capability Split V1:
+  - media-storage-health shared prop typing and capability-grid rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/media-storage-health-card.tsx`
+  - the health-card shell now focuses more narrowly on top-level status, refresh, and metadata rendering while the extracted modules own capability presentation and shared card contracts
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these media-storage-health boundaries and dedicated size ceilings
 
 ## Next
 - Continue the next product slice

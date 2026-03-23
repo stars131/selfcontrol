@@ -1,23 +1,7 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
-import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
-
-type MediaStorageHealthCopy = {
-  storageHealth: string;
-  refreshHealth: string;
-  refreshing: string;
-  secret: string;
-  reachable: string;
-  unreachable: string;
-  available: string;
-  unavailable: string;
-  upload: string;
-  download: string;
-  delete: string;
-  checkedAt: string;
-  endpointRoot: string;
-};
+import { MediaStorageHealthCapabilities } from "./media-storage-health-capabilities";
+import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types";
 
 export function MediaStorageHealthCard({
   copy,
@@ -28,16 +12,7 @@ export function MediaStorageHealthCard({
   onRefreshMediaStorageHealth,
   formatSecretStatus,
   readAnchorHighlightClass,
-}: {
-  copy: MediaStorageHealthCopy;
-  locale: LocaleCode;
-  mediaStorageHealth: MediaStorageProviderHealth;
-  refreshingMediaStorageHealth: boolean;
-  highlightedAnchor?: string | null;
-  onRefreshMediaStorageHealth?: (() => Promise<void>) | null;
-  formatSecretStatus: (status: ProviderFeatureConfig["secret_status"]) => string;
-  readAnchorHighlightClass: (targetId: string, highlightedAnchor?: string | null) => string;
-}) {
+}: MediaStorageHealthCardProps) {
   return (
     <div
       className={`record-card form-stack${readAnchorHighlightClass("provider-media_storage-health", highlightedAnchor)}`}
@@ -83,26 +58,7 @@ export function MediaStorageHealthCard({
           <span className="tag">{mediaStorageHealth.response_time_ms} ms</span>
         ) : null}
       </div>
-      <div className="detail-grid">
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.upload}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {mediaStorageHealth.capabilities.upload ? copy.available : copy.unavailable}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.download}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {mediaStorageHealth.capabilities.download ? copy.available : copy.unavailable}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.delete}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {mediaStorageHealth.capabilities.delete ? copy.available : copy.unavailable}
-          </div>
-        </div>
-      </div>
+      <MediaStorageHealthCapabilities copy={copy} mediaStorageHealth={mediaStorageHealth} />
       <div className="muted">
         {copy.checkedAt} {new Date(mediaStorageHealth.checked_at).toLocaleString(locale)}
       </div>
