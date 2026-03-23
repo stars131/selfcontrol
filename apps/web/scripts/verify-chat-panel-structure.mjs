@@ -17,6 +17,8 @@ const chatPanelManagementSectionPath = path.resolve(
   "components/chat-panel-management-section.tsx",
 );
 const chatPanelManagementSectionSource = fs.readFileSync(chatPanelManagementSectionPath, "utf8");
+const chatPanelActionsPath = path.resolve(process.cwd(), "components/use-chat-panel-actions.ts");
+const chatPanelActionsSource = fs.readFileSync(chatPanelActionsPath, "utf8");
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -134,6 +136,27 @@ if (!chatMessageThreadSource.includes("<ChatMessageSources")) {
   throw new Error("chat-message-thread.tsx must delegate assistant source rendering to ChatMessageSources");
 }
 
+for (const requiredActionsImport of [
+  'from "./chat-panel-action-helpers";',
+  'from "./chat-panel-operator-handlers";',
+  'from "./chat-panel-share-handlers";',
+]) {
+  if (!chatPanelActionsSource.includes(requiredActionsImport)) {
+    throw new Error(`use-chat-panel-actions.ts must import delegated action helpers: ${requiredActionsImport}`);
+  }
+}
+
+for (const requiredActionsUsage of [
+  "countUnreadNotifications(notifications)",
+  "buildChatShareUrl(latestSharePath)",
+  "createChatPanelOperatorHandlers({",
+  "createChatPanelShareHandlers({",
+]) {
+  if (!chatPanelActionsSource.includes(requiredActionsUsage)) {
+    throw new Error(`use-chat-panel-actions.ts must delegate action helper logic: ${requiredActionsUsage}`);
+  }
+}
+
 for (const forbiddenToken of [
   "function buildShareUrl",
   "useState(",
@@ -169,6 +192,12 @@ for (const forbiddenToken of [
 const maxAllowedLines = 140;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+const maxActionsLines = 120;
+const actionsLineCount = chatPanelActionsSource.split(/\r?\n/).length;
+if (actionsLineCount > maxActionsLines) {
+  throw new Error(`use-chat-panel-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`);
 }
 
 console.log("chat-panel structure verification passed");

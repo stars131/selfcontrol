@@ -720,10 +720,14 @@ Last updated: 2026-03-23
   - map-panel location search flow and location-filter helper logic now live in dedicated controller helper modules instead of remaining inline inside `apps/web/components/use-map-panel-controller.ts`
   - the controller hook now focuses more narrowly on state, derived data, and handler orchestration while dedicated helpers own geocoder result parsing and filter-shape creation
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these controller-helper boundaries and a size ceiling for `use-map-panel-controller.ts`
+- Chat Panel Action Helper Extraction V1:
+  - chat-panel share-url/error helpers and operator/share action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-chat-panel-actions.ts`
+  - the chat action hook now focuses more narrowly on state registration and handler assembly while dedicated helpers own share payload shaping and async action flows
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these action-helper boundaries and a size ceiling for `use-chat-panel-actions.ts`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the map panel controller helper extraction
+- Continue simplifying remaining large UI module boundaries after the chat panel action helper extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
