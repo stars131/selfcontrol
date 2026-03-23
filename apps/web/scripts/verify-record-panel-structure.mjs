@@ -2,15 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 
 const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.tsx");
+const legacyRecordPanelPath = path.resolve(process.cwd(), "components/record-panel.tsx");
 const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props.ts",
 );
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
+const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
+const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 
@@ -150,6 +153,48 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 220;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredLegacyImport of [
+  'import { RecordPanelLegacyForm } from "./record-panel-legacy-form";',
+  'import { RecordPanelLegacyList } from "./record-panel-legacy-list";',
+  'import { RecordPanelLegacyStats } from "./record-panel-legacy-stats";',
+  'import type { RecordPanelFormState, RecordPanelProps } from "./record-panel.types";',
+]) {
+  if (!legacyRecordPanelSource.includes(requiredLegacyImport)) {
+    throw new Error(`record-panel.tsx must import delegated legacy helpers: ${requiredLegacyImport}`);
+  }
+}
+
+for (const requiredLegacyUsage of [
+  "<RecordPanelLegacyStats",
+  "<RecordPanelLegacyForm",
+  "<RecordPanelLegacyList",
+]) {
+  if (!legacyRecordPanelSource.includes(requiredLegacyUsage)) {
+    throw new Error(`record-panel.tsx must compose delegated legacy sections: ${requiredLegacyUsage}`);
+  }
+}
+
+for (const forbiddenLegacyToken of [
+  'import type { MediaAsset, RecordItem } from "../lib/types";',
+  'className="panel-header"',
+  'className="stats-grid"',
+  'className="record-card form-stack"',
+  'className="record-list compact-list"',
+  "records.map((record) => (",
+  "mediaAssets.map((asset) => (",
+]) {
+  if (legacyRecordPanelSource.includes(forbiddenLegacyToken)) {
+    throw new Error(`record-panel.tsx must keep legacy layout details delegated: ${forbiddenLegacyToken}`);
+  }
+}
+
+const maxLegacyRecordPanelLines = 150;
+if (legacyRecordPanelLines > maxLegacyRecordPanelLines) {
+  throw new Error(
+    `record-panel.tsx exceeded ${maxLegacyRecordPanelLines} lines: ${legacyRecordPanelLines}`,
+  );
 }
 
 console.log("record-panel structure verification passed");

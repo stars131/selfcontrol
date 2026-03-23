@@ -740,6 +740,10 @@ Last updated: 2026-03-23
   - workspace-settings anchor sync, initial-load flow, and member/provider action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-settings-controller.ts`
   - the workspace-settings controller now focuses more narrowly on state registration and helper assembly while shared controller types own its long-term contract
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-settings-controller.ts`
+- Legacy Record Panel Section Extraction V1:
+  - legacy record-panel stats, form, list, and prop typing now live in dedicated modules instead of remaining inline inside `apps/web/components/record-panel.tsx`
+  - the legacy record-panel shell now focuses more narrowly on local state and async handlers while delegated sections own layout-heavy presentation
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy panel boundaries and a size ceiling for `record-panel.tsx`
 
 ## Next
 - Continue the next product slice
