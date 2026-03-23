@@ -1,23 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
+import { createRecordPanelLegacyActions } from "./record-panel-legacy-actions";
 import { RecordPanelLegacyForm } from "./record-panel-legacy-form";
 import { RecordPanelLegacyList } from "./record-panel-legacy-list";
+import { useRecordPanelLegacyState } from "./record-panel-legacy-state";
 import { RecordPanelLegacyStats } from "./record-panel-legacy-stats";
-import type { RecordPanelFormState, RecordPanelProps } from "./record-panel.types";
-
-const EMPTY_FORM: RecordPanelFormState = {
-  title: "",
-  content: "",
-  type_code: "memo",
-  rating: "",
-  is_avoid: false,
-};
-
-function getRecordPanelErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
+import { useRecordPanelLegacySync } from "./record-panel-legacy-sync";
+import type { RecordPanelProps } from "./record-panel.types";
 
 export function RecordPanel({
   workspaceId,
@@ -36,82 +27,30 @@ export function RecordPanel({
     () => records.find((record) => record.id === selectedRecordId) ?? null,
     [records, selectedRecordId],
   );
-  const [form, setForm] = useState<RecordPanelFormState>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!selectedRecord) {
-      setForm(EMPTY_FORM);
-      return;
-    }
-    setForm({
-      title: selectedRecord.title ?? "",
-      content: selectedRecord.content ?? "",
-      type_code: selectedRecord.type_code,
-      rating: selectedRecord.rating ? String(selectedRecord.rating) : "",
-      is_avoid: selectedRecord.is_avoid,
-    });
-  }, [selectedRecord]);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!form.content.trim()) {
-      setError("Content is required");
-      return;
-    }
-
-    setSaving(true);
-    setError("");
-    try {
-      await onSaveRecord({
-        recordId: selectedRecord?.id,
-        title: form.title.trim() || undefined,
-        content: form.content.trim(),
-        type_code: form.type_code,
-        rating: form.rating ? Number(form.rating) : null,
-        is_avoid: form.is_avoid,
-      });
-    } catch (caught) {
-      setError(getRecordPanelErrorMessage(caught, "Failed to save record"));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!selectedRecord) {
-      return;
-    }
-    setDeleting(true);
-    setError("");
-    try {
-      await onDeleteRecord(selectedRecord.id);
-    } catch (caught) {
-      setError(getRecordPanelErrorMessage(caught, "Failed to delete record"));
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !selectedRecord) {
-      return;
-    }
-    setUploading(true);
-    setError("");
-    try {
-      await onUploadMedia(selectedRecord.id, file);
-      event.target.value = "";
-    } catch (caught) {
-      setError(getRecordPanelErrorMessage(caught, "Failed to upload media"));
-    } finally {
-      setUploading(false);
-    }
-  };
+  const {
+    form,
+    setForm,
+    saving,
+    setSaving,
+    deleting,
+    setDeleting,
+    uploading,
+    setUploading,
+    error,
+    setError,
+  } = useRecordPanelLegacyState();
+  useRecordPanelLegacySync({ selectedRecord, setForm });
+  const { handleSubmit, handleDelete, handleUpload } = createRecordPanelLegacyActions({
+    form,
+    onDeleteRecord,
+    onSaveRecord,
+    onUploadMedia,
+    selectedRecord,
+    setDeleting,
+    setError,
+    setSaving,
+    setUploading,
+  });
 
   return (
     <section className="panel">

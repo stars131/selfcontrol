@@ -326,10 +326,13 @@ if (mediaHandlersLines > maxMediaHandlersLines) {
 }
 
 for (const requiredLegacyImport of [
+  'import { createRecordPanelLegacyActions } from "./record-panel-legacy-actions";',
   'import { RecordPanelLegacyForm } from "./record-panel-legacy-form";',
   'import { RecordPanelLegacyList } from "./record-panel-legacy-list";',
+  'import { useRecordPanelLegacyState } from "./record-panel-legacy-state";',
   'import { RecordPanelLegacyStats } from "./record-panel-legacy-stats";',
-  'import type { RecordPanelFormState, RecordPanelProps } from "./record-panel.types";',
+  'import { useRecordPanelLegacySync } from "./record-panel-legacy-sync";',
+  'import type { RecordPanelProps } from "./record-panel.types";',
 ]) {
   if (!legacyRecordPanelSource.includes(requiredLegacyImport)) {
     throw new Error(`record-panel.tsx must import delegated legacy helpers: ${requiredLegacyImport}`);
@@ -337,6 +340,9 @@ for (const requiredLegacyImport of [
 }
 
 for (const requiredLegacyUsage of [
+  "useRecordPanelLegacyState()",
+  "useRecordPanelLegacySync({ selectedRecord, setForm })",
+  "createRecordPanelLegacyActions({",
   "<RecordPanelLegacyStats",
   "<RecordPanelLegacyForm",
   "<RecordPanelLegacyList",
@@ -352,6 +358,12 @@ for (const forbiddenLegacyToken of [
   'className="stats-grid"',
   'className="record-card form-stack"',
   'className="record-list compact-list"',
+  "useEffect(",
+  "useState(",
+  "const EMPTY_FORM",
+  "const handleSubmit",
+  "const handleDelete",
+  "const handleUpload",
   "records.map((record) => (",
   "mediaAssets.map((asset) => (",
 ]) {

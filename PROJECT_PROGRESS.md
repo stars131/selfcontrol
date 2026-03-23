@@ -840,6 +840,10 @@ Last updated: 2026-03-23
   - record-reminder-tools panel prop assembly now lives in a dedicated builder module instead of remaining inline inside `apps/web/components/record-reminder-tools.tsx`
   - the reminder-tools shell now focuses more narrowly on record gating, bindings creation, and panel composition while the builder owns prop mapping
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder panel prop-builder boundary for `record-reminder-tools.tsx`
+- Legacy Record Panel State and Action Split V1:
+  - legacy record-panel local state, selected-record form sync, and save/delete/upload actions now live in dedicated helpers instead of remaining combined inside `apps/web/components/record-panel.tsx`
+  - the legacy panel shell now focuses more narrowly on derived counts, selected-record lookup, and section composition while helper modules own stateful behavior
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy helper boundaries for `record-panel.tsx`
 
 ## Next
 - Continue the next product slice
