@@ -864,6 +864,10 @@ Last updated: 2026-03-23
   - retention card copy bundle lookup, controller input shaping, and action message formatting now live in a dedicated helper module instead of remaining inline inside `apps/web/components/workspace-media-retention-card.tsx`
   - the retention card now focuses more narrowly on controller invocation and section composition while helper functions own derived view setup
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these retention-card helper boundaries
+- Record Panel Controller Handler Group Assembly Split V1:
+  - record-panel controller record-handler and media-handler input assembly now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
+  - the controller hook now focuses more narrowly on state, sync, derived data, grouped handler composition, and final return assembly
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this handler-group assembly boundary for `use-record-panel-controller.ts`
 
 ## Next
 - Continue the next product slice

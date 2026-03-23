@@ -1,8 +1,7 @@
 "use client";
 
 import type { ControllerProps } from "./record-panel-controller.types";
-import { createRecordPanelControllerMediaHandlers } from "./record-panel-controller-media-handlers";
-import { createRecordPanelControllerRecordHandlers } from "./record-panel-controller-record-handlers";
+import { createRecordPanelControllerHandlerGroups } from "./record-panel-controller-handler-groups";
 import { useRecordPanelControllerSync } from "./use-record-panel-controller-sync";
 import { useRecordPanelControllerState } from "./use-record-panel-controller-state";
 import { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
@@ -103,45 +102,40 @@ export function useRecordPanelController({
     setReminderForm,
     setSelectedDeadLetterIds,
   });
-  const recordHandlers = createRecordPanelControllerRecordHandlers({
+  const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups({
+    authToken,
     detailCopy,
     filterDraft,
     form,
     locationReviewForm,
+    mediaDeadLetterOverview,
     onApplyRecordFilter,
+    onBulkRetryMediaDeadLetter,
     onCreateReminder,
     onCreateSearchPreset,
     onDeleteRecord,
     onDeleteSearchPreset,
     onSaveRecord,
-    presetName,
-    reminderForm,
-    selectedRecord,
-    setDeleting,
-    setError,
-    setForm,
-    setPresetName,
-    setReminderForm,
-    setSaving,
-    setSavingReminder,
-  });
-  const mediaHandlers = createRecordPanelControllerMediaHandlers({
-    authToken,
-    detailCopy,
-    mediaDeadLetterOverview,
-    onBulkRetryMediaDeadLetter,
     onDeleteMedia,
     onRefreshMediaStatus,
     onRetryMedia,
     onUploadMedia,
+    presetName,
+    reminderForm,
     selectedDeadLetterIds,
     selectedRecord,
     setBulkRetryingDeadLetter,
+    setDeleting,
     setDeletingMediaId,
     setDownloadingMediaId,
     setError,
+    setForm,
+    setPresetName,
     setRefreshingMediaId,
+    setReminderForm,
     setRetryingMediaId,
+    setSaving,
+    setSavingReminder,
     setSelectedDeadLetterIds,
     setUploading,
     workspaceId,

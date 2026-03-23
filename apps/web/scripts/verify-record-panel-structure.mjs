@@ -213,8 +213,7 @@ if (shellPropsLines > maxShellPropsLines) {
 
 for (const requiredControllerImport of [
   'from "./record-panel-controller.types";',
-  'from "./record-panel-controller-record-handlers";',
-  'from "./record-panel-controller-media-handlers";',
+  'from "./record-panel-controller-handler-groups";',
   'from "./use-record-panel-controller-sync";',
   'from "./use-record-panel-controller-state";',
   'from "./use-record-panel-controller-view-data";',
@@ -228,8 +227,8 @@ for (const requiredControllerUsage of [
   "useRecordPanelControllerSync({",
   "useRecordPanelControllerViewData({",
   "useRecordPanelControllerState(recordFilter)",
-  "createRecordPanelControllerRecordHandlers({",
-  "createRecordPanelControllerMediaHandlers({",
+  "createRecordPanelControllerHandlerGroups({",
+  "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups({",
   "...recordHandlers",
   "...mediaHandlers",
 ]) {
