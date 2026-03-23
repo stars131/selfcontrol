@@ -46,8 +46,71 @@ const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).leng
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 
-if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
-  throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
+for (const requiredRefreshersImport of [
+  'from "./workspace-shell-conversation-refreshers";',
+  'from "./workspace-shell-managed-refreshers";',
+  'from "./workspace-shell-record-media-refreshers";',
+  'from "./workspace-shell-refreshers.types";',
+]) {
+  if (!refreshersSource.includes(requiredRefreshersImport)) {
+    throw new Error(`use-workspace-shell-refreshers.ts must import delegated refresher groups: ${requiredRefreshersImport}`);
+  }
+}
+
+for (const requiredRefreshersUsage of [
+  "createWorkspaceShellConversationRefreshers(props)",
+  "createWorkspaceShellManagedRefreshers(props)",
+  "createWorkspaceShellRecordMediaRefreshers(props)",
+  "...conversationRefreshers",
+  "...managedRefreshers",
+  "...recordMediaRefreshers",
+]) {
+  if (!refreshersSource.includes(requiredRefreshersUsage)) {
+    throw new Error(`use-workspace-shell-refreshers.ts must delegate refresher assembly: ${requiredRefreshersUsage}`);
+  }
+}
+
+for (const forbiddenRefreshersToken of [
+  "INITIAL_RECORD_FILTER",
+  "loadConversationMessagesForWorkspace(",
+  "refreshAuditLogItems(",
+  "refreshKnowledgeStatsData(",
+  "refreshMediaAssets(",
+  "refreshMediaDeadLetterOverviewData(",
+  "refreshMediaProcessingOverviewData(",
+  "refreshMediaStorageSummaryData(",
+  "refreshNotificationItems(",
+  "refreshProviderConfigItems(",
+  "refreshRecordCollection(",
+  "refreshReminderItems(",
+  "refreshSearchPresetItems(",
+  "refreshShareLinkItems(",
+  "syncDueNotificationsAndRefresh(",
+]) {
+  if (refreshersSource.includes(forbiddenRefreshersToken)) {
+    throw new Error(`use-workspace-shell-refreshers.ts must keep refresher internals delegated: ${forbiddenRefreshersToken}`);
+  }
+}
+
+const refreshersLineCount = refreshersSource.split(/\r?\n/).length;
+const maxRefreshersLines = 30;
+if (refreshersLineCount > maxRefreshersLines) {
+  throw new Error(
+    `use-workspace-shell-refreshers.ts exceeded ${maxRefreshersLines} lines: ${refreshersLineCount}`,
+  );
+}
+
+for (const delegatedRefresherPath of [
+  path.resolve(process.cwd(), "components/workspace-shell-conversation-refreshers.ts"),
+  path.resolve(process.cwd(), "components/workspace-shell-managed-refreshers.ts"),
+  path.resolve(process.cwd(), "components/workspace-shell-record-media-refreshers.ts"),
+]) {
+  const delegatedRefresherSource = fs.readFileSync(delegatedRefresherPath, "utf8");
+  if (!delegatedRefresherSource.includes('from "../lib/workspace-shell-refresh";')) {
+    throw new Error(
+      `${path.basename(delegatedRefresherPath)} must import shared refresh helpers from ../lib/workspace-shell-refresh`,
+    );
+  }
 }
 
 if (!source.includes('import { createWorkspaceShellRefreshers } from "./use-workspace-shell-refreshers";')) {

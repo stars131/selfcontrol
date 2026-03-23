@@ -816,6 +816,10 @@ Last updated: 2026-03-23
   - chat-panel local action state registration and unread/share-url derived data now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-chat-panel-actions.ts`
   - the chat action hook now focuses more narrowly on orchestrating handler builders with delegated state and derived data
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these helper boundaries for `use-chat-panel-actions.ts`
+- Workspace Shell Refresher Groups Split V1:
+  - workspace-shell conversation, record/media, and managed-surface refresh helpers now live in dedicated modules instead of remaining combined inside `apps/web/components/use-workspace-shell-refreshers.ts`
+  - the top-level refresher module now focuses more narrowly on composing grouped refreshers while specialized helpers own each data-loading surface
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this refresher assembly boundary and a size ceiling for `use-workspace-shell-refreshers.ts`
 
 ## Next
 - Continue the next product slice
