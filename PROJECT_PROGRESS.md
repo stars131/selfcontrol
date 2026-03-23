@@ -748,6 +748,10 @@ Last updated: 2026-03-23
   - provider-settings draft helpers, draft-sync effect, and save/reset action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-provider-settings-controller.ts`
   - the provider-settings controller now focuses more narrowly on local state registration and helper assembly while shared controller types own its contract
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-provider-settings-controller.ts`
+- Workspace Entry Controller Extraction V1:
+  - workspace-entry string helpers, initial-load flow, and create/import/share action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-entry-controller.ts`
+  - the workspace-entry controller now focuses more narrowly on state registration, memoized derived values, and helper assembly while shared controller types own its contract
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-entry-controller.ts`
 
 ## Next
 - Continue the next product slice
