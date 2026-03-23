@@ -852,6 +852,10 @@ Last updated: 2026-03-23
   - media-asset upload/download/delete actions and refresh/retry status actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-asset-actions.ts`
   - the media-asset action module now focuses more narrowly on composing grouped media action sets while specialized helpers own each workflow
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this media-asset action assembly boundary and a size ceiling for `record-panel-controller-media-asset-actions.ts`
+- Record Panel Record Save and Delete Action Split V1:
+  - record save-submit actions and record delete actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-record-submit-actions.ts`
+  - the record-submit action module now focuses more narrowly on composing grouped save/delete action sets while specialized helpers own each workflow
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this record-submit action assembly boundary and a size ceiling for `record-panel-controller-record-submit-actions.ts`
 
 ## Next
 - Continue the next product slice
