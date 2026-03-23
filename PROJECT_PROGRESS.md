@@ -808,6 +808,10 @@ Last updated: 2026-03-23
   - record-panel save/delete form actions and reminder creation actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-form-actions.ts`
   - the form-actions module now focuses more narrowly on composing grouped action sets while specialized helpers own each workflow
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this form/reminder action assembly boundary and a size ceiling for `record-panel-controller-form-actions.ts`
+- Workspace Shell Admin Action Groups Split V1:
+  - workspace-shell reminder/notification, knowledge/provider, and share-link actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-shell-admin-actions.ts`
+  - the admin-actions module now focuses more narrowly on composing grouped action sets while specialized helpers own each admin workflow
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this admin action assembly boundary and a size ceiling for `workspace-shell-admin-actions.ts`
 
 ## Next
 - Continue the next product slice

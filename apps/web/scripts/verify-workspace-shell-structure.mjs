@@ -22,6 +22,10 @@ const workspaceShellChatRecordActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-record-actions.ts",
 );
+const workspaceShellAdminActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-admin-actions.ts",
+);
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
@@ -31,6 +35,7 @@ const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
 const initialLoadSource = fs.readFileSync(workspaceShellInitialLoadPath, "utf8");
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
+const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
@@ -39,6 +44,7 @@ const effectsLineCount = effectsSource.split(/\r?\n/).length;
 const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
+const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 
 if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
@@ -422,6 +428,57 @@ const maxChatRecordActionsLines = 20;
 if (chatRecordActionsLineCount > maxChatRecordActionsLines) {
   throw new Error(
     `workspace-shell-chat-record-actions.ts exceeded ${maxChatRecordActionsLines} lines: ${chatRecordActionsLineCount}`,
+  );
+}
+
+for (const requiredAdminImport of [
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-knowledge-provider-actions";',
+  'from "./workspace-shell-reminder-notification-actions";',
+  'from "./workspace-shell-share-actions";',
+]) {
+  if (!adminActionsSource.includes(requiredAdminImport)) {
+    throw new Error(`workspace-shell-admin-actions.ts must import delegated action groups: ${requiredAdminImport}`);
+  }
+}
+
+for (const requiredAdminUsage of [
+  "createWorkspaceShellReminderNotificationActions(props)",
+  "createWorkspaceShellKnowledgeProviderActions(props)",
+  "createWorkspaceShellShareActions(props)",
+  "...reminderNotificationActions",
+  "...knowledgeProviderActions",
+  "...shareActions",
+]) {
+  if (!adminActionsSource.includes(requiredAdminUsage)) {
+    throw new Error(`workspace-shell-admin-actions.ts must delegate action-group assembly: ${requiredAdminUsage}`);
+  }
+}
+
+for (const forbiddenAdminToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  "const handleCreateReminder",
+  "const handleReindexKnowledge",
+  "const handleCreateShareLink",
+  "createReminder(",
+  "updateReminder(",
+  "deleteReminder(",
+  "updateNotification(",
+  "reindexKnowledge(",
+  "updateProviderConfig(",
+  "createShareLink(",
+  "updateShareLink(",
+]) {
+  if (adminActionsSource.includes(forbiddenAdminToken)) {
+    throw new Error(`workspace-shell-admin-actions.ts must keep admin internals delegated: ${forbiddenAdminToken}`);
+  }
+}
+
+const maxAdminActionsLines = 20;
+if (adminActionsLineCount > maxAdminActionsLines) {
+  throw new Error(
+    `workspace-shell-admin-actions.ts exceeded ${maxAdminActionsLines} lines: ${adminActionsLineCount}`,
   );
 }
 
