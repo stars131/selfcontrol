@@ -608,10 +608,14 @@ Last updated: 2026-03-23
   - media asset metadata display, action controls, and props contract now live in dedicated components and types instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
   - the media asset card now focuses more narrowly on attachment card composition while dedicated modules own metadata extraction and action-button behavior
   - `apps/web/scripts/verify-media-asset-card-structure.mjs` and `apps/web/package.json` now make this attachment-card maintainability boundary executable
+- Provider Feature Card Structure Extraction V1:
+  - provider feature card field inputs, status tags, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/provider-feature-card.tsx`
+  - the provider feature card now focuses more narrowly on feature-card composition while dedicated modules own provider input controls and status presentation
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now tightens the provider feature card size ceiling and enforces the new composition boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the media asset card extraction
+- Continue simplifying remaining large UI module boundaries after the provider feature card extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
