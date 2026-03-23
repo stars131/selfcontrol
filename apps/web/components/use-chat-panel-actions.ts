@@ -1,14 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
 import type { NotificationItem } from "../lib/types";
-import {
-  buildChatShareUrl,
-  countUnreadNotifications,
-} from "./chat-panel-action-helpers";
 import { createChatPanelOperatorHandlers } from "./chat-panel-operator-handlers";
 import { createChatPanelShareHandlers } from "./chat-panel-share-handlers";
+import { useChatPanelActionDerivedData } from "./use-chat-panel-action-derived-data";
+import { useChatPanelActionState } from "./use-chat-panel-action-state";
 
 type UseChatPanelActionsProps = {
   latestSharePath: string;
@@ -35,22 +31,34 @@ export function useChatPanelActions({
   onSyncNotifications,
   onSendMessage,
 }: UseChatPanelActionsProps) {
-  const [draft, setDraft] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [syncing, setSyncing] = useState(false);
-  const [reindexing, setReindexing] = useState(false);
-  const [refreshingAudit, setRefreshingAudit] = useState(false);
-  const [creatingShare, setCreatingShare] = useState(false);
-  const [disablingShareId, setDisablingShareId] = useState("");
-  const [shareName, setShareName] = useState("");
-  const [sharePermission, setSharePermission] = useState("viewer");
-  const [shareMaxUses, setShareMaxUses] = useState("");
-  const [error, setError] = useState("");
-  const unreadCount = countUnreadNotifications(notifications);
-  const latestShareUrl = useMemo(
-    () => (latestSharePath ? buildChatShareUrl(latestSharePath) : ""),
-    [latestSharePath],
-  );
+  const {
+    draft,
+    setDraft,
+    loading,
+    setLoading,
+    syncing,
+    setSyncing,
+    reindexing,
+    setReindexing,
+    refreshingAudit,
+    setRefreshingAudit,
+    creatingShare,
+    setCreatingShare,
+    disablingShareId,
+    setDisablingShareId,
+    shareName,
+    setShareName,
+    sharePermission,
+    setSharePermission,
+    shareMaxUses,
+    setShareMaxUses,
+    error,
+    setError,
+  } = useChatPanelActionState();
+  const { unreadCount, latestShareUrl } = useChatPanelActionDerivedData({
+    latestSharePath,
+    notifications,
+  });
   const {
     handleSend,
     handleSyncNotifications,

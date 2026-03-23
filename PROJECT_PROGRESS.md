@@ -812,6 +812,10 @@ Last updated: 2026-03-23
   - workspace-shell reminder/notification, knowledge/provider, and share-link actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-shell-admin-actions.ts`
   - the admin-actions module now focuses more narrowly on composing grouped action sets while specialized helpers own each admin workflow
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this admin action assembly boundary and a size ceiling for `workspace-shell-admin-actions.ts`
+- Chat Panel Action State and Derived Data Split V1:
+  - chat-panel local action state registration and unread/share-url derived data now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-chat-panel-actions.ts`
+  - the chat action hook now focuses more narrowly on orchestrating handler builders with delegated state and derived data
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces these helper boundaries for `use-chat-panel-actions.ts`
 
 ## Next
 - Continue the next product slice

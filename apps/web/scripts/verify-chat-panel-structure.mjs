@@ -137,9 +137,10 @@ if (!chatMessageThreadSource.includes("<ChatMessageSources")) {
 }
 
 for (const requiredActionsImport of [
-  'from "./chat-panel-action-helpers";',
   'from "./chat-panel-operator-handlers";',
   'from "./chat-panel-share-handlers";',
+  'from "./use-chat-panel-action-derived-data";',
+  'from "./use-chat-panel-action-state";',
 ]) {
   if (!chatPanelActionsSource.includes(requiredActionsImport)) {
     throw new Error(`use-chat-panel-actions.ts must import delegated action helpers: ${requiredActionsImport}`);
@@ -147,8 +148,8 @@ for (const requiredActionsImport of [
 }
 
 for (const requiredActionsUsage of [
-  "countUnreadNotifications(notifications)",
-  "buildChatShareUrl(latestSharePath)",
+  "useChatPanelActionState()",
+  "useChatPanelActionDerivedData({",
   "createChatPanelOperatorHandlers({",
   "createChatPanelShareHandlers({",
 ]) {
@@ -159,8 +160,6 @@ for (const requiredActionsUsage of [
 
 for (const forbiddenToken of [
   "function buildShareUrl",
-  "useState(",
-  "useMemo(",
   "const handleSend =",
   "const handleSyncNotifications =",
   "const handleReindexKnowledge =",
@@ -198,6 +197,18 @@ const maxActionsLines = 120;
 const actionsLineCount = chatPanelActionsSource.split(/\r?\n/).length;
 if (actionsLineCount > maxActionsLines) {
   throw new Error(`use-chat-panel-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`);
+}
+
+for (const forbiddenActionsToken of [
+  'from "./chat-panel-action-helpers";',
+  "useState(",
+  "useMemo(",
+  "countUnreadNotifications(",
+  "buildChatShareUrl(",
+]) {
+  if (chatPanelActionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(`use-chat-panel-actions.ts must keep state and derived data delegated: ${forbiddenActionsToken}`);
+  }
 }
 
 console.log("chat-panel structure verification passed");
