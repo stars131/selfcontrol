@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStoredLocale } from "../lib/locale";
-import { LanguageSwitcher } from "./language-switcher";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";
 import { WorkspaceMembersSection } from "./workspace-members-section";
 import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
 import { WorkspaceExportCard } from "./workspace-export-card";
 import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";
+import { WorkspaceSettingsHeader } from "./workspace-settings-header";
+import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";
 import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
 
 export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }) {
@@ -35,6 +35,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
     handleUpdateMemberRole,
     handleRemoveMember,
   } = useWorkspaceSettingsController(router, workspaceId);
+  const managedRole = workspace && workspace.role !== "viewer" ? workspace.role : null;
 
   if (loading) {
     return (
@@ -51,27 +52,14 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
   return (
     <main className="page-shell">
       <section className="panel" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        <div className="panel-header">
-          <div>
-            <div className="eyebrow">{copy.eyebrow}</div>
-            <h1 className="title">{copy.title}</h1>
-            <div className="muted" style={{ marginTop: 8 }}>
-              {copy.subtitle}
-            </div>
-            {user ? (
-              <div className="muted" style={{ marginTop: 8 }}>
-                {user.username}
-                {workspace ? ` / ${workspace.role}` : ""}
-              </div>
-            ) : null}
-          </div>
-          <div className="hero-actions">
-            <LanguageSwitcher locale={locale} onChange={setLocale} />
-            <Link className="button secondary" href={`/app/workspaces/${workspaceId}`}>
-              {copy.back}
-            </Link>
-          </div>
-        </div>
+        <WorkspaceSettingsHeader
+          copy={copy}
+          locale={locale}
+          onLocaleChange={setLocale}
+          username={user?.username}
+          workspace={workspace}
+          workspaceId={workspaceId}
+        />
         <div className="panel-body">
           {error ? (
             <div className="notice error" style={{ marginBottom: 16 }}>
@@ -79,38 +67,8 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
             </div>
           ) : null}
           <div className="two-column-grid">
-            <section className="record-card">
-              <div className="eyebrow">{copy.apiTitle}</div>
-              <div className="muted" style={{ marginTop: 8, lineHeight: 1.7 }}>
-                {copy.apiDescription}
-              </div>
-              <div className="detail-grid" style={{ marginTop: 16 }}>
-                <div className="subtle-card">
-                  <div className="eyebrow">{copy.apiBaseLabel}</div>
-                  <div style={{ marginTop: 8, wordBreak: "break-all", fontWeight: 600 }}>
-                    {process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1"}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{copy.mapKeyLabel}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {process.env.NEXT_PUBLIC_AMAP_KEY ? copy.mapKeyReady : copy.mapKeyMissing}
-                  </div>
-                  <div className="muted" style={{ marginTop: 8 }}>
-                    {copy.browserKeyNote}
-                  </div>
-                </div>
-                <div className="subtle-card">
-                  <div className="eyebrow">{copy.knowledgeTitle}</div>
-                  <div style={{ marginTop: 8, fontWeight: 600 }}>
-                    {knowledgeStats
-                      ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records`
-                      : "-"}
-                  </div>
-                </div>
-              </div>
-            </section>
-            {workspace?.role === "owner" || workspace?.role === "editor" ? (
+            <WorkspaceSettingsOverviewCard copy={copy} knowledgeStats={knowledgeStats} />
+            {managedRole ? (
               <ProviderSettingsPanel
                 locale={locale}
                 highlightedAnchor={highlightedAnchor}
@@ -131,38 +89,38 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
               </section>
             )}
           </div>
-          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+          {managedRole ? (
             token ? (
               <WorkspaceMediaRetentionCard
                 locale={locale}
-                role={workspace.role}
+                role={managedRole}
                 token={token}
                 workspaceId={workspaceId}
               />
             ) : null
           ) : null}
-          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+          {managedRole ? (
             token ? (
               <WorkspaceExportCard
                 locale={locale}
-                role={workspace.role}
+                role={managedRole}
                 token={token}
                 workspaceId={workspaceId}
                 workspaceSlug={workspace?.slug}
               />
             ) : null
           ) : null}
-          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+          {managedRole ? (
             token ? (
               <WorkspaceExportJobsCard
                 locale={locale}
-                role={workspace.role}
+                role={managedRole}
                 token={token}
                 workspaceId={workspaceId}
               />
             ) : null
           ) : null}
-          {workspace?.role === "owner" || workspace?.role === "editor" ? (
+          {managedRole ? (
             <WorkspaceMembersSection
               copy={copy}
               locale={locale}
@@ -172,7 +130,7 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
               removingMemberId={removingMemberId}
               savingMemberId={savingMemberId}
               userId={user?.id}
-              workspaceRole={workspace.role}
+              workspaceRole={managedRole}
             />
           ) : null}
         </div>

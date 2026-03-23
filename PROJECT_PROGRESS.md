@@ -620,10 +620,14 @@ Last updated: 2026-03-23
   - workspace entry main panel props contract and section grid now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-entry-main-panel.tsx`
   - the workspace entry main panel now focuses more narrowly on page shell composition while the dedicated grid module owns create/join/import/list/job section layout
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now tightens the main panel size ceiling and enforces the new entry-grid boundary
+- Workspace Settings Header + Overview Extraction V1:
+  - workspace settings header and environment overview card now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-settings-client.tsx`
+  - the workspace settings page now focuses more narrowly on controller wiring and role-gated section composition while dedicated modules own top header and environment diagnostics presentation
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces both boundaries and lowers the settings shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace entry main panel extraction
+- Continue simplifying remaining large UI module boundaries after the workspace settings header and overview extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
