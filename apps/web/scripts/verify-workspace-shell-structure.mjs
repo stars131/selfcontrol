@@ -9,15 +9,18 @@ const workspaceShellClientPropsPath = path.resolve(
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const workspaceShellActionsPath = path.resolve(process.cwd(), "components/use-workspace-shell-actions.ts");
+const workspaceShellEffectsPath = path.resolve(process.cwd(), "components/use-workspace-shell-effects.ts");
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
+const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
+const effectsLineCount = effectsSource.split(/\r?\n/).length;
 
 if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
   throw new Error("use-workspace-shell-refreshers.ts must import shared refresh helpers from ../lib/workspace-shell-refresh");
@@ -235,6 +238,47 @@ for (const forbiddenActionsToken of [
 const maxActionsLines = 40;
 if (actionsLineCount > maxActionsLines) {
   throw new Error(`use-workspace-shell-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`);
+}
+
+for (const requiredEffectsImport of [
+  'from "./workspace-shell-effects.types";',
+  'from "./use-workspace-shell-initial-load";',
+  'from "./use-workspace-shell-selection-effects";',
+  'from "./use-workspace-shell-notification-effect";',
+]) {
+  if (!effectsSource.includes(requiredEffectsImport)) {
+    throw new Error(`use-workspace-shell-effects.ts must import delegated effect modules: ${requiredEffectsImport}`);
+  }
+}
+
+for (const requiredEffectsUsage of [
+  "useWorkspaceShellInitialLoad(props)",
+  "useWorkspaceShellSelectionEffects(props)",
+  "useWorkspaceShellNotificationEffect(props)",
+]) {
+  if (!effectsSource.includes(requiredEffectsUsage)) {
+    throw new Error(`use-workspace-shell-effects.ts must delegate effect orchestration: ${requiredEffectsUsage}`);
+  }
+}
+
+for (const forbiddenEffectsToken of [
+  "useEffect(",
+  'from "../lib/api";',
+  'from "../lib/auth";',
+  'from "../lib/workspace-shell-refresh";',
+  "getStoredToken(",
+  "refreshMediaAssets(",
+  "refreshReminderItems(",
+  "syncDueNotificationsAndRefresh(",
+]) {
+  if (effectsSource.includes(forbiddenEffectsToken)) {
+    throw new Error(`use-workspace-shell-effects.ts must keep effect internals delegated: ${forbiddenEffectsToken}`);
+  }
+}
+
+const maxEffectsLines = 25;
+if (effectsLineCount > maxEffectsLines) {
+  throw new Error(`use-workspace-shell-effects.ts exceeded ${maxEffectsLines} lines: ${effectsLineCount}`);
 }
 
 console.log("workspace-shell structure verification passed");

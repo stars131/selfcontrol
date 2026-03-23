@@ -732,6 +732,10 @@ Last updated: 2026-03-23
   - record-panel controller sync logic plus record/media handler builders now live in dedicated modules instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
   - the controller hook now focuses more narrowly on state registration, derived data, and final return-shape assembly while helper modules own effect synchronization and imperative UI actions
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-record-panel-controller.ts`
+- Workspace Shell Effects Extraction V1:
+  - workspace-shell initial-load, selected-record sync, and notification polling effects now live in dedicated hooks instead of remaining inline inside `apps/web/components/use-workspace-shell-effects.ts`
+  - the workspace-shell effects hook now focuses more narrowly on effect-module assembly while shared effect types own the shell lifecycle contract
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these effect boundaries and a size ceiling for `use-workspace-shell-effects.ts`
 
 ## Next
 - Continue the next product slice
