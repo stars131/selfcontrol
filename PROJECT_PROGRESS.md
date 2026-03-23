@@ -664,10 +664,14 @@ Last updated: 2026-03-23
   - record browse workspace search/map/results prop builders now live in `apps/web/components/record-browse-workspace-props.ts` instead of remaining inline inside `record-browse-workspace.tsx`
   - the browse workspace shell now focuses more narrowly on section composition while dedicated helper builders own search panel, map panel, and results view prop assembly
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this browse-workspace prop boundary and lowers the browse workspace size ceiling again
+- Workspace Shell Panels Props Extraction V1:
+  - workspace shell chat-panel and record-panel prop builders now live in `apps/web/components/workspace-shell-panels-props.ts` instead of remaining inline inside `workspace-shell-panels.tsx`
+  - the workspace shell panels module now focuses more narrowly on two-panel composition while dedicated helper builders own chat-panel and record-panel prop assembly
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this panels-props boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record browse workspace props extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell panels props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -42,6 +42,10 @@ if (!panelsSource.includes('import type { WorkspaceShellPanelsProps } from "./wo
   throw new Error("workspace-shell-panels.tsx must import WorkspaceShellPanelsProps from workspace-shell-panels.types");
 }
 
+if (!panelsSource.includes('from "./workspace-shell-panels-props";')) {
+  throw new Error("workspace-shell-panels.tsx must import workspace-shell-panels-props");
+}
+
 if (!source.includes("useWorkspaceShellEffects({")) {
   throw new Error("workspace-shell-client.tsx must delegate lifecycle synchronization to useWorkspaceShellEffects");
 }
@@ -68,6 +72,14 @@ if (!panelsSource.includes("<ChatPanel")) {
 
 if (!panelsSource.includes("<RecordPanelV2")) {
   throw new Error("workspace-shell-panels.tsx must keep composing RecordPanelV2");
+}
+
+if (!panelsSource.includes("buildChatPanelProps(props)")) {
+  throw new Error("workspace-shell-panels.tsx must delegate chat panel prop assembly");
+}
+
+if (!panelsSource.includes("buildRecordPanelProps(props)")) {
+  throw new Error("workspace-shell-panels.tsx must delegate record panel prop assembly");
 }
 
 if (!source.includes("<WorkspaceShellFrame")) {

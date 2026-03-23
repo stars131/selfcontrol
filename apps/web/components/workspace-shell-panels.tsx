@@ -2,124 +2,17 @@
 
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
+import { buildChatPanelProps, buildRecordPanelProps } from "./workspace-shell-panels-props";
 import type { WorkspaceShellPanelsProps } from "./workspace-shell-panels.types";
 
-export function WorkspaceShellPanels({
-  activeConversationId,
-  auditLogs,
-  authToken,
-  canManageSharing,
-  canManageWorkspace,
-  canWriteWorkspace,
-  conversations,
-  filteringRecords,
-  knowledgeStats,
-  latestSharePath,
-  mediaAssets,
-  mediaDeadLetterOverview,
-  mediaProcessingOverview,
-  mediaStorageSummary,
-  messages,
-  notifications,
-  onApplyLocationFilter,
-  onApplyRecordFilter,
-  onBulkRetryMediaDeadLetter,
-  onCreateConversation,
-  onCreateReminder,
-  onCreateSearchPreset,
-  onCreateShareLink,
-  onDeleteMedia,
-  onDeleteRecord,
-  onDeleteReminder,
-  onDeleteSearchPreset,
-  onDisableShareLink,
-  onMarkNotificationRead,
-  onRefreshAuditLogs,
-  onRefreshMediaStatus,
-  onReindexKnowledge,
-  onResetFilter,
-  onRetryMedia,
-  onSaveProviderConfig,
-  onSaveRecord,
-  onSelectConversation,
-  onSelectRecord,
-  onSendMessage,
-  onSyncNotifications,
-  onUpdateReminder,
-  onUploadMedia,
-  providerConfigs,
-  recordFilter,
-  records,
-  reminders,
-  savingSearchPreset,
-  searchPresets,
-  selectedRecordId,
-  shareLinks,
-  timelineDays,
-  workspaceId,
-  workspaceRole,
-}: WorkspaceShellPanelsProps) {
+export function WorkspaceShellPanels(props: WorkspaceShellPanelsProps) {
+  const chatPanelProps = buildChatPanelProps(props);
+  const recordPanelProps = buildRecordPanelProps(props);
+
   return (
     <div className="workspace-shell">
-      <ChatPanel
-        activeConversationId={activeConversationId}
-        auditLogs={auditLogs}
-        canManageSharing={canManageSharing}
-        canManageWorkspace={canManageWorkspace}
-        canWriteWorkspace={canWriteWorkspace}
-        conversations={conversations}
-        knowledgeStats={knowledgeStats}
-        latestSharePath={latestSharePath}
-        messages={messages}
-        notifications={notifications}
-        onCreateConversation={onCreateConversation}
-        onCreateShareLink={onCreateShareLink}
-        onDisableShareLink={onDisableShareLink}
-        onMarkNotificationRead={onMarkNotificationRead}
-        onRefreshAuditLogs={onRefreshAuditLogs}
-        onReindexKnowledge={onReindexKnowledge}
-        onSaveProviderConfig={onSaveProviderConfig}
-        onSelectConversation={onSelectConversation}
-        onSendMessage={onSendMessage}
-        onSyncNotifications={onSyncNotifications}
-        providerConfigs={providerConfigs}
-        shareLinks={shareLinks}
-        workspaceId={workspaceId}
-        workspaceRole={workspaceRole}
-      />
-      <RecordPanelV2
-        authToken={authToken}
-        canWriteWorkspace={canWriteWorkspace}
-        filteringRecords={filteringRecords}
-        mediaAssets={mediaAssets}
-        mediaDeadLetterOverview={mediaDeadLetterOverview}
-        mediaProcessingOverview={mediaProcessingOverview}
-        mediaStorageSummary={mediaStorageSummary}
-        onApplyLocationFilter={onApplyLocationFilter}
-        onApplyRecordFilter={onApplyRecordFilter}
-        onBulkRetryMediaDeadLetter={onBulkRetryMediaDeadLetter}
-        onCreateReminder={onCreateReminder}
-        onCreateSearchPreset={onCreateSearchPreset}
-        onDeleteMedia={onDeleteMedia}
-        onDeleteRecord={onDeleteRecord}
-        onDeleteReminder={onDeleteReminder}
-        onDeleteSearchPreset={onDeleteSearchPreset}
-        onRefreshMediaStatus={onRefreshMediaStatus}
-        onResetFilter={onResetFilter}
-        onRetryMedia={onRetryMedia}
-        onSaveRecord={onSaveRecord}
-        onSelectRecord={onSelectRecord}
-        onUpdateReminder={onUpdateReminder}
-        onUploadMedia={onUploadMedia}
-        recordFilter={recordFilter}
-        records={records}
-        reminders={reminders}
-        savingSearchPreset={savingSearchPreset}
-        searchPresets={searchPresets}
-        selectedRecordId={selectedRecordId}
-        timelineDays={timelineDays}
-        workspaceId={workspaceId}
-      />
+      <ChatPanel {...chatPanelProps} />
+      <RecordPanelV2 {...recordPanelProps} />
     </div>
   );
 }
