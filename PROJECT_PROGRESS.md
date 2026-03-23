@@ -876,6 +876,10 @@ Last updated: 2026-03-23
   - workspace-entry controller state registration and memoized slug/share-token derivation now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-workspace-entry-controller.ts`
   - the top-level workspace-entry controller hook now focuses more narrowly on composing state, derived data, initial-load wiring, and action handlers
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these controller helper boundaries and tighter size ceilings for the top-level hook
+- Recent Media Issues Card Extraction V1:
+  - recent-media-issues panel list composition and per-issue rendering now live in separate modules instead of remaining combined inside `apps/web/components/recent-media-issues-panel.tsx`
+  - the media-issues panel now focuses more narrowly on list-level empty-state and mapping behavior while the extracted card owns issue-specific status, retry, and settings rendering
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces these recent-media-issues boundaries and size ceilings for both modules
 
 ## Next
 - Continue the next product slice

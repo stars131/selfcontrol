@@ -6,10 +6,22 @@ const recordMediaSelectedContentPath = path.resolve(
   process.cwd(),
   "components/record-media-selected-content.tsx",
 );
+const recentMediaIssuesPanelPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel.tsx",
+);
+const recentMediaIssueCardPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card.tsx",
+);
 const source = fs.readFileSync(recordMediaToolsPath, "utf8");
 const selectedContentSource = fs.readFileSync(recordMediaSelectedContentPath, "utf8");
+const recentMediaIssuesPanelSource = fs.readFileSync(recentMediaIssuesPanelPath, "utf8");
+const recentMediaIssueCardSource = fs.readFileSync(recentMediaIssueCardPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const selectedContentLineCount = selectedContentSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelLineCount = recentMediaIssuesPanelSource.split(/\r?\n/).length;
+const recentMediaIssueCardLineCount = recentMediaIssueCardSource.split(/\r?\n/).length;
 
 if (!source.includes('import type { RecordMediaToolsProps } from "./record-media-tools.types";')) {
   throw new Error("record-media-tools.tsx must import RecordMediaToolsProps from record-media-tools.types");
@@ -100,6 +112,96 @@ const maxSelectedContentLines = 60;
 if (selectedContentLineCount > maxSelectedContentLines) {
   throw new Error(
     `record-media-selected-content.tsx exceeded ${maxSelectedContentLines} lines: ${selectedContentLineCount}`,
+  );
+}
+
+for (const requiredImport of [
+  'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
+  'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
+]) {
+  if (!recentMediaIssuesPanelSource.includes(requiredImport)) {
+    throw new Error(
+      `recent-media-issues-panel.tsx must keep issue-card boundaries delegated: ${requiredImport}`,
+    );
+  }
+}
+
+for (const requiredUsage of ["<RecentMediaIssueCard", "mediaProcessingOverview.recent_issues.map((issue) => ("]) {
+  if (!recentMediaIssuesPanelSource.includes(requiredUsage)) {
+    throw new Error(
+      `recent-media-issues-panel.tsx must compose delegated issue cards: ${requiredUsage}`,
+    );
+  }
+}
+
+for (const forbiddenToken of [
+  'import Link from "next/link";',
+  'from "../lib/media-issue-display";',
+  'from "../lib/record-panel-media";',
+  "<article className=\"record-card\"",
+  "getMediaIssueAction(",
+  "getMediaIssueLabel(",
+  "getProcessingStatusLabel(",
+  "getRetryStateLabel(",
+  "buildMediaIssueSettingsHref(",
+  "canRetryMediaIssue(",
+]) {
+  if (recentMediaIssuesPanelSource.includes(forbiddenToken)) {
+    throw new Error(
+      `recent-media-issues-panel.tsx must keep per-issue rendering delegated: ${forbiddenToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelLines = 60;
+if (recentMediaIssuesPanelLineCount > maxRecentMediaIssuesPanelLines) {
+  throw new Error(
+    `recent-media-issues-panel.tsx exceeded ${maxRecentMediaIssuesPanelLines} lines: ${recentMediaIssuesPanelLineCount}`,
+  );
+}
+
+for (const requiredImport of [
+  'import Link from "next/link";',
+  'from "../lib/media-issue-display";',
+  'from "../lib/record-panel-media";',
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
+]) {
+  if (!recentMediaIssueCardSource.includes(requiredImport)) {
+    throw new Error(
+      `recent-media-issue-card.tsx must import delegated issue helpers: ${requiredImport}`,
+    );
+  }
+}
+
+for (const requiredUsage of [
+  "const action = getMediaIssueAction(locale, issue);",
+  "const issueLabel = getMediaIssueLabel(locale, issue);",
+  "const settingsHref = buildMediaIssueSettingsHref(workspaceId, issue);",
+  "canRetryMediaIssue(issue)",
+  "<article className=\"record-card\">",
+]) {
+  if (!recentMediaIssueCardSource.includes(requiredUsage)) {
+    throw new Error(
+      `recent-media-issue-card.tsx must own per-issue rendering: ${requiredUsage}`,
+    );
+  }
+}
+
+for (const forbiddenToken of [
+  "mediaProcessingOverview.recent_issues.map(",
+  "type RecentMediaIssuesPanelProps = {",
+]) {
+  if (recentMediaIssueCardSource.includes(forbiddenToken)) {
+    throw new Error(
+      `recent-media-issue-card.tsx must keep list-level concerns delegated: ${forbiddenToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardLines = 110;
+if (recentMediaIssueCardLineCount > maxRecentMediaIssueCardLines) {
+  throw new Error(
+    `recent-media-issue-card.tsx exceeded ${maxRecentMediaIssueCardLines} lines: ${recentMediaIssueCardLineCount}`,
   );
 }
 
