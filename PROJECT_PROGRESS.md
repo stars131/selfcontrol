@@ -744,6 +744,10 @@ Last updated: 2026-03-23
   - legacy record-panel stats, form, list, and prop typing now live in dedicated modules instead of remaining inline inside `apps/web/components/record-panel.tsx`
   - the legacy record-panel shell now focuses more narrowly on local state and async handlers while delegated sections own layout-heavy presentation
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy panel boundaries and a size ceiling for `record-panel.tsx`
+- Provider Settings Controller Extraction V1:
+  - provider-settings draft helpers, draft-sync effect, and save/reset action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-provider-settings-controller.ts`
+  - the provider-settings controller now focuses more narrowly on local state registration and helper assembly while shared controller types own its contract
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-provider-settings-controller.ts`
 
 ## Next
 - Continue the next product slice

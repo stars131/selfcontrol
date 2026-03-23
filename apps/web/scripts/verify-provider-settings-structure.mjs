@@ -2,8 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 
 const providerSettingsPath = path.resolve(process.cwd(), "components/provider-settings-panel.tsx");
+const providerSettingsControllerPath = path.resolve(
+  process.cwd(),
+  "components/use-provider-settings-controller.ts",
+);
 const source = fs.readFileSync(providerSettingsPath, "utf8");
+const controllerSource = fs.readFileSync(providerSettingsControllerPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
 const providerFeatureCardLineCount = providerFeatureCardSource.split(/\r?\n/).length;
@@ -95,6 +101,46 @@ const maxProviderFeatureCardLines = 120;
 if (providerFeatureCardLineCount > maxProviderFeatureCardLines) {
   throw new Error(
     `provider-feature-card.tsx exceeded ${maxProviderFeatureCardLines} lines: ${providerFeatureCardLineCount}`,
+  );
+}
+
+for (const requiredControllerImport of [
+  'from "./provider-settings-controller-actions";',
+  'from "./provider-settings-controller.types";',
+  'from "./use-provider-settings-draft-sync";',
+]) {
+  if (!controllerSource.includes(requiredControllerImport)) {
+    throw new Error(`use-provider-settings-controller.ts must import delegated helpers: ${requiredControllerImport}`);
+  }
+}
+
+for (const requiredControllerUsage of [
+  "useProviderSettingsDraftSync({ providerConfigs, setProviderDrafts })",
+  "createProviderSettingsControllerActions({",
+  "...actions",
+]) {
+  if (!controllerSource.includes(requiredControllerUsage)) {
+    throw new Error(`use-provider-settings-controller.ts must delegate controller orchestration: ${requiredControllerUsage}`);
+  }
+}
+
+for (const forbiddenControllerToken of [
+  "useEffect(",
+  "function buildProviderDraft",
+  "function getActionErrorMessage",
+  "const handleSaveProviderConfig =",
+  "const handleResetProviderConfig =",
+  "JSON.stringify(buildProviderDraft(item))",
+]) {
+  if (controllerSource.includes(forbiddenControllerToken)) {
+    throw new Error(`use-provider-settings-controller.ts must keep draft details delegated: ${forbiddenControllerToken}`);
+  }
+}
+
+const maxControllerLines = 40;
+if (controllerLineCount > maxControllerLines) {
+  throw new Error(
+    `use-provider-settings-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
   );
 }
 

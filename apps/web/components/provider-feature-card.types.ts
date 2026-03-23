@@ -3,7 +3,7 @@
 import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 import type { ProviderSettingsCopy } from "./provider-settings-copy";
-import type { ProviderDraft } from "./use-provider-settings-controller";
+import type { ProviderDraft } from "./provider-settings-controller.types";
 
 export type ProviderFeatureCardProps = {
   copy: ProviderSettingsCopy;

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProviderSettingsCopy } from "./provider-settings-copy";
-import type { ProviderDraft } from "./use-provider-settings-controller";
+import type { ProviderDraft } from "./provider-settings-controller.types";
 
 const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
 const MEDIA_STORAGE_AUTO_RETRY_OPTION = "auto_retry_enabled";
