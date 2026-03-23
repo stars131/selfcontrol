@@ -1,0 +1,44 @@
+import type { LocaleCode } from "../lib/locale";
+
+export type ProviderSettingsCopy = {
+  title: string;
+  subtitle: string;
+  jumpTo: string;
+  enabled: string;
+  provider: string;
+  modelName: string;
+  apiBaseUrl: string;
+  apiKeyEnvName: string;
+  fallbackToLocal: string;
+  autoRetry: string;
+  retryAttempts: string;
+  retryBackoff: string;
+  retryHint: string;
+  defaultProfile: string;
+  workspaceOverride: string;
+  secret: string;
+  customEndpoint: string;
+  defaultEndpoint: string;
+  storageHealth: string;
+  refreshHealth: string;
+  refreshing: string;
+  reachable: string;
+  unreachable: string;
+  available: string;
+  unavailable: string;
+  upload: string;
+  download: string;
+  delete: string;
+  checkedAt: string;
+  endpointRoot: string;
+  saveProvider: string;
+  saving: string;
+  reset: string;
+  unsavedChanges: string;
+  healthSection: string;
+  configured: string;
+  missing: string;
+  notRequired: string;
+};
+
+export type ProviderSettingsCopyMap = Record<LocaleCode, ProviderSettingsCopy>;

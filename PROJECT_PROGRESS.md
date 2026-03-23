@@ -776,6 +776,10 @@ Last updated: 2026-03-23
   - workspace-entry locale payload data and shared copy typing now live in dedicated payload and types modules instead of remaining inline inside `apps/web/components/workspace-entry-copy.ts`
   - the workspace-entry copy module now focuses more narrowly on acting as a thin locale wrapper while delegated modules own large static copy payloads
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces this copy-wrapper boundary and a size ceiling for `workspace-entry-copy.ts`
+- Provider Settings Copy Payload Extraction V1:
+  - provider-settings locale payload data and shared copy typing now live in dedicated payload and types modules instead of remaining inline inside `apps/web/components/provider-settings-copy.ts`
+  - the provider-settings copy module now focuses more narrowly on acting as a thin locale wrapper while delegated modules own large static copy payloads
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this copy-wrapper boundary and a size ceiling for `provider-settings-copy.ts`
 
 ## Next
 - Continue the next product slice

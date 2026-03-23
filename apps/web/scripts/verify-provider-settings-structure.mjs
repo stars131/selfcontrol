@@ -6,10 +6,13 @@ const providerSettingsControllerPath = path.resolve(
   process.cwd(),
   "components/use-provider-settings-controller.ts",
 );
+const providerSettingsCopyPath = path.resolve(process.cwd(), "components/provider-settings-copy.ts");
 const source = fs.readFileSync(providerSettingsPath, "utf8");
 const controllerSource = fs.readFileSync(providerSettingsControllerPath, "utf8");
+const copySource = fs.readFileSync(providerSettingsCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
 const providerFeatureCardLineCount = providerFeatureCardSource.split(/\r?\n/).length;
@@ -142,6 +145,40 @@ if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-provider-settings-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
   );
+}
+
+for (const requiredCopyImport of [
+  'from "./provider-settings-copy.payload";',
+  'from "./provider-settings-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyImport)) {
+    throw new Error(`provider-settings-copy.ts must import delegated copy modules: ${requiredCopyImport}`);
+  }
+}
+
+for (const requiredCopyUsage of [
+  "PROVIDER_SETTINGS_COPY[locale]",
+  'export type { ProviderSettingsCopy } from "./provider-settings-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyUsage)) {
+    throw new Error(`provider-settings-copy.ts must remain a thin copy wrapper: ${requiredCopyUsage}`);
+  }
+}
+
+for (const forbiddenCopyToken of [
+  "const COPY:",
+  '"zh-CN": {',
+  'en: {',
+  'ja: {',
+]) {
+  if (copySource.includes(forbiddenCopyToken)) {
+    throw new Error(`provider-settings-copy.ts must keep locale payload delegated: ${forbiddenCopyToken}`);
+  }
+}
+
+const maxCopyLines = 15;
+if (copyLineCount > maxCopyLines) {
+  throw new Error(`provider-settings-copy.ts exceeded ${maxCopyLines} lines: ${copyLineCount}`);
 }
 
 console.log("provider-settings structure verification passed");
