@@ -2,8 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 
 const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.tsx");
+const recordPanelWorkspacePropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-workspace-props.ts",
+);
 const source = fs.readFileSync(recordPanelPath, "utf8");
+const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
+const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
   throw new Error("record-panel-v2.tsx must import useRecordPanelController");
@@ -59,6 +65,15 @@ if (!source.includes("<RecordPanelHeader")) {
   throw new Error("record-panel-v2.tsx must delegate top header rendering to RecordPanelHeader");
 }
 
+for (const requiredWorkspacePropsExport of [
+  'export { buildRecordBrowseWorkspaceProps } from "./record-panel-v2-browse-workspace-props";',
+  'export { buildRecordEditorWorkspaceProps } from "./record-panel-v2-editor-workspace-props";',
+]) {
+  if (!workspacePropsSource.includes(requiredWorkspacePropsExport)) {
+    throw new Error(`record-panel-v2-workspace-props.ts must remain a stable re-export boundary: ${requiredWorkspacePropsExport}`);
+  }
+}
+
 for (const forbiddenToken of [
   "useState(",
   "useEffect(",
@@ -83,6 +98,13 @@ for (const forbiddenToken of [
 const maxAllowedLines = 125;
 if (normalizedLines.length > maxAllowedLines) {
   throw new Error(`record-panel-v2.tsx exceeded ${maxAllowedLines} lines: ${normalizedLines.length}`);
+}
+
+const maxWorkspacePropsLines = 20;
+if (workspacePropsLines > maxWorkspacePropsLines) {
+  throw new Error(
+    `record-panel-v2-workspace-props.ts exceeded ${maxWorkspacePropsLines} lines: ${workspacePropsLines}`,
+  );
 }
 
 console.log("record-panel structure verification passed");

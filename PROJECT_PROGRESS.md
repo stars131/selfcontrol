@@ -704,10 +704,14 @@ Last updated: 2026-03-23
   - workspace-shell refresher, effects, actions, and panel prop assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/workspace-shell-client.tsx`
   - the workspace shell client now focuses more narrowly on router wiring, state registration, hook invocation, and top-level frame composition while the dedicated helper owns shell-level argument shaping
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this shell-props boundary and lowers the workspace shell client size ceiling again
+- Record Panel Workspace Props Split V1:
+  - record-panel browse/editor workspace prop builders and their shared typing now live in dedicated browse, editor, and types modules instead of staying combined inside `apps/web/components/record-panel-v2-workspace-props.ts`
+  - the stable workspace-props module now acts as a narrow re-export boundary while dedicated helpers own each large prop-mapping surface
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the re-export boundary and a size ceiling for `record-panel-v2-workspace-props.ts`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell client props extraction
+- Continue simplifying remaining large UI module boundaries after the record panel workspace props split
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
