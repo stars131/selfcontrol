@@ -700,10 +700,14 @@ Last updated: 2026-03-23
   - record-panel controller input shaping and header prop assembly now live in a dedicated shell-props helper instead of remaining inline inside `apps/web/components/record-panel-v2.tsx`
   - the record-panel shell now focuses more narrowly on controller invocation and workspace composition while the dedicated helper owns shell-level prop adaptation
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this shell-props boundary and lowers the record-panel shell size ceiling again
+- Workspace Shell Client Props Extraction V1:
+  - workspace-shell refresher, effects, actions, and panel prop assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/workspace-shell-client.tsx`
+  - the workspace shell client now focuses more narrowly on router wiring, state registration, hook invocation, and top-level frame composition while the dedicated helper owns shell-level argument shaping
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this shell-props boundary and lowers the workspace shell client size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record panel shell props extraction
+- Continue simplifying remaining large UI module boundaries after the workspace shell client props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

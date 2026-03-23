@@ -38,6 +38,10 @@ if (!source.includes('import { WorkspaceShellPanels } from "./workspace-shell-pa
   throw new Error("workspace-shell-client.tsx must import WorkspaceShellPanels");
 }
 
+if (!source.includes('from "./workspace-shell-client-props";')) {
+  throw new Error("workspace-shell-client.tsx must import workspace-shell-client-props");
+}
+
 if (!panelsSource.includes('import type { WorkspaceShellPanelsProps } from "./workspace-shell-panels.types";')) {
   throw new Error("workspace-shell-panels.tsx must import WorkspaceShellPanelsProps from workspace-shell-panels.types");
 }
@@ -46,11 +50,11 @@ if (!panelsSource.includes('from "./workspace-shell-panels-props";')) {
   throw new Error("workspace-shell-panels.tsx must import workspace-shell-panels-props");
 }
 
-if (!source.includes("useWorkspaceShellEffects({")) {
+if (!source.includes("useWorkspaceShellEffects(")) {
   throw new Error("workspace-shell-client.tsx must delegate lifecycle synchronization to useWorkspaceShellEffects");
 }
 
-if (!source.includes("useWorkspaceShellActions({")) {
+if (!source.includes("useWorkspaceShellActions(")) {
   throw new Error("workspace-shell-client.tsx must delegate action orchestration to useWorkspaceShellActions");
 }
 
@@ -59,7 +63,9 @@ if (!source.includes("useWorkspaceShellState()")) {
 }
 
 if (!source.includes("createWorkspaceShellRefreshers({")) {
-  throw new Error("workspace-shell-client.tsx must delegate refresh helper composition to createWorkspaceShellRefreshers");
+  if (!source.includes("createWorkspaceShellRefreshers(")) {
+    throw new Error("workspace-shell-client.tsx must delegate refresh helper composition to createWorkspaceShellRefreshers");
+  }
 }
 
 if (!source.includes("<WorkspaceShellPanels")) {
@@ -84,6 +90,17 @@ if (!panelsSource.includes("buildRecordPanelProps(props)")) {
 
 if (!source.includes("<WorkspaceShellFrame")) {
   throw new Error("workspace-shell-client.tsx must delegate loading and error shell rendering to WorkspaceShellFrame");
+}
+
+for (const requiredHelperUsage of [
+  "buildWorkspaceShellRefreshersInput({ state, workspaceId })",
+  "buildWorkspaceShellEffectsInput({ router, state, workspaceId })",
+  "buildWorkspaceShellActionsInput({ refreshers, state, workspaceId })",
+  "buildWorkspaceShellPanelsProps({ actions, state, workspaceId })",
+]) {
+  if (!source.includes(requiredHelperUsage)) {
+    throw new Error(`workspace-shell-client.tsx must delegate shell prop assembly: ${requiredHelperUsage}`);
+  }
 }
 
 for (const forbiddenToken of [
@@ -112,13 +129,18 @@ for (const forbiddenToken of [
   "const refreshMedia = async",
   "const refreshNotifications = async",
   "const refreshKnowledge = async",
+  "token, setToken, workspace, setWorkspace",
+  "refreshAuditLogs,",
+  "handleSendMessage,",
+  "activeConversationId={activeConversationId}",
+  "authToken={token}",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-shell-client.tsx must keep refresh logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 220;
+const maxAllowedLines = 120;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-shell-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
