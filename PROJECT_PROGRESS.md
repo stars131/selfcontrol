@@ -648,10 +648,14 @@ Last updated: 2026-03-23
   - record editor support tools props contract and media/reminder prop builders now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-support-tools.tsx`
   - the support-tools shell now focuses more narrowly on tool composition while dedicated helper builders own media-tool and reminder-tool prop assembly
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this support-tools prop-assembly boundary and lowers the support-tools size ceiling
+- Record Panel V2 Object Boundary Extraction V1:
+  - record panel v2 now keeps top-level props and controller state grouped behind object boundaries instead of destructuring the entire shell inline
+  - the panel shell now focuses more narrowly on controller invocation, workspace prop shaping, and final panel composition while grouped objects reduce top-level churn
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the grouped controller boundary and lowers the record-panel shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor support tools props extraction
+- Continue simplifying remaining large UI module boundaries after the record panel v2 object boundary extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

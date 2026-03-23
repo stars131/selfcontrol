@@ -21,6 +21,10 @@ if (!source.includes("useRecordPanelController({")) {
   throw new Error("record-panel-v2.tsx must delegate controller logic to useRecordPanelController");
 }
 
+if (!source.includes("const controller = useRecordPanelController({")) {
+  throw new Error("record-panel-v2.tsx must keep controller state grouped behind a controller object");
+}
+
 if (!source.includes("buildRecordBrowseWorkspaceProps({")) {
   throw new Error("record-panel-v2.tsx must delegate browse workspace prop shaping to buildRecordBrowseWorkspaceProps");
 }
@@ -40,6 +44,7 @@ for (const forbiddenToken of [
   "useStoredLocale(",
   "fetchMediaBlob(",
   "const handle",
+  "const {\n    locale,",
   "<RecordBrowseWorkspace\n          applyPresetLabel=",
   "<RecordEditorWorkspace\n          authToken=",
   '<div className="eyebrow">{panelCopy.workspace}</div>',
@@ -51,7 +56,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 235;
+const maxAllowedLines = 170;
 if (normalizedLines.length > maxAllowedLines) {
   throw new Error(`record-panel-v2.tsx exceeded ${maxAllowedLines} lines: ${normalizedLines.length}`);
 }
