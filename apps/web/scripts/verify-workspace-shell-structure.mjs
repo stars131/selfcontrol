@@ -14,6 +14,10 @@ const workspaceShellInitialLoadPath = path.resolve(
   process.cwd(),
   "components/use-workspace-shell-initial-load.ts",
 );
+const workspaceShellInitialLoadHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-load-helpers.ts",
+);
 const workspaceShellMediaFilterActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-filter-actions.ts",
@@ -33,6 +37,7 @@ const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
 const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
 const initialLoadSource = fs.readFileSync(workspaceShellInitialLoadPath, "utf8");
+const initialLoadHelpersSource = fs.readFileSync(workspaceShellInitialLoadHelpersPath, "utf8");
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
@@ -42,6 +47,7 @@ const panelsLineCount = panelsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const effectsLineCount = effectsSource.split(/\r?\n/).length;
 const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
+const initialLoadHelpersLineCount = initialLoadHelpersSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
@@ -409,6 +415,55 @@ const maxInitialLoadLines = 135;
 if (initialLoadLineCount > maxInitialLoadLines) {
   throw new Error(
     `use-workspace-shell-initial-load.ts exceeded ${maxInitialLoadLines} lines: ${initialLoadLineCount}`,
+  );
+}
+
+for (const requiredInitialLoadHelpersImport of [
+  'from "./workspace-shell-effects.types";',
+  'from "./workspace-shell-conversation-state-load";',
+  'from "./workspace-shell-initial-bootstrap";',
+  'from "./workspace-shell-initial-follow-up";',
+  'from "./workspace-shell-managed-state-load";',
+]) {
+  if (!initialLoadHelpersSource.includes(requiredInitialLoadHelpersImport)) {
+    throw new Error(`workspace-shell-initial-load-helpers.ts must import delegated bootstrap helpers: ${requiredInitialLoadHelpersImport}`);
+  }
+}
+
+for (const requiredInitialLoadHelpersUsage of [
+  "loadWorkspaceShellInitialBootstrap({",
+  "loadWorkspaceShellInitialFollowUp({",
+]) {
+  if (!initialLoadHelpersSource.includes(requiredInitialLoadHelpersUsage)) {
+    throw new Error(`workspace-shell-initial-load-helpers.ts must delegate bootstrap sequencing: ${requiredInitialLoadHelpersUsage}`);
+  }
+}
+
+for (const forbiddenInitialLoadHelpersToken of [
+  "createConversation(",
+  "listConversations(",
+  "loadConversationMessagesForWorkspace(",
+  "getWorkspace(",
+  "refreshRecordCollection(",
+  "refreshNotificationItems(",
+  "refreshKnowledgeStatsData(",
+  "refreshMediaStorageSummaryData(",
+  "refreshMediaProcessingOverviewData(",
+  "refreshMediaDeadLetterOverviewData(",
+  "refreshProviderConfigItems(",
+  "refreshShareLinkItems(",
+  "refreshSearchPresetItems(",
+  "refreshAuditLogItems(",
+]) {
+  if (initialLoadHelpersSource.includes(forbiddenInitialLoadHelpersToken)) {
+    throw new Error(`workspace-shell-initial-load-helpers.ts must keep bootstrap internals delegated: ${forbiddenInitialLoadHelpersToken}`);
+  }
+}
+
+const maxInitialLoadHelpersLines = 135;
+if (initialLoadHelpersLineCount > maxInitialLoadHelpersLines) {
+  throw new Error(
+    `workspace-shell-initial-load-helpers.ts exceeded ${maxInitialLoadHelpersLines} lines: ${initialLoadHelpersLineCount}`,
   );
 }
 

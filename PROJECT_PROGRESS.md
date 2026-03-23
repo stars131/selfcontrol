@@ -868,6 +868,10 @@ Last updated: 2026-03-23
   - record-panel controller record-handler and media-handler input assembly now lives in a dedicated helper module instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
   - the controller hook now focuses more narrowly on state, sync, derived data, grouped handler composition, and final return assembly
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this handler-group assembly boundary for `use-record-panel-controller.ts`
+- Workspace Shell Initial Bootstrap Follow-Up Split V1:
+  - workspace-shell initial-data bootstrap loading and post-bootstrap managed follow-up loading now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-shell-initial-load-helpers.ts`
+  - the initial-load helper now focuses more narrowly on sequencing startup phases while delegated helpers own bootstrap and follow-up loading details
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these startup helper boundaries and a size ceiling for `workspace-shell-initial-load-helpers.ts`
 
 ## Next
 - Continue the next product slice
