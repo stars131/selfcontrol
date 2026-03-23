@@ -856,6 +856,10 @@ Last updated: 2026-03-23
   - record save-submit actions and record delete actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-record-submit-actions.ts`
   - the record-submit action module now focuses more narrowly on composing grouped save/delete action sets while specialized helpers own each workflow
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this record-submit action assembly boundary and a size ceiling for `record-panel-controller-record-submit-actions.ts`
+- Workspace Media Retention Controller State and Derived Data Split V1:
+  - retention controller local state registration and derived storage-risk labeling now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-workspace-media-retention-controller.ts`
+  - the retention controller now focuses more narrowly on composing report loading, derived data, and action handlers
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces these controller helper boundaries and a tighter size ceiling for `use-workspace-media-retention-controller.ts`
 
 ## Next
 - Continue the next product slice

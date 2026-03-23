@@ -110,10 +110,11 @@ if (lineCount > maxAllowedLines) {
 }
 
 for (const requiredControllerImport of [
-  'from "./workspace-media-retention-controller-helpers";',
   'from "./workspace-media-retention-controller.types";',
   'from "./workspace-media-retention-controller-actions";',
+  'from "./use-workspace-media-retention-derived-data";',
   'from "./use-workspace-media-retention-report";',
+  'from "./use-workspace-media-retention-state";',
 ]) {
   if (!controllerSource.includes(requiredControllerImport)) {
     throw new Error(`use-workspace-media-retention-controller.ts must import delegated helpers: ${requiredControllerImport}`);
@@ -121,8 +122,9 @@ for (const requiredControllerImport of [
 }
 
 for (const requiredControllerUsage of [
+  "useWorkspaceMediaRetentionState()",
   "useWorkspaceMediaRetentionReport({",
-  "buildWorkspaceMediaRetentionRiskLabel({",
+  "useWorkspaceMediaRetentionDerivedData({",
   "createWorkspaceMediaRetentionControllerActions({",
   "...state",
   "...actions",
@@ -135,6 +137,8 @@ for (const requiredControllerUsage of [
 for (const forbiddenControllerToken of [
   'from "../lib/api";',
   "useEffect(",
+  "useMemo(",
+  "useState(",
   "getMediaRetentionReport(",
   "archiveMediaRetention(",
   "cleanupMediaRetention(",
@@ -143,16 +147,35 @@ for (const forbiddenControllerToken of [
   "const toggleSelectedMedia =",
   "const handleArchive =",
   "const handleCleanup =",
+  "buildWorkspaceMediaRetentionRiskLabel(",
 ]) {
   if (controllerSource.includes(forbiddenControllerToken)) {
     throw new Error(`use-workspace-media-retention-controller.ts must keep report and action internals delegated: ${forbiddenControllerToken}`);
   }
 }
 
-const maxControllerLines = 95;
+const maxControllerLines = 80;
 if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-workspace-media-retention-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
+  );
+}
+
+const retentionDerivedDataPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-media-retention-derived-data.ts",
+);
+const retentionDerivedDataSource = fs.readFileSync(retentionDerivedDataPath, "utf8");
+
+if (!retentionDerivedDataSource.includes('from "./workspace-media-retention-controller-helpers";')) {
+  throw new Error(
+    "use-workspace-media-retention-derived-data.ts must import workspace-media-retention-controller-helpers",
+  );
+}
+
+if (!retentionDerivedDataSource.includes("buildWorkspaceMediaRetentionRiskLabel({")) {
+  throw new Error(
+    "use-workspace-media-retention-derived-data.ts must delegate risk label construction through buildWorkspaceMediaRetentionRiskLabel",
   );
 }
 

@@ -1,16 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-import type { MediaRetentionReport } from "../lib/types";
-import { buildWorkspaceMediaRetentionRiskLabel } from "./workspace-media-retention-controller-helpers";
 import type {
-  MediaRetentionActionResult,
   UseWorkspaceMediaRetentionControllerProps,
-  WorkspaceMediaRetentionControllerState,
 } from "./workspace-media-retention-controller.types";
 import { createWorkspaceMediaRetentionControllerActions } from "./workspace-media-retention-controller-actions";
+import { useWorkspaceMediaRetentionDerivedData } from "./use-workspace-media-retention-derived-data";
 import { useWorkspaceMediaRetentionReport } from "./use-workspace-media-retention-report";
+import { useWorkspaceMediaRetentionState } from "./use-workspace-media-retention-state";
 
 export function useWorkspaceMediaRetentionController({
   token,
@@ -22,65 +18,35 @@ export function useWorkspaceMediaRetentionController({
   loadFailedMessage,
   actionFailedMessage,
 }: UseWorkspaceMediaRetentionControllerProps) {
-  const [olderThanDays, setOlderThanDays] = useState(90);
-  const [report, setReport] = useState<MediaRetentionReport | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedMediaIds, setSelectedMediaIds] = useState<string[]>([]);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [actionError, setActionError] = useState("");
-  const [actionResult, setActionResult] = useState<MediaRetentionActionResult | null>(null);
-
-  const state: WorkspaceMediaRetentionControllerState = {
-    olderThanDays,
-    setOlderThanDays,
-    report,
-    setReport,
-    loading,
-    setLoading,
-    error,
-    setError,
-    selectedMediaIds,
-    setSelectedMediaIds,
-    actionLoading,
-    setActionLoading,
-    actionError,
-    setActionError,
-    actionResult,
-    setActionResult,
-  };
+  const state = useWorkspaceMediaRetentionState();
 
   const { loadReport } = useWorkspaceMediaRetentionReport({
     loadFailedMessage,
-    olderThanDays,
-    setError,
-    setLoading,
-    setReport,
-    setSelectedMediaIds,
+    olderThanDays: state.olderThanDays,
+    setError: state.setError,
+    setLoading: state.setLoading,
+    setReport: state.setReport,
+    setSelectedMediaIds: state.setSelectedMediaIds,
     token,
     workspaceId,
   });
-  const storageRiskLabel = useMemo(
-    () =>
-      buildWorkspaceMediaRetentionRiskLabel({
-        allHealthyLabel,
-        missingFilesLabel,
-        orphanFilesLabel,
-        remoteMediaLabel,
-        report,
-      }),
-    [allHealthyLabel, missingFilesLabel, orphanFilesLabel, remoteMediaLabel, report],
-  );
+  const { storageRiskLabel } = useWorkspaceMediaRetentionDerivedData({
+    allHealthyLabel,
+    missingFilesLabel,
+    orphanFilesLabel,
+    remoteMediaLabel,
+    report: state.report,
+  });
   const actions = createWorkspaceMediaRetentionControllerActions({
     actionFailedMessage,
     loadReport,
-    olderThanDays,
-    report,
-    selectedMediaIds,
-    setActionError,
-    setActionLoading,
-    setActionResult,
-    setSelectedMediaIds,
+    olderThanDays: state.olderThanDays,
+    report: state.report,
+    selectedMediaIds: state.selectedMediaIds,
+    setActionError: state.setActionError,
+    setActionLoading: state.setActionLoading,
+    setActionResult: state.setActionResult,
+    setSelectedMediaIds: state.setSelectedMediaIds,
     token,
     workspaceId,
   });
