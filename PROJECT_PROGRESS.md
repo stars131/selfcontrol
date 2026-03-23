@@ -640,10 +640,14 @@ Last updated: 2026-03-23
   - workspace shell refresh helper composition now lives in `apps/web/components/use-workspace-shell-refreshers.ts` instead of remaining inline inside `apps/web/components/workspace-shell-client.tsx`
   - the workspace shell client now focuses more narrowly on state, effects, actions, and panel composition while the dedicated refreshers module owns refresh helper wiring
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this refresher boundary and lowers the shell size ceiling again
+- Location Review Panel Structure Extraction V1:
+  - location review status summary, history list, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/location-review-panel.tsx`
+  - the location review panel now focuses more narrowly on review form composition while dedicated modules own stored-status presentation and history rendering
+  - `apps/web/scripts/verify-location-review-panel-structure.mjs` and `apps/web/package.json` now make this location-review boundary executable
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell refreshers extraction
+- Continue simplifying remaining large UI module boundaries after the location review panel extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

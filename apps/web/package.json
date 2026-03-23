@@ -17,6 +17,7 @@
     "verify:record-media-tools-structure": "node ./scripts/verify-record-media-tools-structure.mjs",
     "verify:record-panel-copy": "node ./scripts/verify-record-panel-copy.mjs",
     "verify:record-editor-fields-structure": "node ./scripts/verify-record-editor-fields-structure.mjs",
+    "verify:location-review-panel-structure": "node ./scripts/verify-location-review-panel-structure.mjs",
     "verify:record-reminder-panel-structure": "node ./scripts/verify-record-reminder-panel-structure.mjs",
     "verify:record-panel-structure": "node ./scripts/verify-record-panel-structure.mjs",
     "verify:record-workspaces": "node ./scripts/verify-record-workspaces.mjs",
