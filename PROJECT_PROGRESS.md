@@ -696,10 +696,14 @@ Last updated: 2026-03-23
   - record editor workspace main-section and support-tool prop assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/record-editor-workspace.tsx`
   - the editor workspace shell now focuses more narrowly on binding creation, helper assembly, and form composition while the dedicated helper owns large child-prop mapping
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this prop-assembly boundary and lowers the editor workspace size ceiling again
+- Record Panel Shell Props Extraction V1:
+  - record-panel controller input shaping and header prop assembly now live in a dedicated shell-props helper instead of remaining inline inside `apps/web/components/record-panel-v2.tsx`
+  - the record-panel shell now focuses more narrowly on controller invocation and workspace composition while the dedicated helper owns shell-level prop adaptation
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this shell-props boundary and lowers the record-panel shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor workspace section props extraction
+- Continue simplifying remaining large UI module boundaries after the record panel shell props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
