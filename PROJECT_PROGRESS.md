@@ -804,6 +804,10 @@ Last updated: 2026-03-23
   - workspace-shell chat conversation/message actions and record create/update/delete actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-shell-chat-record-actions.ts`
   - the chat-record action module now focuses more narrowly on composing grouped action sets while specialized helpers own each workflow
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this chat/record action assembly boundary and a size ceiling for `workspace-shell-chat-record-actions.ts`
+- Record Panel Form and Reminder Action Split V1:
+  - record-panel save/delete form actions and reminder creation actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-form-actions.ts`
+  - the form-actions module now focuses more narrowly on composing grouped action sets while specialized helpers own each workflow
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this form/reminder action assembly boundary and a size ceiling for `record-panel-controller-form-actions.ts`
 
 ## Next
 - Continue the next product slice

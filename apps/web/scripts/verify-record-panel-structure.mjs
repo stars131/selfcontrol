@@ -16,6 +16,10 @@ const recordPanelRecordHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handlers.ts",
 );
+const recordPanelFormActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-form-actions.ts",
+);
 const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
@@ -26,6 +30,7 @@ const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
+const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
@@ -33,6 +38,7 @@ const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
+const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
@@ -234,6 +240,48 @@ const maxRecordHandlersLines = 20;
 if (recordHandlersLines > maxRecordHandlersLines) {
   throw new Error(
     `record-panel-controller-record-handlers.ts exceeded ${maxRecordHandlersLines} lines: ${recordHandlersLines}`,
+  );
+}
+
+for (const requiredFormActionsImport of [
+  'from "./record-panel-controller-record-submit-actions";',
+  'from "./record-panel-controller-reminder-actions";',
+]) {
+  if (!formActionsSource.includes(requiredFormActionsImport)) {
+    throw new Error(`record-panel-controller-form-actions.ts must import delegated form helpers: ${requiredFormActionsImport}`);
+  }
+}
+
+for (const requiredFormActionsUsage of [
+  "createRecordPanelControllerRecordSubmitActions(props)",
+  "createRecordPanelControllerReminderActions(props)",
+  "...recordSubmitActions",
+  "...reminderActions",
+]) {
+  if (!formActionsSource.includes(requiredFormActionsUsage)) {
+    throw new Error(`record-panel-controller-form-actions.ts must delegate form action assembly: ${requiredFormActionsUsage}`);
+  }
+}
+
+for (const forbiddenFormActionsToken of [
+  'from "../lib/record-panel-forms";',
+  "const handleSubmit",
+  "const handleDelete",
+  "const handleCreateReminderSubmit",
+  "event.preventDefault()",
+  "onSaveRecord(",
+  "onCreateReminder(",
+  "onDeleteRecord(",
+]) {
+  if (formActionsSource.includes(forbiddenFormActionsToken)) {
+    throw new Error(`record-panel-controller-form-actions.ts must keep form/reminder internals delegated: ${forbiddenFormActionsToken}`);
+  }
+}
+
+const maxFormActionsLines = 20;
+if (formActionsLines > maxFormActionsLines) {
+  throw new Error(
+    `record-panel-controller-form-actions.ts exceeded ${maxFormActionsLines} lines: ${formActionsLines}`,
   );
 }
 
