@@ -35,6 +35,10 @@ if (!editorWorkspaceSource.includes('import { RecordEditorSupportTools } from ".
   throw new Error("record-editor-workspace.tsx must import RecordEditorSupportTools");
 }
 
+if (!editorWorkspaceSource.includes('from "./record-editor-workspace-sections-props";')) {
+  throw new Error("record-editor-workspace.tsx must import record-editor-workspace-sections-props");
+}
+
 if (!editorWorkspaceSource.includes("<RecordEditorMainSections")) {
   throw new Error("record-editor-workspace.tsx must delegate main editor section rendering");
 }
@@ -43,13 +47,30 @@ if (!editorWorkspaceSource.includes("<RecordEditorSupportTools")) {
   throw new Error("record-editor-workspace.tsx must delegate support tool rendering");
 }
 
+if (!editorWorkspaceSource.includes("buildRecordEditorMainSectionsProps({")) {
+  throw new Error("record-editor-workspace.tsx must delegate main-section prop assembly");
+}
+
+if (!editorWorkspaceSource.includes("buildRecordEditorSupportToolsProps(props)")) {
+  throw new Error("record-editor-workspace.tsx must delegate support-tools prop assembly");
+}
+
 for (const forbiddenToken of ["setForm((", "setLocationReviewForm(("]) {
   if (editorWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-editor-workspace.tsx must keep state-update closures in bindings helpers: ${forbiddenToken}`);
   }
 }
 
-for (const forbiddenToken of ["<LocationReviewPanel", "<RecordMediaTools", "<RecordReminderTools", "<RecordEditorFields"]) {
+for (const forbiddenToken of [
+  "<LocationReviewPanel",
+  "<RecordMediaTools",
+  "<RecordReminderTools",
+  "<RecordEditorFields",
+  "authToken={authToken}",
+  "canWriteWorkspace={canWriteWorkspace}",
+  "fieldBindings={fieldBindings}",
+  "selectedRecord={selectedRecord}",
+]) {
   if (editorWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-editor-workspace.tsx must keep child section composition delegated: ${forbiddenToken}`);
   }
@@ -61,7 +82,7 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
   }
 }
 
-verifyLineLimit(editorWorkspacePath, 180);
+verifyLineLimit(editorWorkspacePath, 110);
 
 if (!editorSupportToolsSource.includes('import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";')) {
   throw new Error("record-editor-support-tools.tsx must import RecordEditorSupportToolsProps from record-editor-support-tools.types");

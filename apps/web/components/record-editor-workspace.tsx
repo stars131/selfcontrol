@@ -7,167 +7,25 @@ import {
   createLocationReviewBindings,
   createRecordEditorFieldBindings,
 } from "./record-editor-workspace-bindings";
+import {
+  buildRecordEditorMainSectionsProps,
+  buildRecordEditorSupportToolsProps,
+} from "./record-editor-workspace-sections-props";
 
-export function RecordEditorWorkspace({
-  authToken,
-  canWriteWorkspace,
-  workspaceId,
-  locale,
-  selectedRecord,
-  form,
-  setForm,
-  locationReviewForm,
-  setLocationReviewForm,
-  reminderForm,
-  setReminderForm,
-  panelCopy,
-  channelInAppLabel,
-  channelLabel,
-  createReminderLabel,
-  deleteReminderLabel,
-  enableReminderLabel,
-  largestFilePrefixLabel,
-  markReminderDoneLabel,
-  noMediaLabel,
-  noRemindersLabel,
-  pauseReminderLabel,
-  reminderNoteLabel,
-  reminderNotePlaceholder,
-  reminderSectionDescription,
-  reminderSectionTitle,
-  reminderTitleLabel,
-  reminderTitlePlaceholder,
-  remindAtLabel,
-  savingReminderLabel,
-  untitledReminderLabel,
-  error,
-  saving,
-  deleting,
-  uploading,
-  savingReminder,
-  bulkRetryingDeadLetter,
-  downloadingMediaId,
-  refreshingMediaId,
-  retryingMediaId,
-  deletingMediaId,
-  selectedDeadLetterIds,
-  selectedRecordMediaSizeLabel,
-  mediaAssets,
-  mediaDeadLetterOverview,
-  mediaIssueCopy,
-  mediaProcessingOverview,
-  mediaStorageSummary,
-  reminders,
-  selectedLocationHistory,
-  selectedLocationReview,
-  formatFileCountLabel,
-  formatHistoryTimestampLabel,
-  formatReminderEnabledLabel,
-  formatReminderStatusLabel,
-  formatReminderTimestampLabel,
-  formatReviewStatusLabel,
-  summarizeHistoryActionLabel,
-  onSubmit,
-  onDelete,
-  onUpload,
-  onCreateReminder,
-  onDeleteReminder,
-  onUpdateReminder,
-  onBulkRetryAllDeadLetter,
-  onBulkRetrySelectedDeadLetter,
-  onClearDeadLetterSelection,
-  onDeleteMediaAsset,
-  onDownloadMedia,
-  onRefreshMedia,
-  onRetryMediaProcessing,
-  onSelectAllDeadLetter,
-  onToggleDeadLetterSelection,
-}: RecordEditorWorkspaceProps) {
-  const fieldBindings = createRecordEditorFieldBindings(setForm);
-  const locationReviewBindings = createLocationReviewBindings(setLocationReviewForm);
+export function RecordEditorWorkspace(props: RecordEditorWorkspaceProps) {
+  const fieldBindings = createRecordEditorFieldBindings(props.setForm);
+  const locationReviewBindings = createLocationReviewBindings(props.setLocationReviewForm);
+  const mainSectionsProps = buildRecordEditorMainSectionsProps({
+    fieldBindings,
+    locationReviewBindings,
+    props,
+  });
+  const supportToolsProps = buildRecordEditorSupportToolsProps(props);
 
   return (
-    <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={onSubmit}>
-      <RecordEditorMainSections
-        canWriteWorkspace={canWriteWorkspace}
-        fieldBindings={fieldBindings}
-        form={form}
-        formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-        formatReviewStatusLabel={formatReviewStatusLabel}
-        locationReviewBindings={locationReviewBindings}
-        panelCopy={panelCopy}
-        locationReviewForm={locationReviewForm}
-        selectedLocationHistory={selectedLocationHistory}
-        selectedLocationReview={selectedLocationReview}
-        selectedRecord={selectedRecord}
-        summarizeHistoryActionLabel={summarizeHistoryActionLabel}
-      />
-      <RecordEditorSupportTools
-        authToken={authToken}
-        bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-        canWriteWorkspace={canWriteWorkspace}
-        channelInAppLabel={channelInAppLabel}
-        channelLabel={channelLabel}
-        createReminderLabel={createReminderLabel}
-        deleteReminderLabel={deleteReminderLabel}
-        deleting={deleting}
-        deletingMediaId={deletingMediaId}
-        downloadingMediaId={downloadingMediaId}
-        enableReminderLabel={enableReminderLabel}
-        error={error}
-        formatFileCountLabel={formatFileCountLabel}
-        formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-        formatReminderEnabledLabel={formatReminderEnabledLabel}
-        formatReminderStatusLabel={formatReminderStatusLabel}
-        formatReminderTimestampLabel={formatReminderTimestampLabel}
-        largestFilePrefixLabel={largestFilePrefixLabel}
-        locale={locale}
-        markReminderDoneLabel={markReminderDoneLabel}
-        mediaAssets={mediaAssets}
-        mediaDeadLetterOverview={mediaDeadLetterOverview}
-        mediaIssueCopy={mediaIssueCopy}
-        mediaProcessingOverview={mediaProcessingOverview}
-        mediaStorageSummary={mediaStorageSummary}
-        noMediaLabel={noMediaLabel}
-        noRemindersLabel={noRemindersLabel}
-        onBulkRetryAllDeadLetter={onBulkRetryAllDeadLetter}
-        onBulkRetrySelectedDeadLetter={onBulkRetrySelectedDeadLetter}
-        onClearDeadLetterSelection={onClearDeadLetterSelection}
-        onCreateReminder={onCreateReminder}
-        onDelete={onDelete}
-        onDeleteMediaAsset={onDeleteMediaAsset}
-        onDeleteReminder={onDeleteReminder}
-        onDownloadMedia={onDownloadMedia}
-        onRefreshMedia={onRefreshMedia}
-        onRetryMediaProcessing={onRetryMediaProcessing}
-        onSelectAllDeadLetter={onSelectAllDeadLetter}
-        onToggleDeadLetterSelection={onToggleDeadLetterSelection}
-        onUpdateReminder={onUpdateReminder}
-        onUpload={onUpload}
-        panelCopy={panelCopy}
-        pauseReminderLabel={pauseReminderLabel}
-        refreshingMediaId={refreshingMediaId}
-        reminderForm={reminderForm}
-        reminderNoteLabel={reminderNoteLabel}
-        reminderNotePlaceholder={reminderNotePlaceholder}
-        reminderSectionDescription={reminderSectionDescription}
-        reminderSectionTitle={reminderSectionTitle}
-        reminderTitleLabel={reminderTitleLabel}
-        reminderTitlePlaceholder={reminderTitlePlaceholder}
-        remindAtLabel={remindAtLabel}
-        reminders={reminders}
-        retryingMediaId={retryingMediaId}
-        saving={saving}
-        savingReminder={savingReminder}
-        savingReminderLabel={savingReminderLabel}
-        selectedDeadLetterIds={selectedDeadLetterIds}
-        selectedRecord={selectedRecord}
-        selectedRecordMediaSizeLabel={selectedRecordMediaSizeLabel}
-        setReminderForm={setReminderForm}
-        uploading={uploading}
-        untitledReminderLabel={untitledReminderLabel}
-        workspaceId={workspaceId}
-      />
+    <form className="record-card form-stack" style={{ marginTop: 20 }} onSubmit={props.onSubmit}>
+      <RecordEditorMainSections {...mainSectionsProps} />
+      <RecordEditorSupportTools {...supportToolsProps} />
     </form>
   );
 }

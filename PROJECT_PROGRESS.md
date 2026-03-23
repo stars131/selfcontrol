@@ -692,10 +692,14 @@ Last updated: 2026-03-23
   - export-card locale copy and owner-only action rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-export-card.tsx`
   - the export card now focuses more narrowly on controller wiring and top-level export summary while dedicated modules own localized copy and role-gated control rendering
   - `apps/web/scripts/verify-workspace-export-structure.mjs` now enforces these boundaries and lowers the export card size ceiling again
+- Record Editor Workspace Section Props Extraction V1:
+  - record editor workspace main-section and support-tool prop assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/record-editor-workspace.tsx`
+  - the editor workspace shell now focuses more narrowly on binding creation, helper assembly, and form composition while the dedicated helper owns large child-prop mapping
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this prop-assembly boundary and lowers the editor workspace size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace export structure extraction
+- Continue simplifying remaining large UI module boundaries after the record editor workspace section props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
