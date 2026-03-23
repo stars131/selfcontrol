@@ -628,10 +628,14 @@ Last updated: 2026-03-23
   - record editor primary fields, metadata fields, location fields, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-fields.tsx`
   - the editor field shell now focuses more narrowly on form-group composition while dedicated modules own text fields, type/time fields, and location inputs
   - `apps/web/scripts/verify-record-editor-fields-structure.mjs` and `apps/web/package.json` now make this editor-field boundary executable
+- Record Media Tools Actions + Processing Extraction V1:
+  - record media tool actions and processing panels now live in dedicated modules instead of remaining inline inside `apps/web/components/record-media-tools.tsx`
+  - the media tool shell now focuses more narrowly on media section composition while dedicated modules own top-level save/upload controls and processing issue panel composition
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces both boundaries and lowers the media-tools size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor fields extraction
+- Continue simplifying remaining large UI module boundaries after the record media tools actions and processing extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

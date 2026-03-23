@@ -9,24 +9,38 @@ if (!source.includes('import type { RecordMediaToolsProps } from "./record-media
   throw new Error("record-media-tools.tsx must import RecordMediaToolsProps from record-media-tools.types");
 }
 
+if (!source.includes('import { RecordMediaToolsActions } from "./record-media-tools-actions";')) {
+  throw new Error("record-media-tools.tsx must import RecordMediaToolsActions");
+}
+
+if (!source.includes('import { RecordMediaSelectedContent } from "./record-media-selected-content";')) {
+  throw new Error("record-media-tools.tsx must import RecordMediaSelectedContent");
+}
+
 for (const requiredUsage of [
-  "<MediaStorageOverview",
-  "<RecentMediaIssuesPanel",
-  "<DeadLetterRecoveryPanel",
-  "<MediaAssetSection",
+  "<RecordMediaToolsActions",
+  "<RecordMediaSelectedContent",
 ]) {
   if (!source.includes(requiredUsage)) {
     throw new Error(`record-media-tools.tsx must keep composing media sub-sections: ${requiredUsage}`);
   }
 }
 
-for (const forbiddenToken of ["type RecordMediaToolsProps = {", 'import type { ChangeEventHandler } from "react";']) {
+for (const forbiddenToken of [
+  "type RecordMediaToolsProps = {",
+  'import type { ChangeEventHandler } from "react";',
+  'className="action-row"',
+  'type="file"',
+  "<MediaStorageOverview",
+  "<RecordMediaProcessingPanels",
+  "<MediaAssetSection",
+]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`record-media-tools.tsx must keep its props contract delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 175;
+const maxAllowedLines = 140;
 if (lineCount > maxAllowedLines) {
   throw new Error(`record-media-tools.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
