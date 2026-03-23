@@ -712,10 +712,14 @@ Last updated: 2026-03-23
   - record-editor support-tool media and reminder prop builders now live in dedicated modules instead of staying combined inside `apps/web/components/record-editor-support-tools-props.ts`
   - the stable support-tools props module now acts as a narrow re-export boundary while dedicated builders own each large prop-mapping surface
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces the re-export boundary and a size ceiling for `record-editor-support-tools-props.ts`
+- Workspace Shell Client Props Split V1:
+  - workspace-shell client refreshers/effects/actions/panels prop builders and shared typing now live in dedicated modules instead of staying combined inside `apps/web/components/workspace-shell-client-props.ts`
+  - the stable client-props module now acts as a narrow re-export boundary while dedicated helpers own each shell-level argument-shaping surface
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the re-export boundary and a size ceiling for `workspace-shell-client-props.ts`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record editor support tool props split
+- Continue simplifying remaining large UI module boundaries after the workspace shell client props split
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -2,12 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 
 const workspaceShellPath = path.resolve(process.cwd(), "components/workspace-shell-client.tsx");
+const workspaceShellClientPropsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-client-props.ts",
+);
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const source = fs.readFileSync(workspaceShellPath, "utf8");
+const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
 
 if (!refreshersSource.includes('from "../lib/workspace-shell-refresh";')) {
@@ -40,6 +46,17 @@ if (!source.includes('import { WorkspaceShellPanels } from "./workspace-shell-pa
 
 if (!source.includes('from "./workspace-shell-client-props";')) {
   throw new Error("workspace-shell-client.tsx must import workspace-shell-client-props");
+}
+
+for (const requiredClientPropsExport of [
+  'export { buildWorkspaceShellActionsInput } from "./workspace-shell-client-actions-input";',
+  'export { buildWorkspaceShellEffectsInput } from "./workspace-shell-client-effects-input";',
+  'export { buildWorkspaceShellPanelsProps } from "./workspace-shell-client-panels-props";',
+  'export { buildWorkspaceShellRefreshersInput } from "./workspace-shell-client-refreshers-input";',
+]) {
+  if (!clientPropsSource.includes(requiredClientPropsExport)) {
+    throw new Error(`workspace-shell-client-props.ts must remain a stable re-export boundary: ${requiredClientPropsExport}`);
+  }
 }
 
 if (!panelsSource.includes('import type { WorkspaceShellPanelsProps } from "./workspace-shell-panels.types";')) {
@@ -148,6 +165,13 @@ if (lineCount > maxAllowedLines) {
 const maxPanelsLines = 130;
 if (panelsLineCount > maxPanelsLines) {
   throw new Error(`workspace-shell-panels.tsx exceeded ${maxPanelsLines} lines: ${panelsLineCount}`);
+}
+
+const maxClientPropsLines = 20;
+if (clientPropsLineCount > maxClientPropsLines) {
+  throw new Error(
+    `workspace-shell-client-props.ts exceeded ${maxClientPropsLines} lines: ${clientPropsLineCount}`,
+  );
 }
 
 console.log("workspace-shell structure verification passed");

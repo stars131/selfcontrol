@@ -1,0 +1,73 @@
+"use client";
+
+import type {
+  WorkspaceShellActions,
+  WorkspaceShellPanelsProps,
+  WorkspaceShellState,
+} from "./workspace-shell-client-props.types";
+
+export function buildWorkspaceShellPanelsProps({
+  actions,
+  state,
+  workspaceId,
+}: {
+  actions: WorkspaceShellActions;
+  state: WorkspaceShellState;
+  workspaceId: string;
+}): WorkspaceShellPanelsProps {
+  return {
+    activeConversationId: state.activeConversationId,
+    auditLogs: state.auditLogs,
+    authToken: state.token,
+    canManageSharing: state.canManageSharing,
+    canManageWorkspace: state.canManageWorkspace,
+    canWriteWorkspace: state.canWriteWorkspace,
+    conversations: state.conversations,
+    filteringRecords: state.filteringRecords,
+    knowledgeStats: state.knowledgeStats,
+    latestSharePath: state.latestSharePath,
+    mediaAssets: state.mediaAssets,
+    mediaDeadLetterOverview: state.mediaDeadLetterOverview,
+    mediaProcessingOverview: state.mediaProcessingOverview,
+    mediaStorageSummary: state.mediaStorageSummary,
+    messages: state.messages,
+    notifications: state.notifications,
+    onApplyLocationFilter: actions.handleApplyLocationFilter,
+    onApplyRecordFilter: actions.handleApplyRecordFilter,
+    onBulkRetryMediaDeadLetter: actions.handleBulkRetryMediaDeadLetter,
+    onCreateConversation: actions.handleCreateConversation,
+    onCreateReminder: actions.handleCreateReminder,
+    onCreateSearchPreset: actions.handleCreateSearchPreset,
+    onCreateShareLink: actions.handleCreateShareLink,
+    onDeleteMedia: actions.handleDeleteMedia,
+    onDeleteRecord: actions.handleDeleteRecord,
+    onDeleteReminder: actions.handleDeleteReminder,
+    onDeleteSearchPreset: actions.handleDeleteSearchPreset,
+    onDisableShareLink: actions.handleDisableShareLink,
+    onMarkNotificationRead: actions.handleMarkNotificationRead,
+    onRefreshAuditLogs: actions.handleRefreshAuditLogs,
+    onRefreshMediaStatus: actions.handleRefreshMediaStatus,
+    onReindexKnowledge: actions.handleReindexKnowledge,
+    onResetFilter: actions.handleResetFilter,
+    onRetryMedia: actions.handleRetryMedia,
+    onSaveProviderConfig: actions.handleSaveProviderConfig,
+    onSaveRecord: actions.handleSaveRecord,
+    onSelectConversation: actions.handleSelectConversation,
+    onSelectRecord: state.setSelectedRecordId,
+    onSendMessage: actions.handleSendMessage,
+    onSyncNotifications: actions.handleSyncNotifications,
+    onUpdateReminder: actions.handleUpdateReminder,
+    onUploadMedia: actions.handleUploadMedia,
+    providerConfigs: state.providerConfigs,
+    recordFilter: state.recordFilter,
+    records: state.visibleRecords,
+    reminders: state.reminders,
+    savingSearchPreset: state.savingSearchPreset,
+    searchPresets: state.searchPresets,
+    selectedRecordId: state.selectedRecordId,
+    shareLinks: state.shareLinks,
+    timelineDays: state.timelineDays,
+    workspaceId,
+    workspaceRole: state.workspace?.role ?? "viewer",
+  };
+}
