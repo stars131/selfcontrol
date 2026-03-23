@@ -23,9 +23,31 @@ if (!editorWorkspaceSource.includes('import type { RecordEditorWorkspaceProps } 
   throw new Error("record-editor-workspace.tsx must import RecordEditorWorkspaceProps from record-editor-workspace.types");
 }
 
+if (!editorWorkspaceSource.includes('import { RecordEditorMainSections } from "./record-editor-main-sections";')) {
+  throw new Error("record-editor-workspace.tsx must import RecordEditorMainSections");
+}
+
+if (!editorWorkspaceSource.includes('import { RecordEditorSupportTools } from "./record-editor-support-tools";')) {
+  throw new Error("record-editor-workspace.tsx must import RecordEditorSupportTools");
+}
+
+if (!editorWorkspaceSource.includes("<RecordEditorMainSections")) {
+  throw new Error("record-editor-workspace.tsx must delegate main editor section rendering");
+}
+
+if (!editorWorkspaceSource.includes("<RecordEditorSupportTools")) {
+  throw new Error("record-editor-workspace.tsx must delegate support tool rendering");
+}
+
 for (const forbiddenToken of ["setForm((", "setLocationReviewForm(("]) {
   if (editorWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-editor-workspace.tsx must keep state-update closures in bindings helpers: ${forbiddenToken}`);
+  }
+}
+
+for (const forbiddenToken of ["<LocationReviewPanel", "<RecordMediaTools", "<RecordReminderTools", "<RecordEditorFields"]) {
+  if (editorWorkspaceSource.includes(forbiddenToken)) {
+    throw new Error(`record-editor-workspace.tsx must keep child section composition delegated: ${forbiddenToken}`);
   }
 }
 
@@ -35,7 +57,7 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
   }
 }
 
-verifyLineLimit(editorWorkspacePath, 220);
+verifyLineLimit(editorWorkspacePath, 180);
 
 const browseWorkspacePath = "components/record-browse-workspace.tsx";
 const browseWorkspaceSource = readSource(browseWorkspacePath);

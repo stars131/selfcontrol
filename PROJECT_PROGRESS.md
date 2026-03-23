@@ -632,10 +632,14 @@ Last updated: 2026-03-23
   - record media tool actions and processing panels now live in dedicated modules instead of remaining inline inside `apps/web/components/record-media-tools.tsx`
   - the media tool shell now focuses more narrowly on media section composition while dedicated modules own top-level save/upload controls and processing issue panel composition
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces both boundaries and lowers the media-tools size ceiling again
+- Record Editor Workspace Section Extraction V1:
+  - record editor main sections and support tools now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-workspace.tsx`
+  - the editor workspace shell now focuses more narrowly on bindings and workspace form composition while dedicated modules own main editor sections and support-tool composition
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces both boundaries and lowers the editor workspace size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record media tools actions and processing extraction
+- Continue simplifying remaining large UI module boundaries after the record editor workspace section extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
