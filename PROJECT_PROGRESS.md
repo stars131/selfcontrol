@@ -644,10 +644,14 @@ Last updated: 2026-03-23
   - location review status summary, history list, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/location-review-panel.tsx`
   - the location review panel now focuses more narrowly on review form composition while dedicated modules own stored-status presentation and history rendering
   - `apps/web/scripts/verify-location-review-panel-structure.mjs` and `apps/web/package.json` now make this location-review boundary executable
+- Record Editor Support Tools Props Extraction V1:
+  - record editor support tools props contract and media/reminder prop builders now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-support-tools.tsx`
+  - the support-tools shell now focuses more narrowly on tool composition while dedicated helper builders own media-tool and reminder-tool prop assembly
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this support-tools prop-assembly boundary and lowers the support-tools size ceiling
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the location review panel extraction
+- Continue simplifying remaining large UI module boundaries after the record editor support tools props extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

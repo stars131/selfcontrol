@@ -14,6 +14,8 @@ function verifyLineLimit(relativePath, maxAllowedLines) {
 
 const editorWorkspacePath = "components/record-editor-workspace.tsx";
 const editorWorkspaceSource = readSource(editorWorkspacePath);
+const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
+const editorSupportToolsSource = readSource(editorSupportToolsPath);
 
 if (!editorWorkspaceSource.includes('from "./record-editor-workspace-bindings";')) {
   throw new Error("record-editor-workspace.tsx must import record-editor-workspace-bindings");
@@ -58,6 +60,30 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
 }
 
 verifyLineLimit(editorWorkspacePath, 180);
+
+if (!editorSupportToolsSource.includes('import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";')) {
+  throw new Error("record-editor-support-tools.tsx must import RecordEditorSupportToolsProps from record-editor-support-tools.types");
+}
+
+if (!editorSupportToolsSource.includes('from "./record-editor-support-tools-props";')) {
+  throw new Error("record-editor-support-tools.tsx must import support-tools prop builders");
+}
+
+if (!editorSupportToolsSource.includes("buildRecordMediaToolsProps(props)")) {
+  throw new Error("record-editor-support-tools.tsx must delegate media tool prop assembly");
+}
+
+if (!editorSupportToolsSource.includes("buildRecordReminderToolsProps(props)")) {
+  throw new Error("record-editor-support-tools.tsx must delegate reminder tool prop assembly");
+}
+
+for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresentLabel", "<RecordReminderTools\n        canWriteWorkspace"]) {
+  if (editorSupportToolsSource.includes(forbiddenToken)) {
+    throw new Error(`record-editor-support-tools.tsx must keep child prop assembly delegated: ${forbiddenToken}`);
+  }
+}
+
+verifyLineLimit(editorSupportToolsPath, 120);
 
 const browseWorkspacePath = "components/record-browse-workspace.tsx";
 const browseWorkspaceSource = readSource(browseWorkspacePath);
