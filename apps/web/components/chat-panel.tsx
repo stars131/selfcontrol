@@ -1,15 +1,12 @@
 "use client";
 
-import { useStoredLocale } from "../lib/locale";
 import { ChatAuditLogsCard } from "./chat-audit-logs-card";
 import { ChatPanelComposer } from "./chat-panel-composer";
 import { ChatConversationBar } from "./chat-conversation-bar";
-import { ChatKnowledgeCard } from "./chat-knowledge-card";
+import { ChatPanelManagementSection } from "./chat-panel-management-section";
 import { ChatMessageThread } from "./chat-message-thread";
 import { ChatNotificationsCard } from "./chat-notifications-card";
 import { ChatPanelHeader } from "./chat-panel-header";
-import { ChatShareLinksCard } from "./chat-share-links-card";
-import { ProviderSettingsPanel } from "./provider-settings-panel";
 import type { ChatPanelProps } from "./chat-panel.types";
 import { useChatPanelActions } from "./use-chat-panel-actions";
 
@@ -39,7 +36,6 @@ export function ChatPanel({
   onSyncNotifications,
   onSendMessage,
 }: ChatPanelProps) {
-  const { locale } = useStoredLocale();
   const {
     draft,
     loading,
@@ -92,39 +88,27 @@ export function ChatPanel({
           onSyncNotifications={handleSyncNotifications}
           syncing={syncing}
         />
-        {canManageWorkspace ? (
-          <>
-            <ChatKnowledgeCard
-              canManageWorkspace={canManageWorkspace}
-              knowledgeStats={knowledgeStats}
-              onReindexKnowledge={handleReindexKnowledge}
-              reindexing={reindexing}
-            />
-            {canManageSharing ? (
-              <ChatShareLinksCard
-                creatingShare={creatingShare}
-                disablingShareId={disablingShareId}
-                latestShareUrl={latestShareUrl}
-                onCreateShareLink={handleCreateShareLink}
-                onDisableShareLink={handleDisableShareLink}
-                setShareMaxUses={setShareMaxUses}
-                setShareName={setShareName}
-                setSharePermission={setSharePermission}
-                shareLinks={shareLinks}
-                shareMaxUses={shareMaxUses}
-                shareName={shareName}
-                sharePermission={sharePermission}
-              />
-            ) : null}
-            <div style={{ marginBottom: 16 }}>
-              <ProviderSettingsPanel
-                locale={locale}
-                onSaveProviderConfig={onSaveProviderConfig}
-                providerConfigs={providerConfigs}
-              />
-            </div>
-          </>
-        ) : null}
+        <ChatPanelManagementSection
+          canManageSharing={canManageSharing}
+          canManageWorkspace={canManageWorkspace}
+          creatingShare={creatingShare}
+          disablingShareId={disablingShareId}
+          knowledgeStats={knowledgeStats}
+          latestShareUrl={latestShareUrl}
+          onCreateShareLink={handleCreateShareLink}
+          onDisableShareLink={handleDisableShareLink}
+          onReindexKnowledge={handleReindexKnowledge}
+          onSaveProviderConfig={onSaveProviderConfig}
+          providerConfigs={providerConfigs}
+          reindexing={reindexing}
+          setShareMaxUses={setShareMaxUses}
+          setShareName={setShareName}
+          setSharePermission={setSharePermission}
+          shareLinks={shareLinks}
+          shareMaxUses={shareMaxUses}
+          shareName={shareName}
+          sharePermission={sharePermission}
+        />
         <ChatAuditLogsCard
           auditLogs={auditLogs}
           onRefreshAuditLogs={handleRefreshAuditLogs}

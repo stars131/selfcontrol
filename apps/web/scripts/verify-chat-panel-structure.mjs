@@ -12,6 +12,11 @@ const chatPanelHeaderPath = path.resolve(process.cwd(), "components/chat-panel-h
 const chatPanelHeaderSource = fs.readFileSync(chatPanelHeaderPath, "utf8");
 const chatPanelComposerPath = path.resolve(process.cwd(), "components/chat-panel-composer.tsx");
 const chatPanelComposerSource = fs.readFileSync(chatPanelComposerPath, "utf8");
+const chatPanelManagementSectionPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-management-section.tsx",
+);
+const chatPanelManagementSectionSource = fs.readFileSync(chatPanelManagementSectionPath, "utf8");
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -21,16 +26,40 @@ if (!source.includes("useChatPanelActions({")) {
   throw new Error("chat-panel.tsx must delegate local async action orchestration to useChatPanelActions");
 }
 
-if (!source.includes('import { ChatKnowledgeCard } from "./chat-knowledge-card";')) {
-  throw new Error("chat-panel.tsx must import ChatKnowledgeCard");
+if (!source.includes('import { ChatPanelManagementSection } from "./chat-panel-management-section";')) {
+  throw new Error("chat-panel.tsx must import ChatPanelManagementSection");
+}
+
+if (!source.includes("<ChatPanelManagementSection")) {
+  throw new Error("chat-panel.tsx must delegate management-card rendering to ChatPanelManagementSection");
+}
+
+if (!chatPanelManagementSectionSource.includes('import { useStoredLocale } from "../lib/locale";')) {
+  throw new Error("chat-panel-management-section.tsx must own locale lookup for provider settings");
+}
+
+for (const requiredImport of [
+  'import { ChatKnowledgeCard } from "./chat-knowledge-card";',
+  'import { ChatShareLinksCard } from "./chat-share-links-card";',
+  'import { ProviderSettingsPanel } from "./provider-settings-panel";',
+]) {
+  if (!chatPanelManagementSectionSource.includes(requiredImport)) {
+    throw new Error(`chat-panel-management-section.tsx must import delegated management cards: ${requiredImport}`);
+  }
+}
+
+for (const requiredUsage of [
+  "<ChatKnowledgeCard",
+  "<ChatShareLinksCard",
+  "<ProviderSettingsPanel",
+]) {
+  if (!chatPanelManagementSectionSource.includes(requiredUsage)) {
+    throw new Error(`chat-panel-management-section.tsx must compose delegated management cards: ${requiredUsage}`);
+  }
 }
 
 if (!source.includes('import { ChatConversationBar } from "./chat-conversation-bar";')) {
   throw new Error("chat-panel.tsx must import ChatConversationBar");
-}
-
-if (!source.includes("<ChatKnowledgeCard")) {
-  throw new Error("chat-panel.tsx must delegate knowledge card rendering to ChatKnowledgeCard");
 }
 
 if (!source.includes("<ChatConversationBar")) {
@@ -105,14 +134,6 @@ if (!chatMessageThreadSource.includes("<ChatMessageSources")) {
   throw new Error("chat-message-thread.tsx must delegate assistant source rendering to ChatMessageSources");
 }
 
-if (!source.includes('import { ChatShareLinksCard } from "./chat-share-links-card";')) {
-  throw new Error("chat-panel.tsx must import ChatShareLinksCard");
-}
-
-if (!source.includes("<ChatShareLinksCard")) {
-  throw new Error("chat-panel.tsx must delegate share-link rendering to ChatShareLinksCard");
-}
-
 for (const forbiddenToken of [
   "function buildShareUrl",
   "useState(",
@@ -131,6 +152,13 @@ for (const forbiddenToken of [
   'className={`message ${message.role === "assistant" ? "assistant" : ""}`}',
   "className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}",
   'href={`/app/workspaces/${workspaceId}/settings`}',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { ChatKnowledgeCard } from "./chat-knowledge-card";',
+  'import { ChatShareLinksCard } from "./chat-share-links-card";',
+  'import { ProviderSettingsPanel } from "./provider-settings-panel";',
+  "<ChatKnowledgeCard",
+  "<ChatShareLinksCard",
+  "<ProviderSettingsPanel",
   'placeholder={',
 ]) {
   if (source.includes(forbiddenToken)) {
@@ -138,7 +166,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 190;
+const maxAllowedLines = 140;
 if (lineCount > maxAllowedLines) {
   throw new Error(`chat-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

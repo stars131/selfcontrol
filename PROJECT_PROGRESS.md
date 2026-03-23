@@ -672,10 +672,14 @@ Last updated: 2026-03-23
   - selected media content prop typing and child-prop builders now live in dedicated modules instead of remaining inline inside `apps/web/components/record-media-selected-content.tsx`
   - the selected-media composition shell now focuses more narrowly on media overview, issue-panel, and asset-section composition while dedicated helpers own child prop assembly
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces this helper boundary and adds a size ceiling for `record-media-selected-content.tsx`
+- Chat Panel Management Section Extraction V1:
+  - chat management cards for knowledge indexing, share links, and provider settings now live in a dedicated management section instead of remaining inline inside `apps/web/components/chat-panel.tsx`
+  - the chat panel shell now focuses more narrowly on action wiring, conversation flow, and high-level panel composition while the management section owns operator-only card orchestration and locale lookup
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the management-section boundary and lowers the chat panel size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record media selected content props extraction
+- Continue simplifying remaining large UI module boundaries after the chat panel management section extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
