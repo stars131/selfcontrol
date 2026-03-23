@@ -788,6 +788,10 @@ Last updated: 2026-03-23
   - record-panel media asset actions and dead-letter selection/retry actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-handlers.ts`
   - the media-handlers module now focuses more narrowly on composing grouped handler sets while specialized helpers own each media workflow
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this media-handler assembly boundary and a size ceiling for `record-panel-controller-media-handlers.ts`
+- Record Panel Record Handler Split V1:
+  - record-panel form/reminder actions and filter/preset actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-record-handlers.ts`
+  - the record-handlers module now focuses more narrowly on composing grouped handler sets while specialized helpers own each record workflow
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this record-handler assembly boundary and a size ceiling for `record-panel-controller-record-handlers.ts`
 
 ## Next
 - Continue the next product slice
