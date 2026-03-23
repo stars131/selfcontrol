@@ -10,10 +10,16 @@ const workspaceSettingsManagedSectionsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-managed-sections.tsx",
 );
+const workspaceSettingsControllerPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-settings-controller.ts",
+);
 const source = fs.readFileSync(workspaceSettingsPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
+const controllerSource = fs.readFileSync(workspaceSettingsControllerPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const controllerLineCount = controllerSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";')) {
   throw new Error("workspace-settings-client.tsx must import useWorkspaceSettingsController");
@@ -124,6 +130,62 @@ for (const forbiddenToken of [
 const maxAllowedLines = 110;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-settings-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredControllerImport of [
+  'from "./workspace-settings-actions";',
+  'from "./workspace-settings-controller.types";',
+  'from "./use-workspace-settings-anchor";',
+  'from "./use-workspace-settings-load";',
+]) {
+  if (!controllerSource.includes(requiredControllerImport)) {
+    throw new Error(`use-workspace-settings-controller.ts must import delegated helpers: ${requiredControllerImport}`);
+  }
+}
+
+for (const requiredControllerUsage of [
+  "useWorkspaceSettingsAnchor({",
+  "useWorkspaceSettingsLoad({ router, state, workspaceId })",
+  "createWorkspaceSettingsActions({ state, workspaceId })",
+  "...state",
+  "...actions",
+]) {
+  if (!controllerSource.includes(requiredControllerUsage)) {
+    throw new Error(`use-workspace-settings-controller.ts must delegate controller orchestration: ${requiredControllerUsage}`);
+  }
+}
+
+for (const forbiddenControllerToken of [
+  "useEffect(",
+  'from "../lib/api";',
+  'from "../lib/auth";',
+  "getStoredToken(",
+  "getCurrentUser(",
+  "getWorkspace(",
+  "getKnowledgeStats(",
+  "listProviderConfigs(",
+  "listWorkspaceMembers(",
+  "getMediaStorageProviderHealth(",
+  "updateProviderConfig(",
+  "updateWorkspaceMember(",
+  "deleteWorkspaceMember(",
+  "window.addEventListener(",
+  "scrollIntoView(",
+  "const refreshMediaStorageHealthState =",
+  "const handleSaveProviderConfig =",
+  "const handleUpdateMemberRole =",
+  "const handleRemoveMember =",
+]) {
+  if (controllerSource.includes(forbiddenControllerToken)) {
+    throw new Error(`use-workspace-settings-controller.ts must keep effect and action internals delegated: ${forbiddenControllerToken}`);
+  }
+}
+
+const maxControllerLines = 85;
+if (controllerLineCount > maxControllerLines) {
+  throw new Error(
+    `use-workspace-settings-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
+  );
 }
 
 console.log("workspace-settings structure verification passed");

@@ -736,6 +736,10 @@ Last updated: 2026-03-23
   - workspace-shell initial-load, selected-record sync, and notification polling effects now live in dedicated hooks instead of remaining inline inside `apps/web/components/use-workspace-shell-effects.ts`
   - the workspace-shell effects hook now focuses more narrowly on effect-module assembly while shared effect types own the shell lifecycle contract
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these effect boundaries and a size ceiling for `use-workspace-shell-effects.ts`
+- Workspace Settings Controller Extraction V1:
+  - workspace-settings anchor sync, initial-load flow, and member/provider action handlers now live in dedicated modules instead of remaining inline inside `apps/web/components/use-workspace-settings-controller.ts`
+  - the workspace-settings controller now focuses more narrowly on state registration and helper assembly while shared controller types own its long-term contract
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces these controller boundaries and a size ceiling for `use-workspace-settings-controller.ts`
 
 ## Next
 - Continue the next product slice
