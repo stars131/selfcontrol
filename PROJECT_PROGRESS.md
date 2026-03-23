@@ -656,10 +656,14 @@ Last updated: 2026-03-23
   - record reminder tool props contract and reminder bindings now live in dedicated modules instead of remaining inline inside `apps/web/components/record-reminder-tools.tsx`
   - the reminder-tools shell now focuses more narrowly on selected-record gating and reminder panel composition while the dedicated bindings module owns reminder form and status-update closures
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder binding boundary and lowers the reminder-tools size ceiling
+- Record Results View Structure Extraction V1:
+  - record results switcher, timeline view, flat list view, shared card renderer, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-results-view.tsx`
+  - the record results shell now focuses more narrowly on shared-card props assembly and view-mode switching while dedicated modules own switcher UI and result rendering modes
+  - `apps/web/scripts/verify-record-results-view-structure.mjs` and `apps/web/package.json` now make this results-view boundary executable
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the record reminder tools bindings extraction
+- Continue simplifying remaining large UI module boundaries after the record results view extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
