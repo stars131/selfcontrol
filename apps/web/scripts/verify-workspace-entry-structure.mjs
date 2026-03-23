@@ -11,14 +11,17 @@ const workspaceEntryActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-controller-actions.ts",
 );
+const workspaceEntryCopyPath = path.resolve(process.cwd(), "components/workspace-entry-copy.ts");
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceEntryActionsPath, "utf8");
+const copySource = fs.readFileSync(workspaceEntryCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
+const copyLineCount = copySource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceEntryController } from "./use-workspace-entry-controller";')) {
   throw new Error("workspace-entry-client.tsx must import useWorkspaceEntryController");
@@ -206,6 +209,42 @@ if (actionsLineCount > maxActionsLines) {
   throw new Error(
     `workspace-entry-controller-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`,
   );
+}
+
+for (const requiredCopyImport of [
+  'from "./workspace-entry-copy.payload";',
+  'from "./workspace-entry-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyImport)) {
+    throw new Error(`workspace-entry-copy.ts must import delegated copy modules: ${requiredCopyImport}`);
+  }
+}
+
+for (const requiredCopyUsage of [
+  "WORKSPACE_ENTRY_COPY[locale]",
+  "WORKSPACE_ENTRY_DISPLAY_COPY[locale]",
+  'export type { WorkspaceEntryCopy } from "./workspace-entry-copy.types";',
+]) {
+  if (!copySource.includes(requiredCopyUsage)) {
+    throw new Error(`workspace-entry-copy.ts must stay as a thin copy wrapper: ${requiredCopyUsage}`);
+  }
+}
+
+for (const forbiddenCopyToken of [
+  "const COPY:",
+  "const DISPLAY_COPY:",
+  '"zh-CN": {',
+  'en: {',
+  'ja: {',
+]) {
+  if (copySource.includes(forbiddenCopyToken)) {
+    throw new Error(`workspace-entry-copy.ts must keep locale payload delegated: ${forbiddenCopyToken}`);
+  }
+}
+
+const maxCopyLines = 20;
+if (copyLineCount > maxCopyLines) {
+  throw new Error(`workspace-entry-copy.ts exceeded ${maxCopyLines} lines: ${copyLineCount}`);
 }
 
 console.log("workspace-entry structure verification passed");

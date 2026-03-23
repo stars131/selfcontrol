@@ -772,6 +772,10 @@ Last updated: 2026-03-23
   - record-panel browse/editor workspace input builders, controller input builder, and header prop builder now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-v2-shell-props.ts`
   - the shell-props module now focuses more narrowly on acting as a stable re-export boundary while specialized helpers own each shell-level mapping surface
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this shell-props re-export boundary and a size ceiling for `record-panel-v2-shell-props.ts`
+- Workspace Entry Copy Payload Extraction V1:
+  - workspace-entry locale payload data and shared copy typing now live in dedicated payload and types modules instead of remaining inline inside `apps/web/components/workspace-entry-copy.ts`
+  - the workspace-entry copy module now focuses more narrowly on acting as a thin locale wrapper while delegated modules own large static copy payloads
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces this copy-wrapper boundary and a size ceiling for `workspace-entry-copy.ts`
 
 ## Next
 - Continue the next product slice
