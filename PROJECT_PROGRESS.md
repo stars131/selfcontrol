@@ -624,10 +624,14 @@ Last updated: 2026-03-23
   - workspace settings header and environment overview card now live in dedicated modules instead of remaining inline inside `apps/web/components/workspace-settings-client.tsx`
   - the workspace settings page now focuses more narrowly on controller wiring and role-gated section composition while dedicated modules own top header and environment diagnostics presentation
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces both boundaries and lowers the settings shell size ceiling again
+- Record Editor Fields Structure Extraction V1:
+  - record editor primary fields, metadata fields, location fields, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-editor-fields.tsx`
+  - the editor field shell now focuses more narrowly on form-group composition while dedicated modules own text fields, type/time fields, and location inputs
+  - `apps/web/scripts/verify-record-editor-fields-structure.mjs` and `apps/web/package.json` now make this editor-field boundary executable
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace settings header and overview extraction
+- Continue simplifying remaining large UI module boundaries after the record editor fields extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
