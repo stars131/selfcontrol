@@ -2,8 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 const mapPanelPath = path.resolve(process.cwd(), "components/map-panel.tsx");
+const mapPanelControllerPath = path.resolve(process.cwd(), "components/use-map-panel-controller.ts");
 const mapPanelSource = fs.readFileSync(mapPanelPath, "utf8");
+const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelLineCount = mapPanelSource.split(/\r?\n/).length;
+const mapPanelControllerLineCount = mapPanelControllerSource.split(/\r?\n/).length;
 
 if (!mapPanelSource.includes('from "../lib/map-panel";')) {
   throw new Error("map-panel.tsx must import shared helpers from ../lib/map-panel");
@@ -43,6 +46,29 @@ if (!mapPanelSource.includes("useMapPanelController({")) {
 
 if (!mapPanelSource.includes("useMapPanelAmap({")) {
   throw new Error("map-panel.tsx must delegate AMap lifecycle wiring to useMapPanelAmap");
+}
+
+for (const requiredControllerImport of [
+  'from "./map-panel-controller-filter";',
+  'from "./map-panel-controller-search";',
+  'from "./use-map-panel-derived-data";',
+  'from "./use-map-panel-sync";',
+]) {
+  if (!mapPanelControllerSource.includes(requiredControllerImport)) {
+    throw new Error(`use-map-panel-controller.ts must import delegated controller helpers: ${requiredControllerImport}`);
+  }
+}
+
+for (const requiredControllerUsage of [
+  "searchMapPanelLocation({",
+  "buildMappedOnlyLocationFilter(filterDraft)",
+  "buildClearedLocationFilter()",
+  "useMapPanelDerivedData({",
+  "useMapPanelSync({",
+]) {
+  if (!mapPanelControllerSource.includes(requiredControllerUsage)) {
+    throw new Error(`use-map-panel-controller.ts must delegate controller helper logic: ${requiredControllerUsage}`);
+  }
 }
 
 for (const forbiddenToken of [
@@ -92,6 +118,13 @@ for (const forbiddenToken of [
 const maxAllowedLines = 120;
 if (mapPanelLineCount > maxAllowedLines) {
   throw new Error(`map-panel.tsx exceeded ${maxAllowedLines} lines: ${mapPanelLineCount}`);
+}
+
+const maxControllerLines = 120;
+if (mapPanelControllerLineCount > maxControllerLines) {
+  throw new Error(
+    `use-map-panel-controller.ts exceeded ${maxControllerLines} lines: ${mapPanelControllerLineCount}`,
+  );
 }
 
 console.log("map-panel structure verification passed");

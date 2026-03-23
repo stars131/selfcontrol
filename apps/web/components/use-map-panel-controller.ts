@@ -1,19 +1,13 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 
-import {
-  formatCoordinate,
-  parseDraftCoordinates,
-  parseMappedRecords,
-  readLatitudeValue,
-  readLongitudeValue,
-  type AMapGeocoderInstance,
-  type AMapMapInstance,
-  type LocationDraft,
-} from "../lib/map-panel";
+import { type AMapGeocoderInstance, type AMapMapInstance, type LocationDraft } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
-import { readLocationReview } from "../lib/location";
+import { buildClearedLocationFilter, buildMappedOnlyLocationFilter } from "./map-panel-controller-filter";
+import { getMapPanelActionErrorMessage, searchMapPanelLocation } from "./map-panel-controller-search";
+import { useMapPanelDerivedData } from "./use-map-panel-derived-data";
+import { useMapPanelSync } from "./use-map-panel-sync";
 
 type UseMapPanelControllerProps = {
   records: RecordItem[];
@@ -28,10 +22,6 @@ type UseMapPanelControllerProps = {
 };
 
 export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;
-
-function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
 
 export function useMapPanelController({
   records,
@@ -49,25 +39,19 @@ export function useMapPanelController({
   const [searching, setSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDraft, setFilterDraft] = useState<LocationFilterState>(locationFilter);
-  const mappedRecords = useMemo(() => parseMappedRecords(records), [records]);
-  const confirmedCount = useMemo(
-    () => records.filter((record) => readLocationReview(record.extra_data)?.status === "confirmed").length,
-    [records],
-  );
-  const needsReviewCount = useMemo(
-    () => records.filter((record) => readLocationReview(record.extra_data)?.status === "needs_review").length,
-    [records],
-  );
-  const draftCoordinates = parseDraftCoordinates(draftLocation);
+  const { draftCoordinates, mappedRecords, confirmedCount, needsReviewCount } = useMapPanelDerivedData({
+    draftLocation,
+    records,
+  });
   const isEditable = Boolean(onDraftLocationChange);
 
-  useEffect(() => {
-    setFilterDraft(locationFilter);
-  }, [locationFilter]);
-
-  useEffect(() => {
-    setSearchQuery(draftLocation?.place_name || draftLocation?.address || "");
-  }, [draftLocation?.address, draftLocation?.place_name, selectedRecordId]);
+  useMapPanelSync({
+    draftLocation,
+    locationFilter,
+    selectedRecordId,
+    setFilterDraft,
+    setSearchQuery,
+  });
 
   const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,47 +64,15 @@ export function useMapPanelController({
 
     try {
       const keyword = searchQuery.trim();
-      const result = await new Promise<Record<string, unknown>>((resolve, reject) => {
-        geocoderRef.current?.getLocation?.(keyword, (status, geocodeResult) => {
-          if (status !== "complete") {
-            reject(new Error("Location search failed"));
-            return;
-          }
-          resolve(geocodeResult);
-        });
+      await searchMapPanelLocation({
+        draftLocation,
+        geocoder: geocoderRef.current,
+        keyword,
+        map: mapRef.current,
+        onDraftLocationChange,
       });
-
-      const geocodes = Array.isArray(result.geocodes) ? result.geocodes : [];
-      const firstItem =
-        geocodes[0] && typeof geocodes[0] === "object" && geocodes[0] !== null
-          ? (geocodes[0] as Record<string, unknown>)
-          : null;
-
-      if (!firstItem) {
-        throw new Error("No matching location found");
-      }
-
-      const location =
-        typeof firstItem.location === "object" && firstItem.location !== null
-          ? (firstItem.location as Record<string, unknown>)
-          : {};
-      const longitude = readLongitudeValue(location);
-      const latitude = readLatitudeValue(location);
-
-      if (latitude === null || longitude === null) {
-        throw new Error("Failed to read coordinates from the search result");
-      }
-
-      onDraftLocationChange({
-        place_name: draftLocation?.place_name || keyword,
-        address: typeof firstItem.formattedAddress === "string" ? firstItem.formattedAddress : keyword,
-        latitude: formatCoordinate(latitude),
-        longitude: formatCoordinate(longitude),
-        source: "search",
-      });
-      mapRef.current?.setZoomAndCenter?.(15, [longitude, latitude]);
     } catch (caught) {
-      setSearchError(getActionErrorMessage(caught, "Location search failed"));
+      setSearchError(getMapPanelActionErrorMessage(caught, "Location search failed"));
     } finally {
       setSearching(false);
     }
@@ -131,20 +83,13 @@ export function useMapPanelController({
   };
 
   const handleUseMappedOnly = async () => {
-    const nextFilter: LocationFilterState = {
-      ...filterDraft,
-      mappedOnly: "mapped",
-    };
+    const nextFilter = buildMappedOnlyLocationFilter(filterDraft);
     setFilterDraft(nextFilter);
     await onApplyLocationFilter(nextFilter);
   };
 
   const handleClearFilter = async () => {
-    const nextFilter: LocationFilterState = {
-      placeQuery: "",
-      reviewStatus: "all",
-      mappedOnly: "all",
-    };
+    const nextFilter = buildClearedLocationFilter();
     setFilterDraft(nextFilter);
     await onApplyLocationFilter(nextFilter);
   };

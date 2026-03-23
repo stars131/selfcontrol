@@ -716,10 +716,14 @@ Last updated: 2026-03-23
   - workspace-shell client refreshers/effects/actions/panels prop builders and shared typing now live in dedicated modules instead of staying combined inside `apps/web/components/workspace-shell-client-props.ts`
   - the stable client-props module now acts as a narrow re-export boundary while dedicated helpers own each shell-level argument-shaping surface
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces the re-export boundary and a size ceiling for `workspace-shell-client-props.ts`
+- Map Panel Controller Helper Extraction V1:
+  - map-panel location search flow and location-filter helper logic now live in dedicated controller helper modules instead of remaining inline inside `apps/web/components/use-map-panel-controller.ts`
+  - the controller hook now focuses more narrowly on state, derived data, and handler orchestration while dedicated helpers own geocoder result parsing and filter-shape creation
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these controller-helper boundaries and a size ceiling for `use-map-panel-controller.ts`
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the workspace shell client props split
+- Continue simplifying remaining large UI module boundaries after the map panel controller helper extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
