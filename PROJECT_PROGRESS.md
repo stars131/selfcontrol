@@ -612,10 +612,14 @@ Last updated: 2026-03-23
   - provider feature card field inputs, status tags, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/provider-feature-card.tsx`
   - the provider feature card now focuses more narrowly on feature-card composition while dedicated modules own provider input controls and status presentation
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now tightens the provider feature card size ceiling and enforces the new composition boundary
+- Record Reminder Panel Structure Extraction V1:
+  - record reminder form, reminder item card, and props contract now live in dedicated modules instead of remaining inline inside `apps/web/components/record-reminder-panel.tsx`
+  - the reminder panel now focuses more narrowly on reminder workflow composition while dedicated modules own reminder form controls and per-reminder action rendering
+  - `apps/web/scripts/verify-record-reminder-panel-structure.mjs` and `apps/web/package.json` now make this reminder-panel boundary executable
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the provider feature card extraction
+- Continue simplifying remaining large UI module boundaries after the record reminder panel extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
