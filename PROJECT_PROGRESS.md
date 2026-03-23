@@ -832,6 +832,10 @@ Last updated: 2026-03-23
   - workspace-shell initial workspace bootstrap, core refreshes, and role-aware startup loading now flow through a dedicated helper instead of remaining inline inside `apps/web/components/use-workspace-shell-initial-load.ts`
   - the initial-load hook now focuses more narrowly on effect lifecycle, auth token gating, and failure handling while helper modules own startup data orchestration
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this initial-data helper boundary for `use-workspace-shell-initial-load.ts`
+- Chat Panel Body Content Extraction V1:
+  - chat-panel body composition for conversations, management surfaces, audit logs, notifications, messages, and composer now lives in a dedicated content component instead of remaining inline inside `apps/web/components/chat-panel.tsx`
+  - the chat-panel shell now focuses more narrowly on action wiring, header rendering, and top-level body delegation
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this body-content boundary for `chat-panel.tsx`
 
 ## Next
 - Continue the next product slice

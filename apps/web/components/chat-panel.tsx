@@ -1,11 +1,6 @@
 "use client";
 
-import { ChatAuditLogsCard } from "./chat-audit-logs-card";
-import { ChatPanelComposer } from "./chat-panel-composer";
-import { ChatConversationBar } from "./chat-conversation-bar";
-import { ChatPanelManagementSection } from "./chat-panel-management-section";
-import { ChatMessageThread } from "./chat-message-thread";
-import { ChatNotificationsCard } from "./chat-notifications-card";
+import { ChatPanelContent } from "./chat-panel-content";
 import { ChatPanelHeader } from "./chat-panel-header";
 import type { ChatPanelProps } from "./chat-panel.types";
 import { useChatPanelActions } from "./use-chat-panel-actions";
@@ -78,57 +73,53 @@ export function ChatPanel({
         workspaceId={workspaceId}
         workspaceRole={workspaceRole}
       />
-      <div className="panel-body">
-        <ChatConversationBar
-          activeConversationId={activeConversationId}
-          canWriteWorkspace={canWriteWorkspace}
-          conversations={conversations}
-          onCreateConversation={onCreateConversation}
-          onSelectConversation={onSelectConversation}
-          onSyncNotifications={handleSyncNotifications}
-          syncing={syncing}
-        />
-        <ChatPanelManagementSection
-          canManageSharing={canManageSharing}
-          canManageWorkspace={canManageWorkspace}
-          creatingShare={creatingShare}
-          disablingShareId={disablingShareId}
-          knowledgeStats={knowledgeStats}
-          latestShareUrl={latestShareUrl}
-          onCreateShareLink={handleCreateShareLink}
-          onDisableShareLink={handleDisableShareLink}
-          onReindexKnowledge={handleReindexKnowledge}
-          onSaveProviderConfig={onSaveProviderConfig}
-          providerConfigs={providerConfigs}
-          reindexing={reindexing}
-          setShareMaxUses={setShareMaxUses}
-          setShareName={setShareName}
-          setSharePermission={setSharePermission}
-          shareLinks={shareLinks}
-          shareMaxUses={shareMaxUses}
-          shareName={shareName}
-          sharePermission={sharePermission}
-        />
-        <ChatAuditLogsCard
-          auditLogs={auditLogs}
-          onRefreshAuditLogs={handleRefreshAuditLogs}
-          refreshingAudit={refreshingAudit}
-        />
-        <ChatNotificationsCard
-          notifications={notifications}
-          onMarkNotificationRead={onMarkNotificationRead}
-          unreadCount={unreadCount}
-        />
-        <ChatMessageThread messages={messages} />
-        <ChatPanelComposer
-          canWriteWorkspace={canWriteWorkspace}
-          draft={draft}
-          error={error}
-          loading={loading}
-          onSend={handleSend}
-          setDraft={setDraft}
-        />
-      </div>
+      <ChatPanelContent
+        activeConversationId={activeConversationId}
+        auditLogs={auditLogs}
+        canManageSharing={canManageSharing}
+        canManageWorkspace={canManageWorkspace}
+        canWriteWorkspace={canWriteWorkspace}
+        conversations={conversations}
+        creatingShare={creatingShare}
+        disablingShareId={disablingShareId}
+        draft={draft}
+        error={error}
+        handleCreateShareLink={handleCreateShareLink}
+        handleDisableShareLink={handleDisableShareLink}
+        handleRefreshAuditLogs={handleRefreshAuditLogs}
+        handleReindexKnowledge={handleReindexKnowledge}
+        handleSend={handleSend}
+        handleSyncNotifications={handleSyncNotifications}
+        knowledgeStats={knowledgeStats}
+        latestSharePath={latestSharePath}
+        latestShareUrl={latestShareUrl}
+        loading={loading}
+        messages={messages}
+        notifications={notifications}
+        onCreateConversation={onCreateConversation}
+        onCreateShareLink={onCreateShareLink}
+        onDisableShareLink={onDisableShareLink}
+        onMarkNotificationRead={onMarkNotificationRead}
+        onRefreshAuditLogs={onRefreshAuditLogs}
+        onReindexKnowledge={onReindexKnowledge}
+        onSaveProviderConfig={onSaveProviderConfig}
+        onSelectConversation={onSelectConversation}
+        onSendMessage={onSendMessage}
+        onSyncNotifications={onSyncNotifications}
+        providerConfigs={providerConfigs}
+        refreshingAudit={refreshingAudit}
+        reindexing={reindexing}
+        setDraft={setDraft}
+        setShareMaxUses={setShareMaxUses}
+        setShareName={setShareName}
+        setSharePermission={setSharePermission}
+        shareLinks={shareLinks}
+        shareMaxUses={shareMaxUses}
+        shareName={shareName}
+        sharePermission={sharePermission}
+        syncing={syncing}
+        unreadCount={unreadCount}
+      />
     </section>
   );
 }

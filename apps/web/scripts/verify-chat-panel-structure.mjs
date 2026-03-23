@@ -29,11 +29,13 @@ if (!source.includes("useChatPanelActions({")) {
 }
 
 if (!source.includes('import { ChatPanelManagementSection } from "./chat-panel-management-section";')) {
-  throw new Error("chat-panel.tsx must import ChatPanelManagementSection");
+  if (!source.includes('import { ChatPanelContent } from "./chat-panel-content";')) {
+    throw new Error("chat-panel.tsx must import ChatPanelContent");
+  }
 }
 
-if (!source.includes("<ChatPanelManagementSection")) {
-  throw new Error("chat-panel.tsx must delegate management-card rendering to ChatPanelManagementSection");
+if (!source.includes("<ChatPanelContent")) {
+  throw new Error("chat-panel.tsx must delegate body rendering to ChatPanelContent");
 }
 
 if (!chatPanelManagementSectionSource.includes('import { useStoredLocale } from "../lib/locale";')) {
@@ -60,14 +62,6 @@ for (const requiredUsage of [
   }
 }
 
-if (!source.includes('import { ChatConversationBar } from "./chat-conversation-bar";')) {
-  throw new Error("chat-panel.tsx must import ChatConversationBar");
-}
-
-if (!source.includes("<ChatConversationBar")) {
-  throw new Error("chat-panel.tsx must delegate conversation-bar rendering to ChatConversationBar");
-}
-
 if (!source.includes('import { ChatPanelHeader } from "./chat-panel-header";')) {
   throw new Error("chat-panel.tsx must import ChatPanelHeader");
 }
@@ -86,38 +80,6 @@ if (!chatPanelHeaderSource.includes('href={`/app/workspaces/${workspaceId}/setti
 
 if (!chatConversationBarSource.includes("className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}")) {
   throw new Error("chat-conversation-bar.tsx must keep conversation pill rendering");
-}
-
-if (!source.includes('import { ChatAuditLogsCard } from "./chat-audit-logs-card";')) {
-  throw new Error("chat-panel.tsx must import ChatAuditLogsCard");
-}
-
-if (!source.includes("<ChatAuditLogsCard")) {
-  throw new Error("chat-panel.tsx must delegate audit-log rendering to ChatAuditLogsCard");
-}
-
-if (!source.includes('import { ChatNotificationsCard } from "./chat-notifications-card";')) {
-  throw new Error("chat-panel.tsx must import ChatNotificationsCard");
-}
-
-if (!source.includes("<ChatNotificationsCard")) {
-  throw new Error("chat-panel.tsx must delegate notification rendering to ChatNotificationsCard");
-}
-
-if (!source.includes('import { ChatMessageThread } from "./chat-message-thread";')) {
-  throw new Error("chat-panel.tsx must import ChatMessageThread");
-}
-
-if (!source.includes("<ChatMessageThread")) {
-  throw new Error("chat-panel.tsx must delegate message-thread rendering to ChatMessageThread");
-}
-
-if (!source.includes('import { ChatPanelComposer } from "./chat-panel-composer";')) {
-  throw new Error("chat-panel.tsx must import ChatPanelComposer");
-}
-
-if (!source.includes("<ChatPanelComposer")) {
-  throw new Error("chat-panel.tsx must delegate composer rendering to ChatPanelComposer");
 }
 
 if (!chatPanelComposerSource.includes("Examples: save this snack note")) {
@@ -166,6 +128,11 @@ for (const forbiddenToken of [
   "const handleRefreshAuditLogs =",
   "const handleCreateShareLink =",
   "const handleDisableShareLink =",
+  "<ChatConversationBar",
+  "<ChatAuditLogsCard",
+  "<ChatNotificationsCard",
+  "<ChatMessageThread",
+  "<ChatPanelComposer",
   "knowledgeStats.chunk_count",
   "auditLogs.map((item)",
   "shareLinks.map((item)",
