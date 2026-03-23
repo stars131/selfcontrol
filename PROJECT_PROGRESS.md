@@ -820,6 +820,10 @@ Last updated: 2026-03-23
   - workspace-shell conversation, record/media, and managed-surface refresh helpers now live in dedicated modules instead of remaining combined inside `apps/web/components/use-workspace-shell-refreshers.ts`
   - the top-level refresher module now focuses more narrowly on composing grouped refreshers while specialized helpers own each data-loading surface
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this refresher assembly boundary and a size ceiling for `use-workspace-shell-refreshers.ts`
+- Workspace Entry Create and Import Action Split V1:
+  - workspace-entry create-workspace actions and import/import-job actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-entry-workspace-actions.ts`
+  - the workspace-actions module now focuses more narrowly on composing grouped entry actions while specialized helpers own each workflow
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces this workspace action assembly boundary and a size ceiling for `workspace-entry-workspace-actions.ts`
 
 ## Next
 - Continue the next product slice
