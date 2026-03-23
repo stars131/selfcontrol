@@ -1,25 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-import { readLocationHistory, readLocationReview } from "../lib/location";
-import { useStoredLocale } from "../lib/locale";
-import { formatByteCount } from "../lib/record-panel-format";
-import { canRetryMediaIssue } from "../lib/record-panel-media";
-import {
-  createEmptyForm,
-  createEmptyReminderForm,
-  type LocationReviewFormState,
-  type ReminderFormState,
-} from "../lib/record-panel-forms";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
-import type { LocationReview, RecordFilterState } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
 import { createRecordPanelControllerMediaHandlers } from "./record-panel-controller-media-handlers";
 import { createRecordPanelControllerRecordHandlers } from "./record-panel-controller-record-handlers";
-import type { ViewMode } from "./record-panel-v2.types";
 import { useRecordPanelControllerSync } from "./use-record-panel-controller-sync";
+import { useRecordPanelControllerState } from "./use-record-panel-controller-state";
+import { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
 
 export function useRecordPanelController({
   authToken,
@@ -41,60 +27,18 @@ export function useRecordPanelController({
   onUploadMedia,
   recordFilter,
 }: ControllerProps) {
-  const { locale } = useStoredLocale();
-  const avoidCount = records.filter((record) => record.is_avoid).length;
-  const foodCount = records.filter((record) => record.type_code === "food").length;
-  const selectedRecord = useMemo(
-    () => records.find((record) => record.id === selectedRecordId) ?? null,
-    [records, selectedRecordId],
-  );
-
-  const [form, setForm] = useState(createEmptyForm);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null);
-  const [retryingMediaId, setRetryingMediaId] = useState<string | null>(null);
-  const [bulkRetryingDeadLetter, setBulkRetryingDeadLetter] = useState(false);
-  const [downloadingMediaId, setDownloadingMediaId] = useState<string | null>(null);
-  const [deletingMediaId, setDeletingMediaId] = useState<string | null>(null);
-  const [reminderForm, setReminderForm] = useState<ReminderFormState>(createEmptyReminderForm);
-  const [savingReminder, setSavingReminder] = useState(false);
-  const [locationReviewForm, setLocationReviewForm] = useState<LocationReviewFormState>({
-    status: "pending",
-    note: "",
-  });
-  const [viewMode, setViewMode] = useState<ViewMode>("timeline");
-  const [filterDraft, setFilterDraft] = useState<RecordFilterState>(recordFilter);
-  const [presetName, setPresetName] = useState("");
-  const [selectedDeadLetterIds, setSelectedDeadLetterIds] = useState<string[]>([]);
-  const [error, setError] = useState("");
-
-  const selectedLocationReview = useMemo<LocationReview | null>(
-    () => readLocationReview(selectedRecord?.extra_data),
-    [selectedRecord],
-  );
-  const selectedLocationHistory = useMemo(
-    () => readLocationHistory(selectedRecord?.extra_data).slice().reverse(),
-    [selectedRecord],
-  );
-  const selectedRecordMediaSizeBytes = useMemo(
-    () => mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0),
-    [mediaAssets],
-  );
-  const actionableDeadLetterIds = useMemo(
-    () =>
-      new Set(
-        (mediaDeadLetterOverview?.items ?? [])
-          .filter((item) => canRetryMediaIssue(item))
-          .map((item) => item.media_id),
-      ),
-    [mediaDeadLetterOverview],
-  );
-
-  const { mediaIssueCopy, panelCopy } = useMemo(() => getRecordPanelUiBundle(locale), [locale]);
   const {
-    copy: detailCopy,
+    locale,
+    avoidCount,
+    foodCount,
+    selectedRecord,
+    selectedLocationReview,
+    selectedLocationHistory,
+    selectedRecordMediaSizeLabel,
+    actionableDeadLetterIds,
+    mediaIssueCopy,
+    panelCopy,
+    detailCopy,
     formatAvoidCountLabel,
     formatFileCountLabel,
     formatHistoryTimestampLabel,
@@ -107,8 +51,48 @@ export function useRecordPanelController({
     formatTimelineDateLabel,
     summarizeHistoryActionLabel,
     summarizeRecordFilterLabel,
-  } = useMemo(() => getRecordPanelDetailBundle(locale), [locale]);
-
+  } = useRecordPanelControllerViewData({
+    mediaAssets,
+    mediaDeadLetterOverview,
+    records,
+    selectedRecordId,
+  });
+  const {
+    form,
+    setForm,
+    saving,
+    setSaving,
+    deleting,
+    setDeleting,
+    uploading,
+    setUploading,
+    refreshingMediaId,
+    setRefreshingMediaId,
+    retryingMediaId,
+    setRetryingMediaId,
+    bulkRetryingDeadLetter,
+    setBulkRetryingDeadLetter,
+    downloadingMediaId,
+    setDownloadingMediaId,
+    deletingMediaId,
+    setDeletingMediaId,
+    reminderForm,
+    setReminderForm,
+    savingReminder,
+    setSavingReminder,
+    locationReviewForm,
+    setLocationReviewForm,
+    viewMode,
+    setViewMode,
+    filterDraft,
+    setFilterDraft,
+    presetName,
+    setPresetName,
+    selectedDeadLetterIds,
+    setSelectedDeadLetterIds,
+    error,
+    setError,
+  } = useRecordPanelControllerState(recordFilter);
   useRecordPanelControllerSync({
     actionableDeadLetterIds,
     recordFilter,
@@ -119,7 +103,6 @@ export function useRecordPanelController({
     setReminderForm,
     setSelectedDeadLetterIds,
   });
-
   const recordHandlers = createRecordPanelControllerRecordHandlers({
     detailCopy,
     filterDraft,
@@ -163,7 +146,6 @@ export function useRecordPanelController({
     setUploading,
     workspaceId,
   });
-
   return {
     locale,
     avoidCount,
@@ -194,7 +176,7 @@ export function useRecordPanelController({
     error,
     selectedLocationReview,
     selectedLocationHistory,
-    selectedRecordMediaSizeLabel: formatByteCount(selectedRecordMediaSizeBytes),
+    selectedRecordMediaSizeLabel,
     mediaIssueCopy,
     panelCopy,
     detailCopy,

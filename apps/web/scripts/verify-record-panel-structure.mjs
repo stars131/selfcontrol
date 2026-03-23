@@ -154,6 +154,8 @@ for (const requiredControllerImport of [
   'from "./record-panel-controller-record-handlers";',
   'from "./record-panel-controller-media-handlers";',
   'from "./use-record-panel-controller-sync";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
 ]) {
   if (!controllerSource.includes(requiredControllerImport)) {
     throw new Error(`use-record-panel-controller.ts must import delegated controller helpers: ${requiredControllerImport}`);
@@ -162,6 +164,8 @@ for (const requiredControllerImport of [
 
 for (const requiredControllerUsage of [
   "useRecordPanelControllerSync({",
+  "useRecordPanelControllerViewData({",
+  "useRecordPanelControllerState(recordFilter)",
   "createRecordPanelControllerRecordHandlers({",
   "createRecordPanelControllerMediaHandlers({",
   "...recordHandlers",
@@ -175,6 +179,8 @@ for (const requiredControllerUsage of [
 for (const forbiddenControllerToken of [
   'from "../lib/api";',
   "useEffect(",
+  "useMemo(",
+  "useState(",
   "const handle",
   "fetchMediaBlob(",
   "event.preventDefault()",
@@ -186,7 +192,7 @@ for (const forbiddenControllerToken of [
   }
 }
 
-const maxControllerLines = 220;
+const maxControllerLines = 200;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
 }
