@@ -800,6 +800,10 @@ Last updated: 2026-03-23
   - AMap initialization/click geocoding and marker/render-viewport updates now live in dedicated hooks instead of remaining combined inside `apps/web/components/use-map-panel-amap.ts`
   - the top-level AMap hook now focuses more narrowly on helper composition and final cleanup behavior
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these delegated AMap helper boundaries and a size ceiling for `use-map-panel-amap.ts`
+- Workspace Shell Chat and Record Action Split V1:
+  - workspace-shell chat conversation/message actions and record create/update/delete actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-shell-chat-record-actions.ts`
+  - the chat-record action module now focuses more narrowly on composing grouped action sets while specialized helpers own each workflow
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces this chat/record action assembly boundary and a size ceiling for `workspace-shell-chat-record-actions.ts`
 
 ## Next
 - Continue the next product slice
