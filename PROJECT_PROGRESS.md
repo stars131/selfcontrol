@@ -848,6 +848,10 @@ Last updated: 2026-03-23
   - editor-workspace copy label mapping and action callback mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
   - the editor-workspace prop builder now focuses more narrowly on top-level prop assembly while delegated helpers own copy and action group mapping
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these editor prop-helper boundaries for `record-panel-v2-editor-workspace-props.ts`
+- Record Panel Media Asset File and Status Action Split V1:
+  - media-asset upload/download/delete actions and refresh/retry status actions now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-asset-actions.ts`
+  - the media-asset action module now focuses more narrowly on composing grouped media action sets while specialized helpers own each workflow
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this media-asset action assembly boundary and a size ceiling for `record-panel-controller-media-asset-actions.ts`
 
 ## Next
 - Continue the next product slice

@@ -28,6 +28,10 @@ const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
 );
+const recordPanelMediaAssetActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-asset-actions.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
@@ -36,6 +40,7 @@ const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
+const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
@@ -45,6 +50,7 @@ const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
+const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
@@ -326,6 +332,50 @@ const maxFormActionsLines = 20;
 if (formActionsLines > maxFormActionsLines) {
   throw new Error(
     `record-panel-controller-form-actions.ts exceeded ${maxFormActionsLines} lines: ${formActionsLines}`,
+  );
+}
+
+for (const requiredMediaAssetActionsImport of [
+  'from "./record-panel-controller-media-file-actions";',
+  'from "./record-panel-controller-media-status-actions";',
+]) {
+  if (!mediaAssetActionsSource.includes(requiredMediaAssetActionsImport)) {
+    throw new Error(`record-panel-controller-media-asset-actions.ts must import delegated media-asset helpers: ${requiredMediaAssetActionsImport}`);
+  }
+}
+
+for (const requiredMediaAssetActionsUsage of [
+  "createRecordPanelControllerMediaFileActions(props)",
+  "createRecordPanelControllerMediaStatusActions(props)",
+  "...mediaFileActions",
+  "...mediaStatusActions",
+]) {
+  if (!mediaAssetActionsSource.includes(requiredMediaAssetActionsUsage)) {
+    throw new Error(`record-panel-controller-media-asset-actions.ts must delegate media-asset action assembly: ${requiredMediaAssetActionsUsage}`);
+  }
+}
+
+for (const forbiddenMediaAssetActionsToken of [
+  'from "../lib/api";',
+  'from "../lib/record-panel-detail";',
+  "const handleUpload",
+  "const handleRefreshMedia",
+  "const handleRetryMediaProcessing",
+  "const handleDownloadMedia",
+  "const handleDeleteMediaAsset",
+  "fetchMediaBlob(",
+  "onRefreshMediaStatus(",
+  "onRetryMedia(",
+]) {
+  if (mediaAssetActionsSource.includes(forbiddenMediaAssetActionsToken)) {
+    throw new Error(`record-panel-controller-media-asset-actions.ts must keep media file/status internals delegated: ${forbiddenMediaAssetActionsToken}`);
+  }
+}
+
+const maxMediaAssetActionsLines = 20;
+if (mediaAssetActionsLines > maxMediaAssetActionsLines) {
+  throw new Error(
+    `record-panel-controller-media-asset-actions.ts exceeded ${maxMediaAssetActionsLines} lines: ${mediaAssetActionsLines}`,
   );
 }
 
