@@ -904,6 +904,10 @@ Last updated: 2026-03-23
   - provider-settings anchor highlight logic, secret-status formatter, and feature-card prop mapping now live in a dedicated helper module instead of remaining inline inside `apps/web/components/provider-settings-panel.tsx`
   - the provider-settings panel now focuses more narrowly on copy lookup, controller composition, and section layout while the helper module owns view-level mapping concerns
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces this panel-helper boundary and a helper size ceiling
+- Chat Panel Action Input and Result Split V1:
+  - chat-panel action handler input shaping and final action-result assembly now live in a dedicated helper module instead of remaining inline inside `apps/web/components/use-chat-panel-actions.ts`
+  - the top-level chat action hook now focuses more narrowly on composing state, derived data, and grouped handlers while the helper module owns mapping between those layers
+  - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces this action helper boundary and tighter size ceilings for `use-chat-panel-actions.ts`
 
 ## Next
 - Continue the next product slice
