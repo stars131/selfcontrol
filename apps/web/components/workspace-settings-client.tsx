@@ -2,15 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useStoredLocale } from "../lib/locale";
-import { ProviderSettingsPanel } from "./provider-settings-panel";
 import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";
-import { WorkspaceMembersSection } from "./workspace-members-section";
 import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
-import { WorkspaceExportCard } from "./workspace-export-card";
-import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";
 import { WorkspaceSettingsHeader } from "./workspace-settings-header";
+import { WorkspaceSettingsManagedSections } from "./workspace-settings-managed-sections";
 import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";
-import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";
+import { WorkspaceSettingsProviderSection } from "./workspace-settings-provider-section";
 
 export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
@@ -68,71 +65,35 @@ export function WorkspaceSettingsClient({ workspaceId }: { workspaceId: string }
           ) : null}
           <div className="two-column-grid">
             <WorkspaceSettingsOverviewCard copy={copy} knowledgeStats={knowledgeStats} />
-            {managedRole ? (
-              <ProviderSettingsPanel
-                locale={locale}
-                highlightedAnchor={highlightedAnchor}
-                mediaStorageHealth={mediaStorageHealth}
-                onRefreshMediaStorageHealth={
-                  token ? async () => refreshMediaStorageHealthState(token) : null
-                }
-                onSaveProviderConfig={handleSaveProviderConfig}
-                providerConfigs={providerConfigs}
-                refreshingMediaStorageHealth={refreshingMediaStorageHealth}
-              />
-            ) : (
-              <section className="record-card">
-                <div className="eyebrow">{copy.providerTitle}</div>
-                <div className="notice" style={{ marginTop: 12 }}>
-                  {copy.viewerNotice}
-                </div>
-              </section>
-            )}
-          </div>
-          {managedRole ? (
-            token ? (
-              <WorkspaceMediaRetentionCard
-                locale={locale}
-                role={managedRole}
-                token={token}
-                workspaceId={workspaceId}
-              />
-            ) : null
-          ) : null}
-          {managedRole ? (
-            token ? (
-              <WorkspaceExportCard
-                locale={locale}
-                role={managedRole}
-                token={token}
-                workspaceId={workspaceId}
-                workspaceSlug={workspace?.slug}
-              />
-            ) : null
-          ) : null}
-          {managedRole ? (
-            token ? (
-              <WorkspaceExportJobsCard
-                locale={locale}
-                role={managedRole}
-                token={token}
-                workspaceId={workspaceId}
-              />
-            ) : null
-          ) : null}
-          {managedRole ? (
-            <WorkspaceMembersSection
-              copy={copy}
+            <WorkspaceSettingsProviderSection
+              highlightedAnchor={highlightedAnchor}
               locale={locale}
-              members={members}
-              onRemoveMember={handleRemoveMember}
-              onUpdateMemberRole={handleUpdateMemberRole}
-              removingMemberId={removingMemberId}
-              savingMemberId={savingMemberId}
-              userId={user?.id}
-              workspaceRole={managedRole}
+              managedRole={managedRole}
+              mediaStorageHealth={mediaStorageHealth}
+              onRefreshMediaStorageHealth={
+                token ? async () => refreshMediaStorageHealthState(token) : null
+              }
+              onSaveProviderConfig={handleSaveProviderConfig}
+              providerConfigs={providerConfigs}
+              refreshingMediaStorageHealth={refreshingMediaStorageHealth}
+              providerTitle={copy.providerTitle}
+              viewerNotice={copy.viewerNotice}
             />
-          ) : null}
+          </div>
+          <WorkspaceSettingsManagedSections
+            copy={copy}
+            locale={locale}
+            managedRole={managedRole}
+            members={members}
+            onRemoveMember={handleRemoveMember}
+            onUpdateMemberRole={handleUpdateMemberRole}
+            removingMemberId={removingMemberId}
+            savingMemberId={savingMemberId}
+            token={token}
+            userId={user?.id}
+            workspaceId={workspaceId}
+            workspaceSlug={workspace?.slug}
+          />
         </div>
       </section>
     </main>

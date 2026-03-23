@@ -2,7 +2,17 @@ import fs from "node:fs";
 import path from "node:path";
 
 const workspaceSettingsPath = path.resolve(process.cwd(), "components/workspace-settings-client.tsx");
+const workspaceSettingsProviderSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-section.tsx",
+);
+const workspaceSettingsManagedSectionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-managed-sections.tsx",
+);
 const source = fs.readFileSync(workspaceSettingsPath, "utf8");
+const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
+const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";')) {
@@ -21,28 +31,62 @@ if (!source.includes("getWorkspaceSettingsCopy(locale)")) {
   throw new Error("workspace-settings-client.tsx must delegate locale copy lookup to getWorkspaceSettingsCopy");
 }
 
-if (!source.includes('import { WorkspaceMembersSection } from "./workspace-members-section";')) {
-  throw new Error("workspace-settings-client.tsx must import WorkspaceMembersSection");
+for (const requiredImport of [
+  'import { WorkspaceSettingsHeader } from "./workspace-settings-header";',
+  'import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";',
+  'import { WorkspaceSettingsProviderSection } from "./workspace-settings-provider-section";',
+  'import { WorkspaceSettingsManagedSections } from "./workspace-settings-managed-sections";',
+]) {
+  if (!source.includes(requiredImport)) {
+    throw new Error(`workspace-settings-client.tsx must import delegated settings sections: ${requiredImport}`);
+  }
 }
 
-if (!source.includes('import { WorkspaceSettingsHeader } from "./workspace-settings-header";')) {
-  throw new Error("workspace-settings-client.tsx must import WorkspaceSettingsHeader");
+for (const requiredUsage of [
+  "<WorkspaceSettingsHeader",
+  "<WorkspaceSettingsOverviewCard",
+  "<WorkspaceSettingsProviderSection",
+  "<WorkspaceSettingsManagedSections",
+]) {
+  if (!source.includes(requiredUsage)) {
+    throw new Error(`workspace-settings-client.tsx must compose delegated settings sections: ${requiredUsage}`);
+  }
 }
 
-if (!source.includes('import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";')) {
-  throw new Error("workspace-settings-client.tsx must import WorkspaceSettingsOverviewCard");
+if (!providerSectionSource.includes('import { ProviderSettingsPanel } from "./provider-settings-panel";')) {
+  throw new Error("workspace-settings-provider-section.tsx must import ProviderSettingsPanel");
 }
 
-if (!source.includes("<WorkspaceMembersSection")) {
-  throw new Error("workspace-settings-client.tsx must delegate member management rendering to WorkspaceMembersSection");
+for (const requiredProviderUsage of [
+  "<ProviderSettingsPanel",
+  "providerTitle",
+  "viewerNotice",
+]) {
+  if (!providerSectionSource.includes(requiredProviderUsage)) {
+    throw new Error(`workspace-settings-provider-section.tsx must own provider/viewer branching: ${requiredProviderUsage}`);
+  }
 }
 
-if (!source.includes("<WorkspaceSettingsHeader")) {
-  throw new Error("workspace-settings-client.tsx must delegate settings header rendering");
+for (const requiredManagedImport of [
+  'import { WorkspaceMembersSection } from "./workspace-members-section";',
+  'import { WorkspaceExportCard } from "./workspace-export-card";',
+  'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
+  'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+]) {
+  if (!managedSectionsSource.includes(requiredManagedImport)) {
+    throw new Error(`workspace-settings-managed-sections.tsx must import delegated managed sections: ${requiredManagedImport}`);
+  }
 }
 
-if (!source.includes("<WorkspaceSettingsOverviewCard")) {
-  throw new Error("workspace-settings-client.tsx must delegate environment overview rendering");
+for (const requiredManagedUsage of [
+  "<WorkspaceMembersSection",
+  "<WorkspaceExportCard",
+  "<WorkspaceExportJobsCard",
+  "<WorkspaceMediaRetentionCard",
+]) {
+  if (!managedSectionsSource.includes(requiredManagedUsage)) {
+    throw new Error(`workspace-settings-managed-sections.tsx must compose delegated managed sections: ${requiredManagedUsage}`);
+  }
 }
 
 for (const forbiddenToken of [
@@ -61,13 +105,23 @@ for (const forbiddenToken of [
   "process.env.NEXT_PUBLIC_AMAP_KEY",
   'className="panel-header"',
   "workspace?.role === \"owner\" || workspace?.role === \"editor\"",
+  'import { ProviderSettingsPanel } from "./provider-settings-panel";',
+  'import { WorkspaceMembersSection } from "./workspace-members-section";',
+  'import { WorkspaceExportCard } from "./workspace-export-card";',
+  'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
+  'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+  "<ProviderSettingsPanel",
+  "<WorkspaceMembersSection",
+  "<WorkspaceExportCard",
+  "<WorkspaceExportJobsCard",
+  "<WorkspaceMediaRetentionCard",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-settings-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 160;
+const maxAllowedLines = 110;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-settings-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }

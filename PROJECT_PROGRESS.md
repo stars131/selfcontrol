@@ -676,10 +676,14 @@ Last updated: 2026-03-23
   - chat management cards for knowledge indexing, share links, and provider settings now live in a dedicated management section instead of remaining inline inside `apps/web/components/chat-panel.tsx`
   - the chat panel shell now focuses more narrowly on action wiring, conversation flow, and high-level panel composition while the management section owns operator-only card orchestration and locale lookup
   - `apps/web/scripts/verify-chat-panel-structure.mjs` now enforces the management-section boundary and lowers the chat panel size ceiling again
+- Workspace Settings Managed Sections Extraction V1:
+  - provider settings branching and owner/editor follow-up sections now live in dedicated provider and managed section components instead of remaining inline inside `apps/web/components/workspace-settings-client.tsx`
+  - the workspace settings shell now focuses more narrowly on routing, locale, controller wiring, and top-level page composition while dedicated sections own viewer gating and owner/editor-only settings surfaces
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces both section boundaries and lowers the workspace settings shell size ceiling again
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat panel management section extraction
+- Continue simplifying remaining large UI module boundaries after the workspace settings sections extraction
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
