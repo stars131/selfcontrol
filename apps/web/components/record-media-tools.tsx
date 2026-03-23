@@ -1,123 +1,19 @@
 "use client";
 
 import { RecordMediaSelectedContent } from "./record-media-selected-content";
+import {
+  buildRecordMediaSelectedContentProps,
+  buildRecordMediaToolsActionsProps,
+} from "./record-media-tools-props";
 import { RecordMediaToolsActions } from "./record-media-tools-actions";
 import type { RecordMediaToolsProps } from "./record-media-tools.types";
 
-export function RecordMediaTools({
-  authToken,
-  canWriteWorkspace,
-  hasSelectedRecord,
-  workspaceId,
-  locale,
-  error,
-  saving,
-  deleting,
-  uploading,
-  saveButtonLabel,
-  deleteButtonLabel,
-  uploadAttachmentLabel,
-  uploadingMediaLabel,
-  allTrackedFilesPresentLabel,
-  localLabel,
-  missingFilesLabel,
-  needsAttentionLabel,
-  processingCompletedLabel,
-  queuedLabel,
-  queueStateLabel,
-  remoteLabel,
-  storageHealthLabel,
-  storageMixLabel,
-  thisRecordMediaLabel,
-  workspaceStorageLabel,
-  selectedRecordMediaSizeLabel,
-  largestFilePrefixLabel,
-  noMediaLabel,
-  mediaIssueCopy,
-  mediaAssets,
-  mediaDeadLetterOverview,
-  mediaProcessingOverview,
-  mediaStorageSummary,
-  downloadingMediaId,
-  refreshingMediaId,
-  retryingMediaId,
-  deletingMediaId,
-  bulkRetryingDeadLetter,
-  selectedDeadLetterIds,
-  formatFileCountLabel,
-  formatHistoryTimestampLabel,
-  onDelete,
-  onUpload,
-  onDeleteMediaAsset,
-  onDownloadMedia,
-  onRefreshMedia,
-  onRetryMediaProcessing,
-  onSelectAllDeadLetter,
-  onClearDeadLetterSelection,
-  onBulkRetrySelectedDeadLetter,
-  onBulkRetryAllDeadLetter,
-  onToggleDeadLetterSelection,
-}: RecordMediaToolsProps) {
+export function RecordMediaTools(props: RecordMediaToolsProps) {
   return (
     <>
-      <RecordMediaToolsActions
-        canWriteWorkspace={canWriteWorkspace}
-        deleteButtonLabel={deleteButtonLabel}
-        deleting={deleting}
-        error={error}
-        hasSelectedRecord={hasSelectedRecord}
-        onDelete={onDelete}
-        onUpload={onUpload}
-        saveButtonLabel={saveButtonLabel}
-        saving={saving}
-        uploadAttachmentLabel={uploadAttachmentLabel}
-        uploading={uploading}
-        uploadingMediaLabel={uploadingMediaLabel}
-      />
-      {hasSelectedRecord ? (
-        <RecordMediaSelectedContent
-          allTrackedFilesPresentLabel={allTrackedFilesPresentLabel}
-          authToken={authToken}
-          bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-          canWriteWorkspace={canWriteWorkspace}
-          deletingMediaId={deletingMediaId}
-          downloadingMediaId={downloadingMediaId}
-          formatFileCountLabel={formatFileCountLabel}
-          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-          largestFilePrefixLabel={largestFilePrefixLabel}
-          locale={locale}
-          localLabel={localLabel}
-          mediaAssets={mediaAssets}
-          mediaDeadLetterOverview={mediaDeadLetterOverview}
-          mediaIssueCopy={mediaIssueCopy}
-          mediaProcessingOverview={mediaProcessingOverview}
-          mediaStorageSummary={mediaStorageSummary}
-          missingFilesLabel={missingFilesLabel}
-          needsAttentionLabel={needsAttentionLabel}
-          noMediaLabel={noMediaLabel}
-          onBulkRetryAllDeadLetter={onBulkRetryAllDeadLetter}
-          onBulkRetrySelectedDeadLetter={onBulkRetrySelectedDeadLetter}
-          onClearDeadLetterSelection={onClearDeadLetterSelection}
-          onDeleteMediaAsset={onDeleteMediaAsset}
-          onDownloadMedia={onDownloadMedia}
-          onRefreshMedia={onRefreshMedia}
-          onRetryMediaProcessing={onRetryMediaProcessing}
-          onSelectAllDeadLetter={onSelectAllDeadLetter}
-          onToggleDeadLetterSelection={onToggleDeadLetterSelection}
-          processingCompletedLabel={processingCompletedLabel}
-          queuedLabel={queuedLabel}
-          queueStateLabel={queueStateLabel}
-          refreshingMediaId={refreshingMediaId}
-          remoteLabel={remoteLabel}
-          retryingMediaId={retryingMediaId}
-          selectedDeadLetterIds={selectedDeadLetterIds}
-          selectedRecordMediaSizeLabel={selectedRecordMediaSizeLabel}
-          storageHealthLabel={storageHealthLabel}
-          storageMixLabel={storageMixLabel}
-          thisRecordMediaLabel={thisRecordMediaLabel}
-          workspaceId={workspaceId}
-          workspaceStorageLabel={workspaceStorageLabel}
-        />
+      <RecordMediaToolsActions {...buildRecordMediaToolsActionsProps(props)} />
+      {props.hasSelectedRecord ? (
+        <RecordMediaSelectedContent {...buildRecordMediaSelectedContentProps(props)} />
       ) : null}
     </>
   );

@@ -824,6 +824,10 @@ Last updated: 2026-03-23
   - workspace-entry create-workspace actions and import/import-job actions now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-entry-workspace-actions.ts`
   - the workspace-actions module now focuses more narrowly on composing grouped entry actions while specialized helpers own each workflow
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces this workspace action assembly boundary and a size ceiling for `workspace-entry-workspace-actions.ts`
+- Record Media Tools Prop Builder Split V1:
+  - record-media-tools child prop assembly now lives in a dedicated builder module instead of remaining inline inside `apps/web/components/record-media-tools.tsx`
+  - the media-tools shell now focuses more narrowly on section composition and selected-record gating while the builder module owns child prop mapping
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces this prop-builder boundary for `record-media-tools.tsx`
 
 ## Next
 - Continue the next product slice

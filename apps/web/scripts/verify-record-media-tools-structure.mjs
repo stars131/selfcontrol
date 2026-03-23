@@ -23,9 +23,15 @@ if (!source.includes('import { RecordMediaSelectedContent } from "./record-media
   throw new Error("record-media-tools.tsx must import RecordMediaSelectedContent");
 }
 
+if (!source.includes('from "./record-media-tools-props";')) {
+  throw new Error("record-media-tools.tsx must import record-media-tools-props");
+}
+
 for (const requiredUsage of [
   "<RecordMediaToolsActions",
   "<RecordMediaSelectedContent",
+  "buildRecordMediaToolsActionsProps(props)",
+  "buildRecordMediaSelectedContentProps(props)",
 ]) {
   if (!source.includes(requiredUsage)) {
     throw new Error(`record-media-tools.tsx must keep composing media sub-sections: ${requiredUsage}`);
@@ -40,6 +46,9 @@ for (const forbiddenToken of [
   "<MediaStorageOverview",
   "<RecordMediaProcessingPanels",
   "<MediaAssetSection",
+  "saveButtonLabel={saveButtonLabel}",
+  "allTrackedFilesPresentLabel={allTrackedFilesPresentLabel}",
+  "authToken={authToken}",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`record-media-tools.tsx must keep its props contract delegated: ${forbiddenToken}`);
