@@ -1,10 +1,8 @@
 "use client";
 
-import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
+import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
-type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
-
-export function buildRecordPanelControllerCoreViewDataResult(viewData: ControllerViewData) {
+export function buildRecordPanelControllerCoreViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput) {
   return {
     locale: viewData.locale,
     avoidCount: viewData.avoidCount,

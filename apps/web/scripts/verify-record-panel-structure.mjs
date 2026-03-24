@@ -5565,7 +5565,7 @@ if (controllerViewDataResultTypesLines > maxControllerViewDataResultTypesLines) 
 }
 
 for (const requiredControllerCoreViewDataResultImport of [
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-view-data-result.types";',
 ]) {
   if (!controllerCoreViewDataResultSource.includes(requiredControllerCoreViewDataResultImport)) {
     throw new Error(
@@ -5575,7 +5575,7 @@ for (const requiredControllerCoreViewDataResultImport of [
 }
 
 for (const requiredControllerCoreViewDataResultUsage of [
-  "export function buildRecordPanelControllerCoreViewDataResult(viewData: ControllerViewData)",
+  "export function buildRecordPanelControllerCoreViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
   "locale: viewData.locale,",
   "selectedRecord: viewData.selectedRecord,",
   "selectedRecordMediaSizeLabel: viewData.selectedRecordMediaSizeLabel,",
@@ -5583,6 +5583,17 @@ for (const requiredControllerCoreViewDataResultUsage of [
   if (!controllerCoreViewDataResultSource.includes(requiredControllerCoreViewDataResultUsage)) {
     throw new Error(
       `record-panel-controller-core-view-data-result.ts must own non-localized result assembly: ${requiredControllerCoreViewDataResultUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerCoreViewDataResultToken of [
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerViewData = ReturnType<",
+]) {
+  if (controllerCoreViewDataResultSource.includes(forbiddenControllerCoreViewDataResultToken)) {
+    throw new Error(
+      `record-panel-controller-core-view-data-result.ts must keep core view-data typing delegated: ${forbiddenControllerCoreViewDataResultToken}`,
     );
   }
 }
@@ -5595,7 +5606,7 @@ if (controllerCoreViewDataResultLines > maxControllerCoreViewDataResultLines) {
 }
 
 for (const requiredControllerLocalizedViewDataResultImport of [
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-view-data-result.types";',
 ]) {
   if (!controllerLocalizedViewDataResultSource.includes(requiredControllerLocalizedViewDataResultImport)) {
     throw new Error(
@@ -5605,7 +5616,7 @@ for (const requiredControllerLocalizedViewDataResultImport of [
 }
 
 for (const requiredControllerLocalizedViewDataResultUsage of [
-  "export function buildRecordPanelControllerLocalizedViewDataResult(viewData: ControllerViewData)",
+  "export function buildRecordPanelControllerLocalizedViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
   "detailCopy: viewData.detailCopy,",
   "formatReminderStatusLabel: viewData.formatReminderStatusLabel,",
   "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
@@ -5613,6 +5624,17 @@ for (const requiredControllerLocalizedViewDataResultUsage of [
   if (!controllerLocalizedViewDataResultSource.includes(requiredControllerLocalizedViewDataResultUsage)) {
     throw new Error(
       `record-panel-controller-localized-view-data-result.ts must own localized result assembly: ${requiredControllerLocalizedViewDataResultUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerLocalizedViewDataResultToken of [
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerViewData = ReturnType<",
+]) {
+  if (controllerLocalizedViewDataResultSource.includes(forbiddenControllerLocalizedViewDataResultToken)) {
+    throw new Error(
+      `record-panel-controller-localized-view-data-result.ts must keep localized view-data typing delegated: ${forbiddenControllerLocalizedViewDataResultToken}`,
     );
   }
 }

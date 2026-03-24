@@ -1448,6 +1448,10 @@ Last updated: 2026-03-24
   - controller-view-data-result input contract now lives in `apps/web/components/record-panel-controller-view-data-result.types.ts` instead of remaining embedded directly in the controller view-data result helper
   - `apps/web/components/record-panel-controller-view-data-result.ts` now consumes the extracted view-data-result input contract behind a thinner composition boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-view-data-result input-type boundary and keeps local `ReturnType` aliases out of the view-data result module
+- Record Panel Controller View-Data Slice Input Reuse V1:
+  - controller core/localized view-data result helpers now reuse the shared input contract from `apps/web/components/record-panel-controller-view-data-result.types.ts` instead of declaring local `ReturnType` aliases
+  - `apps/web/components/record-panel-controller-core-view-data-result.ts` and `apps/web/components/record-panel-controller-localized-view-data-result.ts` now consume the shared view-data-result input contract behind thinner slice boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared view-data-result input boundary across the core and localized result helper modules
 
 ## Next
 - Continue the next product slice
