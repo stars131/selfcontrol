@@ -1332,6 +1332,10 @@ Last updated: 2026-03-24
   - dead-letter retry/selection action input contracts now live in `apps/web/components/record-panel-controller-dead-letter-action-input.types.ts` instead of remaining embedded across the retry, selection, and aggregate action modules
   - `apps/web/components/record-panel-controller-dead-letter-retry-action.ts`, `apps/web/components/record-panel-controller-dead-letter-selection-actions.ts`, and `apps/web/components/record-panel-controller-dead-letter-actions.ts` now consume the shared extracted dead-letter action contracts behind thinner orchestration boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter action input-type boundary and keeps inline retry/selection contract definitions out of the action modules
+- Record Panel Media Status Action Input Type Split V3:
+  - media refresh/retry action input contracts now live in `apps/web/components/record-panel-controller-media-status-action-input.types.ts` instead of remaining embedded across the refresh, retry, and aggregate media-status modules
+  - `apps/web/components/record-panel-controller-media-refresh-action.ts`, `apps/web/components/record-panel-controller-media-retry-action.ts`, and `apps/web/components/record-panel-controller-media-status-actions.ts` now consume the shared extracted media-status contracts behind thinner orchestration boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-status action input-type boundary and keeps inline refresh/retry contract definitions out of the execution modules
 
 ## Next
 - Continue the next product slice
