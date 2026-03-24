@@ -1,16 +1,11 @@
-import type { LocationReviewFormState, RecordFormState } from "../lib/record-panel-forms";
+import type { BuildRecordPanelLocationExtraDataInput } from "./record-panel-controller-record-location-payload.types";
 
 export function buildRecordPanelLocationExtraData({
   form,
   latitude,
   locationReviewForm,
   longitude,
-}: {
-  form: RecordFormState;
-  latitude: number | null;
-  locationReviewForm: LocationReviewFormState;
-  longitude: number | null;
-}) {
+}: BuildRecordPanelLocationExtraDataInput) {
   const hasLocation =
     form.location.place_name.trim() ||
     form.location.address.trim() ||

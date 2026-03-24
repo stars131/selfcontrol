@@ -565,6 +565,10 @@ const recordPanelRecordLocationPayloadPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-location-payload.ts",
 );
+const recordPanelRecordLocationPayloadTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-location-payload.types.ts",
+);
 const recordPanelReminderActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-actions.ts",
@@ -1257,6 +1261,10 @@ const recordSaveCoordinateSource = fs.readFileSync(
   "utf8",
 );
 const recordLocationPayloadSource = fs.readFileSync(recordPanelRecordLocationPayloadPath, "utf8");
+const recordLocationPayloadTypesSource = fs.readFileSync(
+  recordPanelRecordLocationPayloadTypesPath,
+  "utf8",
+);
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
 const reminderSubmitActionSource = fs.readFileSync(recordPanelReminderSubmitActionPath, "utf8");
 const reminderActionInputTypesSource = fs.readFileSync(
@@ -1561,6 +1569,8 @@ const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const recordSavePayloadTypesLines = recordSavePayloadTypesSource.split(/\r?\n/).length;
 const recordSaveCoordinateLines = recordSaveCoordinateSource.split(/\r?\n/).length;
 const recordLocationPayloadLines = recordLocationPayloadSource.split(/\r?\n/).length;
+const recordLocationPayloadTypesLines =
+  recordLocationPayloadTypesSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderSubmitActionLines = reminderSubmitActionSource.split(/\r?\n/).length;
 const reminderActionInputTypesLines = reminderActionInputTypesSource.split(/\r?\n/).length;
@@ -6747,7 +6757,7 @@ if (recordSaveCoordinateLines > maxRecordSaveCoordinateLines) {
 }
 
 for (const requiredRecordLocationPayloadImport of [
-  'from "../lib/record-panel-forms";',
+  'from "./record-panel-controller-record-location-payload.types";',
 ]) {
   if (!recordLocationPayloadSource.includes(requiredRecordLocationPayloadImport)) {
     throw new Error(
@@ -6758,6 +6768,7 @@ for (const requiredRecordLocationPayloadImport of [
 
 for (const requiredRecordLocationPayloadUsage of [
   "export function buildRecordPanelLocationExtraData({",
+  "}: BuildRecordPanelLocationExtraDataInput) {",
   "const hasLocation =",
   'source: form.location.source || "manual"',
   "location_review: {",
@@ -6770,10 +6781,51 @@ for (const requiredRecordLocationPayloadUsage of [
   }
 }
 
+for (const forbiddenRecordLocationPayloadToken of [
+  'from "../lib/record-panel-forms";',
+  "form: RecordFormState;",
+  "latitude: number | null;",
+  "locationReviewForm: LocationReviewFormState;",
+  "longitude: number | null;",
+]) {
+  if (recordLocationPayloadSource.includes(forbiddenRecordLocationPayloadToken)) {
+    throw new Error(
+      `record-panel-controller-record-location-payload.ts must keep location payload typing delegated: ${forbiddenRecordLocationPayloadToken}`,
+    );
+  }
+}
+
 const maxRecordLocationPayloadLines = 40;
 if (recordLocationPayloadLines > maxRecordLocationPayloadLines) {
   throw new Error(
     `record-panel-controller-record-location-payload.ts exceeded ${maxRecordLocationPayloadLines} lines: ${recordLocationPayloadLines}`,
+  );
+}
+
+for (const requiredRecordLocationPayloadTypesImport of [
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!recordLocationPayloadTypesSource.includes(requiredRecordLocationPayloadTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-location-payload.types.ts must import location payload type contracts: ${requiredRecordLocationPayloadTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordLocationPayloadTypesUsage of [
+  "export type BuildRecordPanelLocationExtraDataInput = { form: RecordFormState; latitude: number | null; locationReviewForm: LocationReviewFormState; longitude: number | null };",
+]) {
+  if (!recordLocationPayloadTypesSource.includes(requiredRecordLocationPayloadTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-location-payload.types.ts must own location payload type contracts: ${requiredRecordLocationPayloadTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordLocationPayloadTypesLines = 5;
+if (recordLocationPayloadTypesLines > maxRecordLocationPayloadTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-location-payload.types.ts exceeded ${maxRecordLocationPayloadTypesLines} lines: ${recordLocationPayloadTypesLines}`,
   );
 }
 

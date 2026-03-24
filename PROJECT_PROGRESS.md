@@ -1464,6 +1464,10 @@ Last updated: 2026-03-24
   - media-status runner input contract now lives in `apps/web/components/record-panel-controller-media-status-runner.types.ts` instead of remaining embedded directly in the media-status runner helper
   - `apps/web/components/record-panel-controller-media-status-runner.ts` now consumes the extracted runner input contract behind a thinner execution boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-status runner input-type boundary and keeps inline callback/message/media-id typing out of the runner helper
+- Record Panel Location Payload Input Type Split V1:
+  - location-payload input contract now lives in `apps/web/components/record-panel-controller-record-location-payload.types.ts` instead of remaining embedded directly in the location payload helper
+  - `apps/web/components/record-panel-controller-record-location-payload.ts` now consumes the extracted location-payload input contract behind a thinner assembly boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the location-payload input-type boundary and keeps inline form/location-review coordinate typing out of the payload helper
 
 ## Next
 - Continue the next product slice
