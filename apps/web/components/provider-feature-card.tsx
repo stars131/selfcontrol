@@ -1,13 +1,11 @@
 "use client";
 
 import { MediaStorageHealthCard } from "./media-storage-health-card";
+import { ProviderFeatureCardActions } from "./provider-feature-card-actions";
 import { ProviderFeatureCardFields } from "./provider-feature-card-fields";
+import { readProviderFeatureCardAnchorHighlightClass } from "./provider-feature-card-helpers";
 import { ProviderFeatureCardStatus } from "./provider-feature-card-status";
 import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
-
-function readAnchorHighlightClass(targetId: string, highlightedAnchor?: string | null): string {
-  return highlightedAnchor === targetId ? " anchor-highlight" : "";
-}
 
 export function ProviderFeatureCard({
   copy,
@@ -27,7 +25,7 @@ export function ProviderFeatureCard({
 }: ProviderFeatureCardProps) {
   return (
     <article
-      className={`message${readAnchorHighlightClass(`provider-${item.feature_code}`, highlightedAnchor)}`}
+      className={`message${readProviderFeatureCardAnchorHighlightClass(`provider-${item.feature_code}`, highlightedAnchor)}`}
       id={`provider-${item.feature_code}`}
     >
       <div className="eyebrow">{item.feature_label}</div>
@@ -52,28 +50,18 @@ export function ProviderFeatureCard({
           locale={locale}
           mediaStorageHealth={mediaStorageHealth}
           onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
-          readAnchorHighlightClass={readAnchorHighlightClass}
+          readAnchorHighlightClass={readProviderFeatureCardAnchorHighlightClass}
           refreshingMediaStorageHealth={refreshingMediaStorageHealth}
         />
       ) : null}
-      <div className="action-row" style={{ marginTop: 10 }}>
-        <button
-          className="button secondary"
-          disabled={!isDirty || providerSavingCode === item.feature_code}
-          type="button"
-          onClick={() => onReset(item)}
-        >
-          {copy.reset}
-        </button>
-        <button
-          className="button secondary"
-          disabled={providerSavingCode === item.feature_code || !isDirty}
-          type="button"
-          onClick={() => void onSave(item.feature_code)}
-        >
-          {providerSavingCode === item.feature_code ? copy.saving : copy.saveProvider}
-        </button>
-      </div>
+      <ProviderFeatureCardActions
+        copy={copy}
+        isDirty={isDirty}
+        item={item}
+        onReset={onReset}
+        onSave={onSave}
+        providerSavingCode={providerSavingCode}
+      />
     </article>
   );
 }

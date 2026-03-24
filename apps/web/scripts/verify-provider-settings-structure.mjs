@@ -22,6 +22,20 @@ const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
 const providerFeatureCardLineCount = providerFeatureCardSource.split(/\r?\n/).length;
+const providerFeatureCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-actions.tsx",
+);
+const providerFeatureCardActionsSource = fs.readFileSync(providerFeatureCardActionsPath, "utf8");
+const providerFeatureCardActionsLineCount =
+  providerFeatureCardActionsSource.split(/\r?\n/).length;
+const providerFeatureCardHelpersPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-helpers.ts",
+);
+const providerFeatureCardHelpersSource = fs.readFileSync(providerFeatureCardHelpersPath, "utf8");
+const providerFeatureCardHelpersLineCount =
+  providerFeatureCardHelpersSource.split(/\r?\n/).length;
 const providerFeatureCardFieldsPath = path.resolve(process.cwd(), "components/provider-feature-card-fields.tsx");
 const providerFeatureCardFieldsSource = fs.readFileSync(providerFeatureCardFieldsPath, "utf8");
 const mediaStorageHealthCardPath = path.resolve(
@@ -93,6 +107,14 @@ if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from 
   throw new Error("provider-feature-card.tsx must import MediaStorageHealthCard");
 }
 
+if (!providerFeatureCardSource.includes('import { ProviderFeatureCardActions } from "./provider-feature-card-actions";')) {
+  throw new Error("provider-feature-card.tsx must import ProviderFeatureCardActions");
+}
+
+if (!providerFeatureCardSource.includes('import { readProviderFeatureCardAnchorHighlightClass } from "./provider-feature-card-helpers";')) {
+  throw new Error("provider-feature-card.tsx must import readProviderFeatureCardAnchorHighlightClass");
+}
+
 if (!providerFeatureCardSource.includes('import { ProviderFeatureCardFields } from "./provider-feature-card-fields";')) {
   throw new Error("provider-feature-card.tsx must import ProviderFeatureCardFields");
 }
@@ -111,6 +133,24 @@ if (!providerFeatureCardFieldsSource.includes('import { ProviderFeatureMediaStor
 
 if (!providerFeatureCardSource.includes("<MediaStorageHealthCard")) {
   throw new Error("provider-feature-card.tsx must render MediaStorageHealthCard for media storage health presentation");
+}
+
+if (!providerFeatureCardSource.includes("<ProviderFeatureCardActions")) {
+  throw new Error("provider-feature-card.tsx must delegate action row rendering to ProviderFeatureCardActions");
+}
+
+for (const forbiddenProviderFeatureCardToken of [
+  "function readAnchorHighlightClass",
+  'highlightedAnchor === targetId ? " anchor-highlight" : ""',
+  'className="action-row"',
+  "copy.reset",
+  "copy.saveProvider",
+]) {
+  if (providerFeatureCardSource.includes(forbiddenProviderFeatureCardToken)) {
+    throw new Error(
+      `provider-feature-card.tsx must keep helper and action-row details delegated: ${forbiddenProviderFeatureCardToken}`,
+    );
+  }
 }
 
 for (const requiredHealthCardImport of [
@@ -292,6 +332,54 @@ const maxProviderFeatureCardLines = 120;
 if (providerFeatureCardLineCount > maxProviderFeatureCardLines) {
   throw new Error(
     `provider-feature-card.tsx exceeded ${maxProviderFeatureCardLines} lines: ${providerFeatureCardLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardActionsImport of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+]) {
+  if (!providerFeatureCardActionsSource.includes(requiredProviderFeatureCardActionsImport)) {
+    throw new Error(
+      `provider-feature-card-actions.tsx must import shared provider feature card props: ${requiredProviderFeatureCardActionsImport}`,
+    );
+  }
+}
+
+for (const requiredProviderFeatureCardActionsUsage of [
+  "export function ProviderFeatureCardActions({",
+  "copy.reset",
+  "copy.saveProvider",
+  "providerSavingCode === item.feature_code ? copy.saving : copy.saveProvider",
+]) {
+  if (!providerFeatureCardActionsSource.includes(requiredProviderFeatureCardActionsUsage)) {
+    throw new Error(
+      `provider-feature-card-actions.tsx must own action-row rendering: ${requiredProviderFeatureCardActionsUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardActionsLines = 40;
+if (providerFeatureCardActionsLineCount > maxProviderFeatureCardActionsLines) {
+  throw new Error(
+    `provider-feature-card-actions.tsx exceeded ${maxProviderFeatureCardActionsLines} lines: ${providerFeatureCardActionsLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardHelpersUsage of [
+  "export function readProviderFeatureCardAnchorHighlightClass(",
+  'return highlightedAnchor === targetId ? " anchor-highlight" : "";',
+]) {
+  if (!providerFeatureCardHelpersSource.includes(requiredProviderFeatureCardHelpersUsage)) {
+    throw new Error(
+      `provider-feature-card-helpers.ts must own anchor highlight helper logic: ${requiredProviderFeatureCardHelpersUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardHelpersLines = 15;
+if (providerFeatureCardHelpersLineCount > maxProviderFeatureCardHelpersLines) {
+  throw new Error(
+    `provider-feature-card-helpers.ts exceeded ${maxProviderFeatureCardHelpersLines} lines: ${providerFeatureCardHelpersLineCount}`,
   );
 }
 

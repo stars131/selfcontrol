@@ -928,6 +928,10 @@ Last updated: 2026-03-23
   - workspace-shell raw state registration and workspace-role permission derivation now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-state.ts`
   - the top-level workspace-shell state hook now focuses more narrowly on composing raw state and derived permissions while helper modules own each concern
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these shell-state helper boundaries and dedicated size ceilings
+- Provider Feature Card Helper and Action Split V1:
+  - provider-feature-card anchor highlight logic and save/reset action-row rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/provider-feature-card.tsx`
+  - the provider-feature-card shell now focuses more narrowly on composing fields, status, media-storage health, and actions while helper modules own local view logic
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these provider-feature-card helper boundaries and size ceilings
 
 ## Next
 - Continue the next product slice
