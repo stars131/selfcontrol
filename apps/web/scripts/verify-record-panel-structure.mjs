@@ -220,6 +220,14 @@ const recordPanelMediaStatusHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-helpers.ts",
 );
+const recordPanelMediaStatusErrorHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-status-error-helpers.ts",
+);
+const recordPanelMediaStatusRunnerPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-status-runner.ts",
+);
 const recordPanelMediaFileActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-file-actions.ts",
@@ -413,6 +421,11 @@ const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPa
 const mediaRefreshActionSource = fs.readFileSync(recordPanelMediaRefreshActionPath, "utf8");
 const mediaRetryActionSource = fs.readFileSync(recordPanelMediaRetryActionPath, "utf8");
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
+const mediaStatusErrorHelpersSource = fs.readFileSync(
+  recordPanelMediaStatusErrorHelpersPath,
+  "utf8",
+);
+const mediaStatusRunnerSource = fs.readFileSync(recordPanelMediaStatusRunnerPath, "utf8");
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
 const mediaTransferActionsSource = fs.readFileSync(recordPanelMediaTransferActionsPath, "utf8");
 const mediaUploadActionSource = fs.readFileSync(recordPanelMediaUploadActionPath, "utf8");
@@ -504,6 +517,8 @@ const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
 const mediaRefreshActionLines = mediaRefreshActionSource.split(/\r?\n/).length;
 const mediaRetryActionLines = mediaRetryActionSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
+const mediaStatusErrorHelpersLines = mediaStatusErrorHelpersSource.split(/\r?\n/).length;
+const mediaStatusRunnerLines = mediaStatusRunnerSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
 const mediaTransferActionsLines = mediaTransferActionsSource.split(/\r?\n/).length;
 const mediaUploadActionLines = mediaUploadActionSource.split(/\r?\n/).length;
@@ -2462,34 +2477,94 @@ if (mediaRetryActionLines > maxMediaRetryActionLines) {
   );
 }
 
-for (const requiredMediaStatusHelpersImport of [
-  'from "../lib/record-panel-detail";',
+for (const requiredMediaStatusHelpersExport of [
+  'from "./record-panel-controller-media-status-error-helpers";',
+  'from "./record-panel-controller-media-status-runner";',
 ]) {
-  if (!mediaStatusHelpersSource.includes(requiredMediaStatusHelpersImport)) {
+  if (!mediaStatusHelpersSource.includes(requiredMediaStatusHelpersExport)) {
     throw new Error(
-      `record-panel-controller-media-status-helpers.ts must import media-status copy contracts: ${requiredMediaStatusHelpersImport}`,
+      `record-panel-controller-media-status-helpers.ts must remain a stable media-status helper boundary: ${requiredMediaStatusHelpersExport}`,
     );
   }
 }
 
 for (const requiredMediaStatusHelpersUsage of [
-  "export function getRecordPanelMediaStatusErrorMessage(",
-  "export async function runRecordPanelMediaStatusAction({",
-  "export function getRecordPanelMediaStatusErrorMessages(detailCopy: DetailCopy)",
-  "refreshMediaError",
-  "retryMediaError",
+  "export {",
+  "getRecordPanelMediaStatusErrorMessage,",
+  "getRecordPanelMediaStatusErrorMessages,",
+  "export { runRecordPanelMediaStatusAction }",
 ]) {
   if (!mediaStatusHelpersSource.includes(requiredMediaStatusHelpersUsage)) {
     throw new Error(
-      `record-panel-controller-media-status-helpers.ts must own media-status error and execution helpers: ${requiredMediaStatusHelpersUsage}`,
+      `record-panel-controller-media-status-helpers.ts must expose delegated media-status helpers: ${requiredMediaStatusHelpersUsage}`,
     );
   }
 }
 
-const maxMediaStatusHelpersLines = 45;
+const maxMediaStatusHelpersLines = 10;
 if (mediaStatusHelpersLines > maxMediaStatusHelpersLines) {
   throw new Error(
     `record-panel-controller-media-status-helpers.ts exceeded ${maxMediaStatusHelpersLines} lines: ${mediaStatusHelpersLines}`,
+  );
+}
+
+for (const requiredMediaStatusErrorHelpersImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!mediaStatusErrorHelpersSource.includes(requiredMediaStatusErrorHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-media-status-error-helpers.ts must import media-status copy contracts: ${requiredMediaStatusErrorHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredMediaStatusErrorHelpersUsage of [
+  "export function getRecordPanelMediaStatusErrorMessage(",
+  "export function getRecordPanelMediaStatusErrorMessages(detailCopy: DetailCopy)",
+  "refreshMediaError",
+  "retryMediaError",
+]) {
+  if (!mediaStatusErrorHelpersSource.includes(requiredMediaStatusErrorHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-media-status-error-helpers.ts must own media-status error copy details: ${requiredMediaStatusErrorHelpersUsage}`,
+    );
+  }
+}
+
+const maxMediaStatusErrorHelpersLines = 20;
+if (mediaStatusErrorHelpersLines > maxMediaStatusErrorHelpersLines) {
+  throw new Error(
+    `record-panel-controller-media-status-error-helpers.ts exceeded ${maxMediaStatusErrorHelpersLines} lines: ${mediaStatusErrorHelpersLines}`,
+  );
+}
+
+for (const requiredMediaStatusRunnerImport of [
+  'from "./record-panel-controller-media-status-error-helpers";',
+]) {
+  if (!mediaStatusRunnerSource.includes(requiredMediaStatusRunnerImport)) {
+    throw new Error(
+      `record-panel-controller-media-status-runner.ts must import media-status runner dependencies: ${requiredMediaStatusRunnerImport}`,
+    );
+  }
+}
+
+for (const requiredMediaStatusRunnerUsage of [
+  "export async function runRecordPanelMediaStatusAction({",
+  "setActiveMediaId(mediaId);",
+  "setError(getRecordPanelMediaStatusErrorMessage(caught, fallbackMessage));",
+  "setActiveMediaId(null);",
+]) {
+  if (!mediaStatusRunnerSource.includes(requiredMediaStatusRunnerUsage)) {
+    throw new Error(
+      `record-panel-controller-media-status-runner.ts must own media-status execution details: ${requiredMediaStatusRunnerUsage}`,
+    );
+  }
+}
+
+const maxMediaStatusRunnerLines = 25;
+if (mediaStatusRunnerLines > maxMediaStatusRunnerLines) {
+  throw new Error(
+    `record-panel-controller-media-status-runner.ts exceeded ${maxMediaStatusRunnerLines} lines: ${mediaStatusRunnerLines}`,
   );
 }
 

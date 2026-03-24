@@ -1152,6 +1152,10 @@ Last updated: 2026-03-24
   - dead-letter selection helpers and dead-letter retry helpers now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-helpers.ts`
   - `apps/web/components/record-panel-controller-dead-letter-helpers.ts` now focuses on acting as a stable helper re-export boundary for selection and retry concerns
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter helper split and dedicated size ceilings for both extracted helper modules
+- Record Panel Media Status Helper Split V2:
+  - media-status error-copy formatting and execution orchestration now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-status-helpers.ts`
+  - `apps/web/components/record-panel-controller-media-status-helpers.ts` now focuses on acting as a stable re-export boundary for media-status helper contracts
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-status helper split and dedicated size ceilings for both extracted helper modules
 
 ## Next
 - Continue the next product slice
