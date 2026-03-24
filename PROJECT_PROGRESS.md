@@ -1296,6 +1296,10 @@ Last updated: 2026-03-24
   - sync-hook input assembly now lives in `apps/web/components/record-panel-controller-sync-input.ts` instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
   - `apps/web/components/use-record-panel-controller.ts` now focuses more narrowly on orchestrating view-data, state, sync, handlers, and final result assembly behind a thinner controller-entry boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the sync-input builder boundary and keeps direct sync field mapping out of the controller entry module
+- Record Panel Localized View-Data Hook Split V3:
+  - locale lookup and localized view-data memoization now live in `apps/web/components/use-record-panel-controller-localized-view-data.ts` instead of remaining embedded inside `apps/web/components/use-record-panel-controller-view-data.ts`
+  - `apps/web/components/use-record-panel-controller-view-data.ts` now focuses on composing record, selected-record, and localized view-data slices behind a thinner hook boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the localized hook boundary and keeps direct locale/localized bundle wiring out of the aggregate view-data hook
 
 ## Next
 - Continue the next product slice
