@@ -1933,6 +1933,7 @@ if (editorWorkspacePropsTypesLines > maxEditorWorkspacePropsTypesLines) {
 }
 
 for (const requiredEditorWorkspacePropInputTypesImport of [
+  'from "./record-panel-v2-shell-props.types";',
   'from "./record-panel-v2.types";',
 ]) {
   if (!editorWorkspacePropInputTypesSource.includes(requiredEditorWorkspacePropInputTypesImport)) {
@@ -1943,6 +1944,7 @@ for (const requiredEditorWorkspacePropInputTypesImport of [
 }
 
 for (const requiredEditorWorkspacePropInputTypesUsage of [
+  'export type BuildRecordEditorWorkspacePropInputArgs = { props: RecordPanelShellInput["props"] };',
   "export type BuildRecordEditorWorkspacePropInput = Pick<",
   '"mediaProcessingOverview"',
   '"onUpdateReminder"',
@@ -3514,7 +3516,7 @@ if (editorWorkspaceInputLines > maxEditorWorkspaceInputLines) {
 }
 
 for (const requiredEditorWorkspacePropInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-prop-input.types";',
 ]) {
   if (!editorWorkspacePropInputSource.includes(requiredEditorWorkspacePropInputImport)) {
     throw new Error(
@@ -3524,7 +3526,7 @@ for (const requiredEditorWorkspacePropInputImport of [
 }
 
 for (const requiredEditorWorkspacePropInputUsage of [
-  'export function buildRecordEditorWorkspacePropInput({ props }: Pick<RecordPanelShellInput, "props">)',
+  'export function buildRecordEditorWorkspacePropInput({ props }: BuildRecordEditorWorkspacePropInputArgs)',
   "authToken: props.authToken",
   "mediaStorageSummary: props.mediaStorageSummary",
   "onUpdateReminder: props.onUpdateReminder",
@@ -3532,6 +3534,17 @@ for (const requiredEditorWorkspacePropInputUsage of [
   if (!editorWorkspacePropInputSource.includes(requiredEditorWorkspacePropInputUsage)) {
     throw new Error(
       `record-panel-v2-editor-workspace-prop-input.ts must own editor workspace prop field mapping: ${requiredEditorWorkspacePropInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspacePropInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "props">',
+]) {
+  if (editorWorkspacePropInputSource.includes(forbiddenEditorWorkspacePropInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-prop-input.ts must keep editor workspace prop-input arg typing delegated: ${forbiddenEditorWorkspacePropInputToken}`,
     );
   }
 }

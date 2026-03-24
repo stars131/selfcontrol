@@ -1424,6 +1424,10 @@ Last updated: 2026-03-24
   - editor-workspace channel/media/reminder copy output contracts now live in `apps/web/components/record-panel-v2-editor-workspace-copy-output-props.types.ts` instead of remaining embedded directly in the copy helper and aggregator signatures
   - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-channel-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-media-copy-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-reminder-copy-props.ts` now consume the extracted output contracts behind thinner copy-mapping boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace copy output-type boundary and keeps inline `Pick<RecordEditorWorkspaceProps, ...>` signatures out of the copy helper modules
+- Record Panel Editor Workspace Prop Wrapper Arg Type Split V1:
+  - editor-workspace prop wrapper arg contract now lives in `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts` instead of remaining embedded directly in the prop-input wrapper function signature
+  - `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now consumes the extracted wrapper-arg contract behind a thinner prop-mapping boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace prop wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the prop-input module
 
 ## Next
 - Continue the next product slice

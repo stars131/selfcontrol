@@ -1,8 +1,8 @@
 "use client";
 
-import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
+import type { BuildRecordEditorWorkspacePropInputArgs } from "./record-panel-v2-editor-workspace-prop-input.types";
 
-export function buildRecordEditorWorkspacePropInput({ props }: Pick<RecordPanelShellInput, "props">) {
+export function buildRecordEditorWorkspacePropInput({ props }: BuildRecordEditorWorkspacePropInputArgs) {
   return {
     authToken: props.authToken,
     canWriteWorkspace: props.canWriteWorkspace,
