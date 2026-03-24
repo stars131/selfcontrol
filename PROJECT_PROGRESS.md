@@ -1452,6 +1452,10 @@ Last updated: 2026-03-24
   - controller core/localized view-data result helpers now reuse the shared input contract from `apps/web/components/record-panel-controller-view-data-result.types.ts` instead of declaring local `ReturnType` aliases
   - `apps/web/components/record-panel-controller-core-view-data-result.ts` and `apps/web/components/record-panel-controller-localized-view-data-result.ts` now consume the shared view-data-result input contract behind thinner slice boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared view-data-result input boundary across the core and localized result helper modules
+- Record Panel Filter Apply Action Input Type Split V1:
+  - filter-apply action input contract now lives in `apps/web/components/record-panel-controller-filter-apply-action.types.ts` instead of remaining embedded directly in the filter-apply action helper
+  - `apps/web/components/record-panel-controller-filter-apply-action.ts` now consumes the extracted filter-apply input contract behind a thinner execution boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter-apply input-type boundary and keeps local `DetailCopy` plus inline controller prop typing out of the action helper
 
 ## Next
 - Continue the next product slice

@@ -1,14 +1,12 @@
 "use client";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { ControllerProps } from "./record-panel-controller.types";
+import type { RecordPanelControllerFilterApplyActionInput } from "./record-panel-controller-filter-apply-action.types";
 import { getRecordPanelFilterErrorMessage } from "./record-panel-controller-filter-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
 export function createRecordPanelControllerFilterApplyAction({
   detailCopy,
   filterDraft,
   onApplyRecordFilter,
   setError,
-}: { detailCopy: DetailCopy; filterDraft: ControllerProps["recordFilter"]; onApplyRecordFilter: ControllerProps["onApplyRecordFilter"]; setError: (value: string) => void }) {
+}: RecordPanelControllerFilterApplyActionInput) {
   async function handleApplyFilter() {
     setError("");
     try {
