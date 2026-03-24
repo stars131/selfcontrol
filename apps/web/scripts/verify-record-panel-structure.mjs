@@ -2273,6 +2273,8 @@ for (const requiredBrowseWorkspaceOutputPropsTypesImport of [
 for (const requiredBrowseWorkspaceOutputPropsTypesUsage of [
   'export type RecordBrowseWorkspaceFilterProps = Pick<RecordBrowseWorkspaceProps, "currentFilterSummary" | "filterDraft" | "onApplyFilter" | "onApplyLocationFilter" | "onApplyPreset" | "onDeletePreset" | "onResetFilter" | "onSavePreset" | "presetName" | "recordFilter" | "savingSearchPreset" | "searchPresets" | "setFilterDraft" | "setPresetName" | "summarizeRecordFilterLabel">;',
   'export type RecordBrowseWorkspaceRecordProps = Pick<RecordBrowseWorkspaceProps, "avoidCount" | "canWriteWorkspace" | "filteringRecords" | "foodCount" | "formatAvoidCountLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "onSelectRecord" | "panelCopy" | "records" | "selectedRecordId" | "setViewMode" | "timelineDays" | "viewMode" | "visibleRecordCount">;',
+  'export type RecordBrowseWorkspaceCopyProps = Pick<RecordBrowseWorkspaceProps, "applyPresetLabel" | "avoidRecordLabel" | "avoidStatsLabel" | "deletePresetLabel" | "flatListViewLabel" | "foodLabel" | "mapPrefixLabel" | "noContentLabel" | "noRecordsLabel" | "noSavedFiltersLabel" | "ratingPrefixLabel" | "savedPresetLabel" | "timelineDayLabel" | "timelineViewLabel" | "unknownPlaceLabel" | "untitledRecordLabel" | "visibleRecordsLabel">;',
+  'export type RecordBrowseWorkspaceDraftLocationProps = Pick<RecordBrowseWorkspaceProps, "draftLocation" | "onDraftLocationChange">;',
 ]) {
   if (!browseWorkspaceOutputPropsTypesSource.includes(requiredBrowseWorkspaceOutputPropsTypesUsage)) {
     throw new Error(
@@ -2317,6 +2319,7 @@ if (browseWorkspacePropsInputTypesLines > maxBrowseWorkspacePropsInputTypesLines
 }
 
 for (const requiredBrowseWorkspaceCopyPropsImport of [
+  'from "./record-panel-v2-browse-workspace-output-props.types";',
   'from "./record-panel-v2-browse-workspace-props-input.types";',
 ]) {
   if (!browseWorkspaceCopyPropsSource.includes(requiredBrowseWorkspaceCopyPropsImport)) {
@@ -2327,7 +2330,7 @@ for (const requiredBrowseWorkspaceCopyPropsImport of [
 }
 
 for (const requiredBrowseWorkspaceCopyPropsUsage of [
-  "export function buildRecordBrowseWorkspaceCopyProps({",
+  "export function buildRecordBrowseWorkspaceCopyProps({ detailCopy, panelCopy }: RecordBrowseWorkspaceCopyPropsInput): RecordBrowseWorkspaceCopyProps {",
   "applyPresetLabel: panelCopy.applyPreset",
   "timelineViewLabel: detailCopy.timelineView",
   "visibleRecordsLabel: panelCopy.visibleRecords",
@@ -2342,6 +2345,7 @@ for (const requiredBrowseWorkspaceCopyPropsUsage of [
 for (const forbiddenBrowseWorkspaceCopyPropsToken of [
   'from "./record-panel-v2-workspace-props.types";',
   'Pick<BuildRecordBrowseWorkspacePropsInput, "detailCopy" | "panelCopy">',
+  'Pick<RecordBrowseWorkspaceProps, "applyPresetLabel"',
 ]) {
   if (browseWorkspaceCopyPropsSource.includes(forbiddenBrowseWorkspaceCopyPropsToken)) {
     throw new Error(
@@ -2592,6 +2596,7 @@ if (editorWorkspaceReminderCopyPropsLines > maxEditorWorkspaceReminderCopyPropsL
 }
 
 for (const requiredBrowseWorkspaceDraftLocationPropsImport of [
+  'from "./record-panel-v2-browse-workspace-output-props.types";',
   'from "./record-panel-v2-browse-workspace-props-input.types";',
 ]) {
   if (!browseWorkspaceDraftLocationPropsSource.includes(requiredBrowseWorkspaceDraftLocationPropsImport)) {
@@ -2603,6 +2608,7 @@ for (const requiredBrowseWorkspaceDraftLocationPropsImport of [
 
 for (const requiredBrowseWorkspaceDraftLocationPropsUsage of [
   "export function buildRecordBrowseWorkspaceDraftLocationProps({",
+  "}: RecordBrowseWorkspaceDraftLocationPropsInput): RecordBrowseWorkspaceDraftLocationProps {",
   "draftLocation: canWriteWorkspace ? form.location ?? null : null",
   "setForm((prev) => ({",
 ]) {
@@ -2616,6 +2622,7 @@ for (const requiredBrowseWorkspaceDraftLocationPropsUsage of [
 for (const forbiddenBrowseWorkspaceDraftLocationPropsToken of [
   'from "./record-panel-v2-workspace-props.types";',
   'Pick<BuildRecordBrowseWorkspacePropsInput, "canWriteWorkspace" | "form" | "setForm">',
+  'Pick<RecordBrowseWorkspaceProps, "draftLocation" | "onDraftLocationChange">',
 ]) {
   if (browseWorkspaceDraftLocationPropsSource.includes(forbiddenBrowseWorkspaceDraftLocationPropsToken)) {
     throw new Error(

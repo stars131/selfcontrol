@@ -1428,6 +1428,10 @@ Last updated: 2026-03-24
   - editor-workspace prop wrapper arg contract now lives in `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts` instead of remaining embedded directly in the prop-input wrapper function signature
   - `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now consumes the extracted wrapper-arg contract behind a thinner prop-mapping boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace prop wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the prop-input module
+- Record Panel Browse Workspace Copy Output Type Split V1:
+  - browse-workspace copy and draft-location output contracts now live in `apps/web/components/record-panel-v2-browse-workspace-output-props.types.ts` instead of remaining implicit in the copy and draft-location helper return values
+  - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-draft-location-props.ts` now consume the extracted output contracts behind thinner mapping-only boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace copy output-type boundary and keeps inline `Pick<RecordBrowseWorkspaceProps, ...>` signatures out of the copy and draft-location helper modules
 
 ## Next
 - Continue the next product slice
