@@ -1020,6 +1020,10 @@ Last updated: 2026-03-24
   - record-panel editor-workspace base-prop input shaping and action-prop input shaping now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
   - the top-level editor-workspace prop builder now focuses more narrowly on composing copy, base, and action prop groups while the helper owns the large input mapping surface
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this editor-workspace prop-input boundary and dedicated size ceilings for the extracted modules
+- Browse Workspace Prop Helper Split V1:
+  - record-panel browse-workspace static copy mapping and draft-location update wiring now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-v2-browse-workspace-props.ts`
+  - the top-level browse-workspace prop builder now focuses more narrowly on composing dynamic counts, filter summaries, and action handlers while the helper owns copy-heavy mapping details
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this browse-workspace helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
