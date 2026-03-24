@@ -1328,6 +1328,10 @@ Last updated: 2026-03-24
   - media delete action input contracts now live in `apps/web/components/record-panel-controller-media-file-action-input.types.ts`, alongside the existing transfer-action contract composition used by the media file action surface
   - `apps/web/components/record-panel-controller-media-delete-action.ts` and `apps/web/components/record-panel-controller-media-file-actions.ts` now consume the shared extracted media-file action contract instead of carrying duplicated inline input typing
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-file action input-type boundary and keeps delete/file-action contract definitions out of the execution modules
+- Record Panel Dead-Letter Action Input Type Split V3:
+  - dead-letter retry/selection action input contracts now live in `apps/web/components/record-panel-controller-dead-letter-action-input.types.ts` instead of remaining embedded across the retry, selection, and aggregate action modules
+  - `apps/web/components/record-panel-controller-dead-letter-retry-action.ts`, `apps/web/components/record-panel-controller-dead-letter-selection-actions.ts`, and `apps/web/components/record-panel-controller-dead-letter-actions.ts` now consume the shared extracted dead-letter action contracts behind thinner orchestration boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter action input-type boundary and keeps inline retry/selection contract definitions out of the action modules
 
 ## Next
 - Continue the next product slice

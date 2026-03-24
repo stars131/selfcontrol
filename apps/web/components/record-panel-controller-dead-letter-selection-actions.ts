@@ -1,18 +1,15 @@
 "use client";
 
-import type { MediaDeadLetterOverview } from "../lib/types";
 import {
   getRecordPanelSelectableDeadLetterIds,
   toggleRecordPanelDeadLetterSelection,
 } from "./record-panel-controller-dead-letter-helpers";
+import type { RecordPanelControllerDeadLetterSelectionActionInput } from "./record-panel-controller-dead-letter-action-input.types";
 
 export function createRecordPanelControllerDeadLetterSelectionActions({
   mediaDeadLetterOverview,
   setSelectedDeadLetterIds,
-}: {
-  mediaDeadLetterOverview: MediaDeadLetterOverview | null;
-  setSelectedDeadLetterIds: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
+}: RecordPanelControllerDeadLetterSelectionActionInput) {
   function handleToggleDeadLetterSelection(mediaId: string, checked: boolean) {
     setSelectedDeadLetterIds((current) =>
       toggleRecordPanelDeadLetterSelection(current, mediaId, checked),

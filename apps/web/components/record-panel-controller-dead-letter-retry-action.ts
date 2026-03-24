@@ -1,8 +1,7 @@
 "use client";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { ControllerProps } from "./record-panel-controller.types";
+import type { RecordPanelControllerDeadLetterRetryActionInput } from "./record-panel-controller-dead-letter-action-input.types";
 import { getRecordPanelDeadLetterErrorMessage, getRecordPanelDeadLetterFallbackMessage, getRecordPanelDeadLetterRetryRequest } from "./record-panel-controller-dead-letter-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+
 export function createRecordPanelControllerDeadLetterRetryAction({
   detailCopy,
   onBulkRetryMediaDeadLetter,
@@ -10,14 +9,7 @@ export function createRecordPanelControllerDeadLetterRetryAction({
   setBulkRetryingDeadLetter,
   setError,
   setSelectedDeadLetterIds,
-}: {
-  detailCopy: DetailCopy;
-  onBulkRetryMediaDeadLetter: ControllerProps["onBulkRetryMediaDeadLetter"];
-  selectedDeadLetterIds: string[];
-  setBulkRetryingDeadLetter: (value: boolean) => void;
-  setError: (value: string) => void;
-  setSelectedDeadLetterIds: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
+}: RecordPanelControllerDeadLetterRetryActionInput) {
   const fallbackMessage = getRecordPanelDeadLetterFallbackMessage(detailCopy);
   async function handleBulkRetryDeadLetter(mode: "selected" | "all") {
     setBulkRetryingDeadLetter(true);
