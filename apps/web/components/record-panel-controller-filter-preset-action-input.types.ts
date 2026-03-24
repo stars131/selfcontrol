@@ -1,13 +1,10 @@
 "use client";
-
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordFilterState } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export type RecordPanelControllerFilterPresetActionInput = {
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   filterDraft: RecordFilterState;
   onCreateSearchPreset: ControllerProps["onCreateSearchPreset"];
   onDeleteSearchPreset: ControllerProps["onDeleteSearchPreset"];

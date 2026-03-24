@@ -511,6 +511,10 @@ const recordPanelFilterApplyActionTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-apply-action.types.ts",
 );
+const recordPanelControllerDetailCopyTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-detail-copy.types.ts",
+);
 const recordPanelFilterPresetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-actions.ts",
@@ -1288,6 +1292,10 @@ const filterApplyActionTypesSource = fs.readFileSync(
   recordPanelFilterApplyActionTypesPath,
   "utf8",
 );
+const controllerDetailCopyTypesSource = fs.readFileSync(
+  recordPanelControllerDetailCopyTypesPath,
+  "utf8",
+);
 const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActionsPath, "utf8");
 const filterPresetActionInputTypesSource = fs.readFileSync(
   recordPanelFilterPresetActionInputTypesPath,
@@ -1656,6 +1664,7 @@ const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
 const filterActionInputTypesLines = filterActionInputTypesSource.split(/\r?\n/).length;
 const filterApplyActionLines = filterApplyActionSource.split(/\r?\n/).length;
 const filterApplyActionTypesLines = filterApplyActionTypesSource.split(/\r?\n/).length;
+const controllerDetailCopyTypesLines = controllerDetailCopyTypesSource.split(/\r?\n/).length;
 const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length;
 const filterPresetActionInputTypesLines =
   filterPresetActionInputTypesSource.split(/\r?\n/).length;
@@ -6413,8 +6422,8 @@ if (filterApplyActionLines > maxFilterApplyActionLines) {
 }
 
 for (const requiredFilterApplyActionTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!filterApplyActionTypesSource.includes(requiredFilterApplyActionTypesImport)) {
     throw new Error(
@@ -6424,12 +6433,23 @@ for (const requiredFilterApplyActionTypesImport of [
 }
 
 for (const requiredFilterApplyActionTypesUsage of [
-  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
-  'export type RecordPanelControllerFilterApplyActionInput = { detailCopy: DetailCopy; filterDraft: ControllerProps["recordFilter"]; onApplyRecordFilter: ControllerProps["onApplyRecordFilter"]; setError: (value: string) => void };',
+  'export type RecordPanelControllerFilterApplyActionInput = { detailCopy: RecordPanelControllerDetailCopy; filterDraft: ControllerProps["recordFilter"]; onApplyRecordFilter: ControllerProps["onApplyRecordFilter"]; setError: (value: string) => void };',
 ]) {
   if (!filterApplyActionTypesSource.includes(requiredFilterApplyActionTypesUsage)) {
     throw new Error(
       `record-panel-controller-filter-apply-action.types.ts must own filter-apply type contracts: ${requiredFilterApplyActionTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenFilterApplyActionTypesToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy;",
+]) {
+  if (filterApplyActionTypesSource.includes(forbiddenFilterApplyActionTypesToken)) {
+    throw new Error(
+      `record-panel-controller-filter-apply-action.types.ts must keep detail-copy typing delegated: ${forbiddenFilterApplyActionTypesToken}`,
     );
   }
 }
@@ -6491,9 +6511,9 @@ if (filterPresetActionsLines > maxFilterPresetActionsLines) {
 }
 
 for (const requiredFilterPresetActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!filterPresetActionInputTypesSource.includes(requiredFilterPresetActionInputTypesImport)) {
     throw new Error(
@@ -6503,8 +6523,8 @@ for (const requiredFilterPresetActionInputTypesImport of [
 }
 
 for (const requiredFilterPresetActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerFilterPresetActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   "filterDraft: RecordFilterState;",
   "onCreateSearchPreset: ControllerProps[\"onCreateSearchPreset\"];",
   "onDeleteSearchPreset: ControllerProps[\"onDeleteSearchPreset\"];",
@@ -6512,6 +6532,18 @@ for (const requiredFilterPresetActionInputTypesUsage of [
   if (!filterPresetActionInputTypesSource.includes(requiredFilterPresetActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-filter-preset-action-input.types.ts must own preset-action input typing: ${requiredFilterPresetActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenFilterPresetActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (filterPresetActionInputTypesSource.includes(forbiddenFilterPresetActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenFilterPresetActionInputTypesToken}`,
     );
   }
 }
@@ -8447,9 +8479,9 @@ if (deadLetterActionsLines > maxDeadLetterActionsLines) {
 }
 
 for (const requiredDeadLetterActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!deadLetterActionInputTypesSource.includes(requiredDeadLetterActionInputTypesImport)) {
     throw new Error(
@@ -8459,9 +8491,9 @@ for (const requiredDeadLetterActionInputTypesImport of [
 }
 
 for (const requiredDeadLetterActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerDeadLetterSelectionActionInput = {",
   "export type RecordPanelControllerDeadLetterRetryActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   'onBulkRetryMediaDeadLetter: ControllerProps["onBulkRetryMediaDeadLetter"];',
   "export type RecordPanelControllerDeadLetterActionInput =",
 ]) {
@@ -8472,10 +8504,49 @@ for (const requiredDeadLetterActionInputTypesUsage of [
   }
 }
 
+for (const forbiddenDeadLetterActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (deadLetterActionInputTypesSource.includes(forbiddenDeadLetterActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenDeadLetterActionInputTypesToken}`,
+    );
+  }
+}
+
 const maxDeadLetterActionInputTypesLines = 25;
 if (deadLetterActionInputTypesLines > maxDeadLetterActionInputTypesLines) {
   throw new Error(
     `record-panel-controller-dead-letter-action-input.types.ts exceeded ${maxDeadLetterActionInputTypesLines} lines: ${deadLetterActionInputTypesLines}`,
+  );
+}
+
+for (const requiredControllerDetailCopyTypesImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!controllerDetailCopyTypesSource.includes(requiredControllerDetailCopyTypesImport)) {
+    throw new Error(
+      `record-panel-controller-detail-copy.types.ts must import detail-copy contracts: ${requiredControllerDetailCopyTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerDetailCopyTypesUsage of [
+  'export type RecordPanelControllerDetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+]) {
+  if (!controllerDetailCopyTypesSource.includes(requiredControllerDetailCopyTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-detail-copy.types.ts must own shared detail-copy typing: ${requiredControllerDetailCopyTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerDetailCopyTypesLines = 4;
+if (controllerDetailCopyTypesLines > maxControllerDetailCopyTypesLines) {
+  throw new Error(
+    `record-panel-controller-detail-copy.types.ts exceeded ${maxControllerDetailCopyTypesLines} lines: ${controllerDetailCopyTypesLines}`,
   );
 }
 

@@ -1536,6 +1536,10 @@ Last updated: 2026-03-24
   - controller result typing now reuses dedicated handler-groups/state/view-data result contracts instead of introducing local `ReturnType` aliases inside `record-panel-controller-result.types.ts`
   - `apps/web/components/record-panel-controller-handler-groups-result.types.ts` now owns the handler-groups result boundary behind a thinner contract file
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that controller result typing stays decoupled from direct hook/handler-group `ReturnType` aliases
+- Record Panel Controller Detail-Copy Shared Type Split V1:
+  - shared controller detail-copy typing now lives in `apps/web/components/record-panel-controller-detail-copy.types.ts` instead of remaining duplicated as local `DetailCopy` aliases across controller action-input type files
+  - `record-panel-controller-filter-apply-action.types.ts`, `record-panel-controller-filter-preset-action-input.types.ts`, and `record-panel-controller-dead-letter-action-input.types.ts` now consume the shared detail-copy contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared detail-copy boundary across those controller action-input type modules
 
 ## Next
 - Continue the next product slice
