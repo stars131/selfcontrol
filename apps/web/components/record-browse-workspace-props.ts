@@ -1,15 +1,11 @@
 "use client";
-
-import type { ComponentProps } from "react";
-
 import { MapPanel } from "./map-panel";
 import { RecordResultsView } from "./record-results-view";
 import { RecordSearchPanel } from "./record-search-panel";
 import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types";
-
-type RecordSearchPanelProps = ComponentProps<typeof RecordSearchPanel>;
-type MapPanelProps = ComponentProps<typeof MapPanel>;
-type RecordResultsViewProps = ComponentProps<typeof RecordResultsView>;
+import type { MapPanelProps } from "./map-panel.types";
+import type { RecordResultsViewProps } from "./record-results-view.types";
+import type { RecordSearchPanelProps } from "./record-search-panel.types";
 
 export function buildRecordSearchPanelProps(
   props: RecordBrowseWorkspaceProps,

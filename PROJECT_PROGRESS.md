@@ -1560,6 +1560,10 @@ Last updated: 2026-03-24
   - save/reminder resolution modules now reuse existing payload result types instead of taking payload shapes from builder `ReturnType` expressions
   - `record-panel-controller-record-save-resolution.ts` and `record-panel-controller-reminder-resolution.ts` now depend on thinner payload type boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those resolution modules stay decoupled from direct builder `ReturnType` aliases
+- Record Browse Workspace Explicit Props Type Reuse Split V1:
+  - browse-workspace prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
+  - `apps/web/components/record-browse-workspace-props.ts` now depends directly on `map-panel.types.ts`, `record-results-view.types.ts`, and `record-search-panel.types.ts`
+  - this keeps browse-workspace prop mapping more stable against unrelated child component implementation changes
 
 ## Next
 - Continue the next product slice
