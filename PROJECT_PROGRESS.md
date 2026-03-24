@@ -936,6 +936,10 @@ Last updated: 2026-03-24
   - record-search-panel shared prop contracts now live in a dedicated types module instead of remaining inline inside `apps/web/components/record-search-panel.tsx`
   - advanced-search filter fields and preset-save controls now render through dedicated child components while the parent shell focuses on composition, summary, and apply/reset actions
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces these search-panel boundaries and dedicated size ceilings for the extracted modules
+- Legacy Record Panel Form Section Split V1:
+  - legacy record-panel form shared prop contracts now live in a dedicated types module instead of remaining inline inside `apps/web/components/record-panel-legacy-form.tsx`
+  - editable legacy form fields and selected-record media upload/list rendering now flow through dedicated child components while the parent form focuses on composition and action rows
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy-form boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

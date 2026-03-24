@@ -56,7 +56,24 @@ const recordPanelMediaAssetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-asset-actions.ts",
 );
+const legacyRecordPanelFormPath = path.resolve(process.cwd(), "components/record-panel-legacy-form.tsx");
+const legacyRecordPanelFormTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form.types.ts",
+);
+const legacyRecordPanelFormFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-fields.tsx",
+);
+const legacyRecordPanelFormMediaPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-media.tsx",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
+const legacyRecordPanelFormSource = fs.readFileSync(legacyRecordPanelFormPath, "utf8");
+const legacyRecordPanelFormTypesSource = fs.readFileSync(legacyRecordPanelFormTypesPath, "utf8");
+const legacyRecordPanelFormFieldsSource = fs.readFileSync(legacyRecordPanelFormFieldsPath, "utf8");
+const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const editorWorkspacePropsSource = fs.readFileSync(recordPanelEditorWorkspacePropsPath, "utf8");
@@ -79,6 +96,10 @@ const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
+const legacyRecordPanelFormLines = legacyRecordPanelFormSource.split(/\r?\n/).length;
+const legacyRecordPanelFormTypesLines = legacyRecordPanelFormTypesSource.split(/\r?\n/).length;
+const legacyRecordPanelFormFieldsLines = legacyRecordPanelFormFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const editorWorkspacePropsLines = editorWorkspacePropsSource.split(/\r?\n/).length;
 const editorWorkspaceBasePropsLines = editorWorkspaceBasePropsSource.split(/\r?\n/).length;
@@ -743,6 +764,98 @@ for (const forbiddenLegacyToken of [
   if (legacyRecordPanelSource.includes(forbiddenLegacyToken)) {
     throw new Error(`record-panel.tsx must keep legacy layout details delegated: ${forbiddenLegacyToken}`);
   }
+}
+
+for (const requiredLegacyFormImport of [
+  'import { RecordPanelLegacyFormFields } from "./record-panel-legacy-form-fields";',
+  'import { RecordPanelLegacyFormMedia } from "./record-panel-legacy-form-media";',
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+]) {
+  if (!legacyRecordPanelFormSource.includes(requiredLegacyFormImport)) {
+    throw new Error(`record-panel-legacy-form.tsx must import delegated form helpers: ${requiredLegacyFormImport}`);
+  }
+}
+
+for (const requiredLegacyFormUsage of ["<RecordPanelLegacyFormFields", "<RecordPanelLegacyFormMedia"]) {
+  if (!legacyRecordPanelFormSource.includes(requiredLegacyFormUsage)) {
+    throw new Error(`record-panel-legacy-form.tsx must compose delegated form sections: ${requiredLegacyFormUsage}`);
+  }
+}
+
+for (const forbiddenLegacyFormToken of [
+  'import type { MediaAsset, RecordItem } from "../lib/types";',
+  'import type { RecordPanelFormState } from "./record-panel.types";',
+  "type RecordPanelLegacyFormProps = {",
+  'placeholder="Optional title"',
+  'placeholder="Write a note, food review, or reminder"',
+  'className="record-list compact-list"',
+  "No media uploaded for this record yet.",
+]) {
+  if (legacyRecordPanelFormSource.includes(forbiddenLegacyFormToken)) {
+    throw new Error(`record-panel-legacy-form.tsx must keep field and media details delegated: ${forbiddenLegacyFormToken}`);
+  }
+}
+
+const maxLegacyRecordPanelFormLines = 60;
+if (legacyRecordPanelFormLines > maxLegacyRecordPanelFormLines) {
+  throw new Error(
+    `record-panel-legacy-form.tsx exceeded ${maxLegacyRecordPanelFormLines} lines: ${legacyRecordPanelFormLines}`,
+  );
+}
+
+for (const requiredLegacyFormTypesUsage of [
+  "export type RecordPanelLegacyFormProps = {",
+  "mediaAssets: MediaAsset[];",
+  "setForm: Dispatch<SetStateAction<RecordPanelFormState>>;",
+]) {
+  if (!legacyRecordPanelFormTypesSource.includes(requiredLegacyFormTypesUsage)) {
+    throw new Error(`record-panel-legacy-form.types.ts must own the shared form contract: ${requiredLegacyFormTypesUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelFormTypesLines = 25;
+if (legacyRecordPanelFormTypesLines > maxLegacyRecordPanelFormTypesLines) {
+  throw new Error(
+    `record-panel-legacy-form.types.ts exceeded ${maxLegacyRecordPanelFormTypesLines} lines: ${legacyRecordPanelFormTypesLines}`,
+  );
+}
+
+for (const requiredLegacyFormFieldsUsage of [
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  "export function RecordPanelLegacyFormFields({",
+  'placeholder="Optional title"',
+  'placeholder="Write a note, food review, or reminder"',
+  "Avoid item",
+]) {
+  if (!legacyRecordPanelFormFieldsSource.includes(requiredLegacyFormFieldsUsage)) {
+    throw new Error(`record-panel-legacy-form-fields.tsx must own editable field rendering: ${requiredLegacyFormFieldsUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelFormFieldsLines = 70;
+if (legacyRecordPanelFormFieldsLines > maxLegacyRecordPanelFormFieldsLines) {
+  throw new Error(
+    `record-panel-legacy-form-fields.tsx exceeded ${maxLegacyRecordPanelFormFieldsLines} lines: ${legacyRecordPanelFormFieldsLines}`,
+  );
+}
+
+for (const requiredLegacyFormMediaUsage of [
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  "export function RecordPanelLegacyFormMedia({",
+  "if (!selectedRecord) {",
+  "Uploading media...",
+  "No media uploaded for this record yet.",
+]) {
+  if (!legacyRecordPanelFormMediaSource.includes(requiredLegacyFormMediaUsage)) {
+    throw new Error(`record-panel-legacy-form-media.tsx must own media rendering: ${requiredLegacyFormMediaUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelFormMediaLines = 45;
+if (legacyRecordPanelFormMediaLines > maxLegacyRecordPanelFormMediaLines) {
+  throw new Error(
+    `record-panel-legacy-form-media.tsx exceeded ${maxLegacyRecordPanelFormMediaLines} lines: ${legacyRecordPanelFormMediaLines}`,
+  );
 }
 
 const maxLegacyRecordPanelLines = 150;
