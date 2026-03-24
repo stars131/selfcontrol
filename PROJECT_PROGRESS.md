@@ -1064,6 +1064,10 @@ Last updated: 2026-03-24
   - record-editor support-tools media runtime pass-through state and action mapping now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-editor-support-tools-media-props.ts`
   - the top-level media-props builder now focuses more narrowly on composing derived copy props and pass-through props while specialized helpers own each mapping surface
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this media pass-through helper boundary and dedicated size ceilings for the extracted modules
+- Support Tools Reminder Prop Split V1:
+  - record-editor support-tools reminder derived fields and runtime pass-through mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-editor-support-tools-reminder-props.ts`
+  - the top-level reminder-props builder now focuses more narrowly on composing derived reminder fields and pass-through props while specialized helpers own each mapping surface
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

@@ -49,6 +49,18 @@ const editorSupportToolsMediaTypesSource = readSource(editorSupportToolsMediaTyp
 const editorSupportToolsReminderTypesPath =
   "components/record-editor-support-tools-reminder.types.ts";
 const editorSupportToolsReminderTypesSource = readSource(editorSupportToolsReminderTypesPath);
+const editorSupportToolsReminderPropsPath = "components/record-editor-support-tools-reminder-props.ts";
+const editorSupportToolsReminderPropsSource = readSource(editorSupportToolsReminderPropsPath);
+const editorSupportToolsReminderDerivedPropsPath =
+  "components/record-editor-support-tools-reminder-derived-props.ts";
+const editorSupportToolsReminderDerivedPropsSource = readSource(
+  editorSupportToolsReminderDerivedPropsPath,
+);
+const editorSupportToolsReminderPassThroughPropsPath =
+  "components/record-editor-support-tools-reminder-pass-through-props.ts";
+const editorSupportToolsReminderPassThroughPropsSource = readSource(
+  editorSupportToolsReminderPassThroughPropsPath,
+);
 const editorWorkspaceSectionsPropsPath = "components/record-editor-workspace-sections-props.ts";
 const editorWorkspaceSectionsPropsSource = readSource(editorWorkspaceSectionsPropsPath);
 const editorWorkspaceMainSectionsPropsPath =
@@ -564,6 +576,99 @@ for (const requiredSupportToolsReminderTypesUsage of [
 }
 
 verifyLineLimit(editorSupportToolsReminderTypesPath, 35);
+
+for (const requiredSupportToolsReminderPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  'import { buildRecordReminderToolsDerivedProps } from "./record-editor-support-tools-reminder-derived-props";',
+  'import { buildRecordReminderToolsPassThroughProps } from "./record-editor-support-tools-reminder-pass-through-props";',
+]) {
+  if (!editorSupportToolsReminderPropsSource.includes(requiredSupportToolsReminderPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-props.ts must import delegated reminder prop helpers: ${requiredSupportToolsReminderPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsReminderPropsUsage of [
+  "buildRecordReminderToolsDerivedProps(props)",
+  "buildRecordReminderToolsPassThroughProps(props)",
+  "...derivedProps",
+  "...passThroughProps",
+]) {
+  if (!editorSupportToolsReminderPropsSource.includes(requiredSupportToolsReminderPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-props.ts must delegate derived and pass-through reminder mapping: ${requiredSupportToolsReminderPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSupportToolsReminderPropsToken of [
+  "channelInApp: channelInAppLabel",
+  "hasSelectedRecord: Boolean(selectedRecord)",
+  "selectedRecordTitle: selectedRecord?.title ?? null",
+  "createReminderLabel,",
+  "reminders,",
+  "setReminderForm,",
+]) {
+  if (editorSupportToolsReminderPropsSource.includes(forbiddenSupportToolsReminderPropsToken)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-props.ts must keep reminder derivation and pass-through mapping delegated: ${forbiddenSupportToolsReminderPropsToken}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsReminderPropsPath, 30);
+
+for (const requiredSupportToolsReminderDerivedPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+]) {
+  if (!editorSupportToolsReminderDerivedPropsSource.includes(requiredSupportToolsReminderDerivedPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-derived-props.ts must import reminder support-tool contracts: ${requiredSupportToolsReminderDerivedPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsReminderDerivedPropsUsage of [
+  "export function buildRecordReminderToolsDerivedProps({",
+  "channelInApp: channelInAppLabel",
+  "hasSelectedRecord: Boolean(selectedRecord)",
+  "selectedRecordTitle: selectedRecord?.title ?? null",
+]) {
+  if (!editorSupportToolsReminderDerivedPropsSource.includes(requiredSupportToolsReminderDerivedPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-derived-props.ts must own reminder derived mapping: ${requiredSupportToolsReminderDerivedPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsReminderDerivedPropsPath, 20);
+
+for (const requiredSupportToolsReminderPassThroughPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+]) {
+  if (!editorSupportToolsReminderPassThroughPropsSource.includes(requiredSupportToolsReminderPassThroughPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-pass-through-props.ts must import reminder support-tool contracts: ${requiredSupportToolsReminderPassThroughPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsReminderPassThroughPropsUsage of [
+  "export function buildRecordReminderToolsPassThroughProps({",
+  "...passThroughProps",
+  "void channelInAppLabel;",
+  "void selectedRecord;",
+  "return passThroughProps;",
+]) {
+  if (!editorSupportToolsReminderPassThroughPropsSource.includes(requiredSupportToolsReminderPassThroughPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-pass-through-props.ts must own reminder pass-through mapping: ${requiredSupportToolsReminderPassThroughPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsReminderPassThroughPropsPath, 20);
 
 if (!reminderToolsSource.includes('import type { RecordReminderToolsProps } from "./record-reminder-tools.types";')) {
   throw new Error("record-reminder-tools.tsx must import RecordReminderToolsProps from record-reminder-tools.types");

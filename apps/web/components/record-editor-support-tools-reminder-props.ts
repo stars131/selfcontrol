@@ -1,68 +1,15 @@
 "use client";
 
 import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";
+import { buildRecordReminderToolsDerivedProps } from "./record-editor-support-tools-reminder-derived-props";
+import { buildRecordReminderToolsPassThroughProps } from "./record-editor-support-tools-reminder-pass-through-props";
 
-export function buildRecordReminderToolsProps({
-  canWriteWorkspace,
-  channelInAppLabel,
-  channelLabel,
-  createReminderLabel,
-  deleteReminderLabel,
-  enableReminderLabel,
-  formatReminderEnabledLabel,
-  formatReminderStatusLabel,
-  formatReminderTimestampLabel,
-  markReminderDoneLabel,
-  noRemindersLabel,
-  onCreateReminder,
-  onDeleteReminder,
-  onUpdateReminder,
-  pauseReminderLabel,
-  reminderForm,
-  reminderNoteLabel,
-  reminderNotePlaceholder,
-  reminderSectionDescription,
-  reminderSectionTitle,
-  reminderTitleLabel,
-  reminderTitlePlaceholder,
-  remindAtLabel,
-  reminders,
-  savingReminder,
-  savingReminderLabel,
-  selectedRecord,
-  setReminderForm,
-  untitledReminderLabel,
-}: RecordEditorSupportToolsProps) {
+export function buildRecordReminderToolsProps(props: RecordEditorSupportToolsProps) {
+  const derivedProps = buildRecordReminderToolsDerivedProps(props);
+  const passThroughProps = buildRecordReminderToolsPassThroughProps(props);
+
   return {
-    canWriteWorkspace,
-    channelInApp: channelInAppLabel,
-    channelLabel,
-    createReminderLabel,
-    deleteReminderLabel,
-    enableReminderLabel,
-    formatReminderEnabledLabel,
-    formatReminderStatusLabel,
-    formatReminderTimestampLabel,
-    hasSelectedRecord: Boolean(selectedRecord),
-    markReminderDoneLabel,
-    noRemindersLabel,
-    onCreateReminder,
-    onDeleteReminder,
-    onUpdateReminder,
-    pauseReminderLabel,
-    reminderForm,
-    reminderNoteLabel,
-    reminderNotePlaceholder,
-    reminderSectionDescription,
-    reminderSectionTitle,
-    reminderTitleLabel,
-    reminderTitlePlaceholder,
-    remindAtLabel,
-    reminders,
-    savingReminder,
-    savingReminderLabel,
-    selectedRecordTitle: selectedRecord?.title ?? null,
-    setReminderForm,
-    untitledReminderLabel,
+    ...derivedProps,
+    ...passThroughProps,
   };
 }
