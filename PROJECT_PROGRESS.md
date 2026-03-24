@@ -1364,6 +1364,10 @@ Last updated: 2026-03-24
   - record form/filter aggregate input contracts now live in `apps/web/components/record-panel-controller-record-handler-input.types.ts` instead of remaining implicit across the record-handler builder and handler modules
   - `apps/web/components/record-panel-controller-record-handler-input.ts` and `apps/web/components/record-panel-controller-record-handlers.ts` now share the extracted record-handler contract so the builder output and handler input stay aligned behind one boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-handler input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the record handler module
+- Record Panel Selected-Record Sync Input Type Split V3:
+  - selected-record form/reminder sync input contracts now live in `apps/web/components/use-record-panel-controller-selected-record-sync.types.ts` instead of remaining embedded across the aggregate selected-record sync hook and its child hooks
+  - `apps/web/components/use-record-panel-controller-selected-record-sync.ts`, `apps/web/components/use-record-panel-controller-selected-record-form-sync.ts`, and `apps/web/components/use-record-panel-controller-selected-record-reminder-sync.ts` now consume the shared extracted sync contracts behind thinner hook boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record sync input-type boundary and keeps inline sync contract definitions out of the aggregate and child hooks
 
 ## Next
 - Continue the next product slice

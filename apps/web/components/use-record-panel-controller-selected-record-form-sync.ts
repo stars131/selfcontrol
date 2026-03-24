@@ -1,17 +1,12 @@
 "use client";
-import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 import { createEmptyForm, formatDatetimeInput, readLocationForm, readLocationReviewForm, type LocationReviewFormState, type RecordFormState } from "../lib/record-panel-forms";
-import type { RecordItem } from "../lib/types";
+import type { SelectedRecordFormSyncInput } from "./use-record-panel-controller-selected-record-sync.types";
 export function useRecordPanelControllerSelectedRecordFormSync({
   selectedRecord,
   setForm,
   setLocationReviewForm,
-}: {
-  selectedRecord: RecordItem | null;
-  setForm: Dispatch<SetStateAction<RecordFormState>>;
-  setLocationReviewForm: Dispatch<SetStateAction<LocationReviewFormState>>;
-}) {
+}: SelectedRecordFormSyncInput) {
   useEffect(() => {
     if (!selectedRecord) {
       setForm(createEmptyForm());

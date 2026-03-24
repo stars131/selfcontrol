@@ -1,12 +1,11 @@
 "use client";
-import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
-import { createEmptyReminderForm, type ReminderFormState } from "../lib/record-panel-forms";
-import type { RecordItem } from "../lib/types";
+import { createEmptyReminderForm } from "../lib/record-panel-forms";
+import type { SelectedRecordReminderSyncInput } from "./use-record-panel-controller-selected-record-sync.types";
 export function useRecordPanelControllerSelectedRecordReminderSync({
   selectedRecord,
   setReminderForm,
-}: { selectedRecord: RecordItem | null; setReminderForm: Dispatch<SetStateAction<ReminderFormState>> }) {
+}: SelectedRecordReminderSyncInput) {
   useEffect(() => {
     if (!selectedRecord) {
       setReminderForm(createEmptyReminderForm());

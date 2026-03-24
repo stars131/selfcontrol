@@ -1,7 +1,7 @@
 "use client";
 import { useRecordPanelControllerSelectedRecordFormSync } from "./use-record-panel-controller-selected-record-form-sync";
 import { useRecordPanelControllerSelectedRecordReminderSync } from "./use-record-panel-controller-selected-record-reminder-sync";
-type SelectedRecordSyncInput = Parameters<typeof useRecordPanelControllerSelectedRecordFormSync>[0] & Parameters<typeof useRecordPanelControllerSelectedRecordReminderSync>[0];
+import type { SelectedRecordSyncInput } from "./use-record-panel-controller-selected-record-sync.types";
 
 export function useRecordPanelControllerSelectedRecordSync({
   selectedRecord,

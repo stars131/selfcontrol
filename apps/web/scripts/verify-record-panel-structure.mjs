@@ -237,6 +237,10 @@ const recordPanelControllerSelectedRecordSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-selected-record-sync.ts",
 );
+const recordPanelControllerSelectedRecordSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-selected-record-sync.types.ts",
+);
 const recordPanelControllerSelectedRecordFormSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-selected-record-form-sync.ts",
@@ -951,6 +955,10 @@ const controllerSelectedRecordSyncSource = fs.readFileSync(
   recordPanelControllerSelectedRecordSyncPath,
   "utf8",
 );
+const controllerSelectedRecordSyncTypesSource = fs.readFileSync(
+  recordPanelControllerSelectedRecordSyncTypesPath,
+  "utf8",
+);
 const controllerSelectedRecordFormSyncSource = fs.readFileSync(
   recordPanelControllerSelectedRecordFormSyncPath,
   "utf8",
@@ -1307,6 +1315,8 @@ const controllerSyncTypesLines = controllerSyncTypesSource.split(/\r?\n/).length
 const controllerSyncInputLines = controllerSyncInputSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
+const controllerSelectedRecordSyncTypesLines =
+  controllerSelectedRecordSyncTypesSource.split(/\r?\n/).length;
 const controllerSelectedRecordFormSyncLines =
   controllerSelectedRecordFormSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordReminderSyncLines =
@@ -3475,9 +3485,42 @@ if (controllerDeadLetterSyncLines > maxControllerDeadLetterSyncLines) {
   );
 }
 
+for (const requiredControllerSelectedRecordSyncTypesImport of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+]) {
+  if (!controllerSelectedRecordSyncTypesSource.includes(requiredControllerSelectedRecordSyncTypesImport)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-sync.types.ts must import selected-record sync types: ${requiredControllerSelectedRecordSyncTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSelectedRecordSyncTypesUsage of [
+  "type SelectedRecord = RecordItem | null;",
+  "export type SelectedRecordFormSyncInput = {",
+  "export type SelectedRecordReminderSyncInput = {",
+  "export type SelectedRecordSyncInput = SelectedRecordFormSyncInput & SelectedRecordReminderSyncInput;",
+]) {
+  if (!controllerSelectedRecordSyncTypesSource.includes(requiredControllerSelectedRecordSyncTypesUsage)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-sync.types.ts must own selected-record sync contracts: ${requiredControllerSelectedRecordSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerSelectedRecordSyncTypesLines = 10;
+if (controllerSelectedRecordSyncTypesLines > maxControllerSelectedRecordSyncTypesLines) {
+  throw new Error(
+    `use-record-panel-controller-selected-record-sync.types.ts exceeded ${maxControllerSelectedRecordSyncTypesLines} lines: ${controllerSelectedRecordSyncTypesLines}`,
+  );
+}
+
 for (const requiredControllerSelectedRecordSyncImport of [
   'from "./use-record-panel-controller-selected-record-form-sync";',
   'from "./use-record-panel-controller-selected-record-reminder-sync";',
+  'from "./use-record-panel-controller-selected-record-sync.types";',
 ]) {
   if (!controllerSelectedRecordSyncSource.includes(requiredControllerSelectedRecordSyncImport)) {
     throw new Error(
@@ -3488,8 +3531,6 @@ for (const requiredControllerSelectedRecordSyncImport of [
 
 for (const requiredControllerSelectedRecordSyncUsage of [
   "export function useRecordPanelControllerSelectedRecordSync({",
-  "Parameters<typeof useRecordPanelControllerSelectedRecordFormSync>[0] &",
-  "Parameters<typeof useRecordPanelControllerSelectedRecordReminderSync>[0];",
   "useRecordPanelControllerSelectedRecordFormSync({ selectedRecord, setForm, setLocationReviewForm })",
   "useRecordPanelControllerSelectedRecordReminderSync({ selectedRecord, setReminderForm })",
 ]) {
@@ -3501,6 +3542,8 @@ for (const requiredControllerSelectedRecordSyncUsage of [
 }
 
 for (const forbiddenControllerSelectedRecordSyncToken of [
+  "Parameters<typeof useRecordPanelControllerSelectedRecordFormSync>[0]",
+  "Parameters<typeof useRecordPanelControllerSelectedRecordReminderSync>[0]",
   "createEmptyForm()",
   "createEmptyReminderForm()",
   "formatDatetimeInput(selectedRecord.occurred_at)",
@@ -3523,9 +3566,8 @@ if (controllerSelectedRecordSyncLines > maxControllerSelectedRecordSyncLines) {
 }
 
 for (const requiredControllerSelectedRecordFormSyncImport of [
-  'from "react";',
   'from "../lib/record-panel-forms";',
-  'from "../lib/types";',
+  'from "./use-record-panel-controller-selected-record-sync.types";',
 ]) {
   if (!controllerSelectedRecordFormSyncSource.includes(requiredControllerSelectedRecordFormSyncImport)) {
     throw new Error(
@@ -3549,6 +3591,20 @@ for (const requiredControllerSelectedRecordFormSyncUsage of [
   }
 }
 
+for (const forbiddenControllerSelectedRecordFormSyncToken of [
+  'import type { Dispatch, SetStateAction } from "react";',
+  'from "../lib/types";',
+  "selectedRecord: RecordItem | null;",
+  "setForm: Dispatch<SetStateAction<RecordFormState>>;",
+  "setLocationReviewForm: Dispatch<SetStateAction<LocationReviewFormState>>;",
+]) {
+  if (controllerSelectedRecordFormSyncSource.includes(forbiddenControllerSelectedRecordFormSyncToken)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-form-sync.ts must keep selected-record form input contracts delegated: ${forbiddenControllerSelectedRecordFormSyncToken}`,
+    );
+  }
+}
+
 const maxControllerSelectedRecordFormSyncLines = 40;
 if (controllerSelectedRecordFormSyncLines > maxControllerSelectedRecordFormSyncLines) {
   throw new Error(
@@ -3557,9 +3613,8 @@ if (controllerSelectedRecordFormSyncLines > maxControllerSelectedRecordFormSyncL
 }
 
 for (const requiredControllerSelectedRecordReminderSyncImport of [
-  'from "react";',
   'from "../lib/record-panel-forms";',
-  'from "../lib/types";',
+  'from "./use-record-panel-controller-selected-record-sync.types";',
 ]) {
   if (!controllerSelectedRecordReminderSyncSource.includes(requiredControllerSelectedRecordReminderSyncImport)) {
     throw new Error(
@@ -3576,6 +3631,20 @@ for (const requiredControllerSelectedRecordReminderSyncUsage of [
   if (!controllerSelectedRecordReminderSyncSource.includes(requiredControllerSelectedRecordReminderSyncUsage)) {
     throw new Error(
       `use-record-panel-controller-selected-record-reminder-sync.ts must own selected-record reminder sync details: ${requiredControllerSelectedRecordReminderSyncUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerSelectedRecordReminderSyncToken of [
+  'import type { Dispatch, SetStateAction } from "react";',
+  'from "../lib/types";',
+  'type ReminderFormState',
+  "selectedRecord: RecordItem | null;",
+  "setReminderForm: Dispatch<SetStateAction<ReminderFormState>>",
+]) {
+  if (controllerSelectedRecordReminderSyncSource.includes(forbiddenControllerSelectedRecordReminderSyncToken)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-reminder-sync.ts must keep selected-record reminder input contracts delegated: ${forbiddenControllerSelectedRecordReminderSyncToken}`,
     );
   }
 }
