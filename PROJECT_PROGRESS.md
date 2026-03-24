@@ -1088,10 +1088,14 @@ Last updated: 2026-03-24
   - record-panel filter preset save/delete orchestration now lives in `apps/web/components/record-panel-controller-filter-preset-actions.ts` instead of remaining mixed into the top-level filter action module
   - `apps/web/components/record-panel-controller-filter-actions.ts` now focuses on apply-filter orchestration and composing preset actions behind a thinner boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset-action helper boundary and tighter size ceilings for both filter action modules
+- Record Panel Media File Action Group Split V1:
+  - media upload/download orchestration and media delete orchestration now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-file-actions.ts`
+  - `apps/web/components/record-panel-controller-media-file-actions.ts` now focuses on composing transfer and delete actions behind a stable media-file boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media transfer/delete action boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel media-file helpers and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel reminder/media-status helpers and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -152,6 +152,14 @@ const recordPanelMediaFileActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-file-actions.ts",
 );
+const recordPanelMediaTransferActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-transfer-actions.ts",
+);
+const recordPanelMediaDeleteActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-delete-action.ts",
+);
 const recordPanelMediaFileHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-file-helpers.ts",
@@ -255,6 +263,8 @@ const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "u
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
+const mediaTransferActionsSource = fs.readFileSync(recordPanelMediaTransferActionsPath, "utf8");
+const mediaDeleteActionSource = fs.readFileSync(recordPanelMediaDeleteActionPath, "utf8");
 const mediaFileHelpersSource = fs.readFileSync(recordPanelMediaFileHelpersPath, "utf8");
 const deadLetterActionsSource = fs.readFileSync(recordPanelDeadLetterActionsPath, "utf8");
 const deadLetterHelpersSource = fs.readFileSync(recordPanelDeadLetterHelpersPath, "utf8");
@@ -306,6 +316,8 @@ const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
+const mediaTransferActionsLines = mediaTransferActionsSource.split(/\r?\n/).length;
+const mediaDeleteActionLines = mediaDeleteActionSource.split(/\r?\n/).length;
 const mediaFileHelpersLines = mediaFileHelpersSource.split(/\r?\n/).length;
 const deadLetterActionsLines = deadLetterActionsSource.split(/\r?\n/).length;
 const deadLetterHelpersLines = deadLetterHelpersSource.split(/\r?\n/).length;
@@ -1699,7 +1711,8 @@ if (mediaStatusHelpersLines > maxMediaStatusHelpersLines) {
 }
 
 for (const requiredMediaFileActionsImport of [
-  'from "./record-panel-controller-media-file-helpers";',
+  'from "./record-panel-controller-media-delete-action";',
+  'from "./record-panel-controller-media-transfer-actions";',
 ]) {
   if (!mediaFileActionsSource.includes(requiredMediaFileActionsImport)) {
     throw new Error(
@@ -1709,10 +1722,10 @@ for (const requiredMediaFileActionsImport of [
 }
 
 for (const requiredMediaFileActionsUsage of [
-  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
-  "resolveRecordPanelUploadInput(event, selectedRecord)",
-  "downloadRecordPanelMediaFile({",
-  "getRecordPanelMediaFileErrorMessage(",
+  "createRecordPanelControllerMediaTransferActions(props)",
+  "createRecordPanelControllerMediaDeleteAction(props)",
+  "...mediaTransferActions",
+  "...mediaDeleteAction",
 ]) {
   if (!mediaFileActionsSource.includes(requiredMediaFileActionsUsage)) {
     throw new Error(
@@ -1722,12 +1735,13 @@ for (const requiredMediaFileActionsUsage of [
 }
 
 for (const forbiddenMediaFileActionsToken of [
-  "function getErrorMessage(",
-  "const file = event.target.files?.[0];",
-  "detailCopy.notAuthenticated",
-  "const blob = await fetchMediaBlob(authToken, workspaceId, asset.id);",
-  "URL.createObjectURL(",
-  "anchor.download = asset.original_filename || `${asset.id}.bin`;",
+  'from "../lib/api";',
+  'from "../lib/record-panel-detail";',
+  "const handleUpload",
+  "const handleDeleteMediaAsset",
+  "const handleDownloadMedia",
+  "resolveRecordPanelUploadInput(",
+  "downloadRecordPanelMediaFile({",
 ]) {
   if (mediaFileActionsSource.includes(forbiddenMediaFileActionsToken)) {
     throw new Error(
@@ -1736,10 +1750,76 @@ for (const forbiddenMediaFileActionsToken of [
   }
 }
 
-const maxMediaFileActionsLines = 85;
+const maxMediaFileActionsLines = 20;
 if (mediaFileActionsLines > maxMediaFileActionsLines) {
   throw new Error(
     `record-panel-controller-media-file-actions.ts exceeded ${maxMediaFileActionsLines} lines: ${mediaFileActionsLines}`,
+  );
+}
+
+for (const requiredMediaTransferActionsImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-media-file-helpers";',
+]) {
+  if (!mediaTransferActionsSource.includes(requiredMediaTransferActionsImport)) {
+    throw new Error(
+      `record-panel-controller-media-transfer-actions.ts must import delegated media-transfer contracts: ${requiredMediaTransferActionsImport}`,
+    );
+  }
+}
+
+for (const requiredMediaTransferActionsUsage of [
+  "export function createRecordPanelControllerMediaTransferActions({",
+  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
+  "resolveRecordPanelUploadInput(event, selectedRecord)",
+  "downloadRecordPanelMediaFile({ asset, authToken, workspaceId })",
+  "fallbackMessages.notAuthenticated",
+]) {
+  if (!mediaTransferActionsSource.includes(requiredMediaTransferActionsUsage)) {
+    throw new Error(
+      `record-panel-controller-media-transfer-actions.ts must own upload/download orchestration: ${requiredMediaTransferActionsUsage}`,
+    );
+  }
+}
+
+const maxMediaTransferActionsLines = 70;
+if (mediaTransferActionsLines > maxMediaTransferActionsLines) {
+  throw new Error(
+    `record-panel-controller-media-transfer-actions.ts exceeded ${maxMediaTransferActionsLines} lines: ${mediaTransferActionsLines}`,
+  );
+}
+
+for (const requiredMediaDeleteActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-media-file-helpers";',
+]) {
+  if (!mediaDeleteActionSource.includes(requiredMediaDeleteActionImport)) {
+    throw new Error(
+      `record-panel-controller-media-delete-action.ts must import delegated media-delete contracts: ${requiredMediaDeleteActionImport}`,
+    );
+  }
+}
+
+for (const requiredMediaDeleteActionUsage of [
+  "export function createRecordPanelControllerMediaDeleteAction({",
+  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
+  "await onDeleteMedia(mediaId)",
+  "fallbackMessages.deleteMediaError",
+]) {
+  if (!mediaDeleteActionSource.includes(requiredMediaDeleteActionUsage)) {
+    throw new Error(
+      `record-panel-controller-media-delete-action.ts must own delete orchestration: ${requiredMediaDeleteActionUsage}`,
+    );
+  }
+}
+
+const maxMediaDeleteActionLines = 40;
+if (mediaDeleteActionLines > maxMediaDeleteActionLines) {
+  throw new Error(
+    `record-panel-controller-media-delete-action.ts exceeded ${maxMediaDeleteActionLines} lines: ${mediaDeleteActionLines}`,
   );
 }
 
