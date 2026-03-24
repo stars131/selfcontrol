@@ -1008,6 +1008,10 @@ Last updated: 2026-03-24
   - record-panel media-file upload input resolution, download execution, fallback-message mapping, and shared error formatting now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-media-file-actions.ts`
   - the top-level media-file action module now focuses more narrowly on upload, download, and delete orchestration while the helper owns browser download and upload-input details
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this media-file helper boundary and dedicated size ceilings for the extracted modules
+- Dead-Letter Action Helper Split V1:
+  - record-panel dead-letter selection updates, selectable-id derivation, bulk-retry request building, and fallback error formatting now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-actions.ts`
+  - the top-level dead-letter action module now focuses more narrowly on selection and retry orchestration while the helper owns retry-state-specific details
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this dead-letter helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
