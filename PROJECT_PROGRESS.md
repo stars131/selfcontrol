@@ -1112,10 +1112,14 @@ Last updated: 2026-03-24
   - media upload orchestration and media download orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-transfer-actions.ts`
   - `apps/web/components/record-panel-controller-media-transfer-actions.ts` now focuses on composing upload and download actions behind a stable transfer boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-transfer split and dedicated size ceilings for both extracted modules
+- Record Panel Handler Group Input Slice Split V1:
+  - handler-group input assembly now delegates prop-derived, state-derived, and view-data-derived mapping into dedicated builder modules instead of keeping one broad mapping surface in `apps/web/components/record-panel-controller-handler-groups-input.ts`
+  - `apps/web/components/record-panel-controller-handler-groups-input.ts` now focuses on composing the three specialized input slices behind a thin boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the handler-group slice split and dedicated size ceilings for the extracted builder modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel input contracts and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel payload contracts and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
