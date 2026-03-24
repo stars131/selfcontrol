@@ -2,11 +2,9 @@
 
 import { buildRecordPanelControllerCoreViewDataResult } from "./record-panel-controller-core-view-data-result";
 import { buildRecordPanelControllerLocalizedViewDataResult } from "./record-panel-controller-localized-view-data-result";
-import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
+import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
-type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
-
-export function buildRecordPanelControllerViewDataResult(viewData: ControllerViewData) {
+export function buildRecordPanelControllerViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput) {
   return {
     ...buildRecordPanelControllerCoreViewDataResult(viewData),
     ...buildRecordPanelControllerLocalizedViewDataResult(viewData),

@@ -329,6 +329,10 @@ const recordPanelControllerViewDataResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-result.ts",
 );
+const recordPanelControllerViewDataResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-view-data-result.types.ts",
+);
 const recordPanelControllerCoreViewDataResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-core-view-data-result.ts",
@@ -1078,6 +1082,10 @@ const controllerViewDataResultSource = fs.readFileSync(
   recordPanelControllerViewDataResultPath,
   "utf8",
 );
+const controllerViewDataResultTypesSource = fs.readFileSync(
+  recordPanelControllerViewDataResultTypesPath,
+  "utf8",
+);
 const controllerCoreViewDataResultSource = fs.readFileSync(
   recordPanelControllerCoreViewDataResultPath,
   "utf8",
@@ -1456,6 +1464,8 @@ const controllerStateResultTypesLines =
   controllerStateResultTypesSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
   controllerViewDataResultSource.split(/\r?\n/).length;
+const controllerViewDataResultTypesLines =
+  controllerViewDataResultTypesSource.split(/\r?\n/).length;
 const controllerCoreViewDataResultLines =
   controllerCoreViewDataResultSource.split(/\r?\n/).length;
 const controllerLocalizedViewDataResultLines =
@@ -5483,7 +5493,7 @@ if (controllerStateResultTypesLines > maxControllerStateResultTypesLines) {
 for (const requiredControllerViewDataResultImport of [
   'from "./record-panel-controller-core-view-data-result";',
   'from "./record-panel-controller-localized-view-data-result";',
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-view-data-result.types";',
 ]) {
   if (!controllerViewDataResultSource.includes(requiredControllerViewDataResultImport)) {
     throw new Error(
@@ -5493,7 +5503,7 @@ for (const requiredControllerViewDataResultImport of [
 }
 
 for (const requiredControllerViewDataResultUsage of [
-  "export function buildRecordPanelControllerViewDataResult(viewData: ControllerViewData)",
+  "export function buildRecordPanelControllerViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
   "buildRecordPanelControllerCoreViewDataResult(viewData)",
   "buildRecordPanelControllerLocalizedViewDataResult(viewData)",
 ]) {
@@ -5505,6 +5515,8 @@ for (const requiredControllerViewDataResultUsage of [
 }
 
 for (const forbiddenControllerViewDataResultToken of [
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerViewData = ReturnType<",
   "locale: viewData.locale,",
   "selectedRecord: viewData.selectedRecord,",
   "detailCopy: viewData.detailCopy,",
@@ -5522,6 +5534,33 @@ const maxControllerViewDataResultLines = 20;
 if (controllerViewDataResultLines > maxControllerViewDataResultLines) {
   throw new Error(
     `record-panel-controller-view-data-result.ts exceeded ${maxControllerViewDataResultLines} lines: ${controllerViewDataResultLines}`,
+  );
+}
+
+for (const requiredControllerViewDataResultTypesImport of [
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerViewDataResultTypesSource.includes(requiredControllerViewDataResultTypesImport)) {
+    throw new Error(
+      `record-panel-controller-view-data-result.types.ts must import controller view-data result type contracts: ${requiredControllerViewDataResultTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerViewDataResultTypesUsage of [
+  "export type BuildRecordPanelControllerViewDataResultInput = ReturnType<typeof useRecordPanelControllerViewData>;",
+]) {
+  if (!controllerViewDataResultTypesSource.includes(requiredControllerViewDataResultTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-view-data-result.types.ts must own controller view-data result type contracts: ${requiredControllerViewDataResultTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerViewDataResultTypesLines = 5;
+if (controllerViewDataResultTypesLines > maxControllerViewDataResultTypesLines) {
+  throw new Error(
+    `record-panel-controller-view-data-result.types.ts exceeded ${maxControllerViewDataResultTypesLines} lines: ${controllerViewDataResultTypesLines}`,
   );
 }
 

@@ -1444,6 +1444,10 @@ Last updated: 2026-03-24
   - controller-state-result input contract now lives in `apps/web/components/record-panel-controller-state-result.types.ts` instead of remaining embedded directly in the controller state result helper
   - `apps/web/components/record-panel-controller-state-result.ts` now consumes the extracted state-result input contract behind a thinner state-assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-state-result input-type boundary and keeps local `ReturnType` aliases out of the state result module
+- Record Panel Controller View-Data Result Input Type Split V1:
+  - controller-view-data-result input contract now lives in `apps/web/components/record-panel-controller-view-data-result.types.ts` instead of remaining embedded directly in the controller view-data result helper
+  - `apps/web/components/record-panel-controller-view-data-result.ts` now consumes the extracted view-data-result input contract behind a thinner composition boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-view-data-result input-type boundary and keeps local `ReturnType` aliases out of the view-data result module
 
 ## Next
 - Continue the next product slice
