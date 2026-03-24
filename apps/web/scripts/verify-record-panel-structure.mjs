@@ -140,6 +140,10 @@ const recordPanelReminderHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-helpers.ts",
 );
+const recordPanelReminderPayloadPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-payload.ts",
+);
 const recordPanelMediaStatusActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-actions.ts",
@@ -260,6 +264,7 @@ const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath
 const recordSavePayloadSource = fs.readFileSync(recordPanelRecordSavePayloadPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
+const reminderPayloadSource = fs.readFileSync(recordPanelReminderPayloadPath, "utf8");
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
@@ -313,6 +318,7 @@ const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
 const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
+const reminderPayloadLines = reminderPayloadSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
@@ -1603,8 +1609,7 @@ if (reminderActionsLines > maxReminderActionsLines) {
 
 for (const requiredReminderHelpersImport of [
   'from "../lib/record-panel-detail";',
-  'from "../lib/record-panel-forms";',
-  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-reminder-payload";',
 ]) {
   if (!reminderHelpersSource.includes(requiredReminderHelpersImport)) {
     throw new Error(
@@ -1614,12 +1619,11 @@ for (const requiredReminderHelpersImport of [
 }
 
 for (const requiredReminderHelpersUsage of [
-  "function buildReminderPayload({",
   "export function getRecordPanelReminderErrorMessage(",
   "export function resolveRecordPanelReminderActionInput(",
+  "buildRecordPanelReminderPayload({",
   '"Save or select a record before adding a reminder"',
   "reminderTimeRequiredError",
-  'channel_code: "in_app"',
 ]) {
   if (!reminderHelpersSource.includes(requiredReminderHelpersUsage)) {
     throw new Error(
@@ -1628,10 +1632,43 @@ for (const requiredReminderHelpersUsage of [
   }
 }
 
-const maxReminderHelpersLines = 60;
+const maxReminderHelpersLines = 45;
 if (reminderHelpersLines > maxReminderHelpersLines) {
   throw new Error(
     `record-panel-controller-reminder-helpers.ts exceeded ${maxReminderHelpersLines} lines: ${reminderHelpersLines}`,
+  );
+}
+
+for (const requiredReminderPayloadImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!reminderPayloadSource.includes(requiredReminderPayloadImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.ts must import shared reminder payload contracts: ${requiredReminderPayloadImport}`,
+    );
+  }
+}
+
+for (const requiredReminderPayloadUsage of [
+  "export type ResolveReminderActionInput = {",
+  "export function buildRecordPanelReminderPayload({",
+  "recordId: selectedRecord.id,",
+  'channel_code: "in_app"',
+]) {
+  if (!reminderPayloadSource.includes(requiredReminderPayloadUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.ts must own reminder payload assembly: ${requiredReminderPayloadUsage}`,
+    );
+  }
+}
+
+const maxReminderPayloadLines = 35;
+if (reminderPayloadLines > maxReminderPayloadLines) {
+  throw new Error(
+    `record-panel-controller-reminder-payload.ts exceeded ${maxReminderPayloadLines} lines: ${reminderPayloadLines}`,
   );
 }
 

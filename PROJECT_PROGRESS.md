@@ -1092,10 +1092,14 @@ Last updated: 2026-03-24
   - media upload/download orchestration and media delete orchestration now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-file-actions.ts`
   - `apps/web/components/record-panel-controller-media-file-actions.ts` now focuses on composing transfer and delete actions behind a stable media-file boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media transfer/delete action boundaries and dedicated size ceilings for the extracted modules
+- Record Panel Reminder Payload Split V1:
+  - reminder payload assembly now lives in `apps/web/components/record-panel-controller-reminder-payload.ts` instead of remaining mixed with reminder validation and fallback error handling
+  - `apps/web/components/record-panel-controller-reminder-helpers.ts` now focuses on validation branches and payload handoff through a thinner helper boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder payload boundary and dedicated size ceilings for both reminder helper modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel reminder/media-status helpers and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel media-status/dead-letter helpers and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
