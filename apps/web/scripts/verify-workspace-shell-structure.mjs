@@ -7,6 +7,15 @@ const workspaceShellClientPropsPath = path.resolve(
   "components/workspace-shell-client-props.ts",
 );
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
+const workspaceShellStatePath = path.resolve(process.cwd(), "components/use-workspace-shell-state.ts");
+const workspaceShellStateValuesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-values.ts",
+);
+const workspaceShellStatePermissionsPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-permissions.ts",
+);
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const workspaceShellActionsPath = path.resolve(process.cwd(), "components/use-workspace-shell-actions.ts");
 const workspaceShellEffectsPath = path.resolve(process.cwd(), "components/use-workspace-shell-effects.ts");
@@ -33,6 +42,12 @@ const workspaceShellAdminActionsPath = path.resolve(
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
+const workspaceShellStateSource = fs.readFileSync(workspaceShellStatePath, "utf8");
+const workspaceShellStateValuesSource = fs.readFileSync(workspaceShellStateValuesPath, "utf8");
+const workspaceShellStatePermissionsSource = fs.readFileSync(
+  workspaceShellStatePermissionsPath,
+  "utf8",
+);
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
 const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
@@ -44,6 +59,11 @@ const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
+const workspaceShellStateLineCount = workspaceShellStateSource.split(/\r?\n/).length;
+const workspaceShellStateValuesLineCount =
+  workspaceShellStateValuesSource.split(/\r?\n/).length;
+const workspaceShellStatePermissionsLineCount =
+  workspaceShellStatePermissionsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const effectsLineCount = effectsSource.split(/\r?\n/).length;
 const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
@@ -176,6 +196,99 @@ if (!source.includes("useWorkspaceShellActions(")) {
 
 if (!source.includes("useWorkspaceShellState()")) {
   throw new Error("workspace-shell-client.tsx must delegate local state registration to useWorkspaceShellState");
+}
+
+for (const requiredStateImport of [
+  'from "./use-workspace-shell-state-permissions";',
+  'from "./use-workspace-shell-state-values";',
+]) {
+  if (!workspaceShellStateSource.includes(requiredStateImport)) {
+    throw new Error(`use-workspace-shell-state.ts must import delegated state helpers: ${requiredStateImport}`);
+  }
+}
+
+for (const requiredStateUsage of [
+  "useWorkspaceShellStateValues()",
+  "useWorkspaceShellStatePermissions(state.workspace)",
+  "...state",
+  "...permissions",
+]) {
+  if (!workspaceShellStateSource.includes(requiredStateUsage)) {
+    throw new Error(`use-workspace-shell-state.ts must delegate state composition: ${requiredStateUsage}`);
+  }
+}
+
+for (const forbiddenStateToken of [
+  "useState(",
+  "INITIAL_RECORD_FILTER",
+  'workspace?.role === "owner"',
+  'workspace?.role === "editor"',
+]) {
+  if (workspaceShellStateSource.includes(forbiddenStateToken)) {
+    throw new Error(`use-workspace-shell-state.ts must keep state internals delegated: ${forbiddenStateToken}`);
+  }
+}
+
+const maxWorkspaceShellStateLines = 20;
+if (workspaceShellStateLineCount > maxWorkspaceShellStateLines) {
+  throw new Error(
+    `use-workspace-shell-state.ts exceeded ${maxWorkspaceShellStateLines} lines: ${workspaceShellStateLineCount}`,
+  );
+}
+
+for (const requiredStateValuesImport of [
+  'from "../lib/workspace-shell-refresh";',
+  'from "../lib/types";',
+]) {
+  if (!workspaceShellStateValuesSource.includes(requiredStateValuesImport)) {
+    throw new Error(`use-workspace-shell-state-values.ts must import shared shell state dependencies: ${requiredStateValuesImport}`);
+  }
+}
+
+for (const requiredStateValuesUsage of [
+  "useState<string | null>(null)",
+  "useState(INITIAL_RECORD_FILTER)",
+  "setSavingSearchPreset",
+  "setKnowledgeStats",
+  "setMediaDeadLetterOverview",
+]) {
+  if (!workspaceShellStateValuesSource.includes(requiredStateValuesUsage)) {
+    throw new Error(`use-workspace-shell-state-values.ts must own state registration: ${requiredStateValuesUsage}`);
+  }
+}
+
+const maxWorkspaceShellStateValuesLines = 120;
+if (workspaceShellStateValuesLineCount > maxWorkspaceShellStateValuesLines) {
+  throw new Error(
+    `use-workspace-shell-state-values.ts exceeded ${maxWorkspaceShellStateValuesLines} lines: ${workspaceShellStateValuesLineCount}`,
+  );
+}
+
+for (const requiredStatePermissionsUsage of [
+  "export function useWorkspaceShellStatePermissions(workspace: Workspace | null)",
+  'workspace?.role === "owner" || workspace?.role === "editor"',
+  'workspace?.role === "owner"',
+]) {
+  if (!workspaceShellStatePermissionsSource.includes(requiredStatePermissionsUsage)) {
+    throw new Error(`use-workspace-shell-state-permissions.ts must own workspace permission derivation: ${requiredStatePermissionsUsage}`);
+  }
+}
+
+for (const forbiddenStatePermissionsToken of [
+  "useState(",
+  "INITIAL_RECORD_FILTER",
+  "setWorkspace",
+]) {
+  if (workspaceShellStatePermissionsSource.includes(forbiddenStatePermissionsToken)) {
+    throw new Error(`use-workspace-shell-state-permissions.ts must keep raw state registration delegated: ${forbiddenStatePermissionsToken}`);
+  }
+}
+
+const maxWorkspaceShellStatePermissionsLines = 20;
+if (workspaceShellStatePermissionsLineCount > maxWorkspaceShellStatePermissionsLines) {
+  throw new Error(
+    `use-workspace-shell-state-permissions.ts exceeded ${maxWorkspaceShellStatePermissionsLines} lines: ${workspaceShellStatePermissionsLineCount}`,
+  );
 }
 
 if (!source.includes("createWorkspaceShellRefreshers({")) {

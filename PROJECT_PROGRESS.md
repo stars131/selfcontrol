@@ -924,6 +924,10 @@ Last updated: 2026-03-23
   - record-panel editor-workspace base prop mapping and its shared type contracts now live in dedicated modules instead of remaining inline inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
   - the editor-workspace prop builder now focuses more narrowly on composing base, copy, and action prop groups while the new modules own the large base mapping surface and its contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these editor-workspace base-prop boundaries and dedicated size ceilings
+- Workspace Shell State and Permission Split V1:
+  - workspace-shell raw state registration and workspace-role permission derivation now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-state.ts`
+  - the top-level workspace-shell state hook now focuses more narrowly on composing raw state and derived permissions while helper modules own each concern
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these shell-state helper boundaries and dedicated size ceilings
 
 ## Next
 - Continue the next product slice
