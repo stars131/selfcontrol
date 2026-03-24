@@ -1,21 +1,10 @@
 "use client";
 import { useMemo } from "react";
-import type { MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
 import { buildRecordPanelRecordViewData } from "./record-panel-controller-record-view-data";
 import { buildRecordPanelSelectedRecordViewData } from "./record-panel-controller-selected-record-view-data";
 import { useRecordPanelControllerLocalizedViewData } from "./use-record-panel-controller-localized-view-data";
-
-export function useRecordPanelControllerViewData({
-  mediaAssets,
-  mediaDeadLetterOverview,
-  records,
-  selectedRecordId,
-}: {
-  mediaAssets: MediaAsset[];
-  mediaDeadLetterOverview: MediaDeadLetterOverview | null;
-  records: RecordItem[];
-  selectedRecordId?: string | null;
-}) {
+import type { UseRecordPanelControllerViewDataInput } from "./use-record-panel-controller-view-data.types";
+export function useRecordPanelControllerViewData({ mediaAssets, mediaDeadLetterOverview, records, selectedRecordId }: UseRecordPanelControllerViewDataInput) {
   const recordViewData = useMemo(
     () => buildRecordPanelRecordViewData({ records, selectedRecordId }),
     [records, selectedRecordId],

@@ -377,6 +377,10 @@ const recordPanelControllerViewDataPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-view-data.ts",
 );
+const recordPanelControllerViewDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-view-data.types.ts",
+);
 const recordPanelControllerLocalizedViewDataHookPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-localized-view-data.ts",
@@ -1159,6 +1163,7 @@ const controllerHandlerGroupsViewDataInputSource = fs.readFileSync(
   "utf8",
 );
 const controllerViewDataSource = fs.readFileSync(recordPanelControllerViewDataPath, "utf8");
+const controllerViewDataTypesSource = fs.readFileSync(recordPanelControllerViewDataTypesPath, "utf8");
 const controllerLocalizedViewDataHookSource = fs.readFileSync(
   recordPanelControllerLocalizedViewDataHookPath,
   "utf8",
@@ -1557,6 +1562,7 @@ const controllerHandlerGroupsStateInputLines =
 const controllerHandlerGroupsViewDataInputLines =
   controllerHandlerGroupsViewDataInputSource.split(/\r?\n/).length;
 const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
+const controllerViewDataTypesLines = controllerViewDataTypesSource.split(/\r?\n/).length;
 const controllerLocalizedViewDataHookLines =
   controllerLocalizedViewDataHookSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
@@ -4858,6 +4864,7 @@ if (controllerHandlerGroupsViewDataInputLines > maxControllerHandlerGroupsViewDa
 }
 
 for (const requiredControllerViewDataImport of [
+  'from "./use-record-panel-controller-view-data.types";',
   'from "./record-panel-controller-record-view-data";',
   'from "./record-panel-controller-selected-record-view-data";',
   'from "./use-record-panel-controller-localized-view-data";',
@@ -4870,6 +4877,7 @@ for (const requiredControllerViewDataImport of [
 }
 
 for (const requiredControllerViewDataUsage of [
+  "export function useRecordPanelControllerViewData({ mediaAssets, mediaDeadLetterOverview, records, selectedRecordId }: UseRecordPanelControllerViewDataInput)",
   "buildRecordPanelRecordViewData({ records, selectedRecordId })",
   "buildRecordPanelSelectedRecordViewData({ mediaAssets, mediaDeadLetterOverview, selectedRecord: recordViewData.selectedRecord })",
   "useRecordPanelControllerLocalizedViewData()",
@@ -4908,6 +4916,10 @@ for (const forbiddenControllerViewDataToken of [
   "getSelectedRecordLocationHistory(selectedRecord)",
   "getSelectedRecordMediaSizeLabel(mediaAssets)",
   "getActionableDeadLetterIds(mediaDeadLetterOverview)",
+  "mediaAssets: MediaAsset[];",
+  "mediaDeadLetterOverview: MediaDeadLetterOverview | null;",
+  "records: RecordItem[];",
+  "selectedRecordId?: string | null;",
 ]) {
   if (controllerViewDataSource.includes(forbiddenControllerViewDataToken)) {
     throw new Error(
@@ -4920,6 +4932,31 @@ const maxControllerViewDataLines = 40;
 if (controllerViewDataLines > maxControllerViewDataLines) {
   throw new Error(
     `use-record-panel-controller-view-data.ts exceeded ${maxControllerViewDataLines} lines: ${controllerViewDataLines}`,
+  );
+}
+
+for (const requiredControllerViewDataTypesImport of ['from "../lib/types";']) {
+  if (!controllerViewDataTypesSource.includes(requiredControllerViewDataTypesImport)) {
+    throw new Error(
+      `use-record-panel-controller-view-data.types.ts must import view-data input contracts: ${requiredControllerViewDataTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerViewDataTypesUsage of [
+  "export type UseRecordPanelControllerViewDataInput = { mediaAssets: MediaAsset[]; mediaDeadLetterOverview: MediaDeadLetterOverview | null; records: RecordItem[]; selectedRecordId?: string | null };",
+]) {
+  if (!controllerViewDataTypesSource.includes(requiredControllerViewDataTypesUsage)) {
+    throw new Error(
+      `use-record-panel-controller-view-data.types.ts must own view-data input typing: ${requiredControllerViewDataTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerViewDataTypesLines = 5;
+if (controllerViewDataTypesLines > maxControllerViewDataTypesLines) {
+  throw new Error(
+    `use-record-panel-controller-view-data.types.ts exceeded ${maxControllerViewDataTypesLines} lines: ${controllerViewDataTypesLines}`,
   );
 }
 
