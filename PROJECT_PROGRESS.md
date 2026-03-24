@@ -1216,6 +1216,10 @@ Last updated: 2026-03-24
   - editor workspace controller display fields, formatter fields, and action fields now live in dedicated mapper and type modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts`
   - `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts` now focus on composing the specialized controller-input slices behind thin boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-input split and dedicated size ceilings for all extracted controller mapper and type modules
+- Record Panel Editor Workspace Base Prop Split V3:
+  - editor workspace base props now delegate session, state, form, and media mapping into dedicated slice modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-base-props.ts`
+  - editor workspace base prop types now compose the same four dedicated slice contracts instead of keeping one large duplicated pick list inside `apps/web/components/record-panel-v2-editor-workspace-base-props.types.ts`
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the base-prop split and dedicated size ceilings for all extracted base prop mapper and type modules
 
 ## Next
 - Continue the next product slice

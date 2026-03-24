@@ -1,90 +1,16 @@
-import type {
-  BuildRecordEditorWorkspacePropsInput,
-  RecordEditorWorkspaceProps,
-} from "./record-panel-v2-workspace-props.types";
+import type { BuildRecordEditorWorkspaceBaseFormPropsInput, RecordEditorWorkspaceBaseFormProps } from "./record-panel-v2-editor-workspace-base-form-props.types";
+import type { BuildRecordEditorWorkspaceBaseMediaPropsInput, RecordEditorWorkspaceBaseMediaProps } from "./record-panel-v2-editor-workspace-base-media-props.types";
+import type { BuildRecordEditorWorkspaceBaseSessionPropsInput, RecordEditorWorkspaceBaseSessionProps } from "./record-panel-v2-editor-workspace-base-session-props.types";
+import type { BuildRecordEditorWorkspaceBaseStatePropsInput, RecordEditorWorkspaceBaseStateProps } from "./record-panel-v2-editor-workspace-base-state-props.types";
 
-export type BuildRecordEditorWorkspaceBasePropsInput = Pick<
-  BuildRecordEditorWorkspacePropsInput,
-  | "authToken"
-  | "bulkRetryingDeadLetter"
-  | "canWriteWorkspace"
-  | "deleting"
-  | "deletingMediaId"
-  | "downloadingMediaId"
-  | "error"
-  | "form"
-  | "formatFileCountLabel"
-  | "formatHistoryTimestampLabel"
-  | "formatReminderEnabledLabel"
-  | "formatReminderStatusLabel"
-  | "formatReminderTimestampLabel"
-  | "formatReviewStatusLabel"
-  | "locale"
-  | "locationReviewForm"
-  | "mediaAssets"
-  | "mediaDeadLetterOverview"
-  | "mediaIssueCopy"
-  | "mediaProcessingOverview"
-  | "mediaStorageSummary"
-  | "panelCopy"
-  | "refreshingMediaId"
-  | "reminderForm"
-  | "reminders"
-  | "retryingMediaId"
-  | "saving"
-  | "savingReminder"
-  | "selectedDeadLetterIds"
-  | "selectedLocationHistory"
-  | "selectedLocationReview"
-  | "selectedRecord"
-  | "selectedRecordMediaSizeLabel"
-  | "setForm"
-  | "setLocationReviewForm"
-  | "setReminderForm"
-  | "summarizeHistoryActionLabel"
-  | "uploading"
-  | "workspaceId"
->;
+export type BuildRecordEditorWorkspaceBasePropsInput =
+  BuildRecordEditorWorkspaceBaseFormPropsInput &
+  BuildRecordEditorWorkspaceBaseMediaPropsInput &
+  BuildRecordEditorWorkspaceBaseSessionPropsInput &
+  BuildRecordEditorWorkspaceBaseStatePropsInput;
 
-export type RecordEditorWorkspaceBaseProps = Pick<
-  RecordEditorWorkspaceProps,
-  | "authToken"
-  | "bulkRetryingDeadLetter"
-  | "canWriteWorkspace"
-  | "deleting"
-  | "deletingMediaId"
-  | "downloadingMediaId"
-  | "error"
-  | "form"
-  | "formatFileCountLabel"
-  | "formatHistoryTimestampLabel"
-  | "formatReminderEnabledLabel"
-  | "formatReminderStatusLabel"
-  | "formatReminderTimestampLabel"
-  | "formatReviewStatusLabel"
-  | "locale"
-  | "locationReviewForm"
-  | "mediaAssets"
-  | "mediaDeadLetterOverview"
-  | "mediaIssueCopy"
-  | "mediaProcessingOverview"
-  | "mediaStorageSummary"
-  | "panelCopy"
-  | "refreshingMediaId"
-  | "reminderForm"
-  | "reminders"
-  | "retryingMediaId"
-  | "saving"
-  | "savingReminder"
-  | "selectedDeadLetterIds"
-  | "selectedLocationHistory"
-  | "selectedLocationReview"
-  | "selectedRecord"
-  | "selectedRecordMediaSizeLabel"
-  | "setForm"
-  | "setLocationReviewForm"
-  | "setReminderForm"
-  | "summarizeHistoryActionLabel"
-  | "uploading"
-  | "workspaceId"
->;
+export type RecordEditorWorkspaceBaseProps =
+  RecordEditorWorkspaceBaseFormProps &
+  RecordEditorWorkspaceBaseMediaProps &
+  RecordEditorWorkspaceBaseSessionProps &
+  RecordEditorWorkspaceBaseStateProps;

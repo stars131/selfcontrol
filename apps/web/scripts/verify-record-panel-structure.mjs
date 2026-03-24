@@ -115,6 +115,38 @@ const recordPanelEditorWorkspaceBasePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-base-props.types.ts",
 );
+const recordPanelEditorWorkspaceBaseSessionPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-session-props.ts",
+);
+const recordPanelEditorWorkspaceBaseStatePropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-state-props.ts",
+);
+const recordPanelEditorWorkspaceBaseFormPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-form-props.ts",
+);
+const recordPanelEditorWorkspaceBaseMediaPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-media-props.ts",
+);
+const recordPanelEditorWorkspaceBaseSessionPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-session-props.types.ts",
+);
+const recordPanelEditorWorkspaceBaseStatePropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-state-props.types.ts",
+);
+const recordPanelEditorWorkspaceBaseFormPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-form-props.types.ts",
+);
+const recordPanelEditorWorkspaceBaseMediaPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-media-props.types.ts",
+);
 const recordPanelEditorWorkspaceInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-input.ts",
@@ -565,6 +597,38 @@ const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
   recordPanelEditorWorkspaceBasePropsTypesPath,
   "utf8",
 );
+const editorWorkspaceBaseSessionPropsSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseSessionPropsPath,
+  "utf8",
+);
+const editorWorkspaceBaseStatePropsSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseStatePropsPath,
+  "utf8",
+);
+const editorWorkspaceBaseFormPropsSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseFormPropsPath,
+  "utf8",
+);
+const editorWorkspaceBaseMediaPropsSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseMediaPropsPath,
+  "utf8",
+);
+const editorWorkspaceBaseSessionPropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseSessionPropsTypesPath,
+  "utf8",
+);
+const editorWorkspaceBaseStatePropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseStatePropsTypesPath,
+  "utf8",
+);
+const editorWorkspaceBaseFormPropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseFormPropsTypesPath,
+  "utf8",
+);
+const editorWorkspaceBaseMediaPropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBaseMediaPropsTypesPath,
+  "utf8",
+);
 const editorWorkspaceInputSource = fs.readFileSync(recordPanelEditorWorkspaceInputPath, "utf8");
 const editorWorkspacePropInputSource = fs.readFileSync(
   recordPanelEditorWorkspacePropInputPath,
@@ -784,6 +848,22 @@ const editorWorkspacePrimaryActionPropsLines =
 const editorWorkspaceBasePropsLines = editorWorkspaceBasePropsSource.split(/\r?\n/).length;
 const editorWorkspaceBasePropsTypesLines =
   editorWorkspaceBasePropsTypesSource.split(/\r?\n/).length;
+const editorWorkspaceBaseSessionPropsLines =
+  editorWorkspaceBaseSessionPropsSource.split(/\r?\n/).length;
+const editorWorkspaceBaseStatePropsLines =
+  editorWorkspaceBaseStatePropsSource.split(/\r?\n/).length;
+const editorWorkspaceBaseFormPropsLines =
+  editorWorkspaceBaseFormPropsSource.split(/\r?\n/).length;
+const editorWorkspaceBaseMediaPropsLines =
+  editorWorkspaceBaseMediaPropsSource.split(/\r?\n/).length;
+const editorWorkspaceBaseSessionPropsTypesLines =
+  editorWorkspaceBaseSessionPropsTypesSource.split(/\r?\n/).length;
+const editorWorkspaceBaseStatePropsTypesLines =
+  editorWorkspaceBaseStatePropsTypesSource.split(/\r?\n/).length;
+const editorWorkspaceBaseFormPropsTypesLines =
+  editorWorkspaceBaseFormPropsTypesSource.split(/\r?\n/).length;
+const editorWorkspaceBaseMediaPropsTypesLines =
+  editorWorkspaceBaseMediaPropsTypesSource.split(/\r?\n/).length;
 const editorWorkspaceInputLines = editorWorkspaceInputSource.split(/\r?\n/).length;
 const editorWorkspacePropInputLines = editorWorkspacePropInputSource.split(/\r?\n/).length;
 const editorWorkspaceControllerInputLines =
@@ -1790,6 +1870,10 @@ if (editorWorkspacePrimaryActionPropsLines > maxEditorWorkspacePrimaryActionProp
 
 for (const requiredEditorWorkspaceBasePropsImport of [
   'from "./record-panel-v2-editor-workspace-base-props.types";',
+  'from "./record-panel-v2-editor-workspace-base-form-props";',
+  'from "./record-panel-v2-editor-workspace-base-media-props";',
+  'from "./record-panel-v2-editor-workspace-base-session-props";',
+  'from "./record-panel-v2-editor-workspace-base-state-props";',
 ]) {
   if (!editorWorkspaceBasePropsSource.includes(requiredEditorWorkspaceBasePropsImport)) {
     throw new Error(
@@ -1800,19 +1884,32 @@ for (const requiredEditorWorkspaceBasePropsImport of [
 
 for (const requiredEditorWorkspaceBasePropsUsage of [
   "export function buildRecordEditorWorkspaceBaseProps({",
+  "...buildRecordEditorWorkspaceBaseFormProps(input)",
+  "...buildRecordEditorWorkspaceBaseMediaProps(input)",
+  "...buildRecordEditorWorkspaceBaseSessionProps(input)",
+  "...buildRecordEditorWorkspaceBaseStateProps(input)",
+]) {
+  if (!editorWorkspaceBasePropsSource.includes(requiredEditorWorkspaceBasePropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props.ts must compose delegated base editor prop slices: ${requiredEditorWorkspaceBasePropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceBasePropsToken of [
   "authToken,",
   "mediaAssets,",
   "selectedRecordMediaSizeLabel,",
   "workspaceId,",
 ]) {
-  if (!editorWorkspaceBasePropsSource.includes(requiredEditorWorkspaceBasePropsUsage)) {
+  if (editorWorkspaceBasePropsSource.includes(forbiddenEditorWorkspaceBasePropsToken)) {
     throw new Error(
-      `record-panel-v2-editor-workspace-base-props.ts must own base editor prop assembly: ${requiredEditorWorkspaceBasePropsUsage}`,
+      `record-panel-v2-editor-workspace-base-props.ts must keep base editor prop mapping delegated: ${forbiddenEditorWorkspaceBasePropsToken}`,
     );
   }
 }
 
-const maxEditorWorkspaceBasePropsLines = 95;
+const maxEditorWorkspaceBasePropsLines = 20;
 if (editorWorkspaceBasePropsLines > maxEditorWorkspaceBasePropsLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-base-props.ts exceeded ${maxEditorWorkspaceBasePropsLines} lines: ${editorWorkspaceBasePropsLines}`,
@@ -1820,7 +1917,10 @@ if (editorWorkspaceBasePropsLines > maxEditorWorkspaceBasePropsLines) {
 }
 
 for (const requiredEditorWorkspaceBasePropsTypesImport of [
-  'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-base-form-props.types";',
+  'from "./record-panel-v2-editor-workspace-base-media-props.types";',
+  'from "./record-panel-v2-editor-workspace-base-session-props.types";',
+  'from "./record-panel-v2-editor-workspace-base-state-props.types";',
 ]) {
   if (!editorWorkspaceBasePropsTypesSource.includes(requiredEditorWorkspaceBasePropsTypesImport)) {
     throw new Error(
@@ -1830,23 +1930,268 @@ for (const requiredEditorWorkspaceBasePropsTypesImport of [
 }
 
 for (const requiredEditorWorkspaceBasePropsTypesUsage of [
-  "export type BuildRecordEditorWorkspaceBasePropsInput = Pick<",
-  "export type RecordEditorWorkspaceBaseProps = Pick<",
-  '"authToken"',
-  '"selectedRecordMediaSizeLabel"',
-  '"workspaceId"',
+  "export type BuildRecordEditorWorkspaceBasePropsInput =",
+  "BuildRecordEditorWorkspaceBaseFormPropsInput &",
+  "BuildRecordEditorWorkspaceBaseMediaPropsInput &",
+  "BuildRecordEditorWorkspaceBaseSessionPropsInput &",
+  "BuildRecordEditorWorkspaceBaseStatePropsInput;",
+  "export type RecordEditorWorkspaceBaseProps =",
+  "RecordEditorWorkspaceBaseFormProps &",
+  "RecordEditorWorkspaceBaseMediaProps &",
+  "RecordEditorWorkspaceBaseSessionProps &",
+  "RecordEditorWorkspaceBaseStateProps;",
 ]) {
   if (!editorWorkspaceBasePropsTypesSource.includes(requiredEditorWorkspaceBasePropsTypesUsage)) {
     throw new Error(
-      `record-panel-v2-editor-workspace-base-props.types.ts must own base prop type contracts: ${requiredEditorWorkspaceBasePropsTypesUsage}`,
+      `record-panel-v2-editor-workspace-base-props.types.ts must compose delegated base prop type slices: ${requiredEditorWorkspaceBasePropsTypesUsage}`,
     );
   }
 }
 
-const maxEditorWorkspaceBasePropsTypesLines = 95;
+const maxEditorWorkspaceBasePropsTypesLines = 20;
 if (editorWorkspaceBasePropsTypesLines > maxEditorWorkspaceBasePropsTypesLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-base-props.types.ts exceeded ${maxEditorWorkspaceBasePropsTypesLines} lines: ${editorWorkspaceBasePropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseSessionPropsImport of [
+  'from "./record-panel-v2-editor-workspace-base-session-props.types";',
+]) {
+  if (!editorWorkspaceBaseSessionPropsSource.includes(requiredEditorWorkspaceBaseSessionPropsImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-session-props.ts must import session prop contracts: ${requiredEditorWorkspaceBaseSessionPropsImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseSessionPropsUsage of [
+  "export function buildRecordEditorWorkspaceBaseSessionProps({",
+  "authToken,",
+  "panelCopy,",
+  "workspaceId",
+]) {
+  if (!editorWorkspaceBaseSessionPropsSource.includes(requiredEditorWorkspaceBaseSessionPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-session-props.ts must own session prop mapping: ${requiredEditorWorkspaceBaseSessionPropsUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseSessionPropsLines = 10;
+if (editorWorkspaceBaseSessionPropsLines > maxEditorWorkspaceBaseSessionPropsLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-session-props.ts exceeded ${maxEditorWorkspaceBaseSessionPropsLines} lines: ${editorWorkspaceBaseSessionPropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseStatePropsImport of [
+  'from "./record-panel-v2-editor-workspace-base-state-props.types";',
+]) {
+  if (!editorWorkspaceBaseStatePropsSource.includes(requiredEditorWorkspaceBaseStatePropsImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-state-props.ts must import state prop contracts: ${requiredEditorWorkspaceBaseStatePropsImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseStatePropsUsage of [
+  "export function buildRecordEditorWorkspaceBaseStateProps({",
+  "bulkRetryingDeadLetter,",
+  "retryingMediaId,",
+  "uploading",
+]) {
+  if (!editorWorkspaceBaseStatePropsSource.includes(requiredEditorWorkspaceBaseStatePropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-state-props.ts must own state prop mapping: ${requiredEditorWorkspaceBaseStatePropsUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseStatePropsLines = 10;
+if (editorWorkspaceBaseStatePropsLines > maxEditorWorkspaceBaseStatePropsLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-state-props.ts exceeded ${maxEditorWorkspaceBaseStatePropsLines} lines: ${editorWorkspaceBaseStatePropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseFormPropsImport of [
+  'from "./record-panel-v2-editor-workspace-base-form-props.types";',
+]) {
+  if (!editorWorkspaceBaseFormPropsSource.includes(requiredEditorWorkspaceBaseFormPropsImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-form-props.ts must import form prop contracts: ${requiredEditorWorkspaceBaseFormPropsImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseFormPropsUsage of [
+  "export function buildRecordEditorWorkspaceBaseFormProps({",
+  "form,",
+  "selectedRecord,",
+  "setReminderForm",
+]) {
+  if (!editorWorkspaceBaseFormPropsSource.includes(requiredEditorWorkspaceBaseFormPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-form-props.ts must own form prop mapping: ${requiredEditorWorkspaceBaseFormPropsUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseFormPropsLines = 10;
+if (editorWorkspaceBaseFormPropsLines > maxEditorWorkspaceBaseFormPropsLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-form-props.ts exceeded ${maxEditorWorkspaceBaseFormPropsLines} lines: ${editorWorkspaceBaseFormPropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseMediaPropsImport of [
+  'from "./record-panel-v2-editor-workspace-base-media-props.types";',
+]) {
+  if (!editorWorkspaceBaseMediaPropsSource.includes(requiredEditorWorkspaceBaseMediaPropsImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-media-props.ts must import media prop contracts: ${requiredEditorWorkspaceBaseMediaPropsImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseMediaPropsUsage of [
+  "export function buildRecordEditorWorkspaceBaseMediaProps({",
+  "formatFileCountLabel,",
+  "mediaAssets,",
+  "summarizeHistoryActionLabel",
+]) {
+  if (!editorWorkspaceBaseMediaPropsSource.includes(requiredEditorWorkspaceBaseMediaPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-media-props.ts must own media prop mapping: ${requiredEditorWorkspaceBaseMediaPropsUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseMediaPropsLines = 10;
+if (editorWorkspaceBaseMediaPropsLines > maxEditorWorkspaceBaseMediaPropsLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-media-props.ts exceeded ${maxEditorWorkspaceBaseMediaPropsLines} lines: ${editorWorkspaceBaseMediaPropsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseSessionPropsTypesImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBaseSessionPropsTypesSource.includes(requiredEditorWorkspaceBaseSessionPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-session-props.types.ts must import session type dependencies: ${requiredEditorWorkspaceBaseSessionPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseSessionPropsTypesUsage of [
+  "export type BuildRecordEditorWorkspaceBaseSessionPropsInput = Pick<",
+  "export type RecordEditorWorkspaceBaseSessionProps = Pick<",
+  '"authToken"',
+  '"workspaceId"',
+]) {
+  if (!editorWorkspaceBaseSessionPropsTypesSource.includes(requiredEditorWorkspaceBaseSessionPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-session-props.types.ts must own session prop type contracts: ${requiredEditorWorkspaceBaseSessionPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseSessionPropsTypesLines = 5;
+if (editorWorkspaceBaseSessionPropsTypesLines > maxEditorWorkspaceBaseSessionPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-session-props.types.ts exceeded ${maxEditorWorkspaceBaseSessionPropsTypesLines} lines: ${editorWorkspaceBaseSessionPropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseStatePropsTypesImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBaseStatePropsTypesSource.includes(requiredEditorWorkspaceBaseStatePropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-state-props.types.ts must import state type dependencies: ${requiredEditorWorkspaceBaseStatePropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseStatePropsTypesUsage of [
+  "export type BuildRecordEditorWorkspaceBaseStatePropsInput = Pick<",
+  "export type RecordEditorWorkspaceBaseStateProps = Pick<",
+  '"bulkRetryingDeadLetter"',
+  '"uploading"',
+]) {
+  if (!editorWorkspaceBaseStatePropsTypesSource.includes(requiredEditorWorkspaceBaseStatePropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-state-props.types.ts must own state prop type contracts: ${requiredEditorWorkspaceBaseStatePropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseStatePropsTypesLines = 5;
+if (editorWorkspaceBaseStatePropsTypesLines > maxEditorWorkspaceBaseStatePropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-state-props.types.ts exceeded ${maxEditorWorkspaceBaseStatePropsTypesLines} lines: ${editorWorkspaceBaseStatePropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseFormPropsTypesImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBaseFormPropsTypesSource.includes(requiredEditorWorkspaceBaseFormPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-form-props.types.ts must import form type dependencies: ${requiredEditorWorkspaceBaseFormPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseFormPropsTypesUsage of [
+  "export type BuildRecordEditorWorkspaceBaseFormPropsInput = Pick<",
+  "export type RecordEditorWorkspaceBaseFormProps = Pick<",
+  '"form"',
+  '"setReminderForm"',
+]) {
+  if (!editorWorkspaceBaseFormPropsTypesSource.includes(requiredEditorWorkspaceBaseFormPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-form-props.types.ts must own form prop type contracts: ${requiredEditorWorkspaceBaseFormPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseFormPropsTypesLines = 5;
+if (editorWorkspaceBaseFormPropsTypesLines > maxEditorWorkspaceBaseFormPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-form-props.types.ts exceeded ${maxEditorWorkspaceBaseFormPropsTypesLines} lines: ${editorWorkspaceBaseFormPropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBaseMediaPropsTypesImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBaseMediaPropsTypesSource.includes(requiredEditorWorkspaceBaseMediaPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-media-props.types.ts must import media type dependencies: ${requiredEditorWorkspaceBaseMediaPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBaseMediaPropsTypesUsage of [
+  "export type BuildRecordEditorWorkspaceBaseMediaPropsInput = Pick<",
+  "export type RecordEditorWorkspaceBaseMediaProps = Pick<",
+  '"mediaAssets"',
+  '"summarizeHistoryActionLabel"',
+]) {
+  if (!editorWorkspaceBaseMediaPropsTypesSource.includes(requiredEditorWorkspaceBaseMediaPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-media-props.types.ts must own media prop type contracts: ${requiredEditorWorkspaceBaseMediaPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBaseMediaPropsTypesLines = 5;
+if (editorWorkspaceBaseMediaPropsTypesLines > maxEditorWorkspaceBaseMediaPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-media-props.types.ts exceeded ${maxEditorWorkspaceBaseMediaPropsTypesLines} lines: ${editorWorkspaceBaseMediaPropsTypesLines}`,
   );
 }
 
