@@ -18,6 +18,14 @@ const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
 const editorSupportToolsSource = readSource(editorSupportToolsPath);
 const editorSupportToolsPropsPath = "components/record-editor-support-tools-props.ts";
 const editorSupportToolsPropsSource = readSource(editorSupportToolsPropsPath);
+const editorWorkspaceSectionsPropsPath = "components/record-editor-workspace-sections-props.ts";
+const editorWorkspaceSectionsPropsSource = readSource(editorWorkspaceSectionsPropsPath);
+const editorWorkspaceMainSectionsPropsPath =
+  "components/record-editor-workspace-main-sections-props.ts";
+const editorWorkspaceMainSectionsPropsSource = readSource(editorWorkspaceMainSectionsPropsPath);
+const editorWorkspaceSupportToolsPropsPath =
+  "components/record-editor-workspace-support-tools-props.ts";
+const editorWorkspaceSupportToolsPropsSource = readSource(editorWorkspaceSupportToolsPropsPath);
 const reminderToolsPath = "components/record-reminder-tools.tsx";
 const reminderToolsSource = readSource(reminderToolsPath);
 
@@ -57,6 +65,17 @@ if (!editorWorkspaceSource.includes("buildRecordEditorSupportToolsProps(props)")
   throw new Error("record-editor-workspace.tsx must delegate support-tools prop assembly");
 }
 
+for (const requiredSectionsPropsExport of [
+  'export { buildRecordEditorMainSectionsProps } from "./record-editor-workspace-main-sections-props";',
+  'export { buildRecordEditorSupportToolsProps } from "./record-editor-workspace-support-tools-props";',
+]) {
+  if (!editorWorkspaceSectionsPropsSource.includes(requiredSectionsPropsExport)) {
+    throw new Error(
+      `record-editor-workspace-sections-props.ts must remain a stable re-export boundary: ${requiredSectionsPropsExport}`,
+    );
+  }
+}
+
 for (const forbiddenToken of ["setForm((", "setLocationReviewForm(("]) {
   if (editorWorkspaceSource.includes(forbiddenToken)) {
     throw new Error(`record-editor-workspace.tsx must keep state-update closures in bindings helpers: ${forbiddenToken}`);
@@ -85,6 +104,61 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
 }
 
 verifyLineLimit(editorWorkspacePath, 110);
+verifyLineLimit(editorWorkspaceSectionsPropsPath, 10);
+
+for (const requiredMainSectionsPropsImport of [
+  'import { RecordEditorMainSections } from "./record-editor-main-sections";',
+  'import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";',
+]) {
+  if (!editorWorkspaceMainSectionsPropsSource.includes(requiredMainSectionsPropsImport)) {
+    throw new Error(
+      `record-editor-workspace-main-sections-props.ts must import main-section prop contracts: ${requiredMainSectionsPropsImport}`,
+    );
+  }
+}
+
+for (const requiredMainSectionsPropsUsage of [
+  "export function buildRecordEditorMainSectionsProps({",
+  "fieldBindings",
+  "locationReviewBindings",
+  "formatHistoryTimestampLabel: props.formatHistoryTimestampLabel",
+  "summarizeHistoryActionLabel: props.summarizeHistoryActionLabel",
+]) {
+  if (!editorWorkspaceMainSectionsPropsSource.includes(requiredMainSectionsPropsUsage)) {
+    throw new Error(
+      `record-editor-workspace-main-sections-props.ts must own main-section prop mapping: ${requiredMainSectionsPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorWorkspaceMainSectionsPropsPath, 35);
+
+for (const requiredSupportToolsPropsImport of [
+  'import { RecordEditorSupportTools } from "./record-editor-support-tools";',
+  'import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";',
+]) {
+  if (!editorWorkspaceSupportToolsPropsSource.includes(requiredSupportToolsPropsImport)) {
+    throw new Error(
+      `record-editor-workspace-support-tools-props.ts must import support-tools prop contracts: ${requiredSupportToolsPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsPropsUsage of [
+  "export function buildRecordEditorSupportToolsProps(",
+  "authToken: props.authToken",
+  "mediaIssueCopy: props.mediaIssueCopy",
+  "selectedRecordMediaSizeLabel: props.selectedRecordMediaSizeLabel",
+  "workspaceId: props.workspaceId",
+]) {
+  if (!editorWorkspaceSupportToolsPropsSource.includes(requiredSupportToolsPropsUsage)) {
+    throw new Error(
+      `record-editor-workspace-support-tools-props.ts must own support-tools prop mapping: ${requiredSupportToolsPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorWorkspaceSupportToolsPropsPath, 90);
 
 if (!editorSupportToolsSource.includes('import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";')) {
   throw new Error("record-editor-support-tools.tsx must import RecordEditorSupportToolsProps from record-editor-support-tools.types");
