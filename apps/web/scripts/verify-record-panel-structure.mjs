@@ -2,6 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.tsx");
+const recordPanelHeaderPath = path.resolve(process.cwd(), "components/record-panel-header.tsx");
+const recordPanelHeaderTypesPath = path.resolve(process.cwd(), "components/record-panel-header.types.ts");
 const recordPanelV2TypesPath = path.resolve(process.cwd(), "components/record-panel-v2.types.ts");
 const recordPanelV2InputTypesPath = path.resolve(
   process.cwd(),
@@ -893,6 +895,8 @@ const legacyRecordPanelStatsGridSource = fs.readFileSync(
   "utf8",
 );
 const source = fs.readFileSync(recordPanelPath, "utf8");
+const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
+const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
 const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
 const recordPanelV2PropsDataTypesSource = fs.readFileSync(
@@ -1425,6 +1429,8 @@ const deadLetterRetryHelpersSource = fs.readFileSync(
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
+const recordPanelHeaderLines = recordPanelHeaderSource.split(/\r?\n/).length;
+const recordPanelHeaderTypesLines = recordPanelHeaderTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
 const legacyRecordPanelSyncLines = legacyRecordPanelSyncSource.split(/\r?\n/).length;
@@ -1746,6 +1752,58 @@ if (!source.includes("buildRecordPanelShellViewProps({ controller, props })")) {
 
 if (!source.includes("<RecordPanelHeader")) {
   throw new Error("record-panel-v2.tsx must delegate top header rendering to RecordPanelHeader");
+}
+
+for (const requiredRecordPanelHeaderUsage of [
+  'from "./record-panel-header.types";',
+  "export function RecordPanelHeader({ canWriteWorkspace, onCreateRecord, panelCopy, workspaceId }: RecordPanelHeaderComponentProps)",
+  '{panelCopy.workspace}',
+  '{panelCopy.structuredResults}',
+  '{panelCopy.newRecord}',
+]) {
+  if (!recordPanelHeaderSource.includes(requiredRecordPanelHeaderUsage)) {
+    throw new Error(`record-panel-header.tsx must own focused header rendering: ${requiredRecordPanelHeaderUsage}`);
+  }
+}
+
+for (const forbiddenRecordPanelHeaderToken of [
+  'from "../lib/record-panel-ui";',
+  "canWriteWorkspace: boolean;",
+  "onCreateRecord: () => void;",
+  'panelCopy: Pick<PanelCopy, "workspace" | "structuredResults" | "newRecord">;',
+  "workspaceId: string;",
+]) {
+  if (recordPanelHeaderSource.includes(forbiddenRecordPanelHeaderToken)) {
+    throw new Error(`record-panel-header.tsx must keep header typing delegated: ${forbiddenRecordPanelHeaderToken}`);
+  }
+}
+
+const maxRecordPanelHeaderLines = 25;
+if (recordPanelHeaderLines > maxRecordPanelHeaderLines) {
+  throw new Error(
+    `record-panel-header.tsx exceeded ${maxRecordPanelHeaderLines} lines: ${recordPanelHeaderLines}`,
+  );
+}
+
+for (const requiredRecordPanelHeaderTypesImport of ['from "../lib/record-panel-ui";']) {
+  if (!recordPanelHeaderTypesSource.includes(requiredRecordPanelHeaderTypesImport)) {
+    throw new Error(`record-panel-header.types.ts must import header prop contracts: ${requiredRecordPanelHeaderTypesImport}`);
+  }
+}
+
+for (const requiredRecordPanelHeaderTypesUsage of [
+  'export type RecordPanelHeaderComponentProps = { canWriteWorkspace: boolean; onCreateRecord: () => void; panelCopy: Pick<PanelCopy, "workspace" | "structuredResults" | "newRecord">; workspaceId: string };',
+]) {
+  if (!recordPanelHeaderTypesSource.includes(requiredRecordPanelHeaderTypesUsage)) {
+    throw new Error(`record-panel-header.types.ts must own header prop typing: ${requiredRecordPanelHeaderTypesUsage}`);
+  }
+}
+
+const maxRecordPanelHeaderTypesLines = 5;
+if (recordPanelHeaderTypesLines > maxRecordPanelHeaderTypesLines) {
+  throw new Error(
+    `record-panel-header.types.ts exceeded ${maxRecordPanelHeaderTypesLines} lines: ${recordPanelHeaderTypesLines}`,
+  );
 }
 
 for (const requiredWorkspacePropsExport of [

@@ -1520,6 +1520,10 @@ Last updated: 2026-03-24
   - shared legacy-list prop contracts now live in `apps/web/components/record-panel-legacy-list.types.ts` instead of remaining duplicated inline across the list wrapper and record-card item components
   - `apps/web/components/record-panel-legacy-list.tsx` and `record-panel-legacy-list-item.tsx` now consume the shared props contracts behind thinner legacy list UI boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared legacy-list prop boundary and keeps inline list prop typing out of those UI modules
+- Record Panel Header Props Split V1:
+  - header component prop contract now lives in `apps/web/components/record-panel-header.types.ts` instead of remaining embedded directly in the component signature
+  - `apps/web/components/record-panel-header.tsx` now consumes the extracted header prop contract behind a thinner top-header UI boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header prop boundary and keeps inline header prop typing out of the component module
 
 ## Next
 - Continue the next product slice

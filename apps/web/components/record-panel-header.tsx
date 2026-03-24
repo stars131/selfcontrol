@@ -1,18 +1,6 @@
 "use client";
-
-import type { PanelCopy } from "../lib/record-panel-ui";
-
-export function RecordPanelHeader({
-  canWriteWorkspace,
-  onCreateRecord,
-  panelCopy,
-  workspaceId,
-}: {
-  canWriteWorkspace: boolean;
-  onCreateRecord: () => void;
-  panelCopy: Pick<PanelCopy, "workspace" | "structuredResults" | "newRecord">;
-  workspaceId: string;
-}) {
+import type { RecordPanelHeaderComponentProps } from "./record-panel-header.types";
+export function RecordPanelHeader({ canWriteWorkspace, onCreateRecord, panelCopy, workspaceId }: RecordPanelHeaderComponentProps) {
   return (
     <div className="panel-header">
       <div>
