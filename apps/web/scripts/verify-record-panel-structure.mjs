@@ -381,6 +381,10 @@ const recordPanelRecordHandlerInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handler-input.ts",
 );
+const recordPanelRecordHandlerInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-handler-input.types.ts",
+);
 const recordPanelMediaHandlerInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handler-input.ts",
@@ -1044,6 +1048,10 @@ const handlerGroupViewDataInputTypesSource = fs.readFileSync(
   "utf8",
 );
 const recordHandlerInputSource = fs.readFileSync(recordPanelRecordHandlerInputPath, "utf8");
+const recordHandlerInputTypesSource = fs.readFileSync(
+  recordPanelRecordHandlerInputTypesPath,
+  "utf8",
+);
 const mediaHandlerInputSource = fs.readFileSync(recordPanelMediaHandlerInputPath, "utf8");
 const mediaHandlerInputTypesSource = fs.readFileSync(
   recordPanelMediaHandlerInputTypesPath,
@@ -1346,6 +1354,7 @@ const handlerGroupStateInputTypesLines = handlerGroupStateInputTypesSource.split
 const handlerGroupViewDataInputTypesLines =
   handlerGroupViewDataInputTypesSource.split(/\r?\n/).length;
 const recordHandlerInputLines = recordHandlerInputSource.split(/\r?\n/).length;
+const recordHandlerInputTypesLines = recordHandlerInputTypesSource.split(/\r?\n/).length;
 const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputTypesLines = mediaHandlerInputTypesSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
@@ -4449,8 +4458,39 @@ if (handlerGroupViewDataInputTypesLines > maxHandlerGroupViewDataInputTypesLines
   );
 }
 
+for (const requiredRecordHandlerInputTypesImport of [
+  'from "./record-panel-controller-filter-action-input.types";',
+  'from "./record-panel-controller-form-action-input.types";',
+]) {
+  if (!recordHandlerInputTypesSource.includes(requiredRecordHandlerInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-handler-input.types.ts must import shared record-handler contracts: ${requiredRecordHandlerInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordHandlerInputTypesUsage of [
+  "export type RecordPanelControllerRecordHandlerInput =",
+  "RecordPanelControllerFormActionInput &",
+  "RecordPanelControllerFilterActionInput;",
+]) {
+  if (!recordHandlerInputTypesSource.includes(requiredRecordHandlerInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-handler-input.types.ts must own record-handler contract composition: ${requiredRecordHandlerInputTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordHandlerInputTypesLines = 10;
+if (recordHandlerInputTypesLines > maxRecordHandlerInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-handler-input.types.ts exceeded ${maxRecordHandlerInputTypesLines} lines: ${recordHandlerInputTypesLines}`,
+  );
+}
+
 for (const requiredRecordHandlerInputImport of [
   'from "./record-panel-controller-handler-group-inputs.types";',
+  'from "./record-panel-controller-record-handler-input.types";',
 ]) {
   if (!recordHandlerInputSource.includes(requiredRecordHandlerInputImport)) {
     throw new Error(
@@ -4461,6 +4501,7 @@ for (const requiredRecordHandlerInputImport of [
 
 for (const requiredRecordHandlerInputUsage of [
   "export function buildRecordPanelControllerRecordHandlerInput(",
+  "): RecordPanelControllerRecordHandlerInput {",
   "detailCopy: input.detailCopy,",
   "setSavingReminder: input.setSavingReminder,",
 ]) {
@@ -4729,6 +4770,7 @@ if (controllerLocalizedViewDataResultLines > maxControllerLocalizedViewDataResul
 for (const requiredRecordHandlersImport of [
   'from "./record-panel-controller-filter-actions";',
   'from "./record-panel-controller-form-actions";',
+  'from "./record-panel-controller-record-handler-input.types";',
 ]) {
   if (!recordHandlersSource.includes(requiredRecordHandlersImport)) {
     throw new Error(`record-panel-controller-record-handlers.ts must import delegated record helpers: ${requiredRecordHandlersImport}`);
@@ -4748,6 +4790,8 @@ for (const requiredRecordHandlersUsage of [
 
 for (const forbiddenRecordHandlersToken of [
   'from "../lib/record-panel-forms";',
+  "Parameters<typeof createRecordPanelControllerFormActions>[0]",
+  "Parameters<typeof createRecordPanelControllerFilterActions>[0]",
   "const handleSubmit",
   "const handleApplyFilter",
   "event.preventDefault()",

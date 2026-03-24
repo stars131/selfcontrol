@@ -1,10 +1,11 @@
 "use client";
 
 import type { RecordPanelControllerHandlerGroupInput } from "./record-panel-controller-handler-group-inputs.types";
+import type { RecordPanelControllerRecordHandlerInput } from "./record-panel-controller-record-handler-input.types";
 
 export function buildRecordPanelControllerRecordHandlerInput(
   input: RecordPanelControllerHandlerGroupInput,
-) {
+): RecordPanelControllerRecordHandlerInput {
   return {
     detailCopy: input.detailCopy,
     filterDraft: input.filterDraft,

@@ -1360,6 +1360,10 @@ Last updated: 2026-03-24
   - filter apply/preset aggregate input contracts now live in `apps/web/components/record-panel-controller-filter-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-filter-actions.ts`
   - `apps/web/components/record-panel-controller-filter-actions.ts` now consumes the shared extracted filter contract behind a thinner orchestration boundary while reusing the dedicated preset input module
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter action input-type boundary and keeps inline `FilterActionProps` definitions out of the filter action module
+- Record Panel Record Handler Input Type Split V3:
+  - record form/filter aggregate input contracts now live in `apps/web/components/record-panel-controller-record-handler-input.types.ts` instead of remaining implicit across the record-handler builder and handler modules
+  - `apps/web/components/record-panel-controller-record-handler-input.ts` and `apps/web/components/record-panel-controller-record-handlers.ts` now share the extracted record-handler contract so the builder output and handler input stay aligned behind one boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-handler input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the record handler module
 
 ## Next
 - Continue the next product slice

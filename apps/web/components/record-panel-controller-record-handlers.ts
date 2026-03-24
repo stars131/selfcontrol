@@ -2,10 +2,10 @@
 
 import { createRecordPanelControllerFilterActions } from "./record-panel-controller-filter-actions";
 import { createRecordPanelControllerFormActions } from "./record-panel-controller-form-actions";
+import type { RecordPanelControllerRecordHandlerInput } from "./record-panel-controller-record-handler-input.types";
 
 export function createRecordPanelControllerRecordHandlers(
-  props: Parameters<typeof createRecordPanelControllerFormActions>[0] &
-    Parameters<typeof createRecordPanelControllerFilterActions>[0],
+  props: RecordPanelControllerRecordHandlerInput,
 ) {
   const formActions = createRecordPanelControllerFormActions(props);
   const filterActions = createRecordPanelControllerFilterActions(props);
