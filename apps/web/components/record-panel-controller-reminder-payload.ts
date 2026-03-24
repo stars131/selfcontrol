@@ -1,14 +1,11 @@
 import type { ReminderFormState } from "../lib/record-panel-forms";
 import type { RecordItem } from "../lib/types";
-import type { ReminderPayload } from "./record-panel-controller-reminder-payload.types";
+import type { BuildReminderPayloadInput, ReminderPayload } from "./record-panel-controller-reminder-payload.types";
 
 export function buildRecordPanelReminderPayload({
   reminderForm,
   selectedRecord,
-}: {
-  reminderForm: ReminderFormState;
-  selectedRecord: RecordItem;
-}): ReminderPayload {
+}: BuildReminderPayloadInput): ReminderPayload {
   return {
     recordId: selectedRecord.id,
     title: reminderForm.title.trim() || selectedRecord.title || undefined,

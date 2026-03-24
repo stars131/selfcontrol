@@ -7068,6 +7068,7 @@ for (const requiredReminderPayloadTypesUsage of [
   "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   'export type ReminderPayload = Parameters<ControllerProps["onCreateReminder"]>[0];',
   "export type ResolveReminderActionInput = { detailCopy: DetailCopy; reminderForm: ReminderFormState; selectedRecord: RecordItem | null };",
+  "export type BuildReminderPayloadInput = { reminderForm: ReminderFormState; selectedRecord: RecordItem };",
 ]) {
   if (!reminderPayloadTypesSource.includes(requiredReminderPayloadTypesUsage)) {
     throw new Error(
@@ -7097,6 +7098,7 @@ for (const requiredReminderPayloadImport of [
 
 for (const requiredReminderPayloadUsage of [
   "export function buildRecordPanelReminderPayload({",
+  "}: BuildReminderPayloadInput): ReminderPayload {",
   "recordId: selectedRecord.id,",
   'channel_code: "in_app"',
 ]) {
@@ -7112,6 +7114,8 @@ for (const forbiddenReminderPayloadToken of [
   'from "./record-panel-controller.types";',
   "type DetailCopy =",
   "export type ResolveReminderActionInput = {",
+  "reminderForm: ReminderFormState;",
+  "selectedRecord: RecordItem;",
 ]) {
   if (reminderPayloadSource.includes(forbiddenReminderPayloadToken)) {
     throw new Error(

@@ -1468,6 +1468,10 @@ Last updated: 2026-03-24
   - location-payload input contract now lives in `apps/web/components/record-panel-controller-record-location-payload.types.ts` instead of remaining embedded directly in the location payload helper
   - `apps/web/components/record-panel-controller-record-location-payload.ts` now consumes the extracted location-payload input contract behind a thinner assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the location-payload input-type boundary and keeps inline form/location-review coordinate typing out of the payload helper
+- Record Panel Reminder Payload Builder Input Type Split V1:
+  - reminder-payload builder input contract now lives in `apps/web/components/record-panel-controller-reminder-payload.types.ts` instead of remaining embedded directly in the reminder payload helper
+  - `apps/web/components/record-panel-controller-reminder-payload.ts` now consumes the extracted builder input contract behind a thinner payload-assembly boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-payload builder-input boundary and keeps inline reminder-form and selected-record typing out of the payload helper
 
 ## Next
 - Continue the next product slice
