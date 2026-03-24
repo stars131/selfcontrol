@@ -10,14 +10,26 @@ const providerSettingsPanelHelpersPath = path.resolve(
   process.cwd(),
   "components/provider-settings-panel-helpers.ts",
 );
+const providerSettingsFeatureListPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list.tsx",
+);
+const providerSettingsPanelTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel.types.ts",
+);
 const providerSettingsCopyPath = path.resolve(process.cwd(), "components/provider-settings-copy.ts");
 const source = fs.readFileSync(providerSettingsPath, "utf8");
 const controllerSource = fs.readFileSync(providerSettingsControllerPath, "utf8");
 const panelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "utf8");
+const featureListSource = fs.readFileSync(providerSettingsFeatureListPath, "utf8");
+const panelTypesSource = fs.readFileSync(providerSettingsPanelTypesPath, "utf8");
 const copySource = fs.readFileSync(providerSettingsCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const panelHelpersLineCount = panelHelpersSource.split(/\r?\n/).length;
+const featureListLineCount = featureListSource.split(/\r?\n/).length;
+const panelTypesLineCount = panelTypesSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
@@ -73,8 +85,12 @@ if (!source.includes('import { getProviderSettingsCopy } from "./provider-settin
   throw new Error("provider-settings-panel.tsx must import getProviderSettingsCopy");
 }
 
-if (!source.includes('import { ProviderFeatureCard } from "./provider-feature-card";')) {
-  throw new Error("provider-settings-panel.tsx must import ProviderFeatureCard");
+if (!source.includes('import { ProviderSettingsFeatureList } from "./provider-settings-feature-list";')) {
+  throw new Error("provider-settings-panel.tsx must import ProviderSettingsFeatureList");
+}
+
+if (!source.includes('import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";')) {
+  throw new Error("provider-settings-panel.tsx must import ProviderSettingsPanelProps");
 }
 
 if (!source.includes('from "./provider-settings-panel-helpers";')) {
@@ -85,8 +101,8 @@ if (!source.includes("useProviderSettingsController({")) {
   throw new Error("provider-settings-panel.tsx must delegate draft and save orchestration to useProviderSettingsController");
 }
 
-if (!source.includes("<ProviderFeatureCard")) {
-  throw new Error("provider-settings-panel.tsx must delegate feature form rendering to ProviderFeatureCard");
+if (!source.includes("<ProviderSettingsFeatureList")) {
+  throw new Error("provider-settings-panel.tsx must delegate feature list rendering to ProviderSettingsFeatureList");
 }
 
 if (!source.includes("getProviderSettingsCopy(locale)")) {
@@ -94,13 +110,74 @@ if (!source.includes("getProviderSettingsCopy(locale)")) {
 }
 
 for (const requiredPanelUsage of [
-  "buildProviderSettingsSecretStatusFormatter(copy)",
   'readProviderSettingsAnchorHighlightClass("provider-settings", highlightedAnchor)',
-  "buildProviderFeatureCardProps({",
 ]) {
   if (!source.includes(requiredPanelUsage)) {
     throw new Error(`provider-settings-panel.tsx must delegate view helper logic: ${requiredPanelUsage}`);
   }
+}
+
+for (const forbiddenPanelToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";',
+  'import { ProviderFeatureCard } from "./provider-feature-card";',
+  "buildProviderSettingsSecretStatusFormatter(copy)",
+  "buildProviderFeatureCardProps({",
+  'className="record-list compact-list"',
+  "providerConfigs.map((item) => {",
+  "type ProviderSettingsPanelProps = {",
+]) {
+  if (source.includes(forbiddenPanelToken)) {
+    throw new Error(`provider-settings-panel.tsx must keep feature-list and props internals delegated: ${forbiddenPanelToken}`);
+  }
+}
+
+const maxAllowedLines = 90;
+if (lineCount > maxAllowedLines) {
+  throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredFeatureListImport of [
+  'import { ProviderFeatureCard } from "./provider-feature-card";',
+  'from "./provider-settings-panel-helpers";',
+  'import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+]) {
+  if (!featureListSource.includes(requiredFeatureListImport)) {
+    throw new Error(`provider-settings-feature-list.tsx must import shared provider feature-list dependencies: ${requiredFeatureListImport}`);
+  }
+}
+
+for (const requiredFeatureListUsage of [
+  "buildProviderSettingsSecretStatusFormatter(copy)",
+  "buildProviderFeatureCardProps({",
+  "providerConfigs.map((item) => {",
+  "<ProviderFeatureCard",
+  "isProviderDraftDirty(item)",
+]) {
+  if (!featureListSource.includes(requiredFeatureListUsage)) {
+    throw new Error(`provider-settings-feature-list.tsx must own feature-card list rendering: ${requiredFeatureListUsage}`);
+  }
+}
+
+const maxFeatureListLines = 85;
+if (featureListLineCount > maxFeatureListLines) {
+  throw new Error(`provider-settings-feature-list.tsx exceeded ${maxFeatureListLines} lines: ${featureListLineCount}`);
+}
+
+for (const requiredPanelTypesUsage of [
+  "export type ProviderSettingsPanelProps = {",
+  "providerConfigs: ProviderFeatureConfig[];",
+  "onSaveProviderConfig: UseProviderSettingsControllerProps[\"onSaveProviderConfig\"];",
+]) {
+  if (!panelTypesSource.includes(requiredPanelTypesUsage)) {
+    throw new Error(`provider-settings-panel.types.ts must own shared panel prop contracts: ${requiredPanelTypesUsage}`);
+  }
+}
+
+const maxPanelTypesLines = 20;
+if (panelTypesLineCount > maxPanelTypesLines) {
+  throw new Error(`provider-settings-panel.types.ts exceeded ${maxPanelTypesLines} lines: ${panelTypesLineCount}`);
 }
 
 if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
@@ -275,11 +352,6 @@ for (const forbiddenToken of [
   if (source.includes(forbiddenToken)) {
     throw new Error(`provider-settings-panel.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
-}
-
-const maxAllowedLines = 130;
-if (lineCount > maxAllowedLines) {
-  throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
 
 for (const requiredPanelHelpersImport of [

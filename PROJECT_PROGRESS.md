@@ -960,6 +960,10 @@ Last updated: 2026-03-24
   - workspace export-jobs controller local state registration and export/download action wiring now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-export-jobs-controller.ts`
   - the top-level export-jobs controller now focuses more narrowly on effect-driven initial loading and returning the existing controller contract
   - `apps/web/scripts/verify-workspace-export-jobs-structure.mjs` now enforces these controller helper boundaries and dedicated size ceilings for the extracted modules
+- Provider Settings Panel Feature List Split V1:
+  - provider-settings panel shared prop contracts and feature-card list rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/provider-settings-panel.tsx`
+  - the top-level provider-settings panel now focuses more narrowly on copy lookup, controller composition, anchor highlighting, and shell layout while the extracted feature list owns card mapping
+  - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these panel boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
