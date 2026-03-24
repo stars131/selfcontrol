@@ -1,7 +1,9 @@
 "use client";
 import type { ControllerProps } from "./record-panel-controller.types";
 import { createRecordPanelControllerFilterApplyAction } from "./record-panel-controller-filter-apply-action";
-import { createRecordPanelControllerFilterPresetActions, type RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-actions";
+import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types";
+import { createRecordPanelControllerFilterPresetActions } from "./record-panel-controller-filter-preset-actions";
+
 type FilterActionProps = RecordPanelControllerFilterPresetActionInput & {
   onApplyRecordFilter: ControllerProps["onApplyRecordFilter"];
 };

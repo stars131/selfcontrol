@@ -397,6 +397,10 @@ const recordPanelFilterPresetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-actions.ts",
 );
+const recordPanelFilterPresetActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-action-input.types.ts",
+);
 const recordPanelFilterPresetSaveActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-save-action.ts",
@@ -480,6 +484,10 @@ const recordPanelRecordLocationPayloadPath = path.resolve(
 const recordPanelReminderActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-actions.ts",
+);
+const recordPanelReminderSubmitActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-submit-action.ts",
 );
 const recordPanelReminderActionInputTypesPath = path.resolve(
   process.cwd(),
@@ -996,6 +1004,10 @@ const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const filterActionsSource = fs.readFileSync(recordPanelFilterActionsPath, "utf8");
 const filterApplyActionSource = fs.readFileSync(recordPanelFilterApplyActionPath, "utf8");
 const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActionsPath, "utf8");
+const filterPresetActionInputTypesSource = fs.readFileSync(
+  recordPanelFilterPresetActionInputTypesPath,
+  "utf8",
+);
 const filterPresetSaveActionSource = fs.readFileSync(recordPanelFilterPresetSaveActionPath, "utf8");
 const filterPresetDeleteActionSource = fs.readFileSync(
   recordPanelFilterPresetDeleteActionPath,
@@ -1041,6 +1053,7 @@ const recordSaveCoordinateSource = fs.readFileSync(
 );
 const recordLocationPayloadSource = fs.readFileSync(recordPanelRecordLocationPayloadPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
+const reminderSubmitActionSource = fs.readFileSync(recordPanelReminderSubmitActionPath, "utf8");
 const reminderActionInputTypesSource = fs.readFileSync(
   recordPanelReminderActionInputTypesPath,
   "utf8",
@@ -1252,6 +1265,8 @@ const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
 const filterApplyActionLines = filterApplyActionSource.split(/\r?\n/).length;
 const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length;
+const filterPresetActionInputTypesLines =
+  filterPresetActionInputTypesSource.split(/\r?\n/).length;
 const filterPresetSaveActionLines = filterPresetSaveActionSource.split(/\r?\n/).length;
 const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\n/).length;
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
@@ -1273,6 +1288,7 @@ const recordSavePayloadTypesLines = recordSavePayloadTypesSource.split(/\r?\n/).
 const recordSaveCoordinateLines = recordSaveCoordinateSource.split(/\r?\n/).length;
 const recordLocationPayloadLines = recordLocationPayloadSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
+const reminderSubmitActionLines = reminderSubmitActionSource.split(/\r?\n/).length;
 const reminderActionInputTypesLines = reminderActionInputTypesSource.split(/\r?\n/).length;
 const reminderSuccessHelpersLines = reminderSuccessHelpersSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
@@ -4621,6 +4637,7 @@ if (formActionsLines > maxFormActionsLines) {
 
 for (const requiredFilterActionsImport of [
   'from "./record-panel-controller-filter-apply-action";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
   'from "./record-panel-controller-filter-preset-actions";',
 ]) {
   if (!filterActionsSource.includes(requiredFilterActionsImport)) {
@@ -4698,9 +4715,7 @@ if (filterApplyActionLines > maxFilterApplyActionLines) {
 }
 
 for (const requiredFilterPresetActionsImport of [
-  'from "../lib/record-panel-detail";',
-  'from "../lib/types";',
-  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
   'from "./record-panel-controller-filter-preset-delete-action";',
   'from "./record-panel-controller-filter-preset-save-action";',
 ]) {
@@ -4725,10 +4740,59 @@ for (const requiredFilterPresetActionsUsage of [
   }
 }
 
-const maxFilterPresetActionsLines = 60;
+for (const forbiddenFilterPresetActionsToken of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  "type DetailCopy =",
+  "export type RecordPanelControllerFilterPresetActionInput = {",
+  "onCreateSearchPreset: ControllerProps",
+  "onDeleteSearchPreset: ControllerProps",
+]) {
+  if (filterPresetActionsSource.includes(forbiddenFilterPresetActionsToken)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-actions.ts must keep preset-action input contracts delegated: ${forbiddenFilterPresetActionsToken}`,
+    );
+  }
+}
+
+const maxFilterPresetActionsLines = 25;
 if (filterPresetActionsLines > maxFilterPresetActionsLines) {
   throw new Error(
     `record-panel-controller-filter-preset-actions.ts exceeded ${maxFilterPresetActionsLines} lines: ${filterPresetActionsLines}`,
+  );
+}
+
+for (const requiredFilterPresetActionInputTypesImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!filterPresetActionInputTypesSource.includes(requiredFilterPresetActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-action-input.types.ts must import preset-action input contracts: ${requiredFilterPresetActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredFilterPresetActionInputTypesUsage of [
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "export type RecordPanelControllerFilterPresetActionInput = {",
+  "filterDraft: RecordFilterState;",
+  "onCreateSearchPreset: ControllerProps[\"onCreateSearchPreset\"];",
+  "onDeleteSearchPreset: ControllerProps[\"onDeleteSearchPreset\"];",
+]) {
+  if (!filterPresetActionInputTypesSource.includes(requiredFilterPresetActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-action-input.types.ts must own preset-action input typing: ${requiredFilterPresetActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetActionInputTypesLines = 20;
+if (filterPresetActionInputTypesLines > maxFilterPresetActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-action-input.types.ts exceeded ${maxFilterPresetActionInputTypesLines} lines: ${filterPresetActionInputTypesLines}`,
   );
 }
 
@@ -5377,9 +5441,8 @@ if (recordLocationPayloadLines > maxRecordLocationPayloadLines) {
 }
 
 for (const requiredReminderActionsImport of [
-  'from "./record-panel-controller-reminder-helpers";',
   'from "./record-panel-controller-reminder-action-input.types";',
-  'from "./record-panel-controller-reminder-success-helpers";',
+  'from "./record-panel-controller-reminder-submit-action";',
 ]) {
   if (!reminderActionsSource.includes(requiredReminderActionsImport)) {
     throw new Error(
@@ -5389,26 +5452,29 @@ for (const requiredReminderActionsImport of [
 }
 
 for (const requiredReminderActionsUsage of [
-  "}: RecordPanelControllerReminderActionInput)",
-  "resolveRecordPanelReminderActionInput({",
-  "getRecordPanelReminderErrorMessage(",
-  "await onCreateReminder(reminderInput.payload)",
-  "applyRecordPanelReminderSuccessState({ setReminderForm })",
+  "props: RecordPanelControllerReminderActionInput,",
+  "return createRecordPanelControllerReminderSubmitAction(props);",
 ]) {
   if (!reminderActionsSource.includes(requiredReminderActionsUsage)) {
     throw new Error(
-      `record-panel-controller-reminder-actions.ts must delegate reminder validation and payload assembly: ${requiredReminderActionsUsage}`,
+      `record-panel-controller-reminder-actions.ts must remain a thin reminder-action wrapper: ${requiredReminderActionsUsage}`,
     );
   }
 }
 
 for (const forbiddenReminderActionsToken of [
+  'from "./record-panel-controller-reminder-helpers";',
+  'from "./record-panel-controller-reminder-success-helpers";',
   "function getErrorMessage(",
   '"Save or select a record before adding a reminder"',
   "detailCopy.reminderTimeRequiredError",
   "recordId: selectedRecord.id,",
   'channel_code: "in_app"',
   "setReminderForm((prev) => ({ ...prev, message: \"\", remind_at: \"\" }))",
+  "resolveRecordPanelReminderActionInput({",
+  "getRecordPanelReminderErrorMessage(",
+  "await onCreateReminder(reminderInput.payload)",
+  "applyRecordPanelReminderSuccessState({ setReminderForm })",
 ]) {
   if (reminderActionsSource.includes(forbiddenReminderActionsToken)) {
     throw new Error(
@@ -5417,10 +5483,43 @@ for (const forbiddenReminderActionsToken of [
   }
 }
 
-const maxReminderActionsLines = 55;
+const maxReminderActionsLines = 10;
 if (reminderActionsLines > maxReminderActionsLines) {
   throw new Error(
     `record-panel-controller-reminder-actions.ts exceeded ${maxReminderActionsLines} lines: ${reminderActionsLines}`,
+  );
+}
+
+for (const requiredReminderSubmitActionImport of [
+  'from "./record-panel-controller-reminder-helpers";',
+  'from "./record-panel-controller-reminder-action-input.types";',
+  'from "./record-panel-controller-reminder-success-helpers";',
+]) {
+  if (!reminderSubmitActionSource.includes(requiredReminderSubmitActionImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-action.ts must import reminder-submit contracts: ${requiredReminderSubmitActionImport}`,
+    );
+  }
+}
+
+for (const requiredReminderSubmitActionUsage of [
+  "export function createRecordPanelControllerReminderSubmitAction({",
+  "resolveRecordPanelReminderActionInput({",
+  "getRecordPanelReminderErrorMessage(",
+  "await onCreateReminder(reminderInput.payload)",
+  "applyRecordPanelReminderSuccessState({ setReminderForm })",
+]) {
+  if (!reminderSubmitActionSource.includes(requiredReminderSubmitActionUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-action.ts must own reminder submit orchestration: ${requiredReminderSubmitActionUsage}`,
+    );
+  }
+}
+
+const maxReminderSubmitActionLines = 45;
+if (reminderSubmitActionLines > maxReminderSubmitActionLines) {
+  throw new Error(
+    `record-panel-controller-reminder-submit-action.ts exceeded ${maxReminderSubmitActionLines} lines: ${reminderSubmitActionLines}`,
   );
 }
 

@@ -1304,6 +1304,14 @@ Last updated: 2026-03-24
   - legacy submit/delete button rendering now lives in `apps/web/components/record-panel-legacy-form-actions.tsx` instead of remaining inline inside `apps/web/components/record-panel-legacy-form.tsx`
   - `apps/web/components/record-panel-legacy-form.tsx` now focuses on composing field, action, and media sections instead of mixing button-state presentation with the form shell
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy form-action boundary and keeps action-row/button copy details out of the form container
+- Record Panel Reminder Submit Action Split V3:
+  - reminder submit orchestration now lives in `apps/web/components/record-panel-controller-reminder-submit-action.ts` instead of remaining directly inside `apps/web/components/record-panel-controller-reminder-actions.ts`
+  - `apps/web/components/record-panel-controller-reminder-actions.ts` now focuses on acting as a thin stable wrapper around the specialized reminder submit action
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-action wrapper boundary and a dedicated size ceiling for the extracted submit-action module
+- Record Panel Filter Preset Action Input Type Split V3:
+  - preset save/delete action input contracts now live in `apps/web/components/record-panel-controller-filter-preset-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-filter-preset-actions.ts`
+  - `apps/web/components/record-panel-controller-filter-preset-actions.ts` now focuses on composing preset save/delete actions behind a thinner orchestration boundary, while `apps/web/components/record-panel-controller-filter-actions.ts` consumes the shared extracted contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset-action input-type boundary and a dedicated size ceiling for the extracted type module
 
 ## Next
 - Continue the next product slice
