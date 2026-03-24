@@ -1,10 +1,11 @@
 "use client";
 import type { FormEvent } from "react";
-import { createEmptyForm, type LocationReviewFormState, type RecordFormState } from "../lib/record-panel-forms";
+import type { LocationReviewFormState, RecordFormState } from "../lib/record-panel-forms";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
 import { getRecordPanelRecordSaveErrorMessage, resolveRecordPanelRecordSaveActionInput } from "./record-panel-controller-record-save-helpers";
+import { applyRecordPanelRecordSaveSuccessState } from "./record-panel-controller-record-save-success-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
 export function createRecordPanelControllerRecordSaveActions({
   detailCopy,
@@ -41,9 +42,7 @@ export function createRecordPanelControllerRecordSaveActions({
     setError("");
     try {
       await onSaveRecord(saveInput.payload);
-      if (!selectedRecord) {
-        setForm(createEmptyForm());
-      }
+      applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm });
     } catch (caught) {
       setError(getRecordPanelRecordSaveErrorMessage(caught, detailCopy.saveRecordError));
     } finally {
