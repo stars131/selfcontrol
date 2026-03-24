@@ -7059,10 +7059,10 @@ if (recordSaveSubmitActionLines > maxRecordSaveSubmitActionLines) {
 }
 
 for (const requiredRecordSaveActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/record-panel-forms";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!recordSaveActionInputTypesSource.includes(requiredRecordSaveActionInputTypesImport)) {
     throw new Error(
@@ -7073,6 +7073,7 @@ for (const requiredRecordSaveActionInputTypesImport of [
 
 for (const requiredRecordSaveActionInputTypesUsage of [
   "export type RecordPanelControllerRecordSaveActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   "locationReviewForm: LocationReviewFormState;",
   'onSaveRecord: ControllerProps["onSaveRecord"];',
   "setForm: React.Dispatch<React.SetStateAction<RecordFormState>>;",
@@ -7080,6 +7081,18 @@ for (const requiredRecordSaveActionInputTypesUsage of [
   if (!recordSaveActionInputTypesSource.includes(requiredRecordSaveActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-record-save-action-input.types.ts must own save action input typing: ${requiredRecordSaveActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSaveActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy;",
+]) {
+  if (recordSaveActionInputTypesSource.includes(forbiddenRecordSaveActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenRecordSaveActionInputTypesToken}`,
     );
   }
 }
@@ -7288,10 +7301,10 @@ if (recordSavePayloadLines > maxRecordSavePayloadLines) {
 }
 
 for (const requiredRecordSavePayloadTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/record-panel-forms";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!recordSavePayloadTypesSource.includes(requiredRecordSavePayloadTypesImport)) {
     throw new Error(
@@ -7301,14 +7314,25 @@ for (const requiredRecordSavePayloadTypesImport of [
 }
 
 for (const requiredRecordSavePayloadTypesUsage of [
-  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
   'export type RecordSavePayload = Parameters<ControllerProps["onSaveRecord"]>[0];',
-  "export type ResolveRecordSaveActionInput = { detailCopy: DetailCopy; form: RecordFormState; locationReviewForm: LocationReviewFormState; selectedRecord: RecordItem | null };",
+  "export type ResolveRecordSaveActionInput = { detailCopy: RecordPanelControllerDetailCopy; form: RecordFormState; locationReviewForm: LocationReviewFormState; selectedRecord: RecordItem | null };",
   "export type BuildRecordSavePayloadInput = ResolveRecordSaveActionInput & { latitude: number | null; longitude: number | null };",
 ]) {
   if (!recordSavePayloadTypesSource.includes(requiredRecordSavePayloadTypesUsage)) {
     throw new Error(
       `record-panel-controller-record-save-payload.types.ts must own save payload type details: ${requiredRecordSavePayloadTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSavePayloadTypesToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy;",
+]) {
+  if (recordSavePayloadTypesSource.includes(forbiddenRecordSavePayloadTypesToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-payload.types.ts must keep detail-copy typing delegated: ${forbiddenRecordSavePayloadTypesToken}`,
     );
   }
 }
@@ -7496,10 +7520,10 @@ if (reminderSubmitActionLines > maxReminderSubmitActionLines) {
 }
 
 for (const requiredReminderActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/record-panel-forms";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!reminderActionInputTypesSource.includes(requiredReminderActionInputTypesImport)) {
     throw new Error(
@@ -7510,6 +7534,7 @@ for (const requiredReminderActionInputTypesImport of [
 
 for (const requiredReminderActionInputTypesUsage of [
   "export type RecordPanelControllerReminderActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   'onCreateReminder: ControllerProps["onCreateReminder"];',
   "selectedRecord: RecordItem | null;",
   "setSavingReminder: (value: boolean) => void;",
@@ -7517,6 +7542,18 @@ for (const requiredReminderActionInputTypesUsage of [
   if (!reminderActionInputTypesSource.includes(requiredReminderActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-reminder-action-input.types.ts must own reminder action input typing: ${requiredReminderActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy;",
+]) {
+  if (reminderActionInputTypesSource.includes(forbiddenReminderActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenReminderActionInputTypesToken}`,
     );
   }
 }
@@ -7673,10 +7710,10 @@ if (reminderResolutionLines > maxReminderResolutionLines) {
 }
 
 for (const requiredReminderPayloadTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/record-panel-forms";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!reminderPayloadTypesSource.includes(requiredReminderPayloadTypesImport)) {
     throw new Error(
@@ -7686,14 +7723,25 @@ for (const requiredReminderPayloadTypesImport of [
 }
 
 for (const requiredReminderPayloadTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   'export type ReminderPayload = Parameters<ControllerProps["onCreateReminder"]>[0];',
-  "export type ResolveReminderActionInput = { detailCopy: DetailCopy; reminderForm: ReminderFormState; selectedRecord: RecordItem | null };",
+  "export type ResolveReminderActionInput = { detailCopy: RecordPanelControllerDetailCopy; reminderForm: ReminderFormState; selectedRecord: RecordItem | null };",
   "export type BuildReminderPayloadInput = { reminderForm: ReminderFormState; selectedRecord: RecordItem };",
 ]) {
   if (!reminderPayloadTypesSource.includes(requiredReminderPayloadTypesUsage)) {
     throw new Error(
       `record-panel-controller-reminder-payload.types.ts must own reminder payload typing: ${requiredReminderPayloadTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderPayloadTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (reminderPayloadTypesSource.includes(forbiddenReminderPayloadTypesToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.types.ts must keep detail-copy typing delegated: ${forbiddenReminderPayloadTypesToken}`,
     );
   }
 }

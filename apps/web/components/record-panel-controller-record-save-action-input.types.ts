@@ -1,12 +1,10 @@
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { LocationReviewFormState, RecordFormState } from "../lib/record-panel-forms";
 import type { RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export type RecordPanelControllerRecordSaveActionInput = {
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   form: RecordFormState;
   locationReviewForm: LocationReviewFormState;
   onSaveRecord: ControllerProps["onSaveRecord"];
