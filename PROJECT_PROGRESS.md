@@ -1032,6 +1032,10 @@ Last updated: 2026-03-24
   - record-editor workspace form field bindings and location-review bindings now live in dedicated modules instead of remaining combined inside `apps/web/components/record-editor-workspace-bindings.ts`
   - the top-level bindings file now focuses more narrowly on acting as a stable re-export boundary while specialized modules own each state-update closure group
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this bindings re-export boundary and dedicated size ceilings for the extracted modules
+- Dead-Letter Recovery Item Card Section Split V1:
+  - dead-letter recovery item-card tag rendering and action-row rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/dead-letter-recovery-item-card.tsx`
+  - the top-level item card now focuses more narrowly on issue-level action lookup, settings-link derivation, timestamp display, and error presentation while child modules own tags and CTA rendering
+  - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces these item-card section boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

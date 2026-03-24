@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import {
   getMediaIssueAction,
-  getMediaIssueLabel,
-  getProcessingStatusLabel,
-  getRetryStateLabel,
 } from "../lib/media-issue-display";
 import { buildMediaIssueSettingsHref, canRetryMediaIssue } from "../lib/record-panel-media";
+import { DeadLetterRecoveryItemCardActions } from "./dead-letter-recovery-item-card-actions";
+import { DeadLetterRecoveryItemCardTags } from "./dead-letter-recovery-item-card-tags";
 import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types";
 
 export function DeadLetterRecoveryItemCard({
@@ -25,7 +22,6 @@ export function DeadLetterRecoveryItemCard({
   onRetryMediaProcessing,
 }: DeadLetterRecoveryItemCardProps) {
   const action = getMediaIssueAction(locale, item);
-  const issueLabel = getMediaIssueLabel(locale, item);
   const settingsHref = buildMediaIssueSettingsHref(workspaceId, item);
 
   return (
@@ -43,16 +39,7 @@ export function DeadLetterRecoveryItemCard({
             <div>{item.original_filename}</div>
           </div>
         </div>
-        <div className="tag-row">
-          <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
-          <span className="tag">{item.storage_provider}</span>
-          {item.processing_retry_state ? (
-            <span className="tag">
-              {mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, item.processing_retry_state)}
-            </span>
-          ) : null}
-          {issueLabel ? <span className="tag">{issueLabel}</span> : null}
-        </div>
+        <DeadLetterRecoveryItemCardTags item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />
       </label>
       <div className="muted" style={{ marginTop: 8 }}>
         {mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(item.processing_last_attempt_at)}
@@ -76,25 +63,14 @@ export function DeadLetterRecoveryItemCard({
           {action.detail ? `: ${action.detail}` : ""}
         </div>
       ) : null}
-      {canWriteWorkspace || settingsHref ? (
-        <div className="action-row" style={{ marginTop: 10 }}>
-          {canWriteWorkspace && canRetryMediaIssue(item) ? (
-            <button
-              className="button secondary"
-              disabled={retryingMediaId === item.media_id}
-              type="button"
-              onClick={() => void onRetryMediaProcessing(item.media_id)}
-            >
-              {retryingMediaId === item.media_id ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
-            </button>
-          ) : null}
-          {settingsHref ? (
-            <Link className="button secondary" href={settingsHref}>
-              {mediaIssueCopy.openSettings}
-            </Link>
-          ) : null}
-        </div>
-      ) : null}
+      <DeadLetterRecoveryItemCardActions
+        canWriteWorkspace={canWriteWorkspace}
+        item={item}
+        mediaIssueCopy={mediaIssueCopy}
+        onRetryMediaProcessing={onRetryMediaProcessing}
+        retryingMediaId={retryingMediaId}
+        settingsHref={settingsHref}
+      />
       {item.processing_error ? (
         <div className="notice error" style={{ marginTop: 10 }}>
           {item.processing_error}
