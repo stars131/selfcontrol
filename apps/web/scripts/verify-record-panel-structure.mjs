@@ -68,6 +68,22 @@ const recordPanelControllerFilterSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-filter-sync.ts",
 );
+const recordPanelControllerStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-state.ts",
+);
+const recordPanelControllerFormStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-form-state.ts",
+);
+const recordPanelControllerMediaStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-media-state.ts",
+);
+const recordPanelControllerBrowseStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-browse-state.ts",
+);
 const recordPanelControllerResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-result.ts",
@@ -404,6 +420,10 @@ const controllerSelectedRecordSyncSource = fs.readFileSync(
   "utf8",
 );
 const controllerFilterSyncSource = fs.readFileSync(recordPanelControllerFilterSyncPath, "utf8");
+const controllerStateSource = fs.readFileSync(recordPanelControllerStatePath, "utf8");
+const controllerFormStateSource = fs.readFileSync(recordPanelControllerFormStatePath, "utf8");
+const controllerMediaStateSource = fs.readFileSync(recordPanelControllerMediaStatePath, "utf8");
+const controllerBrowseStateSource = fs.readFileSync(recordPanelControllerBrowseStatePath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
 const controllerStateResultSource = fs.readFileSync(recordPanelControllerStateResultPath, "utf8");
 const controllerViewDataResultSource = fs.readFileSync(
@@ -562,6 +582,10 @@ const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
 const controllerFilterSyncLines = controllerFilterSyncSource.split(/\r?\n/).length;
+const controllerStateLines = controllerStateSource.split(/\r?\n/).length;
+const controllerFormStateLines = controllerFormStateSource.split(/\r?\n/).length;
+const controllerMediaStateLines = controllerMediaStateSource.split(/\r?\n/).length;
+const controllerBrowseStateLines = controllerBrowseStateSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const controllerStateResultLines = controllerStateResultSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
@@ -1296,6 +1320,150 @@ const maxControllerFilterSyncLines = 15;
 if (controllerFilterSyncLines > maxControllerFilterSyncLines) {
   throw new Error(
     `use-record-panel-controller-filter-sync.ts exceeded ${maxControllerFilterSyncLines} lines: ${controllerFilterSyncLines}`,
+  );
+}
+
+for (const requiredControllerStateImport of [
+  'from "../lib/types";',
+  'from "./use-record-panel-controller-browse-state";',
+  'from "./use-record-panel-controller-form-state";',
+  'from "./use-record-panel-controller-media-state";',
+]) {
+  if (!controllerStateSource.includes(requiredControllerStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-state.ts must import delegated state hooks: ${requiredControllerStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerStateUsage of [
+  "useRecordPanelControllerFormState()",
+  "useRecordPanelControllerMediaState()",
+  "useRecordPanelControllerBrowseState(recordFilter)",
+  "...formState",
+  "...mediaState",
+  "...browseState",
+]) {
+  if (!controllerStateSource.includes(requiredControllerStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-state.ts must delegate state-domain assembly: ${requiredControllerStateUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerStateToken of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+  'from "./record-panel-v2.types";',
+  "useState(",
+  "createEmptyForm(",
+  "createEmptyReminderForm(",
+]) {
+  if (controllerStateSource.includes(forbiddenControllerStateToken)) {
+    throw new Error(
+      `use-record-panel-controller-state.ts must keep state internals delegated: ${forbiddenControllerStateToken}`,
+    );
+  }
+}
+
+const maxControllerStateLines = 20;
+if (controllerStateLines > maxControllerStateLines) {
+  throw new Error(
+    `use-record-panel-controller-state.ts exceeded ${maxControllerStateLines} lines: ${controllerStateLines}`,
+  );
+}
+
+for (const requiredControllerFormStateImport of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!controllerFormStateSource.includes(requiredControllerFormStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-form-state.ts must import form-state contracts: ${requiredControllerFormStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerFormStateUsage of [
+  "export function useRecordPanelControllerFormState()",
+  "createEmptyForm",
+  "createEmptyReminderForm",
+  'status: "pending"',
+  "const [error, setError] = useState(\"\")",
+]) {
+  if (!controllerFormStateSource.includes(requiredControllerFormStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-form-state.ts must own form-state details: ${requiredControllerFormStateUsage}`,
+    );
+  }
+}
+
+const maxControllerFormStateLines = 40;
+if (controllerFormStateLines > maxControllerFormStateLines) {
+  throw new Error(
+    `use-record-panel-controller-form-state.ts exceeded ${maxControllerFormStateLines} lines: ${controllerFormStateLines}`,
+  );
+}
+
+for (const requiredControllerMediaStateImport of [
+  'from "react";',
+]) {
+  if (!controllerMediaStateSource.includes(requiredControllerMediaStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-media-state.ts must import media-state contracts: ${requiredControllerMediaStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerMediaStateUsage of [
+  "export function useRecordPanelControllerMediaState()",
+  "const [uploading, setUploading] = useState(false)",
+  "const [refreshingMediaId, setRefreshingMediaId] = useState<string | null>(null)",
+  "const [selectedDeadLetterIds, setSelectedDeadLetterIds] = useState<string[]>([])",
+]) {
+  if (!controllerMediaStateSource.includes(requiredControllerMediaStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-media-state.ts must own media-state details: ${requiredControllerMediaStateUsage}`,
+    );
+  }
+}
+
+const maxControllerMediaStateLines = 35;
+if (controllerMediaStateLines > maxControllerMediaStateLines) {
+  throw new Error(
+    `use-record-panel-controller-media-state.ts exceeded ${maxControllerMediaStateLines} lines: ${controllerMediaStateLines}`,
+  );
+}
+
+for (const requiredControllerBrowseStateImport of [
+  'from "react";',
+  'from "../lib/types";',
+  'from "./record-panel-v2.types";',
+]) {
+  if (!controllerBrowseStateSource.includes(requiredControllerBrowseStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-browse-state.ts must import browse-state contracts: ${requiredControllerBrowseStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerBrowseStateUsage of [
+  "export function useRecordPanelControllerBrowseState(recordFilter: RecordFilterState)",
+  'useState<ViewMode>("timeline")',
+  "useState<RecordFilterState>(recordFilter)",
+  "const [presetName, setPresetName] = useState(\"\")",
+]) {
+  if (!controllerBrowseStateSource.includes(requiredControllerBrowseStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-browse-state.ts must own browse-state details: ${requiredControllerBrowseStateUsage}`,
+    );
+  }
+}
+
+const maxControllerBrowseStateLines = 20;
+if (controllerBrowseStateLines > maxControllerBrowseStateLines) {
+  throw new Error(
+    `use-record-panel-controller-browse-state.ts exceeded ${maxControllerBrowseStateLines} lines: ${controllerBrowseStateLines}`,
   );
 }
 

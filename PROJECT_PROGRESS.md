@@ -1180,6 +1180,10 @@ Last updated: 2026-03-24
   - dead-letter selection sync, selected-record form/reminder sync, and filter-draft sync now live in dedicated hook modules instead of remaining combined inside `apps/web/components/use-record-panel-controller-sync.ts`
   - `apps/web/components/use-record-panel-controller-sync.ts` now focuses on composing the specialized sync hooks behind a thinner orchestration boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the sync-hook split and dedicated size ceilings for the extracted sync modules
+- Record Panel State Hook Split V2:
+  - form-domain state, media-domain state, and browse-domain state now live in dedicated hook modules instead of remaining combined inside `apps/web/components/use-record-panel-controller-state.ts`
+  - `apps/web/components/use-record-panel-controller-state.ts` now focuses on composing the specialized state hooks behind a thinner orchestration boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the state-hook split and dedicated size ceilings for the extracted state modules
 
 ## Next
 - Continue the next product slice
