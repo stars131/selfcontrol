@@ -1,10 +1,8 @@
 "use client";
 
-import type { useRecordPanelControllerState } from "./use-record-panel-controller-state";
+import type { BuildRecordPanelControllerStateResultInput } from "./record-panel-controller-state-result.types";
 
-type ControllerState = ReturnType<typeof useRecordPanelControllerState>;
-
-export function buildRecordPanelControllerStateResult(state: ControllerState) {
+export function buildRecordPanelControllerStateResult(state: BuildRecordPanelControllerStateResultInput) {
   return {
     form: state.form,
     setForm: state.setForm,

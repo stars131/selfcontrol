@@ -321,6 +321,10 @@ const recordPanelControllerStateResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-state-result.ts",
 );
+const recordPanelControllerStateResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-state-result.types.ts",
+);
 const recordPanelControllerViewDataResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-result.ts",
@@ -1066,6 +1070,10 @@ const controllerResultTypesSource = fs.readFileSync(
   "utf8",
 );
 const controllerStateResultSource = fs.readFileSync(recordPanelControllerStateResultPath, "utf8");
+const controllerStateResultTypesSource = fs.readFileSync(
+  recordPanelControllerStateResultTypesPath,
+  "utf8",
+);
 const controllerViewDataResultSource = fs.readFileSync(
   recordPanelControllerViewDataResultPath,
   "utf8",
@@ -1444,6 +1452,8 @@ const controllerBrowseStateLines = controllerBrowseStateSource.split(/\r?\n/).le
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const controllerResultTypesLines = controllerResultTypesSource.split(/\r?\n/).length;
 const controllerStateResultLines = controllerStateResultSource.split(/\r?\n/).length;
+const controllerStateResultTypesLines =
+  controllerStateResultTypesSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
   controllerViewDataResultSource.split(/\r?\n/).length;
 const controllerCoreViewDataResultLines =
@@ -5403,7 +5413,7 @@ if (controllerResultTypesLines > maxControllerResultTypesLines) {
 }
 
 for (const requiredControllerStateResultImport of [
-  'from "./use-record-panel-controller-state";',
+  'from "./record-panel-controller-state-result.types";',
 ]) {
   if (!controllerStateResultSource.includes(requiredControllerStateResultImport)) {
     throw new Error(
@@ -5413,7 +5423,7 @@ for (const requiredControllerStateResultImport of [
 }
 
 for (const requiredControllerStateResultUsage of [
-  "export function buildRecordPanelControllerStateResult(state: ControllerState)",
+  "export function buildRecordPanelControllerStateResult(state: BuildRecordPanelControllerStateResultInput)",
   "form: state.form,",
   "setViewMode: state.setViewMode,",
   "error: state.error,",
@@ -5425,10 +5435,48 @@ for (const requiredControllerStateResultUsage of [
   }
 }
 
+for (const forbiddenControllerStateResultToken of [
+  'from "./use-record-panel-controller-state";',
+  "type ControllerState = ReturnType<",
+]) {
+  if (controllerStateResultSource.includes(forbiddenControllerStateResultToken)) {
+    throw new Error(
+      `record-panel-controller-state-result.ts must keep state result typing delegated: ${forbiddenControllerStateResultToken}`,
+    );
+  }
+}
+
 const maxControllerStateResultLines = 35;
 if (controllerStateResultLines > maxControllerStateResultLines) {
   throw new Error(
     `record-panel-controller-state-result.ts exceeded ${maxControllerStateResultLines} lines: ${controllerStateResultLines}`,
+  );
+}
+
+for (const requiredControllerStateResultTypesImport of [
+  'from "./use-record-panel-controller-state";',
+]) {
+  if (!controllerStateResultTypesSource.includes(requiredControllerStateResultTypesImport)) {
+    throw new Error(
+      `record-panel-controller-state-result.types.ts must import controller state result type contracts: ${requiredControllerStateResultTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerStateResultTypesUsage of [
+  "export type BuildRecordPanelControllerStateResultInput = ReturnType<typeof useRecordPanelControllerState>;",
+]) {
+  if (!controllerStateResultTypesSource.includes(requiredControllerStateResultTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-state-result.types.ts must own controller state result type contracts: ${requiredControllerStateResultTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerStateResultTypesLines = 5;
+if (controllerStateResultTypesLines > maxControllerStateResultTypesLines) {
+  throw new Error(
+    `record-panel-controller-state-result.types.ts exceeded ${maxControllerStateResultTypesLines} lines: ${controllerStateResultTypesLines}`,
   );
 }
 
