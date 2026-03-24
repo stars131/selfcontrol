@@ -1068,10 +1068,14 @@ Last updated: 2026-03-24
   - record-editor support-tools reminder derived fields and runtime pass-through mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-editor-support-tools-reminder-props.ts`
   - the top-level reminder-props builder now focuses more narrowly on composing derived reminder fields and pass-through props while specialized helpers own each mapping surface
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this reminder helper boundary and dedicated size ceilings for the extracted modules
+- Record Panel Handler Input Builder Split V1:
+  - record-panel shared handler-group input contract now lives in a dedicated type module instead of remaining bundled with both builder implementations
+  - record and media handler input mapping now live in separate builder modules while `apps/web/components/record-panel-controller-handler-group-inputs.ts` is reduced to a stable re-export boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the new boundary, shared contract ownership, and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries after the chat panel action helper extraction
+- Continue simplifying remaining large UI module boundaries around record-panel controller composition and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
