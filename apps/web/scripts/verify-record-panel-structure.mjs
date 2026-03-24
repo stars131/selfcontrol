@@ -546,6 +546,23 @@ const recordPanelMediaAssetActionsPath = path.resolve(
   "components/record-panel-controller-media-asset-actions.ts",
 );
 const legacyRecordPanelFormPath = path.resolve(process.cwd(), "components/record-panel-legacy-form.tsx");
+const legacyRecordPanelActionsPath = path.resolve(process.cwd(), "components/record-panel-legacy-actions.ts");
+const legacyRecordPanelActionErrorPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-action-error.ts",
+);
+const legacyRecordPanelSubmitActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-submit-action.ts",
+);
+const legacyRecordPanelDeleteActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-delete-action.ts",
+);
+const legacyRecordPanelUploadActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-upload-action.ts",
+);
 const legacyRecordPanelFormTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form.types.ts",
@@ -559,6 +576,23 @@ const legacyRecordPanelFormMediaPath = path.resolve(
   "components/record-panel-legacy-form-media.tsx",
 );
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
+const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
+const legacyRecordPanelActionErrorSource = fs.readFileSync(
+  legacyRecordPanelActionErrorPath,
+  "utf8",
+);
+const legacyRecordPanelSubmitActionSource = fs.readFileSync(
+  legacyRecordPanelSubmitActionPath,
+  "utf8",
+);
+const legacyRecordPanelDeleteActionSource = fs.readFileSync(
+  legacyRecordPanelDeleteActionPath,
+  "utf8",
+);
+const legacyRecordPanelUploadActionSource = fs.readFileSync(
+  legacyRecordPanelUploadActionPath,
+  "utf8",
+);
 const legacyRecordPanelFormSource = fs.readFileSync(legacyRecordPanelFormPath, "utf8");
 const legacyRecordPanelFormTypesSource = fs.readFileSync(legacyRecordPanelFormTypesPath, "utf8");
 const legacyRecordPanelFormFieldsSource = fs.readFileSync(legacyRecordPanelFormFieldsPath, "utf8");
@@ -921,6 +955,11 @@ const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
+const legacyRecordPanelActionsLines = legacyRecordPanelActionsSource.split(/\r?\n/).length;
+const legacyRecordPanelActionErrorLines = legacyRecordPanelActionErrorSource.split(/\r?\n/).length;
+const legacyRecordPanelSubmitActionLines = legacyRecordPanelSubmitActionSource.split(/\r?\n/).length;
+const legacyRecordPanelDeleteActionLines = legacyRecordPanelDeleteActionSource.split(/\r?\n/).length;
+const legacyRecordPanelUploadActionLines = legacyRecordPanelUploadActionSource.split(/\r?\n/).length;
 const legacyRecordPanelFormLines = legacyRecordPanelFormSource.split(/\r?\n/).length;
 const legacyRecordPanelFormTypesLines = legacyRecordPanelFormTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormFieldsLines = legacyRecordPanelFormFieldsSource.split(/\r?\n/).length;
@@ -5822,6 +5861,149 @@ for (const forbiddenLegacyToken of [
   if (legacyRecordPanelSource.includes(forbiddenLegacyToken)) {
     throw new Error(`record-panel.tsx must keep legacy layout details delegated: ${forbiddenLegacyToken}`);
   }
+}
+
+for (const requiredLegacyActionsImport of [
+  'from "./record-panel-legacy-delete-action";',
+  'from "./record-panel-legacy-submit-action";',
+  'from "./record-panel-legacy-upload-action";',
+]) {
+  if (!legacyRecordPanelActionsSource.includes(requiredLegacyActionsImport)) {
+    throw new Error(`record-panel-legacy-actions.ts must import delegated legacy action helpers: ${requiredLegacyActionsImport}`);
+  }
+}
+
+for (const requiredLegacyActionsUsage of [
+  "type LegacyActionsInput =",
+  "createRecordPanelLegacySubmitAction(input)",
+  "createRecordPanelLegacyDeleteAction(input)",
+  "createRecordPanelLegacyUploadAction(input)",
+]) {
+  if (!legacyRecordPanelActionsSource.includes(requiredLegacyActionsUsage)) {
+    throw new Error(`record-panel-legacy-actions.ts must compose delegated legacy actions: ${requiredLegacyActionsUsage}`);
+  }
+}
+
+for (const forbiddenLegacyActionsToken of [
+  "function getRecordPanelErrorMessage(",
+  "event.preventDefault()",
+  'setError("Content is required")',
+  "await onDeleteRecord(selectedRecord.id)",
+  "await onUploadMedia(selectedRecord.id, file)",
+]) {
+  if (legacyRecordPanelActionsSource.includes(forbiddenLegacyActionsToken)) {
+    throw new Error(`record-panel-legacy-actions.ts must keep legacy action internals delegated: ${forbiddenLegacyActionsToken}`);
+  }
+}
+
+const maxLegacyRecordPanelActionsLines = 20;
+if (legacyRecordPanelActionsLines > maxLegacyRecordPanelActionsLines) {
+  throw new Error(
+    `record-panel-legacy-actions.ts exceeded ${maxLegacyRecordPanelActionsLines} lines: ${legacyRecordPanelActionsLines}`,
+  );
+}
+
+for (const requiredLegacyActionErrorUsage of [
+  "export function getRecordPanelErrorMessage(",
+  "return caught instanceof Error ? caught.message : fallbackMessage;",
+]) {
+  if (!legacyRecordPanelActionErrorSource.includes(requiredLegacyActionErrorUsage)) {
+    throw new Error(`record-panel-legacy-action-error.ts must own legacy action error formatting: ${requiredLegacyActionErrorUsage}`);
+  }
+}
+
+const maxLegacyActionErrorLines = 5;
+if (legacyRecordPanelActionErrorLines > maxLegacyActionErrorLines) {
+  throw new Error(
+    `record-panel-legacy-action-error.ts exceeded ${maxLegacyActionErrorLines} lines: ${legacyRecordPanelActionErrorLines}`,
+  );
+}
+
+for (const requiredLegacySubmitActionImport of [
+  'from "react";',
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  'from "./record-panel-legacy-action-error";',
+]) {
+  if (!legacyRecordPanelSubmitActionSource.includes(requiredLegacySubmitActionImport)) {
+    throw new Error(`record-panel-legacy-submit-action.ts must import legacy submit action contracts: ${requiredLegacySubmitActionImport}`);
+  }
+}
+
+for (const requiredLegacySubmitActionUsage of [
+  "export function createRecordPanelLegacySubmitAction({",
+  "event.preventDefault()",
+  'setError("Content is required")',
+  "await onSaveRecord({",
+  'setError(getRecordPanelErrorMessage(caught, "Failed to save record"))',
+]) {
+  if (!legacyRecordPanelSubmitActionSource.includes(requiredLegacySubmitActionUsage)) {
+    throw new Error(`record-panel-legacy-submit-action.ts must own legacy submit details: ${requiredLegacySubmitActionUsage}`);
+  }
+}
+
+const maxLegacySubmitActionLines = 45;
+if (legacyRecordPanelSubmitActionLines > maxLegacySubmitActionLines) {
+  throw new Error(
+    `record-panel-legacy-submit-action.ts exceeded ${maxLegacySubmitActionLines} lines: ${legacyRecordPanelSubmitActionLines}`,
+  );
+}
+
+for (const requiredLegacyDeleteActionImport of [
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  'from "./record-panel-legacy-action-error";',
+]) {
+  if (!legacyRecordPanelDeleteActionSource.includes(requiredLegacyDeleteActionImport)) {
+    throw new Error(`record-panel-legacy-delete-action.ts must import legacy delete action contracts: ${requiredLegacyDeleteActionImport}`);
+  }
+}
+
+for (const requiredLegacyDeleteActionUsage of [
+  "export function createRecordPanelLegacyDeleteAction({",
+  "if (!selectedRecord) {",
+  "await onDeleteRecord(selectedRecord.id)",
+  'setError(getRecordPanelErrorMessage(caught, "Failed to delete record"))',
+]) {
+  if (!legacyRecordPanelDeleteActionSource.includes(requiredLegacyDeleteActionUsage)) {
+    throw new Error(`record-panel-legacy-delete-action.ts must own legacy delete details: ${requiredLegacyDeleteActionUsage}`);
+  }
+}
+
+const maxLegacyDeleteActionLines = 30;
+if (legacyRecordPanelDeleteActionLines > maxLegacyDeleteActionLines) {
+  throw new Error(
+    `record-panel-legacy-delete-action.ts exceeded ${maxLegacyDeleteActionLines} lines: ${legacyRecordPanelDeleteActionLines}`,
+  );
+}
+
+for (const requiredLegacyUploadActionImport of [
+  'from "react";',
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  'from "./record-panel-legacy-action-error";',
+]) {
+  if (!legacyRecordPanelUploadActionSource.includes(requiredLegacyUploadActionImport)) {
+    throw new Error(`record-panel-legacy-upload-action.ts must import legacy upload action contracts: ${requiredLegacyUploadActionImport}`);
+  }
+}
+
+for (const requiredLegacyUploadActionUsage of [
+  "export function createRecordPanelLegacyUploadAction({",
+  "const file = event.target.files?.[0];",
+  "await onUploadMedia(selectedRecord.id, file)",
+  'setError(getRecordPanelErrorMessage(caught, "Failed to upload media"))',
+]) {
+  if (!legacyRecordPanelUploadActionSource.includes(requiredLegacyUploadActionUsage)) {
+    throw new Error(`record-panel-legacy-upload-action.ts must own legacy upload details: ${requiredLegacyUploadActionUsage}`);
+  }
+}
+
+const maxLegacyUploadActionLines = 35;
+if (legacyRecordPanelUploadActionLines > maxLegacyUploadActionLines) {
+  throw new Error(
+    `record-panel-legacy-upload-action.ts exceeded ${maxLegacyUploadActionLines} lines: ${legacyRecordPanelUploadActionLines}`,
+  );
 }
 
 for (const requiredLegacyFormImport of [

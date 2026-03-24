@@ -1244,6 +1244,10 @@ Last updated: 2026-03-24
   - record-save payload contracts and coordinate parsing now live in dedicated modules instead of remaining mixed inside `apps/web/components/record-panel-controller-record-save-payload.ts`
   - `apps/web/components/record-panel-controller-record-save-payload.ts` now focuses on payload assembly and a stable re-export boundary for the extracted save-payload contracts
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload split and dedicated size ceilings for the extracted payload-type and coordinate helper modules
+- Record Panel Legacy Action Split V3:
+  - legacy submit, delete, and upload orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-legacy-actions.ts`
+  - `apps/web/components/record-panel-legacy-actions.ts` now focuses on composing the specialized legacy action helpers behind a thinner compatibility boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy-action split and dedicated size ceilings for the extracted legacy action modules and shared error helper
 
 ## Next
 - Continue the next product slice
