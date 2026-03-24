@@ -357,6 +357,10 @@ const recordPanelFilterActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-actions.ts",
 );
+const recordPanelFilterApplyActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-apply-action.ts",
+);
 const recordPanelFilterPresetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-actions.ts",
@@ -870,6 +874,7 @@ const recordHandlerInputSource = fs.readFileSync(recordPanelRecordHandlerInputPa
 const mediaHandlerInputSource = fs.readFileSync(recordPanelMediaHandlerInputPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const filterActionsSource = fs.readFileSync(recordPanelFilterActionsPath, "utf8");
+const filterApplyActionSource = fs.readFileSync(recordPanelFilterApplyActionPath, "utf8");
 const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActionsPath, "utf8");
 const filterPresetSaveActionSource = fs.readFileSync(recordPanelFilterPresetSaveActionPath, "utf8");
 const filterPresetDeleteActionSource = fs.readFileSync(
@@ -1092,6 +1097,7 @@ const recordHandlerInputLines = recordHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
+const filterApplyActionLines = filterApplyActionSource.split(/\r?\n/).length;
 const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length;
 const filterPresetSaveActionLines = filterPresetSaveActionSource.split(/\r?\n/).length;
 const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\n/).length;
@@ -4209,8 +4215,8 @@ if (formActionsLines > maxFormActionsLines) {
 }
 
 for (const requiredFilterActionsImport of [
+  'from "./record-panel-controller-filter-apply-action";',
   'from "./record-panel-controller-filter-preset-actions";',
-  'from "./record-panel-controller-filter-helpers";',
 ]) {
   if (!filterActionsSource.includes(requiredFilterActionsImport)) {
     throw new Error(
@@ -4220,8 +4226,9 @@ for (const requiredFilterActionsImport of [
 }
 
 for (const requiredFilterActionsUsage of [
-  "createRecordPanelControllerFilterPresetActions({",
-  "getRecordPanelFilterErrorMessage(",
+  "createRecordPanelControllerFilterApplyAction(props)",
+  "createRecordPanelControllerFilterPresetActions(props)",
+  "...applyAction",
   "...presetActions",
 ]) {
   if (!filterActionsSource.includes(requiredFilterActionsUsage)) {
@@ -4233,9 +4240,11 @@ for (const requiredFilterActionsUsage of [
 
 for (const forbiddenFilterActionsToken of [
   "function getErrorMessage(",
+  "getRecordPanelFilterErrorMessage(",
   "resolveRecordPanelPresetName(",
   "onCreateSearchPreset(",
   "onDeleteSearchPreset(",
+  "onApplyRecordFilter(",
 ]) {
   if (filterActionsSource.includes(forbiddenFilterActionsToken)) {
     throw new Error(
@@ -4248,6 +4257,38 @@ const maxFilterActionsLines = 45;
 if (filterActionsLines > maxFilterActionsLines) {
   throw new Error(
     `record-panel-controller-filter-actions.ts exceeded ${maxFilterActionsLines} lines: ${filterActionsLines}`,
+  );
+}
+
+for (const requiredFilterApplyActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-helpers";',
+]) {
+  if (!filterApplyActionSource.includes(requiredFilterApplyActionImport)) {
+    throw new Error(
+      `record-panel-controller-filter-apply-action.ts must import filter-apply contracts: ${requiredFilterApplyActionImport}`,
+    );
+  }
+}
+
+for (const requiredFilterApplyActionUsage of [
+  "export function createRecordPanelControllerFilterApplyAction({",
+  "filterDraft: ControllerProps[\"recordFilter\"]",
+  "await onApplyRecordFilter(filterDraft)",
+  "getRecordPanelFilterErrorMessage(caught, detailCopy.applyFilterError)",
+]) {
+  if (!filterApplyActionSource.includes(requiredFilterApplyActionUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-apply-action.ts must own filter-apply details: ${requiredFilterApplyActionUsage}`,
+    );
+  }
+}
+
+const maxFilterApplyActionLines = 30;
+if (filterApplyActionLines > maxFilterApplyActionLines) {
+  throw new Error(
+    `record-panel-controller-filter-apply-action.ts exceeded ${maxFilterApplyActionLines} lines: ${filterApplyActionLines}`,
   );
 }
 

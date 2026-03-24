@@ -1248,6 +1248,10 @@ Last updated: 2026-03-24
   - legacy submit, delete, and upload orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-legacy-actions.ts`
   - `apps/web/components/record-panel-legacy-actions.ts` now focuses on composing the specialized legacy action helpers behind a thinner compatibility boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy-action split and dedicated size ceilings for the extracted legacy action modules and shared error helper
+- Record Panel Filter Action Split V3:
+  - filter apply orchestration now lives in a dedicated action module instead of remaining mixed with preset action composition inside `apps/web/components/record-panel-controller-filter-actions.ts`
+  - `apps/web/components/record-panel-controller-filter-actions.ts` now focuses on composing apply-filter and preset actions behind a thinner filter boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter-action split and a dedicated size ceiling for the extracted apply-filter action module
 
 ## Next
 - Continue the next product slice

@@ -1,39 +1,17 @@
 "use client";
 import type { ControllerProps } from "./record-panel-controller.types";
+import { createRecordPanelControllerFilterApplyAction } from "./record-panel-controller-filter-apply-action";
 import { createRecordPanelControllerFilterPresetActions, type RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-actions";
-import { getRecordPanelFilterErrorMessage } from "./record-panel-controller-filter-helpers";
 type FilterActionProps = RecordPanelControllerFilterPresetActionInput & {
   onApplyRecordFilter: ControllerProps["onApplyRecordFilter"];
 };
 export function createRecordPanelControllerFilterActions({
-  detailCopy,
-  filterDraft,
-  onApplyRecordFilter,
-  onCreateSearchPreset,
-  onDeleteSearchPreset,
-  presetName,
-  setError,
-  setPresetName,
+  ...props
 }: FilterActionProps) {
-  const presetActions = createRecordPanelControllerFilterPresetActions({
-    detailCopy,
-    filterDraft,
-    onCreateSearchPreset,
-    onDeleteSearchPreset,
-    presetName,
-    setError,
-    setPresetName,
-  });
-  async function handleApplyFilter() {
-    setError("");
-    try {
-      await onApplyRecordFilter(filterDraft);
-    } catch (caught) {
-      setError(getRecordPanelFilterErrorMessage(caught, detailCopy.applyFilterError));
-    }
-  }
+  const applyAction = createRecordPanelControllerFilterApplyAction(props);
+  const presetActions = createRecordPanelControllerFilterPresetActions(props);
   return {
-    handleApplyFilter,
+    ...applyAction,
     ...presetActions,
   };
 }
