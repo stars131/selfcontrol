@@ -1372,6 +1372,10 @@ Last updated: 2026-03-24
   - legacy submit/delete/upload input contracts now live in `apps/web/components/record-panel-legacy-action-input.types.ts` instead of remaining embedded across the legacy action modules
   - `apps/web/components/record-panel-legacy-actions.ts`, `apps/web/components/record-panel-legacy-submit-action.ts`, `apps/web/components/record-panel-legacy-delete-action.ts`, and `apps/web/components/record-panel-legacy-upload-action.ts` now consume the shared extracted legacy action contracts behind thinner compatibility boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy action input-type boundary and keeps inline legacy action contract definitions out of the legacy action modules
+- Record Panel Editor Workspace Copy Input Type Split V3:
+  - editor workspace shared copy input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-copy-props-input.types.ts` instead of remaining embedded across the aggregate copy-props builder and the channel/media/reminder copy helpers
+  - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-channel-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-media-copy-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-reminder-copy-props.ts` now consume the shared extracted editor-copy contract behind thinner mapping boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace copy input-type boundary and keeps `Parameters<typeof ...>[0]` and duplicated `Pick<...,"detailCopy">` signatures out of the copy helper modules
 
 ## Next
 - Continue the next product slice
