@@ -1016,6 +1016,10 @@ Last updated: 2026-03-24
   - record-panel avoid-count, food-count, selected-record lookup, selected-media-size formatting, and actionable dead-letter derivation now live in a dedicated helper module instead of remaining combined inside `apps/web/components/use-record-panel-controller-view-data.ts`
   - the top-level view-data hook now focuses more narrowly on locale-aware memo composition, location derivation, and bundle wiring while the helper owns reusable counting and selection logic
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this view-data helper boundary and dedicated size ceilings for the extracted modules
+- Editor Workspace Prop Input Split V1:
+  - record-panel editor-workspace base-prop input shaping and action-prop input shaping now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-props.ts`
+  - the top-level editor-workspace prop builder now focuses more narrowly on composing copy, base, and action prop groups while the helper owns the large input mapping surface
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this editor-workspace prop-input boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
