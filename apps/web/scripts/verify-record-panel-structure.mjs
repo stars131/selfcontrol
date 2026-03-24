@@ -4274,8 +4274,8 @@ if (controllerSyncLines > maxControllerSyncLines) {
 
 for (const requiredControllerSyncTypesImport of [
   'from "./record-panel-controller.types";',
-  'from "./use-record-panel-controller-state";',
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-state-result.types";',
+  'from "./record-panel-controller-view-data-result.types";',
 ]) {
   if (!controllerSyncTypesSource.includes(requiredControllerSyncTypesImport)) {
     throw new Error(
@@ -4285,16 +4285,31 @@ for (const requiredControllerSyncTypesImport of [
 }
 
 for (const requiredControllerSyncTypesUsage of [
-  "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
-  "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
-  'export type BuildRecordPanelControllerSyncInputArgs = { props: Pick<ControllerProps, "recordFilter">; state: Pick<ControllerState, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">; viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">; };',
+  'export type BuildRecordPanelControllerSyncInputArgs = { props: Pick<ControllerProps, "recordFilter">; state: Pick<BuildRecordPanelControllerStateResultInput, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">; viewData: Pick<BuildRecordPanelControllerViewDataResultInput, "actionableDeadLetterIds" | "selectedRecord">; };',
   'export type RecordPanelControllerSyncInput = { recordFilter: ControllerProps["recordFilter"] } &',
+  'BuildRecordPanelControllerViewDataResultInput',
+  'BuildRecordPanelControllerStateResultInput',
   '"actionableDeadLetterIds" | "selectedRecord"',
   '"recordFilter"',
 ]) {
   if (!controllerSyncTypesSource.includes(requiredControllerSyncTypesUsage)) {
     throw new Error(
       `use-record-panel-controller-sync.types.ts must own controller sync typing: ${requiredControllerSyncTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerSyncTypesToken of [
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
+  "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
+  "ControllerState,",
+  "ControllerViewData,",
+]) {
+  if (controllerSyncTypesSource.includes(forbiddenControllerSyncTypesToken)) {
+    throw new Error(
+      `use-record-panel-controller-sync.types.ts must keep sync typing delegated to result boundaries: ${forbiddenControllerSyncTypesToken}`,
     );
   }
 }

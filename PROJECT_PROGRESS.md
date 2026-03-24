@@ -1528,6 +1528,10 @@ Last updated: 2026-03-24
   - handler-group state/view-data input types now reuse the existing controller state-result and view-data-result contracts instead of reaching directly into hook return types
   - `apps/web/components/record-panel-controller-handler-group-state-input.types.ts` and `record-panel-controller-handler-group-view-data-input.types.ts` now depend on thinner result boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that handler-group input typing stays decoupled from direct hook `ReturnType` aliases
+- Record Panel Sync Result Type Reuse Split V1:
+  - controller sync input typing now reuses the existing controller state-result and view-data-result contracts instead of introducing local hook `ReturnType` aliases
+  - `apps/web/components/use-record-panel-controller-sync.types.ts` now depends on thinner result boundaries for sync assembly
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that sync input typing stays decoupled from direct hook `ReturnType` aliases
 
 ## Next
 - Continue the next product slice
