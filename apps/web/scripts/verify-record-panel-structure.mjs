@@ -225,6 +225,10 @@ const recordPanelControllerSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-sync.ts",
 );
+const recordPanelControllerSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-sync.types.ts",
+);
 const recordPanelControllerDeadLetterSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-dead-letter-sync.ts",
@@ -897,6 +901,7 @@ const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const shellViewPropsSource = fs.readFileSync(recordPanelShellViewPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
+const controllerSyncTypesSource = fs.readFileSync(recordPanelControllerSyncTypesPath, "utf8");
 const controllerSyncInputSource = fs.readFileSync(recordPanelControllerSyncInputPath, "utf8");
 const controllerDeadLetterSyncSource = fs.readFileSync(
   recordPanelControllerDeadLetterSyncPath,
@@ -1218,6 +1223,7 @@ const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const shellViewPropsLines = shellViewPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
+const controllerSyncTypesLines = controllerSyncTypesSource.split(/\r?\n/).length;
 const controllerSyncInputLines = controllerSyncInputSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
@@ -3258,11 +3264,10 @@ if (controllerSyncInputLines > maxControllerSyncInputLines) {
 }
 
 for (const requiredControllerSyncImport of [
-  'from "../lib/record-panel-forms";',
-  'from "../lib/types";',
   'from "./use-record-panel-controller-dead-letter-sync";',
   'from "./use-record-panel-controller-filter-sync";',
   'from "./use-record-panel-controller-selected-record-sync";',
+  'from "./use-record-panel-controller-sync.types";',
 ]) {
   if (!controllerSyncSource.includes(requiredControllerSyncImport)) {
     throw new Error(
@@ -3275,6 +3280,7 @@ for (const requiredControllerSyncUsage of [
   "useRecordPanelControllerDeadLetterSync({ actionableDeadLetterIds, setSelectedDeadLetterIds })",
   "useRecordPanelControllerSelectedRecordSync({",
   "useRecordPanelControllerFilterSync({ recordFilter, setFilterDraft })",
+  "}: RecordPanelControllerSyncInput)",
 ]) {
   if (!controllerSyncSource.includes(requiredControllerSyncUsage)) {
     throw new Error(
@@ -3284,6 +3290,8 @@ for (const requiredControllerSyncUsage of [
 }
 
 for (const forbiddenControllerSyncToken of [
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
   "useEffect(",
   "createEmptyForm(",
   "createEmptyReminderForm(",
@@ -3291,6 +3299,9 @@ for (const forbiddenControllerSyncToken of [
   "readLocationForm(",
   "readLocationReviewForm(",
   "setSelectedDeadLetterIds((current)",
+  "actionableDeadLetterIds: Set<string>;",
+  "recordFilter: RecordFilterState;",
+  "selectedRecord: RecordItem | null;",
 ]) {
   if (controllerSyncSource.includes(forbiddenControllerSyncToken)) {
     throw new Error(
@@ -3303,6 +3314,39 @@ const maxControllerSyncLines = 35;
 if (controllerSyncLines > maxControllerSyncLines) {
   throw new Error(
     `use-record-panel-controller-sync.ts exceeded ${maxControllerSyncLines} lines: ${controllerSyncLines}`,
+  );
+}
+
+for (const requiredControllerSyncTypesImport of [
+  'from "./record-panel-controller.types";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerSyncTypesSource.includes(requiredControllerSyncTypesImport)) {
+    throw new Error(
+      `use-record-panel-controller-sync.types.ts must import controller sync-type dependencies: ${requiredControllerSyncTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSyncTypesUsage of [
+  "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
+  "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
+  'export type RecordPanelControllerSyncInput = { recordFilter: ControllerProps["recordFilter"] } &',
+  '"actionableDeadLetterIds" | "selectedRecord"',
+  '"recordFilter"',
+]) {
+  if (!controllerSyncTypesSource.includes(requiredControllerSyncTypesUsage)) {
+    throw new Error(
+      `use-record-panel-controller-sync.types.ts must own controller sync typing: ${requiredControllerSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerSyncTypesLines = 20;
+if (controllerSyncTypesLines > maxControllerSyncTypesLines) {
+  throw new Error(
+    `use-record-panel-controller-sync.types.ts exceeded ${maxControllerSyncTypesLines} lines: ${controllerSyncTypesLines}`,
   );
 }
 
@@ -4807,10 +4851,8 @@ if (filterPresetActionInputTypesLines > maxFilterPresetActionInputTypesLines) {
 }
 
 for (const requiredFilterPresetSaveActionImport of [
-  'from "../lib/record-panel-detail";',
-  'from "../lib/types";',
-  'from "./record-panel-controller.types";',
   'from "./record-panel-controller-filter-helpers";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
 ]) {
   if (!filterPresetSaveActionSource.includes(requiredFilterPresetSaveActionImport)) {
     throw new Error(
@@ -4832,6 +4874,21 @@ for (const requiredFilterPresetSaveActionUsage of [
   }
 }
 
+for (const forbiddenFilterPresetSaveActionToken of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  "type DetailCopy =",
+  "onCreateSearchPreset: ControllerProps",
+  "filterDraft: RecordFilterState;",
+]) {
+  if (filterPresetSaveActionSource.includes(forbiddenFilterPresetSaveActionToken)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-save-action.ts must keep preset-save input contracts delegated: ${forbiddenFilterPresetSaveActionToken}`,
+    );
+  }
+}
+
 const maxFilterPresetSaveActionLines = 45;
 if (filterPresetSaveActionLines > maxFilterPresetSaveActionLines) {
   throw new Error(
@@ -4840,9 +4897,8 @@ if (filterPresetSaveActionLines > maxFilterPresetSaveActionLines) {
 }
 
 for (const requiredFilterPresetDeleteActionImport of [
-  'from "../lib/record-panel-detail";',
-  'from "./record-panel-controller.types";',
   'from "./record-panel-controller-filter-helpers";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
 ]) {
   if (!filterPresetDeleteActionSource.includes(requiredFilterPresetDeleteActionImport)) {
     throw new Error(
@@ -4859,6 +4915,19 @@ for (const requiredFilterPresetDeleteActionUsage of [
   if (!filterPresetDeleteActionSource.includes(requiredFilterPresetDeleteActionUsage)) {
     throw new Error(
       `record-panel-controller-filter-preset-delete-action.ts must own preset delete orchestration: ${requiredFilterPresetDeleteActionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenFilterPresetDeleteActionToken of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  "type DetailCopy =",
+  "onDeleteSearchPreset: ControllerProps",
+]) {
+  if (filterPresetDeleteActionSource.includes(forbiddenFilterPresetDeleteActionToken)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-delete-action.ts must keep preset-delete input contracts delegated: ${forbiddenFilterPresetDeleteActionToken}`,
     );
   }
 }

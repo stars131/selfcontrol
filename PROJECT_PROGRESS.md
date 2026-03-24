@@ -1316,6 +1316,14 @@ Last updated: 2026-03-24
   - media upload/download action input contracts now live in `apps/web/components/record-panel-controller-media-transfer-action-input.types.ts` instead of remaining embedded across the upload, download, and transfer-action modules
   - `apps/web/components/record-panel-controller-media-upload-action.ts`, `apps/web/components/record-panel-controller-media-download-action.ts`, and `apps/web/components/record-panel-controller-media-transfer-actions.ts` now consume the shared extracted transfer-action contracts behind thinner execution boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-transfer input-type boundary and keeps inline upload/download contract definitions out of the action modules
+- Record Panel Filter Preset Save/Delete Input Reuse V3:
+  - preset save and delete action modules now consume `apps/web/components/record-panel-controller-filter-preset-action-input.types.ts` instead of carrying duplicated inline input contracts
+  - `apps/web/components/record-panel-controller-filter-preset-save-action.ts` and `apps/web/components/record-panel-controller-filter-preset-delete-action.ts` now reuse the shared preset-action contract through focused `Pick<>` slices
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that preset save/delete action input typing stays delegated to the extracted preset-action type boundary
+- Record Panel Controller Sync Type Split V3:
+  - sync-hook input typing now lives in `apps/web/components/use-record-panel-controller-sync.types.ts` instead of remaining embedded inside `apps/web/components/use-record-panel-controller-sync.ts`
+  - `apps/web/components/use-record-panel-controller-sync.ts` now focuses more narrowly on composing the dead-letter, selected-record, and filter sync hooks behind a thinner orchestration boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the sync-type boundary and keeps direct sync input contract definitions out of the sync hook module
 
 ## Next
 - Continue the next product slice
