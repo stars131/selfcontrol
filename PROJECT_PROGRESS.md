@@ -1052,6 +1052,10 @@ Last updated: 2026-03-24
   - record-panel workspace shared prop aliases, browse-workspace input contracts, and editor-workspace input contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-panel-v2-workspace-props.types.ts`
   - the top-level workspace-props type file now focuses more narrowly on acting as a stable re-export boundary while core, browse, and editor type modules own their specific contracts
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this workspace-prop type-group boundary and dedicated size ceilings for the extracted modules
+- Support Tools Type Group Split V1:
+  - record-editor support-tools media contracts and reminder contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-editor-support-tools.types.ts`
+  - the top-level support-tools type file now focuses more narrowly on composing the delegated media and reminder type groups into the exported `RecordEditorSupportToolsProps` contract
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this support-tools type-group boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

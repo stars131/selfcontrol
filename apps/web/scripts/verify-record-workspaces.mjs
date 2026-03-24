@@ -32,6 +32,13 @@ const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
 const editorSupportToolsSource = readSource(editorSupportToolsPath);
 const editorSupportToolsPropsPath = "components/record-editor-support-tools-props.ts";
 const editorSupportToolsPropsSource = readSource(editorSupportToolsPropsPath);
+const editorSupportToolsTypesPath = "components/record-editor-support-tools.types.ts";
+const editorSupportToolsTypesSource = readSource(editorSupportToolsTypesPath);
+const editorSupportToolsMediaTypesPath = "components/record-editor-support-tools-media.types.ts";
+const editorSupportToolsMediaTypesSource = readSource(editorSupportToolsMediaTypesPath);
+const editorSupportToolsReminderTypesPath =
+  "components/record-editor-support-tools-reminder.types.ts";
+const editorSupportToolsReminderTypesSource = readSource(editorSupportToolsReminderTypesPath);
 const editorWorkspaceSectionsPropsPath = "components/record-editor-workspace-sections-props.ts";
 const editorWorkspaceSectionsPropsSource = readSource(editorWorkspaceSectionsPropsPath);
 const editorWorkspaceMainSectionsPropsPath =
@@ -349,6 +356,28 @@ if (!editorSupportToolsSource.includes('import type { RecordEditorSupportToolsPr
   throw new Error("record-editor-support-tools.tsx must import RecordEditorSupportToolsProps from record-editor-support-tools.types");
 }
 
+for (const requiredSupportToolsTypesImport of [
+  'import type { RecordEditorMediaToolsProps } from "./record-editor-support-tools-media.types";',
+  'import type { RecordEditorReminderToolsProps } from "./record-editor-support-tools-reminder.types";',
+]) {
+  if (!editorSupportToolsTypesSource.includes(requiredSupportToolsTypesImport)) {
+    throw new Error(
+      `record-editor-support-tools.types.ts must import delegated support-tool type groups: ${requiredSupportToolsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsTypesUsage of [
+  "export type RecordEditorSupportToolsProps = RecordEditorMediaToolsProps &",
+  "RecordEditorReminderToolsProps;",
+]) {
+  if (!editorSupportToolsTypesSource.includes(requiredSupportToolsTypesUsage)) {
+    throw new Error(
+      `record-editor-support-tools.types.ts must compose delegated support-tool type groups: ${requiredSupportToolsTypesUsage}`,
+    );
+  }
+}
+
 if (!editorSupportToolsSource.includes('from "./record-editor-support-tools-props";')) {
   throw new Error("record-editor-support-tools.tsx must import support-tools prop builders");
 }
@@ -378,6 +407,57 @@ for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresent
 
 verifyLineLimit(editorSupportToolsPath, 120);
 verifyLineLimit(editorSupportToolsPropsPath, 20);
+verifyLineLimit(editorSupportToolsTypesPath, 10);
+
+for (const requiredSupportToolsMediaTypesImport of [
+  'import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";',
+]) {
+  if (!editorSupportToolsMediaTypesSource.includes(requiredSupportToolsMediaTypesImport)) {
+    throw new Error(
+      `record-editor-support-tools-media.types.ts must import workspace prop contracts: ${requiredSupportToolsMediaTypesImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsMediaTypesUsage of [
+  "export type RecordEditorMediaToolsProps = Pick<",
+  '"mediaDeadLetterOverview"',
+  '"selectedRecordMediaSizeLabel"',
+  '"workspaceId"',
+]) {
+  if (!editorSupportToolsMediaTypesSource.includes(requiredSupportToolsMediaTypesUsage)) {
+    throw new Error(
+      `record-editor-support-tools-media.types.ts must own media-tool support contracts: ${requiredSupportToolsMediaTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsMediaTypesPath, 45);
+
+for (const requiredSupportToolsReminderTypesImport of [
+  'import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";',
+]) {
+  if (!editorSupportToolsReminderTypesSource.includes(requiredSupportToolsReminderTypesImport)) {
+    throw new Error(
+      `record-editor-support-tools-reminder.types.ts must import workspace prop contracts: ${requiredSupportToolsReminderTypesImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsReminderTypesUsage of [
+  "export type RecordEditorReminderToolsProps = Pick<",
+  '"createReminderLabel"',
+  '"savingReminderLabel"',
+  '"untitledReminderLabel"',
+]) {
+  if (!editorSupportToolsReminderTypesSource.includes(requiredSupportToolsReminderTypesUsage)) {
+    throw new Error(
+      `record-editor-support-tools-reminder.types.ts must own reminder-tool support contracts: ${requiredSupportToolsReminderTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsReminderTypesPath, 35);
 
 if (!reminderToolsSource.includes('import type { RecordReminderToolsProps } from "./record-reminder-tools.types";')) {
   throw new Error("record-reminder-tools.tsx must import RecordReminderToolsProps from record-reminder-tools.types");
