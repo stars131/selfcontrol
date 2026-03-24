@@ -389,6 +389,10 @@ const recordPanelControllerSelectedRecordViewDataPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-selected-record-view-data.ts",
 );
+const recordPanelControllerSelectedRecordViewDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-selected-record-view-data.types.ts",
+);
 const recordPanelControllerLocationViewDataPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-location-view-data.ts",
@@ -1151,6 +1155,10 @@ const controllerSelectedRecordViewDataSource = fs.readFileSync(
   recordPanelControllerSelectedRecordViewDataPath,
   "utf8",
 );
+const controllerSelectedRecordViewDataTypesSource = fs.readFileSync(
+  recordPanelControllerSelectedRecordViewDataTypesPath,
+  "utf8",
+);
 const controllerLocationViewDataSource = fs.readFileSync(
   recordPanelControllerLocationViewDataPath,
   "utf8",
@@ -1521,6 +1529,8 @@ const controllerRecordViewDataTypesLines =
   controllerRecordViewDataTypesSource.split(/\r?\n/).length;
 const controllerSelectedRecordViewDataLines =
   controllerSelectedRecordViewDataSource.split(/\r?\n/).length;
+const controllerSelectedRecordViewDataTypesLines =
+  controllerSelectedRecordViewDataTypesSource.split(/\r?\n/).length;
 const controllerLocationViewDataLines = controllerLocationViewDataSource.split(/\r?\n/).length;
 const controllerLocalizedViewDataLines = controllerLocalizedViewDataSource.split(/\r?\n/).length;
 const recordSummaryHelpersLines = recordSummaryHelpersSource.split(/\r?\n/).length;
@@ -4884,7 +4894,7 @@ if (controllerRecordViewDataTypesLines > maxControllerRecordViewDataTypesLines) 
 }
 
 for (const requiredControllerSelectedRecordViewDataImport of [
-  'from "../lib/types";',
+  'from "./record-panel-controller-selected-record-view-data.types";',
   'from "./record-panel-controller-location-view-data";',
   'from "./record-panel-controller-view-data-helpers";',
 ]) {
@@ -4896,7 +4906,7 @@ for (const requiredControllerSelectedRecordViewDataImport of [
 }
 
 for (const requiredControllerSelectedRecordViewDataUsage of [
-  "export function buildRecordPanelSelectedRecordViewData({",
+  "}: BuildRecordPanelSelectedRecordViewDataInput) {",
   "selectedLocationReview: getSelectedRecordLocationReview(selectedRecord)",
   "selectedLocationHistory: getSelectedRecordLocationHistory(selectedRecord)",
   "selectedRecordMediaSizeLabel: getSelectedRecordMediaSizeLabel(mediaAssets)",
@@ -4909,10 +4919,50 @@ for (const requiredControllerSelectedRecordViewDataUsage of [
   }
 }
 
+for (const forbiddenControllerSelectedRecordViewDataToken of [
+  'from "../lib/types";',
+  "mediaAssets: MediaAsset[];",
+  "mediaDeadLetterOverview: MediaDeadLetterOverview | null;",
+  "selectedRecord: RecordItem | null;",
+]) {
+  if (controllerSelectedRecordViewDataSource.includes(forbiddenControllerSelectedRecordViewDataToken)) {
+    throw new Error(
+      `record-panel-controller-selected-record-view-data.ts must keep selected-record view-data typing delegated: ${forbiddenControllerSelectedRecordViewDataToken}`,
+    );
+  }
+}
+
 const maxControllerSelectedRecordViewDataLines = 20;
 if (controllerSelectedRecordViewDataLines > maxControllerSelectedRecordViewDataLines) {
   throw new Error(
     `record-panel-controller-selected-record-view-data.ts exceeded ${maxControllerSelectedRecordViewDataLines} lines: ${controllerSelectedRecordViewDataLines}`,
+  );
+}
+
+for (const requiredControllerSelectedRecordViewDataTypesImport of [
+  'from "../lib/types";',
+]) {
+  if (!controllerSelectedRecordViewDataTypesSource.includes(requiredControllerSelectedRecordViewDataTypesImport)) {
+    throw new Error(
+      `record-panel-controller-selected-record-view-data.types.ts must import selected-record view-data type contracts: ${requiredControllerSelectedRecordViewDataTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSelectedRecordViewDataTypesUsage of [
+  "export type BuildRecordPanelSelectedRecordViewDataInput = { mediaAssets: MediaAsset[]; mediaDeadLetterOverview: MediaDeadLetterOverview | null; selectedRecord: RecordItem | null };",
+]) {
+  if (!controllerSelectedRecordViewDataTypesSource.includes(requiredControllerSelectedRecordViewDataTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-selected-record-view-data.types.ts must own selected-record view-data type contracts: ${requiredControllerSelectedRecordViewDataTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerSelectedRecordViewDataTypesLines = 5;
+if (controllerSelectedRecordViewDataTypesLines > maxControllerSelectedRecordViewDataTypesLines) {
+  throw new Error(
+    `record-panel-controller-selected-record-view-data.types.ts exceeded ${maxControllerSelectedRecordViewDataTypesLines} lines: ${controllerSelectedRecordViewDataTypesLines}`,
   );
 }
 

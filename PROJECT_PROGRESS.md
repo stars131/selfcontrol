@@ -1472,6 +1472,10 @@ Last updated: 2026-03-24
   - reminder-payload builder input contract now lives in `apps/web/components/record-panel-controller-reminder-payload.types.ts` instead of remaining embedded directly in the reminder payload helper
   - `apps/web/components/record-panel-controller-reminder-payload.ts` now consumes the extracted builder input contract behind a thinner payload-assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-payload builder-input boundary and keeps inline reminder-form and selected-record typing out of the payload helper
+- Record Panel Selected-Record View-Data Input Type Split V1:
+  - selected-record view-data input contract now lives in `apps/web/components/record-panel-controller-selected-record-view-data.types.ts` instead of remaining embedded directly in the selected-record view-data helper
+  - `apps/web/components/record-panel-controller-selected-record-view-data.ts` now consumes the extracted selected-record view-data input contract behind a thinner derivation boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record view-data input-type boundary and keeps inline media/dead-letter/selected-record typing out of the helper
 
 ## Next
 - Continue the next product slice

@@ -1,15 +1,11 @@
-import type { MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
+import type { BuildRecordPanelSelectedRecordViewDataInput } from "./record-panel-controller-selected-record-view-data.types";
 import { getSelectedRecordLocationHistory, getSelectedRecordLocationReview } from "./record-panel-controller-location-view-data";
 import { getActionableDeadLetterIds, getSelectedRecordMediaSizeLabel } from "./record-panel-controller-view-data-helpers";
 export function buildRecordPanelSelectedRecordViewData({
   mediaAssets,
   mediaDeadLetterOverview,
   selectedRecord,
-}: {
-  mediaAssets: MediaAsset[];
-  mediaDeadLetterOverview: MediaDeadLetterOverview | null;
-  selectedRecord: RecordItem | null;
-}) {
+}: BuildRecordPanelSelectedRecordViewDataInput) {
   return {
     selectedLocationReview: getSelectedRecordLocationReview(selectedRecord),
     selectedLocationHistory: getSelectedRecordLocationHistory(selectedRecord),
