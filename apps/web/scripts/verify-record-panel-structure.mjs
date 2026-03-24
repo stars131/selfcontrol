@@ -124,6 +124,10 @@ const recordPanelRecordSaveHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-helpers.ts",
 );
+const recordPanelRecordSavePayloadPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-payload.ts",
+);
 const recordPanelReminderActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-actions.ts",
@@ -240,6 +244,7 @@ const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8"
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
+const recordSavePayloadSource = fs.readFileSync(recordPanelRecordSavePayloadPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
@@ -289,6 +294,7 @@ const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
+const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
@@ -1433,8 +1439,7 @@ if (recordSaveActionsLines > maxRecordSaveActionsLines) {
 
 for (const requiredRecordSaveHelpersImport of [
   'from "../lib/record-panel-detail";',
-  'from "../lib/record-panel-forms";',
-  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-record-save-payload";',
 ]) {
   if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersImport)) {
     throw new Error(
@@ -1444,14 +1449,13 @@ for (const requiredRecordSaveHelpersImport of [
 }
 
 for (const requiredRecordSaveHelpersUsage of [
-  "function parseCoordinate(value: string)",
-  "function buildRecordSavePayload({",
   "export function getRecordPanelRecordSaveErrorMessage(",
   "export function resolveRecordPanelRecordSaveActionInput(",
+  "parseRecordPanelCoordinate(input.form.location.latitude)",
+  "buildRecordPanelSavePayload({",
   "contentRequiredError",
   "latitudeInvalidError",
   "longitudeInvalidError",
-  "extra_data: hasLocation",
 ]) {
   if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersUsage)) {
     throw new Error(
@@ -1460,10 +1464,43 @@ for (const requiredRecordSaveHelpersUsage of [
   }
 }
 
-const maxRecordSaveHelpersLines = 110;
+const maxRecordSaveHelpersLines = 45;
 if (recordSaveHelpersLines > maxRecordSaveHelpersLines) {
   throw new Error(
     `record-panel-controller-record-save-helpers.ts exceeded ${maxRecordSaveHelpersLines} lines: ${recordSaveHelpersLines}`,
+  );
+}
+
+for (const requiredRecordSavePayloadImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-forms";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!recordSavePayloadSource.includes(requiredRecordSavePayloadImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-payload.ts must import delegated save payload contracts: ${requiredRecordSavePayloadImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSavePayloadUsage of [
+  "export type ResolveRecordSaveActionInput = {",
+  "export function parseRecordPanelCoordinate(value: string)",
+  "export function buildRecordPanelSavePayload({",
+  "extra_data: hasLocation",
+  'source: form.location.source || "manual"',
+]) {
+  if (!recordSavePayloadSource.includes(requiredRecordSavePayloadUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-payload.ts must own save payload assembly details: ${requiredRecordSavePayloadUsage}`,
+    );
+  }
+}
+
+const maxRecordSavePayloadLines = 75;
+if (recordSavePayloadLines > maxRecordSavePayloadLines) {
+  throw new Error(
+    `record-panel-controller-record-save-payload.ts exceeded ${maxRecordSavePayloadLines} lines: ${recordSavePayloadLines}`,
   );
 }
 

@@ -1080,10 +1080,14 @@ Last updated: 2026-03-24
   - controller result assembly now delegates state-owned fields and view-data-owned fields to dedicated builder modules instead of keeping one broad mapping surface in `apps/web/components/record-panel-controller-result.ts`
   - `apps/web/components/record-panel-controller-result.ts` now focuses on final composition of state, view-data, and handler groups
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the new result-builder boundaries and dedicated size ceilings for both extracted modules
+- Record Panel Save Payload Split V1:
+  - record-panel save helper now delegates coordinate parsing and payload assembly to `apps/web/components/record-panel-controller-record-save-payload.ts`
+  - `apps/web/components/record-panel-controller-record-save-helpers.ts` now focuses on validation branches and fallback error handling instead of mixing payload construction details
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload helper boundary and dedicated size ceilings for both modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel save helpers and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel filter helpers and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
