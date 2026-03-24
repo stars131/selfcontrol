@@ -317,6 +317,10 @@ const recordPanelControllerHandlerGroupsInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-groups-input.ts",
 );
+const recordPanelControllerHandlerGroupsInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-groups-input.types.ts",
+);
 const recordPanelControllerHandlerGroupsPropsInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-groups-props-input.ts",
@@ -1022,6 +1026,10 @@ const controllerHandlerGroupsInputSource = fs.readFileSync(
   recordPanelControllerHandlerGroupsInputPath,
   "utf8",
 );
+const controllerHandlerGroupsInputTypesSource = fs.readFileSync(
+  recordPanelControllerHandlerGroupsInputTypesPath,
+  "utf8",
+);
 const controllerHandlerGroupsPropsInputSource = fs.readFileSync(
   recordPanelControllerHandlerGroupsPropsInputPath,
   "utf8",
@@ -1369,6 +1377,8 @@ const controllerLocalizedViewDataResultLines =
   controllerLocalizedViewDataResultSource.split(/\r?\n/).length;
 const controllerHandlerGroupsInputLines =
   controllerHandlerGroupsInputSource.split(/\r?\n/).length;
+const controllerHandlerGroupsInputTypesLines =
+  controllerHandlerGroupsInputTypesSource.split(/\r?\n/).length;
 const controllerHandlerGroupsPropsInputLines =
   controllerHandlerGroupsPropsInputSource.split(/\r?\n/).length;
 const controllerHandlerGroupsStateInputLines =
@@ -4069,7 +4079,40 @@ if (controllerBrowseStateLines > maxControllerBrowseStateLines) {
   );
 }
 
+for (const requiredControllerHandlerGroupsInputTypesImport of [
+  'from "./record-panel-controller-handler-group-props-input.types";',
+  'from "./record-panel-controller-handler-group-state-input.types";',
+  'from "./record-panel-controller-handler-group-view-data-input.types";',
+]) {
+  if (!controllerHandlerGroupsInputTypesSource.includes(requiredControllerHandlerGroupsInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-input.types.ts must import handler-group input contracts: ${requiredControllerHandlerGroupsInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerHandlerGroupsInputTypesUsage of [
+  "export type RecordPanelControllerHandlerGroupsInputArgs = {",
+  "props: RecordPanelControllerHandlerGroupPropsInput;",
+  "state: RecordPanelControllerHandlerGroupStateInput;",
+  "viewData: RecordPanelControllerHandlerGroupViewDataInput;",
+]) {
+  if (!controllerHandlerGroupsInputTypesSource.includes(requiredControllerHandlerGroupsInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-input.types.ts must own handler-group input typing: ${requiredControllerHandlerGroupsInputTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerHandlerGroupsInputTypesLines = 10;
+if (controllerHandlerGroupsInputTypesLines > maxControllerHandlerGroupsInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-handler-groups-input.types.ts exceeded ${maxControllerHandlerGroupsInputTypesLines} lines: ${controllerHandlerGroupsInputTypesLines}`,
+  );
+}
+
 for (const requiredControllerHandlerGroupsInputImport of [
+  'from "./record-panel-controller-handler-groups-input.types";',
   'from "./record-panel-controller-handler-groups-props-input";',
   'from "./record-panel-controller-handler-groups-state-input";',
   'from "./record-panel-controller-handler-groups-view-data-input";',
@@ -4082,10 +4125,6 @@ for (const requiredControllerHandlerGroupsInputImport of [
 }
 
 for (const requiredControllerHandlerGroupsInputUsage of [
-  "type ControllerHandlerGroupsInputArgs = {",
-  "Parameters<typeof buildRecordPanelControllerHandlerGroupsPropsInput>[0]",
-  "Parameters<typeof buildRecordPanelControllerHandlerGroupsStateInput>[0]",
-  "Parameters<typeof buildRecordPanelControllerHandlerGroupsViewDataInput>[0]",
   "export function buildRecordPanelControllerHandlerGroupsInput({",
   "buildRecordPanelControllerHandlerGroupsPropsInput(props)",
   "buildRecordPanelControllerHandlerGroupsStateInput(state)",
@@ -4098,6 +4137,19 @@ for (const requiredControllerHandlerGroupsInputUsage of [
   }
 }
 
+for (const forbiddenControllerHandlerGroupsInputToken of [
+  "type ControllerHandlerGroupsInputArgs = {",
+  "Parameters<typeof buildRecordPanelControllerHandlerGroupsPropsInput>[0]",
+  "Parameters<typeof buildRecordPanelControllerHandlerGroupsStateInput>[0]",
+  "Parameters<typeof buildRecordPanelControllerHandlerGroupsViewDataInput>[0]",
+]) {
+  if (controllerHandlerGroupsInputSource.includes(forbiddenControllerHandlerGroupsInputToken)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-input.ts must keep handler-group input typing delegated: ${forbiddenControllerHandlerGroupsInputToken}`,
+    );
+  }
+}
+
 const maxControllerHandlerGroupsInputLines = 30;
 if (controllerHandlerGroupsInputLines > maxControllerHandlerGroupsInputLines) {
   throw new Error(
@@ -4106,11 +4158,23 @@ if (controllerHandlerGroupsInputLines > maxControllerHandlerGroupsInputLines) {
 }
 
 for (const requiredControllerHandlerGroupsPropsInputImport of [
-  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-handler-group-props-input.types";',
 ]) {
   if (!controllerHandlerGroupsPropsInputSource.includes(requiredControllerHandlerGroupsPropsInputImport)) {
     throw new Error(
       `record-panel-controller-handler-groups-props-input.ts must import controller prop contracts: ${requiredControllerHandlerGroupsPropsInputImport}`,
+    );
+  }
+}
+
+for (const forbiddenControllerHandlerGroupsPropsInputToken of [
+  'from "./record-panel-controller.types";',
+  "Pick<",
+  "ControllerProps,",
+]) {
+  if (controllerHandlerGroupsPropsInputSource.includes(forbiddenControllerHandlerGroupsPropsInputToken)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-props-input.ts must keep prop input typing delegated: ${forbiddenControllerHandlerGroupsPropsInputToken}`,
     );
   }
 }
@@ -4136,7 +4200,7 @@ if (controllerHandlerGroupsPropsInputLines > maxControllerHandlerGroupsPropsInpu
 }
 
 for (const requiredControllerHandlerGroupsStateInputImport of [
-  'from "./use-record-panel-controller-state";',
+  'from "./record-panel-controller-handler-group-state-input.types";',
 ]) {
   if (!controllerHandlerGroupsStateInputSource.includes(requiredControllerHandlerGroupsStateInputImport)) {
     throw new Error(
@@ -4146,7 +4210,7 @@ for (const requiredControllerHandlerGroupsStateInputImport of [
 }
 
 for (const requiredControllerHandlerGroupsStateInputUsage of [
-  "export function buildRecordPanelControllerHandlerGroupsStateInput(state: ControllerState)",
+  "export function buildRecordPanelControllerHandlerGroupsStateInput(",
   "filterDraft: state.filterDraft,",
   "setSavingReminder: state.setSavingReminder,",
   "setUploading: state.setUploading,",
@@ -4154,6 +4218,18 @@ for (const requiredControllerHandlerGroupsStateInputUsage of [
   if (!controllerHandlerGroupsStateInputSource.includes(requiredControllerHandlerGroupsStateInputUsage)) {
     throw new Error(
       `record-panel-controller-handler-groups-state-input.ts must own state-derived handler-group input mapping: ${requiredControllerHandlerGroupsStateInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerHandlerGroupsStateInputToken of [
+  'from "./use-record-panel-controller-state";',
+  "type ControllerState =",
+  "state: ControllerState",
+]) {
+  if (controllerHandlerGroupsStateInputSource.includes(forbiddenControllerHandlerGroupsStateInputToken)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-state-input.ts must keep state input typing delegated: ${forbiddenControllerHandlerGroupsStateInputToken}`,
     );
   }
 }
@@ -4166,7 +4242,7 @@ if (controllerHandlerGroupsStateInputLines > maxControllerHandlerGroupsStateInpu
 }
 
 for (const requiredControllerHandlerGroupsViewDataInputImport of [
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-handler-group-view-data-input.types";',
 ]) {
   if (!controllerHandlerGroupsViewDataInputSource.includes(requiredControllerHandlerGroupsViewDataInputImport)) {
     throw new Error(
@@ -4183,6 +4259,18 @@ for (const requiredControllerHandlerGroupsViewDataInputUsage of [
   if (!controllerHandlerGroupsViewDataInputSource.includes(requiredControllerHandlerGroupsViewDataInputUsage)) {
     throw new Error(
       `record-panel-controller-handler-groups-view-data-input.ts must own view-data-derived handler-group input mapping: ${requiredControllerHandlerGroupsViewDataInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerHandlerGroupsViewDataInputToken of [
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerViewData =",
+  "viewData: ControllerViewData",
+]) {
+  if (controllerHandlerGroupsViewDataInputSource.includes(forbiddenControllerHandlerGroupsViewDataInputToken)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-view-data-input.ts must keep view-data input typing delegated: ${forbiddenControllerHandlerGroupsViewDataInputToken}`,
     );
   }
 }

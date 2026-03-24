@@ -1,10 +1,9 @@
 "use client";
+import type { RecordPanelControllerHandlerGroupStateInput } from "./record-panel-controller-handler-group-state-input.types";
 
-import type { useRecordPanelControllerState } from "./use-record-panel-controller-state";
-
-type ControllerState = ReturnType<typeof useRecordPanelControllerState>;
-
-export function buildRecordPanelControllerHandlerGroupsStateInput(state: ControllerState) {
+export function buildRecordPanelControllerHandlerGroupsStateInput(
+  state: RecordPanelControllerHandlerGroupStateInput,
+) {
   return {
     filterDraft: state.filterDraft,
     form: state.form,

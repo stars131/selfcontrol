@@ -1,23 +1,7 @@
 "use client";
-import type { ControllerProps } from "./record-panel-controller.types";
+import type { RecordPanelControllerHandlerGroupPropsInput } from "./record-panel-controller-handler-group-props-input.types";
 export function buildRecordPanelControllerHandlerGroupsPropsInput(
-  props: Pick<
-    ControllerProps,
-    | "authToken"
-    | "mediaDeadLetterOverview"
-    | "onApplyRecordFilter"
-    | "onBulkRetryMediaDeadLetter"
-    | "onCreateReminder"
-    | "onCreateSearchPreset"
-    | "onDeleteMedia"
-    | "onDeleteRecord"
-    | "onDeleteSearchPreset"
-    | "onRefreshMediaStatus"
-    | "onRetryMedia"
-    | "onSaveRecord"
-    | "onUploadMedia"
-    | "workspaceId"
-  >,
+  props: RecordPanelControllerHandlerGroupPropsInput,
 ) {
   return {
     authToken: props.authToken,

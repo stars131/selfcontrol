@@ -1380,6 +1380,10 @@ Last updated: 2026-03-24
   - editor workspace dead-letter/primary action input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-action-props-input.types.ts` instead of remaining embedded across the aggregate action-props builder and the dead-letter/primary action helpers
   - `apps/web/components/record-panel-v2-editor-workspace-action-props-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-dead-letter-action-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` now consume the shared extracted editor-action contract behind thinner mapping boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace action input-type boundary and keeps `Parameters<typeof ...>[0]` and duplicated action-input `Pick<...>` signatures out of the action helper modules
+- Record Panel Handler Groups Input Arg Type Split V3:
+  - handler-groups builder argument contracts now live in `apps/web/components/record-panel-controller-handler-groups-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-handler-groups-input.ts`
+  - `apps/web/components/record-panel-controller-handler-groups-input.ts` now consumes the shared extracted handler-groups argument contract behind a thinner aggregation boundary while continuing to reuse the dedicated props/state/view-data input builders
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the handler-groups input-arg boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the handler-groups input module
 
 ## Next
 - Continue the next product slice

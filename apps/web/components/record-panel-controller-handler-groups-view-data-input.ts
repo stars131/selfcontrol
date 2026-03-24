@@ -1,11 +1,8 @@
 "use client";
-
-import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
-
-type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
+import type { RecordPanelControllerHandlerGroupViewDataInput } from "./record-panel-controller-handler-group-view-data-input.types";
 
 export function buildRecordPanelControllerHandlerGroupsViewDataInput(
-  viewData: ControllerViewData,
+  viewData: RecordPanelControllerHandlerGroupViewDataInput,
 ) {
   return {
     detailCopy: viewData.detailCopy,
