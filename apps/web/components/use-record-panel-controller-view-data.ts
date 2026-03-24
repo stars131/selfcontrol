@@ -1,13 +1,10 @@
 "use client";
 import { useMemo } from "react";
 import { useStoredLocale } from "../lib/locale";
-import type { LocationReview, MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
+import type { MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
 import { buildRecordPanelLocalizedViewData } from "./record-panel-controller-localized-view-data";
-import {
-  getSelectedRecordLocationHistory,
-  getSelectedRecordLocationReview,
-} from "./record-panel-controller-location-view-data";
-import { countAvoidRecords, countFoodRecords, findSelectedRecord, getActionableDeadLetterIds, getSelectedRecordMediaSizeLabel } from "./record-panel-controller-view-data-helpers";
+import { buildRecordPanelRecordViewData } from "./record-panel-controller-record-view-data";
+import { buildRecordPanelSelectedRecordViewData } from "./record-panel-controller-selected-record-view-data";
 
 export function useRecordPanelControllerViewData({
   mediaAssets,
@@ -21,36 +18,20 @@ export function useRecordPanelControllerViewData({
   selectedRecordId?: string | null;
 }) {
   const { locale } = useStoredLocale();
-  const avoidCount = useMemo(() => countAvoidRecords(records), [records]);
-  const foodCount = useMemo(() => countFoodRecords(records), [records]);
-  const selectedRecord = useMemo(() => findSelectedRecord(records, selectedRecordId), [records, selectedRecordId]);
-  const selectedLocationReview = useMemo<LocationReview | null>(
-    () => getSelectedRecordLocationReview(selectedRecord),
-    [selectedRecord],
+  const recordViewData = useMemo(
+    () => buildRecordPanelRecordViewData({ records, selectedRecordId }),
+    [records, selectedRecordId],
   );
-  const selectedLocationHistory = useMemo(
-    () => getSelectedRecordLocationHistory(selectedRecord),
-    [selectedRecord],
-  );
-  const selectedRecordMediaSizeLabel = useMemo(
-    () => getSelectedRecordMediaSizeLabel(mediaAssets),
-    [mediaAssets],
-  );
-  const actionableDeadLetterIds = useMemo(
-    () => getActionableDeadLetterIds(mediaDeadLetterOverview),
-    [mediaDeadLetterOverview],
+  const selectedRecordViewData = useMemo(
+    () => buildRecordPanelSelectedRecordViewData({ mediaAssets, mediaDeadLetterOverview, selectedRecord: recordViewData.selectedRecord }),
+    [mediaAssets, mediaDeadLetterOverview, recordViewData.selectedRecord],
   );
   const localizedViewData = useMemo(() => buildRecordPanelLocalizedViewData(locale), [locale]);
 
   return {
     locale,
-    avoidCount,
-    foodCount,
-    selectedRecord,
-    selectedLocationReview,
-    selectedLocationHistory,
-    selectedRecordMediaSizeLabel,
-    actionableDeadLetterIds,
+    ...recordViewData,
+    ...selectedRecordViewData,
     ...localizedViewData,
   };
 }

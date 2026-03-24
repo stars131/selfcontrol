@@ -293,6 +293,14 @@ const recordPanelControllerViewDataHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-helpers.ts",
 );
+const recordPanelControllerRecordViewDataPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-view-data.ts",
+);
+const recordPanelControllerSelectedRecordViewDataPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-selected-record-view-data.ts",
+);
 const recordPanelControllerLocationViewDataPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-location-view-data.ts",
@@ -780,6 +788,14 @@ const controllerViewDataHelpersSource = fs.readFileSync(
   recordPanelControllerViewDataHelpersPath,
   "utf8",
 );
+const controllerRecordViewDataSource = fs.readFileSync(
+  recordPanelControllerRecordViewDataPath,
+  "utf8",
+);
+const controllerSelectedRecordViewDataSource = fs.readFileSync(
+  recordPanelControllerSelectedRecordViewDataPath,
+  "utf8",
+);
 const controllerLocationViewDataSource = fs.readFileSync(
   recordPanelControllerLocationViewDataPath,
   "utf8",
@@ -1003,6 +1019,9 @@ const controllerHandlerGroupsViewDataInputLines =
   controllerHandlerGroupsViewDataInputSource.split(/\r?\n/).length;
 const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
+const controllerRecordViewDataLines = controllerRecordViewDataSource.split(/\r?\n/).length;
+const controllerSelectedRecordViewDataLines =
+  controllerSelectedRecordViewDataSource.split(/\r?\n/).length;
 const controllerLocationViewDataLines = controllerLocationViewDataSource.split(/\r?\n/).length;
 const controllerLocalizedViewDataLines = controllerLocalizedViewDataSource.split(/\r?\n/).length;
 const recordSummaryHelpersLines = recordSummaryHelpersSource.split(/\r?\n/).length;
@@ -3425,8 +3444,8 @@ if (controllerHandlerGroupsViewDataInputLines > maxControllerHandlerGroupsViewDa
 for (const requiredControllerViewDataImport of [
   'from "../lib/locale";',
   'from "./record-panel-controller-localized-view-data";',
-  'from "./record-panel-controller-location-view-data";',
-  'from "./record-panel-controller-view-data-helpers";',
+  'from "./record-panel-controller-record-view-data";',
+  'from "./record-panel-controller-selected-record-view-data";',
 ]) {
   if (!controllerViewDataSource.includes(requiredControllerViewDataImport)) {
     throw new Error(
@@ -3436,14 +3455,11 @@ for (const requiredControllerViewDataImport of [
 }
 
 for (const requiredControllerViewDataUsage of [
-  "countAvoidRecords(records)",
-  "countFoodRecords(records)",
-  "findSelectedRecord(records, selectedRecordId)",
-  "getSelectedRecordLocationReview(selectedRecord)",
-  "getSelectedRecordLocationHistory(selectedRecord)",
-  "getSelectedRecordMediaSizeLabel(mediaAssets)",
-  "getActionableDeadLetterIds(mediaDeadLetterOverview)",
+  "buildRecordPanelRecordViewData({ records, selectedRecordId })",
+  "buildRecordPanelSelectedRecordViewData({ mediaAssets, mediaDeadLetterOverview, selectedRecord: recordViewData.selectedRecord })",
   "buildRecordPanelLocalizedViewData(locale)",
+  "...recordViewData",
+  "...selectedRecordViewData",
 ]) {
   if (!controllerViewDataSource.includes(requiredControllerViewDataUsage)) {
     throw new Error(
@@ -3465,6 +3481,13 @@ for (const forbiddenControllerViewDataToken of [
   "readLocationHistory(selectedRecord?.extra_data).slice().reverse()",
   "getRecordPanelUiBundle(locale)",
   "getRecordPanelDetailBundle(locale)",
+  "countAvoidRecords(records)",
+  "countFoodRecords(records)",
+  "findSelectedRecord(records, selectedRecordId)",
+  "getSelectedRecordLocationReview(selectedRecord)",
+  "getSelectedRecordLocationHistory(selectedRecord)",
+  "getSelectedRecordMediaSizeLabel(mediaAssets)",
+  "getActionableDeadLetterIds(mediaDeadLetterOverview)",
 ]) {
   if (controllerViewDataSource.includes(forbiddenControllerViewDataToken)) {
     throw new Error(
@@ -3473,10 +3496,74 @@ for (const forbiddenControllerViewDataToken of [
   }
 }
 
-const maxControllerViewDataLines = 80;
+const maxControllerViewDataLines = 40;
 if (controllerViewDataLines > maxControllerViewDataLines) {
   throw new Error(
     `use-record-panel-controller-view-data.ts exceeded ${maxControllerViewDataLines} lines: ${controllerViewDataLines}`,
+  );
+}
+
+for (const requiredControllerRecordViewDataImport of [
+  'from "../lib/types";',
+  'from "./record-panel-controller-view-data-helpers";',
+]) {
+  if (!controllerRecordViewDataSource.includes(requiredControllerRecordViewDataImport)) {
+    throw new Error(
+      `record-panel-controller-record-view-data.ts must import record view-data contracts: ${requiredControllerRecordViewDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerRecordViewDataUsage of [
+  "export function buildRecordPanelRecordViewData({ records, selectedRecordId }",
+  "avoidCount: countAvoidRecords(records)",
+  "foodCount: countFoodRecords(records)",
+  "selectedRecord: findSelectedRecord(records, selectedRecordId)",
+]) {
+  if (!controllerRecordViewDataSource.includes(requiredControllerRecordViewDataUsage)) {
+    throw new Error(
+      `record-panel-controller-record-view-data.ts must own record view-data derivation: ${requiredControllerRecordViewDataUsage}`,
+    );
+  }
+}
+
+const maxControllerRecordViewDataLines = 10;
+if (controllerRecordViewDataLines > maxControllerRecordViewDataLines) {
+  throw new Error(
+    `record-panel-controller-record-view-data.ts exceeded ${maxControllerRecordViewDataLines} lines: ${controllerRecordViewDataLines}`,
+  );
+}
+
+for (const requiredControllerSelectedRecordViewDataImport of [
+  'from "../lib/types";',
+  'from "./record-panel-controller-location-view-data";',
+  'from "./record-panel-controller-view-data-helpers";',
+]) {
+  if (!controllerSelectedRecordViewDataSource.includes(requiredControllerSelectedRecordViewDataImport)) {
+    throw new Error(
+      `record-panel-controller-selected-record-view-data.ts must import selected-record view-data contracts: ${requiredControllerSelectedRecordViewDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSelectedRecordViewDataUsage of [
+  "export function buildRecordPanelSelectedRecordViewData({",
+  "selectedLocationReview: getSelectedRecordLocationReview(selectedRecord)",
+  "selectedLocationHistory: getSelectedRecordLocationHistory(selectedRecord)",
+  "selectedRecordMediaSizeLabel: getSelectedRecordMediaSizeLabel(mediaAssets)",
+  "actionableDeadLetterIds: getActionableDeadLetterIds(mediaDeadLetterOverview)",
+]) {
+  if (!controllerSelectedRecordViewDataSource.includes(requiredControllerSelectedRecordViewDataUsage)) {
+    throw new Error(
+      `record-panel-controller-selected-record-view-data.ts must own selected-record view-data derivation: ${requiredControllerSelectedRecordViewDataUsage}`,
+    );
+  }
+}
+
+const maxControllerSelectedRecordViewDataLines = 20;
+if (controllerSelectedRecordViewDataLines > maxControllerSelectedRecordViewDataLines) {
+  throw new Error(
+    `record-panel-controller-selected-record-view-data.ts exceeded ${maxControllerSelectedRecordViewDataLines} lines: ${controllerSelectedRecordViewDataLines}`,
   );
 }
 

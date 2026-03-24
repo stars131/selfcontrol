@@ -1236,6 +1236,10 @@ Last updated: 2026-03-24
   - shared record-panel v2 contracts now delegate input payload types, data props, and action props into dedicated type modules instead of keeping all type definitions inside `apps/web/components/record-panel-v2.types.ts`
   - `apps/web/components/record-panel-v2.types.ts` now focuses on compatibility exports and composing the shared v2 prop contract behind a thinner boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the v2 type-contract split and dedicated size ceilings for the extracted input, data, and action type modules
+- Record Panel View-Data Hook Split V3:
+  - controller view-data hook now delegates record summary and selected-record derived view-data assembly into dedicated helper modules instead of resolving those memoized derivations directly inside `apps/web/components/use-record-panel-controller-view-data.ts`
+  - `apps/web/components/use-record-panel-controller-view-data.ts` now focuses on composing memoized record, selected-record, and localized view-data slices behind a thinner hook boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the view-data hook split and dedicated size ceilings for the extracted record and selected-record view-data helpers
 
 ## Next
 - Continue the next product slice
