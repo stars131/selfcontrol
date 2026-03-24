@@ -1184,6 +1184,10 @@ Last updated: 2026-03-24
   - form-domain state, media-domain state, and browse-domain state now live in dedicated hook modules instead of remaining combined inside `apps/web/components/use-record-panel-controller-state.ts`
   - `apps/web/components/use-record-panel-controller-state.ts` now focuses on composing the specialized state hooks behind a thinner orchestration boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the state-hook split and dedicated size ceilings for the extracted state modules
+- Record Panel Editor Workspace Input Split V2:
+  - editor workspace prop-derived fields and controller-derived fields now live in dedicated input-mapper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-input.ts`
+  - `apps/web/components/record-panel-v2-editor-workspace-input.ts` now focuses on composing the two specialized input mappers behind a thinner assembly boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor workspace input split and dedicated size ceilings for both extracted input modules
 
 ## Next
 - Continue the next product slice

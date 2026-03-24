@@ -47,6 +47,18 @@ const recordPanelEditorWorkspaceBasePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-base-props.types.ts",
 );
+const recordPanelEditorWorkspaceInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-input.ts",
+);
+const recordPanelEditorWorkspacePropInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-prop-input.ts",
+);
+const recordPanelEditorWorkspaceControllerInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-controller-input.ts",
+);
 const recordPanelShellPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-props.ts",
@@ -408,6 +420,15 @@ const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
   recordPanelEditorWorkspaceBasePropsTypesPath,
   "utf8",
 );
+const editorWorkspaceInputSource = fs.readFileSync(recordPanelEditorWorkspaceInputPath, "utf8");
+const editorWorkspacePropInputSource = fs.readFileSync(
+  recordPanelEditorWorkspacePropInputPath,
+  "utf8",
+);
+const editorWorkspaceControllerInputSource = fs.readFileSync(
+  recordPanelEditorWorkspaceControllerInputPath,
+  "utf8",
+);
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
@@ -576,6 +597,10 @@ const editorWorkspacePropsInputsLines = editorWorkspacePropsInputsSource.split(/
 const editorWorkspaceBasePropsLines = editorWorkspaceBasePropsSource.split(/\r?\n/).length;
 const editorWorkspaceBasePropsTypesLines =
   editorWorkspaceBasePropsTypesSource.split(/\r?\n/).length;
+const editorWorkspaceInputLines = editorWorkspaceInputSource.split(/\r?\n/).length;
+const editorWorkspacePropInputLines = editorWorkspacePropInputSource.split(/\r?\n/).length;
+const editorWorkspaceControllerInputLines =
+  editorWorkspaceControllerInputSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
@@ -1093,6 +1118,111 @@ const maxEditorWorkspaceBasePropsTypesLines = 95;
 if (editorWorkspaceBasePropsTypesLines > maxEditorWorkspaceBasePropsTypesLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-base-props.types.ts exceeded ${maxEditorWorkspaceBasePropsTypesLines} lines: ${editorWorkspaceBasePropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceInputImport of [
+  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input";',
+  'from "./record-panel-v2-editor-workspace-prop-input";',
+]) {
+  if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-input.ts must import delegated editor workspace input helpers: ${requiredEditorWorkspaceInputImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceInputUsage of [
+  "export function buildRecordEditorWorkspaceInput({",
+  "...buildRecordEditorWorkspacePropInput({ props })",
+  "...buildRecordEditorWorkspaceControllerInput({ controller })",
+]) {
+  if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-input.ts must delegate editor workspace input assembly: ${requiredEditorWorkspaceInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceInputToken of [
+  "authToken: props.authToken",
+  "bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter",
+  "selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel",
+  "handleUpload: controller.handleUpload",
+]) {
+  if (editorWorkspaceInputSource.includes(forbiddenEditorWorkspaceInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-input.ts must keep prop/controller field mapping delegated: ${forbiddenEditorWorkspaceInputToken}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceInputLines = 20;
+if (editorWorkspaceInputLines > maxEditorWorkspaceInputLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-input.ts exceeded ${maxEditorWorkspaceInputLines} lines: ${editorWorkspaceInputLines}`,
+  );
+}
+
+for (const requiredEditorWorkspacePropInputImport of [
+  'from "./record-panel-v2-shell-props.types";',
+]) {
+  if (!editorWorkspacePropInputSource.includes(requiredEditorWorkspacePropInputImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-prop-input.ts must import editor workspace prop-input contracts: ${requiredEditorWorkspacePropInputImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspacePropInputUsage of [
+  'export function buildRecordEditorWorkspacePropInput({ props }: Pick<RecordPanelShellInput, "props">)',
+  "authToken: props.authToken",
+  "mediaStorageSummary: props.mediaStorageSummary",
+  "onUpdateReminder: props.onUpdateReminder",
+]) {
+  if (!editorWorkspacePropInputSource.includes(requiredEditorWorkspacePropInputUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-prop-input.ts must own editor workspace prop field mapping: ${requiredEditorWorkspacePropInputUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspacePropInputLines = 20;
+if (editorWorkspacePropInputLines > maxEditorWorkspacePropInputLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-prop-input.ts exceeded ${maxEditorWorkspacePropInputLines} lines: ${editorWorkspacePropInputLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceControllerInputImport of [
+  'from "./record-panel-v2-shell-props.types";',
+]) {
+  if (!editorWorkspaceControllerInputSource.includes(requiredEditorWorkspaceControllerInputImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-input.ts must import editor workspace controller-input contracts: ${requiredEditorWorkspaceControllerInputImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceControllerInputUsage of [
+  'export function buildRecordEditorWorkspaceControllerInput({',
+  "bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter",
+  "handleUpload: controller.handleUpload",
+  "selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel",
+  "summarizeHistoryActionLabel: controller.summarizeHistoryActionLabel",
+]) {
+  if (!editorWorkspaceControllerInputSource.includes(requiredEditorWorkspaceControllerInputUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-input.ts must own editor workspace controller field mapping: ${requiredEditorWorkspaceControllerInputUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceControllerInputLines = 55;
+if (editorWorkspaceControllerInputLines > maxEditorWorkspaceControllerInputLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-controller-input.ts exceeded ${maxEditorWorkspaceControllerInputLines} lines: ${editorWorkspaceControllerInputLines}`,
   );
 }
 
