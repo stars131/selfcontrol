@@ -92,6 +92,14 @@ const recordPanelControllerViewDataHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-helpers.ts",
 );
+const recordPanelRecordSummaryHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-summary-helpers.ts",
+);
+const recordPanelMediaViewDataHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-view-data-helpers.ts",
+);
 const recordPanelRecordHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handlers.ts",
@@ -389,6 +397,11 @@ const controllerViewDataHelpersSource = fs.readFileSync(
   recordPanelControllerViewDataHelpersPath,
   "utf8",
 );
+const recordSummaryHelpersSource = fs.readFileSync(recordPanelRecordSummaryHelpersPath, "utf8");
+const mediaViewDataHelpersSource = fs.readFileSync(
+  recordPanelMediaViewDataHelpersPath,
+  "utf8",
+);
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
 const handlerGroupInputsSource = fs.readFileSync(recordPanelHandlerGroupInputsPath, "utf8");
 const handlerGroupInputTypesSource = fs.readFileSync(recordPanelHandlerGroupInputTypesPath, "utf8");
@@ -517,6 +530,8 @@ const controllerHandlerGroupsViewDataInputLines =
   controllerHandlerGroupsViewDataInputSource.split(/\r?\n/).length;
 const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
+const recordSummaryHelpersLines = recordSummaryHelpersSource.split(/\r?\n/).length;
+const mediaViewDataHelpersLines = mediaViewDataHelpersSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
 const handlerGroupInputsLines = handlerGroupInputsSource.split(/\r?\n/).length;
 const handlerGroupInputTypesLines = handlerGroupInputTypesSource.split(/\r?\n/).length;
@@ -1267,38 +1282,97 @@ if (controllerViewDataLines > maxControllerViewDataLines) {
   );
 }
 
-for (const requiredControllerViewDataHelpersImport of [
-  'from "../lib/record-panel-format";',
-  'from "../lib/record-panel-media";',
-  'from "../lib/types";',
+for (const requiredControllerViewDataHelpersExport of [
+  'from "./record-panel-controller-record-summary-helpers";',
+  'from "./record-panel-controller-media-view-data-helpers";',
 ]) {
-  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersImport)) {
+  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersExport)) {
     throw new Error(
-      `record-panel-controller-view-data-helpers.ts must import view-data helper contracts: ${requiredControllerViewDataHelpersImport}`,
+      `record-panel-controller-view-data-helpers.ts must remain a stable view-data helper boundary: ${requiredControllerViewDataHelpersExport}`,
     );
   }
 }
 
 for (const requiredControllerViewDataHelpersUsage of [
+  "export {",
+  "countAvoidRecords,",
+  "countFoodRecords,",
+  "findSelectedRecord,",
+  "getActionableDeadLetterIds,",
+  "getSelectedRecordMediaSizeLabel,",
+]) {
+  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-view-data-helpers.ts must expose delegated view-data helpers: ${requiredControllerViewDataHelpersUsage}`,
+    );
+  }
+}
+
+const maxControllerViewDataHelpersLines = 10;
+if (controllerViewDataHelpersLines > maxControllerViewDataHelpersLines) {
+  throw new Error(
+    `record-panel-controller-view-data-helpers.ts exceeded ${maxControllerViewDataHelpersLines} lines: ${controllerViewDataHelpersLines}`,
+  );
+}
+
+for (const requiredRecordSummaryHelpersImport of [
+  'from "../lib/types";',
+]) {
+  if (!recordSummaryHelpersSource.includes(requiredRecordSummaryHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-record-summary-helpers.ts must import record-summary helper contracts: ${requiredRecordSummaryHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSummaryHelpersUsage of [
   "export function countAvoidRecords(records: RecordItem[])",
   "export function countFoodRecords(records: RecordItem[])",
   "export function findSelectedRecord(records: RecordItem[], selectedRecordId?: string | null)",
+]) {
+  if (!recordSummaryHelpersSource.includes(requiredRecordSummaryHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-record-summary-helpers.ts must own record summary helper details: ${requiredRecordSummaryHelpersUsage}`,
+    );
+  }
+}
+
+const maxRecordSummaryHelpersLines = 20;
+if (recordSummaryHelpersLines > maxRecordSummaryHelpersLines) {
+  throw new Error(
+    `record-panel-controller-record-summary-helpers.ts exceeded ${maxRecordSummaryHelpersLines} lines: ${recordSummaryHelpersLines}`,
+  );
+}
+
+for (const requiredMediaViewDataHelpersImport of [
+  'from "../lib/record-panel-format";',
+  'from "../lib/record-panel-media";',
+  'from "../lib/types";',
+]) {
+  if (!mediaViewDataHelpersSource.includes(requiredMediaViewDataHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-media-view-data-helpers.ts must import media view-data helper contracts: ${requiredMediaViewDataHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredMediaViewDataHelpersUsage of [
   "export function getSelectedRecordMediaSizeLabel(mediaAssets: MediaAsset[])",
   "export function getActionableDeadLetterIds(",
   "formatByteCount(",
   "canRetryMediaIssue(",
 ]) {
-  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersUsage)) {
+  if (!mediaViewDataHelpersSource.includes(requiredMediaViewDataHelpersUsage)) {
     throw new Error(
-      `record-panel-controller-view-data-helpers.ts must own view-data helper details: ${requiredControllerViewDataHelpersUsage}`,
+      `record-panel-controller-media-view-data-helpers.ts must own media view-data helper details: ${requiredMediaViewDataHelpersUsage}`,
     );
   }
 }
 
-const maxControllerViewDataHelpersLines = 35;
-if (controllerViewDataHelpersLines > maxControllerViewDataHelpersLines) {
+const maxMediaViewDataHelpersLines = 25;
+if (mediaViewDataHelpersLines > maxMediaViewDataHelpersLines) {
   throw new Error(
-    `record-panel-controller-view-data-helpers.ts exceeded ${maxControllerViewDataHelpersLines} lines: ${controllerViewDataHelpersLines}`,
+    `record-panel-controller-media-view-data-helpers.ts exceeded ${maxMediaViewDataHelpersLines} lines: ${mediaViewDataHelpersLines}`,
   );
 }
 
