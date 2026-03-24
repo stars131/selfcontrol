@@ -1,14 +1,9 @@
 "use client";
-
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordFilterState } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
+import { getRecordPanelFilterErrorMessage, resolveRecordPanelPresetName } from "./record-panel-controller-filter-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
-
-function getErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
 
 export function createRecordPanelControllerFilterActions({
   detailCopy,
@@ -34,22 +29,22 @@ export function createRecordPanelControllerFilterActions({
     try {
       await onApplyRecordFilter(filterDraft);
     } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.applyFilterError));
+      setError(getRecordPanelFilterErrorMessage(caught, detailCopy.applyFilterError));
     }
   }
 
   async function handleSavePreset() {
-    if (!presetName.trim()) {
-      setError(detailCopy.presetNameRequiredError);
+    const presetInput = resolveRecordPanelPresetName(detailCopy, presetName);
+    if ("errorMessage" in presetInput) {
+      setError(presetInput.errorMessage);
       return;
     }
-
     setError("");
     try {
-      await onCreateSearchPreset(presetName.trim(), filterDraft);
+      await onCreateSearchPreset(presetInput.presetName, filterDraft);
       setPresetName("");
     } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.savePresetError));
+      setError(getRecordPanelFilterErrorMessage(caught, detailCopy.savePresetError));
     }
   }
 
@@ -58,10 +53,9 @@ export function createRecordPanelControllerFilterActions({
     try {
       await onDeleteSearchPreset(presetId);
     } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.deletePresetError));
+      setError(getRecordPanelFilterErrorMessage(caught, detailCopy.deletePresetError));
     }
   }
-
   return {
     handleApplyFilter,
     handleSavePreset,
