@@ -561,6 +561,10 @@ const recordPanelReminderPayloadPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-payload.ts",
 );
+const recordPanelReminderPayloadTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-payload.types.ts",
+);
 const recordPanelMediaStatusActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-actions.ts",
@@ -1187,6 +1191,10 @@ const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "u
 const reminderErrorHelpersSource = fs.readFileSync(recordPanelReminderErrorHelpersPath, "utf8");
 const reminderResolutionSource = fs.readFileSync(recordPanelReminderResolutionPath, "utf8");
 const reminderPayloadSource = fs.readFileSync(recordPanelReminderPayloadPath, "utf8");
+const reminderPayloadTypesSource = fs.readFileSync(
+  recordPanelReminderPayloadTypesPath,
+  "utf8",
+);
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
 const mediaRefreshActionSource = fs.readFileSync(recordPanelMediaRefreshActionPath, "utf8");
 const mediaRetryActionSource = fs.readFileSync(recordPanelMediaRetryActionPath, "utf8");
@@ -1457,6 +1465,7 @@ const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const reminderErrorHelpersLines = reminderErrorHelpersSource.split(/\r?\n/).length;
 const reminderResolutionLines = reminderResolutionSource.split(/\r?\n/).length;
 const reminderPayloadLines = reminderPayloadSource.split(/\r?\n/).length;
+const reminderPayloadTypesLines = reminderPayloadTypesSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
 const mediaRefreshActionLines = mediaRefreshActionSource.split(/\r?\n/).length;
 const mediaRetryActionLines = mediaRetryActionSource.split(/\r?\n/).length;
@@ -6390,6 +6399,7 @@ if (reminderErrorHelpersLines > maxReminderErrorHelpersLines) {
 
 for (const requiredReminderResolutionImport of [
   'from "./record-panel-controller-reminder-payload";',
+  'from "./record-panel-controller-reminder-payload.types";',
 ]) {
   if (!reminderResolutionSource.includes(requiredReminderResolutionImport)) {
     throw new Error(
@@ -6418,11 +6428,42 @@ if (reminderResolutionLines > maxReminderResolutionLines) {
   );
 }
 
-for (const requiredReminderPayloadImport of [
+for (const requiredReminderPayloadTypesImport of [
   'from "../lib/record-panel-detail";',
   'from "../lib/record-panel-forms";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+]) {
+  if (!reminderPayloadTypesSource.includes(requiredReminderPayloadTypesImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.types.ts must import reminder payload contracts: ${requiredReminderPayloadTypesImport}`,
+    );
+  }
+}
+
+for (const requiredReminderPayloadTypesUsage of [
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  'export type ReminderPayload = Parameters<ControllerProps["onCreateReminder"]>[0];',
+  "export type ResolveReminderActionInput = { detailCopy: DetailCopy; reminderForm: ReminderFormState; selectedRecord: RecordItem | null };",
+]) {
+  if (!reminderPayloadTypesSource.includes(requiredReminderPayloadTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.types.ts must own reminder payload typing: ${requiredReminderPayloadTypesUsage}`,
+    );
+  }
+}
+
+const maxReminderPayloadTypesLines = 10;
+if (reminderPayloadTypesLines > maxReminderPayloadTypesLines) {
+  throw new Error(
+    `record-panel-controller-reminder-payload.types.ts exceeded ${maxReminderPayloadTypesLines} lines: ${reminderPayloadTypesLines}`,
+  );
+}
+
+for (const requiredReminderPayloadImport of [
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+  'from "./record-panel-controller-reminder-payload.types";',
 ]) {
   if (!reminderPayloadSource.includes(requiredReminderPayloadImport)) {
     throw new Error(
@@ -6432,7 +6473,6 @@ for (const requiredReminderPayloadImport of [
 }
 
 for (const requiredReminderPayloadUsage of [
-  "export type ResolveReminderActionInput = {",
   "export function buildRecordPanelReminderPayload({",
   "recordId: selectedRecord.id,",
   'channel_code: "in_app"',
@@ -6440,6 +6480,19 @@ for (const requiredReminderPayloadUsage of [
   if (!reminderPayloadSource.includes(requiredReminderPayloadUsage)) {
     throw new Error(
       `record-panel-controller-reminder-payload.ts must own reminder payload assembly: ${requiredReminderPayloadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderPayloadToken of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  "type DetailCopy =",
+  "export type ResolveReminderActionInput = {",
+]) {
+  if (reminderPayloadSource.includes(forbiddenReminderPayloadToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-payload.ts must keep reminder payload typing delegated: ${forbiddenReminderPayloadToken}`,
     );
   }
 }

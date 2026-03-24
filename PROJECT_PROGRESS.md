@@ -1388,6 +1388,10 @@ Last updated: 2026-03-24
   - editor workspace shared non-copy builder input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-props-builder-input.types.ts` instead of remaining embedded across the base-props and action-props input builders
   - `apps/web/components/record-panel-v2-editor-workspace-base-props-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-action-props-input.ts` now consume the shared extracted builder-input contract behind thinner pass-through boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace builder-input boundary and keeps duplicated `Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">` aliases out of both builder modules
+- Record Panel Reminder Payload Type Split V3:
+  - reminder payload and reminder action resolution contracts now live in `apps/web/components/record-panel-controller-reminder-payload.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-reminder-payload.ts`
+  - `apps/web/components/record-panel-controller-reminder-payload.ts` and `apps/web/components/record-panel-controller-reminder-resolution.ts` now consume the shared extracted reminder payload types behind thinner payload-building and resolution boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder payload type boundary and keeps inline reminder payload contract definitions out of the payload builder module
 
 ## Next
 - Continue the next product slice
