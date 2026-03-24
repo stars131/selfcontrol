@@ -1336,6 +1336,10 @@ Last updated: 2026-03-24
   - media refresh/retry action input contracts now live in `apps/web/components/record-panel-controller-media-status-action-input.types.ts` instead of remaining embedded across the refresh, retry, and aggregate media-status modules
   - `apps/web/components/record-panel-controller-media-refresh-action.ts`, `apps/web/components/record-panel-controller-media-retry-action.ts`, and `apps/web/components/record-panel-controller-media-status-actions.ts` now consume the shared extracted media-status contracts behind thinner orchestration boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-status action input-type boundary and keeps inline refresh/retry contract definitions out of the execution modules
+- Record Panel Media Asset Action Input Type Split V3:
+  - media file/status aggregate input contracts now live in `apps/web/components/record-panel-controller-media-asset-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-media-asset-actions.ts`
+  - `apps/web/components/record-panel-controller-media-asset-actions.ts` now consumes the shared extracted media-asset contract behind a thinner orchestration boundary while reusing the dedicated media-file and media-status input modules
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-asset action input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the media-asset action module
 
 ## Next
 - Continue the next product slice

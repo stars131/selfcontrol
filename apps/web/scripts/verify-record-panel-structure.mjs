@@ -617,6 +617,10 @@ const recordPanelMediaAssetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-asset-actions.ts",
 );
+const recordPanelMediaAssetActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-asset-action-input.types.ts",
+);
 const legacyRecordPanelFormPath = path.resolve(process.cwd(), "components/record-panel-legacy-form.tsx");
 const legacyRecordPanelActionsPath = path.resolve(process.cwd(), "components/record-panel-legacy-actions.ts");
 const legacyRecordPanelActionErrorPath = path.resolve(
@@ -1120,6 +1124,10 @@ const deadLetterActionInputTypesSource = fs.readFileSync(
   recordPanelDeadLetterActionInputTypesPath,
   "utf8",
 );
+const mediaAssetActionInputTypesSource = fs.readFileSync(
+  recordPanelMediaAssetActionInputTypesPath,
+  "utf8",
+);
 const deadLetterSelectionActionsSource = fs.readFileSync(
   recordPanelDeadLetterSelectionActionsPath,
   "utf8",
@@ -1363,6 +1371,8 @@ const deadLetterSelectionHelpersLines =
   deadLetterSelectionHelpersSource.split(/\r?\n/).length;
 const deadLetterRetryHelpersLines = deadLetterRetryHelpersSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
+const mediaAssetActionInputTypesLines =
+  mediaAssetActionInputTypesSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useRecordPanelController } from "./use-record-panel-controller";')) {
@@ -6696,7 +6706,38 @@ if (deadLetterRetryHelpersLines > maxDeadLetterRetryHelpersLines) {
   );
 }
 
+for (const requiredMediaAssetActionInputTypesImport of [
+  'from "./record-panel-controller-media-file-action-input.types";',
+  'from "./record-panel-controller-media-status-action-input.types";',
+]) {
+  if (!mediaAssetActionInputTypesSource.includes(requiredMediaAssetActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-media-asset-action-input.types.ts must import shared media-asset contracts: ${requiredMediaAssetActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredMediaAssetActionInputTypesUsage of [
+  "export type RecordPanelControllerMediaAssetActionInput =",
+  "RecordPanelControllerMediaFileActionInput &",
+  "RecordPanelControllerMediaStatusActionInput;",
+]) {
+  if (!mediaAssetActionInputTypesSource.includes(requiredMediaAssetActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-media-asset-action-input.types.ts must own media-asset contract composition: ${requiredMediaAssetActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetActionInputTypesLines = 10;
+if (mediaAssetActionInputTypesLines > maxMediaAssetActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-media-asset-action-input.types.ts exceeded ${maxMediaAssetActionInputTypesLines} lines: ${mediaAssetActionInputTypesLines}`,
+  );
+}
+
 for (const requiredMediaAssetActionsImport of [
+  'from "./record-panel-controller-media-asset-action-input.types";',
   'from "./record-panel-controller-media-file-actions";',
   'from "./record-panel-controller-media-status-actions";',
 ]) {
@@ -6719,6 +6760,8 @@ for (const requiredMediaAssetActionsUsage of [
 for (const forbiddenMediaAssetActionsToken of [
   'from "../lib/api";',
   'from "../lib/record-panel-detail";',
+  "Parameters<typeof createRecordPanelControllerMediaFileActions>[0]",
+  "Parameters<typeof createRecordPanelControllerMediaStatusActions>[0]",
   "const handleUpload",
   "const handleRefreshMedia",
   "const handleRetryMediaProcessing",
