@@ -1084,10 +1084,14 @@ Last updated: 2026-03-24
   - record-panel save helper now delegates coordinate parsing and payload assembly to `apps/web/components/record-panel-controller-record-save-payload.ts`
   - `apps/web/components/record-panel-controller-record-save-helpers.ts` now focuses on validation branches and fallback error handling instead of mixing payload construction details
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload helper boundary and dedicated size ceilings for both modules
+- Record Panel Filter Preset Action Split V1:
+  - record-panel filter preset save/delete orchestration now lives in `apps/web/components/record-panel-controller-filter-preset-actions.ts` instead of remaining mixed into the top-level filter action module
+  - `apps/web/components/record-panel-controller-filter-actions.ts` now focuses on apply-filter orchestration and composing preset actions behind a thinner boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset-action helper boundary and tighter size ceilings for both filter action modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel filter helpers and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel media-file helpers and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
