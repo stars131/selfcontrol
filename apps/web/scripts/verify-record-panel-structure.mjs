@@ -457,6 +457,10 @@ const recordPanelRecordDeleteRunActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-delete-run-action.ts",
 );
+const recordPanelRecordDeleteActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-delete-action-input.types.ts",
+);
 const recordPanelRecordDeleteHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-delete-helpers.ts",
@@ -1068,6 +1072,10 @@ const recordDeleteRunActionSource = fs.readFileSync(
   recordPanelRecordDeleteRunActionPath,
   "utf8",
 );
+const recordDeleteActionInputTypesSource = fs.readFileSync(
+  recordPanelRecordDeleteActionInputTypesPath,
+  "utf8",
+);
 const recordDeleteHelpersSource = fs.readFileSync(recordPanelRecordDeleteHelpersPath, "utf8");
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
 const recordSaveErrorHelpersSource = fs.readFileSync(
@@ -1334,6 +1342,8 @@ const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/
 const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\n/).length;
 const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
 const recordDeleteRunActionLines = recordDeleteRunActionSource.split(/\r?\n/).length;
+const recordDeleteActionInputTypesLines =
+  recordDeleteActionInputTypesSource.split(/\r?\n/).length;
 const recordDeleteHelpersLines = recordDeleteHelpersSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
 const recordSaveErrorHelpersLines = recordSaveErrorHelpersSource.split(/\r?\n/).length;
@@ -5135,7 +5145,41 @@ if (recordSubmitActionsLines > maxRecordSubmitActionsLines) {
   );
 }
 
+for (const requiredRecordDeleteActionInputTypesImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!recordDeleteActionInputTypesSource.includes(requiredRecordDeleteActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-delete-action-input.types.ts must import delete input contracts: ${requiredRecordDeleteActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordDeleteActionInputTypesUsage of [
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "export type RecordPanelControllerRecordDeleteActionInput = {",
+  'onDeleteRecord: ControllerProps["onDeleteRecord"];',
+  "selectedRecord: RecordItem | null;",
+  "setDeleting: (value: boolean) => void;",
+]) {
+  if (!recordDeleteActionInputTypesSource.includes(requiredRecordDeleteActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-delete-action-input.types.ts must own delete action input typing: ${requiredRecordDeleteActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordDeleteActionInputTypesLines = 20;
+if (recordDeleteActionInputTypesLines > maxRecordDeleteActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-delete-action-input.types.ts exceeded ${maxRecordDeleteActionInputTypesLines} lines: ${recordDeleteActionInputTypesLines}`,
+  );
+}
+
 for (const requiredRecordDeleteActionsImport of [
+  'from "./record-panel-controller-record-delete-action-input.types";',
   'from "./record-panel-controller-record-delete-run-action";',
 ]) {
   if (!recordDeleteActionsSource.includes(requiredRecordDeleteActionsImport)) {
@@ -5157,6 +5201,7 @@ for (const requiredRecordDeleteActionsUsage of [
 }
 
 for (const forbiddenRecordDeleteActionsToken of [
+  "Parameters<typeof createRecordPanelControllerRecordDeleteRunAction>[0]",
   "function getErrorMessage(",
   "detailCopy.deleteRecordError",
   "caught instanceof Error ? caught.message : fallbackMessage",
@@ -5179,10 +5224,8 @@ if (recordDeleteActionsLines > maxRecordDeleteActionsLines) {
 }
 
 for (const requiredRecordDeleteRunActionImport of [
-  'from "../lib/record-panel-detail";',
-  'from "../lib/types";',
-  'from "./record-panel-controller.types";',
   'from "./record-panel-controller-record-delete-helpers";',
+  'from "./record-panel-controller-record-delete-action-input.types";',
 ]) {
   if (!recordDeleteRunActionSource.includes(requiredRecordDeleteRunActionImport)) {
     throw new Error(
@@ -5200,6 +5243,22 @@ for (const requiredRecordDeleteRunActionUsage of [
   if (!recordDeleteRunActionSource.includes(requiredRecordDeleteRunActionUsage)) {
     throw new Error(
       `record-panel-controller-record-delete-run-action.ts must own delete-run orchestration: ${requiredRecordDeleteRunActionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordDeleteRunActionToken of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  "type DetailCopy =",
+  'onDeleteRecord: ControllerProps["onDeleteRecord"];',
+  "selectedRecord: RecordItem | null;",
+  "setDeleting: (value: boolean) => void;",
+]) {
+  if (recordDeleteRunActionSource.includes(forbiddenRecordDeleteRunActionToken)) {
+    throw new Error(
+      `record-panel-controller-record-delete-run-action.ts must keep delete input contracts delegated: ${forbiddenRecordDeleteRunActionToken}`,
     );
   }
 }

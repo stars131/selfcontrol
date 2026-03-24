@@ -1,8 +1,9 @@
 "use client";
 import { createRecordPanelControllerRecordDeleteRunAction } from "./record-panel-controller-record-delete-run-action";
+import type { RecordPanelControllerRecordDeleteActionInput } from "./record-panel-controller-record-delete-action-input.types";
 
 export function createRecordPanelControllerRecordDeleteActions(
-  props: Parameters<typeof createRecordPanelControllerRecordDeleteRunAction>[0],
+  props: RecordPanelControllerRecordDeleteActionInput,
 ) {
   return createRecordPanelControllerRecordDeleteRunAction(props);
 }

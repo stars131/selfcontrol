@@ -1344,6 +1344,10 @@ Last updated: 2026-03-24
   - media asset/dead-letter aggregate input contracts now live in `apps/web/components/record-panel-controller-media-handler-input.types.ts` instead of remaining implicit across the builder and handler modules
   - `apps/web/components/record-panel-controller-media-handler-input.ts` and `apps/web/components/record-panel-controller-media-handlers.ts` now share the extracted media-handler contract so the builder output and handler input stay aligned behind one boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-handler input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the media handler module
+- Record Panel Record Delete Action Input Type Split V3:
+  - record delete action input contracts now live in `apps/web/components/record-panel-controller-record-delete-action-input.types.ts` instead of remaining embedded across the delete wrapper and delete runner modules
+  - `apps/web/components/record-panel-controller-record-delete-actions.ts` and `apps/web/components/record-panel-controller-record-delete-run-action.ts` now consume the shared extracted delete contract behind thinner execution boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the delete action input-type boundary and keeps inline delete contract definitions out of the wrapper and runner modules
 
 ## Next
 - Continue the next product slice
