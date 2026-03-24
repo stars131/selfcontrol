@@ -63,6 +63,14 @@ const recordPanelBrowseWorkspacePropsHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-props-helpers.ts",
 );
+const recordPanelBrowseWorkspaceFilterPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-filter-props.ts",
+);
+const recordPanelBrowseWorkspaceRecordPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-record-props.ts",
+);
 const recordPanelBrowseWorkspaceCopyPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-copy-props.ts",
@@ -564,6 +572,14 @@ const browseWorkspacePropsHelpersSource = fs.readFileSync(
   recordPanelBrowseWorkspacePropsHelpersPath,
   "utf8",
 );
+const browseWorkspaceFilterPropsSource = fs.readFileSync(
+  recordPanelBrowseWorkspaceFilterPropsPath,
+  "utf8",
+);
+const browseWorkspaceRecordPropsSource = fs.readFileSync(
+  recordPanelBrowseWorkspaceRecordPropsPath,
+  "utf8",
+);
 const browseWorkspaceCopyPropsSource = fs.readFileSync(
   recordPanelBrowseWorkspaceCopyPropsPath,
   "utf8",
@@ -860,6 +876,8 @@ const editorWorkspaceControllerFormatterInputTypesLines =
 const editorWorkspacePropsLines = editorWorkspacePropsSource.split(/\r?\n/).length;
 const browseWorkspacePropsLines = browseWorkspacePropsSource.split(/\r?\n/).length;
 const browseWorkspacePropsHelpersLines = browseWorkspacePropsHelpersSource.split(/\r?\n/).length;
+const browseWorkspaceFilterPropsLines = browseWorkspaceFilterPropsSource.split(/\r?\n/).length;
+const browseWorkspaceRecordPropsLines = browseWorkspaceRecordPropsSource.split(/\r?\n/).length;
 const browseWorkspaceCopyPropsLines = browseWorkspaceCopyPropsSource.split(/\r?\n/).length;
 const editorWorkspaceCopyPropsLines = editorWorkspaceCopyPropsSource.split(/\r?\n/).length;
 const editorWorkspaceChannelCopyPropsLines =
@@ -1440,8 +1458,12 @@ for (const requiredBrowseWorkspacePropsImport of [
 for (const requiredBrowseWorkspacePropsUsage of [
   "buildRecordBrowseWorkspaceCopyProps(input)",
   "buildRecordBrowseWorkspaceDraftLocationProps(input)",
+  "buildRecordBrowseWorkspaceFilterProps(input)",
+  "buildRecordBrowseWorkspaceRecordProps(input)",
   "...copyProps",
   "...draftLocationProps",
+  "...filterProps",
+  "...recordProps",
 ]) {
   if (!browseWorkspacePropsSource.includes(requiredBrowseWorkspacePropsUsage)) {
     throw new Error(
@@ -1457,6 +1479,9 @@ for (const forbiddenBrowseWorkspacePropsToken of [
   "onDraftLocationChange: canWriteWorkspace",
   "timelineViewLabel: detailCopy.timelineView",
   "visibleRecordsLabel: panelCopy.visibleRecords",
+  "currentFilterSummary: input.summarizeRecordFilterLabel(input.recordFilter)",
+  "onApplyFilter: input.handleApplyFilter",
+  "visibleRecordCount: input.records.length",
 ]) {
   if (browseWorkspacePropsSource.includes(forbiddenBrowseWorkspacePropsToken)) {
     throw new Error(
@@ -1475,6 +1500,8 @@ if (browseWorkspacePropsLines > maxBrowseWorkspacePropsLines) {
 for (const requiredBrowseWorkspacePropsHelpersExport of [
   'from "./record-panel-v2-browse-workspace-copy-props";',
   'from "./record-panel-v2-browse-workspace-draft-location-props";',
+  'from "./record-panel-v2-browse-workspace-filter-props";',
+  'from "./record-panel-v2-browse-workspace-record-props";',
 ]) {
   if (!browseWorkspacePropsHelpersSource.includes(requiredBrowseWorkspacePropsHelpersExport)) {
     throw new Error(
@@ -1486,6 +1513,8 @@ for (const requiredBrowseWorkspacePropsHelpersExport of [
 for (const requiredBrowseWorkspacePropsHelpersUsage of [
   "export { buildRecordBrowseWorkspaceCopyProps }",
   "export { buildRecordBrowseWorkspaceDraftLocationProps }",
+  "export { buildRecordBrowseWorkspaceFilterProps }",
+  "export { buildRecordBrowseWorkspaceRecordProps }",
 ]) {
   if (!browseWorkspacePropsHelpersSource.includes(requiredBrowseWorkspacePropsHelpersUsage)) {
     throw new Error(
@@ -1494,10 +1523,70 @@ for (const requiredBrowseWorkspacePropsHelpersUsage of [
   }
 }
 
-const maxBrowseWorkspacePropsHelpersLines = 10;
+const maxBrowseWorkspacePropsHelpersLines = 15;
 if (browseWorkspacePropsHelpersLines > maxBrowseWorkspacePropsHelpersLines) {
   throw new Error(
     `record-panel-v2-browse-workspace-props-helpers.ts exceeded ${maxBrowseWorkspacePropsHelpersLines} lines: ${browseWorkspacePropsHelpersLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspaceFilterPropsImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!browseWorkspaceFilterPropsSource.includes(requiredBrowseWorkspaceFilterPropsImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-filter-props.ts must import filter prop contracts: ${requiredBrowseWorkspaceFilterPropsImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspaceFilterPropsUsage of [
+  "export function buildRecordBrowseWorkspaceFilterProps(input: BuildRecordBrowseWorkspacePropsInput)",
+  "currentFilterSummary: input.summarizeRecordFilterLabel(input.recordFilter)",
+  "onApplyFilter: input.handleApplyFilter",
+  "summarizeRecordFilterLabel: input.summarizeRecordFilterLabel",
+]) {
+  if (!browseWorkspaceFilterPropsSource.includes(requiredBrowseWorkspaceFilterPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-filter-props.ts must own filter prop mapping: ${requiredBrowseWorkspaceFilterPropsUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspaceFilterPropsLines = 25;
+if (browseWorkspaceFilterPropsLines > maxBrowseWorkspaceFilterPropsLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-filter-props.ts exceeded ${maxBrowseWorkspaceFilterPropsLines} lines: ${browseWorkspaceFilterPropsLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspaceRecordPropsImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!browseWorkspaceRecordPropsSource.includes(requiredBrowseWorkspaceRecordPropsImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-record-props.ts must import record prop contracts: ${requiredBrowseWorkspaceRecordPropsImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspaceRecordPropsUsage of [
+  "export function buildRecordBrowseWorkspaceRecordProps(input: BuildRecordBrowseWorkspacePropsInput)",
+  "avoidCount: input.avoidCount",
+  "panelCopy: input.panelCopy",
+  "visibleRecordCount: input.records.length",
+]) {
+  if (!browseWorkspaceRecordPropsSource.includes(requiredBrowseWorkspaceRecordPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-record-props.ts must own record prop mapping: ${requiredBrowseWorkspaceRecordPropsUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspaceRecordPropsLines = 30;
+if (browseWorkspaceRecordPropsLines > maxBrowseWorkspaceRecordPropsLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-record-props.ts exceeded ${maxBrowseWorkspaceRecordPropsLines} lines: ${browseWorkspaceRecordPropsLines}`,
   );
 }
 

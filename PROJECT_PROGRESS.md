@@ -1224,6 +1224,10 @@ Last updated: 2026-03-24
   - editor workspace copy props now delegate channel copy, media copy, and reminder copy mapping into dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`
   - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts` now focuses on composing the specialized copy helpers behind a thinner copy boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the copy-prop split and dedicated size ceilings for all extracted editor copy helper modules
+- Record Panel Browse Workspace Prop Split V3:
+  - browse workspace props now delegate filter/search props and record/list props into dedicated helper modules instead of keeping those mappings mixed inside `apps/web/components/record-panel-v2-browse-workspace-props.ts`
+  - `apps/web/components/record-panel-v2-browse-workspace-props-helpers.ts` now exposes copy, draft-location, filter, and record helper boundaries through one stable browse helper surface
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace prop split and dedicated size ceilings for the extracted browse filter and record helper modules
 
 ## Next
 - Continue the next product slice
