@@ -1,10 +1,12 @@
 "use client";
 import { useMemo } from "react";
-import { readLocationHistory, readLocationReview } from "../lib/location";
 import { useStoredLocale } from "../lib/locale";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import type { LocationReview, MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
+import { buildRecordPanelLocalizedViewData } from "./record-panel-controller-localized-view-data";
+import {
+  getSelectedRecordLocationHistory,
+  getSelectedRecordLocationReview,
+} from "./record-panel-controller-location-view-data";
 import { countAvoidRecords, countFoodRecords, findSelectedRecord, getActionableDeadLetterIds, getSelectedRecordMediaSizeLabel } from "./record-panel-controller-view-data-helpers";
 
 export function useRecordPanelControllerViewData({
@@ -23,11 +25,11 @@ export function useRecordPanelControllerViewData({
   const foodCount = useMemo(() => countFoodRecords(records), [records]);
   const selectedRecord = useMemo(() => findSelectedRecord(records, selectedRecordId), [records, selectedRecordId]);
   const selectedLocationReview = useMemo<LocationReview | null>(
-    () => readLocationReview(selectedRecord?.extra_data),
+    () => getSelectedRecordLocationReview(selectedRecord),
     [selectedRecord],
   );
   const selectedLocationHistory = useMemo(
-    () => readLocationHistory(selectedRecord?.extra_data).slice().reverse(),
+    () => getSelectedRecordLocationHistory(selectedRecord),
     [selectedRecord],
   );
   const selectedRecordMediaSizeLabel = useMemo(
@@ -38,9 +40,7 @@ export function useRecordPanelControllerViewData({
     () => getActionableDeadLetterIds(mediaDeadLetterOverview),
     [mediaDeadLetterOverview],
   );
-
-  const { mediaIssueCopy, panelCopy } = useMemo(() => getRecordPanelUiBundle(locale), [locale]);
-  const detailBundle = useMemo(() => getRecordPanelDetailBundle(locale), [locale]);
+  const localizedViewData = useMemo(() => buildRecordPanelLocalizedViewData(locale), [locale]);
 
   return {
     locale,
@@ -51,20 +51,6 @@ export function useRecordPanelControllerViewData({
     selectedLocationHistory,
     selectedRecordMediaSizeLabel,
     actionableDeadLetterIds,
-    mediaIssueCopy,
-    panelCopy,
-    detailCopy: detailBundle.copy,
-    formatAvoidCountLabel: detailBundle.formatAvoidCountLabel,
-    formatFileCountLabel: detailBundle.formatFileCountLabel,
-    formatHistoryTimestampLabel: detailBundle.formatHistoryTimestampLabel,
-    formatRecordTimestampLabel: detailBundle.formatRecordTimestampLabel,
-    formatReminderEnabledLabel: detailBundle.formatReminderEnabledLabel,
-    formatReminderStatusLabel: detailBundle.formatReminderStatusLabel,
-    formatReminderTimestampLabel: detailBundle.formatReminderTimestampLabel,
-    formatReviewStatusLabel: detailBundle.formatReviewStatusLabel,
-    formatTimelineCountLabel: detailBundle.formatTimelineCountLabel,
-    formatTimelineDateLabel: detailBundle.formatTimelineDateLabel,
-    summarizeHistoryActionLabel: detailBundle.summarizeHistoryActionLabel,
-    summarizeRecordFilterLabel: detailBundle.summarizeRecordFilterLabel,
+    ...localizedViewData,
   };
 }

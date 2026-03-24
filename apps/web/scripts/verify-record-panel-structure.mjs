@@ -92,6 +92,14 @@ const recordPanelControllerViewDataHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-helpers.ts",
 );
+const recordPanelControllerLocationViewDataPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-location-view-data.ts",
+);
+const recordPanelControllerLocalizedViewDataPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-localized-view-data.ts",
+);
 const recordPanelRecordSummaryHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-summary-helpers.ts",
@@ -397,6 +405,14 @@ const controllerViewDataHelpersSource = fs.readFileSync(
   recordPanelControllerViewDataHelpersPath,
   "utf8",
 );
+const controllerLocationViewDataSource = fs.readFileSync(
+  recordPanelControllerLocationViewDataPath,
+  "utf8",
+);
+const controllerLocalizedViewDataSource = fs.readFileSync(
+  recordPanelControllerLocalizedViewDataPath,
+  "utf8",
+);
 const recordSummaryHelpersSource = fs.readFileSync(recordPanelRecordSummaryHelpersPath, "utf8");
 const mediaViewDataHelpersSource = fs.readFileSync(
   recordPanelMediaViewDataHelpersPath,
@@ -530,6 +546,8 @@ const controllerHandlerGroupsViewDataInputLines =
   controllerHandlerGroupsViewDataInputSource.split(/\r?\n/).length;
 const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
+const controllerLocationViewDataLines = controllerLocationViewDataSource.split(/\r?\n/).length;
+const controllerLocalizedViewDataLines = controllerLocalizedViewDataSource.split(/\r?\n/).length;
 const recordSummaryHelpersLines = recordSummaryHelpersSource.split(/\r?\n/).length;
 const mediaViewDataHelpersLines = mediaViewDataHelpersSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
@@ -1234,10 +1252,9 @@ if (controllerHandlerGroupsViewDataInputLines > maxControllerHandlerGroupsViewDa
 }
 
 for (const requiredControllerViewDataImport of [
-  'from "../lib/location";',
   'from "../lib/locale";',
-  'from "../lib/record-panel-detail";',
-  'from "../lib/record-panel-ui";',
+  'from "./record-panel-controller-localized-view-data";',
+  'from "./record-panel-controller-location-view-data";',
   'from "./record-panel-controller-view-data-helpers";',
 ]) {
   if (!controllerViewDataSource.includes(requiredControllerViewDataImport)) {
@@ -1251,8 +1268,11 @@ for (const requiredControllerViewDataUsage of [
   "countAvoidRecords(records)",
   "countFoodRecords(records)",
   "findSelectedRecord(records, selectedRecordId)",
+  "getSelectedRecordLocationReview(selectedRecord)",
+  "getSelectedRecordLocationHistory(selectedRecord)",
   "getSelectedRecordMediaSizeLabel(mediaAssets)",
   "getActionableDeadLetterIds(mediaDeadLetterOverview)",
+  "buildRecordPanelLocalizedViewData(locale)",
 ]) {
   if (!controllerViewDataSource.includes(requiredControllerViewDataUsage)) {
     throw new Error(
@@ -1262,11 +1282,18 @@ for (const requiredControllerViewDataUsage of [
 }
 
 for (const forbiddenControllerViewDataToken of [
+  'from "../lib/location";',
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-ui";',
   "records.filter((record) => record.is_avoid).length",
   'records.filter((record) => record.type_code === "food").length',
   "records.find((record) => record.id === selectedRecordId) ?? null",
   "formatByteCount(mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0))",
   "canRetryMediaIssue(item)",
+  "readLocationReview(selectedRecord?.extra_data)",
+  "readLocationHistory(selectedRecord?.extra_data).slice().reverse()",
+  "getRecordPanelUiBundle(locale)",
+  "getRecordPanelDetailBundle(locale)",
 ]) {
   if (controllerViewDataSource.includes(forbiddenControllerViewDataToken)) {
     throw new Error(
@@ -1279,6 +1306,70 @@ const maxControllerViewDataLines = 80;
 if (controllerViewDataLines > maxControllerViewDataLines) {
   throw new Error(
     `use-record-panel-controller-view-data.ts exceeded ${maxControllerViewDataLines} lines: ${controllerViewDataLines}`,
+  );
+}
+
+for (const requiredControllerLocationViewDataImport of [
+  'from "../lib/location";',
+  'from "../lib/types";',
+]) {
+  if (!controllerLocationViewDataSource.includes(requiredControllerLocationViewDataImport)) {
+    throw new Error(
+      `record-panel-controller-location-view-data.ts must import location view-data contracts: ${requiredControllerLocationViewDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerLocationViewDataUsage of [
+  "export function getSelectedRecordLocationReview(selectedRecord: RecordItem | null)",
+  "export function getSelectedRecordLocationHistory(selectedRecord: RecordItem | null)",
+  "readLocationReview(selectedRecord?.extra_data)",
+  "readLocationHistory(selectedRecord?.extra_data).slice().reverse()",
+]) {
+  if (!controllerLocationViewDataSource.includes(requiredControllerLocationViewDataUsage)) {
+    throw new Error(
+      `record-panel-controller-location-view-data.ts must own selected-record location derivation: ${requiredControllerLocationViewDataUsage}`,
+    );
+  }
+}
+
+const maxControllerLocationViewDataLines = 15;
+if (controllerLocationViewDataLines > maxControllerLocationViewDataLines) {
+  throw new Error(
+    `record-panel-controller-location-view-data.ts exceeded ${maxControllerLocationViewDataLines} lines: ${controllerLocationViewDataLines}`,
+  );
+}
+
+for (const requiredControllerLocalizedViewDataImport of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-ui";',
+]) {
+  if (!controllerLocalizedViewDataSource.includes(requiredControllerLocalizedViewDataImport)) {
+    throw new Error(
+      `record-panel-controller-localized-view-data.ts must import localized view-data contracts: ${requiredControllerLocalizedViewDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerLocalizedViewDataUsage of [
+  "export function buildRecordPanelLocalizedViewData(locale: LocaleCode)",
+  "getRecordPanelUiBundle(locale)",
+  "getRecordPanelDetailBundle(locale)",
+  "detailCopy: detailBundle.copy",
+  "summarizeRecordFilterLabel: detailBundle.summarizeRecordFilterLabel",
+]) {
+  if (!controllerLocalizedViewDataSource.includes(requiredControllerLocalizedViewDataUsage)) {
+    throw new Error(
+      `record-panel-controller-localized-view-data.ts must own localized view-data assembly: ${requiredControllerLocalizedViewDataUsage}`,
+    );
+  }
+}
+
+const maxControllerLocalizedViewDataLines = 25;
+if (controllerLocalizedViewDataLines > maxControllerLocalizedViewDataLines) {
+  throw new Error(
+    `record-panel-controller-localized-view-data.ts exceeded ${maxControllerLocalizedViewDataLines} lines: ${controllerLocalizedViewDataLines}`,
   );
 }
 

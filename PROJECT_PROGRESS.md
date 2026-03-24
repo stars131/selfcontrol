@@ -1172,6 +1172,10 @@ Last updated: 2026-03-24
   - record summary counters/selection lookup and media-derived view-data helpers now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-controller-view-data-helpers.ts`
   - `apps/web/components/record-panel-controller-view-data-helpers.ts` now focuses on acting as a stable re-export boundary for controller view-data helper contracts
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the view-data helper split and dedicated size ceilings for both extracted helper modules
+- Record Panel View-Data Hook Split V2:
+  - selected-record location derivation and localized detail/ui bundle assembly now live in dedicated helper modules instead of remaining embedded inside `apps/web/components/use-record-panel-controller-view-data.ts`
+  - `apps/web/components/use-record-panel-controller-view-data.ts` now focuses on composing memoized view-data slices behind a thinner hook boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the location/localized view-data helper boundaries and dedicated size ceilings for both extracted helper modules
 
 ## Next
 - Continue the next product slice
