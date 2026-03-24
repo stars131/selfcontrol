@@ -369,6 +369,10 @@ const recordPanelControllerRecordViewDataPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-view-data.ts",
 );
+const recordPanelControllerRecordViewDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-view-data.types.ts",
+);
 const recordPanelControllerSelectedRecordViewDataPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-selected-record-view-data.ts",
@@ -1099,6 +1103,10 @@ const controllerRecordViewDataSource = fs.readFileSync(
   recordPanelControllerRecordViewDataPath,
   "utf8",
 );
+const controllerRecordViewDataTypesSource = fs.readFileSync(
+  recordPanelControllerRecordViewDataTypesPath,
+  "utf8",
+);
 const controllerSelectedRecordViewDataSource = fs.readFileSync(
   recordPanelControllerSelectedRecordViewDataPath,
   "utf8",
@@ -1448,6 +1456,8 @@ const controllerLocalizedViewDataHookLines =
   controllerLocalizedViewDataHookSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
 const controllerRecordViewDataLines = controllerRecordViewDataSource.split(/\r?\n/).length;
+const controllerRecordViewDataTypesLines =
+  controllerRecordViewDataTypesSource.split(/\r?\n/).length;
 const controllerSelectedRecordViewDataLines =
   controllerSelectedRecordViewDataSource.split(/\r?\n/).length;
 const controllerLocationViewDataLines = controllerLocationViewDataSource.split(/\r?\n/).length;
@@ -4739,7 +4749,7 @@ if (controllerLocalizedViewDataHookLines > maxControllerLocalizedViewDataHookLin
 }
 
 for (const requiredControllerRecordViewDataImport of [
-  'from "../lib/types";',
+  'from "./record-panel-controller-record-view-data.types";',
   'from "./record-panel-controller-view-data-helpers";',
 ]) {
   if (!controllerRecordViewDataSource.includes(requiredControllerRecordViewDataImport)) {
@@ -4750,7 +4760,7 @@ for (const requiredControllerRecordViewDataImport of [
 }
 
 for (const requiredControllerRecordViewDataUsage of [
-  "export function buildRecordPanelRecordViewData({ records, selectedRecordId }",
+  "export function buildRecordPanelRecordViewData({ records, selectedRecordId }: BuildRecordPanelRecordViewDataInput)",
   "avoidCount: countAvoidRecords(records)",
   "foodCount: countFoodRecords(records)",
   "selectedRecord: findSelectedRecord(records, selectedRecordId)",
@@ -4762,10 +4772,48 @@ for (const requiredControllerRecordViewDataUsage of [
   }
 }
 
+for (const forbiddenControllerRecordViewDataToken of [
+  'from "../lib/types";',
+  "{ records: RecordItem[]; selectedRecordId?: string | null }",
+]) {
+  if (controllerRecordViewDataSource.includes(forbiddenControllerRecordViewDataToken)) {
+    throw new Error(
+      `record-panel-controller-record-view-data.ts must keep record view-data typing delegated: ${forbiddenControllerRecordViewDataToken}`,
+    );
+  }
+}
+
 const maxControllerRecordViewDataLines = 10;
 if (controllerRecordViewDataLines > maxControllerRecordViewDataLines) {
   throw new Error(
     `record-panel-controller-record-view-data.ts exceeded ${maxControllerRecordViewDataLines} lines: ${controllerRecordViewDataLines}`,
+  );
+}
+
+for (const requiredControllerRecordViewDataTypesImport of [
+  'from "../lib/types";',
+]) {
+  if (!controllerRecordViewDataTypesSource.includes(requiredControllerRecordViewDataTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-view-data.types.ts must import record view-data type contracts: ${requiredControllerRecordViewDataTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerRecordViewDataTypesUsage of [
+  "export type BuildRecordPanelRecordViewDataInput = { records: RecordItem[]; selectedRecordId?: string | null };",
+]) {
+  if (!controllerRecordViewDataTypesSource.includes(requiredControllerRecordViewDataTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-view-data.types.ts must own record view-data type contracts: ${requiredControllerRecordViewDataTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerRecordViewDataTypesLines = 5;
+if (controllerRecordViewDataTypesLines > maxControllerRecordViewDataTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-view-data.types.ts exceeded ${maxControllerRecordViewDataTypesLines} lines: ${controllerRecordViewDataTypesLines}`,
   );
 }
 

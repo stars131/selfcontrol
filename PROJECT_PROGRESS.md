@@ -1432,6 +1432,10 @@ Last updated: 2026-03-24
   - browse-workspace copy and draft-location output contracts now live in `apps/web/components/record-panel-v2-browse-workspace-output-props.types.ts` instead of remaining implicit in the copy and draft-location helper return values
   - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-draft-location-props.ts` now consume the extracted output contracts behind thinner mapping-only boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace copy output-type boundary and keeps inline `Pick<RecordBrowseWorkspaceProps, ...>` signatures out of the copy and draft-location helper modules
+- Record Panel Record View Data Input Type Split V1:
+  - record-view-data input contract now lives in `apps/web/components/record-panel-controller-record-view-data.types.ts` instead of remaining embedded directly in the record view-data helper signature
+  - `apps/web/components/record-panel-controller-record-view-data.ts` now consumes the extracted input contract behind a thinner derivation boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-view-data input-type boundary and keeps inline record/selected-id object typing out of the view-data helper module
 
 ## Next
 - Continue the next product slice
