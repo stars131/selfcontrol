@@ -67,6 +67,14 @@ const recordPanelEditorWorkspacePropsInputsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-props-inputs.ts",
 );
+const recordPanelEditorWorkspaceBasePropsInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-base-props-input.ts",
+);
+const recordPanelEditorWorkspaceActionPropsInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-action-props-input.ts",
+);
 const recordPanelEditorWorkspaceBasePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-base-props.ts",
@@ -465,6 +473,14 @@ const editorWorkspacePropsInputsSource = fs.readFileSync(
   recordPanelEditorWorkspacePropsInputsPath,
   "utf8",
 );
+const editorWorkspaceBasePropsInputSource = fs.readFileSync(
+  recordPanelEditorWorkspaceBasePropsInputPath,
+  "utf8",
+);
+const editorWorkspaceActionPropsInputSource = fs.readFileSync(
+  recordPanelEditorWorkspaceActionPropsInputPath,
+  "utf8",
+);
 const editorWorkspaceBasePropsSource = fs.readFileSync(
   recordPanelEditorWorkspaceBasePropsPath,
   "utf8",
@@ -659,6 +675,10 @@ const browseWorkspacePropInputLines = browseWorkspacePropInputSource.split(/\r?\
 const browseWorkspaceControllerInputLines =
   browseWorkspaceControllerInputSource.split(/\r?\n/).length;
 const editorWorkspacePropsInputsLines = editorWorkspacePropsInputsSource.split(/\r?\n/).length;
+const editorWorkspaceBasePropsInputLines =
+  editorWorkspaceBasePropsInputSource.split(/\r?\n/).length;
+const editorWorkspaceActionPropsInputLines =
+  editorWorkspaceActionPropsInputSource.split(/\r?\n/).length;
 const editorWorkspaceBasePropsLines = editorWorkspaceBasePropsSource.split(/\r?\n/).length;
 const editorWorkspaceBasePropsTypesLines =
   editorWorkspaceBasePropsTypesSource.split(/\r?\n/).length;
@@ -1312,7 +1332,8 @@ if (editorWorkspacePropsLines > maxEditorWorkspacePropsLines) {
 }
 
 for (const requiredEditorWorkspacePropsInputsImport of [
-  'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-action-props-input";',
+  'from "./record-panel-v2-editor-workspace-base-props-input";',
 ]) {
   if (!editorWorkspacePropsInputsSource.includes(requiredEditorWorkspacePropsInputsImport)) {
     throw new Error(
@@ -1322,12 +1343,8 @@ for (const requiredEditorWorkspacePropsInputsImport of [
 }
 
 for (const requiredEditorWorkspacePropsInputsUsage of [
-  'type EditorWorkspacePropsBuilderInput = Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
-  "export function buildRecordEditorWorkspaceBasePropsInput(input: EditorWorkspacePropsBuilderInput)",
-  "export function buildRecordEditorWorkspaceActionPropsInput({",
-  "return input;",
-  "handleBulkRetryDeadLetter,",
-  "onUpdateReminder,",
+  "export { buildRecordEditorWorkspaceBasePropsInput }",
+  "export { buildRecordEditorWorkspaceActionPropsInput }",
 ]) {
   if (!editorWorkspacePropsInputsSource.includes(requiredEditorWorkspacePropsInputsUsage)) {
     throw new Error(
@@ -1336,10 +1353,69 @@ for (const requiredEditorWorkspacePropsInputsUsage of [
   }
 }
 
-const maxEditorWorkspacePropsInputsLines = 110;
+const maxEditorWorkspacePropsInputsLines = 10;
 if (editorWorkspacePropsInputsLines > maxEditorWorkspacePropsInputsLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-props-inputs.ts exceeded ${maxEditorWorkspacePropsInputsLines} lines: ${editorWorkspacePropsInputsLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceBasePropsInputImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceBasePropsInputSource.includes(requiredEditorWorkspaceBasePropsInputImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props-input.ts must import shared workspace prop types: ${requiredEditorWorkspaceBasePropsInputImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceBasePropsInputUsage of [
+  'type EditorWorkspacePropsBuilderInput = Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
+  "export function buildRecordEditorWorkspaceBasePropsInput(input: EditorWorkspacePropsBuilderInput)",
+  "return input;",
+]) {
+  if (!editorWorkspaceBasePropsInputSource.includes(requiredEditorWorkspaceBasePropsInputUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-base-props-input.ts must own base-props input mapping: ${requiredEditorWorkspaceBasePropsInputUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceBasePropsInputLines = 10;
+if (editorWorkspaceBasePropsInputLines > maxEditorWorkspaceBasePropsInputLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-base-props-input.ts exceeded ${maxEditorWorkspaceBasePropsInputLines} lines: ${editorWorkspaceBasePropsInputLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceActionPropsInputImport of [
+  'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceActionPropsInputSource.includes(requiredEditorWorkspaceActionPropsInputImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-action-props-input.ts must import shared workspace prop types: ${requiredEditorWorkspaceActionPropsInputImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceActionPropsInputUsage of [
+  'type EditorWorkspacePropsBuilderInput = Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
+  "export function buildRecordEditorWorkspaceActionPropsInput({",
+  "handleBulkRetryDeadLetter,",
+  "onUpdateReminder,",
+]) {
+  if (!editorWorkspaceActionPropsInputSource.includes(requiredEditorWorkspaceActionPropsInputUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-action-props-input.ts must own action-props input mapping: ${requiredEditorWorkspaceActionPropsInputUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceActionPropsInputLines = 40;
+if (editorWorkspaceActionPropsInputLines > maxEditorWorkspaceActionPropsInputLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-action-props-input.ts exceeded ${maxEditorWorkspaceActionPropsInputLines} lines: ${editorWorkspaceActionPropsInputLines}`,
   );
 }
 
