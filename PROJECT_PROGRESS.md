@@ -1208,10 +1208,15 @@ Last updated: 2026-03-24
   - browse workspace copy-label mapping and draft-location mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-browse-workspace-props-helpers.ts`
   - `apps/web/components/record-panel-v2-browse-workspace-props-helpers.ts` now focuses on acting as a stable re-export boundary for the specialized browse workspace helpers
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse workspace helper split and dedicated size ceilings for both extracted helper modules
+- Record Panel Editor Workspace Action Split V2:
+  - editor workspace dead-letter action mapping and primary action mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`
+  - `apps/web/components/record-panel-v2-editor-workspace-action-props.ts` now focuses on composing the specialized action helpers behind a thinner boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor workspace action split and dedicated size ceilings for both extracted action modules
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
+- Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
