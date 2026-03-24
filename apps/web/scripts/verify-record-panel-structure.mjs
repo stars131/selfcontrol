@@ -277,6 +277,14 @@ const recordPanelControllerViewDataResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-view-data-result.ts",
 );
+const recordPanelControllerCoreViewDataResultPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-core-view-data-result.ts",
+);
+const recordPanelControllerLocalizedViewDataResultPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-localized-view-data-result.ts",
+);
 const recordPanelControllerHandlerGroupsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-groups.ts",
@@ -858,6 +866,14 @@ const controllerViewDataResultSource = fs.readFileSync(
   recordPanelControllerViewDataResultPath,
   "utf8",
 );
+const controllerCoreViewDataResultSource = fs.readFileSync(
+  recordPanelControllerCoreViewDataResultPath,
+  "utf8",
+);
+const controllerLocalizedViewDataResultSource = fs.readFileSync(
+  recordPanelControllerLocalizedViewDataResultPath,
+  "utf8",
+);
 const controllerHandlerGroupsInputSource = fs.readFileSync(
   recordPanelControllerHandlerGroupsInputPath,
   "utf8",
@@ -1130,6 +1146,10 @@ const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const controllerStateResultLines = controllerStateResultSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
   controllerViewDataResultSource.split(/\r?\n/).length;
+const controllerCoreViewDataResultLines =
+  controllerCoreViewDataResultSource.split(/\r?\n/).length;
+const controllerLocalizedViewDataResultLines =
+  controllerLocalizedViewDataResultSource.split(/\r?\n/).length;
 const controllerHandlerGroupsInputLines =
   controllerHandlerGroupsInputSource.split(/\r?\n/).length;
 const controllerHandlerGroupsPropsInputLines =
@@ -4244,6 +4264,8 @@ if (controllerStateResultLines > maxControllerStateResultLines) {
 }
 
 for (const requiredControllerViewDataResultImport of [
+  'from "./record-panel-controller-core-view-data-result";',
+  'from "./record-panel-controller-localized-view-data-result";',
   'from "./use-record-panel-controller-view-data";',
 ]) {
   if (!controllerViewDataResultSource.includes(requiredControllerViewDataResultImport)) {
@@ -4255,9 +4277,8 @@ for (const requiredControllerViewDataResultImport of [
 
 for (const requiredControllerViewDataResultUsage of [
   "export function buildRecordPanelControllerViewDataResult(viewData: ControllerViewData)",
-  "locale: viewData.locale,",
-  "detailCopy: viewData.detailCopy,",
-  "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
+  "buildRecordPanelControllerCoreViewDataResult(viewData)",
+  "buildRecordPanelControllerLocalizedViewDataResult(viewData)",
 ]) {
   if (!controllerViewDataResultSource.includes(requiredControllerViewDataResultUsage)) {
     throw new Error(
@@ -4266,10 +4287,84 @@ for (const requiredControllerViewDataResultUsage of [
   }
 }
 
-const maxControllerViewDataResultLines = 35;
+for (const forbiddenControllerViewDataResultToken of [
+  "locale: viewData.locale,",
+  "selectedRecord: viewData.selectedRecord,",
+  "detailCopy: viewData.detailCopy,",
+  "formatReminderStatusLabel: viewData.formatReminderStatusLabel,",
+  "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
+]) {
+  if (controllerViewDataResultSource.includes(forbiddenControllerViewDataResultToken)) {
+    throw new Error(
+      `record-panel-controller-view-data-result.ts must keep core/localized field details delegated: ${forbiddenControllerViewDataResultToken}`,
+    );
+  }
+}
+
+const maxControllerViewDataResultLines = 20;
 if (controllerViewDataResultLines > maxControllerViewDataResultLines) {
   throw new Error(
     `record-panel-controller-view-data-result.ts exceeded ${maxControllerViewDataResultLines} lines: ${controllerViewDataResultLines}`,
+  );
+}
+
+for (const requiredControllerCoreViewDataResultImport of [
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerCoreViewDataResultSource.includes(requiredControllerCoreViewDataResultImport)) {
+    throw new Error(
+      `record-panel-controller-core-view-data-result.ts must import controller view-data dependencies: ${requiredControllerCoreViewDataResultImport}`,
+    );
+  }
+}
+
+for (const requiredControllerCoreViewDataResultUsage of [
+  "export function buildRecordPanelControllerCoreViewDataResult(viewData: ControllerViewData)",
+  "locale: viewData.locale,",
+  "selectedRecord: viewData.selectedRecord,",
+  "selectedRecordMediaSizeLabel: viewData.selectedRecordMediaSizeLabel,",
+]) {
+  if (!controllerCoreViewDataResultSource.includes(requiredControllerCoreViewDataResultUsage)) {
+    throw new Error(
+      `record-panel-controller-core-view-data-result.ts must own non-localized result assembly: ${requiredControllerCoreViewDataResultUsage}`,
+    );
+  }
+}
+
+const maxControllerCoreViewDataResultLines = 20;
+if (controllerCoreViewDataResultLines > maxControllerCoreViewDataResultLines) {
+  throw new Error(
+    `record-panel-controller-core-view-data-result.ts exceeded ${maxControllerCoreViewDataResultLines} lines: ${controllerCoreViewDataResultLines}`,
+  );
+}
+
+for (const requiredControllerLocalizedViewDataResultImport of [
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerLocalizedViewDataResultSource.includes(requiredControllerLocalizedViewDataResultImport)) {
+    throw new Error(
+      `record-panel-controller-localized-view-data-result.ts must import controller view-data dependencies: ${requiredControllerLocalizedViewDataResultImport}`,
+    );
+  }
+}
+
+for (const requiredControllerLocalizedViewDataResultUsage of [
+  "export function buildRecordPanelControllerLocalizedViewDataResult(viewData: ControllerViewData)",
+  "detailCopy: viewData.detailCopy,",
+  "formatReminderStatusLabel: viewData.formatReminderStatusLabel,",
+  "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
+]) {
+  if (!controllerLocalizedViewDataResultSource.includes(requiredControllerLocalizedViewDataResultUsage)) {
+    throw new Error(
+      `record-panel-controller-localized-view-data-result.ts must own localized result assembly: ${requiredControllerLocalizedViewDataResultUsage}`,
+    );
+  }
+}
+
+const maxControllerLocalizedViewDataResultLines = 25;
+if (controllerLocalizedViewDataResultLines > maxControllerLocalizedViewDataResultLines) {
+  throw new Error(
+    `record-panel-controller-localized-view-data-result.ts exceeded ${maxControllerLocalizedViewDataResultLines} lines: ${controllerLocalizedViewDataResultLines}`,
   );
 }
 

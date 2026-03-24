@@ -1276,6 +1276,10 @@ Last updated: 2026-03-24
   - legacy title/content inputs now live in `apps/web/components/record-panel-legacy-primary-fields.tsx`, while type/rating/avoid controls now live in `apps/web/components/record-panel-legacy-classification-fields.tsx`
   - `apps/web/components/record-panel-legacy-form-fields.tsx` now focuses on composing the two field groups instead of rendering all editable controls directly
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the split field-group boundaries and dedicated size ceilings for both extracted legacy field modules
+- Record Panel View-Data Result Split V3:
+  - controller view-data result assembly now delegates non-localized fields to `apps/web/components/record-panel-controller-core-view-data-result.ts` and localized copy/formatter fields to `apps/web/components/record-panel-controller-localized-view-data-result.ts`
+  - `apps/web/components/record-panel-controller-view-data-result.ts` now focuses on composing the two specialized result builders behind a thinner compatibility boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the split result boundaries and dedicated size ceilings for both extracted controller result modules
 
 ## Next
 - Continue the next product slice
