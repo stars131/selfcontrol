@@ -245,6 +245,14 @@ const recordPanelControllerFormStatePath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-form-state.ts",
 );
+const recordPanelControllerRecordFormStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-record-form-state.ts",
+);
+const recordPanelControllerSupportingFormStatePath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-supporting-form-state.ts",
+);
 const recordPanelControllerMediaStatePath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-media-state.ts",
@@ -805,6 +813,14 @@ const controllerSelectedRecordReminderSyncSource = fs.readFileSync(
 const controllerFilterSyncSource = fs.readFileSync(recordPanelControllerFilterSyncPath, "utf8");
 const controllerStateSource = fs.readFileSync(recordPanelControllerStatePath, "utf8");
 const controllerFormStateSource = fs.readFileSync(recordPanelControllerFormStatePath, "utf8");
+const controllerRecordFormStateSource = fs.readFileSync(
+  recordPanelControllerRecordFormStatePath,
+  "utf8",
+);
+const controllerSupportingFormStateSource = fs.readFileSync(
+  recordPanelControllerSupportingFormStatePath,
+  "utf8",
+);
 const controllerMediaStateSource = fs.readFileSync(recordPanelControllerMediaStatePath, "utf8");
 const controllerBrowseStateSource = fs.readFileSync(recordPanelControllerBrowseStatePath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
@@ -1063,6 +1079,9 @@ const controllerSelectedRecordReminderSyncLines =
 const controllerFilterSyncLines = controllerFilterSyncSource.split(/\r?\n/).length;
 const controllerStateLines = controllerStateSource.split(/\r?\n/).length;
 const controllerFormStateLines = controllerFormStateSource.split(/\r?\n/).length;
+const controllerRecordFormStateLines = controllerRecordFormStateSource.split(/\r?\n/).length;
+const controllerSupportingFormStateLines =
+  controllerSupportingFormStateSource.split(/\r?\n/).length;
 const controllerMediaStateLines = controllerMediaStateSource.split(/\r?\n/).length;
 const controllerBrowseStateLines = controllerBrowseStateSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
@@ -3286,8 +3305,8 @@ if (controllerStateLines > maxControllerStateLines) {
 }
 
 for (const requiredControllerFormStateImport of [
-  'from "react";',
-  'from "../lib/record-panel-forms";',
+  'from "./use-record-panel-controller-record-form-state";',
+  'from "./use-record-panel-controller-supporting-form-state";',
 ]) {
   if (!controllerFormStateSource.includes(requiredControllerFormStateImport)) {
     throw new Error(
@@ -3298,10 +3317,10 @@ for (const requiredControllerFormStateImport of [
 
 for (const requiredControllerFormStateUsage of [
   "export function useRecordPanelControllerFormState()",
-  "createEmptyForm",
-  "createEmptyReminderForm",
-  'status: "pending"',
-  "const [error, setError] = useState(\"\")",
+  "useRecordPanelControllerRecordFormState()",
+  "useRecordPanelControllerSupportingFormState()",
+  "...recordFormState",
+  "...supportingFormState",
 ]) {
   if (!controllerFormStateSource.includes(requiredControllerFormStateUsage)) {
     throw new Error(
@@ -3310,10 +3329,88 @@ for (const requiredControllerFormStateUsage of [
   }
 }
 
-const maxControllerFormStateLines = 40;
+for (const forbiddenControllerFormStateToken of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+  "createEmptyForm",
+  "createEmptyReminderForm",
+  'status: "pending"',
+  "const [error, setError] = useState(\"\")",
+]) {
+  if (controllerFormStateSource.includes(forbiddenControllerFormStateToken)) {
+    throw new Error(
+      `use-record-panel-controller-form-state.ts must keep form-state internals delegated: ${forbiddenControllerFormStateToken}`,
+    );
+  }
+}
+
+const maxControllerFormStateLines = 15;
 if (controllerFormStateLines > maxControllerFormStateLines) {
   throw new Error(
     `use-record-panel-controller-form-state.ts exceeded ${maxControllerFormStateLines} lines: ${controllerFormStateLines}`,
+  );
+}
+
+for (const requiredControllerRecordFormStateImport of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!controllerRecordFormStateSource.includes(requiredControllerRecordFormStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-record-form-state.ts must import record-form-state contracts: ${requiredControllerRecordFormStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerRecordFormStateUsage of [
+  "export function useRecordPanelControllerRecordFormState()",
+  "const [form, setForm] = useState(createEmptyForm)",
+  "const [saving, setSaving] = useState(false)",
+  "const [deleting, setDeleting] = useState(false)",
+]) {
+  if (!controllerRecordFormStateSource.includes(requiredControllerRecordFormStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-record-form-state.ts must own record-form-state details: ${requiredControllerRecordFormStateUsage}`,
+    );
+  }
+}
+
+const maxControllerRecordFormStateLines = 15;
+if (controllerRecordFormStateLines > maxControllerRecordFormStateLines) {
+  throw new Error(
+    `use-record-panel-controller-record-form-state.ts exceeded ${maxControllerRecordFormStateLines} lines: ${controllerRecordFormStateLines}`,
+  );
+}
+
+for (const requiredControllerSupportingFormStateImport of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!controllerSupportingFormStateSource.includes(requiredControllerSupportingFormStateImport)) {
+    throw new Error(
+      `use-record-panel-controller-supporting-form-state.ts must import supporting-form-state contracts: ${requiredControllerSupportingFormStateImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSupportingFormStateUsage of [
+  "export function useRecordPanelControllerSupportingFormState()",
+  "createEmptyReminderForm",
+  "const [savingReminder, setSavingReminder] = useState(false)",
+  'status: "pending"',
+  "const [error, setError] = useState(\"\")",
+]) {
+  if (!controllerSupportingFormStateSource.includes(requiredControllerSupportingFormStateUsage)) {
+    throw new Error(
+      `use-record-panel-controller-supporting-form-state.ts must own supporting-form-state details: ${requiredControllerSupportingFormStateUsage}`,
+    );
+  }
+}
+
+const maxControllerSupportingFormStateLines = 30;
+if (controllerSupportingFormStateLines > maxControllerSupportingFormStateLines) {
+  throw new Error(
+    `use-record-panel-controller-supporting-form-state.ts exceeded ${maxControllerSupportingFormStateLines} lines: ${controllerSupportingFormStateLines}`,
   );
 }
 

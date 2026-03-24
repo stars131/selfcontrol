@@ -1252,6 +1252,10 @@ Last updated: 2026-03-24
   - filter apply orchestration now lives in a dedicated action module instead of remaining mixed with preset action composition inside `apps/web/components/record-panel-controller-filter-actions.ts`
   - `apps/web/components/record-panel-controller-filter-actions.ts` now focuses on composing apply-filter and preset actions behind a thinner filter boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter-action split and a dedicated size ceiling for the extracted apply-filter action module
+- Record Panel Form State Split V3:
+  - controller form state now delegates record-form state and supporting reminder/location/error state into dedicated hooks instead of keeping all form-domain state setup inside `apps/web/components/use-record-panel-controller-form-state.ts`
+  - `apps/web/components/use-record-panel-controller-form-state.ts` now focuses on composing the specialized form-state hooks behind a thinner state boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the form-state split and dedicated size ceilings for the extracted record-form and supporting-form state hooks
 
 ## Next
 - Continue the next product slice
