@@ -385,6 +385,10 @@ const recordPanelMediaHandlerInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handler-input.ts",
 );
+const recordPanelMediaHandlerInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-handler-input.types.ts",
+);
 const recordPanelFormActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-form-actions.ts",
@@ -1025,6 +1029,10 @@ const handlerGroupViewDataInputTypesSource = fs.readFileSync(
 );
 const recordHandlerInputSource = fs.readFileSync(recordPanelRecordHandlerInputPath, "utf8");
 const mediaHandlerInputSource = fs.readFileSync(recordPanelMediaHandlerInputPath, "utf8");
+const mediaHandlerInputTypesSource = fs.readFileSync(
+  recordPanelMediaHandlerInputTypesPath,
+  "utf8",
+);
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const filterActionsSource = fs.readFileSync(recordPanelFilterActionsPath, "utf8");
 const filterApplyActionSource = fs.readFileSync(recordPanelFilterApplyActionPath, "utf8");
@@ -1307,6 +1315,7 @@ const handlerGroupViewDataInputTypesLines =
   handlerGroupViewDataInputTypesSource.split(/\r?\n/).length;
 const recordHandlerInputLines = recordHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
+const mediaHandlerInputTypesLines = mediaHandlerInputTypesSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
 const filterApplyActionLines = filterApplyActionSource.split(/\r?\n/).length;
@@ -4431,8 +4440,39 @@ if (recordHandlerInputLines > maxRecordHandlerInputLines) {
   );
 }
 
+for (const requiredMediaHandlerInputTypesImport of [
+  'from "./record-panel-controller-dead-letter-action-input.types";',
+  'from "./record-panel-controller-media-asset-action-input.types";',
+]) {
+  if (!mediaHandlerInputTypesSource.includes(requiredMediaHandlerInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-media-handler-input.types.ts must import shared media-handler contracts: ${requiredMediaHandlerInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredMediaHandlerInputTypesUsage of [
+  "export type RecordPanelControllerMediaHandlerInput =",
+  "RecordPanelControllerMediaAssetActionInput &",
+  "RecordPanelControllerDeadLetterActionInput;",
+]) {
+  if (!mediaHandlerInputTypesSource.includes(requiredMediaHandlerInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-media-handler-input.types.ts must own media-handler contract composition: ${requiredMediaHandlerInputTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaHandlerInputTypesLines = 10;
+if (mediaHandlerInputTypesLines > maxMediaHandlerInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-media-handler-input.types.ts exceeded ${maxMediaHandlerInputTypesLines} lines: ${mediaHandlerInputTypesLines}`,
+  );
+}
+
 for (const requiredMediaHandlerInputImport of [
   'from "./record-panel-controller-handler-group-inputs.types";',
+  'from "./record-panel-controller-media-handler-input.types";',
 ]) {
   if (!mediaHandlerInputSource.includes(requiredMediaHandlerInputImport)) {
     throw new Error(
@@ -4443,6 +4483,7 @@ for (const requiredMediaHandlerInputImport of [
 
 for (const requiredMediaHandlerInputUsage of [
   "export function buildRecordPanelControllerMediaHandlerInput(",
+  "): RecordPanelControllerMediaHandlerInput {",
   "authToken: input.authToken,",
   "workspaceId: input.workspaceId,",
 ]) {
@@ -6786,6 +6827,7 @@ if (mediaAssetActionsLines > maxMediaAssetActionsLines) {
 for (const requiredMediaHandlersImport of [
   'from "./record-panel-controller-dead-letter-actions";',
   'from "./record-panel-controller-media-asset-actions";',
+  'from "./record-panel-controller-media-handler-input.types";',
 ]) {
   if (!mediaHandlersSource.includes(requiredMediaHandlersImport)) {
     throw new Error(`record-panel-controller-media-handlers.ts must import delegated media helpers: ${requiredMediaHandlersImport}`);
@@ -6806,6 +6848,8 @@ for (const requiredMediaHandlersUsage of [
 for (const forbiddenMediaHandlersToken of [
   'from "../lib/api";',
   'from "../lib/record-panel-media";',
+  "Parameters<typeof createRecordPanelControllerMediaAssetActions>[0]",
+  "Parameters<typeof createRecordPanelControllerDeadLetterActions>[0]",
   "const handleUpload",
   "const handleToggleDeadLetterSelection",
   "fetchMediaBlob(",

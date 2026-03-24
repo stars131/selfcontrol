@@ -1,10 +1,11 @@
 "use client";
 
 import type { RecordPanelControllerHandlerGroupInput } from "./record-panel-controller-handler-group-inputs.types";
+import type { RecordPanelControllerMediaHandlerInput } from "./record-panel-controller-media-handler-input.types";
 
 export function buildRecordPanelControllerMediaHandlerInput(
   input: RecordPanelControllerHandlerGroupInput,
-) {
+): RecordPanelControllerMediaHandlerInput {
   return {
     authToken: input.authToken,
     detailCopy: input.detailCopy,
