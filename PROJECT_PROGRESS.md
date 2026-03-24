@@ -984,6 +984,10 @@ Last updated: 2026-03-24
   - recent-media-issue card tag rendering and action-row rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/recent-media-issue-card.tsx`
   - the top-level issue card now focuses more narrowly on issue-level status messaging, timestamp rendering, settings-href derivation, and error presentation
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces these media-issue card boundaries and dedicated size ceilings for the extracted modules
+- Media Preview Hook and Content Split V1:
+  - media-preview shared contracts, blob-loading logic, and preview rendering states now live in dedicated modules instead of remaining combined inside `apps/web/components/media-preview.tsx`
+  - the top-level media-preview shell now focuses more narrowly on composing the preview hook and content renderer while delegated modules own fetch lifecycle and UI-state rendering
+  - `apps/web/scripts/verify-media-asset-card-structure.mjs` now enforces these media-preview boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
