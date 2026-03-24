@@ -1480,6 +1480,10 @@ Last updated: 2026-03-24
   - record-save success input contract now lives in `apps/web/components/record-panel-controller-record-save-success-helpers.types.ts` instead of remaining embedded directly in the success helper
   - `apps/web/components/record-panel-controller-record-save-success-helpers.ts` now consumes the extracted success input contract behind a thinner post-save reset boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-save success input-type boundary and keeps inline selected-record and `setForm` typing out of the success helper
+- Record Panel Reminder Success Input Type Split V1:
+  - reminder-success input contract now lives in `apps/web/components/record-panel-controller-reminder-success-helpers.types.ts` instead of remaining embedded directly in the reminder success helper
+  - `apps/web/components/record-panel-controller-reminder-success-helpers.ts` now consumes the extracted success input contract behind a thinner post-reminder reset boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-success input-type boundary and keeps inline `setReminderForm` typing out of the success helper
 
 ## Next
 - Continue the next product slice

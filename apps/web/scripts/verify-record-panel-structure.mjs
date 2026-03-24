@@ -593,6 +593,10 @@ const recordPanelReminderSuccessHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-success-helpers.ts",
 );
+const recordPanelReminderSuccessHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-success-helpers.types.ts",
+);
 const recordPanelReminderHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-helpers.ts",
@@ -1291,6 +1295,10 @@ const reminderSuccessHelpersSource = fs.readFileSync(
   recordPanelReminderSuccessHelpersPath,
   "utf8",
 );
+const reminderSuccessHelpersTypesSource = fs.readFileSync(
+  recordPanelReminderSuccessHelpersTypesPath,
+  "utf8",
+);
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const reminderErrorHelpersSource = fs.readFileSync(recordPanelReminderErrorHelpersPath, "utf8");
 const reminderResolutionSource = fs.readFileSync(recordPanelReminderResolutionPath, "utf8");
@@ -1595,6 +1603,8 @@ const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderSubmitActionLines = reminderSubmitActionSource.split(/\r?\n/).length;
 const reminderActionInputTypesLines = reminderActionInputTypesSource.split(/\r?\n/).length;
 const reminderSuccessHelpersLines = reminderSuccessHelpersSource.split(/\r?\n/).length;
+const reminderSuccessHelpersTypesLines =
+  reminderSuccessHelpersTypesSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const reminderErrorHelpersLines = reminderErrorHelpersSource.split(/\r?\n/).length;
 const reminderResolutionLines = reminderResolutionSource.split(/\r?\n/).length;
@@ -7046,6 +7056,7 @@ if (reminderActionInputTypesLines > maxReminderActionInputTypesLines) {
 
 for (const requiredReminderSuccessHelpersImport of [
   'from "../lib/record-panel-forms";',
+  'from "./record-panel-controller-reminder-success-helpers.types";',
 ]) {
   if (!reminderSuccessHelpersSource.includes(requiredReminderSuccessHelpersImport)) {
     throw new Error(
@@ -7056,7 +7067,7 @@ for (const requiredReminderSuccessHelpersImport of [
 
 for (const requiredReminderSuccessHelpersUsage of [
   "export function applyRecordPanelReminderSuccessState({",
-  "setReminderForm: React.Dispatch<React.SetStateAction<ReminderFormState>>;",
+  "}: ApplyRecordPanelReminderSuccessStateInput) {",
   'setReminderForm((prev) => ({ ...prev, message: "", remind_at: "" }));',
 ]) {
   if (!reminderSuccessHelpersSource.includes(requiredReminderSuccessHelpersUsage)) {
@@ -7066,10 +7077,47 @@ for (const requiredReminderSuccessHelpersUsage of [
   }
 }
 
+for (const forbiddenReminderSuccessHelpersToken of [
+  "setReminderForm: React.Dispatch<React.SetStateAction<ReminderFormState>>;",
+]) {
+  if (reminderSuccessHelpersSource.includes(forbiddenReminderSuccessHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-success-helpers.ts must keep reminder success typing delegated: ${forbiddenReminderSuccessHelpersToken}`,
+    );
+  }
+}
+
 const maxReminderSuccessHelpersLines = 15;
 if (reminderSuccessHelpersLines > maxReminderSuccessHelpersLines) {
   throw new Error(
     `record-panel-controller-reminder-success-helpers.ts exceeded ${maxReminderSuccessHelpersLines} lines: ${reminderSuccessHelpersLines}`,
+  );
+}
+
+for (const requiredReminderSuccessHelpersTypesImport of [
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!reminderSuccessHelpersTypesSource.includes(requiredReminderSuccessHelpersTypesImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-success-helpers.types.ts must import reminder success type contracts: ${requiredReminderSuccessHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredReminderSuccessHelpersTypesUsage of [
+  "export type ApplyRecordPanelReminderSuccessStateInput = { setReminderForm: React.Dispatch<React.SetStateAction<ReminderFormState>> };",
+]) {
+  if (!reminderSuccessHelpersTypesSource.includes(requiredReminderSuccessHelpersTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-success-helpers.types.ts must own reminder success type contracts: ${requiredReminderSuccessHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxReminderSuccessHelpersTypesLines = 5;
+if (reminderSuccessHelpersTypesLines > maxReminderSuccessHelpersTypesLines) {
+  throw new Error(
+    `record-panel-controller-reminder-success-helpers.types.ts exceeded ${maxReminderSuccessHelpersTypesLines} lines: ${reminderSuccessHelpersTypesLines}`,
   );
 }
 
