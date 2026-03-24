@@ -14,12 +14,36 @@ const workspaceSettingsControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-settings-controller.ts",
 );
+const workspaceSettingsActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-actions.ts",
+);
+const workspaceSettingsActionErrorPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-action-error.ts",
+);
+const workspaceSettingsProviderActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-actions.ts",
+);
+const workspaceSettingsMemberActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-member-actions.ts",
+);
 const source = fs.readFileSync(workspaceSettingsPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceSettingsControllerPath, "utf8");
+const actionsSource = fs.readFileSync(workspaceSettingsActionsPath, "utf8");
+const actionErrorSource = fs.readFileSync(workspaceSettingsActionErrorPath, "utf8");
+const providerActionsSource = fs.readFileSync(workspaceSettingsProviderActionsPath, "utf8");
+const memberActionsSource = fs.readFileSync(workspaceSettingsMemberActionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const actionsLineCount = actionsSource.split(/\r?\n/).length;
+const actionErrorLineCount = actionErrorSource.split(/\r?\n/).length;
+const providerActionsLineCount = providerActionsSource.split(/\r?\n/).length;
+const memberActionsLineCount = memberActionsSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";')) {
   throw new Error("workspace-settings-client.tsx must import useWorkspaceSettingsController");
@@ -186,6 +210,92 @@ if (controllerLineCount > maxControllerLines) {
   throw new Error(
     `use-workspace-settings-controller.ts exceeded ${maxControllerLines} lines: ${controllerLineCount}`,
   );
+}
+
+for (const requiredActionsImport of [
+  'import { createWorkspaceSettingsMemberActions } from "./workspace-settings-member-actions";',
+  'import { createWorkspaceSettingsProviderActions } from "./workspace-settings-provider-actions";',
+]) {
+  if (!actionsSource.includes(requiredActionsImport)) {
+    throw new Error(`workspace-settings-actions.ts must import delegated action helpers: ${requiredActionsImport}`);
+  }
+}
+
+for (const requiredActionsUsage of [
+  "createWorkspaceSettingsProviderActions({ state, workspaceId })",
+  "createWorkspaceSettingsMemberActions({ state, workspaceId })",
+  "...providerActions",
+  "...memberActions",
+]) {
+  if (!actionsSource.includes(requiredActionsUsage)) {
+    throw new Error(`workspace-settings-actions.ts must compose delegated action groups: ${requiredActionsUsage}`);
+  }
+}
+
+for (const forbiddenActionsToken of [
+  'from "../lib/api";',
+  "function getWorkspaceSettingsActionErrorMessage(",
+  "async function refreshMediaStorageHealthState(",
+  "async function handleSaveProviderConfig(",
+  "async function handleUpdateMemberRole(",
+  "async function handleRemoveMember(",
+]) {
+  if (actionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(`workspace-settings-actions.ts must keep action internals delegated: ${forbiddenActionsToken}`);
+  }
+}
+
+if (actionsLineCount > 30) {
+  throw new Error(`workspace-settings-actions.ts exceeded 30 lines: ${actionsLineCount}`);
+}
+
+for (const requiredActionErrorUsage of [
+  "export function getWorkspaceSettingsActionErrorMessage(",
+  "return caught instanceof Error ? caught.message : fallbackMessage;",
+]) {
+  if (!actionErrorSource.includes(requiredActionErrorUsage)) {
+    throw new Error(`workspace-settings-action-error.ts must own shared error formatting: ${requiredActionErrorUsage}`);
+  }
+}
+
+if (actionErrorLineCount > 10) {
+  throw new Error(`workspace-settings-action-error.ts exceeded 10 lines: ${actionErrorLineCount}`);
+}
+
+for (const requiredProviderActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-settings-action-error";',
+  "export function createWorkspaceSettingsProviderActions({",
+  "async function refreshMediaStorageHealthState(",
+  "async function handleSaveProviderConfig(",
+  "getMediaStorageProviderHealth(",
+  "updateProviderConfig(",
+]) {
+  if (!providerActionsSource.includes(requiredProviderActionsUsage)) {
+    throw new Error(`workspace-settings-provider-actions.ts must own provider action logic: ${requiredProviderActionsUsage}`);
+  }
+}
+
+if (providerActionsLineCount > 65) {
+  throw new Error(`workspace-settings-provider-actions.ts exceeded 65 lines: ${providerActionsLineCount}`);
+}
+
+for (const requiredMemberActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-settings-action-error";',
+  "export function createWorkspaceSettingsMemberActions({",
+  "async function handleUpdateMemberRole(",
+  "async function handleRemoveMember(",
+  "updateWorkspaceMember(",
+  "deleteWorkspaceMember(",
+]) {
+  if (!memberActionsSource.includes(requiredMemberActionsUsage)) {
+    throw new Error(`workspace-settings-member-actions.ts must own member action logic: ${requiredMemberActionsUsage}`);
+  }
+}
+
+if (memberActionsLineCount > 55) {
+  throw new Error(`workspace-settings-member-actions.ts exceeded 55 lines: ${memberActionsLineCount}`);
 }
 
 console.log("workspace-settings structure verification passed");

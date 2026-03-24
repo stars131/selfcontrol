@@ -948,6 +948,10 @@ Last updated: 2026-03-24
   - map-panel controller local state registration and search/filter action wiring now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-map-panel-controller.ts`
   - the top-level map-panel controller now focuses more narrowly on composing state, derived data, sync, and returned controller shape
   - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these controller helper boundaries and dedicated size ceilings for the extracted modules
+- Workspace Settings Action Group Split V1:
+  - workspace-settings provider health/config actions and member-management actions now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-settings-actions.ts`
+  - the top-level workspace-settings actions module now focuses more narrowly on composing grouped action sets while shared error formatting is kept in a dedicated helper
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces these action-group boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
