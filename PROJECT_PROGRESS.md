@@ -1404,6 +1404,10 @@ Last updated: 2026-03-24
   - record-save payload builder input contracts now live in `apps/web/components/record-panel-controller-record-save-payload.types.ts` instead of remaining embedded across the save-payload builder module
   - `apps/web/components/record-panel-controller-record-save-payload.ts` now consumes the extracted builder input contract instead of carrying the inline latitude/longitude intersection while continuing to own payload assembly
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload builder-input boundary and keeps inline builder intersections out of the payload module
+- Record Panel Browse Workspace Output Props Type Split V1:
+  - browse-workspace filter and record output contracts now live in `apps/web/components/record-panel-v2-browse-workspace-output-props.types.ts` instead of remaining embedded directly in the filter and record helper function signatures
+  - `apps/web/components/record-panel-v2-browse-workspace-filter-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-record-props.ts` now consume the extracted output contracts behind thinner mapping-only boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace output-props boundary and keeps inline `Pick<RecordBrowseWorkspaceProps, ...>` signatures out of the filter and record helper modules
 
 ## Next
 - Continue the next product slice

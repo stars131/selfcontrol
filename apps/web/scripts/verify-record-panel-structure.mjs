@@ -88,6 +88,10 @@ const recordPanelBrowseWorkspaceRecordPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-record-props.ts",
 );
+const recordPanelBrowseWorkspaceOutputPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-output-props.types.ts",
+);
 const recordPanelBrowseWorkspaceCopyPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-copy-props.ts",
@@ -855,6 +859,10 @@ const browseWorkspaceRecordPropsSource = fs.readFileSync(
   recordPanelBrowseWorkspaceRecordPropsPath,
   "utf8",
 );
+const browseWorkspaceOutputPropsTypesSource = fs.readFileSync(
+  recordPanelBrowseWorkspaceOutputPropsTypesPath,
+  "utf8",
+);
 const browseWorkspaceCopyPropsSource = fs.readFileSync(
   recordPanelBrowseWorkspaceCopyPropsPath,
   "utf8",
@@ -1312,6 +1320,8 @@ const browseWorkspacePropsLines = browseWorkspacePropsSource.split(/\r?\n/).leng
 const browseWorkspacePropsHelpersLines = browseWorkspacePropsHelpersSource.split(/\r?\n/).length;
 const browseWorkspaceFilterPropsLines = browseWorkspaceFilterPropsSource.split(/\r?\n/).length;
 const browseWorkspaceRecordPropsLines = browseWorkspaceRecordPropsSource.split(/\r?\n/).length;
+const browseWorkspaceOutputPropsTypesLines =
+  browseWorkspaceOutputPropsTypesSource.split(/\r?\n/).length;
 const browseWorkspaceCopyPropsLines = browseWorkspaceCopyPropsSource.split(/\r?\n/).length;
 const browseWorkspacePropsInputTypesLines =
   browseWorkspacePropsInputTypesSource.split(/\r?\n/).length;
@@ -2139,6 +2149,7 @@ if (browseWorkspacePropsHelpersLines > maxBrowseWorkspacePropsHelpersLines) {
 }
 
 for (const requiredBrowseWorkspaceFilterPropsImport of [
+  'from "./record-panel-v2-browse-workspace-output-props.types";',
   'from "./record-panel-v2-workspace-props.types";',
 ]) {
   if (!browseWorkspaceFilterPropsSource.includes(requiredBrowseWorkspaceFilterPropsImport)) {
@@ -2149,7 +2160,7 @@ for (const requiredBrowseWorkspaceFilterPropsImport of [
 }
 
 for (const requiredBrowseWorkspaceFilterPropsUsage of [
-  "export function buildRecordBrowseWorkspaceFilterProps(input: BuildRecordBrowseWorkspacePropsInput)",
+  "export function buildRecordBrowseWorkspaceFilterProps(input: BuildRecordBrowseWorkspacePropsInput): RecordBrowseWorkspaceFilterProps {",
   "currentFilterSummary: input.summarizeRecordFilterLabel(input.recordFilter)",
   "onApplyFilter: input.handleApplyFilter",
   "summarizeRecordFilterLabel: input.summarizeRecordFilterLabel",
@@ -2157,6 +2168,17 @@ for (const requiredBrowseWorkspaceFilterPropsUsage of [
   if (!browseWorkspaceFilterPropsSource.includes(requiredBrowseWorkspaceFilterPropsUsage)) {
     throw new Error(
       `record-panel-v2-browse-workspace-filter-props.ts must own filter prop mapping: ${requiredBrowseWorkspaceFilterPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenBrowseWorkspaceFilterPropsToken of [
+  'RecordBrowseWorkspaceProps } from "./record-panel-v2-workspace-props.types";',
+  'Pick<RecordBrowseWorkspaceProps, "currentFilterSummary"',
+]) {
+  if (browseWorkspaceFilterPropsSource.includes(forbiddenBrowseWorkspaceFilterPropsToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-filter-props.ts must keep filter prop typing delegated: ${forbiddenBrowseWorkspaceFilterPropsToken}`,
     );
   }
 }
@@ -2169,6 +2191,7 @@ if (browseWorkspaceFilterPropsLines > maxBrowseWorkspaceFilterPropsLines) {
 }
 
 for (const requiredBrowseWorkspaceRecordPropsImport of [
+  'from "./record-panel-v2-browse-workspace-output-props.types";',
   'from "./record-panel-v2-workspace-props.types";',
 ]) {
   if (!browseWorkspaceRecordPropsSource.includes(requiredBrowseWorkspaceRecordPropsImport)) {
@@ -2179,7 +2202,7 @@ for (const requiredBrowseWorkspaceRecordPropsImport of [
 }
 
 for (const requiredBrowseWorkspaceRecordPropsUsage of [
-  "export function buildRecordBrowseWorkspaceRecordProps(input: BuildRecordBrowseWorkspacePropsInput)",
+  "export function buildRecordBrowseWorkspaceRecordProps(input: BuildRecordBrowseWorkspacePropsInput): RecordBrowseWorkspaceRecordProps {",
   "avoidCount: input.avoidCount",
   "panelCopy: input.panelCopy",
   "visibleRecordCount: input.records.length",
@@ -2191,10 +2214,49 @@ for (const requiredBrowseWorkspaceRecordPropsUsage of [
   }
 }
 
+for (const forbiddenBrowseWorkspaceRecordPropsToken of [
+  'RecordBrowseWorkspaceProps } from "./record-panel-v2-workspace-props.types";',
+  'Pick<RecordBrowseWorkspaceProps, "avoidCount"',
+]) {
+  if (browseWorkspaceRecordPropsSource.includes(forbiddenBrowseWorkspaceRecordPropsToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-record-props.ts must keep record prop typing delegated: ${forbiddenBrowseWorkspaceRecordPropsToken}`,
+    );
+  }
+}
+
 const maxBrowseWorkspaceRecordPropsLines = 30;
 if (browseWorkspaceRecordPropsLines > maxBrowseWorkspaceRecordPropsLines) {
   throw new Error(
     `record-panel-v2-browse-workspace-record-props.ts exceeded ${maxBrowseWorkspaceRecordPropsLines} lines: ${browseWorkspaceRecordPropsLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspaceOutputPropsTypesImport of [
+  'from "./record-browse-workspace.types";',
+]) {
+  if (!browseWorkspaceOutputPropsTypesSource.includes(requiredBrowseWorkspaceOutputPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-output-props.types.ts must import browse workspace output contracts: ${requiredBrowseWorkspaceOutputPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspaceOutputPropsTypesUsage of [
+  'export type RecordBrowseWorkspaceFilterProps = Pick<RecordBrowseWorkspaceProps, "currentFilterSummary" | "filterDraft" | "onApplyFilter" | "onApplyLocationFilter" | "onApplyPreset" | "onDeletePreset" | "onResetFilter" | "onSavePreset" | "presetName" | "recordFilter" | "savingSearchPreset" | "searchPresets" | "setFilterDraft" | "setPresetName" | "summarizeRecordFilterLabel">;',
+  'export type RecordBrowseWorkspaceRecordProps = Pick<RecordBrowseWorkspaceProps, "avoidCount" | "canWriteWorkspace" | "filteringRecords" | "foodCount" | "formatAvoidCountLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "onSelectRecord" | "panelCopy" | "records" | "selectedRecordId" | "setViewMode" | "timelineDays" | "viewMode" | "visibleRecordCount">;',
+]) {
+  if (!browseWorkspaceOutputPropsTypesSource.includes(requiredBrowseWorkspaceOutputPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-output-props.types.ts must own browse workspace output typing: ${requiredBrowseWorkspaceOutputPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspaceOutputPropsTypesLines = 6;
+if (browseWorkspaceOutputPropsTypesLines > maxBrowseWorkspaceOutputPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-output-props.types.ts exceeded ${maxBrowseWorkspaceOutputPropsTypesLines} lines: ${browseWorkspaceOutputPropsTypesLines}`,
   );
 }
 

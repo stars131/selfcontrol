@@ -1,6 +1,7 @@
-import type { BuildRecordBrowseWorkspacePropsInput, RecordBrowseWorkspaceProps } from "./record-panel-v2-workspace-props.types";
+import type { RecordBrowseWorkspaceRecordProps } from "./record-panel-v2-browse-workspace-output-props.types";
+import type { BuildRecordBrowseWorkspacePropsInput } from "./record-panel-v2-workspace-props.types";
 
-export function buildRecordBrowseWorkspaceRecordProps(input: BuildRecordBrowseWorkspacePropsInput): Pick<RecordBrowseWorkspaceProps, "avoidCount" | "canWriteWorkspace" | "filteringRecords" | "foodCount" | "formatAvoidCountLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "onSelectRecord" | "panelCopy" | "records" | "selectedRecordId" | "setViewMode" | "timelineDays" | "viewMode" | "visibleRecordCount"> {
+export function buildRecordBrowseWorkspaceRecordProps(input: BuildRecordBrowseWorkspacePropsInput): RecordBrowseWorkspaceRecordProps {
   return {
     avoidCount: input.avoidCount,
     canWriteWorkspace: input.canWriteWorkspace,

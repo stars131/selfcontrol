@@ -1,6 +1,7 @@
-import type { BuildRecordBrowseWorkspacePropsInput, RecordBrowseWorkspaceProps } from "./record-panel-v2-workspace-props.types";
+import type { RecordBrowseWorkspaceFilterProps } from "./record-panel-v2-browse-workspace-output-props.types";
+import type { BuildRecordBrowseWorkspacePropsInput } from "./record-panel-v2-workspace-props.types";
 
-export function buildRecordBrowseWorkspaceFilterProps(input: BuildRecordBrowseWorkspacePropsInput): Pick<RecordBrowseWorkspaceProps, "currentFilterSummary" | "filterDraft" | "onApplyFilter" | "onApplyLocationFilter" | "onApplyPreset" | "onDeletePreset" | "onResetFilter" | "onSavePreset" | "presetName" | "recordFilter" | "savingSearchPreset" | "searchPresets" | "setFilterDraft" | "setPresetName" | "summarizeRecordFilterLabel"> {
+export function buildRecordBrowseWorkspaceFilterProps(input: BuildRecordBrowseWorkspacePropsInput): RecordBrowseWorkspaceFilterProps {
   return {
     currentFilterSummary: input.summarizeRecordFilterLabel(input.recordFilter),
     filterDraft: input.filterDraft,
