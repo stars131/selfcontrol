@@ -1220,6 +1220,10 @@ Last updated: 2026-03-24
   - editor workspace base props now delegate session, state, form, and media mapping into dedicated slice modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-base-props.ts`
   - editor workspace base prop types now compose the same four dedicated slice contracts instead of keeping one large duplicated pick list inside `apps/web/components/record-panel-v2-editor-workspace-base-props.types.ts`
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the base-prop split and dedicated size ceilings for all extracted base prop mapper and type modules
+- Record Panel Editor Workspace Copy Prop Split V3:
+  - editor workspace copy props now delegate channel copy, media copy, and reminder copy mapping into dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`
+  - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts` now focuses on composing the specialized copy helpers behind a thinner copy boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the copy-prop split and dedicated size ceilings for all extracted editor copy helper modules
 
 ## Next
 - Continue the next product slice

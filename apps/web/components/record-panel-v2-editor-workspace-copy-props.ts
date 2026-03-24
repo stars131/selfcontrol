@@ -1,51 +1,13 @@
-import type {
-  BuildRecordEditorWorkspacePropsInput,
-  RecordEditorWorkspaceProps,
-} from "./record-panel-v2-workspace-props.types";
+import { buildRecordEditorWorkspaceChannelCopyProps } from "./record-panel-v2-editor-workspace-channel-copy-props";
+import { buildRecordEditorWorkspaceMediaCopyProps } from "./record-panel-v2-editor-workspace-media-copy-props";
+import { buildRecordEditorWorkspaceReminderCopyProps } from "./record-panel-v2-editor-workspace-reminder-copy-props";
 
-export function buildRecordEditorWorkspaceCopyProps({
-  detailCopy,
-}: Pick<BuildRecordEditorWorkspacePropsInput, "detailCopy">): Pick<
-  RecordEditorWorkspaceProps,
-  | "channelInAppLabel"
-  | "channelLabel"
-  | "createReminderLabel"
-  | "deleteReminderLabel"
-  | "enableReminderLabel"
-  | "largestFilePrefixLabel"
-  | "markReminderDoneLabel"
-  | "noMediaLabel"
-  | "noRemindersLabel"
-  | "pauseReminderLabel"
-  | "reminderNoteLabel"
-  | "reminderNotePlaceholder"
-  | "reminderSectionDescription"
-  | "reminderSectionTitle"
-  | "reminderTitleLabel"
-  | "reminderTitlePlaceholder"
-  | "remindAtLabel"
-  | "savingReminderLabel"
-  | "untitledReminderLabel"
-> {
+type EditorWorkspaceCopyPropsInput = Parameters<typeof buildRecordEditorWorkspaceChannelCopyProps>[0];
+
+export function buildRecordEditorWorkspaceCopyProps({ ...input }: EditorWorkspaceCopyPropsInput) {
   return {
-    channelInAppLabel: detailCopy.channelInApp,
-    channelLabel: detailCopy.channelLabel,
-    createReminderLabel: detailCopy.createReminder,
-    deleteReminderLabel: detailCopy.deleteReminder,
-    enableReminderLabel: detailCopy.enableReminder,
-    largestFilePrefixLabel: detailCopy.largestFilePrefix,
-    markReminderDoneLabel: detailCopy.markReminderDone,
-    noMediaLabel: detailCopy.noMedia,
-    noRemindersLabel: detailCopy.noReminders,
-    pauseReminderLabel: detailCopy.pauseReminder,
-    reminderNoteLabel: detailCopy.reminderNoteLabel,
-    reminderNotePlaceholder: detailCopy.reminderNotePlaceholder,
-    reminderSectionDescription: detailCopy.reminderSectionDescription,
-    reminderSectionTitle: detailCopy.reminderSectionTitle,
-    reminderTitleLabel: detailCopy.reminderTitleLabel,
-    reminderTitlePlaceholder: detailCopy.reminderTitlePlaceholder,
-    remindAtLabel: detailCopy.remindAtLabel,
-    savingReminderLabel: detailCopy.savingReminder,
-    untitledReminderLabel: detailCopy.untitledReminder,
+    ...buildRecordEditorWorkspaceChannelCopyProps(input),
+    ...buildRecordEditorWorkspaceMediaCopyProps(input),
+    ...buildRecordEditorWorkspaceReminderCopyProps(input),
   };
 }
