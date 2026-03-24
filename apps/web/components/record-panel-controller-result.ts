@@ -1,6 +1,8 @@
 "use client";
 
 import type { createRecordPanelControllerHandlerGroups } from "./record-panel-controller-handler-groups";
+import { buildRecordPanelControllerStateResult } from "./record-panel-controller-state-result";
+import { buildRecordPanelControllerViewDataResult } from "./record-panel-controller-view-data-result";
 import type { useRecordPanelControllerState } from "./use-record-panel-controller-state";
 import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
 
@@ -20,51 +22,8 @@ export function buildRecordPanelControllerResult({
   viewData: ControllerViewData;
 }) {
   return {
-    locale: viewData.locale,
-    avoidCount: viewData.avoidCount,
-    foodCount: viewData.foodCount,
-    selectedRecord: viewData.selectedRecord,
-    form: state.form,
-    setForm: state.setForm,
-    saving: state.saving,
-    deleting: state.deleting,
-    uploading: state.uploading,
-    refreshingMediaId: state.refreshingMediaId,
-    retryingMediaId: state.retryingMediaId,
-    bulkRetryingDeadLetter: state.bulkRetryingDeadLetter,
-    downloadingMediaId: state.downloadingMediaId,
-    deletingMediaId: state.deletingMediaId,
-    reminderForm: state.reminderForm,
-    setReminderForm: state.setReminderForm,
-    savingReminder: state.savingReminder,
-    locationReviewForm: state.locationReviewForm,
-    setLocationReviewForm: state.setLocationReviewForm,
-    viewMode: state.viewMode,
-    setViewMode: state.setViewMode,
-    filterDraft: state.filterDraft,
-    setFilterDraft: state.setFilterDraft,
-    presetName: state.presetName,
-    setPresetName: state.setPresetName,
-    selectedDeadLetterIds: state.selectedDeadLetterIds,
-    error: state.error,
-    selectedLocationReview: viewData.selectedLocationReview,
-    selectedLocationHistory: viewData.selectedLocationHistory,
-    selectedRecordMediaSizeLabel: viewData.selectedRecordMediaSizeLabel,
-    mediaIssueCopy: viewData.mediaIssueCopy,
-    panelCopy: viewData.panelCopy,
-    detailCopy: viewData.detailCopy,
-    formatAvoidCountLabel: viewData.formatAvoidCountLabel,
-    formatFileCountLabel: viewData.formatFileCountLabel,
-    formatHistoryTimestampLabel: viewData.formatHistoryTimestampLabel,
-    formatRecordTimestampLabel: viewData.formatRecordTimestampLabel,
-    formatReminderEnabledLabel: viewData.formatReminderEnabledLabel,
-    formatReminderStatusLabel: viewData.formatReminderStatusLabel,
-    formatReminderTimestampLabel: viewData.formatReminderTimestampLabel,
-    formatReviewStatusLabel: viewData.formatReviewStatusLabel,
-    formatTimelineCountLabel: viewData.formatTimelineCountLabel,
-    formatTimelineDateLabel: viewData.formatTimelineDateLabel,
-    summarizeHistoryActionLabel: viewData.summarizeHistoryActionLabel,
-    summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,
+    ...buildRecordPanelControllerViewDataResult(viewData),
+    ...buildRecordPanelControllerStateResult(state),
     ...recordHandlers,
     ...mediaHandlers,
   };
