@@ -1,5 +1,8 @@
 "use client";
 
+import { RecordPanelLegacyStatsGrid } from "./record-panel-legacy-stats-grid";
+import { RecordPanelLegacyStatsHeader } from "./record-panel-legacy-stats-header";
+
 export function RecordPanelLegacyStats({
   avoidCount,
   foodCount,
@@ -15,40 +18,12 @@ export function RecordPanelLegacyStats({
 }) {
   return (
     <>
-      <div className="panel-header">
-        <div>
-          <div className="eyebrow">Workspace</div>
-          <h2 className="title" style={{ fontSize: 22 }}>
-            Structured Results
-          </h2>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {workspaceId}
-          </div>
-        </div>
-        <button className="button secondary" type="button" onClick={() => void onResetFilter()}>
-          Reset list
-        </button>
-      </div>
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="eyebrow">Visible records</div>
-          <div className="title" style={{ fontSize: 20 }}>
-            {recordCount}
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="eyebrow">Food</div>
-          <div className="title" style={{ fontSize: 20 }}>
-            {foodCount}
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="eyebrow">Avoid</div>
-          <div className="title" style={{ fontSize: 20 }}>
-            {avoidCount}
-          </div>
-        </div>
-      </div>
+      <RecordPanelLegacyStatsHeader workspaceId={workspaceId} onResetFilter={onResetFilter} />
+      <RecordPanelLegacyStatsGrid
+        avoidCount={avoidCount}
+        foodCount={foodCount}
+        recordCount={recordCount}
+      />
     </>
   );
 }

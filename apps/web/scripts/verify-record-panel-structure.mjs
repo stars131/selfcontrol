@@ -245,6 +245,10 @@ const recordPanelControllerFilterSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-filter-sync.ts",
 );
+const recordPanelControllerSyncInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-sync-input.ts",
+);
 const recordPanelControllerStatePath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-state.ts",
@@ -631,6 +635,18 @@ const legacyRecordPanelListEmptyPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-list-empty.tsx",
 );
+const legacyRecordPanelStatsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-stats.tsx",
+);
+const legacyRecordPanelStatsHeaderPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-stats-header.tsx",
+);
+const legacyRecordPanelStatsGridPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-stats-grid.tsx",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
@@ -665,6 +681,15 @@ const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMe
 const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "utf8");
 const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
 const legacyRecordPanelListEmptySource = fs.readFileSync(legacyRecordPanelListEmptyPath, "utf8");
+const legacyRecordPanelStatsSource = fs.readFileSync(legacyRecordPanelStatsPath, "utf8");
+const legacyRecordPanelStatsHeaderSource = fs.readFileSync(
+  legacyRecordPanelStatsHeaderPath,
+  "utf8",
+);
+const legacyRecordPanelStatsGridSource = fs.readFileSync(
+  legacyRecordPanelStatsGridPath,
+  "utf8",
+);
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
 const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
@@ -851,6 +876,7 @@ const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const shellViewPropsSource = fs.readFileSync(recordPanelShellViewPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
+const controllerSyncInputSource = fs.readFileSync(recordPanelControllerSyncInputPath, "utf8");
 const controllerDeadLetterSyncSource = fs.readFileSync(
   recordPanelControllerDeadLetterSyncPath,
   "utf8",
@@ -1066,6 +1092,10 @@ const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/
 const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).length;
 const legacyRecordPanelListItemLines = legacyRecordPanelListItemSource.split(/\r?\n/).length;
 const legacyRecordPanelListEmptyLines = legacyRecordPanelListEmptySource.split(/\r?\n/).length;
+const legacyRecordPanelStatsLines = legacyRecordPanelStatsSource.split(/\r?\n/).length;
+const legacyRecordPanelStatsHeaderLines =
+  legacyRecordPanelStatsHeaderSource.split(/\r?\n/).length;
+const legacyRecordPanelStatsGridLines = legacyRecordPanelStatsGridSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -1152,6 +1182,7 @@ const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const shellViewPropsLines = shellViewPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
+const controllerSyncInputLines = controllerSyncInputSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordFormSyncLines =
@@ -3078,6 +3109,7 @@ if (shellViewPropsLines > maxShellViewPropsLines) {
 for (const requiredControllerImport of [
   'from "./record-panel-controller.types";',
   'from "./record-panel-controller-handler-groups-input";',
+  'from "./record-panel-controller-sync-input";',
   'from "./record-panel-controller-handler-groups";',
   'from "./record-panel-controller-result";',
   'from "./use-record-panel-controller-sync";',
@@ -3102,7 +3134,7 @@ for (const requiredHandlerGroupsImport of [
 }
 
 for (const requiredControllerUsage of [
-  "useRecordPanelControllerSync({",
+  "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ props, state, viewData }))",
   "useRecordPanelControllerViewData({",
   "useRecordPanelControllerState(props.recordFilter)",
   "buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData })",
@@ -3124,6 +3156,14 @@ for (const forbiddenControllerToken of [
   "fetchMediaBlob(",
   "event.preventDefault()",
   "URL.createObjectURL(",
+  "actionableDeadLetterIds: viewData.actionableDeadLetterIds",
+  "recordFilter: props.recordFilter",
+  "selectedRecord: viewData.selectedRecord",
+  "setFilterDraft: state.setFilterDraft",
+  "setForm: state.setForm",
+  "setLocationReviewForm: state.setLocationReviewForm",
+  "setReminderForm: state.setReminderForm",
+  "setSelectedDeadLetterIds: state.setSelectedDeadLetterIds",
   "setSelectedDeadLetterIds((current)",
   "locale,",
   "...recordHandlers",
@@ -3139,6 +3179,39 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredControllerSyncInputImport of [
+  'from "./record-panel-controller.types";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerSyncInputSource.includes(requiredControllerSyncInputImport)) {
+    throw new Error(
+      `record-panel-controller-sync-input.ts must import delegated sync-input contracts: ${requiredControllerSyncInputImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSyncInputUsage of [
+  "export function buildRecordPanelControllerSyncInput({",
+  'props: Pick<ControllerProps, "recordFilter">;',
+  'viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">;',
+  "actionableDeadLetterIds: viewData.actionableDeadLetterIds,",
+  "setSelectedDeadLetterIds: state.setSelectedDeadLetterIds,",
+]) {
+  if (!controllerSyncInputSource.includes(requiredControllerSyncInputUsage)) {
+    throw new Error(
+      `record-panel-controller-sync-input.ts must own sync-input assembly: ${requiredControllerSyncInputUsage}`,
+    );
+  }
+}
+
+const maxControllerSyncInputLines = 35;
+if (controllerSyncInputLines > maxControllerSyncInputLines) {
+  throw new Error(
+    `record-panel-controller-sync-input.ts exceeded ${maxControllerSyncInputLines} lines: ${controllerSyncInputLines}`,
+  );
 }
 
 for (const requiredControllerSyncImport of [
@@ -6563,6 +6636,74 @@ const maxLegacyRecordPanelFormMediaLines = 45;
 if (legacyRecordPanelFormMediaLines > maxLegacyRecordPanelFormMediaLines) {
   throw new Error(
     `record-panel-legacy-form-media.tsx exceeded ${maxLegacyRecordPanelFormMediaLines} lines: ${legacyRecordPanelFormMediaLines}`,
+  );
+}
+
+for (const requiredLegacyStatsUsage of [
+  'import { RecordPanelLegacyStatsGrid } from "./record-panel-legacy-stats-grid";',
+  'import { RecordPanelLegacyStatsHeader } from "./record-panel-legacy-stats-header";',
+  "export function RecordPanelLegacyStats({",
+  "<RecordPanelLegacyStatsHeader",
+  "<RecordPanelLegacyStatsGrid",
+]) {
+  if (!legacyRecordPanelStatsSource.includes(requiredLegacyStatsUsage)) {
+    throw new Error(`record-panel-legacy-stats.tsx must compose delegated legacy stats sections: ${requiredLegacyStatsUsage}`);
+  }
+}
+
+for (const forbiddenLegacyStatsToken of [
+  'className="panel-header"',
+  'className="stats-grid"',
+  "Structured Results",
+  "Visible records",
+  "Reset list",
+]) {
+  if (legacyRecordPanelStatsSource.includes(forbiddenLegacyStatsToken)) {
+    throw new Error(`record-panel-legacy-stats.tsx must keep header/grid details delegated: ${forbiddenLegacyStatsToken}`);
+  }
+}
+
+const maxLegacyRecordPanelStatsLines = 30;
+if (legacyRecordPanelStatsLines > maxLegacyRecordPanelStatsLines) {
+  throw new Error(
+    `record-panel-legacy-stats.tsx exceeded ${maxLegacyRecordPanelStatsLines} lines: ${legacyRecordPanelStatsLines}`,
+  );
+}
+
+for (const requiredLegacyStatsHeaderUsage of [
+  "export function RecordPanelLegacyStatsHeader({",
+  '{workspaceId}',
+  "Structured Results",
+  "Reset list",
+]) {
+  if (!legacyRecordPanelStatsHeaderSource.includes(requiredLegacyStatsHeaderUsage)) {
+    throw new Error(`record-panel-legacy-stats-header.tsx must own legacy stats header rendering: ${requiredLegacyStatsHeaderUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelStatsHeaderLines = 30;
+if (legacyRecordPanelStatsHeaderLines > maxLegacyRecordPanelStatsHeaderLines) {
+  throw new Error(
+    `record-panel-legacy-stats-header.tsx exceeded ${maxLegacyRecordPanelStatsHeaderLines} lines: ${legacyRecordPanelStatsHeaderLines}`,
+  );
+}
+
+for (const requiredLegacyStatsGridUsage of [
+  "export function RecordPanelLegacyStatsGrid({",
+  "Visible records",
+  "{recordCount}",
+  "{foodCount}",
+  "{avoidCount}",
+]) {
+  if (!legacyRecordPanelStatsGridSource.includes(requiredLegacyStatsGridUsage)) {
+    throw new Error(`record-panel-legacy-stats-grid.tsx must own legacy stats grid rendering: ${requiredLegacyStatsGridUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelStatsGridLines = 35;
+if (legacyRecordPanelStatsGridLines > maxLegacyRecordPanelStatsGridLines) {
+  throw new Error(
+    `record-panel-legacy-stats-grid.tsx exceeded ${maxLegacyRecordPanelStatsGridLines} lines: ${legacyRecordPanelStatsGridLines}`,
   );
 }
 

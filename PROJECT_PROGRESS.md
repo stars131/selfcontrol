@@ -1288,6 +1288,14 @@ Last updated: 2026-03-24
   - legacy empty-state rendering now lives in `apps/web/components/record-panel-legacy-list-empty.tsx`, while single-record card rendering now lives in `apps/web/components/record-panel-legacy-list-item.tsx`
   - `apps/web/components/record-panel-legacy-list.tsx` now focuses on list traversal and selection wiring instead of mixing empty-state and card markup details
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy list split with dedicated size ceilings for the extracted list-section modules
+- Record Panel Legacy Stats Section Split V3:
+  - legacy panel header rendering now lives in `apps/web/components/record-panel-legacy-stats-header.tsx`, while aggregate count rendering now lives in `apps/web/components/record-panel-legacy-stats-grid.tsx`
+  - `apps/web/components/record-panel-legacy-stats.tsx` now focuses on composing the two stats sections instead of mixing header and summary-card markup directly
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy stats split with dedicated size ceilings for the extracted header and grid modules
+- Record Panel Controller Sync Input Split V3:
+  - sync-hook input assembly now lives in `apps/web/components/record-panel-controller-sync-input.ts` instead of remaining inline inside `apps/web/components/use-record-panel-controller.ts`
+  - `apps/web/components/use-record-panel-controller.ts` now focuses more narrowly on orchestrating view-data, state, sync, handlers, and final result assembly behind a thinner controller-entry boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the sync-input builder boundary and keeps direct sync field mapping out of the controller entry module
 
 ## Next
 - Continue the next product slice
