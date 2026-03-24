@@ -168,6 +168,14 @@ const recordPanelMediaTransferActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-transfer-actions.ts",
 );
+const recordPanelMediaUploadActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-upload-action.ts",
+);
+const recordPanelMediaDownloadActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-download-action.ts",
+);
 const recordPanelMediaDeleteActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-delete-action.ts",
@@ -291,6 +299,8 @@ const mediaRetryActionSource = fs.readFileSync(recordPanelMediaRetryActionPath, 
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
 const mediaTransferActionsSource = fs.readFileSync(recordPanelMediaTransferActionsPath, "utf8");
+const mediaUploadActionSource = fs.readFileSync(recordPanelMediaUploadActionPath, "utf8");
+const mediaDownloadActionSource = fs.readFileSync(recordPanelMediaDownloadActionPath, "utf8");
 const mediaDeleteActionSource = fs.readFileSync(recordPanelMediaDeleteActionPath, "utf8");
 const mediaFileHelpersSource = fs.readFileSync(recordPanelMediaFileHelpersPath, "utf8");
 const mediaDownloadSource = fs.readFileSync(recordPanelMediaDownloadPath, "utf8");
@@ -353,6 +363,8 @@ const mediaRetryActionLines = mediaRetryActionSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
 const mediaTransferActionsLines = mediaTransferActionsSource.split(/\r?\n/).length;
+const mediaUploadActionLines = mediaUploadActionSource.split(/\r?\n/).length;
+const mediaDownloadActionLines = mediaDownloadActionSource.split(/\r?\n/).length;
 const mediaDeleteActionLines = mediaDeleteActionSource.split(/\r?\n/).length;
 const mediaFileHelpersLines = mediaFileHelpersSource.split(/\r?\n/).length;
 const mediaDownloadLines = mediaDownloadSource.split(/\r?\n/).length;
@@ -1897,10 +1909,8 @@ if (mediaFileActionsLines > maxMediaFileActionsLines) {
 }
 
 for (const requiredMediaTransferActionsImport of [
-  'from "../lib/record-panel-detail";',
-  'from "../lib/types";',
-  'from "./record-panel-controller.types";',
-  'from "./record-panel-controller-media-file-helpers";',
+  'from "./record-panel-controller-media-download-action";',
+  'from "./record-panel-controller-media-upload-action";',
 ]) {
   if (!mediaTransferActionsSource.includes(requiredMediaTransferActionsImport)) {
     throw new Error(
@@ -1910,11 +1920,10 @@ for (const requiredMediaTransferActionsImport of [
 }
 
 for (const requiredMediaTransferActionsUsage of [
-  "export function createRecordPanelControllerMediaTransferActions({",
-  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
-  "resolveRecordPanelUploadInput(event, selectedRecord)",
-  "downloadRecordPanelMediaFile({ asset, authToken, workspaceId })",
-  "fallbackMessages.notAuthenticated",
+  "createRecordPanelControllerMediaDownloadAction(props)",
+  "createRecordPanelControllerMediaUploadAction(props)",
+  "...mediaUploadAction",
+  "...mediaDownloadAction",
 ]) {
   if (!mediaTransferActionsSource.includes(requiredMediaTransferActionsUsage)) {
     throw new Error(
@@ -1923,10 +1932,77 @@ for (const requiredMediaTransferActionsUsage of [
   }
 }
 
-const maxMediaTransferActionsLines = 70;
+const maxMediaTransferActionsLines = 20;
 if (mediaTransferActionsLines > maxMediaTransferActionsLines) {
   throw new Error(
     `record-panel-controller-media-transfer-actions.ts exceeded ${maxMediaTransferActionsLines} lines: ${mediaTransferActionsLines}`,
+  );
+}
+
+for (const requiredMediaUploadActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-media-file-helpers";',
+]) {
+  if (!mediaUploadActionSource.includes(requiredMediaUploadActionImport)) {
+    throw new Error(
+      `record-panel-controller-media-upload-action.ts must import media-upload contracts: ${requiredMediaUploadActionImport}`,
+    );
+  }
+}
+
+for (const requiredMediaUploadActionUsage of [
+  "export function createRecordPanelControllerMediaUploadAction({",
+  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
+  "resolveRecordPanelUploadInput(event, selectedRecord)",
+  "await onUploadMedia(uploadInput.recordId, uploadInput.file)",
+  "fallbackMessages.uploadMediaError",
+]) {
+  if (!mediaUploadActionSource.includes(requiredMediaUploadActionUsage)) {
+    throw new Error(
+      `record-panel-controller-media-upload-action.ts must own upload orchestration: ${requiredMediaUploadActionUsage}`,
+    );
+  }
+}
+
+const maxMediaUploadActionLines = 45;
+if (mediaUploadActionLines > maxMediaUploadActionLines) {
+  throw new Error(
+    `record-panel-controller-media-upload-action.ts exceeded ${maxMediaUploadActionLines} lines: ${mediaUploadActionLines}`,
+  );
+}
+
+for (const requiredMediaDownloadActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller-media-file-helpers";',
+]) {
+  if (!mediaDownloadActionSource.includes(requiredMediaDownloadActionImport)) {
+    throw new Error(
+      `record-panel-controller-media-download-action.ts must import media-download-action contracts: ${requiredMediaDownloadActionImport}`,
+    );
+  }
+}
+
+for (const requiredMediaDownloadActionUsage of [
+  "export function createRecordPanelControllerMediaDownloadAction({",
+  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
+  "fallbackMessages.notAuthenticated",
+  "downloadRecordPanelMediaFile({ asset, authToken, workspaceId })",
+  "fallbackMessages.downloadMediaError",
+]) {
+  if (!mediaDownloadActionSource.includes(requiredMediaDownloadActionUsage)) {
+    throw new Error(
+      `record-panel-controller-media-download-action.ts must own download orchestration: ${requiredMediaDownloadActionUsage}`,
+    );
+  }
+}
+
+const maxMediaDownloadActionLines = 45;
+if (mediaDownloadActionLines > maxMediaDownloadActionLines) {
+  throw new Error(
+    `record-panel-controller-media-download-action.ts exceeded ${maxMediaDownloadActionLines} lines: ${mediaDownloadActionLines}`,
   );
 }
 
