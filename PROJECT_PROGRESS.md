@@ -1116,10 +1116,14 @@ Last updated: 2026-03-24
   - handler-group input assembly now delegates prop-derived, state-derived, and view-data-derived mapping into dedicated builder modules instead of keeping one broad mapping surface in `apps/web/components/record-panel-controller-handler-groups-input.ts`
   - `apps/web/components/record-panel-controller-handler-groups-input.ts` now focuses on composing the three specialized input slices behind a thin boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the handler-group slice split and dedicated size ceilings for the extracted builder modules
+- Record Panel Save Location Payload Split V1:
+  - record save location and `location_review` extra-data assembly now lives in `apps/web/components/record-panel-controller-record-location-payload.ts` instead of remaining mixed into the top-level save payload module
+  - `apps/web/components/record-panel-controller-record-save-payload.ts` now focuses on coordinate parsing and top-level record payload composition
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-location payload boundary and dedicated size ceilings for both payload modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel payload contracts and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel remaining payload/input contracts and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
