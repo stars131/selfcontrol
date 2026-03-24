@@ -1324,6 +1324,10 @@ Last updated: 2026-03-24
   - sync-hook input typing now lives in `apps/web/components/use-record-panel-controller-sync.types.ts` instead of remaining embedded inside `apps/web/components/use-record-panel-controller-sync.ts`
   - `apps/web/components/use-record-panel-controller-sync.ts` now focuses more narrowly on composing the dead-letter, selected-record, and filter sync hooks behind a thinner orchestration boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the sync-type boundary and keeps direct sync input contract definitions out of the sync hook module
+- Record Panel Media File Action Input Type Split V3:
+  - media delete action input contracts now live in `apps/web/components/record-panel-controller-media-file-action-input.types.ts`, alongside the existing transfer-action contract composition used by the media file action surface
+  - `apps/web/components/record-panel-controller-media-delete-action.ts` and `apps/web/components/record-panel-controller-media-file-actions.ts` now consume the shared extracted media-file action contract instead of carrying duplicated inline input typing
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-file action input-type boundary and keeps delete/file-action contract definitions out of the execution modules
 
 ## Next
 - Continue the next product slice
