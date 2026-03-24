@@ -2,6 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 
 const workspaceEntryPath = path.resolve(process.cwd(), "components/workspace-entry-client.tsx");
+const workspaceEntryClientHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-client-helpers.ts",
+);
+const workspaceEntryClientTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-client.types.ts",
+);
+const workspaceEntryLoadingShellPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-loading-shell.tsx",
+);
 const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/workspace-entry-main-panel.tsx");
 const workspaceEntryControllerPath = path.resolve(
   process.cwd(),
@@ -25,6 +37,9 @@ const workspaceEntryWorkspaceActionsPath = path.resolve(
 );
 const workspaceEntryCopyPath = path.resolve(process.cwd(), "components/workspace-entry-copy.ts");
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
+const clientHelpersSource = fs.readFileSync(workspaceEntryClientHelpersPath, "utf8");
+const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8");
+const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
 const controllerStateSource = fs.readFileSync(workspaceEntryControllerStatePath, "utf8");
@@ -36,6 +51,9 @@ const actionsSource = fs.readFileSync(workspaceEntryActionsPath, "utf8");
 const workspaceActionsSource = fs.readFileSync(workspaceEntryWorkspaceActionsPath, "utf8");
 const copySource = fs.readFileSync(workspaceEntryCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
+const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
+const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const controllerStateLineCount = controllerStateSource.split(/\r?\n/).length;
@@ -46,6 +64,16 @@ const copyLineCount = copySource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceEntryController } from "./use-workspace-entry-controller";')) {
   throw new Error("workspace-entry-client.tsx must import useWorkspaceEntryController");
+}
+
+for (const requiredClientImport of [
+  'from "./workspace-entry-client-helpers";',
+  'import type { WorkspaceEntryClientProps } from "./workspace-entry-client.types";',
+  'import { WorkspaceEntryLoadingShell } from "./workspace-entry-loading-shell";',
+]) {
+  if (!source.includes(requiredClientImport)) {
+    throw new Error(`workspace-entry-client.tsx must import delegated entry client helpers: ${requiredClientImport}`);
+  }
 }
 
 if (!source.includes("useWorkspaceEntryController(router)")) {
@@ -66,6 +94,16 @@ if (!source.includes("<WorkspaceEntryMainPanel")) {
 
 if (!source.includes("getWorkspaceEntryCopy(locale)")) {
   throw new Error("workspace-entry-client.tsx must delegate locale copy lookup to getWorkspaceEntryCopy");
+}
+
+for (const requiredClientUsage of [
+  "<WorkspaceEntryLoadingShell",
+  "buildWorkspaceEntryMainPanelProps({",
+  "buildWorkspaceEntryRefreshJobs(token, loadTransferJobs)",
+]) {
+  if (!source.includes(requiredClientUsage)) {
+    throw new Error(`workspace-entry-client.tsx must delegate client shell and prop mapping: ${requiredClientUsage}`);
+  }
 }
 
 for (const requiredImport of [
@@ -118,6 +156,8 @@ for (const forbiddenToken of [
   "const handleDownloadTransferJob =",
   "const COPY:",
   "const DISPLAY_COPY:",
+  'className="panel auth-panel"',
+  "token ? loadTransferJobs(token) : Promise.resolve()",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-entry-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
@@ -127,6 +167,57 @@ for (const forbiddenToken of [
 const maxAllowedLines = 130;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-entry-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredClientHelpersImport of [
+  'from "../lib/locale";',
+  'from "./workspace-entry-main-panel.types";',
+]) {
+  if (!clientHelpersSource.includes(requiredClientHelpersImport)) {
+    throw new Error(`workspace-entry-client-helpers.ts must import shared entry client types: ${requiredClientHelpersImport}`);
+  }
+}
+
+for (const requiredClientHelpersUsage of [
+  "export function buildWorkspaceEntryMainPanelProps(",
+  "return props;",
+  "export function buildWorkspaceEntryRefreshJobs(",
+  "return () => (token ? loadTransferJobs(token) : Promise.resolve())",
+  "export type WorkspaceEntryClientHelperInput =",
+]) {
+  if (!clientHelpersSource.includes(requiredClientHelpersUsage)) {
+    throw new Error(`workspace-entry-client-helpers.ts must own client prop mapping helpers: ${requiredClientHelpersUsage}`);
+  }
+}
+
+if (clientHelpersLineCount > 25) {
+  throw new Error(`workspace-entry-client-helpers.ts exceeded 25 lines: ${clientHelpersLineCount}`);
+}
+
+for (const requiredClientTypesUsage of [
+  "export type WorkspaceEntryClientProps = Record<string, never>;",
+]) {
+  if (!clientTypesSource.includes(requiredClientTypesUsage)) {
+    throw new Error(`workspace-entry-client.types.ts must own shared client props: ${requiredClientTypesUsage}`);
+  }
+}
+
+if (clientTypesLineCount > 3) {
+  throw new Error(`workspace-entry-client.types.ts exceeded 3 lines: ${clientTypesLineCount}`);
+}
+
+for (const requiredLoadingShellUsage of [
+  "export function WorkspaceEntryLoadingShell({ loadingLabel }: { loadingLabel: string })",
+  'className="panel auth-panel"',
+  "{loadingLabel}",
+]) {
+  if (!loadingShellSource.includes(requiredLoadingShellUsage)) {
+    throw new Error(`workspace-entry-loading-shell.tsx must own entry loading shell rendering: ${requiredLoadingShellUsage}`);
+  }
+}
+
+if (loadingShellLineCount > 15) {
+  throw new Error(`workspace-entry-loading-shell.tsx exceeded 15 lines: ${loadingShellLineCount}`);
 }
 
 const maxMainPanelLines = 110;

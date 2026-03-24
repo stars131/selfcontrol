@@ -2,11 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useStoredLocale } from "../lib/locale";
+import {
+  buildWorkspaceEntryMainPanelProps,
+  buildWorkspaceEntryRefreshJobs,
+} from "./workspace-entry-client-helpers";
+import type { WorkspaceEntryClientProps } from "./workspace-entry-client.types";
 import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import { useWorkspaceEntryController } from "./use-workspace-entry-controller";
+import { WorkspaceEntryLoadingShell } from "./workspace-entry-loading-shell";
 import { WorkspaceEntryMainPanel } from "./workspace-entry-main-panel";
 
-export function WorkspaceEntryClient() {
+export function WorkspaceEntryClient(_: WorkspaceEntryClientProps) {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
   const copy = getWorkspaceEntryCopy(locale);
@@ -47,54 +53,48 @@ export function WorkspaceEntryClient() {
   } = useWorkspaceEntryController(router);
 
   if (loading) {
-    return (
-      <main className="page-shell">
-        <section className="panel auth-panel">
-          <div className="panel-body">
-            <div className="notice">{copy.loading}</div>
-          </div>
-        </section>
-      </main>
-    );
+    return <WorkspaceEntryLoadingShell loadingLabel={copy.loading} />;
   }
 
   return (
     <WorkspaceEntryMainPanel
-      copy={copy}
-      creating={creating}
-      error={error}
-      fileInputRef={fileInputRef}
-      importFile={importFile}
-      importName={importName}
-      importSlug={importSlug}
-      importing={importing}
-      jobsLoading={jobsLoading}
-      joining={joining}
-      locale={locale}
-      name={name}
-      onAcceptShare={handleAcceptShare}
-      onCreate={handleCreate}
-      onDownloadTransferJob={handleDownloadTransferJob}
-      onImportFileChange={setImportFile}
-      onImportNameChange={setImportName}
-      onImportSlugChange={setImportSlug}
-      onImportWorkspace={handleImportWorkspace}
-      onLocaleChange={setLocale}
-      onLogout={handleLogout}
-      onNameChange={setName}
-      onPreviewShare={handlePreviewShare}
-      onQueueImportJob={handleQueueImportJob}
-      onRefreshJobs={() => (token ? loadTransferJobs(token) : Promise.resolve())}
-      onShareTokenInputChange={setShareTokenInput}
-      previewing={previewing}
-      queueingImportJob={queueingImportJob}
-      sharePreview={sharePreview}
-      shareTokenInput={shareTokenInput}
-      suggestedSlug={suggestedSlug}
-      token={token}
-      transferJobs={transferJobs}
-      username={user?.username}
-      workspaces={workspaces}
+      {...buildWorkspaceEntryMainPanelProps({
+        copy,
+        creating,
+        error,
+        fileInputRef,
+        importFile,
+        importName,
+        importSlug,
+        importing,
+        jobsLoading,
+        joining,
+        locale,
+        name,
+        onAcceptShare: handleAcceptShare,
+        onCreate: handleCreate,
+        onDownloadTransferJob: handleDownloadTransferJob,
+        onImportFileChange: setImportFile,
+        onImportNameChange: setImportName,
+        onImportSlugChange: setImportSlug,
+        onImportWorkspace: handleImportWorkspace,
+        onLocaleChange: setLocale,
+        onLogout: handleLogout,
+        onNameChange: setName,
+        onPreviewShare: handlePreviewShare,
+        onQueueImportJob: handleQueueImportJob,
+        onRefreshJobs: buildWorkspaceEntryRefreshJobs(token, loadTransferJobs),
+        onShareTokenInputChange: setShareTokenInput,
+        previewing,
+        queueingImportJob,
+        sharePreview,
+        shareTokenInput,
+        suggestedSlug,
+        token,
+        transferJobs,
+        username: user?.username,
+        workspaces,
+      })}
     />
   );
 }
