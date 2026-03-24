@@ -52,6 +52,22 @@ const recordPanelShellPropsPath = path.resolve(
   "components/record-panel-v2-shell-props.ts",
 );
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
+const recordPanelControllerSyncPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-sync.ts",
+);
+const recordPanelControllerDeadLetterSyncPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-dead-letter-sync.ts",
+);
+const recordPanelControllerSelectedRecordSyncPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-selected-record-sync.ts",
+);
+const recordPanelControllerFilterSyncPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-filter-sync.ts",
+);
 const recordPanelControllerResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-result.ts",
@@ -378,6 +394,16 @@ const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
 );
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
+const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
+const controllerDeadLetterSyncSource = fs.readFileSync(
+  recordPanelControllerDeadLetterSyncPath,
+  "utf8",
+);
+const controllerSelectedRecordSyncSource = fs.readFileSync(
+  recordPanelControllerSelectedRecordSyncPath,
+  "utf8",
+);
+const controllerFilterSyncSource = fs.readFileSync(recordPanelControllerFilterSyncPath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
 const controllerStateResultSource = fs.readFileSync(recordPanelControllerStateResultPath, "utf8");
 const controllerViewDataResultSource = fs.readFileSync(
@@ -532,6 +558,10 @@ const editorWorkspaceBasePropsTypesLines =
   editorWorkspaceBasePropsTypesSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
+const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
+const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
+const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
+const controllerFilterSyncLines = controllerFilterSyncSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
 const controllerStateResultLines = controllerStateResultSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
@@ -1124,6 +1154,149 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredControllerSyncImport of [
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+  'from "./use-record-panel-controller-dead-letter-sync";',
+  'from "./use-record-panel-controller-filter-sync";',
+  'from "./use-record-panel-controller-selected-record-sync";',
+]) {
+  if (!controllerSyncSource.includes(requiredControllerSyncImport)) {
+    throw new Error(
+      `use-record-panel-controller-sync.ts must import delegated sync hooks: ${requiredControllerSyncImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSyncUsage of [
+  "useRecordPanelControllerDeadLetterSync({ actionableDeadLetterIds, setSelectedDeadLetterIds })",
+  "useRecordPanelControllerSelectedRecordSync({",
+  "useRecordPanelControllerFilterSync({ recordFilter, setFilterDraft })",
+]) {
+  if (!controllerSyncSource.includes(requiredControllerSyncUsage)) {
+    throw new Error(
+      `use-record-panel-controller-sync.ts must delegate sync orchestration: ${requiredControllerSyncUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerSyncToken of [
+  "useEffect(",
+  "createEmptyForm(",
+  "createEmptyReminderForm(",
+  "formatDatetimeInput(",
+  "readLocationForm(",
+  "readLocationReviewForm(",
+  "setSelectedDeadLetterIds((current)",
+]) {
+  if (controllerSyncSource.includes(forbiddenControllerSyncToken)) {
+    throw new Error(
+      `use-record-panel-controller-sync.ts must keep sync effect internals delegated: ${forbiddenControllerSyncToken}`,
+    );
+  }
+}
+
+const maxControllerSyncLines = 35;
+if (controllerSyncLines > maxControllerSyncLines) {
+  throw new Error(
+    `use-record-panel-controller-sync.ts exceeded ${maxControllerSyncLines} lines: ${controllerSyncLines}`,
+  );
+}
+
+for (const requiredControllerDeadLetterSyncImport of [
+  'from "react";',
+]) {
+  if (!controllerDeadLetterSyncSource.includes(requiredControllerDeadLetterSyncImport)) {
+    throw new Error(
+      `use-record-panel-controller-dead-letter-sync.ts must import dead-letter sync contracts: ${requiredControllerDeadLetterSyncImport}`,
+    );
+  }
+}
+
+for (const requiredControllerDeadLetterSyncUsage of [
+  "export function useRecordPanelControllerDeadLetterSync({",
+  "useEffect(() => {",
+  "setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)))",
+]) {
+  if (!controllerDeadLetterSyncSource.includes(requiredControllerDeadLetterSyncUsage)) {
+    throw new Error(
+      `use-record-panel-controller-dead-letter-sync.ts must own dead-letter selection sync: ${requiredControllerDeadLetterSyncUsage}`,
+    );
+  }
+}
+
+const maxControllerDeadLetterSyncLines = 18;
+if (controllerDeadLetterSyncLines > maxControllerDeadLetterSyncLines) {
+  throw new Error(
+    `use-record-panel-controller-dead-letter-sync.ts exceeded ${maxControllerDeadLetterSyncLines} lines: ${controllerDeadLetterSyncLines}`,
+  );
+}
+
+for (const requiredControllerSelectedRecordSyncImport of [
+  'from "react";',
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+]) {
+  if (!controllerSelectedRecordSyncSource.includes(requiredControllerSelectedRecordSyncImport)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-sync.ts must import selected-record sync contracts: ${requiredControllerSelectedRecordSyncImport}`,
+    );
+  }
+}
+
+for (const requiredControllerSelectedRecordSyncUsage of [
+  "export function useRecordPanelControllerSelectedRecordSync({",
+  "createEmptyForm()",
+  "createEmptyReminderForm()",
+  "formatDatetimeInput(selectedRecord.occurred_at)",
+  "readLocationForm(selectedRecord)",
+  "readLocationReviewForm(selectedRecord)",
+  'setLocationReviewForm({ status: "pending", note: "" })',
+]) {
+  if (!controllerSelectedRecordSyncSource.includes(requiredControllerSelectedRecordSyncUsage)) {
+    throw new Error(
+      `use-record-panel-controller-selected-record-sync.ts must own selected-record sync details: ${requiredControllerSelectedRecordSyncUsage}`,
+    );
+  }
+}
+
+const maxControllerSelectedRecordSyncLines = 55;
+if (controllerSelectedRecordSyncLines > maxControllerSelectedRecordSyncLines) {
+  throw new Error(
+    `use-record-panel-controller-selected-record-sync.ts exceeded ${maxControllerSelectedRecordSyncLines} lines: ${controllerSelectedRecordSyncLines}`,
+  );
+}
+
+for (const requiredControllerFilterSyncImport of [
+  'from "react";',
+  'from "../lib/types";',
+]) {
+  if (!controllerFilterSyncSource.includes(requiredControllerFilterSyncImport)) {
+    throw new Error(
+      `use-record-panel-controller-filter-sync.ts must import filter sync contracts: ${requiredControllerFilterSyncImport}`,
+    );
+  }
+}
+
+for (const requiredControllerFilterSyncUsage of [
+  "export function useRecordPanelControllerFilterSync({",
+  "useEffect(() => {",
+  "setFilterDraft(recordFilter)",
+]) {
+  if (!controllerFilterSyncSource.includes(requiredControllerFilterSyncUsage)) {
+    throw new Error(
+      `use-record-panel-controller-filter-sync.ts must own filter draft sync: ${requiredControllerFilterSyncUsage}`,
+    );
+  }
+}
+
+const maxControllerFilterSyncLines = 15;
+if (controllerFilterSyncLines > maxControllerFilterSyncLines) {
+  throw new Error(
+    `use-record-panel-controller-filter-sync.ts exceeded ${maxControllerFilterSyncLines} lines: ${controllerFilterSyncLines}`,
+  );
 }
 
 for (const requiredControllerHandlerGroupsInputImport of [

@@ -1,20 +1,10 @@
 "use client";
-
 import type { Dispatch, SetStateAction } from "react";
-import { useEffect } from "react";
-
-import {
-  createEmptyForm,
-  createEmptyReminderForm,
-  formatDatetimeInput,
-  readLocationForm,
-  readLocationReviewForm,
-  type LocationReviewFormState,
-  type RecordFormState,
-  type ReminderFormState,
-} from "../lib/record-panel-forms";
+import type { LocationReviewFormState, RecordFormState, ReminderFormState } from "../lib/record-panel-forms";
 import type { RecordFilterState, RecordItem } from "../lib/types";
-
+import { useRecordPanelControllerDeadLetterSync } from "./use-record-panel-controller-dead-letter-sync";
+import { useRecordPanelControllerFilterSync } from "./use-record-panel-controller-filter-sync";
+import { useRecordPanelControllerSelectedRecordSync } from "./use-record-panel-controller-selected-record-sync";
 export function useRecordPanelControllerSync({
   actionableDeadLetterIds,
   recordFilter,
@@ -34,46 +24,7 @@ export function useRecordPanelControllerSync({
   setReminderForm: Dispatch<SetStateAction<ReminderFormState>>;
   setSelectedDeadLetterIds: Dispatch<SetStateAction<string[]>>;
 }) {
-  useEffect(() => {
-    setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)));
-  }, [actionableDeadLetterIds, setSelectedDeadLetterIds]);
-
-  useEffect(() => {
-    if (!selectedRecord) {
-      setForm(createEmptyForm());
-      setLocationReviewForm({
-        status: "pending",
-        note: "",
-      });
-      return;
-    }
-
-    setForm({
-      title: selectedRecord.title ?? "",
-      content: selectedRecord.content ?? "",
-      type_code: selectedRecord.type_code,
-      rating: selectedRecord.rating ? String(selectedRecord.rating) : "",
-      occurred_at: formatDatetimeInput(selectedRecord.occurred_at),
-      is_avoid: selectedRecord.is_avoid,
-      location: readLocationForm(selectedRecord),
-    });
-    setLocationReviewForm(readLocationReviewForm(selectedRecord));
-  }, [selectedRecord, setForm, setLocationReviewForm]);
-
-  useEffect(() => {
-    if (!selectedRecord) {
-      setReminderForm(createEmptyReminderForm());
-      return;
-    }
-
-    setReminderForm({
-      title: selectedRecord.title ?? "",
-      message: "",
-      remind_at: "",
-    });
-  }, [selectedRecord, setReminderForm]);
-
-  useEffect(() => {
-    setFilterDraft(recordFilter);
-  }, [recordFilter, setFilterDraft]);
+  useRecordPanelControllerDeadLetterSync({ actionableDeadLetterIds, setSelectedDeadLetterIds });
+  useRecordPanelControllerSelectedRecordSync({ selectedRecord, setForm, setLocationReviewForm, setReminderForm });
+  useRecordPanelControllerFilterSync({ recordFilter, setFilterDraft });
 }
