@@ -1,19 +1,16 @@
 "use client";
-
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { ControllerProps } from "./record-panel-controller.types";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export type RecordPanelControllerMediaRefreshActionInput = {
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   onRefreshMediaStatus: ControllerProps["onRefreshMediaStatus"];
   setError: (value: string) => void;
   setRefreshingMediaId: (value: string | null) => void;
 };
 
 export type RecordPanelControllerMediaRetryActionInput = {
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   onRetryMedia: ControllerProps["onRetryMedia"];
   setError: (value: string) => void;
   setRetryingMediaId: (value: string | null) => void;

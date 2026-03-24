@@ -7802,8 +7802,8 @@ if (mediaStatusActionsLines > maxMediaStatusActionsLines) {
 }
 
 for (const requiredMediaStatusActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!mediaStatusActionInputTypesSource.includes(requiredMediaStatusActionInputTypesImport)) {
     throw new Error(
@@ -7813,8 +7813,8 @@ for (const requiredMediaStatusActionInputTypesImport of [
 }
 
 for (const requiredMediaStatusActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerMediaRefreshActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   'onRefreshMediaStatus: ControllerProps["onRefreshMediaStatus"];',
   "export type RecordPanelControllerMediaRetryActionInput = {",
   'onRetryMedia: ControllerProps["onRetryMedia"];',
@@ -7823,6 +7823,18 @@ for (const requiredMediaStatusActionInputTypesUsage of [
   if (!mediaStatusActionInputTypesSource.includes(requiredMediaStatusActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-media-status-action-input.types.ts must own media-status input typing: ${requiredMediaStatusActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaStatusActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (mediaStatusActionInputTypesSource.includes(forbiddenMediaStatusActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-media-status-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenMediaStatusActionInputTypesToken}`,
     );
   }
 }
@@ -7958,7 +7970,7 @@ if (mediaStatusHelpersLines > maxMediaStatusHelpersLines) {
 }
 
 for (const requiredMediaStatusErrorHelpersImport of [
-  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!mediaStatusErrorHelpersSource.includes(requiredMediaStatusErrorHelpersImport)) {
     throw new Error(
@@ -7969,13 +7981,25 @@ for (const requiredMediaStatusErrorHelpersImport of [
 
 for (const requiredMediaStatusErrorHelpersUsage of [
   "export function getRecordPanelMediaStatusErrorMessage(",
-  "export function getRecordPanelMediaStatusErrorMessages(detailCopy: DetailCopy)",
+  "export function getRecordPanelMediaStatusErrorMessages(detailCopy: RecordPanelControllerDetailCopy)",
   "refreshMediaError",
   "retryMediaError",
 ]) {
   if (!mediaStatusErrorHelpersSource.includes(requiredMediaStatusErrorHelpersUsage)) {
     throw new Error(
       `record-panel-controller-media-status-error-helpers.ts must own media-status error copy details: ${requiredMediaStatusErrorHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaStatusErrorHelpersToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy)",
+]) {
+  if (mediaStatusErrorHelpersSource.includes(forbiddenMediaStatusErrorHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-media-status-error-helpers.ts must keep detail-copy typing delegated: ${forbiddenMediaStatusErrorHelpersToken}`,
     );
   }
 }
@@ -8101,8 +8125,8 @@ if (mediaFileActionsLines > maxMediaFileActionsLines) {
 }
 
 for (const requiredMediaFileActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
   'from "./record-panel-controller-media-transfer-action-input.types";',
 ]) {
   if (!mediaFileActionInputTypesSource.includes(requiredMediaFileActionInputTypesImport)) {
@@ -8113,8 +8137,8 @@ for (const requiredMediaFileActionInputTypesImport of [
 }
 
 for (const requiredMediaFileActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerMediaDeleteActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   "onDeleteMedia: ControllerProps[\"onDeleteMedia\"];",
   "export type RecordPanelControllerMediaFileActionInput =",
   "RecordPanelControllerMediaTransferActionInput & RecordPanelControllerMediaDeleteActionInput",
@@ -8122,6 +8146,18 @@ for (const requiredMediaFileActionInputTypesUsage of [
   if (!mediaFileActionInputTypesSource.includes(requiredMediaFileActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-media-file-action-input.types.ts must own media-file input typing: ${requiredMediaFileActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaFileActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (mediaFileActionInputTypesSource.includes(forbiddenMediaFileActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-media-file-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenMediaFileActionInputTypesToken}`,
     );
   }
 }
@@ -8177,9 +8213,9 @@ if (mediaTransferActionsLines > maxMediaTransferActionsLines) {
 }
 
 for (const requiredMediaTransferActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!mediaTransferActionInputTypesSource.includes(requiredMediaTransferActionInputTypesImport)) {
     throw new Error(
@@ -8189,8 +8225,8 @@ for (const requiredMediaTransferActionInputTypesImport of [
 }
 
 for (const requiredMediaTransferActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerMediaUploadActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   "export type RecordPanelControllerMediaDownloadActionInput = {",
   "export type RecordPanelControllerMediaTransferActionInput =",
   "export type RecordPanelControllerMediaDownloadAsset = MediaAsset;",
@@ -8198,6 +8234,18 @@ for (const requiredMediaTransferActionInputTypesUsage of [
   if (!mediaTransferActionInputTypesSource.includes(requiredMediaTransferActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-media-transfer-action-input.types.ts must own media-transfer input typing: ${requiredMediaTransferActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaTransferActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (mediaTransferActionInputTypesSource.includes(forbiddenMediaTransferActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-media-transfer-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenMediaTransferActionInputTypesToken}`,
     );
   }
 }
@@ -8349,8 +8397,8 @@ if (mediaDeleteActionLines > maxMediaDeleteActionLines) {
 }
 
 for (const requiredMediaFileHelpersImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/types";',
+  'from "./record-panel-controller-detail-copy.types";',
   'from "./record-panel-controller-media-download";',
 ]) {
   if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersImport)) {
@@ -8364,12 +8412,24 @@ for (const requiredMediaFileHelpersUsage of [
   'export { downloadRecordPanelMediaFile } from "./record-panel-controller-media-download";',
   "export function getRecordPanelMediaFileErrorMessage(",
   "export function resolveRecordPanelUploadInput(",
-  "export function getRecordPanelMediaFileFallbackMessages(detailCopy: DetailCopy)",
+  "export function getRecordPanelMediaFileFallbackMessages(detailCopy: RecordPanelControllerDetailCopy)",
   "notAuthenticated",
 ]) {
   if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersUsage)) {
     throw new Error(
       `record-panel-controller-media-file-helpers.ts must own media-file helper details: ${requiredMediaFileHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaFileHelpersToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy)",
+]) {
+  if (mediaFileHelpersSource.includes(forbiddenMediaFileHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-media-file-helpers.ts must keep detail-copy typing delegated: ${forbiddenMediaFileHelpersToken}`,
     );
   }
 }

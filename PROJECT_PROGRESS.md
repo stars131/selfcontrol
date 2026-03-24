@@ -1544,6 +1544,10 @@ Last updated: 2026-03-24
   - helper modules for preset-name validation, dead-letter retry fallback, and record-delete fallback now reuse the shared controller detail-copy contract instead of local `DetailCopy` aliases
   - `record-panel-controller-filter-preset-name.ts`, `record-panel-controller-dead-letter-retry-helpers.ts`, and `record-panel-controller-record-delete-helpers.ts` now depend on the shared detail-copy boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those helper modules stay decoupled from direct detail-bundle `ReturnType` aliases
+- Record Panel Media Detail-Copy Boundary Reuse Split V1:
+  - media action-input and helper modules now reuse the shared controller detail-copy contract instead of local `DetailCopy` aliases
+  - `record-panel-controller-media-status-action-input.types.ts`, `record-panel-controller-media-file-action-input.types.ts`, `record-panel-controller-media-transfer-action-input.types.ts`, `record-panel-controller-media-file-helpers.ts`, and `record-panel-controller-media-status-error-helpers.ts` now depend on the shared detail-copy boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those media modules stay decoupled from direct detail-bundle `ReturnType` aliases
 
 ## Next
 - Continue the next product slice

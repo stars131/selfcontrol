@@ -1,6 +1,4 @@
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export function getRecordPanelMediaStatusErrorMessage(
   caught: unknown,
@@ -9,7 +7,7 @@ export function getRecordPanelMediaStatusErrorMessage(
   return caught instanceof Error ? caught.message : fallbackMessage;
 }
 
-export function getRecordPanelMediaStatusErrorMessages(detailCopy: DetailCopy) {
+export function getRecordPanelMediaStatusErrorMessages(detailCopy: RecordPanelControllerDetailCopy) {
   return {
     refreshMediaError: detailCopy.refreshMediaError,
     retryMediaError: detailCopy.retryMediaError,

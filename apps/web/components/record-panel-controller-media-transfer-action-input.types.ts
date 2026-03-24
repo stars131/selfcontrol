@@ -1,13 +1,10 @@
 "use client";
-
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { MediaAsset, RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export type RecordPanelControllerMediaUploadActionInput = {
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   onUploadMedia: ControllerProps["onUploadMedia"];
   selectedRecord: RecordItem | null;
   setError: (value: string) => void;
@@ -16,7 +13,7 @@ export type RecordPanelControllerMediaUploadActionInput = {
 
 export type RecordPanelControllerMediaDownloadActionInput = {
   authToken: string | null;
-  detailCopy: DetailCopy;
+  detailCopy: RecordPanelControllerDetailCopy;
   setDownloadingMediaId: (value: string | null) => void;
   setError: (value: string) => void;
   workspaceId: string;

@@ -1,10 +1,8 @@
 import type { ChangeEvent } from "react";
 
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordItem } from "../lib/types";
 export { downloadRecordPanelMediaFile } from "./record-panel-controller-media-download";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export function getRecordPanelMediaFileErrorMessage(caught: unknown, fallbackMessage: string) {
   return caught instanceof Error ? caught.message : fallbackMessage;
@@ -25,7 +23,7 @@ export function resolveRecordPanelUploadInput(
   };
 }
 
-export function getRecordPanelMediaFileFallbackMessages(detailCopy: DetailCopy) {
+export function getRecordPanelMediaFileFallbackMessages(detailCopy: RecordPanelControllerDetailCopy) {
   return {
     deleteMediaError: detailCopy.deleteMediaError,
     downloadMediaError: detailCopy.downloadMediaError,
