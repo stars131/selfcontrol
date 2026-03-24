@@ -1,8 +1,8 @@
 "use client";
 
-import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
+import type { BuildRecordEditorWorkspaceControllerInputArgs } from "./record-panel-v2-editor-workspace-controller-input.types";
 
-export function buildRecordEditorWorkspaceControllerActionInput({ controller }: Pick<RecordPanelShellInput, "controller">) {
+export function buildRecordEditorWorkspaceControllerActionInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs) {
   return {
     handleBulkRetryDeadLetter: controller.handleBulkRetryDeadLetter,
     handleClearDeadLetterSelection: controller.handleClearDeadLetterSelection,

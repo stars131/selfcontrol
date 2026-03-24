@@ -1952,6 +1952,7 @@ if (editorWorkspacePropInputTypesLines > maxEditorWorkspacePropInputTypesLines) 
 }
 
 for (const requiredEditorWorkspaceControllerInputTypesImport of [
+  'from "./record-panel-v2-shell-props.types";',
   'from "./record-panel-v2-editor-workspace-controller-action-input.types";',
   'from "./record-panel-v2-editor-workspace-controller-display-input.types";',
   'from "./record-panel-v2-editor-workspace-controller-formatter-input.types";',
@@ -1964,6 +1965,7 @@ for (const requiredEditorWorkspaceControllerInputTypesImport of [
 }
 
 for (const requiredEditorWorkspaceControllerInputTypesUsage of [
+  "export type BuildRecordEditorWorkspaceControllerInputArgs = { controller: RecordPanelController };",
   "export type BuildRecordEditorWorkspaceControllerInput =",
   "BuildRecordEditorWorkspaceControllerActionInput &",
   "BuildRecordEditorWorkspaceControllerDisplayInput &",
@@ -3495,7 +3497,7 @@ if (editorWorkspacePropInputLines > maxEditorWorkspacePropInputLines) {
 }
 
 for (const requiredEditorWorkspaceControllerInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
   'from "./record-panel-v2-editor-workspace-controller-action-input";',
   'from "./record-panel-v2-editor-workspace-controller-display-input";',
   'from "./record-panel-v2-editor-workspace-controller-formatter-input";',
@@ -3508,7 +3510,7 @@ for (const requiredEditorWorkspaceControllerInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerInputUsage of [
-  'export function buildRecordEditorWorkspaceControllerInput({',
+  "export function buildRecordEditorWorkspaceControllerInput({ ...input }: BuildRecordEditorWorkspaceControllerInputArgs) {",
   "buildRecordEditorWorkspaceControllerActionInput(input)",
   "buildRecordEditorWorkspaceControllerDisplayInput(input)",
   "buildRecordEditorWorkspaceControllerFormatterInput(input)",
@@ -3521,6 +3523,8 @@ for (const requiredEditorWorkspaceControllerInputUsage of [
 }
 
 for (const forbiddenEditorWorkspaceControllerInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "controller">',
   "bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter",
   "handleUpload: controller.handleUpload",
   "selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel",
@@ -3541,7 +3545,7 @@ if (editorWorkspaceControllerInputLines > maxEditorWorkspaceControllerInputLines
 }
 
 for (const requiredEditorWorkspaceControllerActionInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
 ]) {
   if (!editorWorkspaceControllerActionInputSource.includes(requiredEditorWorkspaceControllerActionInputImport)) {
     throw new Error(
@@ -3551,7 +3555,7 @@ for (const requiredEditorWorkspaceControllerActionInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerActionInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerActionInput({ controller }: Pick<RecordPanelShellInput, \"controller\">)",
+  "export function buildRecordEditorWorkspaceControllerActionInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
   "handleBulkRetryDeadLetter: controller.handleBulkRetryDeadLetter",
   "handleUpload: controller.handleUpload",
   "setReminderForm: controller.setReminderForm",
@@ -3559,6 +3563,17 @@ for (const requiredEditorWorkspaceControllerActionInputUsage of [
   if (!editorWorkspaceControllerActionInputSource.includes(requiredEditorWorkspaceControllerActionInputUsage)) {
     throw new Error(
       `record-panel-v2-editor-workspace-controller-action-input.ts must own controller action mapping: ${requiredEditorWorkspaceControllerActionInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceControllerActionInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "controller">',
+]) {
+  if (editorWorkspaceControllerActionInputSource.includes(forbiddenEditorWorkspaceControllerActionInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-action-input.ts must keep controller action arg typing delegated: ${forbiddenEditorWorkspaceControllerActionInputToken}`,
     );
   }
 }
@@ -3571,7 +3586,7 @@ if (editorWorkspaceControllerActionInputLines > maxEditorWorkspaceControllerActi
 }
 
 for (const requiredEditorWorkspaceControllerDisplayInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
 ]) {
   if (!editorWorkspaceControllerDisplayInputSource.includes(requiredEditorWorkspaceControllerDisplayInputImport)) {
     throw new Error(
@@ -3581,7 +3596,7 @@ for (const requiredEditorWorkspaceControllerDisplayInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerDisplayInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerDisplayInput({ controller }: Pick<RecordPanelShellInput, \"controller\">)",
+  "export function buildRecordEditorWorkspaceControllerDisplayInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
   "bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter",
   "detailCopy: controller.detailCopy",
   "selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel",
@@ -3594,6 +3609,17 @@ for (const requiredEditorWorkspaceControllerDisplayInputUsage of [
   }
 }
 
+for (const forbiddenEditorWorkspaceControllerDisplayInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "controller">',
+]) {
+  if (editorWorkspaceControllerDisplayInputSource.includes(forbiddenEditorWorkspaceControllerDisplayInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-display-input.ts must keep controller display arg typing delegated: ${forbiddenEditorWorkspaceControllerDisplayInputToken}`,
+    );
+  }
+}
+
 const maxEditorWorkspaceControllerDisplayInputLines = 30;
 if (editorWorkspaceControllerDisplayInputLines > maxEditorWorkspaceControllerDisplayInputLines) {
   throw new Error(
@@ -3602,7 +3628,7 @@ if (editorWorkspaceControllerDisplayInputLines > maxEditorWorkspaceControllerDis
 }
 
 for (const requiredEditorWorkspaceControllerFormatterInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
 ]) {
   if (!editorWorkspaceControllerFormatterInputSource.includes(requiredEditorWorkspaceControllerFormatterInputImport)) {
     throw new Error(
@@ -3612,7 +3638,7 @@ for (const requiredEditorWorkspaceControllerFormatterInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerFormatterInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerFormatterInput({ controller }: Pick<RecordPanelShellInput, \"controller\">)",
+  "export function buildRecordEditorWorkspaceControllerFormatterInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
   "formatFileCountLabel: controller.formatFileCountLabel",
   "formatReviewStatusLabel: controller.formatReviewStatusLabel",
   "summarizeHistoryActionLabel: controller.summarizeHistoryActionLabel",
@@ -3620,6 +3646,17 @@ for (const requiredEditorWorkspaceControllerFormatterInputUsage of [
   if (!editorWorkspaceControllerFormatterInputSource.includes(requiredEditorWorkspaceControllerFormatterInputUsage)) {
     throw new Error(
       `record-panel-v2-editor-workspace-controller-formatter-input.ts must own controller formatter mapping: ${requiredEditorWorkspaceControllerFormatterInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceControllerFormatterInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "controller">',
+]) {
+  if (editorWorkspaceControllerFormatterInputSource.includes(forbiddenEditorWorkspaceControllerFormatterInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-formatter-input.ts must keep controller formatter arg typing delegated: ${forbiddenEditorWorkspaceControllerFormatterInputToken}`,
     );
   }
 }

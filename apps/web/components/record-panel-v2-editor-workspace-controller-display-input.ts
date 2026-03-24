@@ -1,7 +1,7 @@
 "use client";
-import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
+import type { BuildRecordEditorWorkspaceControllerInputArgs } from "./record-panel-v2-editor-workspace-controller-input.types";
 
-export function buildRecordEditorWorkspaceControllerDisplayInput({ controller }: Pick<RecordPanelShellInput, "controller">) {
+export function buildRecordEditorWorkspaceControllerDisplayInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs) {
   return {
     bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter,
     deleting: controller.deleting,

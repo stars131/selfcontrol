@@ -1416,6 +1416,10 @@ Last updated: 2026-03-24
   - browse-workspace prop/controller wrapper arg contracts now live in `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts` and `apps/web/components/record-panel-v2-browse-workspace-controller-input.types.ts` instead of remaining embedded directly in the wrapper function signatures
   - `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts` and `apps/web/components/record-panel-v2-browse-workspace-controller-input.ts` now consume the extracted wrapper-arg contracts behind thinner mapping-only boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the wrapper modules
+- Record Panel Editor Workspace Controller Wrapper Arg Type Split V1:
+  - editor-workspace controller wrapper arg contract now lives in `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts` instead of remaining embedded across the aggregate, action, display, and formatter wrapper function signatures
+  - `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-controller-action-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-controller-display-input.ts`, and `apps/web/components/record-panel-v2-editor-workspace-controller-formatter-input.ts` now consume the shared wrapper-arg contract behind thinner mapping-only boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace controller wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the controller wrapper modules
 
 ## Next
 - Continue the next product slice
