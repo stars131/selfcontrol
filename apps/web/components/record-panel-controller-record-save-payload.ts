@@ -1,7 +1,7 @@
 export { parseRecordPanelCoordinate } from "./record-panel-controller-record-save-coordinate";
-export type { RecordSavePayload, ResolveRecordSaveActionInput } from "./record-panel-controller-record-save-payload.types";
+export type { BuildRecordSavePayloadInput, RecordSavePayload, ResolveRecordSaveActionInput } from "./record-panel-controller-record-save-payload.types";
 import { buildRecordPanelLocationExtraData } from "./record-panel-controller-record-location-payload";
-import type { RecordSavePayload, ResolveRecordSaveActionInput } from "./record-panel-controller-record-save-payload.types";
+import type { BuildRecordSavePayloadInput, RecordSavePayload } from "./record-panel-controller-record-save-payload.types";
 
 export function buildRecordPanelSavePayload({
   form,
@@ -9,7 +9,7 @@ export function buildRecordPanelSavePayload({
   locationReviewForm,
   longitude,
   selectedRecord,
-}: ResolveRecordSaveActionInput & { latitude: number | null; longitude: number | null }): RecordSavePayload {
+}: BuildRecordSavePayloadInput): RecordSavePayload {
   return {
     recordId: selectedRecord?.id,
     title: form.title.trim() || undefined,

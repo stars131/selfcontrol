@@ -1400,6 +1400,10 @@ Last updated: 2026-03-24
   - browse workspace copy and draft-location input contracts now live in `apps/web/components/record-panel-v2-browse-workspace-props-input.types.ts` instead of remaining embedded across the copy-props and draft-location helper modules
   - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-draft-location-props.ts` now consume the shared extracted browse-workspace input contracts behind thinner mapping boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace input-type boundary and keeps duplicated `Pick<BuildRecordBrowseWorkspacePropsInput, ...>` signatures out of the browse workspace helper modules
+- Record Panel Record Save Payload Builder Input Type Split V3:
+  - record-save payload builder input contracts now live in `apps/web/components/record-panel-controller-record-save-payload.types.ts` instead of remaining embedded across the save-payload builder module
+  - `apps/web/components/record-panel-controller-record-save-payload.ts` now consumes the extracted builder input contract instead of carrying the inline latitude/longitude intersection while continuing to own payload assembly
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload builder-input boundary and keeps inline builder intersections out of the payload module
 
 ## Next
 - Continue the next product slice

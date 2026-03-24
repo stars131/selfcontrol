@@ -6149,7 +6149,7 @@ for (const requiredRecordSavePayloadImport of [
 
 for (const requiredRecordSavePayloadUsage of [
   'export { parseRecordPanelCoordinate } from "./record-panel-controller-record-save-coordinate";',
-  'export type { RecordSavePayload, ResolveRecordSaveActionInput } from "./record-panel-controller-record-save-payload.types";',
+  'export type { BuildRecordSavePayloadInput, RecordSavePayload, ResolveRecordSaveActionInput } from "./record-panel-controller-record-save-payload.types";',
   "export function buildRecordPanelSavePayload({",
   "extra_data: buildRecordPanelLocationExtraData({",
   "occurred_at: form.occurred_at ? new Date(form.occurred_at).toISOString() : undefined,",
@@ -6166,6 +6166,7 @@ for (const forbiddenRecordSavePayloadToken of [
   'from "../lib/record-panel-forms";',
   'from "./record-panel-controller.types";',
   "export type ResolveRecordSaveActionInput = {",
+  "ResolveRecordSaveActionInput & { latitude: number | null; longitude: number | null }",
   "export function parseRecordPanelCoordinate(value: string)",
 ]) {
   if (recordSavePayloadSource.includes(forbiddenRecordSavePayloadToken)) {
@@ -6198,9 +6199,8 @@ for (const requiredRecordSavePayloadTypesImport of [
 for (const requiredRecordSavePayloadTypesUsage of [
   'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
   'export type RecordSavePayload = Parameters<ControllerProps["onSaveRecord"]>[0];',
-  "export type ResolveRecordSaveActionInput = {",
-  "locationReviewForm: LocationReviewFormState;",
-  "selectedRecord: RecordItem | null;",
+  "export type ResolveRecordSaveActionInput = { detailCopy: DetailCopy; form: RecordFormState; locationReviewForm: LocationReviewFormState; selectedRecord: RecordItem | null };",
+  "export type BuildRecordSavePayloadInput = ResolveRecordSaveActionInput & { latitude: number | null; longitude: number | null };",
 ]) {
   if (!recordSavePayloadTypesSource.includes(requiredRecordSavePayloadTypesUsage)) {
     throw new Error(
