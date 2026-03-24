@@ -2,11 +2,11 @@
 
 import { createRecordPanelControllerRecordSubmitActions } from "./record-panel-controller-record-submit-actions";
 import { createRecordPanelControllerReminderActions } from "./record-panel-controller-reminder-actions";
+import type { RecordPanelControllerFormActionInput } from "./record-panel-controller-form-action-input.types";
 
 export function createRecordPanelControllerFormActions({
   ...props
-}: Parameters<typeof createRecordPanelControllerRecordSubmitActions>[0] &
-  Parameters<typeof createRecordPanelControllerReminderActions>[0]) {
+}: RecordPanelControllerFormActionInput) {
   const recordSubmitActions = createRecordPanelControllerRecordSubmitActions(props);
   const reminderActions = createRecordPanelControllerReminderActions(props);
 

@@ -393,6 +393,10 @@ const recordPanelFormActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-form-actions.ts",
 );
+const recordPanelFormActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-form-action-input.types.ts",
+);
 const recordPanelFilterActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-actions.ts",
@@ -1042,6 +1046,10 @@ const mediaHandlerInputTypesSource = fs.readFileSync(
   "utf8",
 );
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
+const formActionInputTypesSource = fs.readFileSync(
+  recordPanelFormActionInputTypesPath,
+  "utf8",
+);
 const filterActionsSource = fs.readFileSync(recordPanelFilterActionsPath, "utf8");
 const filterApplyActionSource = fs.readFileSync(recordPanelFilterApplyActionPath, "utf8");
 const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActionsPath, "utf8");
@@ -1333,6 +1341,7 @@ const recordHandlerInputLines = recordHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputTypesLines = mediaHandlerInputTypesSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
+const formActionInputTypesLines = formActionInputTypesSource.split(/\r?\n/).length;
 const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
 const filterApplyActionLines = filterApplyActionSource.split(/\r?\n/).length;
 const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length;
@@ -4748,7 +4757,38 @@ if (recordHandlersLines > maxRecordHandlersLines) {
   );
 }
 
+for (const requiredFormActionInputTypesImport of [
+  'from "./record-panel-controller-record-submit-action-input.types";',
+  'from "./record-panel-controller-reminder-action-input.types";',
+]) {
+  if (!formActionInputTypesSource.includes(requiredFormActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-form-action-input.types.ts must import shared form contracts: ${requiredFormActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredFormActionInputTypesUsage of [
+  "export type RecordPanelControllerFormActionInput =",
+  "RecordPanelControllerRecordSubmitActionInput &",
+  "RecordPanelControllerReminderActionInput;",
+]) {
+  if (!formActionInputTypesSource.includes(requiredFormActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-form-action-input.types.ts must own form contract composition: ${requiredFormActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxFormActionInputTypesLines = 10;
+if (formActionInputTypesLines > maxFormActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-form-action-input.types.ts exceeded ${maxFormActionInputTypesLines} lines: ${formActionInputTypesLines}`,
+  );
+}
+
 for (const requiredFormActionsImport of [
+  'from "./record-panel-controller-form-action-input.types";',
   'from "./record-panel-controller-record-submit-actions";',
   'from "./record-panel-controller-reminder-actions";',
 ]) {
@@ -4770,6 +4810,8 @@ for (const requiredFormActionsUsage of [
 
 for (const forbiddenFormActionsToken of [
   'from "../lib/record-panel-forms";',
+  "Parameters<typeof createRecordPanelControllerRecordSubmitActions>[0]",
+  "Parameters<typeof createRecordPanelControllerReminderActions>[0]",
   "const handleSubmit",
   "const handleDelete",
   "const handleCreateReminderSubmit",

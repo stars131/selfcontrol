@@ -1352,6 +1352,10 @@ Last updated: 2026-03-24
   - record save/delete aggregate input contracts now live in `apps/web/components/record-panel-controller-record-submit-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-record-submit-actions.ts`
   - `apps/web/components/record-panel-controller-record-submit-actions.ts` now consumes the shared extracted submit contract behind a thinner orchestration boundary while reusing the dedicated save and delete input modules
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the submit action input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the submit action module
+- Record Panel Form Action Input Type Split V3:
+  - record submit/reminder aggregate input contracts now live in `apps/web/components/record-panel-controller-form-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-form-actions.ts`
+  - `apps/web/components/record-panel-controller-form-actions.ts` now consumes the shared extracted form contract behind a thinner orchestration boundary while reusing the dedicated submit and reminder input modules
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the form action input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the form action module
 
 ## Next
 - Continue the next product slice
