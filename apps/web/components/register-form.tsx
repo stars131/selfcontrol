@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -8,7 +7,7 @@ import { login, register } from "../lib/api";
 import { setStoredSession } from "../lib/auth";
 import { useStoredLocale } from "../lib/locale";
 import { getRegisterFormCopy } from "./auth-form-copy";
-import { LanguageSwitcher } from "./language-switcher";
+import { AuthFormFrame } from "./auth-form-frame";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -49,67 +48,58 @@ export function RegisterForm() {
   };
 
   return (
-    <main className="page-shell">
-      <section className="panel auth-panel">
-        <div className="panel-header">
-          <div>
-            <div className="eyebrow">{copy.eyebrow}</div>
-            <h1 className="title">{copy.title}</h1>
-          </div>
-          <div className="hero-actions">
-            <LanguageSwitcher locale={locale} onChange={setLocale} />
-            <Link className="button secondary" href="/login">
-              {copy.signIn}
-            </Link>
-          </div>
-        </div>
-        <div className="panel-body">
-          <form className="form-stack" onSubmit={handleSubmit}>
-            <label className="field">
-              <span className="field-label">{copy.username}</span>
-              <input
-                className="input"
-                value={form.username}
-                onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
-                placeholder={copy.usernamePlaceholder}
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{copy.email}</span>
-              <input
-                className="input"
-                type="email"
-                value={form.email}
-                onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
-                placeholder={copy.emailPlaceholder}
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{copy.displayName}</span>
-              <input
-                className="input"
-                value={form.displayName}
-                onChange={(event) => setForm((prev) => ({ ...prev, displayName: event.target.value }))}
-                placeholder={copy.displayNamePlaceholder}
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{copy.password}</span>
-              <input
-                className="input"
-                type="password"
-                value={form.password}
-                onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
-                placeholder={copy.passwordPlaceholder}
-              />
-            </label>
-            {error ? <div className="notice error">{error}</div> : null}
-            <button className="button" type="submit" disabled={loading}>
-              {loading ? copy.loading : copy.submit}
-            </button>
-          </form>
-        </div>
-      </section>
-    </main>
+    <AuthFormFrame
+      alternateHref="/login"
+      alternateLabel={copy.signIn}
+      eyebrow={copy.eyebrow}
+      locale={locale}
+      onLocaleChange={setLocale}
+      title={copy.title}
+    >
+      <form className="form-stack" onSubmit={handleSubmit}>
+        <label className="field">
+          <span className="field-label">{copy.username}</span>
+          <input
+            className="input"
+            value={form.username}
+            onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
+            placeholder={copy.usernamePlaceholder}
+          />
+        </label>
+        <label className="field">
+          <span className="field-label">{copy.email}</span>
+          <input
+            className="input"
+            type="email"
+            value={form.email}
+            onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+            placeholder={copy.emailPlaceholder}
+          />
+        </label>
+        <label className="field">
+          <span className="field-label">{copy.displayName}</span>
+          <input
+            className="input"
+            value={form.displayName}
+            onChange={(event) => setForm((prev) => ({ ...prev, displayName: event.target.value }))}
+            placeholder={copy.displayNamePlaceholder}
+          />
+        </label>
+        <label className="field">
+          <span className="field-label">{copy.password}</span>
+          <input
+            className="input"
+            type="password"
+            value={form.password}
+            onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+            placeholder={copy.passwordPlaceholder}
+          />
+        </label>
+        {error ? <div className="notice error">{error}</div> : null}
+        <button className="button" type="submit" disabled={loading}>
+          {loading ? copy.loading : copy.submit}
+        </button>
+      </form>
+    </AuthFormFrame>
   );
 }

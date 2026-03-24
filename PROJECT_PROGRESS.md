@@ -940,6 +940,10 @@ Last updated: 2026-03-24
   - legacy record-panel form shared prop contracts now live in a dedicated types module instead of remaining inline inside `apps/web/components/record-panel-legacy-form.tsx`
   - editable legacy form fields and selected-record media upload/list rendering now flow through dedicated child components while the parent form focuses on composition and action rows
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces these legacy-form boundaries and dedicated size ceilings for the extracted modules
+- Auth Form Shared Frame Split V1:
+  - login and register pages now render through a shared auth-form frame instead of duplicating panel shell, locale switcher, and alternate-entry header layout in each component
+  - the new `apps/web/components/auth-form-frame.tsx` owns the shared access-page chrome while the concrete auth pages focus on redirect and submit logic
+  - `apps/web/scripts/verify-auth-forms-structure.mjs` now enforces this shared auth-frame boundary and tighter size ceilings for the form pages
 
 ## Next
 - Continue the next product slice
