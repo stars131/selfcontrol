@@ -2,6 +2,19 @@ import fs from "node:fs";
 import path from "node:path";
 
 const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.tsx");
+const recordPanelV2TypesPath = path.resolve(process.cwd(), "components/record-panel-v2.types.ts");
+const recordPanelV2InputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-input.types.ts",
+);
+const recordPanelV2PropsDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-props-data.types.ts",
+);
+const recordPanelV2PropsActionTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-props-action.types.ts",
+);
 const legacyRecordPanelPath = path.resolve(process.cwd(), "components/record-panel.tsx");
 const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
@@ -535,6 +548,16 @@ const legacyRecordPanelFormTypesSource = fs.readFileSync(legacyRecordPanelFormTy
 const legacyRecordPanelFormFieldsSource = fs.readFileSync(legacyRecordPanelFormFieldsPath, "utf8");
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
+const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
+const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
+const recordPanelV2PropsDataTypesSource = fs.readFileSync(
+  recordPanelV2PropsDataTypesPath,
+  "utf8",
+);
+const recordPanelV2PropsActionTypesSource = fs.readFileSync(
+  recordPanelV2PropsActionTypesPath,
+  "utf8",
+);
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const workspacePropsTypesSource = fs.readFileSync(recordPanelWorkspacePropsTypesPath, "utf8");
 const workspacePropsCoreTypesSource = fs.readFileSync(recordPanelWorkspacePropsCoreTypesPath, "utf8");
@@ -870,6 +893,11 @@ const legacyRecordPanelFormLines = legacyRecordPanelFormSource.split(/\r?\n/).le
 const legacyRecordPanelFormTypesLines = legacyRecordPanelFormTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormFieldsLines = legacyRecordPanelFormFieldsSource.split(/\r?\n/).length;
 const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
+const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
+const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
+const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
+const recordPanelV2PropsActionTypesLines =
+  recordPanelV2PropsActionTypesSource.split(/\r?\n/).length;
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const workspacePropsTypesLines = workspacePropsTypesSource.split(/\r?\n/).length;
 const workspacePropsCoreTypesLines = workspacePropsCoreTypesSource.split(/\r?\n/).length;
@@ -1188,6 +1216,140 @@ const maxWorkspacePropsCoreTypesLines = 25;
 if (workspacePropsCoreTypesLines > maxWorkspacePropsCoreTypesLines) {
   throw new Error(
     `record-panel-v2-workspace-props-core.types.ts exceeded ${maxWorkspacePropsCoreTypesLines} lines: ${workspacePropsCoreTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelV2TypesImport of [
+  'from "./record-panel-v2-props-action.types";',
+  'from "./record-panel-v2-props-data.types";',
+  'from "./record-panel-v2-input.types";',
+]) {
+  if (!recordPanelV2TypesSource.includes(requiredRecordPanelV2TypesImport)) {
+    throw new Error(
+      `record-panel-v2.types.ts must import delegated v2 type slices: ${requiredRecordPanelV2TypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordPanelV2TypesUsage of [
+  "export type { RecordPanelBulkRetryMediaDeadLetterInput, RecordPanelCreateReminderInput, RecordPanelLocationFilterInput, ReminderUpdateInput, SaveRecordInput, ViewMode } from \"./record-panel-v2-input.types\";",
+  "export type RecordPanelV2Props = RecordPanelV2ActionProps & RecordPanelV2DataProps;",
+]) {
+  if (!recordPanelV2TypesSource.includes(requiredRecordPanelV2TypesUsage)) {
+    throw new Error(
+      `record-panel-v2.types.ts must compose delegated v2 contracts: ${requiredRecordPanelV2TypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordPanelV2TypesToken of [
+  'from "../lib/types";',
+  'MediaAsset,',
+  'export type SaveRecordInput = {',
+  'export type ReminderUpdateInput = Partial<{',
+  'export type RecordPanelV2Props = {',
+]) {
+  if (recordPanelV2TypesSource.includes(forbiddenRecordPanelV2TypesToken)) {
+    throw new Error(
+      `record-panel-v2.types.ts must keep v2 contract internals delegated: ${forbiddenRecordPanelV2TypesToken}`,
+    );
+  }
+}
+
+const maxRecordPanelV2TypesLines = 10;
+if (recordPanelV2TypesLines > maxRecordPanelV2TypesLines) {
+  throw new Error(
+    `record-panel-v2.types.ts exceeded ${maxRecordPanelV2TypesLines} lines: ${recordPanelV2TypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelV2InputTypesImport of ['from "../lib/types";']) {
+  if (!recordPanelV2InputTypesSource.includes(requiredRecordPanelV2InputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-input.types.ts must import v2 input type dependencies: ${requiredRecordPanelV2InputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordPanelV2InputTypesUsage of [
+  'export type ViewMode = "timeline" | "list";',
+  "export type SaveRecordInput = {",
+  "export type ReminderUpdateInput = Partial<{",
+  "export type RecordPanelCreateReminderInput = {",
+  "export type RecordPanelBulkRetryMediaDeadLetterInput = {",
+  'export type RecordPanelLocationFilterInput = Pick<RecordFilterState, "placeQuery" | "reviewStatus" | "mappedOnly">;',
+]) {
+  if (!recordPanelV2InputTypesSource.includes(requiredRecordPanelV2InputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-input.types.ts must own shared v2 input contracts: ${requiredRecordPanelV2InputTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelV2InputTypesLines = 10;
+if (recordPanelV2InputTypesLines > maxRecordPanelV2InputTypesLines) {
+  throw new Error(
+    `record-panel-v2-input.types.ts exceeded ${maxRecordPanelV2InputTypesLines} lines: ${recordPanelV2InputTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelV2PropsDataTypesImport of ['from "../lib/types";']) {
+  if (!recordPanelV2PropsDataTypesSource.includes(requiredRecordPanelV2PropsDataTypesImport)) {
+    throw new Error(
+      `record-panel-v2-props-data.types.ts must import v2 data type dependencies: ${requiredRecordPanelV2PropsDataTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordPanelV2PropsDataTypesUsage of [
+  "export type RecordPanelV2DataProps = {",
+  "authToken: string | null;",
+  "mediaStorageSummary: MediaStorageSummary | null;",
+  "filteringRecords: boolean;",
+]) {
+  if (!recordPanelV2PropsDataTypesSource.includes(requiredRecordPanelV2PropsDataTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-props-data.types.ts must own v2 data prop contracts: ${requiredRecordPanelV2PropsDataTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelV2PropsDataTypesLines = 10;
+if (recordPanelV2PropsDataTypesLines > maxRecordPanelV2PropsDataTypesLines) {
+  throw new Error(
+    `record-panel-v2-props-data.types.ts exceeded ${maxRecordPanelV2PropsDataTypesLines} lines: ${recordPanelV2PropsDataTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelV2PropsActionTypesImport of [
+  'from "../lib/types";',
+  'from "./record-panel-v2-input.types";',
+]) {
+  if (!recordPanelV2PropsActionTypesSource.includes(requiredRecordPanelV2PropsActionTypesImport)) {
+    throw new Error(
+      `record-panel-v2-props-action.types.ts must import v2 action type dependencies: ${requiredRecordPanelV2PropsActionTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordPanelV2PropsActionTypesUsage of [
+  "export type RecordPanelV2ActionProps = {",
+  "onSaveRecord: (input: SaveRecordInput) => Promise<void>;",
+  "onCreateReminder: (input: RecordPanelCreateReminderInput) => Promise<void>;",
+  "onBulkRetryMediaDeadLetter: (input: RecordPanelBulkRetryMediaDeadLetterInput) => Promise<void>;",
+  "onApplyLocationFilter: (nextFilter: RecordPanelLocationFilterInput) => Promise<void>;",
+]) {
+  if (!recordPanelV2PropsActionTypesSource.includes(requiredRecordPanelV2PropsActionTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-props-action.types.ts must own v2 action prop contracts: ${requiredRecordPanelV2PropsActionTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelV2PropsActionTypesLines = 10;
+if (recordPanelV2PropsActionTypesLines > maxRecordPanelV2PropsActionTypesLines) {
+  throw new Error(
+    `record-panel-v2-props-action.types.ts exceeded ${maxRecordPanelV2PropsActionTypesLines} lines: ${recordPanelV2PropsActionTypesLines}`,
   );
 }
 

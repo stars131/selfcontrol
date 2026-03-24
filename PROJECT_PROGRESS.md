@@ -1232,6 +1232,10 @@ Last updated: 2026-03-24
   - selected-record sync now delegates form synchronization and reminder synchronization into dedicated hook modules instead of keeping both `useEffect` blocks inside `apps/web/components/use-record-panel-controller-selected-record-sync.ts`
   - `apps/web/components/use-record-panel-controller-selected-record-sync.ts` now focuses on composing the specialized sync hooks behind a thinner selected-record boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record sync split and dedicated size ceilings for the extracted form and reminder sync hooks
+- Record Panel V2 Type Contract Split V3:
+  - shared record-panel v2 contracts now delegate input payload types, data props, and action props into dedicated type modules instead of keeping all type definitions inside `apps/web/components/record-panel-v2.types.ts`
+  - `apps/web/components/record-panel-v2.types.ts` now focuses on compatibility exports and composing the shared v2 prop contract behind a thinner boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the v2 type-contract split and dedicated size ceilings for the extracted input, data, and action type modules
 
 ## Next
 - Continue the next product slice

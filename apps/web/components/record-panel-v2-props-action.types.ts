@@ -1,0 +1,6 @@
+import type { RecordFilterState } from "../lib/types";
+import type { RecordPanelBulkRetryMediaDeadLetterInput, RecordPanelCreateReminderInput, RecordPanelLocationFilterInput, ReminderUpdateInput, SaveRecordInput } from "./record-panel-v2-input.types";
+
+export type RecordPanelV2ActionProps = {
+  onSelectRecord: (recordId: string | null) => void; onSaveRecord: (input: SaveRecordInput) => Promise<void>; onCreateReminder: (input: RecordPanelCreateReminderInput) => Promise<void>; onDeleteMedia: (mediaId: string) => Promise<void>; onUpdateReminder: (reminderId: string, input: ReminderUpdateInput) => Promise<void>; onDeleteReminder: (reminderId: string) => Promise<void>; onDeleteRecord: (recordId: string) => Promise<void>; onBulkRetryMediaDeadLetter: (input: RecordPanelBulkRetryMediaDeadLetterInput) => Promise<void>; onRefreshMediaStatus: (mediaId: string) => Promise<void>; onApplyRecordFilter: (nextFilter: RecordFilterState) => Promise<void>; onApplyLocationFilter: (nextFilter: RecordPanelLocationFilterInput) => Promise<void>; onCreateSearchPreset: (name: string, nextFilter: RecordFilterState) => Promise<void>; onDeleteSearchPreset: (presetId: string) => Promise<void>; onRetryMedia: (mediaId: string) => Promise<void>; onUploadMedia: (recordId: string, file: File) => Promise<void>; onResetFilter: () => Promise<void>;
+};
