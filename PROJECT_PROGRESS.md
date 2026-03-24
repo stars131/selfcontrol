@@ -1240,6 +1240,10 @@ Last updated: 2026-03-24
   - controller view-data hook now delegates record summary and selected-record derived view-data assembly into dedicated helper modules instead of resolving those memoized derivations directly inside `apps/web/components/use-record-panel-controller-view-data.ts`
   - `apps/web/components/use-record-panel-controller-view-data.ts` now focuses on composing memoized record, selected-record, and localized view-data slices behind a thinner hook boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the view-data hook split and dedicated size ceilings for the extracted record and selected-record view-data helpers
+- Record Panel Save Payload Split V3:
+  - record-save payload contracts and coordinate parsing now live in dedicated modules instead of remaining mixed inside `apps/web/components/record-panel-controller-record-save-payload.ts`
+  - `apps/web/components/record-panel-controller-record-save-payload.ts` now focuses on payload assembly and a stable re-export boundary for the extracted save-payload contracts
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-payload split and dedicated size ceilings for the extracted payload-type and coordinate helper modules
 
 ## Next
 - Continue the next product slice
