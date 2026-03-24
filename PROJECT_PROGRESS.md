@@ -1048,6 +1048,10 @@ Last updated: 2026-03-24
   - record-editor workspace data props, copy-label props, and action contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-editor-workspace.types.ts`
   - the top-level workspace type file now focuses more narrowly on composing the three delegated type groups into the exported `RecordEditorWorkspaceProps` contract
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this type-group boundary and dedicated size ceilings for the extracted modules
+- Workspace Prop Type Group Split V1:
+  - record-panel workspace shared prop aliases, browse-workspace input contracts, and editor-workspace input contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-panel-v2-workspace-props.types.ts`
+  - the top-level workspace-props type file now focuses more narrowly on acting as a stable re-export boundary while core, browse, and editor type modules own their specific contracts
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this workspace-prop type-group boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
