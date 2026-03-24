@@ -136,6 +136,14 @@ const recordPanelFilterPresetActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-actions.ts",
 );
+const recordPanelFilterPresetSaveActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-save-action.ts",
+);
+const recordPanelFilterPresetDeleteActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-delete-action.ts",
+);
 const recordPanelFilterHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-helpers.ts",
@@ -353,6 +361,11 @@ const mediaHandlerInputSource = fs.readFileSync(recordPanelMediaHandlerInputPath
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const filterActionsSource = fs.readFileSync(recordPanelFilterActionsPath, "utf8");
 const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActionsPath, "utf8");
+const filterPresetSaveActionSource = fs.readFileSync(recordPanelFilterPresetSaveActionPath, "utf8");
+const filterPresetDeleteActionSource = fs.readFileSync(
+  recordPanelFilterPresetDeleteActionPath,
+  "utf8",
+);
 const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
@@ -438,6 +451,8 @@ const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const filterActionsLines = filterActionsSource.split(/\r?\n/).length;
 const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length;
+const filterPresetSaveActionLines = filterPresetSaveActionSource.split(/\r?\n/).length;
+const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\n/).length;
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
@@ -1669,7 +1684,8 @@ for (const requiredFilterPresetActionsImport of [
   'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
-  'from "./record-panel-controller-filter-helpers";',
+  'from "./record-panel-controller-filter-preset-delete-action";',
+  'from "./record-panel-controller-filter-preset-save-action";',
 ]) {
   if (!filterPresetActionsSource.includes(requiredFilterPresetActionsImport)) {
     throw new Error(
@@ -1680,11 +1696,10 @@ for (const requiredFilterPresetActionsImport of [
 
 for (const requiredFilterPresetActionsUsage of [
   "export function createRecordPanelControllerFilterPresetActions({",
-  "resolveRecordPanelPresetName(detailCopy, presetName)",
-  "await onCreateSearchPreset(presetInput.presetName, filterDraft)",
-  "await onDeleteSearchPreset(presetId)",
-  "detailCopy.savePresetError",
-  "detailCopy.deletePresetError",
+  "createRecordPanelControllerFilterPresetDeleteAction(props)",
+  "createRecordPanelControllerFilterPresetSaveAction(props)",
+  "...presetSaveAction",
+  "...presetDeleteAction",
 ]) {
   if (!filterPresetActionsSource.includes(requiredFilterPresetActionsUsage)) {
     throw new Error(
@@ -1697,6 +1712,70 @@ const maxFilterPresetActionsLines = 60;
 if (filterPresetActionsLines > maxFilterPresetActionsLines) {
   throw new Error(
     `record-panel-controller-filter-preset-actions.ts exceeded ${maxFilterPresetActionsLines} lines: ${filterPresetActionsLines}`,
+  );
+}
+
+for (const requiredFilterPresetSaveActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-helpers";',
+]) {
+  if (!filterPresetSaveActionSource.includes(requiredFilterPresetSaveActionImport)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-save-action.ts must import preset-save contracts: ${requiredFilterPresetSaveActionImport}`,
+    );
+  }
+}
+
+for (const requiredFilterPresetSaveActionUsage of [
+  "export function createRecordPanelControllerFilterPresetSaveAction({",
+  "resolveRecordPanelPresetName(detailCopy, presetName)",
+  "await onCreateSearchPreset(presetInput.presetName, filterDraft)",
+  "detailCopy.savePresetError",
+]) {
+  if (!filterPresetSaveActionSource.includes(requiredFilterPresetSaveActionUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-save-action.ts must own preset save orchestration: ${requiredFilterPresetSaveActionUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetSaveActionLines = 45;
+if (filterPresetSaveActionLines > maxFilterPresetSaveActionLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-save-action.ts exceeded ${maxFilterPresetSaveActionLines} lines: ${filterPresetSaveActionLines}`,
+  );
+}
+
+for (const requiredFilterPresetDeleteActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-helpers";',
+]) {
+  if (!filterPresetDeleteActionSource.includes(requiredFilterPresetDeleteActionImport)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-delete-action.ts must import preset-delete contracts: ${requiredFilterPresetDeleteActionImport}`,
+    );
+  }
+}
+
+for (const requiredFilterPresetDeleteActionUsage of [
+  "export function createRecordPanelControllerFilterPresetDeleteAction({",
+  "await onDeleteSearchPreset(presetId)",
+  "detailCopy.deletePresetError",
+]) {
+  if (!filterPresetDeleteActionSource.includes(requiredFilterPresetDeleteActionUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-delete-action.ts must own preset delete orchestration: ${requiredFilterPresetDeleteActionUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetDeleteActionLines = 30;
+if (filterPresetDeleteActionLines > maxFilterPresetDeleteActionLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-delete-action.ts exceeded ${maxFilterPresetDeleteActionLines} lines: ${filterPresetDeleteActionLines}`,
   );
 }
 

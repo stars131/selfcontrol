@@ -1136,6 +1136,10 @@ Last updated: 2026-03-24
   - post-reminder form reset now lives in `apps/web/components/record-panel-controller-reminder-success-helpers.ts` instead of remaining embedded inside the reminder action module
   - `apps/web/components/record-panel-controller-reminder-actions.ts` now focuses more narrowly on reminder submission orchestration, validation handoff, and saving-state transitions
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-success helper boundary and dedicated size ceilings for both modules
+- Record Panel Filter Preset Action Split V2:
+  - filter preset save and delete orchestration now each have their own dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-filter-preset-actions.ts`
+  - `apps/web/components/record-panel-controller-filter-preset-actions.ts` now focuses on composing preset save/delete actions behind a thinner boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset action split and dedicated size ceilings for both extracted modules
 
 ## Next
 - Continue the next product slice
