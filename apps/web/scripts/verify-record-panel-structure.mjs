@@ -433,6 +433,10 @@ const recordPanelRecordSubmitActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-submit-actions.ts",
 );
+const recordPanelRecordSubmitActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-submit-action-input.types.ts",
+);
 const recordPanelRecordSaveActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-actions.ts",
@@ -1054,6 +1058,10 @@ const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8"
 const filterErrorHelpersSource = fs.readFileSync(recordPanelFilterErrorHelpersPath, "utf8");
 const filterPresetNameSource = fs.readFileSync(recordPanelFilterPresetNamePath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
+const recordSubmitActionInputTypesSource = fs.readFileSync(
+  recordPanelRecordSubmitActionInputTypesPath,
+  "utf8",
+);
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
 const recordSaveSubmitActionSource = fs.readFileSync(
   recordPanelRecordSaveSubmitActionPath,
@@ -1336,6 +1344,8 @@ const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const filterErrorHelpersLines = filterErrorHelpersSource.split(/\r?\n/).length;
 const filterPresetNameLines = filterPresetNameSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
+const recordSubmitActionInputTypesLines =
+  recordSubmitActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveSubmitActionLines = recordSaveSubmitActionSource.split(/\r?\n/).length;
 const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
@@ -5104,7 +5114,38 @@ if (filterPresetNameLines > maxFilterPresetNameLines) {
   );
 }
 
+for (const requiredRecordSubmitActionInputTypesImport of [
+  'from "./record-panel-controller-record-delete-action-input.types";',
+  'from "./record-panel-controller-record-save-action-input.types";',
+]) {
+  if (!recordSubmitActionInputTypesSource.includes(requiredRecordSubmitActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-submit-action-input.types.ts must import shared submit contracts: ${requiredRecordSubmitActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSubmitActionInputTypesUsage of [
+  "export type RecordPanelControllerRecordSubmitActionInput =",
+  "RecordPanelControllerRecordSaveActionInput &",
+  "RecordPanelControllerRecordDeleteActionInput;",
+]) {
+  if (!recordSubmitActionInputTypesSource.includes(requiredRecordSubmitActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-submit-action-input.types.ts must own submit contract composition: ${requiredRecordSubmitActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSubmitActionInputTypesLines = 10;
+if (recordSubmitActionInputTypesLines > maxRecordSubmitActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-submit-action-input.types.ts exceeded ${maxRecordSubmitActionInputTypesLines} lines: ${recordSubmitActionInputTypesLines}`,
+  );
+}
+
 for (const requiredRecordSubmitActionsImport of [
+  'from "./record-panel-controller-record-submit-action-input.types";',
   'from "./record-panel-controller-record-delete-actions";',
   'from "./record-panel-controller-record-save-actions";',
 ]) {
@@ -5127,6 +5168,8 @@ for (const requiredRecordSubmitActionsUsage of [
 for (const forbiddenRecordSubmitActionsToken of [
   'from "../lib/record-panel-forms";',
   'from "../lib/record-panel-detail";',
+  "Parameters<typeof createRecordPanelControllerRecordSaveActions>[0]",
+  "Parameters<typeof createRecordPanelControllerRecordDeleteActions>[0]",
   "const handleSubmit",
   "const handleDelete",
   "event.preventDefault()",

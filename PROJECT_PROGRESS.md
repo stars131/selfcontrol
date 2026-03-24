@@ -1348,6 +1348,10 @@ Last updated: 2026-03-24
   - record delete action input contracts now live in `apps/web/components/record-panel-controller-record-delete-action-input.types.ts` instead of remaining embedded across the delete wrapper and delete runner modules
   - `apps/web/components/record-panel-controller-record-delete-actions.ts` and `apps/web/components/record-panel-controller-record-delete-run-action.ts` now consume the shared extracted delete contract behind thinner execution boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the delete action input-type boundary and keeps inline delete contract definitions out of the wrapper and runner modules
+- Record Panel Record Submit Action Input Type Split V3:
+  - record save/delete aggregate input contracts now live in `apps/web/components/record-panel-controller-record-submit-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-record-submit-actions.ts`
+  - `apps/web/components/record-panel-controller-record-submit-actions.ts` now consumes the shared extracted submit contract behind a thinner orchestration boundary while reusing the dedicated save and delete input modules
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the submit action input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the submit action module
 
 ## Next
 - Continue the next product slice
