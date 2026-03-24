@@ -992,6 +992,10 @@ Last updated: 2026-03-24
   - record-panel save-action validation, coordinate parsing, and save-payload assembly now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-record-save-actions.ts`
   - the top-level record save action now focuses more narrowly on submit orchestration, saving state transitions, and reset-after-create behavior while the helper owns the input contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this record-save helper boundary and dedicated size ceilings for the extracted modules
+- Reminder Action Helper Split V1:
+  - record-panel reminder-action validation, fallback error formatting, and reminder payload assembly now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-reminder-actions.ts`
+  - the top-level reminder action now focuses more narrowly on submit orchestration, saving-state transitions, and post-create form reset while the helper owns the input contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this reminder helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

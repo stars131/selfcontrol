@@ -1,15 +1,10 @@
 "use client";
-
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { ReminderFormState } from "../lib/record-panel-forms";
 import type { RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
+import { getRecordPanelReminderErrorMessage, resolveRecordPanelReminderActionInput } from "./record-panel-controller-reminder-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
-
-function getErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
 
 export function createRecordPanelControllerReminderActions({
   detailCopy,
@@ -29,32 +24,22 @@ export function createRecordPanelControllerReminderActions({
   setSavingReminder: (value: boolean) => void;
 }) {
   async function handleCreateReminderSubmit() {
-    if (!selectedRecord) {
-      setError("Save or select a record before adding a reminder");
+    const reminderInput = resolveRecordPanelReminderActionInput({
+      detailCopy,
+      reminderForm,
+      selectedRecord,
+    });
+    if ("errorMessage" in reminderInput) {
+      setError(reminderInput.errorMessage);
       return;
     }
-    if (!reminderForm.remind_at) {
-      setError(detailCopy.reminderTimeRequiredError);
-      return;
-    }
-
     setSavingReminder(true);
     setError("");
     try {
-      await onCreateReminder({
-        recordId: selectedRecord.id,
-        title: reminderForm.title.trim() || selectedRecord.title || undefined,
-        message: reminderForm.message.trim() || undefined,
-        remind_at: new Date(reminderForm.remind_at).toISOString(),
-        channel_code: "in_app",
-      });
-      setReminderForm((prev) => ({
-        ...prev,
-        message: "",
-        remind_at: "",
-      }));
+      await onCreateReminder(reminderInput.payload);
+      setReminderForm((prev) => ({ ...prev, message: "", remind_at: "" }));
     } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.createReminderError));
+      setError(getRecordPanelReminderErrorMessage(caught, detailCopy.createReminderError));
     } finally {
       setSavingReminder(false);
     }

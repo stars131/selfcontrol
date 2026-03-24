@@ -56,6 +56,14 @@ const recordPanelRecordSaveHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-helpers.ts",
 );
+const recordPanelReminderActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-actions.ts",
+);
+const recordPanelReminderHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-helpers.ts",
+);
 const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
@@ -102,6 +110,8 @@ const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
+const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
+const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
@@ -124,6 +134,8 @@ const formActionsLines = formActionsSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
+const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
+const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
@@ -725,6 +737,83 @@ const maxRecordSaveHelpersLines = 110;
 if (recordSaveHelpersLines > maxRecordSaveHelpersLines) {
   throw new Error(
     `record-panel-controller-record-save-helpers.ts exceeded ${maxRecordSaveHelpersLines} lines: ${recordSaveHelpersLines}`,
+  );
+}
+
+for (const requiredReminderActionsImport of [
+  'from "./record-panel-controller-reminder-helpers";',
+]) {
+  if (!reminderActionsSource.includes(requiredReminderActionsImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-actions.ts must import delegated reminder helpers: ${requiredReminderActionsImport}`,
+    );
+  }
+}
+
+for (const requiredReminderActionsUsage of [
+  "resolveRecordPanelReminderActionInput({",
+  "getRecordPanelReminderErrorMessage(",
+  "await onCreateReminder(reminderInput.payload)",
+]) {
+  if (!reminderActionsSource.includes(requiredReminderActionsUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-actions.ts must delegate reminder validation and payload assembly: ${requiredReminderActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderActionsToken of [
+  "function getErrorMessage(",
+  '"Save or select a record before adding a reminder"',
+  "detailCopy.reminderTimeRequiredError",
+  "recordId: selectedRecord.id,",
+  'channel_code: "in_app"',
+]) {
+  if (reminderActionsSource.includes(forbiddenReminderActionsToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-actions.ts must keep reminder internals delegated: ${forbiddenReminderActionsToken}`,
+    );
+  }
+}
+
+const maxReminderActionsLines = 55;
+if (reminderActionsLines > maxReminderActionsLines) {
+  throw new Error(
+    `record-panel-controller-reminder-actions.ts exceeded ${maxReminderActionsLines} lines: ${reminderActionsLines}`,
+  );
+}
+
+for (const requiredReminderHelpersImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-forms";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!reminderHelpersSource.includes(requiredReminderHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-helpers.ts must import shared reminder contracts: ${requiredReminderHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredReminderHelpersUsage of [
+  "function buildReminderPayload({",
+  "export function getRecordPanelReminderErrorMessage(",
+  "export function resolveRecordPanelReminderActionInput(",
+  '"Save or select a record before adding a reminder"',
+  "reminderTimeRequiredError",
+  'channel_code: "in_app"',
+]) {
+  if (!reminderHelpersSource.includes(requiredReminderHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-helpers.ts must own reminder validation and payload assembly: ${requiredReminderHelpersUsage}`,
+    );
+  }
+}
+
+const maxReminderHelpersLines = 60;
+if (reminderHelpersLines > maxReminderHelpersLines) {
+  throw new Error(
+    `record-panel-controller-reminder-helpers.ts exceeded ${maxReminderHelpersLines} lines: ${reminderHelpersLines}`,
   );
 }
 
