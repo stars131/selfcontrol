@@ -1124,10 +1124,14 @@ Last updated: 2026-03-24
   - handler-group shared contract types now delegate prop, state, and view-data slices into dedicated type modules instead of remaining combined inside `apps/web/components/record-panel-controller-handler-group-inputs.types.ts`
   - `apps/web/components/record-panel-controller-handler-group-inputs.types.ts` now focuses on composing the three specialized type slices behind a thin shared contract boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the handler-group type-slice split and dedicated size ceilings for the extracted type modules
+- Record Panel Record Delete Helper Split V1:
+  - record delete fallback-message and error formatting now live in `apps/web/components/record-panel-controller-record-delete-helpers.ts` instead of remaining embedded inside the delete action module
+  - `apps/web/components/record-panel-controller-record-delete-actions.ts` now focuses on delete orchestration and selected-record guarding behind a thinner action boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-delete helper boundary and dedicated size ceilings for both modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel remaining action/input contracts and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

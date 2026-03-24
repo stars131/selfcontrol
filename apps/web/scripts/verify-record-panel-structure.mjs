@@ -148,6 +148,14 @@ const recordPanelRecordSaveActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-actions.ts",
 );
+const recordPanelRecordDeleteActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-delete-actions.ts",
+);
+const recordPanelRecordDeleteHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-delete-helpers.ts",
+);
 const recordPanelRecordSaveHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-helpers.ts",
@@ -340,6 +348,8 @@ const filterPresetActionsSource = fs.readFileSync(recordPanelFilterPresetActions
 const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
+const recordDeleteActionsSource = fs.readFileSync(recordPanelRecordDeleteActionsPath, "utf8");
+const recordDeleteHelpersSource = fs.readFileSync(recordPanelRecordDeleteHelpersPath, "utf8");
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
 const recordSavePayloadSource = fs.readFileSync(recordPanelRecordSavePayloadPath, "utf8");
 const recordLocationPayloadSource = fs.readFileSync(recordPanelRecordLocationPayloadPath, "utf8");
@@ -415,6 +425,8 @@ const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
+const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
+const recordDeleteHelpersLines = recordDeleteHelpersSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
 const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const recordLocationPayloadLines = recordLocationPayloadSource.split(/\r?\n/).length;
@@ -1737,6 +1749,81 @@ const maxRecordSubmitActionsLines = 20;
 if (recordSubmitActionsLines > maxRecordSubmitActionsLines) {
   throw new Error(
     `record-panel-controller-record-submit-actions.ts exceeded ${maxRecordSubmitActionsLines} lines: ${recordSubmitActionsLines}`,
+  );
+}
+
+for (const requiredRecordDeleteActionsImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-record-delete-helpers";',
+]) {
+  if (!recordDeleteActionsSource.includes(requiredRecordDeleteActionsImport)) {
+    throw new Error(
+      `record-panel-controller-record-delete-actions.ts must import delegated delete helpers: ${requiredRecordDeleteActionsImport}`,
+    );
+  }
+}
+
+for (const requiredRecordDeleteActionsUsage of [
+  "export function createRecordPanelControllerRecordDeleteActions({",
+  "getRecordPanelRecordDeleteFallbackMessage(detailCopy)",
+  "await onDeleteRecord(selectedRecord.id)",
+  "getRecordPanelRecordDeleteErrorMessage(caught, fallbackMessage)",
+]) {
+  if (!recordDeleteActionsSource.includes(requiredRecordDeleteActionsUsage)) {
+    throw new Error(
+      `record-panel-controller-record-delete-actions.ts must delegate delete error handling: ${requiredRecordDeleteActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordDeleteActionsToken of [
+  "function getErrorMessage(",
+  "detailCopy.deleteRecordError",
+  "caught instanceof Error ? caught.message : fallbackMessage",
+]) {
+  if (recordDeleteActionsSource.includes(forbiddenRecordDeleteActionsToken)) {
+    throw new Error(
+      `record-panel-controller-record-delete-actions.ts must keep delete helper internals delegated: ${forbiddenRecordDeleteActionsToken}`,
+    );
+  }
+}
+
+const maxRecordDeleteActionsLines = 45;
+if (recordDeleteActionsLines > maxRecordDeleteActionsLines) {
+  throw new Error(
+    `record-panel-controller-record-delete-actions.ts exceeded ${maxRecordDeleteActionsLines} lines: ${recordDeleteActionsLines}`,
+  );
+}
+
+for (const requiredRecordDeleteHelpersImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!recordDeleteHelpersSource.includes(requiredRecordDeleteHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-record-delete-helpers.ts must import delegated delete copy contracts: ${requiredRecordDeleteHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredRecordDeleteHelpersUsage of [
+  "export function getRecordPanelRecordDeleteErrorMessage(",
+  "export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: DetailCopy)",
+  "return caught instanceof Error ? caught.message : fallbackMessage;",
+  "return detailCopy.deleteRecordError;",
+]) {
+  if (!recordDeleteHelpersSource.includes(requiredRecordDeleteHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-record-delete-helpers.ts must own delete helper details: ${requiredRecordDeleteHelpersUsage}`,
+    );
+  }
+}
+
+const maxRecordDeleteHelpersLines = 20;
+if (recordDeleteHelpersLines > maxRecordDeleteHelpersLines) {
+  throw new Error(
+    `record-panel-controller-record-delete-helpers.ts exceeded ${maxRecordDeleteHelpersLines} lines: ${recordDeleteHelpersLines}`,
   );
 }
 

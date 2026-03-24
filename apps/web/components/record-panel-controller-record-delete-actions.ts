@@ -1,15 +1,9 @@
 "use client";
-
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
-
+import { getRecordPanelRecordDeleteErrorMessage, getRecordPanelRecordDeleteFallbackMessage } from "./record-panel-controller-record-delete-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
-
-function getErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
-
 export function createRecordPanelControllerRecordDeleteActions({
   detailCopy,
   onDeleteRecord,
@@ -23,6 +17,7 @@ export function createRecordPanelControllerRecordDeleteActions({
   setDeleting: (value: boolean) => void;
   setError: (value: string) => void;
 }) {
+  const fallbackMessage = getRecordPanelRecordDeleteFallbackMessage(detailCopy);
   async function handleDelete() {
     if (!selectedRecord) {
       return;
@@ -32,12 +27,11 @@ export function createRecordPanelControllerRecordDeleteActions({
     try {
       await onDeleteRecord(selectedRecord.id);
     } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.deleteRecordError));
+      setError(getRecordPanelRecordDeleteErrorMessage(caught, fallbackMessage));
     } finally {
       setDeleting(false);
     }
   }
-
   return {
     handleDelete,
   };
