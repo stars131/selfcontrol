@@ -1264,6 +1264,10 @@ Last updated: 2026-03-24
   - record delete orchestration now lives in a dedicated action module instead of remaining directly inside `apps/web/components/record-panel-controller-record-delete-actions.ts`
   - `apps/web/components/record-panel-controller-record-delete-actions.ts` now focuses on acting as a thin stable wrapper around the specialized delete-run action
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the delete-action split and dedicated size ceilings for the extracted delete-run action module
+- Record Panel Delete Action Runner Split V3:
+  - delete-run orchestration is now explicitly isolated in `apps/web/components/record-panel-controller-record-delete-run-action.ts`, while `apps/web/components/record-panel-controller-record-delete-actions.ts` stays as the stable compatibility wrapper consumed by the broader submit-action assembly
+  - this keeps fallback-message lookup, delete execution, and delete error handling out of the boundary module that other slices depend on
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the wrapper-vs-runner separation for record delete actions
 
 ## Next
 - Continue the next product slice
