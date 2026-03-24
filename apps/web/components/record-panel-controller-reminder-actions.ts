@@ -1,11 +1,7 @@
 "use client";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { ReminderFormState } from "../lib/record-panel-forms";
-import type { RecordItem } from "../lib/types";
-import type { ControllerProps } from "./record-panel-controller.types";
 import { getRecordPanelReminderErrorMessage, resolveRecordPanelReminderActionInput } from "./record-panel-controller-reminder-helpers";
+import type { RecordPanelControllerReminderActionInput } from "./record-panel-controller-reminder-action-input.types";
 import { applyRecordPanelReminderSuccessState } from "./record-panel-controller-reminder-success-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
 
 export function createRecordPanelControllerReminderActions({
   detailCopy,
@@ -15,15 +11,7 @@ export function createRecordPanelControllerReminderActions({
   setError,
   setReminderForm,
   setSavingReminder,
-}: {
-  detailCopy: DetailCopy;
-  onCreateReminder: ControllerProps["onCreateReminder"];
-  reminderForm: ReminderFormState;
-  selectedRecord: RecordItem | null;
-  setError: (value: string) => void;
-  setReminderForm: React.Dispatch<React.SetStateAction<ReminderFormState>>;
-  setSavingReminder: (value: boolean) => void;
-}) {
+}: RecordPanelControllerReminderActionInput) {
   async function handleCreateReminderSubmit() {
     const reminderInput = resolveRecordPanelReminderActionInput({
       detailCopy,

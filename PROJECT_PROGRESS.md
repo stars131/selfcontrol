@@ -1140,10 +1140,14 @@ Last updated: 2026-03-24
   - filter preset save and delete orchestration now each have their own dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-filter-preset-actions.ts`
   - `apps/web/components/record-panel-controller-filter-preset-actions.ts` now focuses on composing preset save/delete actions behind a thinner boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset action split and dedicated size ceilings for both extracted modules
+- Record Panel Reminder Action Input Type Split V1:
+  - reminder action input contracts now live in `apps/web/components/record-panel-controller-reminder-action-input.types.ts` instead of remaining embedded inside the reminder action module
+  - `apps/web/components/record-panel-controller-reminder-actions.ts` now focuses more narrowly on reminder submit orchestration while consuming a shared typed input contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder action input-type boundary and a dedicated size ceiling for the extracted type module
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper slices
+- Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
