@@ -1188,6 +1188,10 @@ Last updated: 2026-03-24
   - editor workspace prop-derived fields and controller-derived fields now live in dedicated input-mapper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-input.ts`
   - `apps/web/components/record-panel-v2-editor-workspace-input.ts` now focuses on composing the two specialized input mappers behind a thinner assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor workspace input split and dedicated size ceilings for both extracted input modules
+- Record Panel Browse Workspace Input Split V2:
+  - browse workspace prop-derived fields and controller-derived fields now live in dedicated input-mapper modules instead of remaining combined inside `apps/web/components/record-panel-v2-browse-workspace-input.ts`
+  - `apps/web/components/record-panel-v2-browse-workspace-input.ts` now focuses on composing the two specialized input mappers behind a thinner assembly boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse workspace input split and dedicated size ceilings for both extracted input modules
 
 ## Next
 - Continue the next product slice
