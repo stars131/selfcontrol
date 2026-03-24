@@ -968,6 +968,10 @@ Last updated: 2026-03-24
   - workspace-shell initial-load token gating, initial-data input mapping, and load execution flow now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-initial-load.ts`
   - the top-level initial-load hook now focuses more narrowly on effect lifecycle and dependency wiring while delegated helpers own redirect, input shaping, and startup execution details
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these initial-load helper boundaries and dedicated size ceilings for the extracted modules
+- Workspace Settings Client Shell and Prop Builder Split V1:
+  - workspace-settings client shared props, loading shell, managed-role derivation, and provider/managed section prop assembly now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-settings-client.tsx`
+  - the top-level settings client now focuses more narrowly on controller composition, locale wiring, and shell layout while delegated helpers own loading presentation and section input shaping
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces these client-helper boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

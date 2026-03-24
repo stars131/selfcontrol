@@ -1,31 +1,7 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
-import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 import { ProviderSettingsPanel } from "./provider-settings-panel";
-
-type WorkspaceSettingsProviderSectionProps = {
-  highlightedAnchor: string | null;
-  locale: LocaleCode;
-  managedRole: "owner" | "editor" | null;
-  mediaStorageHealth: MediaStorageProviderHealth | null;
-  onRefreshMediaStorageHealth: (() => Promise<void>) | null;
-  onSaveProviderConfig: (
-    featureCode: string,
-    input: {
-      provider_code: string;
-      model_name?: string | null;
-      is_enabled: boolean;
-      api_base_url?: string | null;
-      api_key_env_name?: string | null;
-      options_json?: Record<string, unknown>;
-    },
-  ) => Promise<void>;
-  providerConfigs: ProviderFeatureConfig[];
-  refreshingMediaStorageHealth: boolean;
-  providerTitle: string;
-  viewerNotice: string;
-};
+import type { WorkspaceSettingsProviderSectionProps } from "./workspace-settings-provider-section.types";
 
 export function WorkspaceSettingsProviderSection({
   highlightedAnchor,
