@@ -1,13 +1,10 @@
 import { createEmptyForm, type RecordFormState } from "../lib/record-panel-forms";
-import type { RecordItem } from "../lib/types";
+import type { ApplyRecordPanelRecordSaveSuccessStateInput } from "./record-panel-controller-record-save-success-helpers.types";
 
 export function applyRecordPanelRecordSaveSuccessState({
   selectedRecord,
   setForm,
-}: {
-  selectedRecord: RecordItem | null;
-  setForm: React.Dispatch<React.SetStateAction<RecordFormState>>;
-}) {
+}: ApplyRecordPanelRecordSaveSuccessStateInput) {
   if (!selectedRecord) {
     setForm(createEmptyForm());
   }

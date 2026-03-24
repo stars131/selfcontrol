@@ -1476,6 +1476,10 @@ Last updated: 2026-03-24
   - selected-record view-data input contract now lives in `apps/web/components/record-panel-controller-selected-record-view-data.types.ts` instead of remaining embedded directly in the selected-record view-data helper
   - `apps/web/components/record-panel-controller-selected-record-view-data.ts` now consumes the extracted selected-record view-data input contract behind a thinner derivation boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record view-data input-type boundary and keeps inline media/dead-letter/selected-record typing out of the helper
+- Record Panel Record-Save Success Input Type Split V1:
+  - record-save success input contract now lives in `apps/web/components/record-panel-controller-record-save-success-helpers.types.ts` instead of remaining embedded directly in the success helper
+  - `apps/web/components/record-panel-controller-record-save-success-helpers.ts` now consumes the extracted success input contract behind a thinner post-save reset boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the record-save success input-type boundary and keeps inline selected-record and `setForm` typing out of the success helper
 
 ## Next
 - Continue the next product slice

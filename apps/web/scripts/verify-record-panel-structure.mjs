@@ -525,6 +525,10 @@ const recordPanelRecordSaveSuccessHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-success-helpers.ts",
 );
+const recordPanelRecordSaveSuccessHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-success-helpers.types.ts",
+);
 const recordPanelRecordDeleteActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-delete-actions.ts",
@@ -1243,6 +1247,10 @@ const recordSaveSuccessHelpersSource = fs.readFileSync(
   recordPanelRecordSaveSuccessHelpersPath,
   "utf8",
 );
+const recordSaveSuccessHelpersTypesSource = fs.readFileSync(
+  recordPanelRecordSaveSuccessHelpersTypesPath,
+  "utf8",
+);
 const recordDeleteActionsSource = fs.readFileSync(recordPanelRecordDeleteActionsPath, "utf8");
 const recordDeleteRunActionSource = fs.readFileSync(
   recordPanelRecordDeleteRunActionPath,
@@ -1567,6 +1575,8 @@ const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveSubmitActionLines = recordSaveSubmitActionSource.split(/\r?\n/).length;
 const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\n/).length;
+const recordSaveSuccessHelpersTypesLines =
+  recordSaveSuccessHelpersTypesSource.split(/\r?\n/).length;
 const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
 const recordDeleteRunActionLines = recordDeleteRunActionSource.split(/\r?\n/).length;
 const recordDeleteActionInputTypesLines =
@@ -6599,7 +6609,7 @@ if (recordSaveActionInputTypesLines > maxRecordSaveActionInputTypesLines) {
 
 for (const requiredRecordSaveSuccessHelpersImport of [
   'from "../lib/record-panel-forms";',
-  'from "../lib/types";',
+  'from "./record-panel-controller-record-save-success-helpers.types";',
 ]) {
   if (!recordSaveSuccessHelpersSource.includes(requiredRecordSaveSuccessHelpersImport)) {
     throw new Error(
@@ -6610,8 +6620,7 @@ for (const requiredRecordSaveSuccessHelpersImport of [
 
 for (const requiredRecordSaveSuccessHelpersUsage of [
   "export function applyRecordPanelRecordSaveSuccessState({",
-  "selectedRecord: RecordItem | null;",
-  "setForm: React.Dispatch<React.SetStateAction<RecordFormState>>;",
+  "}: ApplyRecordPanelRecordSaveSuccessStateInput) {",
   "setForm(createEmptyForm())",
 ]) {
   if (!recordSaveSuccessHelpersSource.includes(requiredRecordSaveSuccessHelpersUsage)) {
@@ -6621,10 +6630,50 @@ for (const requiredRecordSaveSuccessHelpersUsage of [
   }
 }
 
+for (const forbiddenRecordSaveSuccessHelpersToken of [
+  'from "../lib/types";',
+  "selectedRecord: RecordItem | null;",
+  "setForm: React.Dispatch<React.SetStateAction<RecordFormState>>;",
+]) {
+  if (recordSaveSuccessHelpersSource.includes(forbiddenRecordSaveSuccessHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-success-helpers.ts must keep save success typing delegated: ${forbiddenRecordSaveSuccessHelpersToken}`,
+    );
+  }
+}
+
 const maxRecordSaveSuccessHelpersLines = 20;
 if (recordSaveSuccessHelpersLines > maxRecordSaveSuccessHelpersLines) {
   throw new Error(
     `record-panel-controller-record-save-success-helpers.ts exceeded ${maxRecordSaveSuccessHelpersLines} lines: ${recordSaveSuccessHelpersLines}`,
+  );
+}
+
+for (const requiredRecordSaveSuccessHelpersTypesImport of [
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+]) {
+  if (!recordSaveSuccessHelpersTypesSource.includes(requiredRecordSaveSuccessHelpersTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-success-helpers.types.ts must import save success type contracts: ${requiredRecordSaveSuccessHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSaveSuccessHelpersTypesUsage of [
+  "export type ApplyRecordPanelRecordSaveSuccessStateInput = { selectedRecord: RecordItem | null; setForm: React.Dispatch<React.SetStateAction<RecordFormState>> };",
+]) {
+  if (!recordSaveSuccessHelpersTypesSource.includes(requiredRecordSaveSuccessHelpersTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-success-helpers.types.ts must own save success type contracts: ${requiredRecordSaveSuccessHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSaveSuccessHelpersTypesLines = 5;
+if (recordSaveSuccessHelpersTypesLines > maxRecordSaveSuccessHelpersTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-save-success-helpers.types.ts exceeded ${maxRecordSaveSuccessHelpersTypesLines} lines: ${recordSaveSuccessHelpersTypesLines}`,
   );
 }
 
