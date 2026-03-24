@@ -80,6 +80,14 @@ const recordPanelMediaStatusHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-helpers.ts",
 );
+const recordPanelMediaFileActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-file-actions.ts",
+);
+const recordPanelMediaFileHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-file-helpers.ts",
+);
 const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
@@ -132,6 +140,8 @@ const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "u
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
+const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
+const mediaFileHelpersSource = fs.readFileSync(recordPanelMediaFileHelpersPath, "utf8");
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
@@ -160,6 +170,8 @@ const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
+const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
+const mediaFileHelpersLines = mediaFileHelpersSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
@@ -984,6 +996,86 @@ const maxMediaStatusHelpersLines = 45;
 if (mediaStatusHelpersLines > maxMediaStatusHelpersLines) {
   throw new Error(
     `record-panel-controller-media-status-helpers.ts exceeded ${maxMediaStatusHelpersLines} lines: ${mediaStatusHelpersLines}`,
+  );
+}
+
+for (const requiredMediaFileActionsImport of [
+  'from "./record-panel-controller-media-file-helpers";',
+]) {
+  if (!mediaFileActionsSource.includes(requiredMediaFileActionsImport)) {
+    throw new Error(
+      `record-panel-controller-media-file-actions.ts must import delegated media-file helpers: ${requiredMediaFileActionsImport}`,
+    );
+  }
+}
+
+for (const requiredMediaFileActionsUsage of [
+  "getRecordPanelMediaFileFallbackMessages(detailCopy)",
+  "resolveRecordPanelUploadInput(event, selectedRecord)",
+  "downloadRecordPanelMediaFile({",
+  "getRecordPanelMediaFileErrorMessage(",
+]) {
+  if (!mediaFileActionsSource.includes(requiredMediaFileActionsUsage)) {
+    throw new Error(
+      `record-panel-controller-media-file-actions.ts must delegate media-file execution details: ${requiredMediaFileActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaFileActionsToken of [
+  "function getErrorMessage(",
+  "const file = event.target.files?.[0];",
+  "detailCopy.notAuthenticated",
+  "const blob = await fetchMediaBlob(authToken, workspaceId, asset.id);",
+  "URL.createObjectURL(",
+  "anchor.download = asset.original_filename || `${asset.id}.bin`;",
+]) {
+  if (mediaFileActionsSource.includes(forbiddenMediaFileActionsToken)) {
+    throw new Error(
+      `record-panel-controller-media-file-actions.ts must keep media-file internals delegated: ${forbiddenMediaFileActionsToken}`,
+    );
+  }
+}
+
+const maxMediaFileActionsLines = 85;
+if (mediaFileActionsLines > maxMediaFileActionsLines) {
+  throw new Error(
+    `record-panel-controller-media-file-actions.ts exceeded ${maxMediaFileActionsLines} lines: ${mediaFileActionsLines}`,
+  );
+}
+
+for (const requiredMediaFileHelpersImport of [
+  'from "../lib/api";',
+  'from "../lib/record-panel-detail";',
+  'from "../lib/types";',
+]) {
+  if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-media-file-helpers.ts must import media-file helper contracts: ${requiredMediaFileHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredMediaFileHelpersUsage of [
+  "export function getRecordPanelMediaFileErrorMessage(",
+  "export function resolveRecordPanelUploadInput(",
+  "export async function downloadRecordPanelMediaFile({",
+  "export function getRecordPanelMediaFileFallbackMessages(detailCopy: DetailCopy)",
+  "fetchMediaBlob(",
+  "URL.createObjectURL(",
+  "notAuthenticated",
+]) {
+  if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-media-file-helpers.ts must own media-file helper details: ${requiredMediaFileHelpersUsage}`,
+    );
+  }
+}
+
+const maxMediaFileHelpersLines = 60;
+if (mediaFileHelpersLines > maxMediaFileHelpersLines) {
+  throw new Error(
+    `record-panel-controller-media-file-helpers.ts exceeded ${maxMediaFileHelpersLines} lines: ${mediaFileHelpersLines}`,
   );
 }
 
