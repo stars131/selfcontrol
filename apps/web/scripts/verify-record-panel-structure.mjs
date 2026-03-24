@@ -619,6 +619,18 @@ const legacyRecordPanelFormMediaPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-media.tsx",
 );
+const legacyRecordPanelListPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-list.tsx",
+);
+const legacyRecordPanelListItemPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-list-item.tsx",
+);
+const legacyRecordPanelListEmptyPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-list-empty.tsx",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
@@ -650,6 +662,9 @@ const legacyRecordPanelClassificationFieldsSource = fs.readFileSync(
   "utf8",
 );
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
+const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "utf8");
+const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
+const legacyRecordPanelListEmptySource = fs.readFileSync(legacyRecordPanelListEmptyPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
 const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
@@ -1048,6 +1063,9 @@ const legacyRecordPanelPrimaryFieldsLines =
 const legacyRecordPanelClassificationFieldsLines =
   legacyRecordPanelClassificationFieldsSource.split(/\r?\n/).length;
 const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
+const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).length;
+const legacyRecordPanelListItemLines = legacyRecordPanelListItemSource.split(/\r?\n/).length;
+const legacyRecordPanelListEmptyLines = legacyRecordPanelListEmptySource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -6545,6 +6563,73 @@ const maxLegacyRecordPanelFormMediaLines = 45;
 if (legacyRecordPanelFormMediaLines > maxLegacyRecordPanelFormMediaLines) {
   throw new Error(
     `record-panel-legacy-form-media.tsx exceeded ${maxLegacyRecordPanelFormMediaLines} lines: ${legacyRecordPanelFormMediaLines}`,
+  );
+}
+
+for (const requiredLegacyListUsage of [
+  'import type { RecordItem } from "../lib/types";',
+  'import { RecordPanelLegacyListEmpty } from "./record-panel-legacy-list-empty";',
+  'import { RecordPanelLegacyListItem } from "./record-panel-legacy-list-item";',
+  "export function RecordPanelLegacyList({",
+  "<RecordPanelLegacyListItem",
+  "<RecordPanelLegacyListEmpty",
+]) {
+  if (!legacyRecordPanelListSource.includes(requiredLegacyListUsage)) {
+    throw new Error(`record-panel-legacy-list.tsx must compose delegated legacy list sections: ${requiredLegacyListUsage}`);
+  }
+}
+
+for (const forbiddenLegacyListToken of [
+  '<article',
+  'className="notice"',
+  "No records yet. Save one from the chat panel or create one manually above.",
+  'className={`record-card selectable-card',
+  '{record.title || "Untitled"}',
+]) {
+  if (legacyRecordPanelListSource.includes(forbiddenLegacyListToken)) {
+    throw new Error(`record-panel-legacy-list.tsx must keep empty-state and card details delegated: ${forbiddenLegacyListToken}`);
+  }
+}
+
+const maxLegacyRecordPanelListLines = 35;
+if (legacyRecordPanelListLines > maxLegacyRecordPanelListLines) {
+  throw new Error(
+    `record-panel-legacy-list.tsx exceeded ${maxLegacyRecordPanelListLines} lines: ${legacyRecordPanelListLines}`,
+  );
+}
+
+for (const requiredLegacyListItemUsage of [
+  'import type { RecordItem } from "../lib/types";',
+  "export function RecordPanelLegacyListItem({",
+  '{record.title || "Untitled"}',
+  '{record.content || "No content"}',
+  '{record.is_avoid ? <span className="tag">avoid</span> : null}',
+]) {
+  if (!legacyRecordPanelListItemSource.includes(requiredLegacyListItemUsage)) {
+    throw new Error(`record-panel-legacy-list-item.tsx must own legacy record-card rendering: ${requiredLegacyListItemUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelListItemLines = 35;
+if (legacyRecordPanelListItemLines > maxLegacyRecordPanelListItemLines) {
+  throw new Error(
+    `record-panel-legacy-list-item.tsx exceeded ${maxLegacyRecordPanelListItemLines} lines: ${legacyRecordPanelListItemLines}`,
+  );
+}
+
+for (const requiredLegacyListEmptyUsage of [
+  "export function RecordPanelLegacyListEmpty() {",
+  "No records yet. Save one from the chat panel or create one manually above.",
+]) {
+  if (!legacyRecordPanelListEmptySource.includes(requiredLegacyListEmptyUsage)) {
+    throw new Error(`record-panel-legacy-list-empty.tsx must own legacy empty-state rendering: ${requiredLegacyListEmptyUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelListEmptyLines = 10;
+if (legacyRecordPanelListEmptyLines > maxLegacyRecordPanelListEmptyLines) {
+  throw new Error(
+    `record-panel-legacy-list-empty.tsx exceeded ${maxLegacyRecordPanelListEmptyLines} lines: ${legacyRecordPanelListEmptyLines}`,
   );
 }
 

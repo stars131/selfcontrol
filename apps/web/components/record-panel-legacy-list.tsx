@@ -1,6 +1,8 @@
 "use client";
 
 import type { RecordItem } from "../lib/types";
+import { RecordPanelLegacyListEmpty } from "./record-panel-legacy-list-empty";
+import { RecordPanelLegacyListItem } from "./record-panel-legacy-list-item";
 
 export function RecordPanelLegacyList({
   records,
@@ -15,28 +17,15 @@ export function RecordPanelLegacyList({
     <div style={{ marginTop: 20 }} className="record-list">
       {records.length ? (
         records.map((record) => (
-          <article
-            className={`record-card selectable-card ${record.id === selectedRecordId ? "selected" : ""}`}
+          <RecordPanelLegacyListItem
             key={record.id}
-            onClick={() => onSelectRecord(record.id)}
-          >
-            <div className="eyebrow">{record.type_code}</div>
-            <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>{record.title || "Untitled"}</h3>
-            <div className="muted">
-              {record.created_at} 路 {record.source_type}
-            </div>
-            <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>{record.content || "No content"}</p>
-            <div className="tag-row">
-              <span className="tag">{record.status}</span>
-              {record.rating ? <span className="tag">rating {record.rating}</span> : null}
-              {record.is_avoid ? <span className="tag">avoid</span> : null}
-            </div>
-          </article>
+            onSelectRecord={onSelectRecord}
+            record={record}
+            selected={record.id === selectedRecordId}
+          />
         ))
       ) : (
-        <div className="notice">
-          No records yet. Save one from the chat panel or create one manually above.
-        </div>
+        <RecordPanelLegacyListEmpty />
       )}
     </div>
   );

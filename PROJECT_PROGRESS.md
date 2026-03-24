@@ -1284,6 +1284,10 @@ Last updated: 2026-03-24
   - v2 shell browse/editor/header prop assembly now lives in `apps/web/components/record-panel-v2-shell-view-props.ts` instead of remaining distributed inside `apps/web/components/record-panel-v2.tsx`
   - `apps/web/components/record-panel-v2.tsx` now focuses more narrowly on controller construction and top-level workspace rendering behind a thinner shell boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dedicated shell-view prop builder boundary and keeps direct shell prop assembly out of the component
+- Record Panel Legacy List Section Split V3:
+  - legacy empty-state rendering now lives in `apps/web/components/record-panel-legacy-list-empty.tsx`, while single-record card rendering now lives in `apps/web/components/record-panel-legacy-list-item.tsx`
+  - `apps/web/components/record-panel-legacy-list.tsx` now focuses on list traversal and selection wiring instead of mixing empty-state and card markup details
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy list split with dedicated size ceilings for the extracted list-section modules
 
 ## Next
 - Continue the next product slice
