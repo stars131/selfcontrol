@@ -1,13 +1,9 @@
 "use client";
-
-import type { ComponentProps } from "react";
-
 import { ChatPanel } from "./chat-panel";
 import { RecordPanelV2 } from "./record-panel-v2";
+import type { ChatPanelProps } from "./chat-panel.types";
+import type { RecordPanelV2Props } from "./record-panel-v2.types";
 import type { WorkspaceShellPanelsProps } from "./workspace-shell-panels.types";
-
-type ChatPanelProps = ComponentProps<typeof ChatPanel>;
-type RecordPanelProps = ComponentProps<typeof RecordPanelV2>;
 
 export function buildChatPanelProps(props: WorkspaceShellPanelsProps): ChatPanelProps {
   return {
@@ -38,7 +34,7 @@ export function buildChatPanelProps(props: WorkspaceShellPanelsProps): ChatPanel
   };
 }
 
-export function buildRecordPanelProps(props: WorkspaceShellPanelsProps): RecordPanelProps {
+export function buildRecordPanelProps(props: WorkspaceShellPanelsProps): RecordPanelV2Props {
   return {
     authToken: props.authToken,
     canWriteWorkspace: props.canWriteWorkspace,

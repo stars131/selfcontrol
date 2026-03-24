@@ -1,11 +1,7 @@
 "use client";
-
-import type { ComponentProps } from "react";
-
 import { RecordEditorSupportTools } from "./record-editor-support-tools";
+import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";
 import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";
-
-type RecordEditorSupportToolsProps = ComponentProps<typeof RecordEditorSupportTools>;
 
 export function buildRecordEditorSupportToolsProps(
   props: RecordEditorWorkspaceProps,

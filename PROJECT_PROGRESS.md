@@ -1564,6 +1564,10 @@ Last updated: 2026-03-24
   - browse-workspace prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
   - `apps/web/components/record-browse-workspace-props.ts` now depends directly on `map-panel.types.ts`, `record-results-view.types.ts`, and `record-search-panel.types.ts`
   - this keeps browse-workspace prop mapping more stable against unrelated child component implementation changes
+- Workspace Shell Explicit Props Type Reuse Split V1:
+  - shell panel and editor-support-tools prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
+  - `apps/web/components/workspace-shell-panels-props.ts` and `record-editor-workspace-support-tools-props.ts` now depend directly on `chat-panel.types.ts`, `record-panel-v2.types.ts`, and `record-editor-support-tools.types.ts`
+  - this keeps parent prop mapping stable against unrelated child component implementation changes
 
 ## Next
 - Continue the next product slice
