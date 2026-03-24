@@ -1504,6 +1504,10 @@ Last updated: 2026-03-24
   - header-props builder input contract now lives in `apps/web/components/record-panel-v2-header-props.types.ts` instead of remaining embedded directly in the builder signature
   - `apps/web/components/record-panel-v2-header-props.ts` now consumes the extracted builder input contract behind a thinner shell-header assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header-props input-type boundary and keeps inline header builder typing out of the shell helper
+- Record Panel Legacy View-Data Hook Input Type Split V1:
+  - legacy view-data hook input contract now lives in `apps/web/components/use-record-panel-legacy-view-data.types.ts` instead of remaining embedded directly in the hook signature
+  - `apps/web/components/use-record-panel-legacy-view-data.ts` now consumes the extracted hook input contract behind a thinner legacy record-summary derivation boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy view-data input-type boundary and keeps inline legacy record typing out of the hook module
 
 ## Next
 - Continue the next product slice

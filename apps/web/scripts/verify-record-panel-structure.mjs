@@ -20,6 +20,10 @@ const legacyRecordPanelViewDataPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-legacy-view-data.ts",
 );
+const legacyRecordPanelViewDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-legacy-view-data.types.ts",
+);
 const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props.ts",
@@ -821,6 +825,7 @@ const legacyRecordPanelStatsGridPath = path.resolve(
 );
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
+const legacyRecordPanelViewDataTypesSource = fs.readFileSync(legacyRecordPanelViewDataTypesPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
 const legacyRecordPanelActionInputTypesSource = fs.readFileSync(
   legacyRecordPanelActionInputTypesPath,
@@ -1402,6 +1407,8 @@ const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8"
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
+const legacyRecordPanelViewDataTypesLines =
+  legacyRecordPanelViewDataTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelActionsLines = legacyRecordPanelActionsSource.split(/\r?\n/).length;
 const legacyRecordPanelActionInputTypesLines =
   legacyRecordPanelActionInputTypesSource.split(/\r?\n/).length;
@@ -8650,8 +8657,8 @@ for (const forbiddenLegacyToken of [
 
 for (const requiredLegacyViewDataImport of [
   'from "react";',
-  'from "../lib/types";',
   'from "./record-panel-controller-record-view-data";',
+  'from "./use-record-panel-legacy-view-data.types";',
 ]) {
   if (!legacyRecordPanelViewDataSource.includes(requiredLegacyViewDataImport)) {
     throw new Error(`use-record-panel-legacy-view-data.ts must import legacy view-data contracts: ${requiredLegacyViewDataImport}`);
@@ -8659,7 +8666,7 @@ for (const requiredLegacyViewDataImport of [
 }
 
 for (const requiredLegacyViewDataUsage of [
-  "export function useRecordPanelLegacyViewData({",
+  "export function useRecordPanelLegacyViewData({ records, selectedRecordId }: UseRecordPanelLegacyViewDataInput)",
   "return useMemo(",
   "buildRecordPanelRecordViewData({ records, selectedRecordId })",
 ]) {
@@ -8668,10 +8675,40 @@ for (const requiredLegacyViewDataUsage of [
   }
 }
 
+for (const forbiddenLegacyViewDataToken of [
+  "records: RecordItem[];",
+  "selectedRecordId: string | null;",
+]) {
+  if (legacyRecordPanelViewDataSource.includes(forbiddenLegacyViewDataToken)) {
+    throw new Error(`use-record-panel-legacy-view-data.ts must keep legacy view-data typing delegated: ${forbiddenLegacyViewDataToken}`);
+  }
+}
+
 const maxLegacyRecordPanelViewDataLines = 20;
 if (legacyRecordPanelViewDataLines > maxLegacyRecordPanelViewDataLines) {
   throw new Error(
     `use-record-panel-legacy-view-data.ts exceeded ${maxLegacyRecordPanelViewDataLines} lines: ${legacyRecordPanelViewDataLines}`,
+  );
+}
+
+for (const requiredLegacyViewDataTypesImport of ['from "../lib/types";']) {
+  if (!legacyRecordPanelViewDataTypesSource.includes(requiredLegacyViewDataTypesImport)) {
+    throw new Error(`use-record-panel-legacy-view-data.types.ts must import legacy view-data input contracts: ${requiredLegacyViewDataTypesImport}`);
+  }
+}
+
+for (const requiredLegacyViewDataTypesUsage of [
+  "export type UseRecordPanelLegacyViewDataInput = { records: RecordItem[]; selectedRecordId: string | null };",
+]) {
+  if (!legacyRecordPanelViewDataTypesSource.includes(requiredLegacyViewDataTypesUsage)) {
+    throw new Error(`use-record-panel-legacy-view-data.types.ts must own legacy view-data input typing: ${requiredLegacyViewDataTypesUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelViewDataTypesLines = 5;
+if (legacyRecordPanelViewDataTypesLines > maxLegacyRecordPanelViewDataTypesLines) {
+  throw new Error(
+    `use-record-panel-legacy-view-data.types.ts exceeded ${maxLegacyRecordPanelViewDataTypesLines} lines: ${legacyRecordPanelViewDataTypesLines}`,
   );
 }
 
