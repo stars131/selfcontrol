@@ -627,6 +627,10 @@ const legacyRecordPanelFormMediaPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-media.tsx",
 );
+const legacyRecordPanelFormActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-actions.tsx",
+);
 const legacyRecordPanelListPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-list.tsx",
@@ -682,6 +686,7 @@ const legacyRecordPanelClassificationFieldsSource = fs.readFileSync(
   "utf8",
 );
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
+const legacyRecordPanelFormActionsSource = fs.readFileSync(legacyRecordPanelFormActionsPath, "utf8");
 const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "utf8");
 const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
 const legacyRecordPanelListEmptySource = fs.readFileSync(legacyRecordPanelListEmptyPath, "utf8");
@@ -1097,6 +1102,8 @@ const legacyRecordPanelPrimaryFieldsLines =
 const legacyRecordPanelClassificationFieldsLines =
   legacyRecordPanelClassificationFieldsSource.split(/\r?\n/).length;
 const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
+const legacyRecordPanelFormActionsLines =
+  legacyRecordPanelFormActionsSource.split(/\r?\n/).length;
 const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).length;
 const legacyRecordPanelListItemLines = legacyRecordPanelListItemSource.split(/\r?\n/).length;
 const legacyRecordPanelListEmptyLines = legacyRecordPanelListEmptySource.split(/\r?\n/).length;
@@ -6544,6 +6551,7 @@ if (legacyRecordPanelUploadActionLines > maxLegacyUploadActionLines) {
 }
 
 for (const requiredLegacyFormImport of [
+  'import { RecordPanelLegacyFormActions } from "./record-panel-legacy-form-actions";',
   'import { RecordPanelLegacyFormFields } from "./record-panel-legacy-form-fields";',
   'import { RecordPanelLegacyFormMedia } from "./record-panel-legacy-form-media";',
   'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
@@ -6553,7 +6561,11 @@ for (const requiredLegacyFormImport of [
   }
 }
 
-for (const requiredLegacyFormUsage of ["<RecordPanelLegacyFormFields", "<RecordPanelLegacyFormMedia"]) {
+for (const requiredLegacyFormUsage of [
+  "<RecordPanelLegacyFormFields",
+  "<RecordPanelLegacyFormActions",
+  "<RecordPanelLegacyFormMedia",
+]) {
   if (!legacyRecordPanelFormSource.includes(requiredLegacyFormUsage)) {
     throw new Error(`record-panel-legacy-form.tsx must compose delegated form sections: ${requiredLegacyFormUsage}`);
   }
@@ -6565,6 +6577,12 @@ for (const forbiddenLegacyFormToken of [
   "type RecordPanelLegacyFormProps = {",
   'placeholder="Optional title"',
   'placeholder="Write a note, food review, or reminder"',
+  'className="action-row"',
+  '"Saving..."',
+  '"Update record"',
+  '"Create record"',
+  '"Deleting..."',
+  '"Delete record"',
   'className="record-list compact-list"',
   "No media uploaded for this record yet.",
 ]) {
@@ -6577,6 +6595,25 @@ const maxLegacyRecordPanelFormLines = 60;
 if (legacyRecordPanelFormLines > maxLegacyRecordPanelFormLines) {
   throw new Error(
     `record-panel-legacy-form.tsx exceeded ${maxLegacyRecordPanelFormLines} lines: ${legacyRecordPanelFormLines}`,
+  );
+}
+
+for (const requiredLegacyFormActionsUsage of [
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  "export function RecordPanelLegacyFormActions({",
+  'className="action-row"',
+  '"Saving..."',
+  '"Delete record"',
+]) {
+  if (!legacyRecordPanelFormActionsSource.includes(requiredLegacyFormActionsUsage)) {
+    throw new Error(`record-panel-legacy-form-actions.tsx must own legacy form action rendering: ${requiredLegacyFormActionsUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelFormActionsLines = 30;
+if (legacyRecordPanelFormActionsLines > maxLegacyRecordPanelFormActionsLines) {
+  throw new Error(
+    `record-panel-legacy-form-actions.tsx exceeded ${maxLegacyRecordPanelFormActionsLines} lines: ${legacyRecordPanelFormActionsLines}`,
   );
 }
 

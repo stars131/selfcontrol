@@ -1300,6 +1300,10 @@ Last updated: 2026-03-24
   - locale lookup and localized view-data memoization now live in `apps/web/components/use-record-panel-controller-localized-view-data.ts` instead of remaining embedded inside `apps/web/components/use-record-panel-controller-view-data.ts`
   - `apps/web/components/use-record-panel-controller-view-data.ts` now focuses on composing record, selected-record, and localized view-data slices behind a thinner hook boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the localized hook boundary and keeps direct locale/localized bundle wiring out of the aggregate view-data hook
+- Record Panel Legacy Form Action Split V3:
+  - legacy submit/delete button rendering now lives in `apps/web/components/record-panel-legacy-form-actions.tsx` instead of remaining inline inside `apps/web/components/record-panel-legacy-form.tsx`
+  - `apps/web/components/record-panel-legacy-form.tsx` now focuses on composing field, action, and media sections instead of mixing button-state presentation with the form shell
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy form-action boundary and keeps action-row/button copy details out of the form container
 
 ## Next
 - Continue the next product slice

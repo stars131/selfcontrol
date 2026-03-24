@@ -1,5 +1,6 @@
 "use client";
 
+import { RecordPanelLegacyFormActions } from "./record-panel-legacy-form-actions";
 import { RecordPanelLegacyFormFields } from "./record-panel-legacy-form-fields";
 import { RecordPanelLegacyFormMedia } from "./record-panel-legacy-form-media";
 import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";
@@ -22,16 +23,12 @@ export function RecordPanelLegacyForm({
       <div className="eyebrow">{selectedRecord ? "Edit record" : "New manual record"}</div>
       <RecordPanelLegacyFormFields form={form} setForm={setForm} />
       {error ? <div className="notice error">{error}</div> : null}
-      <div className="action-row">
-        <button className="button" disabled={saving} type="submit">
-          {saving ? "Saving..." : selectedRecord ? "Update record" : "Create record"}
-        </button>
-        {selectedRecord ? (
-          <button className="button secondary" disabled={deleting} onClick={() => void handleDelete()} type="button">
-            {deleting ? "Deleting..." : "Delete record"}
-          </button>
-        ) : null}
-      </div>
+      <RecordPanelLegacyFormActions
+        deleting={deleting}
+        handleDelete={handleDelete}
+        saving={saving}
+        selectedRecord={selectedRecord}
+      />
       <RecordPanelLegacyFormMedia
         handleUpload={handleUpload}
         mediaAssets={mediaAssets}
