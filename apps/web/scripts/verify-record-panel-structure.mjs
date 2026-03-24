@@ -23,6 +23,14 @@ const recordPanelEditorWorkspacePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-props.types.ts",
 );
+const recordPanelEditorWorkspacePropInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-prop-input.types.ts",
+);
+const recordPanelEditorWorkspaceControllerInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-controller-input.types.ts",
+);
 const recordPanelEditorWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-props.ts",
@@ -414,6 +422,14 @@ const editorWorkspacePropsTypesSource = fs.readFileSync(
   recordPanelEditorWorkspacePropsTypesPath,
   "utf8",
 );
+const editorWorkspacePropInputTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspacePropInputTypesPath,
+  "utf8",
+);
+const editorWorkspaceControllerInputTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceControllerInputTypesPath,
+  "utf8",
+);
 const editorWorkspacePropsSource = fs.readFileSync(recordPanelEditorWorkspacePropsPath, "utf8");
 const browseWorkspacePropsSource = fs.readFileSync(recordPanelBrowseWorkspacePropsPath, "utf8");
 const browseWorkspacePropsHelpersSource = fs.readFileSync(
@@ -611,6 +627,10 @@ const workspacePropsTypesLines = workspacePropsTypesSource.split(/\r?\n/).length
 const workspacePropsCoreTypesLines = workspacePropsCoreTypesSource.split(/\r?\n/).length;
 const browseWorkspacePropsTypesLines = browseWorkspacePropsTypesSource.split(/\r?\n/).length;
 const editorWorkspacePropsTypesLines = editorWorkspacePropsTypesSource.split(/\r?\n/).length;
+const editorWorkspacePropInputTypesLines =
+  editorWorkspacePropInputTypesSource.split(/\r?\n/).length;
+const editorWorkspaceControllerInputTypesLines =
+  editorWorkspaceControllerInputTypesSource.split(/\r?\n/).length;
 const editorWorkspacePropsLines = editorWorkspacePropsSource.split(/\r?\n/).length;
 const browseWorkspacePropsLines = browseWorkspacePropsSource.split(/\r?\n/).length;
 const browseWorkspacePropsHelpersLines = browseWorkspacePropsHelpersSource.split(/\r?\n/).length;
@@ -899,8 +919,8 @@ if (browseWorkspacePropsTypesLines > maxBrowseWorkspacePropsTypesLines) {
 }
 
 for (const requiredEditorWorkspacePropsTypesImport of [
-  'import type { RecordPanelV2Props } from "./record-panel-v2.types";',
-  'from "./record-panel-v2-workspace-props-core.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
+  'from "./record-panel-v2-editor-workspace-prop-input.types";',
 ]) {
   if (!editorWorkspacePropsTypesSource.includes(requiredEditorWorkspacePropsTypesImport)) {
     throw new Error(
@@ -910,11 +930,9 @@ for (const requiredEditorWorkspacePropsTypesImport of [
 }
 
 for (const requiredEditorWorkspacePropsTypesUsage of [
-  "export type BuildRecordEditorWorkspacePropsInput = Pick<",
-  '"mediaProcessingOverview"',
-  "detailCopy: RecordPanelDetailCopy;",
-  'handleBulkRetryDeadLetter: (mode: "all" | "selected") => Promise<void>;',
-  'summarizeHistoryActionLabel: RecordEditorWorkspaceProps["summarizeHistoryActionLabel"];',
+  "export type BuildRecordEditorWorkspacePropsInput =",
+  "BuildRecordEditorWorkspacePropInput &",
+  "BuildRecordEditorWorkspaceControllerInput;",
 ]) {
   if (!editorWorkspacePropsTypesSource.includes(requiredEditorWorkspacePropsTypesUsage)) {
     throw new Error(
@@ -923,10 +941,69 @@ for (const requiredEditorWorkspacePropsTypesUsage of [
   }
 }
 
-const maxEditorWorkspacePropsTypesLines = 65;
+const maxEditorWorkspacePropsTypesLines = 10;
 if (editorWorkspacePropsTypesLines > maxEditorWorkspacePropsTypesLines) {
   throw new Error(
     `record-panel-v2-editor-workspace-props.types.ts exceeded ${maxEditorWorkspacePropsTypesLines} lines: ${editorWorkspacePropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspacePropInputTypesImport of [
+  'from "./record-panel-v2.types";',
+]) {
+  if (!editorWorkspacePropInputTypesSource.includes(requiredEditorWorkspacePropInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-prop-input.types.ts must import editor workspace prop-input type dependencies: ${requiredEditorWorkspacePropInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspacePropInputTypesUsage of [
+  "export type BuildRecordEditorWorkspacePropInput = Pick<",
+  '"mediaProcessingOverview"',
+  '"onUpdateReminder"',
+]) {
+  if (!editorWorkspacePropInputTypesSource.includes(requiredEditorWorkspacePropInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-prop-input.types.ts must own editor workspace prop-input contracts: ${requiredEditorWorkspacePropInputTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspacePropInputTypesLines = 20;
+if (editorWorkspacePropInputTypesLines > maxEditorWorkspacePropInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-prop-input.types.ts exceeded ${maxEditorWorkspacePropInputTypesLines} lines: ${editorWorkspacePropInputTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceControllerInputTypesImport of [
+  'from "./record-panel-v2-workspace-props-core.types";',
+]) {
+  if (!editorWorkspaceControllerInputTypesSource.includes(requiredEditorWorkspaceControllerInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-input.types.ts must import editor workspace controller-input type dependencies: ${requiredEditorWorkspaceControllerInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceControllerInputTypesUsage of [
+  "export type BuildRecordEditorWorkspaceControllerInput = {",
+  "detailCopy: RecordPanelDetailCopy;",
+  'handleBulkRetryDeadLetter: (mode: "all" | "selected") => Promise<void>;',
+  'summarizeHistoryActionLabel: RecordEditorWorkspaceProps["summarizeHistoryActionLabel"];',
+]) {
+  if (!editorWorkspaceControllerInputTypesSource.includes(requiredEditorWorkspaceControllerInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-controller-input.types.ts must own editor workspace controller-input contracts: ${requiredEditorWorkspaceControllerInputTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceControllerInputTypesLines = 50;
+if (editorWorkspaceControllerInputTypesLines > maxEditorWorkspaceControllerInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-controller-input.types.ts exceeded ${maxEditorWorkspaceControllerInputTypesLines} lines: ${editorWorkspaceControllerInputTypesLines}`,
   );
 }
 
