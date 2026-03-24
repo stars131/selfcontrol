@@ -281,6 +281,10 @@ const recordPanelControllerFilterSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-filter-sync.ts",
 );
+const recordPanelControllerFilterSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-filter-sync.types.ts",
+);
 const recordPanelControllerSyncInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-sync-input.ts",
@@ -1084,6 +1088,10 @@ const controllerSelectedRecordReminderSyncSource = fs.readFileSync(
   "utf8",
 );
 const controllerFilterSyncSource = fs.readFileSync(recordPanelControllerFilterSyncPath, "utf8");
+const controllerFilterSyncTypesSource = fs.readFileSync(
+  recordPanelControllerFilterSyncTypesPath,
+  "utf8",
+);
 const controllerStateSource = fs.readFileSync(recordPanelControllerStatePath, "utf8");
 const controllerFormStateSource = fs.readFileSync(recordPanelControllerFormStatePath, "utf8");
 const controllerRecordFormStateSource = fs.readFileSync(
@@ -1506,6 +1514,8 @@ const controllerSelectedRecordFormSyncLines =
 const controllerSelectedRecordReminderSyncLines =
   controllerSelectedRecordReminderSyncSource.split(/\r?\n/).length;
 const controllerFilterSyncLines = controllerFilterSyncSource.split(/\r?\n/).length;
+const controllerFilterSyncTypesLines =
+  controllerFilterSyncTypesSource.split(/\r?\n/).length;
 const controllerStateLines = controllerStateSource.split(/\r?\n/).length;
 const controllerFormStateLines = controllerFormStateSource.split(/\r?\n/).length;
 const controllerRecordFormStateLines = controllerRecordFormStateSource.split(/\r?\n/).length;
@@ -4294,6 +4304,7 @@ if (controllerSelectedRecordReminderSyncLines > maxControllerSelectedRecordRemin
 for (const requiredControllerFilterSyncImport of [
   'from "react";',
   'from "../lib/types";',
+  'from "./use-record-panel-controller-filter-sync.types";',
 ]) {
   if (!controllerFilterSyncSource.includes(requiredControllerFilterSyncImport)) {
     throw new Error(
@@ -4303,7 +4314,7 @@ for (const requiredControllerFilterSyncImport of [
 }
 
 for (const requiredControllerFilterSyncUsage of [
-  "export function useRecordPanelControllerFilterSync({",
+  "export function useRecordPanelControllerFilterSync({ recordFilter, setFilterDraft }: UseRecordPanelControllerFilterSyncInput)",
   "useEffect(() => {",
   "setFilterDraft(recordFilter)",
 ]) {
@@ -4314,10 +4325,49 @@ for (const requiredControllerFilterSyncUsage of [
   }
 }
 
+for (const forbiddenControllerFilterSyncToken of [
+  "recordFilter: RecordFilterState;",
+  "setFilterDraft: Dispatch<SetStateAction<RecordFilterState>>;",
+]) {
+  if (controllerFilterSyncSource.includes(forbiddenControllerFilterSyncToken)) {
+    throw new Error(
+      `use-record-panel-controller-filter-sync.ts must keep filter sync typing delegated: ${forbiddenControllerFilterSyncToken}`,
+    );
+  }
+}
+
 const maxControllerFilterSyncLines = 15;
 if (controllerFilterSyncLines > maxControllerFilterSyncLines) {
   throw new Error(
     `use-record-panel-controller-filter-sync.ts exceeded ${maxControllerFilterSyncLines} lines: ${controllerFilterSyncLines}`,
+  );
+}
+
+for (const requiredControllerFilterSyncTypesImport of [
+  'from "react";',
+  'from "../lib/types";',
+]) {
+  if (!controllerFilterSyncTypesSource.includes(requiredControllerFilterSyncTypesImport)) {
+    throw new Error(
+      `use-record-panel-controller-filter-sync.types.ts must import filter sync type contracts: ${requiredControllerFilterSyncTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerFilterSyncTypesUsage of [
+  "export type UseRecordPanelControllerFilterSyncInput = { recordFilter: RecordFilterState; setFilterDraft: Dispatch<SetStateAction<RecordFilterState>> };",
+]) {
+  if (!controllerFilterSyncTypesSource.includes(requiredControllerFilterSyncTypesUsage)) {
+    throw new Error(
+      `use-record-panel-controller-filter-sync.types.ts must own filter sync type contracts: ${requiredControllerFilterSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerFilterSyncTypesLines = 6;
+if (controllerFilterSyncTypesLines > maxControllerFilterSyncTypesLines) {
+  throw new Error(
+    `use-record-panel-controller-filter-sync.types.ts exceeded ${maxControllerFilterSyncTypesLines} lines: ${controllerFilterSyncTypesLines}`,
   );
 }
 

@@ -1484,6 +1484,10 @@ Last updated: 2026-03-24
   - reminder-success input contract now lives in `apps/web/components/record-panel-controller-reminder-success-helpers.types.ts` instead of remaining embedded directly in the reminder success helper
   - `apps/web/components/record-panel-controller-reminder-success-helpers.ts` now consumes the extracted success input contract behind a thinner post-reminder reset boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-success input-type boundary and keeps inline `setReminderForm` typing out of the success helper
+- Record Panel Filter Sync Hook Input Type Split V1:
+  - filter-sync hook input contract now lives in `apps/web/components/use-record-panel-controller-filter-sync.types.ts` instead of remaining embedded directly in the filter-sync hook signature
+  - `apps/web/components/use-record-panel-controller-filter-sync.ts` now consumes the extracted hook input contract behind a thinner sync boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter-sync hook input-type boundary and keeps inline filter draft setter typing out of the hook module
 
 ## Next
 - Continue the next product slice
