@@ -1408,6 +1408,10 @@ Last updated: 2026-03-24
   - browse-workspace filter and record output contracts now live in `apps/web/components/record-panel-v2-browse-workspace-output-props.types.ts` instead of remaining embedded directly in the filter and record helper function signatures
   - `apps/web/components/record-panel-v2-browse-workspace-filter-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-record-props.ts` now consume the extracted output contracts behind thinner mapping-only boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace output-props boundary and keeps inline `Pick<RecordBrowseWorkspaceProps, ...>` signatures out of the filter and record helper modules
+- Record Panel Editor Workspace Action Output Type Split V1:
+  - editor-workspace dead-letter and primary action output contracts now live in `apps/web/components/record-panel-v2-editor-workspace-action-props.types.ts` instead of remaining embedded across the action helpers and aggregator
+  - `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-dead-letter-action-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` now consume the extracted output contracts behind thinner action-mapping boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace action output-type boundary and keeps inline `Pick<RecordEditorWorkspaceProps, ...>` signatures out of the helper and aggregator modules
 
 ## Next
 - Continue the next product slice
