@@ -980,6 +980,10 @@ Last updated: 2026-03-24
   - workspace transfer-jobs section shared contracts, list rendering, and per-job card rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-transfer-jobs-section.tsx`
   - the top-level transfer-jobs section now focuses more narrowly on section header and refresh action wiring while extracted modules own list empty-state and item-specific actions
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these transfer-jobs boundaries and dedicated size ceilings for the extracted modules
+- Recent Media Issue Card Tag and Action Split V1:
+  - recent-media-issue card tag rendering and action-row rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/recent-media-issue-card.tsx`
+  - the top-level issue card now focuses more narrowly on issue-level status messaging, timestamp rendering, settings-href derivation, and error presentation
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now enforces these media-issue card boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
