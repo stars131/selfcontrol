@@ -60,6 +60,10 @@ const recordPanelControllerHandlerGroupsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-groups.ts",
 );
+const recordPanelControllerHandlerGroupsInputPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-groups-input.ts",
+);
 const recordPanelControllerViewDataPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-view-data.ts",
@@ -203,6 +207,10 @@ const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
+const controllerHandlerGroupsInputSource = fs.readFileSync(
+  recordPanelControllerHandlerGroupsInputPath,
+  "utf8",
+);
 const controllerViewDataSource = fs.readFileSync(recordPanelControllerViewDataPath, "utf8");
 const controllerViewDataHelpersSource = fs.readFileSync(
   recordPanelControllerViewDataHelpersPath,
@@ -250,6 +258,8 @@ const editorWorkspaceBasePropsTypesLines =
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
+const controllerHandlerGroupsInputLines =
+  controllerHandlerGroupsInputSource.split(/\r?\n/).length;
 const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
 const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
@@ -727,6 +737,7 @@ if (shellPropsLines > maxShellPropsLines) {
 
 for (const requiredControllerImport of [
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-handler-groups-input";',
   'from "./record-panel-controller-handler-groups";',
   'from "./record-panel-controller-result";',
   'from "./use-record-panel-controller-sync";',
@@ -753,9 +764,10 @@ for (const requiredHandlerGroupsImport of [
 for (const requiredControllerUsage of [
   "useRecordPanelControllerSync({",
   "useRecordPanelControllerViewData({",
-  "useRecordPanelControllerState(recordFilter)",
-  "createRecordPanelControllerHandlerGroups({",
-  "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups({",
+  "useRecordPanelControllerState(props.recordFilter)",
+  "buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData })",
+  "createRecordPanelControllerHandlerGroups(",
+  "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(",
   "buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData })",
 ]) {
   if (!controllerSource.includes(requiredControllerUsage)) {
@@ -776,6 +788,8 @@ for (const forbiddenControllerToken of [
   "locale,",
   "...recordHandlers",
   "...mediaHandlers",
+  "detailCopy: viewData.detailCopy,",
+  "workspaceId,",
 ]) {
   if (controllerSource.includes(forbiddenControllerToken)) {
     throw new Error(`use-record-panel-controller.ts must keep sync and handler details delegated: ${forbiddenControllerToken}`);
@@ -785,6 +799,39 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredControllerHandlerGroupsInputImport of [
+  'from "./record-panel-controller.types";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerHandlerGroupsInputSource.includes(requiredControllerHandlerGroupsInputImport)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-input.ts must import controller handler-group dependencies: ${requiredControllerHandlerGroupsInputImport}`,
+    );
+  }
+}
+
+for (const requiredControllerHandlerGroupsInputUsage of [
+  "export function buildRecordPanelControllerHandlerGroupsInput({",
+  "props: Pick<",
+  "detailCopy: viewData.detailCopy,",
+  "selectedRecord: viewData.selectedRecord,",
+  "setUploading: state.setUploading,",
+]) {
+  if (!controllerHandlerGroupsInputSource.includes(requiredControllerHandlerGroupsInputUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-groups-input.ts must own handler-group input assembly: ${requiredControllerHandlerGroupsInputUsage}`,
+    );
+  }
+}
+
+const maxControllerHandlerGroupsInputLines = 75;
+if (controllerHandlerGroupsInputLines > maxControllerHandlerGroupsInputLines) {
+  throw new Error(
+    `record-panel-controller-handler-groups-input.ts exceeded ${maxControllerHandlerGroupsInputLines} lines: ${controllerHandlerGroupsInputLines}`,
+  );
 }
 
 for (const requiredControllerViewDataImport of [

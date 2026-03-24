@@ -1072,10 +1072,14 @@ Last updated: 2026-03-24
   - record-panel shared handler-group input contract now lives in a dedicated type module instead of remaining bundled with both builder implementations
   - record and media handler input mapping now live in separate builder modules while `apps/web/components/record-panel-controller-handler-group-inputs.ts` is reduced to a stable re-export boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the new boundary, shared contract ownership, and dedicated size ceilings for the extracted modules
+- Record Panel Handler Group Assembly Split V1:
+  - `use-record-panel-controller.ts` now passes a compact `props` object through controller composition instead of owning the full handler-group mapping inline
+  - handler-group input assembly now lives in `apps/web/components/record-panel-controller-handler-groups-input.ts`, keeping the controller hook focused on state, sync, view-data, and final result wiring
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this assembly boundary and a dedicated size ceiling for the extracted builder module
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel controller composition and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel result assembly and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

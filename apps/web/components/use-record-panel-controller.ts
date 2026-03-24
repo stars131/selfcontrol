@@ -1,42 +1,24 @@
 "use client";
 
 import type { ControllerProps } from "./record-panel-controller.types";
+import { buildRecordPanelControllerHandlerGroupsInput } from "./record-panel-controller-handler-groups-input";
 import { createRecordPanelControllerHandlerGroups } from "./record-panel-controller-handler-groups";
 import { buildRecordPanelControllerResult } from "./record-panel-controller-result";
 import { useRecordPanelControllerSync } from "./use-record-panel-controller-sync";
 import { useRecordPanelControllerState } from "./use-record-panel-controller-state";
 import { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
 
-export function useRecordPanelController({
-  authToken,
-  workspaceId,
-  records,
-  selectedRecordId,
-  mediaAssets,
-  mediaDeadLetterOverview,
-  onSaveRecord,
-  onCreateReminder,
-  onDeleteMedia,
-  onDeleteRecord,
-  onBulkRetryMediaDeadLetter,
-  onRefreshMediaStatus,
-  onApplyRecordFilter,
-  onCreateSearchPreset,
-  onDeleteSearchPreset,
-  onRetryMedia,
-  onUploadMedia,
-  recordFilter,
-}: ControllerProps) {
+export function useRecordPanelController(props: ControllerProps) {
   const viewData = useRecordPanelControllerViewData({
-    mediaAssets,
-    mediaDeadLetterOverview,
-    records,
-    selectedRecordId,
+    mediaAssets: props.mediaAssets,
+    mediaDeadLetterOverview: props.mediaDeadLetterOverview,
+    records: props.records,
+    selectedRecordId: props.selectedRecordId,
   });
-  const state = useRecordPanelControllerState(recordFilter);
+  const state = useRecordPanelControllerState(props.recordFilter);
   useRecordPanelControllerSync({
     actionableDeadLetterIds: viewData.actionableDeadLetterIds,
-    recordFilter,
+    recordFilter: props.recordFilter,
     selectedRecord: viewData.selectedRecord,
     setFilterDraft: state.setFilterDraft,
     setForm: state.setForm,
@@ -44,43 +26,8 @@ export function useRecordPanelController({
     setReminderForm: state.setReminderForm,
     setSelectedDeadLetterIds: state.setSelectedDeadLetterIds,
   });
-  const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups({
-    authToken,
-    detailCopy: viewData.detailCopy,
-    filterDraft: state.filterDraft,
-    form: state.form,
-    locationReviewForm: state.locationReviewForm,
-    mediaDeadLetterOverview,
-    onApplyRecordFilter,
-    onBulkRetryMediaDeadLetter,
-    onCreateReminder,
-    onCreateSearchPreset,
-    onDeleteRecord,
-    onDeleteSearchPreset,
-    onSaveRecord,
-    onDeleteMedia,
-    onRefreshMediaStatus,
-    onRetryMedia,
-    onUploadMedia,
-    presetName: state.presetName,
-    reminderForm: state.reminderForm,
-    selectedDeadLetterIds: state.selectedDeadLetterIds,
-    selectedRecord: viewData.selectedRecord,
-    setBulkRetryingDeadLetter: state.setBulkRetryingDeadLetter,
-    setDeleting: state.setDeleting,
-    setDeletingMediaId: state.setDeletingMediaId,
-    setDownloadingMediaId: state.setDownloadingMediaId,
-    setError: state.setError,
-    setForm: state.setForm,
-    setPresetName: state.setPresetName,
-    setRefreshingMediaId: state.setRefreshingMediaId,
-    setReminderForm: state.setReminderForm,
-    setRetryingMediaId: state.setRetryingMediaId,
-    setSaving: state.setSaving,
-    setSavingReminder: state.setSavingReminder,
-    setSelectedDeadLetterIds: state.setSelectedDeadLetterIds,
-    setUploading: state.setUploading,
-    workspaceId,
-  });
+  const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(
+    buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData }),
+  );
   return buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData });
 }
