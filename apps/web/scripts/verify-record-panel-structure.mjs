@@ -72,6 +72,14 @@ const recordPanelReminderHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-helpers.ts",
 );
+const recordPanelMediaStatusActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-status-actions.ts",
+);
+const recordPanelMediaStatusHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-status-helpers.ts",
+);
 const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
@@ -122,6 +130,8 @@ const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
+const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
+const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
@@ -148,6 +158,8 @@ const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
+const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
+const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
@@ -897,6 +909,81 @@ const maxReminderHelpersLines = 60;
 if (reminderHelpersLines > maxReminderHelpersLines) {
   throw new Error(
     `record-panel-controller-reminder-helpers.ts exceeded ${maxReminderHelpersLines} lines: ${reminderHelpersLines}`,
+  );
+}
+
+for (const requiredMediaStatusActionsImport of [
+  'from "./record-panel-controller-media-status-helpers";',
+]) {
+  if (!mediaStatusActionsSource.includes(requiredMediaStatusActionsImport)) {
+    throw new Error(
+      `record-panel-controller-media-status-actions.ts must import delegated media-status helpers: ${requiredMediaStatusActionsImport}`,
+    );
+  }
+}
+
+for (const requiredMediaStatusActionsUsage of [
+  "getRecordPanelMediaStatusErrorMessages(detailCopy)",
+  "runRecordPanelMediaStatusAction({",
+  "setActiveMediaId: setRefreshingMediaId",
+  "setActiveMediaId: setRetryingMediaId",
+]) {
+  if (!mediaStatusActionsSource.includes(requiredMediaStatusActionsUsage)) {
+    throw new Error(
+      `record-panel-controller-media-status-actions.ts must delegate media-status execution details: ${requiredMediaStatusActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaStatusActionsToken of [
+  "function getErrorMessage(",
+  "setRefreshingMediaId(mediaId);",
+  "setRetryingMediaId(mediaId);",
+  "detailCopy.refreshMediaError",
+  "detailCopy.retryMediaError",
+]) {
+  if (mediaStatusActionsSource.includes(forbiddenMediaStatusActionsToken)) {
+    throw new Error(
+      `record-panel-controller-media-status-actions.ts must keep media-status internals delegated: ${forbiddenMediaStatusActionsToken}`,
+    );
+  }
+}
+
+const maxMediaStatusActionsLines = 55;
+if (mediaStatusActionsLines > maxMediaStatusActionsLines) {
+  throw new Error(
+    `record-panel-controller-media-status-actions.ts exceeded ${maxMediaStatusActionsLines} lines: ${mediaStatusActionsLines}`,
+  );
+}
+
+for (const requiredMediaStatusHelpersImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!mediaStatusHelpersSource.includes(requiredMediaStatusHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-media-status-helpers.ts must import media-status copy contracts: ${requiredMediaStatusHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredMediaStatusHelpersUsage of [
+  "export function getRecordPanelMediaStatusErrorMessage(",
+  "export async function runRecordPanelMediaStatusAction({",
+  "export function getRecordPanelMediaStatusErrorMessages(detailCopy: DetailCopy)",
+  "refreshMediaError",
+  "retryMediaError",
+]) {
+  if (!mediaStatusHelpersSource.includes(requiredMediaStatusHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-media-status-helpers.ts must own media-status error and execution helpers: ${requiredMediaStatusHelpersUsage}`,
+    );
+  }
+}
+
+const maxMediaStatusHelpersLines = 45;
+if (mediaStatusHelpersLines > maxMediaStatusHelpersLines) {
+  throw new Error(
+    `record-panel-controller-media-status-helpers.ts exceeded ${maxMediaStatusHelpersLines} lines: ${mediaStatusHelpersLines}`,
   );
 }
 

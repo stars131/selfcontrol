@@ -1,13 +1,11 @@
 "use client";
-
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { ControllerProps } from "./record-panel-controller.types";
-
+import {
+  getRecordPanelMediaStatusErrorMessages,
+  runRecordPanelMediaStatusAction,
+} from "./record-panel-controller-media-status-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
-
-function getErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
-}
 
 export function createRecordPanelControllerMediaStatusActions({
   detailCopy,
@@ -24,28 +22,26 @@ export function createRecordPanelControllerMediaStatusActions({
   setRefreshingMediaId: (value: string | null) => void;
   setRetryingMediaId: (value: string | null) => void;
 }) {
+  const errorMessages = getRecordPanelMediaStatusErrorMessages(detailCopy);
+
   async function handleRefreshMedia(mediaId: string) {
-    setRefreshingMediaId(mediaId);
-    setError("");
-    try {
-      await onRefreshMediaStatus(mediaId);
-    } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.refreshMediaError));
-    } finally {
-      setRefreshingMediaId(null);
-    }
+    await runRecordPanelMediaStatusAction({
+      action: onRefreshMediaStatus,
+      fallbackMessage: errorMessages.refreshMediaError,
+      mediaId,
+      setActiveMediaId: setRefreshingMediaId,
+      setError,
+    });
   }
 
   async function handleRetryMediaProcessing(mediaId: string) {
-    setRetryingMediaId(mediaId);
-    setError("");
-    try {
-      await onRetryMedia(mediaId);
-    } catch (caught) {
-      setError(getErrorMessage(caught, detailCopy.retryMediaError));
-    } finally {
-      setRetryingMediaId(null);
-    }
+    await runRecordPanelMediaStatusAction({
+      action: onRetryMedia,
+      fallbackMessage: errorMessages.retryMediaError,
+      mediaId,
+      setActiveMediaId: setRetryingMediaId,
+      setError,
+    });
   }
 
   return {
