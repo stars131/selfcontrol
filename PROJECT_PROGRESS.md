@@ -1272,6 +1272,10 @@ Last updated: 2026-03-24
   - legacy record summary counts and selected-record lookup now live behind `apps/web/components/use-record-panel-legacy-view-data.ts` instead of remaining inline inside `apps/web/components/record-panel.tsx`
   - `apps/web/components/record-panel.tsx` now focuses more narrowly on composing legacy state, sync, actions, and delegated subviews behind a thinner shell boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy view-data hook boundary and a dedicated size ceiling for the extracted hook module
+- Record Panel Legacy Field Group Split V3:
+  - legacy title/content inputs now live in `apps/web/components/record-panel-legacy-primary-fields.tsx`, while type/rating/avoid controls now live in `apps/web/components/record-panel-legacy-classification-fields.tsx`
+  - `apps/web/components/record-panel-legacy-form-fields.tsx` now focuses on composing the two field groups instead of rendering all editable controls directly
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the split field-group boundaries and dedicated size ceilings for both extracted legacy field modules
 
 ## Next
 - Continue the next product slice

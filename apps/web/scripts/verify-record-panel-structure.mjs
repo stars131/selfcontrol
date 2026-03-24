@@ -595,6 +595,14 @@ const legacyRecordPanelFormFieldsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-fields.tsx",
 );
+const legacyRecordPanelPrimaryFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-primary-fields.tsx",
+);
+const legacyRecordPanelClassificationFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-classification-fields.tsx",
+);
 const legacyRecordPanelFormMediaPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-media.tsx",
@@ -621,6 +629,14 @@ const legacyRecordPanelUploadActionSource = fs.readFileSync(
 const legacyRecordPanelFormSource = fs.readFileSync(legacyRecordPanelFormPath, "utf8");
 const legacyRecordPanelFormTypesSource = fs.readFileSync(legacyRecordPanelFormTypesPath, "utf8");
 const legacyRecordPanelFormFieldsSource = fs.readFileSync(legacyRecordPanelFormFieldsPath, "utf8");
+const legacyRecordPanelPrimaryFieldsSource = fs.readFileSync(
+  legacyRecordPanelPrimaryFieldsPath,
+  "utf8",
+);
+const legacyRecordPanelClassificationFieldsSource = fs.readFileSync(
+  legacyRecordPanelClassificationFieldsPath,
+  "utf8",
+);
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
@@ -1006,6 +1022,10 @@ const legacyRecordPanelUploadActionLines = legacyRecordPanelUploadActionSource.s
 const legacyRecordPanelFormLines = legacyRecordPanelFormSource.split(/\r?\n/).length;
 const legacyRecordPanelFormTypesLines = legacyRecordPanelFormTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormFieldsLines = legacyRecordPanelFormFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelPrimaryFieldsLines =
+  legacyRecordPanelPrimaryFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelClassificationFieldsLines =
+  legacyRecordPanelClassificationFieldsSource.split(/\r?\n/).length;
 const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
@@ -6321,21 +6341,71 @@ if (legacyRecordPanelFormTypesLines > maxLegacyRecordPanelFormTypesLines) {
 }
 
 for (const requiredLegacyFormFieldsUsage of [
+  'import { RecordPanelLegacyClassificationFields } from "./record-panel-legacy-classification-fields";',
   'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  'import { RecordPanelLegacyPrimaryFields } from "./record-panel-legacy-primary-fields";',
   "export function RecordPanelLegacyFormFields({",
-  'placeholder="Optional title"',
-  'placeholder="Write a note, food review, or reminder"',
-  "Avoid item",
+  "<RecordPanelLegacyPrimaryFields",
+  "<RecordPanelLegacyClassificationFields",
 ]) {
   if (!legacyRecordPanelFormFieldsSource.includes(requiredLegacyFormFieldsUsage)) {
     throw new Error(`record-panel-legacy-form-fields.tsx must own editable field rendering: ${requiredLegacyFormFieldsUsage}`);
   }
 }
 
-const maxLegacyRecordPanelFormFieldsLines = 70;
+for (const forbiddenLegacyFormFieldsToken of [
+  'placeholder="Optional title"',
+  'placeholder="Write a note, food review, or reminder"',
+  '<option value="memo">',
+  "Avoid item",
+]) {
+  if (legacyRecordPanelFormFieldsSource.includes(forbiddenLegacyFormFieldsToken)) {
+    throw new Error(`record-panel-legacy-form-fields.tsx must keep primary/classification field details delegated: ${forbiddenLegacyFormFieldsToken}`);
+  }
+}
+
+const maxLegacyRecordPanelFormFieldsLines = 20;
 if (legacyRecordPanelFormFieldsLines > maxLegacyRecordPanelFormFieldsLines) {
   throw new Error(
     `record-panel-legacy-form-fields.tsx exceeded ${maxLegacyRecordPanelFormFieldsLines} lines: ${legacyRecordPanelFormFieldsLines}`,
+  );
+}
+
+for (const requiredLegacyPrimaryFieldsUsage of [
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  "export function RecordPanelLegacyPrimaryFields({",
+  'placeholder="Optional title"',
+  'placeholder="Write a note, food review, or reminder"',
+]) {
+  if (!legacyRecordPanelPrimaryFieldsSource.includes(requiredLegacyPrimaryFieldsUsage)) {
+    throw new Error(`record-panel-legacy-primary-fields.tsx must own title/content field rendering: ${requiredLegacyPrimaryFieldsUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelPrimaryFieldsLines = 35;
+if (legacyRecordPanelPrimaryFieldsLines > maxLegacyRecordPanelPrimaryFieldsLines) {
+  throw new Error(
+    `record-panel-legacy-primary-fields.tsx exceeded ${maxLegacyRecordPanelPrimaryFieldsLines} lines: ${legacyRecordPanelPrimaryFieldsLines}`,
+  );
+}
+
+for (const requiredLegacyClassificationFieldsUsage of [
+  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+  "export function RecordPanelLegacyClassificationFields({",
+  '<option value="memo">memo</option>',
+  '<option value="bad_experience">bad_experience</option>',
+  'placeholder="1-5"',
+  "Avoid item",
+]) {
+  if (!legacyRecordPanelClassificationFieldsSource.includes(requiredLegacyClassificationFieldsUsage)) {
+    throw new Error(`record-panel-legacy-classification-fields.tsx must own type/rating/avoid rendering: ${requiredLegacyClassificationFieldsUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelClassificationFieldsLines = 45;
+if (legacyRecordPanelClassificationFieldsLines > maxLegacyRecordPanelClassificationFieldsLines) {
+  throw new Error(
+    `record-panel-legacy-classification-fields.tsx exceeded ${maxLegacyRecordPanelClassificationFieldsLines} lines: ${legacyRecordPanelClassificationFieldsLines}`,
   );
 }
 
