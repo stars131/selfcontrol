@@ -1412,6 +1412,10 @@ Last updated: 2026-03-24
   - editor-workspace dead-letter and primary action output contracts now live in `apps/web/components/record-panel-v2-editor-workspace-action-props.types.ts` instead of remaining embedded across the action helpers and aggregator
   - `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-dead-letter-action-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` now consume the extracted output contracts behind thinner action-mapping boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace action output-type boundary and keeps inline `Pick<RecordEditorWorkspaceProps, ...>` signatures out of the helper and aggregator modules
+- Record Panel Browse Workspace Wrapper Arg Type Split V1:
+  - browse-workspace prop/controller wrapper arg contracts now live in `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts` and `apps/web/components/record-panel-v2-browse-workspace-controller-input.types.ts` instead of remaining embedded directly in the wrapper function signatures
+  - `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts` and `apps/web/components/record-panel-v2-browse-workspace-controller-input.ts` now consume the extracted wrapper-arg contracts behind thinner mapping-only boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the wrapper modules
 
 ## Next
 - Continue the next product slice

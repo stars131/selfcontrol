@@ -1,6 +1,6 @@
 "use client";
-import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
-export function buildRecordBrowseWorkspaceControllerInput({ controller }: Pick<RecordPanelShellInput, "controller">) {
+import type { BuildRecordBrowseWorkspaceControllerInputArgs } from "./record-panel-v2-browse-workspace-controller-input.types";
+export function buildRecordBrowseWorkspaceControllerInput({ controller }: BuildRecordBrowseWorkspaceControllerInputArgs) {
   return {
     avoidCount: controller.avoidCount,
     detailCopy: controller.detailCopy,

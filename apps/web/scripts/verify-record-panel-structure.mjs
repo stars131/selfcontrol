@@ -1830,6 +1830,7 @@ if (browseWorkspacePropsTypesLines > maxBrowseWorkspacePropsTypesLines) {
 }
 
 for (const requiredBrowseWorkspacePropInputTypesImport of [
+  'from "./record-panel-v2-shell-props.types";',
   'from "./record-panel-v2.types";',
 ]) {
   if (!browseWorkspacePropInputTypesSource.includes(requiredBrowseWorkspacePropInputTypesImport)) {
@@ -1840,6 +1841,7 @@ for (const requiredBrowseWorkspacePropInputTypesImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputTypesUsage of [
+  'export type BuildRecordBrowseWorkspacePropInputArgs = { props: RecordPanelShellInput["props"] };',
   "export type BuildRecordBrowseWorkspacePropInput = Pick<",
   '"onApplyLocationFilter"',
   '"onSelectRecord"',
@@ -1859,6 +1861,7 @@ if (browseWorkspacePropInputTypesLines > maxBrowseWorkspacePropInputTypesLines) 
 }
 
 for (const requiredBrowseWorkspaceControllerInputTypesImport of [
+  'from "./record-panel-v2-shell-props.types";',
   'from "./record-panel-v2-workspace-props-core.types";',
 ]) {
   if (!browseWorkspaceControllerInputTypesSource.includes(requiredBrowseWorkspaceControllerInputTypesImport)) {
@@ -1869,6 +1872,7 @@ for (const requiredBrowseWorkspaceControllerInputTypesImport of [
 }
 
 for (const requiredBrowseWorkspaceControllerInputTypesUsage of [
+  "export type BuildRecordBrowseWorkspaceControllerInputArgs = { controller: RecordPanelController };",
   "export type BuildRecordBrowseWorkspaceControllerInput =",
   "RecordBrowseWorkspaceTypeSupport & {",
   "detailCopy: RecordPanelDetailCopy;",
@@ -2621,7 +2625,7 @@ if (browseWorkspaceInputLines > maxBrowseWorkspaceInputLines) {
 }
 
 for (const requiredBrowseWorkspacePropInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-browse-workspace-prop-input.types";',
 ]) {
   if (!browseWorkspacePropInputSource.includes(requiredBrowseWorkspacePropInputImport)) {
     throw new Error(
@@ -2631,7 +2635,7 @@ for (const requiredBrowseWorkspacePropInputImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputUsage of [
-  'export function buildRecordBrowseWorkspacePropInput({ props }: Pick<RecordPanelShellInput, "props">)',
+  'export function buildRecordBrowseWorkspacePropInput({ props }: BuildRecordBrowseWorkspacePropInputArgs)',
   "canWriteWorkspace: props.canWriteWorkspace",
   "searchPresets: props.searchPresets",
   "savingSearchPreset: props.savingSearchPreset",
@@ -2639,6 +2643,17 @@ for (const requiredBrowseWorkspacePropInputUsage of [
   if (!browseWorkspacePropInputSource.includes(requiredBrowseWorkspacePropInputUsage)) {
     throw new Error(
       `record-panel-v2-browse-workspace-prop-input.ts must own browse workspace prop field mapping: ${requiredBrowseWorkspacePropInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenBrowseWorkspacePropInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "props">',
+]) {
+  if (browseWorkspacePropInputSource.includes(forbiddenBrowseWorkspacePropInputToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-prop-input.ts must keep browse workspace prop-input arg typing delegated: ${forbiddenBrowseWorkspacePropInputToken}`,
     );
   }
 }
@@ -2651,7 +2666,7 @@ if (browseWorkspacePropInputLines > maxBrowseWorkspacePropInputLines) {
 }
 
 for (const requiredBrowseWorkspaceControllerInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-browse-workspace-controller-input.types";',
 ]) {
   if (!browseWorkspaceControllerInputSource.includes(requiredBrowseWorkspaceControllerInputImport)) {
     throw new Error(
@@ -2661,7 +2676,7 @@ for (const requiredBrowseWorkspaceControllerInputImport of [
 }
 
 for (const requiredBrowseWorkspaceControllerInputUsage of [
-  'export function buildRecordBrowseWorkspaceControllerInput({',
+  "export function buildRecordBrowseWorkspaceControllerInput({ controller }: BuildRecordBrowseWorkspaceControllerInputArgs) {",
   "avoidCount: controller.avoidCount",
   "handleSavePreset: controller.handleSavePreset",
   "summarizeRecordFilterLabel: controller.summarizeRecordFilterLabel",
@@ -2670,6 +2685,17 @@ for (const requiredBrowseWorkspaceControllerInputUsage of [
   if (!browseWorkspaceControllerInputSource.includes(requiredBrowseWorkspaceControllerInputUsage)) {
     throw new Error(
       `record-panel-v2-browse-workspace-controller-input.ts must own browse workspace controller field mapping: ${requiredBrowseWorkspaceControllerInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenBrowseWorkspaceControllerInputToken of [
+  'from "./record-panel-v2-shell-props.types";',
+  'Pick<RecordPanelShellInput, "controller">',
+]) {
+  if (browseWorkspaceControllerInputSource.includes(forbiddenBrowseWorkspaceControllerInputToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-controller-input.ts must keep browse workspace controller-input arg typing delegated: ${forbiddenBrowseWorkspaceControllerInputToken}`,
     );
   }
 }

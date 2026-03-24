@@ -1,5 +1,7 @@
+import type { RecordPanelController } from "./record-panel-v2-shell-props.types";
 import type { RecordBrowseWorkspaceProps, RecordBrowseWorkspaceTypeSupport, RecordPanelDetailCopy } from "./record-panel-v2-workspace-props-core.types";
 
+export type BuildRecordBrowseWorkspaceControllerInputArgs = { controller: RecordPanelController };
 export type BuildRecordBrowseWorkspaceControllerInput =
   RecordBrowseWorkspaceTypeSupport & {
     avoidCount: number;

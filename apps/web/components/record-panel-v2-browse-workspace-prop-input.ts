@@ -1,7 +1,7 @@
 "use client";
-import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
+import type { BuildRecordBrowseWorkspacePropInputArgs } from "./record-panel-v2-browse-workspace-prop-input.types";
 
-export function buildRecordBrowseWorkspacePropInput({ props }: Pick<RecordPanelShellInput, "props">) {
+export function buildRecordBrowseWorkspacePropInput({ props }: BuildRecordBrowseWorkspacePropInputArgs) {
   return {
     canWriteWorkspace: props.canWriteWorkspace,
     records: props.records,
