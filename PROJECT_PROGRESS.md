@@ -1228,6 +1228,10 @@ Last updated: 2026-03-24
   - browse workspace props now delegate filter/search props and record/list props into dedicated helper modules instead of keeping those mappings mixed inside `apps/web/components/record-panel-v2-browse-workspace-props.ts`
   - `apps/web/components/record-panel-v2-browse-workspace-props-helpers.ts` now exposes copy, draft-location, filter, and record helper boundaries through one stable browse helper surface
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace prop split and dedicated size ceilings for the extracted browse filter and record helper modules
+- Record Panel Selected Record Sync Split V3:
+  - selected-record sync now delegates form synchronization and reminder synchronization into dedicated hook modules instead of keeping both `useEffect` blocks inside `apps/web/components/use-record-panel-controller-selected-record-sync.ts`
+  - `apps/web/components/use-record-panel-controller-selected-record-sync.ts` now focuses on composing the specialized sync hooks behind a thinner selected-record boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record sync split and dedicated size ceilings for the extracted form and reminder sync hooks
 
 ## Next
 - Continue the next product slice
