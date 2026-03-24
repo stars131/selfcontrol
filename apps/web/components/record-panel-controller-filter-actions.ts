@@ -1,15 +1,11 @@
 "use client";
-import type { ControllerProps } from "./record-panel-controller.types";
 import { createRecordPanelControllerFilterApplyAction } from "./record-panel-controller-filter-apply-action";
-import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types";
+import type { RecordPanelControllerFilterActionInput } from "./record-panel-controller-filter-action-input.types";
 import { createRecordPanelControllerFilterPresetActions } from "./record-panel-controller-filter-preset-actions";
 
-type FilterActionProps = RecordPanelControllerFilterPresetActionInput & {
-  onApplyRecordFilter: ControllerProps["onApplyRecordFilter"];
-};
 export function createRecordPanelControllerFilterActions({
   ...props
-}: FilterActionProps) {
+}: RecordPanelControllerFilterActionInput) {
   const applyAction = createRecordPanelControllerFilterApplyAction(props);
   const presetActions = createRecordPanelControllerFilterPresetActions(props);
   return {

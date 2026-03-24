@@ -1356,6 +1356,10 @@ Last updated: 2026-03-24
   - record submit/reminder aggregate input contracts now live in `apps/web/components/record-panel-controller-form-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-form-actions.ts`
   - `apps/web/components/record-panel-controller-form-actions.ts` now consumes the shared extracted form contract behind a thinner orchestration boundary while reusing the dedicated submit and reminder input modules
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the form action input-type boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the form action module
+- Record Panel Filter Action Input Type Split V3:
+  - filter apply/preset aggregate input contracts now live in `apps/web/components/record-panel-controller-filter-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-filter-actions.ts`
+  - `apps/web/components/record-panel-controller-filter-actions.ts` now consumes the shared extracted filter contract behind a thinner orchestration boundary while reusing the dedicated preset input module
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter action input-type boundary and keeps inline `FilterActionProps` definitions out of the filter action module
 
 ## Next
 - Continue the next product slice
