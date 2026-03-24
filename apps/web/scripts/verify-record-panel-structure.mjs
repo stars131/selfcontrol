@@ -6806,9 +6806,9 @@ if (recordSubmitActionsLines > maxRecordSubmitActionsLines) {
 }
 
 for (const requiredRecordDeleteActionInputTypesImport of [
-  'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!recordDeleteActionInputTypesSource.includes(requiredRecordDeleteActionInputTypesImport)) {
     throw new Error(
@@ -6818,8 +6818,8 @@ for (const requiredRecordDeleteActionInputTypesImport of [
 }
 
 for (const requiredRecordDeleteActionInputTypesUsage of [
-  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
   "export type RecordPanelControllerRecordDeleteActionInput = {",
+  "detailCopy: RecordPanelControllerDetailCopy;",
   'onDeleteRecord: ControllerProps["onDeleteRecord"];',
   "selectedRecord: RecordItem | null;",
   "setDeleting: (value: boolean) => void;",
@@ -6827,6 +6827,18 @@ for (const requiredRecordDeleteActionInputTypesUsage of [
   if (!recordDeleteActionInputTypesSource.includes(requiredRecordDeleteActionInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-record-delete-action-input.types.ts must own delete action input typing: ${requiredRecordDeleteActionInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordDeleteActionInputTypesToken of [
+  'from "../lib/record-panel-detail";',
+  "type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>[\"copy\"];",
+  "detailCopy: DetailCopy;",
+]) {
+  if (recordDeleteActionInputTypesSource.includes(forbiddenRecordDeleteActionInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-record-delete-action-input.types.ts must keep detail-copy typing delegated: ${forbiddenRecordDeleteActionInputTypesToken}`,
     );
   }
 }

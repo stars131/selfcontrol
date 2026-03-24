@@ -1552,6 +1552,10 @@ Last updated: 2026-03-24
   - save/reminder action-input and payload type modules now reuse the shared controller detail-copy contract instead of local `DetailCopy` aliases
   - `record-panel-controller-record-save-action-input.types.ts`, `record-panel-controller-record-save-payload.types.ts`, `record-panel-controller-reminder-action-input.types.ts`, and `record-panel-controller-reminder-payload.types.ts` now depend on the shared detail-copy boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those save/reminder type modules stay decoupled from direct detail-bundle `ReturnType` aliases
+- Record Panel Record-Delete Detail-Copy Type Reuse Split V1:
+  - the record-delete action-input type now reuses the shared controller detail-copy contract instead of a local `DetailCopy` alias
+  - `apps/web/components/record-panel-controller-record-delete-action-input.types.ts` now depends on the shared detail-copy boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that the record-delete action-input type stays decoupled from direct detail-bundle `ReturnType` aliases
 
 ## Next
 - Continue the next product slice
