@@ -651,6 +651,10 @@ const recordPanelMediaAssetActionInputTypesPath = path.resolve(
 );
 const legacyRecordPanelFormPath = path.resolve(process.cwd(), "components/record-panel-legacy-form.tsx");
 const legacyRecordPanelActionsPath = path.resolve(process.cwd(), "components/record-panel-legacy-actions.ts");
+const legacyRecordPanelActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-action-input.types.ts",
+);
 const legacyRecordPanelActionErrorPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-action-error.ts",
@@ -718,6 +722,10 @@ const legacyRecordPanelStatsGridPath = path.resolve(
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
+const legacyRecordPanelActionInputTypesSource = fs.readFileSync(
+  legacyRecordPanelActionInputTypesPath,
+  "utf8",
+);
 const legacyRecordPanelActionErrorSource = fs.readFileSync(
   legacyRecordPanelActionErrorPath,
   "utf8",
@@ -1204,6 +1212,8 @@ const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
 const legacyRecordPanelActionsLines = legacyRecordPanelActionsSource.split(/\r?\n/).length;
+const legacyRecordPanelActionInputTypesLines =
+  legacyRecordPanelActionInputTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelActionErrorLines = legacyRecordPanelActionErrorSource.split(/\r?\n/).length;
 const legacyRecordPanelSubmitActionLines = legacyRecordPanelSubmitActionSource.split(/\r?\n/).length;
 const legacyRecordPanelDeleteActionLines = legacyRecordPanelDeleteActionSource.split(/\r?\n/).length;
@@ -7245,7 +7255,35 @@ if (legacyRecordPanelViewDataLines > maxLegacyRecordPanelViewDataLines) {
   );
 }
 
+for (const requiredLegacyActionInputTypesImport of [
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+]) {
+  if (!legacyRecordPanelActionInputTypesSource.includes(requiredLegacyActionInputTypesImport)) {
+    throw new Error(`record-panel-legacy-action-input.types.ts must import legacy action contracts: ${requiredLegacyActionInputTypesImport}`);
+  }
+}
+
+for (const requiredLegacyActionInputTypesUsage of [
+  "export type RecordPanelLegacyDeleteActionInput = {",
+  "export type RecordPanelLegacySubmitActionInput = {",
+  "export type RecordPanelLegacyUploadActionInput = {",
+  "export type LegacyActionsInput = RecordPanelLegacyDeleteActionInput & RecordPanelLegacySubmitActionInput & RecordPanelLegacyUploadActionInput;",
+]) {
+  if (!legacyRecordPanelActionInputTypesSource.includes(requiredLegacyActionInputTypesUsage)) {
+    throw new Error(`record-panel-legacy-action-input.types.ts must own legacy action typing: ${requiredLegacyActionInputTypesUsage}`);
+  }
+}
+
+const maxLegacyActionInputTypesLines = 10;
+if (legacyRecordPanelActionInputTypesLines > maxLegacyActionInputTypesLines) {
+  throw new Error(
+    `record-panel-legacy-action-input.types.ts exceeded ${maxLegacyActionInputTypesLines} lines: ${legacyRecordPanelActionInputTypesLines}`,
+  );
+}
+
 for (const requiredLegacyActionsImport of [
+  'from "./record-panel-legacy-action-input.types";',
   'from "./record-panel-legacy-delete-action";',
   'from "./record-panel-legacy-submit-action";',
   'from "./record-panel-legacy-upload-action";',
@@ -7256,7 +7294,6 @@ for (const requiredLegacyActionsImport of [
 }
 
 for (const requiredLegacyActionsUsage of [
-  "type LegacyActionsInput =",
   "createRecordPanelLegacySubmitAction(input)",
   "createRecordPanelLegacyDeleteAction(input)",
   "createRecordPanelLegacyUploadAction(input)",
@@ -7267,6 +7304,9 @@ for (const requiredLegacyActionsUsage of [
 }
 
 for (const forbiddenLegacyActionsToken of [
+  "Parameters<typeof createRecordPanelLegacyDeleteAction>[0]",
+  "Parameters<typeof createRecordPanelLegacySubmitAction>[0]",
+  "Parameters<typeof createRecordPanelLegacyUploadAction>[0]",
   "function getRecordPanelErrorMessage(",
   "event.preventDefault()",
   'setError("Content is required")',
@@ -7303,9 +7343,8 @@ if (legacyRecordPanelActionErrorLines > maxLegacyActionErrorLines) {
 
 for (const requiredLegacySubmitActionImport of [
   'from "react";',
-  'from "../lib/types";',
-  'from "./record-panel.types";',
   'from "./record-panel-legacy-action-error";',
+  'from "./record-panel-legacy-action-input.types";',
 ]) {
   if (!legacyRecordPanelSubmitActionSource.includes(requiredLegacySubmitActionImport)) {
     throw new Error(`record-panel-legacy-submit-action.ts must import legacy submit action contracts: ${requiredLegacySubmitActionImport}`);
@@ -7324,6 +7363,19 @@ for (const requiredLegacySubmitActionUsage of [
   }
 }
 
+for (const forbiddenLegacySubmitActionToken of [
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  "form: RecordPanelFormState;",
+  'onSaveRecord: RecordPanelProps["onSaveRecord"];',
+  "selectedRecord: RecordItem | null;",
+  "setSaving: (value: boolean) => void;",
+]) {
+  if (legacyRecordPanelSubmitActionSource.includes(forbiddenLegacySubmitActionToken)) {
+    throw new Error(`record-panel-legacy-submit-action.ts must keep legacy submit input contracts delegated: ${forbiddenLegacySubmitActionToken}`);
+  }
+}
+
 const maxLegacySubmitActionLines = 45;
 if (legacyRecordPanelSubmitActionLines > maxLegacySubmitActionLines) {
   throw new Error(
@@ -7332,9 +7384,8 @@ if (legacyRecordPanelSubmitActionLines > maxLegacySubmitActionLines) {
 }
 
 for (const requiredLegacyDeleteActionImport of [
-  'from "../lib/types";',
-  'from "./record-panel.types";',
   'from "./record-panel-legacy-action-error";',
+  'from "./record-panel-legacy-action-input.types";',
 ]) {
   if (!legacyRecordPanelDeleteActionSource.includes(requiredLegacyDeleteActionImport)) {
     throw new Error(`record-panel-legacy-delete-action.ts must import legacy delete action contracts: ${requiredLegacyDeleteActionImport}`);
@@ -7352,6 +7403,18 @@ for (const requiredLegacyDeleteActionUsage of [
   }
 }
 
+for (const forbiddenLegacyDeleteActionToken of [
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  'onDeleteRecord: RecordPanelProps["onDeleteRecord"];',
+  "selectedRecord: RecordItem | null;",
+  "setDeleting: (value: boolean) => void;",
+]) {
+  if (legacyRecordPanelDeleteActionSource.includes(forbiddenLegacyDeleteActionToken)) {
+    throw new Error(`record-panel-legacy-delete-action.ts must keep legacy delete input contracts delegated: ${forbiddenLegacyDeleteActionToken}`);
+  }
+}
+
 const maxLegacyDeleteActionLines = 30;
 if (legacyRecordPanelDeleteActionLines > maxLegacyDeleteActionLines) {
   throw new Error(
@@ -7361,9 +7424,8 @@ if (legacyRecordPanelDeleteActionLines > maxLegacyDeleteActionLines) {
 
 for (const requiredLegacyUploadActionImport of [
   'from "react";',
-  'from "../lib/types";',
-  'from "./record-panel.types";',
   'from "./record-panel-legacy-action-error";',
+  'from "./record-panel-legacy-action-input.types";',
 ]) {
   if (!legacyRecordPanelUploadActionSource.includes(requiredLegacyUploadActionImport)) {
     throw new Error(`record-panel-legacy-upload-action.ts must import legacy upload action contracts: ${requiredLegacyUploadActionImport}`);
@@ -7378,6 +7440,18 @@ for (const requiredLegacyUploadActionUsage of [
 ]) {
   if (!legacyRecordPanelUploadActionSource.includes(requiredLegacyUploadActionUsage)) {
     throw new Error(`record-panel-legacy-upload-action.ts must own legacy upload details: ${requiredLegacyUploadActionUsage}`);
+  }
+}
+
+for (const forbiddenLegacyUploadActionToken of [
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+  'onUploadMedia: RecordPanelProps["onUploadMedia"];',
+  "selectedRecord: RecordItem | null;",
+  "setUploading: (value: boolean) => void;",
+]) {
+  if (legacyRecordPanelUploadActionSource.includes(forbiddenLegacyUploadActionToken)) {
+    throw new Error(`record-panel-legacy-upload-action.ts must keep legacy upload input contracts delegated: ${forbiddenLegacyUploadActionToken}`);
   }
 }
 

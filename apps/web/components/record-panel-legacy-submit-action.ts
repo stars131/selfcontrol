@@ -1,15 +1,14 @@
 "use client";
 import type { FormEvent } from "react";
-import type { RecordItem } from "../lib/types";
-import type { RecordPanelFormState, RecordPanelProps } from "./record-panel.types";
 import { getRecordPanelErrorMessage } from "./record-panel-legacy-action-error";
+import type { RecordPanelLegacySubmitActionInput } from "./record-panel-legacy-action-input.types";
 export function createRecordPanelLegacySubmitAction({
   form,
   onSaveRecord,
   selectedRecord,
   setError,
   setSaving,
-}: { form: RecordPanelFormState; onSaveRecord: RecordPanelProps["onSaveRecord"]; selectedRecord: RecordItem | null; setError: (value: string) => void; setSaving: (value: boolean) => void }) {
+}: RecordPanelLegacySubmitActionInput) {
   return async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!form.content.trim()) {

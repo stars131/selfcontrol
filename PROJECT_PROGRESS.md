@@ -1368,6 +1368,10 @@ Last updated: 2026-03-24
   - selected-record form/reminder sync input contracts now live in `apps/web/components/use-record-panel-controller-selected-record-sync.types.ts` instead of remaining embedded across the aggregate selected-record sync hook and its child hooks
   - `apps/web/components/use-record-panel-controller-selected-record-sync.ts`, `apps/web/components/use-record-panel-controller-selected-record-form-sync.ts`, and `apps/web/components/use-record-panel-controller-selected-record-reminder-sync.ts` now consume the shared extracted sync contracts behind thinner hook boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the selected-record sync input-type boundary and keeps inline sync contract definitions out of the aggregate and child hooks
+- Record Panel Legacy Action Input Type Split V3:
+  - legacy submit/delete/upload input contracts now live in `apps/web/components/record-panel-legacy-action-input.types.ts` instead of remaining embedded across the legacy action modules
+  - `apps/web/components/record-panel-legacy-actions.ts`, `apps/web/components/record-panel-legacy-submit-action.ts`, `apps/web/components/record-panel-legacy-delete-action.ts`, and `apps/web/components/record-panel-legacy-upload-action.ts` now consume the shared extracted legacy action contracts behind thinner compatibility boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy action input-type boundary and keeps inline legacy action contract definitions out of the legacy action modules
 
 ## Next
 - Continue the next product slice

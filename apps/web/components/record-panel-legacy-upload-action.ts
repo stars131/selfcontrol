@@ -1,14 +1,13 @@
 "use client";
 import type { ChangeEvent } from "react";
-import type { RecordItem } from "../lib/types";
-import type { RecordPanelProps } from "./record-panel.types";
 import { getRecordPanelErrorMessage } from "./record-panel-legacy-action-error";
+import type { RecordPanelLegacyUploadActionInput } from "./record-panel-legacy-action-input.types";
 export function createRecordPanelLegacyUploadAction({
   onUploadMedia,
   selectedRecord,
   setError,
   setUploading,
-}: { onUploadMedia: RecordPanelProps["onUploadMedia"]; selectedRecord: RecordItem | null; setError: (value: string) => void; setUploading: (value: boolean) => void }) {
+}: RecordPanelLegacyUploadActionInput) {
   return async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !selectedRecord) {
