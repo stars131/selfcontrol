@@ -1100,10 +1100,14 @@ Last updated: 2026-03-24
   - media refresh and media retry orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-media-status-actions.ts`
   - `apps/web/components/record-panel-controller-media-status-actions.ts` now focuses on composing refresh and retry actions behind a stable media-status boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-status action split and dedicated size ceilings for both extracted modules
+- Record Panel Dead-Letter Action Split V1:
+  - dead-letter selection controls and bulk-retry orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-actions.ts`
+  - `apps/web/components/record-panel-controller-dead-letter-actions.ts` now focuses on composing selection and retry actions behind a stable dead-letter boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter action split and dedicated size ceilings for both extracted modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel dead-letter helpers and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel helper payload/error utilities and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule
