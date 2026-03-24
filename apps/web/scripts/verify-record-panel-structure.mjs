@@ -148,6 +148,14 @@ const recordPanelMediaStatusActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-actions.ts",
 );
+const recordPanelMediaRefreshActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-refresh-action.ts",
+);
+const recordPanelMediaRetryActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-retry-action.ts",
+);
 const recordPanelMediaStatusHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-helpers.ts",
@@ -266,6 +274,8 @@ const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "u
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const reminderPayloadSource = fs.readFileSync(recordPanelReminderPayloadPath, "utf8");
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
+const mediaRefreshActionSource = fs.readFileSync(recordPanelMediaRefreshActionPath, "utf8");
+const mediaRetryActionSource = fs.readFileSync(recordPanelMediaRetryActionPath, "utf8");
 const mediaStatusHelpersSource = fs.readFileSync(recordPanelMediaStatusHelpersPath, "utf8");
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
 const mediaTransferActionsSource = fs.readFileSync(recordPanelMediaTransferActionsPath, "utf8");
@@ -320,6 +330,8 @@ const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const reminderPayloadLines = reminderPayloadSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
+const mediaRefreshActionLines = mediaRefreshActionSource.split(/\r?\n/).length;
+const mediaRetryActionLines = mediaRetryActionSource.split(/\r?\n/).length;
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
 const mediaTransferActionsLines = mediaTransferActionsSource.split(/\r?\n/).length;
@@ -1673,7 +1685,8 @@ if (reminderPayloadLines > maxReminderPayloadLines) {
 }
 
 for (const requiredMediaStatusActionsImport of [
-  'from "./record-panel-controller-media-status-helpers";',
+  'from "./record-panel-controller-media-refresh-action";',
+  'from "./record-panel-controller-media-retry-action";',
 ]) {
   if (!mediaStatusActionsSource.includes(requiredMediaStatusActionsImport)) {
     throw new Error(
@@ -1683,10 +1696,10 @@ for (const requiredMediaStatusActionsImport of [
 }
 
 for (const requiredMediaStatusActionsUsage of [
-  "getRecordPanelMediaStatusErrorMessages(detailCopy)",
-  "runRecordPanelMediaStatusAction({",
-  "setActiveMediaId: setRefreshingMediaId",
-  "setActiveMediaId: setRetryingMediaId",
+  "createRecordPanelControllerMediaRefreshAction(props)",
+  "createRecordPanelControllerMediaRetryAction(props)",
+  "...mediaRefreshAction",
+  "...mediaRetryAction",
 ]) {
   if (!mediaStatusActionsSource.includes(requiredMediaStatusActionsUsage)) {
     throw new Error(
@@ -1696,11 +1709,12 @@ for (const requiredMediaStatusActionsUsage of [
 }
 
 for (const forbiddenMediaStatusActionsToken of [
-  "function getErrorMessage(",
-  "setRefreshingMediaId(mediaId);",
-  "setRetryingMediaId(mediaId);",
-  "detailCopy.refreshMediaError",
-  "detailCopy.retryMediaError",
+  'from "../lib/record-panel-detail";',
+  "getRecordPanelMediaStatusErrorMessages(",
+  "runRecordPanelMediaStatusAction({",
+  "const errorMessages",
+  "handleRefreshMedia",
+  "handleRetryMediaProcessing",
 ]) {
   if (mediaStatusActionsSource.includes(forbiddenMediaStatusActionsToken)) {
     throw new Error(
@@ -1709,10 +1723,76 @@ for (const forbiddenMediaStatusActionsToken of [
   }
 }
 
-const maxMediaStatusActionsLines = 55;
+const maxMediaStatusActionsLines = 20;
 if (mediaStatusActionsLines > maxMediaStatusActionsLines) {
   throw new Error(
     `record-panel-controller-media-status-actions.ts exceeded ${maxMediaStatusActionsLines} lines: ${mediaStatusActionsLines}`,
+  );
+}
+
+for (const requiredMediaRefreshActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-media-status-helpers";',
+]) {
+  if (!mediaRefreshActionSource.includes(requiredMediaRefreshActionImport)) {
+    throw new Error(
+      `record-panel-controller-media-refresh-action.ts must import delegated media-refresh contracts: ${requiredMediaRefreshActionImport}`,
+    );
+  }
+}
+
+for (const requiredMediaRefreshActionUsage of [
+  "export function createRecordPanelControllerMediaRefreshAction({",
+  "getRecordPanelMediaStatusErrorMessages(detailCopy)",
+  "runRecordPanelMediaStatusAction({",
+  "fallbackMessage: errorMessages.refreshMediaError",
+  "setActiveMediaId: setRefreshingMediaId",
+]) {
+  if (!mediaRefreshActionSource.includes(requiredMediaRefreshActionUsage)) {
+    throw new Error(
+      `record-panel-controller-media-refresh-action.ts must own refresh orchestration: ${requiredMediaRefreshActionUsage}`,
+    );
+  }
+}
+
+const maxMediaRefreshActionLines = 40;
+if (mediaRefreshActionLines > maxMediaRefreshActionLines) {
+  throw new Error(
+    `record-panel-controller-media-refresh-action.ts exceeded ${maxMediaRefreshActionLines} lines: ${mediaRefreshActionLines}`,
+  );
+}
+
+for (const requiredMediaRetryActionImport of [
+  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-media-status-helpers";',
+]) {
+  if (!mediaRetryActionSource.includes(requiredMediaRetryActionImport)) {
+    throw new Error(
+      `record-panel-controller-media-retry-action.ts must import delegated media-retry contracts: ${requiredMediaRetryActionImport}`,
+    );
+  }
+}
+
+for (const requiredMediaRetryActionUsage of [
+  "export function createRecordPanelControllerMediaRetryAction({",
+  "getRecordPanelMediaStatusErrorMessages(detailCopy)",
+  "runRecordPanelMediaStatusAction({",
+  "fallbackMessage: errorMessages.retryMediaError",
+  "setActiveMediaId: setRetryingMediaId",
+]) {
+  if (!mediaRetryActionSource.includes(requiredMediaRetryActionUsage)) {
+    throw new Error(
+      `record-panel-controller-media-retry-action.ts must own retry orchestration: ${requiredMediaRetryActionUsage}`,
+    );
+  }
+}
+
+const maxMediaRetryActionLines = 40;
+if (mediaRetryActionLines > maxMediaRetryActionLines) {
+  throw new Error(
+    `record-panel-controller-media-retry-action.ts exceeded ${maxMediaRetryActionLines} lines: ${mediaRetryActionLines}`,
   );
 }
 

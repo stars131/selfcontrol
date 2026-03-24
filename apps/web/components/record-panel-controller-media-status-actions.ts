@@ -1,51 +1,16 @@
 "use client";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { ControllerProps } from "./record-panel-controller.types";
-import {
-  getRecordPanelMediaStatusErrorMessages,
-  runRecordPanelMediaStatusAction,
-} from "./record-panel-controller-media-status-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import { createRecordPanelControllerMediaRefreshAction } from "./record-panel-controller-media-refresh-action";
+import { createRecordPanelControllerMediaRetryAction } from "./record-panel-controller-media-retry-action";
 
 export function createRecordPanelControllerMediaStatusActions({
-  detailCopy,
-  onRefreshMediaStatus,
-  onRetryMedia,
-  setError,
-  setRefreshingMediaId,
-  setRetryingMediaId,
-}: {
-  detailCopy: DetailCopy;
-  onRefreshMediaStatus: ControllerProps["onRefreshMediaStatus"];
-  onRetryMedia: ControllerProps["onRetryMedia"];
-  setError: (value: string) => void;
-  setRefreshingMediaId: (value: string | null) => void;
-  setRetryingMediaId: (value: string | null) => void;
-}) {
-  const errorMessages = getRecordPanelMediaStatusErrorMessages(detailCopy);
-
-  async function handleRefreshMedia(mediaId: string) {
-    await runRecordPanelMediaStatusAction({
-      action: onRefreshMediaStatus,
-      fallbackMessage: errorMessages.refreshMediaError,
-      mediaId,
-      setActiveMediaId: setRefreshingMediaId,
-      setError,
-    });
-  }
-
-  async function handleRetryMediaProcessing(mediaId: string) {
-    await runRecordPanelMediaStatusAction({
-      action: onRetryMedia,
-      fallbackMessage: errorMessages.retryMediaError,
-      mediaId,
-      setActiveMediaId: setRetryingMediaId,
-      setError,
-    });
-  }
+  ...props
+}: Parameters<typeof createRecordPanelControllerMediaRefreshAction>[0] &
+  Parameters<typeof createRecordPanelControllerMediaRetryAction>[0]) {
+  const mediaRefreshAction = createRecordPanelControllerMediaRefreshAction(props);
+  const mediaRetryAction = createRecordPanelControllerMediaRetryAction(props);
 
   return {
-    handleRefreshMedia,
-    handleRetryMediaProcessing,
+    ...mediaRefreshAction,
+    ...mediaRetryAction,
   };
 }
