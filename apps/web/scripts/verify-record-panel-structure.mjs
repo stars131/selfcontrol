@@ -148,6 +148,14 @@ const recordPanelFilterHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-helpers.ts",
 );
+const recordPanelFilterErrorHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-error-helpers.ts",
+);
+const recordPanelFilterPresetNamePath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-name.ts",
+);
 const recordPanelRecordSubmitActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-submit-actions.ts",
@@ -407,6 +415,8 @@ const filterPresetDeleteActionSource = fs.readFileSync(
   "utf8",
 );
 const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8");
+const filterErrorHelpersSource = fs.readFileSync(recordPanelFilterErrorHelpersPath, "utf8");
+const filterPresetNameSource = fs.readFileSync(recordPanelFilterPresetNamePath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
 const recordSaveActionInputTypesSource = fs.readFileSync(
@@ -522,6 +532,8 @@ const filterPresetActionsLines = filterPresetActionsSource.split(/\r?\n/).length
 const filterPresetSaveActionLines = filterPresetSaveActionSource.split(/\r?\n/).length;
 const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\n/).length;
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
+const filterErrorHelpersLines = filterErrorHelpersSource.split(/\r?\n/).length;
+const filterPresetNameLines = filterPresetNameSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
@@ -1858,32 +1870,77 @@ if (filterPresetDeleteActionLines > maxFilterPresetDeleteActionLines) {
   );
 }
 
-for (const requiredFilterHelpersImport of [
-  'from "../lib/record-panel-detail";',
+for (const requiredFilterHelpersExport of [
+  'from "./record-panel-controller-filter-error-helpers";',
+  'from "./record-panel-controller-filter-preset-name";',
 ]) {
-  if (!filterHelpersSource.includes(requiredFilterHelpersImport)) {
+  if (!filterHelpersSource.includes(requiredFilterHelpersExport)) {
     throw new Error(
-      `record-panel-controller-filter-helpers.ts must import delegated filter copy contracts: ${requiredFilterHelpersImport}`,
+      `record-panel-controller-filter-helpers.ts must remain a stable filter-helper boundary: ${requiredFilterHelpersExport}`,
     );
   }
 }
 
 for (const requiredFilterHelpersUsage of [
-  "export function getRecordPanelFilterErrorMessage(",
-  "export function resolveRecordPanelPresetName(",
-  "presetNameRequiredError",
+  "export { getRecordPanelFilterErrorMessage }",
+  "export { resolveRecordPanelPresetName }",
 ]) {
   if (!filterHelpersSource.includes(requiredFilterHelpersUsage)) {
     throw new Error(
-      `record-panel-controller-filter-helpers.ts must own filter error formatting and preset-name validation: ${requiredFilterHelpersUsage}`,
+      `record-panel-controller-filter-helpers.ts must expose delegated filter helpers: ${requiredFilterHelpersUsage}`,
     );
   }
 }
 
-const maxFilterHelpersLines = 25;
+const maxFilterHelpersLines = 10;
 if (filterHelpersLines > maxFilterHelpersLines) {
   throw new Error(
     `record-panel-controller-filter-helpers.ts exceeded ${maxFilterHelpersLines} lines: ${filterHelpersLines}`,
+  );
+}
+
+for (const requiredFilterErrorHelpersUsage of [
+  "export function getRecordPanelFilterErrorMessage(",
+]) {
+  if (!filterErrorHelpersSource.includes(requiredFilterErrorHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-error-helpers.ts must own filter error formatting: ${requiredFilterErrorHelpersUsage}`,
+    );
+  }
+}
+
+const maxFilterErrorHelpersLines = 10;
+if (filterErrorHelpersLines > maxFilterErrorHelpersLines) {
+  throw new Error(
+    `record-panel-controller-filter-error-helpers.ts exceeded ${maxFilterErrorHelpersLines} lines: ${filterErrorHelpersLines}`,
+  );
+}
+
+for (const requiredFilterPresetNameImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!filterPresetNameSource.includes(requiredFilterPresetNameImport)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-name.ts must import preset-name contracts: ${requiredFilterPresetNameImport}`,
+    );
+  }
+}
+
+for (const requiredFilterPresetNameUsage of [
+  "export function resolveRecordPanelPresetName(",
+  "presetNameRequiredError",
+]) {
+  if (!filterPresetNameSource.includes(requiredFilterPresetNameUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-name.ts must own preset-name validation: ${requiredFilterPresetNameUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetNameLines = 20;
+if (filterPresetNameLines > maxFilterPresetNameLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-name.ts exceeded ${maxFilterPresetNameLines} lines: ${filterPresetNameLines}`,
   );
 }
 

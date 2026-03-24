@@ -1164,6 +1164,10 @@ Last updated: 2026-03-24
   - reminder error formatting and reminder-input resolution now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-controller-reminder-helpers.ts`
   - `apps/web/components/record-panel-controller-reminder-helpers.ts` now focuses on acting as a stable re-export boundary for reminder helper contracts
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder helper split and dedicated size ceilings for both extracted helper modules
+- Record Panel Filter Helper Split V2:
+  - filter error formatting and preset-name validation now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-controller-filter-helpers.ts`
+  - `apps/web/components/record-panel-controller-filter-helpers.ts` now focuses on acting as a stable re-export boundary for filter helper contracts
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter helper split and dedicated size ceilings for both extracted helper modules
 
 ## Next
 - Continue the next product slice
