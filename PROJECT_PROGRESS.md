@@ -988,6 +988,10 @@ Last updated: 2026-03-24
   - media-preview shared contracts, blob-loading logic, and preview rendering states now live in dedicated modules instead of remaining combined inside `apps/web/components/media-preview.tsx`
   - the top-level media-preview shell now focuses more narrowly on composing the preview hook and content renderer while delegated modules own fetch lifecycle and UI-state rendering
   - `apps/web/scripts/verify-media-asset-card-structure.mjs` now enforces these media-preview boundaries and dedicated size ceilings for the extracted modules
+- Record Save Action Helper Split V1:
+  - record-panel save-action validation, coordinate parsing, and save-payload assembly now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-record-save-actions.ts`
+  - the top-level record save action now focuses more narrowly on submit orchestration, saving state transitions, and reset-after-create behavior while the helper owns the input contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this record-save helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
