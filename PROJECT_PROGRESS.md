@@ -952,6 +952,10 @@ Last updated: 2026-03-24
   - workspace-settings provider health/config actions and member-management actions now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-settings-actions.ts`
   - the top-level workspace-settings actions module now focuses more narrowly on composing grouped action sets while shared error formatting is kept in a dedicated helper
   - `apps/web/scripts/verify-workspace-settings-structure.mjs` now enforces these action-group boundaries and dedicated size ceilings for the extracted modules
+- Workspace Shell State Value Group Split V1:
+  - workspace-shell raw state registration is now divided into dedicated core, conversation, media, and managed state helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-state-values.ts`
+  - the top-level state-values module now focuses more narrowly on composing grouped state bundles while preserving the existing external controller contract
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these state-group boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

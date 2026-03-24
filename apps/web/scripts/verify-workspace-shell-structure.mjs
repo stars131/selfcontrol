@@ -12,6 +12,22 @@ const workspaceShellStateValuesPath = path.resolve(
   process.cwd(),
   "components/use-workspace-shell-state-values.ts",
 );
+const workspaceShellStateCoreValuesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-core-values.ts",
+);
+const workspaceShellStateConversationValuesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-conversation-values.ts",
+);
+const workspaceShellStateMediaValuesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-media-values.ts",
+);
+const workspaceShellStateManagedValuesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-state-managed-values.ts",
+);
 const workspaceShellStatePermissionsPath = path.resolve(
   process.cwd(),
   "components/use-workspace-shell-state-permissions.ts",
@@ -44,6 +60,22 @@ const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8")
 const panelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const workspaceShellStateSource = fs.readFileSync(workspaceShellStatePath, "utf8");
 const workspaceShellStateValuesSource = fs.readFileSync(workspaceShellStateValuesPath, "utf8");
+const workspaceShellStateCoreValuesSource = fs.readFileSync(
+  workspaceShellStateCoreValuesPath,
+  "utf8",
+);
+const workspaceShellStateConversationValuesSource = fs.readFileSync(
+  workspaceShellStateConversationValuesPath,
+  "utf8",
+);
+const workspaceShellStateMediaValuesSource = fs.readFileSync(
+  workspaceShellStateMediaValuesPath,
+  "utf8",
+);
+const workspaceShellStateManagedValuesSource = fs.readFileSync(
+  workspaceShellStateManagedValuesPath,
+  "utf8",
+);
 const workspaceShellStatePermissionsSource = fs.readFileSync(
   workspaceShellStatePermissionsPath,
   "utf8",
@@ -62,6 +94,14 @@ const panelsLineCount = panelsSource.split(/\r?\n/).length;
 const workspaceShellStateLineCount = workspaceShellStateSource.split(/\r?\n/).length;
 const workspaceShellStateValuesLineCount =
   workspaceShellStateValuesSource.split(/\r?\n/).length;
+const workspaceShellStateCoreValuesLineCount =
+  workspaceShellStateCoreValuesSource.split(/\r?\n/).length;
+const workspaceShellStateConversationValuesLineCount =
+  workspaceShellStateConversationValuesSource.split(/\r?\n/).length;
+const workspaceShellStateMediaValuesLineCount =
+  workspaceShellStateMediaValuesSource.split(/\r?\n/).length;
+const workspaceShellStateManagedValuesLineCount =
+  workspaceShellStateManagedValuesSource.split(/\r?\n/).length;
 const workspaceShellStatePermissionsLineCount =
   workspaceShellStatePermissionsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
@@ -237,8 +277,10 @@ if (workspaceShellStateLineCount > maxWorkspaceShellStateLines) {
 }
 
 for (const requiredStateValuesImport of [
-  'from "../lib/workspace-shell-refresh";',
-  'from "../lib/types";',
+  'from "./use-workspace-shell-state-core-values";',
+  'from "./use-workspace-shell-state-conversation-values";',
+  'from "./use-workspace-shell-state-media-values";',
+  'from "./use-workspace-shell-state-managed-values";',
 ]) {
   if (!workspaceShellStateValuesSource.includes(requiredStateValuesImport)) {
     throw new Error(`use-workspace-shell-state-values.ts must import shared shell state dependencies: ${requiredStateValuesImport}`);
@@ -246,21 +288,119 @@ for (const requiredStateValuesImport of [
 }
 
 for (const requiredStateValuesUsage of [
-  "useState<string | null>(null)",
-  "useState(INITIAL_RECORD_FILTER)",
-  "setSavingSearchPreset",
-  "setKnowledgeStats",
-  "setMediaDeadLetterOverview",
+  "useWorkspaceShellStateCoreValues()",
+  "useWorkspaceShellStateConversationValues()",
+  "useWorkspaceShellStateMediaValues()",
+  "useWorkspaceShellStateManagedValues()",
+  "...coreState",
+  "...conversationState",
+  "...mediaState",
+  "...managedState",
 ]) {
   if (!workspaceShellStateValuesSource.includes(requiredStateValuesUsage)) {
     throw new Error(`use-workspace-shell-state-values.ts must own state registration: ${requiredStateValuesUsage}`);
   }
 }
 
-const maxWorkspaceShellStateValuesLines = 120;
+for (const forbiddenStateValuesToken of [
+  'from "../lib/workspace-shell-refresh";',
+  'from "../lib/types";',
+  "useState(",
+  "useState(INITIAL_RECORD_FILTER)",
+  "setSavingSearchPreset",
+  "setKnowledgeStats",
+  "setMediaDeadLetterOverview",
+]) {
+  if (workspaceShellStateValuesSource.includes(forbiddenStateValuesToken)) {
+    throw new Error(`use-workspace-shell-state-values.ts must keep grouped state internals delegated: ${forbiddenStateValuesToken}`);
+  }
+}
+
+const maxWorkspaceShellStateValuesLines = 25;
 if (workspaceShellStateValuesLineCount > maxWorkspaceShellStateValuesLines) {
   throw new Error(
     `use-workspace-shell-state-values.ts exceeded ${maxWorkspaceShellStateValuesLines} lines: ${workspaceShellStateValuesLineCount}`,
+  );
+}
+
+for (const requiredCoreStateValuesUsage of [
+  'from "../lib/workspace-shell-refresh";',
+  'from "../lib/types";',
+  "useState<string | null>(null)",
+  "useState(INITIAL_RECORD_FILTER)",
+  "setSavingSearchPreset",
+]) {
+  if (!workspaceShellStateCoreValuesSource.includes(requiredCoreStateValuesUsage)) {
+    throw new Error(`use-workspace-shell-state-core-values.ts must own core shell state registration: ${requiredCoreStateValuesUsage}`);
+  }
+}
+
+const maxWorkspaceShellStateCoreValuesLines = 55;
+if (workspaceShellStateCoreValuesLineCount > maxWorkspaceShellStateCoreValuesLines) {
+  throw new Error(
+    `use-workspace-shell-state-core-values.ts exceeded ${maxWorkspaceShellStateCoreValuesLines} lines: ${workspaceShellStateCoreValuesLineCount}`,
+  );
+}
+
+for (const requiredConversationStateValuesUsage of [
+  'from "../lib/types";',
+  "useState<Conversation[]>([])",
+  "useState<string | null>(null)",
+  "useState<ChatMessage[]>([])",
+]) {
+  if (!workspaceShellStateConversationValuesSource.includes(requiredConversationStateValuesUsage)) {
+    throw new Error(`use-workspace-shell-state-conversation-values.ts must own conversation state registration: ${requiredConversationStateValuesUsage}`);
+  }
+}
+
+const maxWorkspaceShellStateConversationValuesLines = 25;
+if (
+  workspaceShellStateConversationValuesLineCount >
+  maxWorkspaceShellStateConversationValuesLines
+) {
+  throw new Error(
+    `use-workspace-shell-state-conversation-values.ts exceeded ${maxWorkspaceShellStateConversationValuesLines} lines: ${workspaceShellStateConversationValuesLineCount}`,
+  );
+}
+
+for (const requiredMediaStateValuesUsage of [
+  'from "../lib/types";',
+  "useState<MediaAsset[]>([])",
+  "useState<MediaDeadLetterOverview | null>(null)",
+  "useState<MediaProcessingOverview | null>(null)",
+  "useState<MediaStorageSummary | null>(null)",
+  "useState<ReminderItem[]>([])",
+  "useState<NotificationItem[]>([])",
+]) {
+  if (!workspaceShellStateMediaValuesSource.includes(requiredMediaStateValuesUsage)) {
+    throw new Error(`use-workspace-shell-state-media-values.ts must own media state registration: ${requiredMediaStateValuesUsage}`);
+  }
+}
+
+const maxWorkspaceShellStateMediaValuesLines = 40;
+if (workspaceShellStateMediaValuesLineCount > maxWorkspaceShellStateMediaValuesLines) {
+  throw new Error(
+    `use-workspace-shell-state-media-values.ts exceeded ${maxWorkspaceShellStateMediaValuesLines} lines: ${workspaceShellStateMediaValuesLineCount}`,
+  );
+}
+
+for (const requiredManagedStateValuesUsage of [
+  'from "../lib/types";',
+  "useState<KnowledgeStats | null>(null)",
+  "useState<ProviderFeatureConfig[]>([])",
+  "useState<ShareLinkItem[]>([])",
+  "useState(\"\")",
+  "useState<AuditLogItem[]>([])",
+]) {
+  if (!workspaceShellStateManagedValuesSource.includes(requiredManagedStateValuesUsage)) {
+    throw new Error(`use-workspace-shell-state-managed-values.ts must own managed state registration: ${requiredManagedStateValuesUsage}`);
+  }
+}
+
+const maxWorkspaceShellStateManagedValuesLines = 35;
+if (workspaceShellStateManagedValuesLineCount > maxWorkspaceShellStateManagedValuesLines) {
+  throw new Error(
+    `use-workspace-shell-state-managed-values.ts exceeded ${maxWorkspaceShellStateManagedValuesLines} lines: ${workspaceShellStateManagedValuesLineCount}`,
   );
 }
 
