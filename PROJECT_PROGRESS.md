@@ -1212,6 +1212,10 @@ Last updated: 2026-03-24
   - editor workspace dead-letter action mapping and primary action mapping now live in dedicated helper modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`
   - `apps/web/components/record-panel-v2-editor-workspace-action-props.ts` now focuses on composing the specialized action helpers behind a thinner boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor workspace action split and dedicated size ceilings for both extracted action modules
+- Record Panel Editor Workspace Controller Input Split V3:
+  - editor workspace controller display fields, formatter fields, and action fields now live in dedicated mapper and type modules instead of remaining combined inside `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts`
+  - `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts` now focus on composing the specialized controller-input slices behind thin boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-input split and dedicated size ceilings for all extracted controller mapper and type modules
 
 ## Next
 - Continue the next product slice

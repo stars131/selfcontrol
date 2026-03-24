@@ -1,47 +1,8 @@
-import type { RecordEditorWorkspaceProps, RecordPanelDetailCopy } from "./record-panel-v2-workspace-props-core.types";
+import type { BuildRecordEditorWorkspaceControllerActionInput } from "./record-panel-v2-editor-workspace-controller-action-input.types";
+import type { BuildRecordEditorWorkspaceControllerDisplayInput } from "./record-panel-v2-editor-workspace-controller-display-input.types";
+import type { BuildRecordEditorWorkspaceControllerFormatterInput } from "./record-panel-v2-editor-workspace-controller-formatter-input.types";
 
-export type BuildRecordEditorWorkspaceControllerInput = {
-  bulkRetryingDeadLetter: boolean;
-  deleting: boolean;
-  deletingMediaId: string | null;
-  detailCopy: RecordPanelDetailCopy;
-  downloadingMediaId: string | null;
-  error: string;
-  form: RecordEditorWorkspaceProps["form"];
-  formatFileCountLabel: RecordEditorWorkspaceProps["formatFileCountLabel"];
-  formatHistoryTimestampLabel: RecordEditorWorkspaceProps["formatHistoryTimestampLabel"];
-  formatReminderEnabledLabel: RecordEditorWorkspaceProps["formatReminderEnabledLabel"];
-  formatReminderStatusLabel: RecordEditorWorkspaceProps["formatReminderStatusLabel"];
-  formatReminderTimestampLabel: RecordEditorWorkspaceProps["formatReminderTimestampLabel"];
-  formatReviewStatusLabel: RecordEditorWorkspaceProps["formatReviewStatusLabel"];
-  handleBulkRetryDeadLetter: (mode: "all" | "selected") => Promise<void>;
-  handleClearDeadLetterSelection: () => void;
-  handleCreateReminderSubmit: () => Promise<void>;
-  handleDelete: () => void;
-  handleDeleteMediaAsset: (mediaId: string) => Promise<void>;
-  handleDownloadMedia: (asset: RecordEditorWorkspaceProps["mediaAssets"][number]) => Promise<void>;
-  handleRefreshMedia: (mediaId: string) => Promise<void>;
-  handleRetryMediaProcessing: (mediaId: string) => Promise<void>;
-  handleSelectAllDeadLetter: () => void;
-  handleSubmit: RecordEditorWorkspaceProps["onSubmit"];
-  handleToggleDeadLetterSelection: (mediaId: string, checked: boolean) => void;
-  handleUpload: RecordEditorWorkspaceProps["onUpload"];
-  locale: RecordEditorWorkspaceProps["locale"];
-  locationReviewForm: RecordEditorWorkspaceProps["locationReviewForm"];
-  mediaIssueCopy: RecordEditorWorkspaceProps["mediaIssueCopy"];
-  panelCopy: RecordEditorWorkspaceProps["panelCopy"];
-  refreshingMediaId: string | null;
-  reminderForm: RecordEditorWorkspaceProps["reminderForm"];
-  retryingMediaId: string | null;
-  saving: boolean; savingReminder: boolean;
-  selectedDeadLetterIds: string[];
-  selectedLocationHistory: RecordEditorWorkspaceProps["selectedLocationHistory"];
-  selectedLocationReview: RecordEditorWorkspaceProps["selectedLocationReview"];
-  selectedRecord: RecordEditorWorkspaceProps["selectedRecord"];
-  selectedRecordMediaSizeLabel: string;
-  setForm: RecordEditorWorkspaceProps["setForm"];
-  setLocationReviewForm: RecordEditorWorkspaceProps["setLocationReviewForm"];
-  setReminderForm: RecordEditorWorkspaceProps["setReminderForm"];
-  summarizeHistoryActionLabel: RecordEditorWorkspaceProps["summarizeHistoryActionLabel"];
-  uploading: boolean;
-};
+export type BuildRecordEditorWorkspaceControllerInput =
+  BuildRecordEditorWorkspaceControllerActionInput &
+  BuildRecordEditorWorkspaceControllerDisplayInput &
+  BuildRecordEditorWorkspaceControllerFormatterInput;

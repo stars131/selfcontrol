@@ -1,54 +1,14 @@
 "use client";
 
 import type { RecordPanelShellInput } from "./record-panel-v2-shell-props.types";
+import { buildRecordEditorWorkspaceControllerActionInput } from "./record-panel-v2-editor-workspace-controller-action-input";
+import { buildRecordEditorWorkspaceControllerDisplayInput } from "./record-panel-v2-editor-workspace-controller-display-input";
+import { buildRecordEditorWorkspaceControllerFormatterInput } from "./record-panel-v2-editor-workspace-controller-formatter-input";
 
-export function buildRecordEditorWorkspaceControllerInput({
-  controller,
-}: Pick<RecordPanelShellInput, "controller">) {
+export function buildRecordEditorWorkspaceControllerInput({ ...input }: Pick<RecordPanelShellInput, "controller">) {
   return {
-    bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter,
-    deleting: controller.deleting,
-    deletingMediaId: controller.deletingMediaId,
-    detailCopy: controller.detailCopy,
-    downloadingMediaId: controller.downloadingMediaId,
-    error: controller.error,
-    form: controller.form,
-    formatFileCountLabel: controller.formatFileCountLabel,
-    formatHistoryTimestampLabel: controller.formatHistoryTimestampLabel,
-    formatReminderEnabledLabel: controller.formatReminderEnabledLabel,
-    formatReminderStatusLabel: controller.formatReminderStatusLabel,
-    formatReminderTimestampLabel: controller.formatReminderTimestampLabel,
-    formatReviewStatusLabel: controller.formatReviewStatusLabel,
-    handleBulkRetryDeadLetter: controller.handleBulkRetryDeadLetter,
-    handleClearDeadLetterSelection: controller.handleClearDeadLetterSelection,
-    handleCreateReminderSubmit: controller.handleCreateReminderSubmit,
-    handleDelete: controller.handleDelete,
-    handleDeleteMediaAsset: controller.handleDeleteMediaAsset,
-    handleDownloadMedia: controller.handleDownloadMedia,
-    handleRefreshMedia: controller.handleRefreshMedia,
-    handleRetryMediaProcessing: controller.handleRetryMediaProcessing,
-    handleSelectAllDeadLetter: controller.handleSelectAllDeadLetter,
-    handleSubmit: controller.handleSubmit,
-    handleToggleDeadLetterSelection: controller.handleToggleDeadLetterSelection,
-    handleUpload: controller.handleUpload,
-    locale: controller.locale,
-    locationReviewForm: controller.locationReviewForm,
-    mediaIssueCopy: controller.mediaIssueCopy,
-    panelCopy: controller.panelCopy,
-    refreshingMediaId: controller.refreshingMediaId,
-    reminderForm: controller.reminderForm,
-    retryingMediaId: controller.retryingMediaId,
-    saving: controller.saving,
-    savingReminder: controller.savingReminder,
-    selectedDeadLetterIds: controller.selectedDeadLetterIds,
-    selectedLocationHistory: controller.selectedLocationHistory,
-    selectedLocationReview: controller.selectedLocationReview,
-    selectedRecord: controller.selectedRecord,
-    selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel,
-    setForm: controller.setForm,
-    setLocationReviewForm: controller.setLocationReviewForm,
-    setReminderForm: controller.setReminderForm,
-    summarizeHistoryActionLabel: controller.summarizeHistoryActionLabel,
-    uploading: controller.uploading,
+    ...buildRecordEditorWorkspaceControllerActionInput(input),
+    ...buildRecordEditorWorkspaceControllerDisplayInput(input),
+    ...buildRecordEditorWorkspaceControllerFormatterInput(input),
   };
 }
