@@ -1376,6 +1376,10 @@ Last updated: 2026-03-24
   - editor workspace shared copy input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-copy-props-input.types.ts` instead of remaining embedded across the aggregate copy-props builder and the channel/media/reminder copy helpers
   - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-channel-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-media-copy-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-reminder-copy-props.ts` now consume the shared extracted editor-copy contract behind thinner mapping boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace copy input-type boundary and keeps `Parameters<typeof ...>[0]` and duplicated `Pick<...,"detailCopy">` signatures out of the copy helper modules
+- Record Panel Editor Workspace Action Input Type Split V3:
+  - editor workspace dead-letter/primary action input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-action-props-input.types.ts` instead of remaining embedded across the aggregate action-props builder and the dead-letter/primary action helpers
+  - `apps/web/components/record-panel-v2-editor-workspace-action-props-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-dead-letter-action-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` now consume the shared extracted editor-action contract behind thinner mapping boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace action input-type boundary and keeps `Parameters<typeof ...>[0]` and duplicated action-input `Pick<...>` signatures out of the action helper modules
 
 ## Next
 - Continue the next product slice

@@ -1,14 +1,9 @@
-import type { BuildRecordEditorWorkspacePropsInput, RecordEditorWorkspaceProps } from "./record-panel-v2-workspace-props.types";
+import type { RecordEditorWorkspaceProps } from "./record-panel-v2-workspace-props.types";
+import type { RecordEditorWorkspaceDeadLetterActionPropsInput } from "./record-panel-v2-editor-workspace-action-props-input.types";
 
 export function buildRecordEditorWorkspaceDeadLetterActionProps({
   handleBulkRetryDeadLetter, handleClearDeadLetterSelection, handleSelectAllDeadLetter, handleToggleDeadLetterSelection,
-}: Pick<
-  BuildRecordEditorWorkspacePropsInput,
-  | "handleBulkRetryDeadLetter"
-  | "handleClearDeadLetterSelection"
-  | "handleSelectAllDeadLetter"
-  | "handleToggleDeadLetterSelection"
->): Pick<
+}: RecordEditorWorkspaceDeadLetterActionPropsInput): Pick<
   RecordEditorWorkspaceProps,
   | "onBulkRetryAllDeadLetter"
   | "onBulkRetrySelectedDeadLetter"

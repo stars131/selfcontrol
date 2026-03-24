@@ -140,6 +140,10 @@ const recordPanelEditorWorkspaceActionPropsInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-action-props-input.ts",
 );
+const recordPanelEditorWorkspaceActionPropsInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-action-props-input.types.ts",
+);
 const recordPanelEditorWorkspaceActionPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-action-props.ts",
@@ -884,6 +888,10 @@ const editorWorkspaceActionPropsInputSource = fs.readFileSync(
   recordPanelEditorWorkspaceActionPropsInputPath,
   "utf8",
 );
+const editorWorkspaceActionPropsInputTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceActionPropsInputTypesPath,
+  "utf8",
+);
 const editorWorkspaceActionPropsSource = fs.readFileSync(
   recordPanelEditorWorkspaceActionPropsPath,
   "utf8",
@@ -1293,6 +1301,8 @@ const editorWorkspaceBasePropsInputLines =
   editorWorkspaceBasePropsInputSource.split(/\r?\n/).length;
 const editorWorkspaceActionPropsInputLines =
   editorWorkspaceActionPropsInputSource.split(/\r?\n/).length;
+const editorWorkspaceActionPropsInputTypesLines =
+  editorWorkspaceActionPropsInputTypesSource.split(/\r?\n/).length;
 const editorWorkspaceActionPropsLines = editorWorkspaceActionPropsSource.split(/\r?\n/).length;
 const editorWorkspaceDeadLetterActionPropsLines =
   editorWorkspaceDeadLetterActionPropsSource.split(/\r?\n/).length;
@@ -2613,8 +2623,38 @@ if (editorWorkspaceBasePropsInputLines > maxEditorWorkspaceBasePropsInputLines) 
   );
 }
 
+for (const requiredEditorWorkspaceActionPropsInputTypesImport of [
+  'from "./record-panel-v2-editor-workspace-props.types";',
+]) {
+  if (!editorWorkspaceActionPropsInputTypesSource.includes(requiredEditorWorkspaceActionPropsInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-action-props-input.types.ts must import editor action input contracts: ${requiredEditorWorkspaceActionPropsInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceActionPropsInputTypesUsage of [
+  "export type RecordEditorWorkspaceDeadLetterActionPropsInput = Pick<BuildRecordEditorWorkspacePropsInput,",
+  "export type RecordEditorWorkspacePrimaryActionPropsInput = Pick<BuildRecordEditorWorkspacePropsInput,",
+  "export type RecordEditorWorkspaceActionPropsInput = RecordEditorWorkspaceDeadLetterActionPropsInput & RecordEditorWorkspacePrimaryActionPropsInput;",
+]) {
+  if (!editorWorkspaceActionPropsInputTypesSource.includes(requiredEditorWorkspaceActionPropsInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-action-props-input.types.ts must own editor action input typing: ${requiredEditorWorkspaceActionPropsInputTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceActionPropsInputTypesLines = 5;
+if (editorWorkspaceActionPropsInputTypesLines > maxEditorWorkspaceActionPropsInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-action-props-input.types.ts exceeded ${maxEditorWorkspaceActionPropsInputTypesLines} lines: ${editorWorkspaceActionPropsInputTypesLines}`,
+  );
+}
+
 for (const requiredEditorWorkspaceActionPropsInputImport of [
   'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-action-props-input.types";',
 ]) {
   if (!editorWorkspaceActionPropsInputSource.includes(requiredEditorWorkspaceActionPropsInputImport)) {
     throw new Error(
@@ -2628,10 +2668,22 @@ for (const requiredEditorWorkspaceActionPropsInputUsage of [
   "export function buildRecordEditorWorkspaceActionPropsInput({",
   "handleBulkRetryDeadLetter,",
   "onUpdateReminder,",
+  "}: EditorWorkspacePropsBuilderInput): RecordEditorWorkspaceActionPropsInput {",
 ]) {
   if (!editorWorkspaceActionPropsInputSource.includes(requiredEditorWorkspaceActionPropsInputUsage)) {
     throw new Error(
       `record-panel-v2-editor-workspace-action-props-input.ts must own action-props input mapping: ${requiredEditorWorkspaceActionPropsInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceActionPropsInputToken of [
+  "RecordEditorWorkspaceDeadLetterActionPropsInput =",
+  "RecordEditorWorkspacePrimaryActionPropsInput =",
+]) {
+  if (editorWorkspaceActionPropsInputSource.includes(forbiddenEditorWorkspaceActionPropsInputToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-action-props-input.ts must keep editor action input typing delegated: ${forbiddenEditorWorkspaceActionPropsInputToken}`,
     );
   }
 }
@@ -2644,6 +2696,7 @@ if (editorWorkspaceActionPropsInputLines > maxEditorWorkspaceActionPropsInputLin
 }
 
 for (const requiredEditorWorkspaceActionPropsImport of [
+  'from "./record-panel-v2-editor-workspace-action-props-input.types";',
   'from "./record-panel-v2-editor-workspace-dead-letter-action-props";',
   'from "./record-panel-v2-editor-workspace-primary-action-props";',
 ]) {
@@ -2655,10 +2708,7 @@ for (const requiredEditorWorkspaceActionPropsImport of [
 }
 
 for (const requiredEditorWorkspaceActionPropsUsage of [
-  "type EditorWorkspaceActionPropsInput =",
-  "Parameters<typeof buildRecordEditorWorkspaceDeadLetterActionProps>[0] &",
-  "Parameters<typeof buildRecordEditorWorkspacePrimaryActionProps>[0];",
-  "export function buildRecordEditorWorkspaceActionProps({ ...input }: EditorWorkspaceActionPropsInput)",
+  "export function buildRecordEditorWorkspaceActionProps({ ...input }: RecordEditorWorkspaceActionPropsInput)",
   "buildRecordEditorWorkspaceDeadLetterActionProps(input)",
   "buildRecordEditorWorkspacePrimaryActionProps(input)",
   "...deadLetterActionProps",
@@ -2672,6 +2722,8 @@ for (const requiredEditorWorkspaceActionPropsUsage of [
 }
 
 for (const forbiddenEditorWorkspaceActionPropsToken of [
+  "Parameters<typeof buildRecordEditorWorkspaceDeadLetterActionProps>[0]",
+  "Parameters<typeof buildRecordEditorWorkspacePrimaryActionProps>[0]",
   "onBulkRetryAllDeadLetter: () => handleBulkRetryDeadLetter(\"all\")",
   "onCreateReminder: handleCreateReminderSubmit",
   "onDeleteMediaAsset: handleDeleteMediaAsset",
@@ -2693,10 +2745,23 @@ if (editorWorkspaceActionPropsLines > maxEditorWorkspaceActionPropsLines) {
 
 for (const requiredEditorWorkspaceDeadLetterActionPropsImport of [
   'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-action-props-input.types";',
 ]) {
   if (!editorWorkspaceDeadLetterActionPropsSource.includes(requiredEditorWorkspaceDeadLetterActionPropsImport)) {
     throw new Error(
       `record-panel-v2-editor-workspace-dead-letter-action-props.ts must import dead-letter action contracts: ${requiredEditorWorkspaceDeadLetterActionPropsImport}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspaceDeadLetterActionPropsToken of [
+  "BuildRecordEditorWorkspacePropsInput",
+  '"handleBulkRetryDeadLetter"',
+  '"handleToggleDeadLetterSelection"',
+]) {
+  if (editorWorkspaceDeadLetterActionPropsSource.includes(forbiddenEditorWorkspaceDeadLetterActionPropsToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-dead-letter-action-props.ts must keep dead-letter input typing delegated: ${forbiddenEditorWorkspaceDeadLetterActionPropsToken}`,
     );
   }
 }
@@ -2723,10 +2788,22 @@ if (editorWorkspaceDeadLetterActionPropsLines > maxEditorWorkspaceDeadLetterActi
 
 for (const requiredEditorWorkspacePrimaryActionPropsImport of [
   'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-action-props-input.types";',
 ]) {
   if (!editorWorkspacePrimaryActionPropsSource.includes(requiredEditorWorkspacePrimaryActionPropsImport)) {
     throw new Error(
       `record-panel-v2-editor-workspace-primary-action-props.ts must import primary action contracts: ${requiredEditorWorkspacePrimaryActionPropsImport}`,
+    );
+  }
+}
+
+for (const forbiddenEditorWorkspacePrimaryActionPropsToken of [
+  "type EditorWorkspacePrimaryActionPropsInput = Pick<",
+  "BuildRecordEditorWorkspacePropsInput",
+]) {
+  if (editorWorkspacePrimaryActionPropsSource.includes(forbiddenEditorWorkspacePrimaryActionPropsToken)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-primary-action-props.ts must keep primary action input typing delegated: ${forbiddenEditorWorkspacePrimaryActionPropsToken}`,
     );
   }
 }

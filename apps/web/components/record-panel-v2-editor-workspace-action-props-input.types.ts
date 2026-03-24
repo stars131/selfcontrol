@@ -1,0 +1,4 @@
+import type { BuildRecordEditorWorkspacePropsInput } from "./record-panel-v2-editor-workspace-props.types";
+export type RecordEditorWorkspaceDeadLetterActionPropsInput = Pick<BuildRecordEditorWorkspacePropsInput, "handleBulkRetryDeadLetter" | "handleClearDeadLetterSelection" | "handleSelectAllDeadLetter" | "handleToggleDeadLetterSelection">;
+export type RecordEditorWorkspacePrimaryActionPropsInput = Pick<BuildRecordEditorWorkspacePropsInput, "handleCreateReminderSubmit" | "handleDelete" | "handleDeleteMediaAsset" | "handleDownloadMedia" | "handleRefreshMedia" | "handleRetryMediaProcessing" | "handleSubmit" | "handleUpload" | "onDeleteReminder" | "onUpdateReminder">;
+export type RecordEditorWorkspaceActionPropsInput = RecordEditorWorkspaceDeadLetterActionPropsInput & RecordEditorWorkspacePrimaryActionPropsInput;

@@ -1,4 +1,5 @@
 import type { BuildRecordEditorWorkspacePropsInput } from "./record-panel-v2-workspace-props.types";
+import type { RecordEditorWorkspaceActionPropsInput } from "./record-panel-v2-editor-workspace-action-props-input.types";
 
 type EditorWorkspacePropsBuilderInput = Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">;
 
@@ -17,7 +18,7 @@ export function buildRecordEditorWorkspaceActionPropsInput({
   handleUpload,
   onDeleteReminder,
   onUpdateReminder,
-}: EditorWorkspacePropsBuilderInput) {
+}: EditorWorkspacePropsBuilderInput): RecordEditorWorkspaceActionPropsInput {
   return {
     handleBulkRetryDeadLetter,
     handleClearDeadLetterSelection,

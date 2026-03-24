@@ -1,11 +1,8 @@
 import { buildRecordEditorWorkspaceDeadLetterActionProps } from "./record-panel-v2-editor-workspace-dead-letter-action-props";
 import { buildRecordEditorWorkspacePrimaryActionProps } from "./record-panel-v2-editor-workspace-primary-action-props";
+import type { RecordEditorWorkspaceActionPropsInput } from "./record-panel-v2-editor-workspace-action-props-input.types";
 
-type EditorWorkspaceActionPropsInput =
-  Parameters<typeof buildRecordEditorWorkspaceDeadLetterActionProps>[0] &
-  Parameters<typeof buildRecordEditorWorkspacePrimaryActionProps>[0];
-
-export function buildRecordEditorWorkspaceActionProps({ ...input }: EditorWorkspaceActionPropsInput) {
+export function buildRecordEditorWorkspaceActionProps({ ...input }: RecordEditorWorkspaceActionPropsInput) {
   const deadLetterActionProps = buildRecordEditorWorkspaceDeadLetterActionProps(input);
   const primaryActionProps = buildRecordEditorWorkspacePrimaryActionProps(input);
   return {
