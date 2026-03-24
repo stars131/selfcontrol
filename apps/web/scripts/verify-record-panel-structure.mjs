@@ -7243,6 +7243,8 @@ for (const requiredRecordSaveResolutionImport of [
 }
 
 for (const requiredRecordSaveResolutionUsage of [
+  "type RecordSaveResolution =",
+  "| { payload: RecordSavePayload };",
   "export function resolveRecordPanelRecordSaveActionInput(",
   "parseRecordPanelCoordinate(input.form.location.latitude)",
   "buildRecordPanelSavePayload({",
@@ -7253,6 +7255,16 @@ for (const requiredRecordSaveResolutionUsage of [
   if (!recordSaveResolutionSource.includes(requiredRecordSaveResolutionUsage)) {
     throw new Error(
       `record-panel-controller-record-save-resolution.ts must own save validation and payload assembly: ${requiredRecordSaveResolutionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSaveResolutionToken of [
+  "ReturnType<typeof buildRecordPanelSavePayload>",
+]) {
+  if (recordSaveResolutionSource.includes(forbiddenRecordSaveResolutionToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-resolution.ts must keep save payload typing delegated: ${forbiddenRecordSaveResolutionToken}`,
     );
   }
 }
@@ -7702,6 +7714,8 @@ for (const requiredReminderResolutionImport of [
 }
 
 for (const requiredReminderResolutionUsage of [
+  "type ReminderResolution =",
+  "| { payload: ReminderPayload };",
   "export function resolveRecordPanelReminderActionInput(",
   "buildRecordPanelReminderPayload({",
   '"Save or select a record before adding a reminder"',
@@ -7710,6 +7724,16 @@ for (const requiredReminderResolutionUsage of [
   if (!reminderResolutionSource.includes(requiredReminderResolutionUsage)) {
     throw new Error(
       `record-panel-controller-reminder-resolution.ts must own reminder validation and payload assembly: ${requiredReminderResolutionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderResolutionToken of [
+  "ReturnType<typeof buildRecordPanelReminderPayload>",
+]) {
+  if (reminderResolutionSource.includes(forbiddenReminderResolutionToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-resolution.ts must keep reminder payload typing delegated: ${forbiddenReminderResolutionToken}`,
     );
   }
 }

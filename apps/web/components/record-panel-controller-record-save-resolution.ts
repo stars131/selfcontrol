@@ -1,12 +1,13 @@
 import {
   buildRecordPanelSavePayload,
   parseRecordPanelCoordinate,
+  type RecordSavePayload,
   type ResolveRecordSaveActionInput,
 } from "./record-panel-controller-record-save-payload";
 
 type RecordSaveResolution =
   | { errorMessage: string }
-  | { payload: ReturnType<typeof buildRecordPanelSavePayload> };
+  | { payload: RecordSavePayload };
 
 export function resolveRecordPanelRecordSaveActionInput(
   input: ResolveRecordSaveActionInput,

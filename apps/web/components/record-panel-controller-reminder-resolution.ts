@@ -1,9 +1,9 @@
 import { buildRecordPanelReminderPayload } from "./record-panel-controller-reminder-payload";
-import type { ResolveReminderActionInput } from "./record-panel-controller-reminder-payload.types";
+import type { ReminderPayload, ResolveReminderActionInput } from "./record-panel-controller-reminder-payload.types";
 
 type ReminderResolution =
   | { errorMessage: string }
-  | { payload: ReturnType<typeof buildRecordPanelReminderPayload> };
+  | { payload: ReminderPayload };
 
 export function resolveRecordPanelReminderActionInput(
   input: ResolveReminderActionInput,

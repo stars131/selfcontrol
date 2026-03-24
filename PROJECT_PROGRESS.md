@@ -1556,6 +1556,10 @@ Last updated: 2026-03-24
   - the record-delete action-input type now reuses the shared controller detail-copy contract instead of a local `DetailCopy` alias
   - `apps/web/components/record-panel-controller-record-delete-action-input.types.ts` now depends on the shared detail-copy boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that the record-delete action-input type stays decoupled from direct detail-bundle `ReturnType` aliases
+- Record Panel Resolution Payload Type Reuse Split V1:
+  - save/reminder resolution modules now reuse existing payload result types instead of taking payload shapes from builder `ReturnType` expressions
+  - `record-panel-controller-record-save-resolution.ts` and `record-panel-controller-reminder-resolution.ts` now depend on thinner payload type boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those resolution modules stay decoupled from direct builder `ReturnType` aliases
 
 ## Next
 - Continue the next product slice
