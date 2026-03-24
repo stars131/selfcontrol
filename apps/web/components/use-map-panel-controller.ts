@@ -1,12 +1,10 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-
 import { type AMapGeocoderInstance, type AMapMapInstance, type LocationDraft } from "../lib/map-panel";
 import type { LocationFilterState, RecordItem } from "../lib/types";
-import { buildClearedLocationFilter, buildMappedOnlyLocationFilter } from "./map-panel-controller-filter";
-import { getMapPanelActionErrorMessage, searchMapPanelLocation } from "./map-panel-controller-search";
+import { createMapPanelControllerActions } from "./map-panel-controller-actions";
 import { useMapPanelDerivedData } from "./use-map-panel-derived-data";
+import { useMapPanelControllerState } from "./use-map-panel-controller-state";
 import { useMapPanelSync } from "./use-map-panel-sync";
 
 type UseMapPanelControllerProps = {
@@ -34,11 +32,18 @@ export function useMapPanelController({
   geocoderRef,
   mapRef,
 }: UseMapPanelControllerProps) {
-  const [loadError, setLoadError] = useState("");
-  const [searchError, setSearchError] = useState("");
-  const [searching, setSearching] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterDraft, setFilterDraft] = useState<LocationFilterState>(locationFilter);
+  const {
+    loadError,
+    setLoadError,
+    searchError,
+    setSearchError,
+    searching,
+    setSearching,
+    searchQuery,
+    setSearchQuery,
+    filterDraft,
+    setFilterDraft,
+  } = useMapPanelControllerState(locationFilter);
   const { draftCoordinates, mappedRecords, confirmedCount, needsReviewCount } = useMapPanelDerivedData({
     draftLocation,
     records,
@@ -53,46 +58,19 @@ export function useMapPanelController({
     setSearchQuery,
   });
 
-  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!geocoderRef.current || !onDraftLocationChange || !searchQuery.trim()) {
-      return;
-    }
-
-    setSearching(true);
-    setSearchError("");
-
-    try {
-      const keyword = searchQuery.trim();
-      await searchMapPanelLocation({
-        draftLocation,
-        geocoder: geocoderRef.current,
-        keyword,
-        map: mapRef.current,
-        onDraftLocationChange,
-      });
-    } catch (caught) {
-      setSearchError(getMapPanelActionErrorMessage(caught, "Location search failed"));
-    } finally {
-      setSearching(false);
-    }
-  };
-
-  const handleApplyFilter = async () => {
-    await onApplyLocationFilter(filterDraft);
-  };
-
-  const handleUseMappedOnly = async () => {
-    const nextFilter = buildMappedOnlyLocationFilter(filterDraft);
-    setFilterDraft(nextFilter);
-    await onApplyLocationFilter(nextFilter);
-  };
-
-  const handleClearFilter = async () => {
-    const nextFilter = buildClearedLocationFilter();
-    setFilterDraft(nextFilter);
-    await onApplyLocationFilter(nextFilter);
-  };
+  const { handleSearch, handleApplyFilter, handleUseMappedOnly, handleClearFilter } =
+    createMapPanelControllerActions({
+      draftLocation,
+      filterDraft,
+      geocoderRef,
+      mapRef,
+      onApplyLocationFilter,
+      onDraftLocationChange,
+      searchQuery,
+      setFilterDraft,
+      setSearchError,
+      setSearching,
+    });
 
   return {
     loadError,

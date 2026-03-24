@@ -4,12 +4,24 @@ import path from "node:path";
 const mapPanelPath = path.resolve(process.cwd(), "components/map-panel.tsx");
 const mapPanelControllerPath = path.resolve(process.cwd(), "components/use-map-panel-controller.ts");
 const mapPanelAmapPath = path.resolve(process.cwd(), "components/use-map-panel-amap.ts");
+const mapPanelControllerActionsPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-actions.ts",
+);
+const mapPanelControllerStatePath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-controller-state.ts",
+);
 const mapPanelSource = fs.readFileSync(mapPanelPath, "utf8");
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelAmapSource = fs.readFileSync(mapPanelAmapPath, "utf8");
+const mapPanelControllerActionsSource = fs.readFileSync(mapPanelControllerActionsPath, "utf8");
+const mapPanelControllerStateSource = fs.readFileSync(mapPanelControllerStatePath, "utf8");
 const mapPanelLineCount = mapPanelSource.split(/\r?\n/).length;
 const mapPanelControllerLineCount = mapPanelControllerSource.split(/\r?\n/).length;
 const mapPanelAmapLineCount = mapPanelAmapSource.split(/\r?\n/).length;
+const mapPanelControllerActionsLineCount = mapPanelControllerActionsSource.split(/\r?\n/).length;
+const mapPanelControllerStateLineCount = mapPanelControllerStateSource.split(/\r?\n/).length;
 
 if (!mapPanelSource.includes('from "../lib/map-panel";')) {
   throw new Error("map-panel.tsx must import shared helpers from ../lib/map-panel");
@@ -52,9 +64,9 @@ if (!mapPanelSource.includes("useMapPanelAmap({")) {
 }
 
 for (const requiredControllerImport of [
-  'from "./map-panel-controller-filter";',
-  'from "./map-panel-controller-search";',
+  'from "./map-panel-controller-actions";',
   'from "./use-map-panel-derived-data";',
+  'from "./use-map-panel-controller-state";',
   'from "./use-map-panel-sync";',
 ]) {
   if (!mapPanelControllerSource.includes(requiredControllerImport)) {
@@ -63,14 +75,27 @@ for (const requiredControllerImport of [
 }
 
 for (const requiredControllerUsage of [
-  "searchMapPanelLocation({",
-  "buildMappedOnlyLocationFilter(filterDraft)",
-  "buildClearedLocationFilter()",
+  "createMapPanelControllerActions({",
   "useMapPanelDerivedData({",
+  "useMapPanelControllerState(locationFilter)",
   "useMapPanelSync({",
 ]) {
   if (!mapPanelControllerSource.includes(requiredControllerUsage)) {
     throw new Error(`use-map-panel-controller.ts must delegate controller helper logic: ${requiredControllerUsage}`);
+  }
+}
+
+for (const forbiddenControllerToken of [
+  'from "./map-panel-controller-filter";',
+  'from "./map-panel-controller-search";',
+  "useState(",
+  "const handleSearch =",
+  "const handleApplyFilter =",
+  "const handleUseMappedOnly =",
+  "const handleClearFilter =",
+]) {
+  if (mapPanelControllerSource.includes(forbiddenControllerToken)) {
+    throw new Error(`use-map-panel-controller.ts must keep state and action internals delegated: ${forbiddenControllerToken}`);
   }
 }
 
@@ -127,6 +152,44 @@ const maxControllerLines = 120;
 if (mapPanelControllerLineCount > maxControllerLines) {
   throw new Error(
     `use-map-panel-controller.ts exceeded ${maxControllerLines} lines: ${mapPanelControllerLineCount}`,
+  );
+}
+
+for (const requiredControllerActionsUsage of [
+  'from "./map-panel-controller-filter";',
+  'from "./map-panel-controller-search";',
+  "export function createMapPanelControllerActions({",
+  "searchMapPanelLocation({",
+  "buildMappedOnlyLocationFilter(filterDraft)",
+  "buildClearedLocationFilter()",
+]) {
+  if (!mapPanelControllerActionsSource.includes(requiredControllerActionsUsage)) {
+    throw new Error(`map-panel-controller-actions.ts must own controller action wiring: ${requiredControllerActionsUsage}`);
+  }
+}
+
+const maxControllerActionsLines = 85;
+if (mapPanelControllerActionsLineCount > maxControllerActionsLines) {
+  throw new Error(
+    `map-panel-controller-actions.ts exceeded ${maxControllerActionsLines} lines: ${mapPanelControllerActionsLineCount}`,
+  );
+}
+
+for (const requiredControllerStateUsage of [
+  'import { useState } from "react";',
+  "export function useMapPanelControllerState(locationFilter: LocationFilterState)",
+  "const [loadError, setLoadError] = useState(\"\");",
+  "const [filterDraft, setFilterDraft] = useState<LocationFilterState>(locationFilter);",
+]) {
+  if (!mapPanelControllerStateSource.includes(requiredControllerStateUsage)) {
+    throw new Error(`use-map-panel-controller-state.ts must own controller state registration: ${requiredControllerStateUsage}`);
+  }
+}
+
+const maxControllerStateLines = 30;
+if (mapPanelControllerStateLineCount > maxControllerStateLines) {
+  throw new Error(
+    `use-map-panel-controller-state.ts exceeded ${maxControllerStateLines} lines: ${mapPanelControllerStateLineCount}`,
   );
 }
 

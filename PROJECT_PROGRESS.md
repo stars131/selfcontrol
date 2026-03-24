@@ -944,6 +944,10 @@ Last updated: 2026-03-24
   - login and register pages now render through a shared auth-form frame instead of duplicating panel shell, locale switcher, and alternate-entry header layout in each component
   - the new `apps/web/components/auth-form-frame.tsx` owns the shared access-page chrome while the concrete auth pages focus on redirect and submit logic
   - `apps/web/scripts/verify-auth-forms-structure.mjs` now enforces this shared auth-frame boundary and tighter size ceilings for the form pages
+- Map Panel Controller State and Action Split V1:
+  - map-panel controller local state registration and search/filter action wiring now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-map-panel-controller.ts`
+  - the top-level map-panel controller now focuses more narrowly on composing state, derived data, sync, and returned controller shape
+  - `apps/web/scripts/verify-map-panel-structure.mjs` now enforces these controller helper boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
