@@ -2,41 +2,7 @@
 
 import { LocationReviewPanel } from "./location-review-panel";
 import { RecordEditorFields } from "./record-editor-fields";
-import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";
-
-type RecordEditorMainSectionsProps = Pick<
-  RecordEditorWorkspaceProps,
-  | "canWriteWorkspace"
-  | "form"
-  | "formatHistoryTimestampLabel"
-  | "formatReviewStatusLabel"
-  | "locationReviewForm"
-  | "panelCopy"
-  | "selectedLocationHistory"
-  | "selectedLocationReview"
-  | "selectedRecord"
-  | "summarizeHistoryActionLabel"
-> & {
-  fieldBindings: {
-    onAddressChange: (value: string) => void;
-    onAvoidChange: (value: boolean) => void;
-    onContentChange: (value: string) => void;
-    onLatitudeChange: (value: string) => void;
-    onLongitudeChange: (value: string) => void;
-    onOccurredAtChange: (value: string) => void;
-    onPlaceNameChange: (value: string) => void;
-    onRatingChange: (value: string) => void;
-    onTitleChange: (value: string) => void;
-    onTypeCodeChange: (value: string) => void;
-  };
-  locationReviewBindings: {
-    onMarkConfirmed: () => void;
-    onMarkNeedsReview: () => void;
-    onNoteChange: (value: string) => void;
-    onResetReview: () => void;
-    onStatusChange: (value: string) => void;
-  };
-};
+import type { RecordEditorMainSectionsProps } from "./record-editor-main-sections.types";
 
 export function RecordEditorMainSections({
   canWriteWorkspace,

@@ -1,11 +1,7 @@
 "use client";
-
-import type { ComponentProps } from "react";
-
 import { RecordEditorMainSections } from "./record-editor-main-sections";
+import type { RecordEditorMainSectionsProps } from "./record-editor-main-sections.types";
 import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";
-
-type RecordEditorMainSectionsProps = ComponentProps<typeof RecordEditorMainSections>;
 
 export function buildRecordEditorMainSectionsProps({
   fieldBindings,

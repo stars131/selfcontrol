@@ -1568,6 +1568,10 @@ Last updated: 2026-03-24
   - shell panel and editor-support-tools prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
   - `apps/web/components/workspace-shell-panels-props.ts` and `record-editor-workspace-support-tools-props.ts` now depend directly on `chat-panel.types.ts`, `record-panel-v2.types.ts`, and `record-editor-support-tools.types.ts`
   - this keeps parent prop mapping stable against unrelated child component implementation changes
+- Record Editor Main-Sections Shared Props Split V1:
+  - main-sections props now live in `apps/web/components/record-editor-main-sections.types.ts` instead of being embedded in the component file and re-inferred through `ComponentProps`
+  - `record-editor-main-sections.tsx` and `record-editor-workspace-main-sections-props.ts` now share the same explicit child-component prop contract
+  - this keeps editor workspace prop mapping stable and easier to evolve without implicit component-signature coupling
 
 ## Next
 - Continue the next product slice
