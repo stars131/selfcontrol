@@ -176,6 +176,14 @@ const recordPanelRecordSaveHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-helpers.ts",
 );
+const recordPanelRecordSaveErrorHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-error-helpers.ts",
+);
+const recordPanelRecordSaveResolutionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-resolution.ts",
+);
 const recordPanelRecordSavePayloadPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-payload.ts",
@@ -404,6 +412,11 @@ const recordSaveSuccessHelpersSource = fs.readFileSync(
 const recordDeleteActionsSource = fs.readFileSync(recordPanelRecordDeleteActionsPath, "utf8");
 const recordDeleteHelpersSource = fs.readFileSync(recordPanelRecordDeleteHelpersPath, "utf8");
 const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath, "utf8");
+const recordSaveErrorHelpersSource = fs.readFileSync(
+  recordPanelRecordSaveErrorHelpersPath,
+  "utf8",
+);
+const recordSaveResolutionSource = fs.readFileSync(recordPanelRecordSaveResolutionPath, "utf8");
 const recordSavePayloadSource = fs.readFileSync(recordPanelRecordSavePayloadPath, "utf8");
 const recordLocationPayloadSource = fs.readFileSync(recordPanelRecordLocationPayloadPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
@@ -506,6 +519,8 @@ const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\
 const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
 const recordDeleteHelpersLines = recordDeleteHelpersSource.split(/\r?\n/).length;
 const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
+const recordSaveErrorHelpersLines = recordSaveErrorHelpersSource.split(/\r?\n/).length;
+const recordSaveResolutionLines = recordSaveResolutionSource.split(/\r?\n/).length;
 const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const recordLocationPayloadLines = recordLocationPayloadSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
@@ -2091,19 +2106,63 @@ if (recordSaveSuccessHelpersLines > maxRecordSaveSuccessHelpersLines) {
   );
 }
 
-for (const requiredRecordSaveHelpersImport of [
-  'from "../lib/record-panel-detail";',
-  'from "./record-panel-controller-record-save-payload";',
+for (const requiredRecordSaveHelpersExport of [
+  'from "./record-panel-controller-record-save-error-helpers";',
+  'from "./record-panel-controller-record-save-resolution";',
 ]) {
-  if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersImport)) {
+  if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersExport)) {
     throw new Error(
-      `record-panel-controller-record-save-helpers.ts must import the delegated save contracts: ${requiredRecordSaveHelpersImport}`,
+      `record-panel-controller-record-save-helpers.ts must remain a stable save-helper boundary: ${requiredRecordSaveHelpersExport}`,
     );
   }
 }
 
 for (const requiredRecordSaveHelpersUsage of [
+  "export { getRecordPanelRecordSaveErrorMessage }",
+  "export { resolveRecordPanelRecordSaveActionInput }",
+]) {
+  if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-helpers.ts must expose delegated save helpers: ${requiredRecordSaveHelpersUsage}`,
+    );
+  }
+}
+
+const maxRecordSaveHelpersLines = 10;
+if (recordSaveHelpersLines > maxRecordSaveHelpersLines) {
+  throw new Error(
+    `record-panel-controller-record-save-helpers.ts exceeded ${maxRecordSaveHelpersLines} lines: ${recordSaveHelpersLines}`,
+  );
+}
+
+for (const requiredRecordSaveErrorHelpersUsage of [
   "export function getRecordPanelRecordSaveErrorMessage(",
+]) {
+  if (!recordSaveErrorHelpersSource.includes(requiredRecordSaveErrorHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-error-helpers.ts must own save error formatting: ${requiredRecordSaveErrorHelpersUsage}`,
+    );
+  }
+}
+
+const maxRecordSaveErrorHelpersLines = 10;
+if (recordSaveErrorHelpersLines > maxRecordSaveErrorHelpersLines) {
+  throw new Error(
+    `record-panel-controller-record-save-error-helpers.ts exceeded ${maxRecordSaveErrorHelpersLines} lines: ${recordSaveErrorHelpersLines}`,
+  );
+}
+
+for (const requiredRecordSaveResolutionImport of [
+  'from "./record-panel-controller-record-save-payload";',
+]) {
+  if (!recordSaveResolutionSource.includes(requiredRecordSaveResolutionImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-resolution.ts must import delegated save resolution contracts: ${requiredRecordSaveResolutionImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSaveResolutionUsage of [
   "export function resolveRecordPanelRecordSaveActionInput(",
   "parseRecordPanelCoordinate(input.form.location.latitude)",
   "buildRecordPanelSavePayload({",
@@ -2111,17 +2170,17 @@ for (const requiredRecordSaveHelpersUsage of [
   "latitudeInvalidError",
   "longitudeInvalidError",
 ]) {
-  if (!recordSaveHelpersSource.includes(requiredRecordSaveHelpersUsage)) {
+  if (!recordSaveResolutionSource.includes(requiredRecordSaveResolutionUsage)) {
     throw new Error(
-      `record-panel-controller-record-save-helpers.ts must own save validation and payload assembly: ${requiredRecordSaveHelpersUsage}`,
+      `record-panel-controller-record-save-resolution.ts must own save validation and payload assembly: ${requiredRecordSaveResolutionUsage}`,
     );
   }
 }
 
-const maxRecordSaveHelpersLines = 45;
-if (recordSaveHelpersLines > maxRecordSaveHelpersLines) {
+const maxRecordSaveResolutionLines = 30;
+if (recordSaveResolutionLines > maxRecordSaveResolutionLines) {
   throw new Error(
-    `record-panel-controller-record-save-helpers.ts exceeded ${maxRecordSaveHelpersLines} lines: ${recordSaveHelpersLines}`,
+    `record-panel-controller-record-save-resolution.ts exceeded ${maxRecordSaveResolutionLines} lines: ${recordSaveResolutionLines}`,
   );
 }
 
