@@ -1260,6 +1260,10 @@ Last updated: 2026-03-24
   - record save submit orchestration now lives in a dedicated action module instead of remaining directly inside `apps/web/components/record-panel-controller-record-save-actions.ts`
   - `apps/web/components/record-panel-controller-record-save-actions.ts` now focuses on acting as a thin stable wrapper around the specialized save-submit action
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-action split and dedicated size ceilings for the extracted save-submit action module
+- Record Panel Delete Action Split V3:
+  - record delete orchestration now lives in a dedicated action module instead of remaining directly inside `apps/web/components/record-panel-controller-record-delete-actions.ts`
+  - `apps/web/components/record-panel-controller-record-delete-actions.ts` now focuses on acting as a thin stable wrapper around the specialized delete-run action
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the delete-action split and dedicated size ceilings for the extracted delete-run action module
 
 ## Next
 - Continue the next product slice
