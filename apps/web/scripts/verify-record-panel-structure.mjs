@@ -264,6 +264,14 @@ const recordPanelDeadLetterHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-dead-letter-helpers.ts",
 );
+const recordPanelDeadLetterSelectionHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-dead-letter-selection-helpers.ts",
+);
+const recordPanelDeadLetterRetryHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-dead-letter-retry-helpers.ts",
+);
 const recordPanelMediaHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-handlers.ts",
@@ -419,6 +427,14 @@ const deadLetterSelectionActionsSource = fs.readFileSync(
 );
 const deadLetterRetryActionSource = fs.readFileSync(recordPanelDeadLetterRetryActionPath, "utf8");
 const deadLetterHelpersSource = fs.readFileSync(recordPanelDeadLetterHelpersPath, "utf8");
+const deadLetterSelectionHelpersSource = fs.readFileSync(
+  recordPanelDeadLetterSelectionHelpersPath,
+  "utf8",
+);
+const deadLetterRetryHelpersSource = fs.readFileSync(
+  recordPanelDeadLetterRetryHelpersPath,
+  "utf8",
+);
 const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath, "utf8");
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
@@ -500,6 +516,9 @@ const deadLetterSelectionActionsLines =
   deadLetterSelectionActionsSource.split(/\r?\n/).length;
 const deadLetterRetryActionLines = deadLetterRetryActionSource.split(/\r?\n/).length;
 const deadLetterHelpersLines = deadLetterHelpersSource.split(/\r?\n/).length;
+const deadLetterSelectionHelpersLines =
+  deadLetterSelectionHelpersSource.split(/\r?\n/).length;
+const deadLetterRetryHelpersLines = deadLetterRetryHelpersSource.split(/\r?\n/).length;
 const mediaAssetActionsLines = mediaAssetActionsSource.split(/\r?\n/).length;
 const mediaHandlersLines = mediaHandlersSource.split(/\r?\n/).length;
 
@@ -2826,38 +2845,97 @@ if (deadLetterRetryActionLines > maxDeadLetterRetryActionLines) {
   );
 }
 
-for (const requiredDeadLetterHelpersImport of [
-  'from "../lib/record-panel-media";',
-  'from "../lib/record-panel-detail";',
-  'from "../lib/types";',
+for (const requiredDeadLetterHelpersExport of [
+  'from "./record-panel-controller-dead-letter-selection-helpers";',
+  'from "./record-panel-controller-dead-letter-retry-helpers";',
 ]) {
-  if (!deadLetterHelpersSource.includes(requiredDeadLetterHelpersImport)) {
+  if (!deadLetterHelpersSource.includes(requiredDeadLetterHelpersExport)) {
     throw new Error(
-      `record-panel-controller-dead-letter-helpers.ts must import dead-letter helper contracts: ${requiredDeadLetterHelpersImport}`,
+      `record-panel-controller-dead-letter-helpers.ts must remain a stable dead-letter helper boundary: ${requiredDeadLetterHelpersExport}`,
     );
   }
 }
 
 for (const requiredDeadLetterHelpersUsage of [
-  "export function getRecordPanelDeadLetterErrorMessage(",
-  "export function toggleRecordPanelDeadLetterSelection(",
-  "export function getRecordPanelSelectableDeadLetterIds(",
-  "export function getRecordPanelDeadLetterRetryRequest(",
-  "export function getRecordPanelDeadLetterFallbackMessage(detailCopy: DetailCopy)",
-  "canRetryMediaIssue(",
-  "bulkRetryError",
+  "export {",
+  "getRecordPanelSelectableDeadLetterIds,",
+  "toggleRecordPanelDeadLetterSelection,",
+  "getRecordPanelDeadLetterErrorMessage,",
+  "getRecordPanelDeadLetterRetryRequest,",
 ]) {
   if (!deadLetterHelpersSource.includes(requiredDeadLetterHelpersUsage)) {
     throw new Error(
-      `record-panel-controller-dead-letter-helpers.ts must own dead-letter helper details: ${requiredDeadLetterHelpersUsage}`,
+      `record-panel-controller-dead-letter-helpers.ts must expose delegated dead-letter helper contracts: ${requiredDeadLetterHelpersUsage}`,
     );
   }
 }
 
-const maxDeadLetterHelpersLines = 55;
+const maxDeadLetterHelpersLines = 10;
 if (deadLetterHelpersLines > maxDeadLetterHelpersLines) {
   throw new Error(
     `record-panel-controller-dead-letter-helpers.ts exceeded ${maxDeadLetterHelpersLines} lines: ${deadLetterHelpersLines}`,
+  );
+}
+
+for (const requiredDeadLetterSelectionHelpersImport of [
+  'from "../lib/record-panel-media";',
+  'from "../lib/types";',
+]) {
+  if (!deadLetterSelectionHelpersSource.includes(requiredDeadLetterSelectionHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-selection-helpers.ts must import dead-letter selection helper contracts: ${requiredDeadLetterSelectionHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredDeadLetterSelectionHelpersUsage of [
+  "export function toggleRecordPanelDeadLetterSelection(",
+  "export function getRecordPanelSelectableDeadLetterIds(",
+  "canRetryMediaIssue(",
+  "current.includes(mediaId) ? current : [...current, mediaId]",
+]) {
+  if (!deadLetterSelectionHelpersSource.includes(requiredDeadLetterSelectionHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-selection-helpers.ts must own dead-letter selection details: ${requiredDeadLetterSelectionHelpersUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterSelectionHelpersLines = 30;
+if (deadLetterSelectionHelpersLines > maxDeadLetterSelectionHelpersLines) {
+  throw new Error(
+    `record-panel-controller-dead-letter-selection-helpers.ts exceeded ${maxDeadLetterSelectionHelpersLines} lines: ${deadLetterSelectionHelpersLines}`,
+  );
+}
+
+for (const requiredDeadLetterRetryHelpersImport of [
+  'from "../lib/record-panel-detail";',
+]) {
+  if (!deadLetterRetryHelpersSource.includes(requiredDeadLetterRetryHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-retry-helpers.ts must import dead-letter retry helper contracts: ${requiredDeadLetterRetryHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredDeadLetterRetryHelpersUsage of [
+  "export function getRecordPanelDeadLetterErrorMessage(",
+  "export function getRecordPanelDeadLetterRetryRequest(",
+  "export function getRecordPanelDeadLetterFallbackMessage(detailCopy: DetailCopy)",
+  '"manual_only", "exhausted", "disabled"',
+  "bulkRetryError",
+]) {
+  if (!deadLetterRetryHelpersSource.includes(requiredDeadLetterRetryHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-retry-helpers.ts must own dead-letter retry details: ${requiredDeadLetterRetryHelpersUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRetryHelpersLines = 30;
+if (deadLetterRetryHelpersLines > maxDeadLetterRetryHelpersLines) {
+  throw new Error(
+    `record-panel-controller-dead-letter-retry-helpers.ts exceeded ${maxDeadLetterRetryHelpersLines} lines: ${deadLetterRetryHelpersLines}`,
   );
 }
 

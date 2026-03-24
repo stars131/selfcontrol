@@ -1148,6 +1148,10 @@ Last updated: 2026-03-24
   - record-save action input contracts now live in `apps/web/components/record-panel-controller-record-save-action-input.types.ts` instead of remaining embedded inside the save action module
   - `apps/web/components/record-panel-controller-record-save-actions.ts` now focuses more narrowly on submit orchestration while consuming a shared typed input contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save action input-type boundary and a dedicated size ceiling for the extracted type module
+- Record Panel Dead-Letter Helper Split V2:
+  - dead-letter selection helpers and dead-letter retry helpers now live in dedicated modules instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-helpers.ts`
+  - `apps/web/components/record-panel-controller-dead-letter-helpers.ts` now focuses on acting as a stable helper re-export boundary for selection and retry concerns
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter helper split and dedicated size ceilings for both extracted helper modules
 
 ## Next
 - Continue the next product slice
