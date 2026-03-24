@@ -1,7 +1,7 @@
-import type { BuildRecordEditorWorkspacePropsInput } from "./record-panel-v2-workspace-props.types";
+import type { RecordEditorWorkspacePropsBuilderInput } from "./record-panel-v2-editor-workspace-props-builder-input.types";
 
-type EditorWorkspacePropsBuilderInput = Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">;
-
-export function buildRecordEditorWorkspaceBasePropsInput(input: EditorWorkspacePropsBuilderInput) {
+export function buildRecordEditorWorkspaceBasePropsInput(
+  input: RecordEditorWorkspacePropsBuilderInput,
+) {
   return input;
 }

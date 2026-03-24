@@ -1384,6 +1384,10 @@ Last updated: 2026-03-24
   - handler-groups builder argument contracts now live in `apps/web/components/record-panel-controller-handler-groups-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-handler-groups-input.ts`
   - `apps/web/components/record-panel-controller-handler-groups-input.ts` now consumes the shared extracted handler-groups argument contract behind a thinner aggregation boundary while continuing to reuse the dedicated props/state/view-data input builders
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the handler-groups input-arg boundary and keeps `Parameters<typeof ...>[0]` aggregation out of the handler-groups input module
+- Record Panel Editor Workspace Builder Input Type Split V3:
+  - editor workspace shared non-copy builder input contracts now live in `apps/web/components/record-panel-v2-editor-workspace-props-builder-input.types.ts` instead of remaining embedded across the base-props and action-props input builders
+  - `apps/web/components/record-panel-v2-editor-workspace-base-props-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-action-props-input.ts` now consume the shared extracted builder-input contract behind thinner pass-through boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace builder-input boundary and keeps duplicated `Omit<BuildRecordEditorWorkspacePropsInput, "detailCopy">` aliases out of both builder modules
 
 ## Next
 - Continue the next product slice
