@@ -104,6 +104,18 @@ const recordPanelHandlerGroupInputTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-group-inputs.types.ts",
 );
+const recordPanelHandlerGroupPropsInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-group-props-input.types.ts",
+);
+const recordPanelHandlerGroupStateInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-group-state-input.types.ts",
+);
+const recordPanelHandlerGroupViewDataInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-handler-group-view-data-input.types.ts",
+);
 const recordPanelRecordHandlerInputPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handler-input.ts",
@@ -308,6 +320,18 @@ const controllerViewDataHelpersSource = fs.readFileSync(
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
 const handlerGroupInputsSource = fs.readFileSync(recordPanelHandlerGroupInputsPath, "utf8");
 const handlerGroupInputTypesSource = fs.readFileSync(recordPanelHandlerGroupInputTypesPath, "utf8");
+const handlerGroupPropsInputTypesSource = fs.readFileSync(
+  recordPanelHandlerGroupPropsInputTypesPath,
+  "utf8",
+);
+const handlerGroupStateInputTypesSource = fs.readFileSync(
+  recordPanelHandlerGroupStateInputTypesPath,
+  "utf8",
+);
+const handlerGroupViewDataInputTypesSource = fs.readFileSync(
+  recordPanelHandlerGroupViewDataInputTypesPath,
+  "utf8",
+);
 const recordHandlerInputSource = fs.readFileSync(recordPanelRecordHandlerInputPath, "utf8");
 const mediaHandlerInputSource = fs.readFileSync(recordPanelMediaHandlerInputPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
@@ -379,6 +403,10 @@ const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
 const handlerGroupInputsLines = handlerGroupInputsSource.split(/\r?\n/).length;
 const handlerGroupInputTypesLines = handlerGroupInputTypesSource.split(/\r?\n/).length;
+const handlerGroupPropsInputTypesLines = handlerGroupPropsInputTypesSource.split(/\r?\n/).length;
+const handlerGroupStateInputTypesLines = handlerGroupStateInputTypesSource.split(/\r?\n/).length;
+const handlerGroupViewDataInputTypesLines =
+  handlerGroupViewDataInputTypesSource.split(/\r?\n/).length;
 const recordHandlerInputLines = recordHandlerInputSource.split(/\r?\n/).length;
 const mediaHandlerInputLines = mediaHandlerInputSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
@@ -1195,9 +1223,9 @@ if (handlerGroupInputsLines > maxHandlerGroupInputsLines) {
 }
 
 for (const requiredHandlerGroupInputTypesImport of [
-  'from "./record-panel-controller.types";',
-  'from "./use-record-panel-controller-state";',
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-handler-group-props-input.types";',
+  'from "./record-panel-controller-handler-group-state-input.types";',
+  'from "./record-panel-controller-handler-group-view-data-input.types";',
 ]) {
   if (!handlerGroupInputTypesSource.includes(requiredHandlerGroupInputTypesImport)) {
     throw new Error(
@@ -1207,10 +1235,10 @@ for (const requiredHandlerGroupInputTypesImport of [
 }
 
 for (const requiredHandlerGroupInputTypesUsage of [
-  "export type RecordPanelControllerHandlerGroupInput = Pick<",
-  '"workspaceId"',
-  '"setUploading"',
-  'Pick<ControllerViewData, "detailCopy" | "selectedRecord">;',
+  "export type RecordPanelControllerHandlerGroupInput =",
+  "RecordPanelControllerHandlerGroupPropsInput &",
+  "RecordPanelControllerHandlerGroupStateInput &",
+  "RecordPanelControllerHandlerGroupViewDataInput;",
 ]) {
   if (!handlerGroupInputTypesSource.includes(requiredHandlerGroupInputTypesUsage)) {
     throw new Error(
@@ -1219,10 +1247,96 @@ for (const requiredHandlerGroupInputTypesUsage of [
   }
 }
 
-const maxHandlerGroupInputTypesLines = 60;
+const maxHandlerGroupInputTypesLines = 15;
 if (handlerGroupInputTypesLines > maxHandlerGroupInputTypesLines) {
   throw new Error(
     `record-panel-controller-handler-group-inputs.types.ts exceeded ${maxHandlerGroupInputTypesLines} lines: ${handlerGroupInputTypesLines}`,
+  );
+}
+
+for (const requiredHandlerGroupPropsInputTypesImport of [
+  'from "./record-panel-controller.types";',
+]) {
+  if (!handlerGroupPropsInputTypesSource.includes(requiredHandlerGroupPropsInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-handler-group-props-input.types.ts must import controller props: ${requiredHandlerGroupPropsInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredHandlerGroupPropsInputTypesUsage of [
+  "export type RecordPanelControllerHandlerGroupPropsInput = Pick<",
+  '"workspaceId"',
+  '"onUploadMedia"',
+]) {
+  if (!handlerGroupPropsInputTypesSource.includes(requiredHandlerGroupPropsInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-group-props-input.types.ts must own prop type slices: ${requiredHandlerGroupPropsInputTypesUsage}`,
+    );
+  }
+}
+
+const maxHandlerGroupPropsInputTypesLines = 25;
+if (handlerGroupPropsInputTypesLines > maxHandlerGroupPropsInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-handler-group-props-input.types.ts exceeded ${maxHandlerGroupPropsInputTypesLines} lines: ${handlerGroupPropsInputTypesLines}`,
+  );
+}
+
+for (const requiredHandlerGroupStateInputTypesImport of [
+  'from "./use-record-panel-controller-state";',
+]) {
+  if (!handlerGroupStateInputTypesSource.includes(requiredHandlerGroupStateInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-handler-group-state-input.types.ts must import controller state: ${requiredHandlerGroupStateInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredHandlerGroupStateInputTypesUsage of [
+  "export type RecordPanelControllerHandlerGroupStateInput = Pick<",
+  '"setSavingReminder"',
+  '"setUploading"',
+]) {
+  if (!handlerGroupStateInputTypesSource.includes(requiredHandlerGroupStateInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-group-state-input.types.ts must own state type slices: ${requiredHandlerGroupStateInputTypesUsage}`,
+    );
+  }
+}
+
+const maxHandlerGroupStateInputTypesLines = 30;
+if (handlerGroupStateInputTypesLines > maxHandlerGroupStateInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-handler-group-state-input.types.ts exceeded ${maxHandlerGroupStateInputTypesLines} lines: ${handlerGroupStateInputTypesLines}`,
+  );
+}
+
+for (const requiredHandlerGroupViewDataInputTypesImport of [
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!handlerGroupViewDataInputTypesSource.includes(requiredHandlerGroupViewDataInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-handler-group-view-data-input.types.ts must import controller view data: ${requiredHandlerGroupViewDataInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredHandlerGroupViewDataInputTypesUsage of [
+  "export type RecordPanelControllerHandlerGroupViewDataInput = Pick<",
+  '"detailCopy" | "selectedRecord"',
+]) {
+  if (!handlerGroupViewDataInputTypesSource.includes(requiredHandlerGroupViewDataInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-handler-group-view-data-input.types.ts must own view-data type slices: ${requiredHandlerGroupViewDataInputTypesUsage}`,
+    );
+  }
+}
+
+const maxHandlerGroupViewDataInputTypesLines = 15;
+if (handlerGroupViewDataInputTypesLines > maxHandlerGroupViewDataInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-handler-group-view-data-input.types.ts exceeded ${maxHandlerGroupViewDataInputTypesLines} lines: ${handlerGroupViewDataInputTypesLines}`,
   );
 }
 
