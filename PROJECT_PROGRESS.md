@@ -1508,6 +1508,10 @@ Last updated: 2026-03-24
   - legacy view-data hook input contract now lives in `apps/web/components/use-record-panel-legacy-view-data.types.ts` instead of remaining embedded directly in the hook signature
   - `apps/web/components/use-record-panel-legacy-view-data.ts` now consumes the extracted hook input contract behind a thinner legacy record-summary derivation boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy view-data input-type boundary and keeps inline legacy record typing out of the hook module
+- Record Panel Legacy Sync Hook Input Type Split V1:
+  - legacy sync hook input contract now lives in `apps/web/components/record-panel-legacy-sync.types.ts` instead of remaining embedded directly in the hook signature
+  - `apps/web/components/record-panel-legacy-sync.ts` now consumes the extracted hook input contract behind a thinner legacy form-sync boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy sync input-type boundary and keeps inline legacy setter typing out of the sync hook
 
 ## Next
 - Continue the next product slice

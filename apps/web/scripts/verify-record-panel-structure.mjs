@@ -20,6 +20,14 @@ const legacyRecordPanelViewDataPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-legacy-view-data.ts",
 );
+const legacyRecordPanelSyncPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-sync.ts",
+);
+const legacyRecordPanelSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-sync.types.ts",
+);
 const legacyRecordPanelViewDataTypesPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-legacy-view-data.types.ts",
@@ -825,6 +833,8 @@ const legacyRecordPanelStatsGridPath = path.resolve(
 );
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
+const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
+const legacyRecordPanelSyncTypesSource = fs.readFileSync(legacyRecordPanelSyncTypesPath, "utf8");
 const legacyRecordPanelViewDataTypesSource = fs.readFileSync(legacyRecordPanelViewDataTypesPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
 const legacyRecordPanelActionInputTypesSource = fs.readFileSync(
@@ -1407,6 +1417,9 @@ const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8"
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
+const legacyRecordPanelSyncLines = legacyRecordPanelSyncSource.split(/\r?\n/).length;
+const legacyRecordPanelSyncTypesLines =
+  legacyRecordPanelSyncTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataTypesLines =
   legacyRecordPanelViewDataTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelActionsLines = legacyRecordPanelActionsSource.split(/\r?\n/).length;
@@ -8709,6 +8722,68 @@ const maxLegacyRecordPanelViewDataTypesLines = 5;
 if (legacyRecordPanelViewDataTypesLines > maxLegacyRecordPanelViewDataTypesLines) {
   throw new Error(
     `use-record-panel-legacy-view-data.types.ts exceeded ${maxLegacyRecordPanelViewDataTypesLines} lines: ${legacyRecordPanelViewDataTypesLines}`,
+  );
+}
+
+for (const requiredLegacySyncImport of [
+  'from "react";',
+  'from "./record-panel-legacy-state";',
+  'from "./record-panel-legacy-sync.types";',
+]) {
+  if (!legacyRecordPanelSyncSource.includes(requiredLegacySyncImport)) {
+    throw new Error(`record-panel-legacy-sync.ts must import legacy sync contracts: ${requiredLegacySyncImport}`);
+  }
+}
+
+for (const requiredLegacySyncUsage of [
+  "export function useRecordPanelLegacySync({ selectedRecord, setForm }: UseRecordPanelLegacySyncInput)",
+  "setForm(EMPTY_RECORD_PANEL_FORM)",
+  'title: selectedRecord.title ?? ""',
+  "content: selectedRecord.content ?? \"\"",
+]) {
+  if (!legacyRecordPanelSyncSource.includes(requiredLegacySyncUsage)) {
+    throw new Error(`record-panel-legacy-sync.ts must keep legacy form sync focused: ${requiredLegacySyncUsage}`);
+  }
+}
+
+for (const forbiddenLegacySyncToken of [
+  "selectedRecord: RecordItem | null;",
+  "setForm: React.Dispatch<React.SetStateAction<RecordPanelFormState>>;",
+]) {
+  if (legacyRecordPanelSyncSource.includes(forbiddenLegacySyncToken)) {
+    throw new Error(`record-panel-legacy-sync.ts must keep legacy sync typing delegated: ${forbiddenLegacySyncToken}`);
+  }
+}
+
+const maxLegacyRecordPanelSyncLines = 18;
+if (legacyRecordPanelSyncLines > maxLegacyRecordPanelSyncLines) {
+  throw new Error(
+    `record-panel-legacy-sync.ts exceeded ${maxLegacyRecordPanelSyncLines} lines: ${legacyRecordPanelSyncLines}`,
+  );
+}
+
+for (const requiredLegacySyncTypesImport of [
+  'from "react";',
+  'from "../lib/types";',
+  'from "./record-panel.types";',
+]) {
+  if (!legacyRecordPanelSyncTypesSource.includes(requiredLegacySyncTypesImport)) {
+    throw new Error(`record-panel-legacy-sync.types.ts must import legacy sync input contracts: ${requiredLegacySyncTypesImport}`);
+  }
+}
+
+for (const requiredLegacySyncTypesUsage of [
+  "export type UseRecordPanelLegacySyncInput = { selectedRecord: RecordItem | null; setForm: Dispatch<SetStateAction<RecordPanelFormState>> };",
+]) {
+  if (!legacyRecordPanelSyncTypesSource.includes(requiredLegacySyncTypesUsage)) {
+    throw new Error(`record-panel-legacy-sync.types.ts must own legacy sync input typing: ${requiredLegacySyncTypesUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelSyncTypesLines = 6;
+if (legacyRecordPanelSyncTypesLines > maxLegacyRecordPanelSyncTypesLines) {
+  throw new Error(
+    `record-panel-legacy-sync.types.ts exceeded ${maxLegacyRecordPanelSyncTypesLines} lines: ${legacyRecordPanelSyncTypesLines}`,
   );
 }
 
