@@ -16,6 +16,10 @@ const recordPanelV2PropsActionTypesPath = path.resolve(
   "components/record-panel-v2-props-action.types.ts",
 );
 const legacyRecordPanelPath = path.resolve(process.cwd(), "components/record-panel.tsx");
+const legacyRecordPanelViewDataPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-legacy-view-data.ts",
+);
 const recordPanelWorkspacePropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props.ts",
@@ -596,6 +600,7 @@ const legacyRecordPanelFormMediaPath = path.resolve(
   "components/record-panel-legacy-form-media.tsx",
 );
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
+const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelActionsSource = fs.readFileSync(legacyRecordPanelActionsPath, "utf8");
 const legacyRecordPanelActionErrorSource = fs.readFileSync(
   legacyRecordPanelActionErrorPath,
@@ -992,6 +997,7 @@ const mediaAssetActionsSource = fs.readFileSync(recordPanelMediaAssetActionsPath
 const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8");
 const normalizedLines = source.split(/\r?\n/);
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
+const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
 const legacyRecordPanelActionsLines = legacyRecordPanelActionsSource.split(/\r?\n/).length;
 const legacyRecordPanelActionErrorLines = legacyRecordPanelActionErrorSource.split(/\r?\n/).length;
 const legacyRecordPanelSubmitActionLines = legacyRecordPanelSubmitActionSource.split(/\r?\n/).length;
@@ -6045,6 +6051,7 @@ for (const requiredLegacyImport of [
   'import { useRecordPanelLegacyState } from "./record-panel-legacy-state";',
   'import { RecordPanelLegacyStats } from "./record-panel-legacy-stats";',
   'import { useRecordPanelLegacySync } from "./record-panel-legacy-sync";',
+  'import { useRecordPanelLegacyViewData } from "./use-record-panel-legacy-view-data";',
   'import type { RecordPanelProps } from "./record-panel.types";',
 ]) {
   if (!legacyRecordPanelSource.includes(requiredLegacyImport)) {
@@ -6053,6 +6060,7 @@ for (const requiredLegacyImport of [
 }
 
 for (const requiredLegacyUsage of [
+  "useRecordPanelLegacyViewData({",
   "useRecordPanelLegacyState()",
   "useRecordPanelLegacySync({ selectedRecord, setForm })",
   "createRecordPanelLegacyActions({",
@@ -6072,17 +6080,47 @@ for (const forbiddenLegacyToken of [
   'className="record-card form-stack"',
   'className="record-list compact-list"',
   "useEffect(",
+  "useMemo(",
   "useState(",
   "const EMPTY_FORM",
   "const handleSubmit",
   "const handleDelete",
   "const handleUpload",
+  "records.filter(",
+  "records.find(",
   "records.map((record) => (",
   "mediaAssets.map((asset) => (",
 ]) {
   if (legacyRecordPanelSource.includes(forbiddenLegacyToken)) {
     throw new Error(`record-panel.tsx must keep legacy layout details delegated: ${forbiddenLegacyToken}`);
   }
+}
+
+for (const requiredLegacyViewDataImport of [
+  'from "react";',
+  'from "../lib/types";',
+  'from "./record-panel-controller-record-view-data";',
+]) {
+  if (!legacyRecordPanelViewDataSource.includes(requiredLegacyViewDataImport)) {
+    throw new Error(`use-record-panel-legacy-view-data.ts must import legacy view-data contracts: ${requiredLegacyViewDataImport}`);
+  }
+}
+
+for (const requiredLegacyViewDataUsage of [
+  "export function useRecordPanelLegacyViewData({",
+  "return useMemo(",
+  "buildRecordPanelRecordViewData({ records, selectedRecordId })",
+]) {
+  if (!legacyRecordPanelViewDataSource.includes(requiredLegacyViewDataUsage)) {
+    throw new Error(`use-record-panel-legacy-view-data.ts must own legacy record summary derivation: ${requiredLegacyViewDataUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelViewDataLines = 20;
+if (legacyRecordPanelViewDataLines > maxLegacyRecordPanelViewDataLines) {
+  throw new Error(
+    `use-record-panel-legacy-view-data.ts exceeded ${maxLegacyRecordPanelViewDataLines} lines: ${legacyRecordPanelViewDataLines}`,
+  );
 }
 
 for (const requiredLegacyActionsImport of [

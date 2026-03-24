@@ -1,13 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { createRecordPanelLegacyActions } from "./record-panel-legacy-actions";
 import { RecordPanelLegacyForm } from "./record-panel-legacy-form";
 import { RecordPanelLegacyList } from "./record-panel-legacy-list";
 import { useRecordPanelLegacyState } from "./record-panel-legacy-state";
 import { RecordPanelLegacyStats } from "./record-panel-legacy-stats";
 import { useRecordPanelLegacySync } from "./record-panel-legacy-sync";
+import { useRecordPanelLegacyViewData } from "./use-record-panel-legacy-view-data";
 import type { RecordPanelProps } from "./record-panel.types";
 
 export function RecordPanel({
@@ -21,12 +20,10 @@ export function RecordPanel({
   onUploadMedia,
   onResetFilter,
 }: RecordPanelProps) {
-  const avoidCount = records.filter((record) => record.is_avoid).length;
-  const foodCount = records.filter((record) => record.type_code === "food").length;
-  const selectedRecord = useMemo(
-    () => records.find((record) => record.id === selectedRecordId) ?? null,
-    [records, selectedRecordId],
-  );
+  const { avoidCount, foodCount, selectedRecord } = useRecordPanelLegacyViewData({
+    records,
+    selectedRecordId,
+  });
   const {
     form,
     setForm,

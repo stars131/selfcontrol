@@ -1268,6 +1268,10 @@ Last updated: 2026-03-24
   - delete-run orchestration is now explicitly isolated in `apps/web/components/record-panel-controller-record-delete-run-action.ts`, while `apps/web/components/record-panel-controller-record-delete-actions.ts` stays as the stable compatibility wrapper consumed by the broader submit-action assembly
   - this keeps fallback-message lookup, delete execution, and delete error handling out of the boundary module that other slices depend on
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the wrapper-vs-runner separation for record delete actions
+- Record Panel Legacy View-Data Hook Split V3:
+  - legacy record summary counts and selected-record lookup now live behind `apps/web/components/use-record-panel-legacy-view-data.ts` instead of remaining inline inside `apps/web/components/record-panel.tsx`
+  - `apps/web/components/record-panel.tsx` now focuses more narrowly on composing legacy state, sync, actions, and delegated subviews behind a thinner shell boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the legacy view-data hook boundary and a dedicated size ceiling for the extracted hook module
 
 ## Next
 - Continue the next product slice
