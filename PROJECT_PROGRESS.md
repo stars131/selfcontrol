@@ -1492,6 +1492,10 @@ Last updated: 2026-03-24
   - controller-sync wrapper arg contract now lives in `apps/web/components/use-record-panel-controller-sync.types.ts` instead of remaining embedded directly in the sync-input builder signature
   - `apps/web/components/record-panel-controller-sync-input.ts` now consumes the extracted wrapper-arg contract behind a thinner sync-input assembly boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the controller-sync wrapper-arg boundary and keeps local `ReturnType` aliases plus inline sync-input arg typing out of the builder module
+- Record Panel Dead-Letter Sync Hook Input Type Split V1:
+  - dead-letter sync hook input contract now lives in `apps/web/components/use-record-panel-controller-dead-letter-sync.types.ts` instead of remaining embedded directly in the hook signature
+  - `apps/web/components/use-record-panel-controller-dead-letter-sync.ts` now consumes the extracted hook input contract behind a thinner dead-letter selection sync boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter sync input-type boundary and keeps inline dead-letter setter typing out of the hook module
 
 ## Next
 - Continue the next product slice

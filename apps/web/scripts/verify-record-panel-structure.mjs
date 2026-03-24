@@ -261,6 +261,10 @@ const recordPanelControllerDeadLetterSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-dead-letter-sync.ts",
 );
+const recordPanelControllerDeadLetterSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-dead-letter-sync.types.ts",
+);
 const recordPanelControllerSelectedRecordSyncPath = path.resolve(
   process.cwd(),
   "components/use-record-panel-controller-selected-record-sync.ts",
@@ -1071,6 +1075,10 @@ const controllerDeadLetterSyncSource = fs.readFileSync(
   recordPanelControllerDeadLetterSyncPath,
   "utf8",
 );
+const controllerDeadLetterSyncTypesSource = fs.readFileSync(
+  recordPanelControllerDeadLetterSyncTypesPath,
+  "utf8",
+);
 const controllerSelectedRecordSyncSource = fs.readFileSync(
   recordPanelControllerSelectedRecordSyncPath,
   "utf8",
@@ -1506,6 +1514,8 @@ const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
 const controllerSyncTypesLines = controllerSyncTypesSource.split(/\r?\n/).length;
 const controllerSyncInputLines = controllerSyncInputSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
+const controllerDeadLetterSyncTypesLines =
+  controllerDeadLetterSyncTypesSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncLines = controllerSelectedRecordSyncSource.split(/\r?\n/).length;
 const controllerSelectedRecordSyncTypesLines =
   controllerSelectedRecordSyncTypesSource.split(/\r?\n/).length;
@@ -4117,6 +4127,7 @@ if (controllerSyncTypesLines > maxControllerSyncTypesLines) {
 
 for (const requiredControllerDeadLetterSyncImport of [
   'from "react";',
+  'from "./use-record-panel-controller-dead-letter-sync.types";',
 ]) {
   if (!controllerDeadLetterSyncSource.includes(requiredControllerDeadLetterSyncImport)) {
     throw new Error(
@@ -4126,7 +4137,7 @@ for (const requiredControllerDeadLetterSyncImport of [
 }
 
 for (const requiredControllerDeadLetterSyncUsage of [
-  "export function useRecordPanelControllerDeadLetterSync({",
+  "export function useRecordPanelControllerDeadLetterSync({ actionableDeadLetterIds, setSelectedDeadLetterIds }: UseRecordPanelControllerDeadLetterSyncInput)",
   "useEffect(() => {",
   "setSelectedDeadLetterIds((current) => current.filter((item) => actionableDeadLetterIds.has(item)))",
 ]) {
@@ -4137,10 +4148,46 @@ for (const requiredControllerDeadLetterSyncUsage of [
   }
 }
 
-const maxControllerDeadLetterSyncLines = 18;
+for (const forbiddenControllerDeadLetterSyncToken of [
+  "actionableDeadLetterIds: Set<string>;",
+  "setSelectedDeadLetterIds: Dispatch<SetStateAction<string[]>>;",
+]) {
+  if (controllerDeadLetterSyncSource.includes(forbiddenControllerDeadLetterSyncToken)) {
+    throw new Error(
+      `use-record-panel-controller-dead-letter-sync.ts must keep dead-letter sync typing delegated: ${forbiddenControllerDeadLetterSyncToken}`,
+    );
+  }
+}
+
+const maxControllerDeadLetterSyncLines = 10;
 if (controllerDeadLetterSyncLines > maxControllerDeadLetterSyncLines) {
   throw new Error(
     `use-record-panel-controller-dead-letter-sync.ts exceeded ${maxControllerDeadLetterSyncLines} lines: ${controllerDeadLetterSyncLines}`,
+  );
+}
+
+for (const requiredControllerDeadLetterSyncTypesImport of ['from "react";']) {
+  if (!controllerDeadLetterSyncTypesSource.includes(requiredControllerDeadLetterSyncTypesImport)) {
+    throw new Error(
+      `use-record-panel-controller-dead-letter-sync.types.ts must import dead-letter sync type contracts: ${requiredControllerDeadLetterSyncTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerDeadLetterSyncTypesUsage of [
+  "export type UseRecordPanelControllerDeadLetterSyncInput = { actionableDeadLetterIds: Set<string>; setSelectedDeadLetterIds: Dispatch<SetStateAction<string[]>> };",
+]) {
+  if (!controllerDeadLetterSyncTypesSource.includes(requiredControllerDeadLetterSyncTypesUsage)) {
+    throw new Error(
+      `use-record-panel-controller-dead-letter-sync.types.ts must own dead-letter sync type contracts: ${requiredControllerDeadLetterSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerDeadLetterSyncTypesLines = 5;
+if (controllerDeadLetterSyncTypesLines > maxControllerDeadLetterSyncTypesLines) {
+  throw new Error(
+    `use-record-panel-controller-dead-letter-sync.types.ts exceeded ${maxControllerDeadLetterSyncTypesLines} lines: ${controllerDeadLetterSyncTypesLines}`,
   );
 }
 
