@@ -1044,6 +1044,10 @@ Last updated: 2026-03-24
   - dead-letter recovery item-list rendering and empty-state rendering now live in a dedicated content module instead of remaining combined inside `apps/web/components/dead-letter-recovery-panel.tsx`
   - the top-level panel now focuses more narrowly on summary/content composition while the content module owns per-item mapping and empty-state presentation
   - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces this panel-content boundary and a dedicated size ceiling for the new module
+- Editor Workspace Type Group Split V1:
+  - record-editor workspace data props, copy-label props, and action contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-editor-workspace.types.ts`
+  - the top-level workspace type file now focuses more narrowly on composing the three delegated type groups into the exported `RecordEditorWorkspaceProps` contract
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this type-group boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

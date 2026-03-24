@@ -16,6 +16,14 @@ const editorWorkspacePath = "components/record-editor-workspace.tsx";
 const editorWorkspaceSource = readSource(editorWorkspacePath);
 const editorWorkspaceBindingsPath = "components/record-editor-workspace-bindings.ts";
 const editorWorkspaceBindingsSource = readSource(editorWorkspaceBindingsPath);
+const editorWorkspaceTypesPath = "components/record-editor-workspace.types.ts";
+const editorWorkspaceTypesSource = readSource(editorWorkspaceTypesPath);
+const editorWorkspaceActionsTypesPath = "components/record-editor-workspace-actions.types.ts";
+const editorWorkspaceActionsTypesSource = readSource(editorWorkspaceActionsTypesPath);
+const editorWorkspaceCopyTypesPath = "components/record-editor-workspace-copy.types.ts";
+const editorWorkspaceCopyTypesSource = readSource(editorWorkspaceCopyTypesPath);
+const editorWorkspaceDataTypesPath = "components/record-editor-workspace-data.types.ts";
+const editorWorkspaceDataTypesSource = readSource(editorWorkspaceDataTypesPath);
 const editorFieldBindingsPath = "components/record-editor-field-bindings.ts";
 const editorFieldBindingsSource = readSource(editorFieldBindingsPath);
 const editorLocationReviewBindingsPath = "components/record-editor-location-review-bindings.ts";
@@ -41,6 +49,30 @@ if (!editorWorkspaceSource.includes('from "./record-editor-workspace-bindings";'
 
 if (!editorWorkspaceSource.includes('import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";')) {
   throw new Error("record-editor-workspace.tsx must import RecordEditorWorkspaceProps from record-editor-workspace.types");
+}
+
+for (const requiredEditorWorkspaceTypesImport of [
+  'import type { RecordEditorWorkspaceActionProps } from "./record-editor-workspace-actions.types";',
+  'import type { RecordEditorWorkspaceCopyProps } from "./record-editor-workspace-copy.types";',
+  'import type { RecordEditorWorkspaceDataProps } from "./record-editor-workspace-data.types";',
+]) {
+  if (!editorWorkspaceTypesSource.includes(requiredEditorWorkspaceTypesImport)) {
+    throw new Error(
+      `record-editor-workspace.types.ts must import delegated type groups: ${requiredEditorWorkspaceTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceTypesUsage of [
+  "export type RecordEditorWorkspaceProps = RecordEditorWorkspaceActionProps &",
+  "RecordEditorWorkspaceCopyProps &",
+  "RecordEditorWorkspaceDataProps;",
+]) {
+  if (!editorWorkspaceTypesSource.includes(requiredEditorWorkspaceTypesUsage)) {
+    throw new Error(
+      `record-editor-workspace.types.ts must compose delegated type groups: ${requiredEditorWorkspaceTypesUsage}`,
+    );
+  }
 }
 
 if (!editorWorkspaceSource.includes('import { RecordEditorMainSections } from "./record-editor-main-sections";')) {
@@ -122,7 +154,90 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
 
 verifyLineLimit(editorWorkspacePath, 110);
 verifyLineLimit(editorWorkspaceBindingsPath, 10);
+verifyLineLimit(editorWorkspaceTypesPath, 10);
 verifyLineLimit(editorWorkspaceSectionsPropsPath, 10);
+
+for (const requiredEditorWorkspaceActionsTypesImport of [
+  'import type { ChangeEventHandler, FormEventHandler } from "react";',
+  'import type { MediaAsset } from "../lib/types";',
+]) {
+  if (!editorWorkspaceActionsTypesSource.includes(requiredEditorWorkspaceActionsTypesImport)) {
+    throw new Error(
+      `record-editor-workspace-actions.types.ts must import action type contracts: ${requiredEditorWorkspaceActionsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceActionsTypesUsage of [
+  "export type RecordEditorWorkspaceReminderUpdateInput = Partial<{",
+  "title: string | null;",
+  "is_enabled: boolean;",
+  "export type RecordEditorWorkspaceActionProps = {",
+  "onUpdateReminder: (",
+]) {
+  if (!editorWorkspaceActionsTypesSource.includes(requiredEditorWorkspaceActionsTypesUsage)) {
+    throw new Error(
+      `record-editor-workspace-actions.types.ts must own reminder update and action contracts: ${requiredEditorWorkspaceActionsTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorWorkspaceActionsTypesPath, 35);
+
+for (const requiredEditorWorkspaceCopyTypesImport of [
+  'import type { PanelCopy } from "../lib/record-panel-ui";',
+]) {
+  if (!editorWorkspaceCopyTypesSource.includes(requiredEditorWorkspaceCopyTypesImport)) {
+    throw new Error(
+      `record-editor-workspace-copy.types.ts must import copy type contracts: ${requiredEditorWorkspaceCopyTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceCopyTypesUsage of [
+  "export type RecordEditorWorkspaceCopyProps = {",
+  "panelCopy: PanelCopy;",
+  "channelInAppLabel: string;",
+  "savingReminderLabel: string;",
+  "untitledReminderLabel: string;",
+]) {
+  if (!editorWorkspaceCopyTypesSource.includes(requiredEditorWorkspaceCopyTypesUsage)) {
+    throw new Error(
+      `record-editor-workspace-copy.types.ts must own copy label contracts: ${requiredEditorWorkspaceCopyTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorWorkspaceCopyTypesPath, 30);
+
+for (const requiredEditorWorkspaceDataTypesImport of [
+  'import type { Dispatch, SetStateAction } from "react";',
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
+  'import type {',
+]) {
+  if (!editorWorkspaceDataTypesSource.includes(requiredEditorWorkspaceDataTypesImport)) {
+    throw new Error(
+      `record-editor-workspace-data.types.ts must import data type contracts: ${requiredEditorWorkspaceDataTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceDataTypesUsage of [
+  "export type RecordEditorWorkspaceDataProps = {",
+  "authToken: string | null;",
+  "mediaIssueCopy: MediaIssueCopy;",
+  "selectedLocationHistory: LocationHistoryEntry[];",
+  "summarizeHistoryActionLabel: (entry: LocationHistoryEntry) => string;",
+]) {
+  if (!editorWorkspaceDataTypesSource.includes(requiredEditorWorkspaceDataTypesUsage)) {
+    throw new Error(
+      `record-editor-workspace-data.types.ts must own workspace data contracts: ${requiredEditorWorkspaceDataTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorWorkspaceDataTypesPath, 55);
 
 for (const requiredFieldBindingsImport of [
   'import type { RecordFormState } from "../lib/record-panel-forms";',
