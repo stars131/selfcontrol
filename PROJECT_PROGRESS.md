@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-24
+Last updated: 2026-03-25
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -1572,6 +1572,10 @@ Last updated: 2026-03-24
   - main-sections props now live in `apps/web/components/record-editor-main-sections.types.ts` instead of being embedded in the component file and re-inferred through `ComponentProps`
   - `record-editor-main-sections.tsx` and `record-editor-workspace-main-sections-props.ts` now share the same explicit child-component prop contract
   - this keeps editor workspace prop mapping stable and easier to evolve without implicit component-signature coupling
+- Workspace Shell Client Result Boundaries Split V1:
+  - workspace-shell client shared types now re-export explicit state/actions/refreshers/router boundaries instead of inferring them inline from component props or `useRouter()`
+  - `workspace-shell-client-props.types.ts` now depends on `workspace-shell-*.types.ts` boundary files and the existing `workspace-shell-panels.types.ts` contract
+  - this keeps shell client prop mappers stable against unrelated hook, router, and panel implementation signature changes
 
 ## Next
 - Continue the next product slice
