@@ -1,6 +1,5 @@
-import type { BuildRecordBrowseWorkspacePropsInput } from "./record-panel-v2-workspace-props.types";
-
-export function buildRecordBrowseWorkspaceCopyProps({ detailCopy, panelCopy }: Pick<BuildRecordBrowseWorkspacePropsInput, "detailCopy" | "panelCopy">) {
+import type { RecordBrowseWorkspaceCopyPropsInput } from "./record-panel-v2-browse-workspace-props-input.types";
+export function buildRecordBrowseWorkspaceCopyProps({ detailCopy, panelCopy }: RecordBrowseWorkspaceCopyPropsInput) {
   return {
     applyPresetLabel: panelCopy.applyPreset,
     avoidRecordLabel: detailCopy.avoidLabel,

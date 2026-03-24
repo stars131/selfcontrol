@@ -92,6 +92,10 @@ const recordPanelBrowseWorkspaceCopyPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-copy-props.ts",
 );
+const recordPanelBrowseWorkspacePropsInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-props-input.types.ts",
+);
 const recordPanelEditorWorkspaceCopyPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-copy-props.ts",
@@ -855,6 +859,10 @@ const browseWorkspaceCopyPropsSource = fs.readFileSync(
   recordPanelBrowseWorkspaceCopyPropsPath,
   "utf8",
 );
+const browseWorkspacePropsInputTypesSource = fs.readFileSync(
+  recordPanelBrowseWorkspacePropsInputTypesPath,
+  "utf8",
+);
 const editorWorkspaceCopyPropsSource = fs.readFileSync(
   recordPanelEditorWorkspaceCopyPropsPath,
   "utf8",
@@ -1305,6 +1313,8 @@ const browseWorkspacePropsHelpersLines = browseWorkspacePropsHelpersSource.split
 const browseWorkspaceFilterPropsLines = browseWorkspaceFilterPropsSource.split(/\r?\n/).length;
 const browseWorkspaceRecordPropsLines = browseWorkspaceRecordPropsSource.split(/\r?\n/).length;
 const browseWorkspaceCopyPropsLines = browseWorkspaceCopyPropsSource.split(/\r?\n/).length;
+const browseWorkspacePropsInputTypesLines =
+  browseWorkspacePropsInputTypesSource.split(/\r?\n/).length;
 const editorWorkspaceCopyPropsLines = editorWorkspaceCopyPropsSource.split(/\r?\n/).length;
 const editorWorkspaceCopyPropsInputTypesLines =
   editorWorkspaceCopyPropsInputTypesSource.split(/\r?\n/).length;
@@ -2188,8 +2198,36 @@ if (browseWorkspaceRecordPropsLines > maxBrowseWorkspaceRecordPropsLines) {
   );
 }
 
-for (const requiredBrowseWorkspaceCopyPropsImport of [
+for (const requiredBrowseWorkspacePropsInputTypesImport of [
   'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!browseWorkspacePropsInputTypesSource.includes(requiredBrowseWorkspacePropsInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-props-input.types.ts must import browse workspace input contracts: ${requiredBrowseWorkspacePropsInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspacePropsInputTypesUsage of [
+  'export type RecordBrowseWorkspaceCopyPropsInput = Pick<BuildRecordBrowseWorkspacePropsInput, "detailCopy" | "panelCopy">;',
+  'export type RecordBrowseWorkspaceDraftLocationPropsInput = Pick<BuildRecordBrowseWorkspacePropsInput, "canWriteWorkspace" | "form" | "setForm">;',
+]) {
+  if (!browseWorkspacePropsInputTypesSource.includes(requiredBrowseWorkspacePropsInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-props-input.types.ts must own browse workspace input typing: ${requiredBrowseWorkspacePropsInputTypesUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspacePropsInputTypesLines = 5;
+if (browseWorkspacePropsInputTypesLines > maxBrowseWorkspacePropsInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-props-input.types.ts exceeded ${maxBrowseWorkspacePropsInputTypesLines} lines: ${browseWorkspacePropsInputTypesLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspaceCopyPropsImport of [
+  'from "./record-panel-v2-browse-workspace-props-input.types";',
 ]) {
   if (!browseWorkspaceCopyPropsSource.includes(requiredBrowseWorkspaceCopyPropsImport)) {
     throw new Error(
@@ -2207,6 +2245,17 @@ for (const requiredBrowseWorkspaceCopyPropsUsage of [
   if (!browseWorkspaceCopyPropsSource.includes(requiredBrowseWorkspaceCopyPropsUsage)) {
     throw new Error(
       `record-panel-v2-browse-workspace-copy-props.ts must own browse copy details: ${requiredBrowseWorkspaceCopyPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenBrowseWorkspaceCopyPropsToken of [
+  'from "./record-panel-v2-workspace-props.types";',
+  'Pick<BuildRecordBrowseWorkspacePropsInput, "detailCopy" | "panelCopy">',
+]) {
+  if (browseWorkspaceCopyPropsSource.includes(forbiddenBrowseWorkspaceCopyPropsToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-copy-props.ts must keep browse workspace copy typing delegated: ${forbiddenBrowseWorkspaceCopyPropsToken}`,
     );
   }
 }
@@ -2416,7 +2465,7 @@ if (editorWorkspaceReminderCopyPropsLines > maxEditorWorkspaceReminderCopyPropsL
 }
 
 for (const requiredBrowseWorkspaceDraftLocationPropsImport of [
-  'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-browse-workspace-props-input.types";',
 ]) {
   if (!browseWorkspaceDraftLocationPropsSource.includes(requiredBrowseWorkspaceDraftLocationPropsImport)) {
     throw new Error(
@@ -2433,6 +2482,17 @@ for (const requiredBrowseWorkspaceDraftLocationPropsUsage of [
   if (!browseWorkspaceDraftLocationPropsSource.includes(requiredBrowseWorkspaceDraftLocationPropsUsage)) {
     throw new Error(
       `record-panel-v2-browse-workspace-draft-location-props.ts must own draft-location details: ${requiredBrowseWorkspaceDraftLocationPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenBrowseWorkspaceDraftLocationPropsToken of [
+  'from "./record-panel-v2-workspace-props.types";',
+  'Pick<BuildRecordBrowseWorkspacePropsInput, "canWriteWorkspace" | "form" | "setForm">',
+]) {
+  if (browseWorkspaceDraftLocationPropsSource.includes(forbiddenBrowseWorkspaceDraftLocationPropsToken)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-draft-location-props.ts must keep draft-location input typing delegated: ${forbiddenBrowseWorkspaceDraftLocationPropsToken}`,
     );
   }
 }

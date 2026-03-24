@@ -1396,6 +1396,10 @@ Last updated: 2026-03-24
   - workspace media retention risk-label input contracts now live in `apps/web/components/workspace-media-retention-controller.types.ts` instead of remaining embedded inside the helper and derived-data hook
   - `apps/web/components/workspace-media-retention-controller-helpers.ts` and `apps/web/components/use-workspace-media-retention-derived-data.ts` now consume the shared extracted risk-label contract behind thinner helper and hook boundaries
   - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces the risk-label type boundary and keeps inline `MediaRetentionReport` input typing plus `Parameters<typeof ...>` report extraction out of the helper and derived-data hook
+- Record Panel Browse Workspace Input Type Split V3:
+  - browse workspace copy and draft-location input contracts now live in `apps/web/components/record-panel-v2-browse-workspace-props-input.types.ts` instead of remaining embedded across the copy-props and draft-location helper modules
+  - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `apps/web/components/record-panel-v2-browse-workspace-draft-location-props.ts` now consume the shared extracted browse-workspace input contracts behind thinner mapping boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the browse-workspace input-type boundary and keeps duplicated `Pick<BuildRecordBrowseWorkspacePropsInput, ...>` signatures out of the browse workspace helper modules
 
 ## Next
 - Continue the next product slice
