@@ -19,6 +19,14 @@ const recordPanelBrowseWorkspacePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-props.types.ts",
 );
+const recordPanelBrowseWorkspacePropInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-prop-input.types.ts",
+);
+const recordPanelBrowseWorkspaceControllerInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-browse-workspace-controller-input.types.ts",
+);
 const recordPanelEditorWorkspacePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-props.types.ts",
@@ -418,6 +426,14 @@ const browseWorkspacePropsTypesSource = fs.readFileSync(
   recordPanelBrowseWorkspacePropsTypesPath,
   "utf8",
 );
+const browseWorkspacePropInputTypesSource = fs.readFileSync(
+  recordPanelBrowseWorkspacePropInputTypesPath,
+  "utf8",
+);
+const browseWorkspaceControllerInputTypesSource = fs.readFileSync(
+  recordPanelBrowseWorkspaceControllerInputTypesPath,
+  "utf8",
+);
 const editorWorkspacePropsTypesSource = fs.readFileSync(
   recordPanelEditorWorkspacePropsTypesPath,
   "utf8",
@@ -626,6 +642,10 @@ const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const workspacePropsTypesLines = workspacePropsTypesSource.split(/\r?\n/).length;
 const workspacePropsCoreTypesLines = workspacePropsCoreTypesSource.split(/\r?\n/).length;
 const browseWorkspacePropsTypesLines = browseWorkspacePropsTypesSource.split(/\r?\n/).length;
+const browseWorkspacePropInputTypesLines =
+  browseWorkspacePropInputTypesSource.split(/\r?\n/).length;
+const browseWorkspaceControllerInputTypesLines =
+  browseWorkspaceControllerInputTypesSource.split(/\r?\n/).length;
 const editorWorkspacePropsTypesLines = editorWorkspacePropsTypesSource.split(/\r?\n/).length;
 const editorWorkspacePropInputTypesLines =
   editorWorkspacePropInputTypesSource.split(/\r?\n/).length;
@@ -887,8 +907,8 @@ if (workspacePropsCoreTypesLines > maxWorkspacePropsCoreTypesLines) {
 }
 
 for (const requiredBrowseWorkspacePropsTypesImport of [
-  'import type { RecordPanelV2Props } from "./record-panel-v2.types";',
-  'from "./record-panel-v2-workspace-props-core.types";',
+  'from "./record-panel-v2-browse-workspace-controller-input.types";',
+  'from "./record-panel-v2-browse-workspace-prop-input.types";',
 ]) {
   if (!browseWorkspacePropsTypesSource.includes(requiredBrowseWorkspacePropsTypesImport)) {
     throw new Error(
@@ -898,11 +918,9 @@ for (const requiredBrowseWorkspacePropsTypesImport of [
 }
 
 for (const requiredBrowseWorkspacePropsTypesUsage of [
-  "export type BuildRecordBrowseWorkspacePropsInput = Pick<",
-  '"onApplyLocationFilter"',
-  "RecordBrowseWorkspaceTypeSupport & {",
-  "detailCopy: RecordPanelDetailCopy;",
-  'summarizeRecordFilterLabel: (filter: RecordBrowseWorkspaceTypeSupport["filterDraft"]) => string;',
+  "export type BuildRecordBrowseWorkspacePropsInput =",
+  "BuildRecordBrowseWorkspacePropInput &",
+  "BuildRecordBrowseWorkspaceControllerInput;",
 ]) {
   if (!browseWorkspacePropsTypesSource.includes(requiredBrowseWorkspacePropsTypesUsage)) {
     throw new Error(
@@ -911,10 +929,69 @@ for (const requiredBrowseWorkspacePropsTypesUsage of [
   }
 }
 
-const maxBrowseWorkspacePropsTypesLines = 35;
+const maxBrowseWorkspacePropsTypesLines = 10;
 if (browseWorkspacePropsTypesLines > maxBrowseWorkspacePropsTypesLines) {
   throw new Error(
     `record-panel-v2-browse-workspace-props.types.ts exceeded ${maxBrowseWorkspacePropsTypesLines} lines: ${browseWorkspacePropsTypesLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspacePropInputTypesImport of [
+  'from "./record-panel-v2.types";',
+]) {
+  if (!browseWorkspacePropInputTypesSource.includes(requiredBrowseWorkspacePropInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-prop-input.types.ts must import browse workspace prop-input type dependencies: ${requiredBrowseWorkspacePropInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspacePropInputTypesUsage of [
+  "export type BuildRecordBrowseWorkspacePropInput = Pick<",
+  '"onApplyLocationFilter"',
+  '"onSelectRecord"',
+]) {
+  if (!browseWorkspacePropInputTypesSource.includes(requiredBrowseWorkspacePropInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-prop-input.types.ts must own browse workspace prop-input contracts: ${requiredBrowseWorkspacePropInputTypesUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspacePropInputTypesLines = 20;
+if (browseWorkspacePropInputTypesLines > maxBrowseWorkspacePropInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-prop-input.types.ts exceeded ${maxBrowseWorkspacePropInputTypesLines} lines: ${browseWorkspacePropInputTypesLines}`,
+  );
+}
+
+for (const requiredBrowseWorkspaceControllerInputTypesImport of [
+  'from "./record-panel-v2-workspace-props-core.types";',
+]) {
+  if (!browseWorkspaceControllerInputTypesSource.includes(requiredBrowseWorkspaceControllerInputTypesImport)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-controller-input.types.ts must import browse workspace controller-input type dependencies: ${requiredBrowseWorkspaceControllerInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredBrowseWorkspaceControllerInputTypesUsage of [
+  "export type BuildRecordBrowseWorkspaceControllerInput =",
+  "RecordBrowseWorkspaceTypeSupport & {",
+  "detailCopy: RecordPanelDetailCopy;",
+  'summarizeRecordFilterLabel: (filter: RecordBrowseWorkspaceTypeSupport["filterDraft"]) => string;',
+]) {
+  if (!browseWorkspaceControllerInputTypesSource.includes(requiredBrowseWorkspaceControllerInputTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-browse-workspace-controller-input.types.ts must own browse workspace controller-input contracts: ${requiredBrowseWorkspaceControllerInputTypesUsage}`,
+    );
+  }
+}
+
+const maxBrowseWorkspaceControllerInputTypesLines = 25;
+if (browseWorkspaceControllerInputTypesLines > maxBrowseWorkspaceControllerInputTypesLines) {
+  throw new Error(
+    `record-panel-v2-browse-workspace-controller-input.types.ts exceeded ${maxBrowseWorkspaceControllerInputTypesLines} lines: ${browseWorkspaceControllerInputTypesLines}`,
   );
 }
 
