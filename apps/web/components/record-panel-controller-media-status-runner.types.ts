@@ -1,0 +1,1 @@
+export type RunRecordPanelMediaStatusActionInput = { action: (mediaId: string) => Promise<void>; fallbackMessage: string; mediaId: string; setActiveMediaId: (value: string | null) => void; setError: (value: string) => void };

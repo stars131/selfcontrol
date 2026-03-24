@@ -629,6 +629,10 @@ const recordPanelMediaStatusRunnerPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-status-runner.ts",
 );
+const recordPanelMediaStatusRunnerTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-status-runner.types.ts",
+);
 const recordPanelMediaFileActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-file-actions.ts",
@@ -1284,6 +1288,10 @@ const mediaStatusErrorHelpersSource = fs.readFileSync(
   "utf8",
 );
 const mediaStatusRunnerSource = fs.readFileSync(recordPanelMediaStatusRunnerPath, "utf8");
+const mediaStatusRunnerTypesSource = fs.readFileSync(
+  recordPanelMediaStatusRunnerTypesPath,
+  "utf8",
+);
 const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, "utf8");
 const mediaFileActionInputTypesSource = fs.readFileSync(
   recordPanelMediaFileActionInputTypesPath,
@@ -1570,6 +1578,7 @@ const mediaStatusActionInputTypesLines =
 const mediaStatusHelpersLines = mediaStatusHelpersSource.split(/\r?\n/).length;
 const mediaStatusErrorHelpersLines = mediaStatusErrorHelpersSource.split(/\r?\n/).length;
 const mediaStatusRunnerLines = mediaStatusRunnerSource.split(/\r?\n/).length;
+const mediaStatusRunnerTypesLines = mediaStatusRunnerTypesSource.split(/\r?\n/).length;
 const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
 const mediaFileActionInputTypesLines =
   mediaFileActionInputTypesSource.split(/\r?\n/).length;
@@ -7302,6 +7311,7 @@ if (mediaStatusErrorHelpersLines > maxMediaStatusErrorHelpersLines) {
 }
 
 for (const requiredMediaStatusRunnerImport of [
+  'from "./record-panel-controller-media-status-runner.types";',
   'from "./record-panel-controller-media-status-error-helpers";',
 ]) {
   if (!mediaStatusRunnerSource.includes(requiredMediaStatusRunnerImport)) {
@@ -7313,6 +7323,7 @@ for (const requiredMediaStatusRunnerImport of [
 
 for (const requiredMediaStatusRunnerUsage of [
   "export async function runRecordPanelMediaStatusAction({",
+  "}: RunRecordPanelMediaStatusActionInput) {",
   "setActiveMediaId(mediaId);",
   "setError(getRecordPanelMediaStatusErrorMessage(caught, fallbackMessage));",
   "setActiveMediaId(null);",
@@ -7324,10 +7335,41 @@ for (const requiredMediaStatusRunnerUsage of [
   }
 }
 
+for (const forbiddenMediaStatusRunnerToken of [
+  "action: (mediaId: string) => Promise<void>;",
+  "fallbackMessage: string;",
+  "mediaId: string;",
+  "setActiveMediaId: (value: string | null) => void;",
+  "setError: (value: string) => void;",
+]) {
+  if (mediaStatusRunnerSource.includes(forbiddenMediaStatusRunnerToken)) {
+    throw new Error(
+      `record-panel-controller-media-status-runner.ts must keep media-status runner typing delegated: ${forbiddenMediaStatusRunnerToken}`,
+    );
+  }
+}
+
 const maxMediaStatusRunnerLines = 25;
 if (mediaStatusRunnerLines > maxMediaStatusRunnerLines) {
   throw new Error(
     `record-panel-controller-media-status-runner.ts exceeded ${maxMediaStatusRunnerLines} lines: ${mediaStatusRunnerLines}`,
+  );
+}
+
+for (const requiredMediaStatusRunnerTypesUsage of [
+  'export type RunRecordPanelMediaStatusActionInput = { action: (mediaId: string) => Promise<void>; fallbackMessage: string; mediaId: string; setActiveMediaId: (value: string | null) => void; setError: (value: string) => void };',
+]) {
+  if (!mediaStatusRunnerTypesSource.includes(requiredMediaStatusRunnerTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-media-status-runner.types.ts must own media-status runner type contracts: ${requiredMediaStatusRunnerTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStatusRunnerTypesLines = 4;
+if (mediaStatusRunnerTypesLines > maxMediaStatusRunnerTypesLines) {
+  throw new Error(
+    `record-panel-controller-media-status-runner.types.ts exceeded ${maxMediaStatusRunnerTypesLines} lines: ${mediaStatusRunnerTypesLines}`,
   );
 }
 

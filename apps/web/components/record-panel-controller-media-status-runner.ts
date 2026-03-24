@@ -1,3 +1,4 @@
+import type { RunRecordPanelMediaStatusActionInput } from "./record-panel-controller-media-status-runner.types";
 import { getRecordPanelMediaStatusErrorMessage } from "./record-panel-controller-media-status-error-helpers";
 
 export async function runRecordPanelMediaStatusAction({
@@ -6,13 +7,7 @@ export async function runRecordPanelMediaStatusAction({
   mediaId,
   setActiveMediaId,
   setError,
-}: {
-  action: (mediaId: string) => Promise<void>;
-  fallbackMessage: string;
-  mediaId: string;
-  setActiveMediaId: (value: string | null) => void;
-  setError: (value: string) => void;
-}) {
+}: RunRecordPanelMediaStatusActionInput) {
   setActiveMediaId(mediaId); setError("");
   try {
     await action(mediaId);
