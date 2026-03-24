@@ -1040,6 +1040,10 @@ Last updated: 2026-03-24
   - dead-letter recovery summary retry-state statistics and bulk-action controls now live in dedicated modules instead of remaining combined inside `apps/web/components/dead-letter-recovery-summary.tsx`
   - the top-level summary now focuses more narrowly on section-level layout and composition while child modules own stats rendering and bulk action CTA rendering
   - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces these summary section boundaries and dedicated size ceilings for the extracted modules
+- Dead-Letter Recovery Panel Content Split V1:
+  - dead-letter recovery item-list rendering and empty-state rendering now live in a dedicated content module instead of remaining combined inside `apps/web/components/dead-letter-recovery-panel.tsx`
+  - the top-level panel now focuses more narrowly on summary/content composition while the content module owns per-item mapping and empty-state presentation
+  - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces this panel-content boundary and a dedicated size ceiling for the new module
 
 ## Next
 - Continue the next product slice

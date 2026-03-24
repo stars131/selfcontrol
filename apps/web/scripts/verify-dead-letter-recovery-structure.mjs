@@ -4,6 +4,11 @@ import path from "node:path";
 const panelPath = path.resolve(process.cwd(), "components/dead-letter-recovery-panel.tsx");
 const panelSource = fs.readFileSync(panelPath, "utf8");
 const panelLineCount = panelSource.split(/\r?\n/).length;
+const panelContentPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-content.tsx",
+);
+const panelContentSource = fs.readFileSync(panelContentPath, "utf8");
 const summaryPath = path.resolve(process.cwd(), "components/dead-letter-recovery-summary.tsx");
 const summarySource = fs.readFileSync(summaryPath, "utf8");
 const summaryStatsPath = path.resolve(process.cwd(), "components/dead-letter-recovery-summary-stats.tsx");
@@ -27,8 +32,8 @@ if (!panelSource.includes('import { DeadLetterRecoverySummary } from "./dead-let
   throw new Error("dead-letter-recovery-panel.tsx must import DeadLetterRecoverySummary");
 }
 
-if (!panelSource.includes('import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";')) {
-  throw new Error("dead-letter-recovery-panel.tsx must import DeadLetterRecoveryItemCard");
+if (!panelSource.includes('import { DeadLetterRecoveryPanelContent } from "./dead-letter-recovery-panel-content";')) {
+  throw new Error("dead-letter-recovery-panel.tsx must import DeadLetterRecoveryPanelContent");
 }
 
 if (!panelSource.includes('import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";')) {
@@ -39,8 +44,8 @@ if (!panelSource.includes("<DeadLetterRecoverySummary")) {
   throw new Error("dead-letter-recovery-panel.tsx must delegate summary rendering");
 }
 
-if (!panelSource.includes("<DeadLetterRecoveryItemCard")) {
-  throw new Error("dead-letter-recovery-panel.tsx must delegate item-card rendering");
+if (!panelSource.includes("<DeadLetterRecoveryPanelContent")) {
+  throw new Error("dead-letter-recovery-panel.tsx must delegate panel content rendering");
 }
 
 for (const requiredSummaryImport of [
@@ -228,6 +233,9 @@ for (const forbiddenToken of [
   "getMediaIssueAction(locale, item)",
   "buildMediaIssueSettingsHref(workspaceId, item)",
   "className=\"record-card\" key={item.media_id}",
+  "<DeadLetterRecoveryItemCard",
+  "mediaDeadLetterOverview?.items.length ?",
+  "mediaIssueCopy.noDeadLetter",
 ]) {
   if (panelSource.includes(forbiddenToken)) {
     throw new Error(`dead-letter-recovery-panel.tsx must keep detail rendering delegated: ${forbiddenToken}`);
@@ -237,6 +245,32 @@ for (const forbiddenToken of [
 const maxAllowedLines = 95;
 if (panelLineCount > maxAllowedLines) {
   throw new Error(`dead-letter-recovery-panel.tsx exceeded ${maxAllowedLines} lines: ${panelLineCount}`);
+}
+
+for (const requiredPanelContentImport of [
+  'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";',
+]) {
+  if (!panelContentSource.includes(requiredPanelContentImport)) {
+    throw new Error(`dead-letter-recovery-panel-content.tsx must import panel content dependencies: ${requiredPanelContentImport}`);
+  }
+}
+
+for (const requiredPanelContentUsage of [
+  "export function DeadLetterRecoveryPanelContent({",
+  "if (!mediaDeadLetterOverview?.items.length) {",
+  "mediaIssueCopy.noDeadLetter",
+  "<DeadLetterRecoveryItemCard",
+  "mediaDeadLetterOverview.items.map((item) => (",
+]) {
+  if (!panelContentSource.includes(requiredPanelContentUsage)) {
+    throw new Error(`dead-letter-recovery-panel-content.tsx must own list and empty-state rendering: ${requiredPanelContentUsage}`);
+  }
+}
+
+const panelContentLineCount = panelContentSource.split(/\r?\n/).length;
+if (panelContentLineCount > 60) {
+  throw new Error(`dead-letter-recovery-panel-content.tsx exceeded 60 lines: ${panelContentLineCount}`);
 }
 
 console.log("dead-letter recovery structure verification passed");
