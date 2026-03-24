@@ -1056,6 +1056,14 @@ Last updated: 2026-03-24
   - record-editor support-tools media contracts and reminder contracts now live in dedicated type modules instead of remaining combined inside `apps/web/components/record-editor-support-tools.types.ts`
   - the top-level support-tools type file now focuses more narrowly on composing the delegated media and reminder type groups into the exported `RecordEditorSupportToolsProps` contract
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this support-tools type-group boundary and dedicated size ceilings for the extracted modules
+- Support Tools Media Copy Prop Split V1:
+  - record-editor support-tools media derived copy labels, save/delete labels, and selected-record display flags now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-editor-support-tools-media-props.ts`
+  - the top-level media-props builder now focuses more narrowly on passing through runtime state and action handlers while the helper owns derived copy/state label mapping
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this media-copy helper boundary and dedicated size ceilings for the extracted modules
+- Support Tools Media Pass-Through Prop Split V1:
+  - record-editor support-tools media runtime pass-through state and action mapping now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-editor-support-tools-media-props.ts`
+  - the top-level media-props builder now focuses more narrowly on composing derived copy props and pass-through props while specialized helpers own each mapping surface
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this media pass-through helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

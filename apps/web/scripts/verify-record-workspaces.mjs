@@ -34,6 +34,16 @@ const editorSupportToolsPropsPath = "components/record-editor-support-tools-prop
 const editorSupportToolsPropsSource = readSource(editorSupportToolsPropsPath);
 const editorSupportToolsTypesPath = "components/record-editor-support-tools.types.ts";
 const editorSupportToolsTypesSource = readSource(editorSupportToolsTypesPath);
+const editorSupportToolsMediaPropsPath = "components/record-editor-support-tools-media-props.ts";
+const editorSupportToolsMediaPropsSource = readSource(editorSupportToolsMediaPropsPath);
+const editorSupportToolsMediaCopyPropsPath =
+  "components/record-editor-support-tools-media-copy-props.ts";
+const editorSupportToolsMediaCopyPropsSource = readSource(editorSupportToolsMediaCopyPropsPath);
+const editorSupportToolsMediaPassThroughPropsPath =
+  "components/record-editor-support-tools-media-pass-through-props.ts";
+const editorSupportToolsMediaPassThroughPropsSource = readSource(
+  editorSupportToolsMediaPassThroughPropsPath,
+);
 const editorSupportToolsMediaTypesPath = "components/record-editor-support-tools-media.types.ts";
 const editorSupportToolsMediaTypesSource = readSource(editorSupportToolsMediaTypesPath);
 const editorSupportToolsReminderTypesPath =
@@ -408,6 +418,102 @@ for (const forbiddenToken of ["<RecordMediaTools\n        allTrackedFilesPresent
 verifyLineLimit(editorSupportToolsPath, 120);
 verifyLineLimit(editorSupportToolsPropsPath, 20);
 verifyLineLimit(editorSupportToolsTypesPath, 10);
+
+for (const requiredSupportToolsMediaPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  'import { buildRecordMediaToolsCopyProps } from "./record-editor-support-tools-media-copy-props";',
+  'import { buildRecordMediaToolsPassThroughProps } from "./record-editor-support-tools-media-pass-through-props";',
+]) {
+  if (!editorSupportToolsMediaPropsSource.includes(requiredSupportToolsMediaPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-media-props.ts must import delegated media prop helpers: ${requiredSupportToolsMediaPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsMediaPropsUsage of [
+  "buildRecordMediaToolsCopyProps(props)",
+  "buildRecordMediaToolsPassThroughProps(props)",
+  "...copyProps",
+  "...passThroughProps",
+]) {
+  if (!editorSupportToolsMediaPropsSource.includes(requiredSupportToolsMediaPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-media-props.ts must delegate derived copy mapping: ${requiredSupportToolsMediaPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSupportToolsMediaPropsToken of [
+  "allTrackedFilesPresentLabel: panelCopy.allTrackedFilesPresent",
+  "deleteButtonLabel: deleting ? panelCopy.deleting : panelCopy.deleteRecord",
+  "hasSelectedRecord: Boolean(selectedRecord)",
+  "saveButtonLabel: saving ? panelCopy.saving : selectedRecord ? panelCopy.updateRecord : panelCopy.createRecord",
+  "workspaceStorageLabel: panelCopy.workspaceStorage",
+  "authToken,",
+  "mediaAssets,",
+  "selectedRecordMediaSizeLabel,",
+]) {
+  if (editorSupportToolsMediaPropsSource.includes(forbiddenSupportToolsMediaPropsToken)) {
+    throw new Error(
+      `record-editor-support-tools-media-props.ts must keep derived copy mapping delegated: ${forbiddenSupportToolsMediaPropsToken}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsMediaPropsPath, 35);
+
+for (const requiredSupportToolsMediaCopyPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+]) {
+  if (!editorSupportToolsMediaCopyPropsSource.includes(requiredSupportToolsMediaCopyPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-media-copy-props.ts must import media support-tool contracts: ${requiredSupportToolsMediaCopyPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsMediaCopyPropsUsage of [
+  "export function buildRecordMediaToolsCopyProps({",
+  "allTrackedFilesPresentLabel: panelCopy.allTrackedFilesPresent",
+  "deleteButtonLabel: deleting ? panelCopy.deleting : panelCopy.deleteRecord",
+  "saveButtonLabel: saving",
+  "workspaceStorageLabel: panelCopy.workspaceStorage",
+]) {
+  if (!editorSupportToolsMediaCopyPropsSource.includes(requiredSupportToolsMediaCopyPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-media-copy-props.ts must own derived media copy mapping: ${requiredSupportToolsMediaCopyPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsMediaCopyPropsPath, 35);
+
+for (const requiredSupportToolsMediaPassThroughPropsImport of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+]) {
+  if (!editorSupportToolsMediaPassThroughPropsSource.includes(requiredSupportToolsMediaPassThroughPropsImport)) {
+    throw new Error(
+      `record-editor-support-tools-media-pass-through-props.ts must import media support-tool contracts: ${requiredSupportToolsMediaPassThroughPropsImport}`,
+    );
+  }
+}
+
+for (const requiredSupportToolsMediaPassThroughPropsUsage of [
+  "export function buildRecordMediaToolsPassThroughProps({",
+  "...passThroughProps",
+  "void selectedRecord;",
+  "void panelCopy;",
+  "return passThroughProps;",
+]) {
+  if (!editorSupportToolsMediaPassThroughPropsSource.includes(requiredSupportToolsMediaPassThroughPropsUsage)) {
+    throw new Error(
+      `record-editor-support-tools-media-pass-through-props.ts must own runtime media prop pass-through mapping: ${requiredSupportToolsMediaPassThroughPropsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsMediaPassThroughPropsPath, 45);
 
 for (const requiredSupportToolsMediaTypesImport of [
   'import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types";',
