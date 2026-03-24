@@ -6,6 +6,13 @@ const panelSource = fs.readFileSync(panelPath, "utf8");
 const panelLineCount = panelSource.split(/\r?\n/).length;
 const summaryPath = path.resolve(process.cwd(), "components/dead-letter-recovery-summary.tsx");
 const summarySource = fs.readFileSync(summaryPath, "utf8");
+const summaryStatsPath = path.resolve(process.cwd(), "components/dead-letter-recovery-summary-stats.tsx");
+const summaryStatsSource = fs.readFileSync(summaryStatsPath, "utf8");
+const summaryActionsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-actions.tsx",
+);
+const summaryActionsSource = fs.readFileSync(summaryActionsPath, "utf8");
 const itemCardPath = path.resolve(process.cwd(), "components/dead-letter-recovery-item-card.tsx");
 const itemCardSource = fs.readFileSync(itemCardPath, "utf8");
 const itemCardTagsPath = path.resolve(process.cwd(), "components/dead-letter-recovery-item-card-tags.tsx");
@@ -36,12 +43,87 @@ if (!panelSource.includes("<DeadLetterRecoveryItemCard")) {
   throw new Error("dead-letter-recovery-panel.tsx must delegate item-card rendering");
 }
 
-if (!summarySource.includes("mediaDeadLetterOverview?.total_count ?? 0")) {
-  throw new Error("dead-letter-recovery-summary.tsx must keep total-count rendering");
+for (const requiredSummaryImport of [
+  'import { DeadLetterRecoverySummaryActions } from "./dead-letter-recovery-summary-actions";',
+  'import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";',
+]) {
+  if (!summarySource.includes(requiredSummaryImport)) {
+    throw new Error(`dead-letter-recovery-summary.tsx must import delegated summary helpers: ${requiredSummaryImport}`);
+  }
 }
 
-if (!summarySource.includes("Object.entries(mediaDeadLetterOverview.by_retry_state)")) {
-  throw new Error("dead-letter-recovery-summary.tsx must keep retry-state summary rendering");
+for (const requiredSummaryUsage of ["<DeadLetterRecoverySummaryStats", "<DeadLetterRecoverySummaryActions"]) {
+  if (!summarySource.includes(requiredSummaryUsage)) {
+    throw new Error(`dead-letter-recovery-summary.tsx must delegate summary sections: ${requiredSummaryUsage}`);
+  }
+}
+
+for (const forbiddenSummaryToken of [
+  "mediaDeadLetterOverview?.total_count ?? 0",
+  "Object.entries(mediaDeadLetterOverview.by_retry_state)",
+  "Object.entries(mediaDeadLetterOverview.by_issue_category)",
+  "mediaIssueCopy.retrySelectedPrefix",
+  "mediaIssueCopy.retryAll",
+]) {
+  if (summarySource.includes(forbiddenSummaryToken)) {
+    throw new Error(`dead-letter-recovery-summary.tsx must keep stats/actions rendering delegated: ${forbiddenSummaryToken}`);
+  }
+}
+
+const summaryLineCount = summarySource.split(/\r?\n/).length;
+if (summaryLineCount > 55) {
+  throw new Error(`dead-letter-recovery-summary.tsx exceeded 55 lines: ${summaryLineCount}`);
+}
+
+for (const requiredSummaryStatsImport of [
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";',
+]) {
+  if (!summaryStatsSource.includes(requiredSummaryStatsImport)) {
+    throw new Error(`dead-letter-recovery-summary-stats.tsx must import summary prop contracts: ${requiredSummaryStatsImport}`);
+  }
+}
+
+for (const requiredSummaryStatsUsage of [
+  "export function DeadLetterRecoverySummaryStats({",
+  "mediaDeadLetterOverview?.total_count ?? 0",
+  "Object.entries(mediaDeadLetterOverview.by_retry_state)",
+  "Object.entries(mediaDeadLetterOverview.by_issue_category)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (!summaryStatsSource.includes(requiredSummaryStatsUsage)) {
+    throw new Error(`dead-letter-recovery-summary-stats.tsx must own retry-state and issue summary rendering: ${requiredSummaryStatsUsage}`);
+  }
+}
+
+const summaryStatsLineCount = summaryStatsSource.split(/\r?\n/).length;
+if (summaryStatsLineCount > 40) {
+  throw new Error(`dead-letter-recovery-summary-stats.tsx exceeded 40 lines: ${summaryStatsLineCount}`);
+}
+
+for (const requiredSummaryActionsImport of [
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";',
+]) {
+  if (!summaryActionsSource.includes(requiredSummaryActionsImport)) {
+    throw new Error(`dead-letter-recovery-summary-actions.tsx must import summary action contracts: ${requiredSummaryActionsImport}`);
+  }
+}
+
+for (const requiredSummaryActionsUsage of [
+  "export function DeadLetterRecoverySummaryActions({",
+  "mediaIssueCopy.selectVisible",
+  "mediaIssueCopy.clearSelection",
+  "mediaIssueCopy.retrySelectedPrefix",
+  "mediaIssueCopy.retryAll",
+  "selectedDeadLetterIds.length",
+]) {
+  if (!summaryActionsSource.includes(requiredSummaryActionsUsage)) {
+    throw new Error(`dead-letter-recovery-summary-actions.tsx must own bulk-action rendering: ${requiredSummaryActionsUsage}`);
+  }
+}
+
+const summaryActionsLineCount = summaryActionsSource.split(/\r?\n/).length;
+if (summaryActionsLineCount > 55) {
+  throw new Error(`dead-letter-recovery-summary-actions.tsx exceeded 55 lines: ${summaryActionsLineCount}`);
 }
 
 if (!itemCardSource.includes("const action = getMediaIssueAction(locale, item);")) {

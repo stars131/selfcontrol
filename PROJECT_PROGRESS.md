@@ -1036,6 +1036,10 @@ Last updated: 2026-03-24
   - dead-letter recovery item-card tag rendering and action-row rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/dead-letter-recovery-item-card.tsx`
   - the top-level item card now focuses more narrowly on issue-level action lookup, settings-link derivation, timestamp display, and error presentation while child modules own tags and CTA rendering
   - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces these item-card section boundaries and dedicated size ceilings for the extracted modules
+- Dead-Letter Recovery Summary Section Split V1:
+  - dead-letter recovery summary retry-state statistics and bulk-action controls now live in dedicated modules instead of remaining combined inside `apps/web/components/dead-letter-recovery-summary.tsx`
+  - the top-level summary now focuses more narrowly on section-level layout and composition while child modules own stats rendering and bulk action CTA rendering
+  - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` now enforces these summary section boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
