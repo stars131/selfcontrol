@@ -976,6 +976,10 @@ Last updated: 2026-03-24
   - workspace-entry client shared props, loading shell, and main-panel prop assembly now live in dedicated helper modules instead of remaining combined inside `apps/web/components/workspace-entry-client.tsx`
   - the top-level entry client now focuses more narrowly on controller composition and locale wiring while delegated helpers own loading presentation and main-panel input shaping
   - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these client-helper boundaries and dedicated size ceilings for the extracted modules
+- Workspace Transfer Jobs Section Split V1:
+  - workspace transfer-jobs section shared contracts, list rendering, and per-job card rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/workspace-transfer-jobs-section.tsx`
+  - the top-level transfer-jobs section now focuses more narrowly on section header and refresh action wiring while extracted modules own list empty-state and item-specific actions
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces these transfer-jobs boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

@@ -15,6 +15,22 @@ const workspaceEntryLoadingShellPath = path.resolve(
   "components/workspace-entry-loading-shell.tsx",
 );
 const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/workspace-entry-main-panel.tsx");
+const workspaceTransferJobsSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-section.tsx",
+);
+const workspaceTransferJobsSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-section.types.ts",
+);
+const workspaceTransferJobsListPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-list.tsx",
+);
+const workspaceTransferJobCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-job-card.tsx",
+);
 const workspaceEntryControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-entry-controller.ts",
@@ -41,6 +57,10 @@ const clientHelpersSource = fs.readFileSync(workspaceEntryClientHelpersPath, "ut
 const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8");
 const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
+const transferJobsSectionSource = fs.readFileSync(workspaceTransferJobsSectionPath, "utf8");
+const transferJobsSectionTypesSource = fs.readFileSync(workspaceTransferJobsSectionTypesPath, "utf8");
+const transferJobsListSource = fs.readFileSync(workspaceTransferJobsListPath, "utf8");
+const transferJobCardSource = fs.readFileSync(workspaceTransferJobCardPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
 const controllerStateSource = fs.readFileSync(workspaceEntryControllerStatePath, "utf8");
 const controllerDerivedDataSource = fs.readFileSync(
@@ -55,6 +75,10 @@ const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
+const transferJobsSectionLineCount = transferJobsSectionSource.split(/\r?\n/).length;
+const transferJobsSectionTypesLineCount = transferJobsSectionTypesSource.split(/\r?\n/).length;
+const transferJobsListLineCount = transferJobsListSource.split(/\r?\n/).length;
+const transferJobCardLineCount = transferJobCardSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const controllerStateLineCount = controllerStateSource.split(/\r?\n/).length;
 const controllerDerivedDataLineCount = controllerDerivedDataSource.split(/\r?\n/).length;
@@ -218,6 +242,89 @@ for (const requiredLoadingShellUsage of [
 
 if (loadingShellLineCount > 15) {
   throw new Error(`workspace-entry-loading-shell.tsx exceeded 15 lines: ${loadingShellLineCount}`);
+}
+
+for (const requiredTransferJobsSectionImport of [
+  'import { WorkspaceTransferJobsList } from "./workspace-transfer-jobs-list";',
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";',
+]) {
+  if (!transferJobsSectionSource.includes(requiredTransferJobsSectionImport)) {
+    throw new Error(`workspace-transfer-jobs-section.tsx must import delegated transfer-jobs helpers: ${requiredTransferJobsSectionImport}`);
+  }
+}
+
+for (const requiredTransferJobsSectionUsage of [
+  "<WorkspaceTransferJobsList",
+  "jobsLoading ? `${copy.refreshJobs}...` : copy.refreshJobs",
+]) {
+  if (!transferJobsSectionSource.includes(requiredTransferJobsSectionUsage)) {
+    throw new Error(`workspace-transfer-jobs-section.tsx must delegate transfer-jobs list rendering: ${requiredTransferJobsSectionUsage}`);
+  }
+}
+
+for (const forbiddenTransferJobsSectionToken of [
+  'import Link from "next/link";',
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { WorkspaceTransferJob } from "../lib/types";',
+  "type WorkspaceTransferJobsCopy = {",
+  "const importedWorkspaceId =",
+  "transferJobs.map((job) => {",
+  "<article className=\"message\"",
+]) {
+  if (transferJobsSectionSource.includes(forbiddenTransferJobsSectionToken)) {
+    throw new Error(`workspace-transfer-jobs-section.tsx must keep item rendering and props delegated: ${forbiddenTransferJobsSectionToken}`);
+  }
+}
+
+if (transferJobsSectionLineCount > 45) {
+  throw new Error(`workspace-transfer-jobs-section.tsx exceeded 45 lines: ${transferJobsSectionLineCount}`);
+}
+
+for (const requiredTransferJobsSectionTypesUsage of [
+  "export type WorkspaceTransferJobsCopy = {",
+  "export type WorkspaceTransferJobsSectionProps = {",
+  "transferJobs: WorkspaceTransferJob[];",
+]) {
+  if (!transferJobsSectionTypesSource.includes(requiredTransferJobsSectionTypesUsage)) {
+    throw new Error(`workspace-transfer-jobs-section.types.ts must own transfer-jobs contracts: ${requiredTransferJobsSectionTypesUsage}`);
+  }
+}
+
+if (transferJobsSectionTypesLineCount > 25) {
+  throw new Error(`workspace-transfer-jobs-section.types.ts exceeded 25 lines: ${transferJobsSectionTypesLineCount}`);
+}
+
+for (const requiredTransferJobsListUsage of [
+  'import { WorkspaceTransferJobCard } from "./workspace-transfer-job-card";',
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";',
+  "transferJobs.map((job) => (",
+  "<WorkspaceTransferJobCard",
+  "{copy.noJobs}",
+]) {
+  if (!transferJobsListSource.includes(requiredTransferJobsListUsage)) {
+    throw new Error(`workspace-transfer-jobs-list.tsx must own transfer-jobs list rendering: ${requiredTransferJobsListUsage}`);
+  }
+}
+
+if (transferJobsListLineCount > 35) {
+  throw new Error(`workspace-transfer-jobs-list.tsx exceeded 35 lines: ${transferJobsListLineCount}`);
+}
+
+for (const requiredTransferJobCardUsage of [
+  'import Link from "next/link";',
+  'import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types";',
+  "const importedWorkspaceId =",
+  'href={`/app/workspaces/${importedWorkspaceId}`}',
+  "onClick={() => void onDownloadTransferJob(job.id)}",
+  "new Date(job.created_at).toLocaleString(locale)",
+]) {
+  if (!transferJobCardSource.includes(requiredTransferJobCardUsage)) {
+    throw new Error(`workspace-transfer-job-card.tsx must own transfer-job item rendering: ${requiredTransferJobCardUsage}`);
+  }
+}
+
+if (transferJobCardLineCount > 55) {
+  throw new Error(`workspace-transfer-job-card.tsx exceeded 55 lines: ${transferJobCardLineCount}`);
 }
 
 const maxMainPanelLines = 110;
