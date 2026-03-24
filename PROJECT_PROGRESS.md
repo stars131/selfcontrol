@@ -1012,6 +1012,10 @@ Last updated: 2026-03-24
   - record-panel dead-letter selection updates, selectable-id derivation, bulk-retry request building, and fallback error formatting now live in a dedicated helper module instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-actions.ts`
   - the top-level dead-letter action module now focuses more narrowly on selection and retry orchestration while the helper owns retry-state-specific details
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this dead-letter helper boundary and dedicated size ceilings for the extracted modules
+- Record Panel View-Data Helper Split V1:
+  - record-panel avoid-count, food-count, selected-record lookup, selected-media-size formatting, and actionable dead-letter derivation now live in a dedicated helper module instead of remaining combined inside `apps/web/components/use-record-panel-controller-view-data.ts`
+  - the top-level view-data hook now focuses more narrowly on locale-aware memo composition, location derivation, and bundle wiring while the helper owns reusable counting and selection logic
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this view-data helper boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

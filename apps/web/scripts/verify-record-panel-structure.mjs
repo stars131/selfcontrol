@@ -32,6 +32,14 @@ const recordPanelControllerHandlerGroupsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-handler-groups.ts",
 );
+const recordPanelControllerViewDataPath = path.resolve(
+  process.cwd(),
+  "components/use-record-panel-controller-view-data.ts",
+);
+const recordPanelControllerViewDataHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-view-data-helpers.ts",
+);
 const recordPanelRecordHandlersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-handlers.ts",
@@ -136,6 +144,11 @@ const editorWorkspaceBasePropsTypesSource = fs.readFileSync(
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
+const controllerViewDataSource = fs.readFileSync(recordPanelControllerViewDataPath, "utf8");
+const controllerViewDataHelpersSource = fs.readFileSync(
+  recordPanelControllerViewDataHelpersPath,
+  "utf8",
+);
 const recordHandlersSource = fs.readFileSync(recordPanelRecordHandlersPath, "utf8");
 const handlerGroupInputsSource = fs.readFileSync(recordPanelHandlerGroupInputsPath, "utf8");
 const formActionsSource = fs.readFileSync(recordPanelFormActionsPath, "utf8");
@@ -168,6 +181,8 @@ const editorWorkspaceBasePropsTypesLines =
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
+const controllerViewDataLines = controllerViewDataSource.split(/\r?\n/).length;
+const controllerViewDataHelpersLines = controllerViewDataHelpersSource.split(/\r?\n/).length;
 const recordHandlersLines = recordHandlersSource.split(/\r?\n/).length;
 const handlerGroupInputsLines = handlerGroupInputsSource.split(/\r?\n/).length;
 const formActionsLines = formActionsSource.split(/\r?\n/).length;
@@ -464,6 +479,90 @@ for (const forbiddenControllerToken of [
 const maxControllerLines = 130;
 if (controllerLines > maxControllerLines) {
   throw new Error(`use-record-panel-controller.ts exceeded ${maxControllerLines} lines: ${controllerLines}`);
+}
+
+for (const requiredControllerViewDataImport of [
+  'from "../lib/location";',
+  'from "../lib/locale";',
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-ui";',
+  'from "./record-panel-controller-view-data-helpers";',
+]) {
+  if (!controllerViewDataSource.includes(requiredControllerViewDataImport)) {
+    throw new Error(
+      `use-record-panel-controller-view-data.ts must import delegated view-data helpers: ${requiredControllerViewDataImport}`,
+    );
+  }
+}
+
+for (const requiredControllerViewDataUsage of [
+  "countAvoidRecords(records)",
+  "countFoodRecords(records)",
+  "findSelectedRecord(records, selectedRecordId)",
+  "getSelectedRecordMediaSizeLabel(mediaAssets)",
+  "getActionableDeadLetterIds(mediaDeadLetterOverview)",
+]) {
+  if (!controllerViewDataSource.includes(requiredControllerViewDataUsage)) {
+    throw new Error(
+      `use-record-panel-controller-view-data.ts must delegate view-data derivation: ${requiredControllerViewDataUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerViewDataToken of [
+  "records.filter((record) => record.is_avoid).length",
+  'records.filter((record) => record.type_code === "food").length',
+  "records.find((record) => record.id === selectedRecordId) ?? null",
+  "formatByteCount(mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0))",
+  "canRetryMediaIssue(item)",
+]) {
+  if (controllerViewDataSource.includes(forbiddenControllerViewDataToken)) {
+    throw new Error(
+      `use-record-panel-controller-view-data.ts must keep view-data derivation internals delegated: ${forbiddenControllerViewDataToken}`,
+    );
+  }
+}
+
+const maxControllerViewDataLines = 80;
+if (controllerViewDataLines > maxControllerViewDataLines) {
+  throw new Error(
+    `use-record-panel-controller-view-data.ts exceeded ${maxControllerViewDataLines} lines: ${controllerViewDataLines}`,
+  );
+}
+
+for (const requiredControllerViewDataHelpersImport of [
+  'from "../lib/record-panel-format";',
+  'from "../lib/record-panel-media";',
+  'from "../lib/types";',
+]) {
+  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-view-data-helpers.ts must import view-data helper contracts: ${requiredControllerViewDataHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredControllerViewDataHelpersUsage of [
+  "export function countAvoidRecords(records: RecordItem[])",
+  "export function countFoodRecords(records: RecordItem[])",
+  "export function findSelectedRecord(records: RecordItem[], selectedRecordId?: string | null)",
+  "export function getSelectedRecordMediaSizeLabel(mediaAssets: MediaAsset[])",
+  "export function getActionableDeadLetterIds(",
+  "formatByteCount(",
+  "canRetryMediaIssue(",
+]) {
+  if (!controllerViewDataHelpersSource.includes(requiredControllerViewDataHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-view-data-helpers.ts must own view-data helper details: ${requiredControllerViewDataHelpersUsage}`,
+    );
+  }
+}
+
+const maxControllerViewDataHelpersLines = 35;
+if (controllerViewDataHelpersLines > maxControllerViewDataHelpersLines) {
+  throw new Error(
+    `record-panel-controller-view-data-helpers.ts exceeded ${maxControllerViewDataHelpersLines} lines: ${controllerViewDataHelpersLines}`,
+  );
 }
 
 const handlerGroupsSource = fs.readFileSync(recordPanelControllerHandlerGroupsPath, "utf8");

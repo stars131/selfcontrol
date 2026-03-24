@@ -1,14 +1,11 @@
 "use client";
-
 import { useMemo } from "react";
-
 import { readLocationHistory, readLocationReview } from "../lib/location";
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import { formatByteCount } from "../lib/record-panel-format";
-import { canRetryMediaIssue } from "../lib/record-panel-media";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import type { LocationReview, MediaAsset, MediaDeadLetterOverview, RecordItem } from "../lib/types";
+import { countAvoidRecords, countFoodRecords, findSelectedRecord, getActionableDeadLetterIds, getSelectedRecordMediaSizeLabel } from "./record-panel-controller-view-data-helpers";
 
 export function useRecordPanelControllerViewData({
   mediaAssets,
@@ -22,16 +19,9 @@ export function useRecordPanelControllerViewData({
   selectedRecordId?: string | null;
 }) {
   const { locale } = useStoredLocale();
-
-  const avoidCount = useMemo(() => records.filter((record) => record.is_avoid).length, [records]);
-  const foodCount = useMemo(
-    () => records.filter((record) => record.type_code === "food").length,
-    [records],
-  );
-  const selectedRecord = useMemo(
-    () => records.find((record) => record.id === selectedRecordId) ?? null,
-    [records, selectedRecordId],
-  );
+  const avoidCount = useMemo(() => countAvoidRecords(records), [records]);
+  const foodCount = useMemo(() => countFoodRecords(records), [records]);
+  const selectedRecord = useMemo(() => findSelectedRecord(records, selectedRecordId), [records, selectedRecordId]);
   const selectedLocationReview = useMemo<LocationReview | null>(
     () => readLocationReview(selectedRecord?.extra_data),
     [selectedRecord],
@@ -41,16 +31,11 @@ export function useRecordPanelControllerViewData({
     [selectedRecord],
   );
   const selectedRecordMediaSizeLabel = useMemo(
-    () => formatByteCount(mediaAssets.reduce((sum, asset) => sum + asset.size_bytes, 0)),
+    () => getSelectedRecordMediaSizeLabel(mediaAssets),
     [mediaAssets],
   );
   const actionableDeadLetterIds = useMemo(
-    () =>
-      new Set(
-        (mediaDeadLetterOverview?.items ?? [])
-          .filter((item) => canRetryMediaIssue(item))
-          .map((item) => item.media_id),
-      ),
+    () => getActionableDeadLetterIds(mediaDeadLetterOverview),
     [mediaDeadLetterOverview],
   );
 
