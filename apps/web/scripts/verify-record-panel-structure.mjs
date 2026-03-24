@@ -313,6 +313,10 @@ const recordPanelControllerResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-result.ts",
 );
+const recordPanelControllerResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-result.types.ts",
+);
 const recordPanelControllerStateResultPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-state-result.ts",
@@ -1057,6 +1061,10 @@ const controllerSupportingFormStateSource = fs.readFileSync(
 const controllerMediaStateSource = fs.readFileSync(recordPanelControllerMediaStatePath, "utf8");
 const controllerBrowseStateSource = fs.readFileSync(recordPanelControllerBrowseStatePath, "utf8");
 const controllerResultSource = fs.readFileSync(recordPanelControllerResultPath, "utf8");
+const controllerResultTypesSource = fs.readFileSync(
+  recordPanelControllerResultTypesPath,
+  "utf8",
+);
 const controllerStateResultSource = fs.readFileSync(recordPanelControllerStateResultPath, "utf8");
 const controllerViewDataResultSource = fs.readFileSync(
   recordPanelControllerViewDataResultPath,
@@ -1434,6 +1442,7 @@ const controllerSupportingFormStateLines =
 const controllerMediaStateLines = controllerMediaStateSource.split(/\r?\n/).length;
 const controllerBrowseStateLines = controllerBrowseStateSource.split(/\r?\n/).length;
 const controllerResultLines = controllerResultSource.split(/\r?\n/).length;
+const controllerResultTypesLines = controllerResultTypesSource.split(/\r?\n/).length;
 const controllerStateResultLines = controllerStateResultSource.split(/\r?\n/).length;
 const controllerViewDataResultLines =
   controllerViewDataResultSource.split(/\r?\n/).length;
@@ -5305,11 +5314,9 @@ if (mediaHandlerInputLines > maxMediaHandlerInputLines) {
 }
 
 for (const requiredControllerResultImport of [
-  'from "./record-panel-controller-handler-groups";',
+  'from "./record-panel-controller-result.types";',
   'from "./record-panel-controller-state-result";',
   'from "./record-panel-controller-view-data-result";',
-  'from "./use-record-panel-controller-state";',
-  'from "./use-record-panel-controller-view-data";',
 ]) {
   if (!controllerResultSource.includes(requiredControllerResultImport)) {
     throw new Error(
@@ -5320,6 +5327,7 @@ for (const requiredControllerResultImport of [
 
 for (const requiredControllerResultUsage of [
   "export function buildRecordPanelControllerResult({",
+  "}: BuildRecordPanelControllerResultInput) {",
   "buildRecordPanelControllerViewDataResult(viewData)",
   "buildRecordPanelControllerStateResult(state)",
   "...recordHandlers",
@@ -5338,6 +5346,12 @@ for (const forbiddenControllerResultToken of [
   "useState(",
   "createRecordPanelControllerHandlerGroups(",
   "useRecordPanelControllerSync(",
+  'from "./record-panel-controller-handler-groups";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerState = ReturnType<",
+  "type ControllerViewData = ReturnType<",
+  "type ControllerHandlers = ReturnType<",
   "locale: viewData.locale,",
   "form: state.form,",
   "detailCopy: viewData.detailCopy,",
@@ -5353,6 +5367,38 @@ const maxControllerResultLines = 80;
 if (controllerResultLines > maxControllerResultLines) {
   throw new Error(
     `record-panel-controller-result.ts exceeded ${maxControllerResultLines} lines: ${controllerResultLines}`,
+  );
+}
+
+for (const requiredControllerResultTypesImport of [
+  'from "./record-panel-controller-handler-groups";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+]) {
+  if (!controllerResultTypesSource.includes(requiredControllerResultTypesImport)) {
+    throw new Error(
+      `record-panel-controller-result.types.ts must import controller result type contracts: ${requiredControllerResultTypesImport}`,
+    );
+  }
+}
+
+for (const requiredControllerResultTypesUsage of [
+  "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
+  "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
+  "type ControllerHandlers = ReturnType<typeof createRecordPanelControllerHandlerGroups>;",
+  'export type BuildRecordPanelControllerResultInput = { mediaHandlers: ControllerHandlers["mediaHandlers"]; recordHandlers: ControllerHandlers["recordHandlers"]; state: ControllerState; viewData: ControllerViewData };',
+]) {
+  if (!controllerResultTypesSource.includes(requiredControllerResultTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-result.types.ts must own controller result type contracts: ${requiredControllerResultTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerResultTypesLines = 8;
+if (controllerResultTypesLines > maxControllerResultTypesLines) {
+  throw new Error(
+    `record-panel-controller-result.types.ts exceeded ${maxControllerResultTypesLines} lines: ${controllerResultTypesLines}`,
   );
 }
 
