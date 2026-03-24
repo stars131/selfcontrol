@@ -1,7 +1,7 @@
-import type { RecordEditorWorkspaceProps } from "./record-panel-v2-workspace-props.types";
+import type { RecordEditorWorkspaceReminderCopyProps } from "./record-panel-v2-editor-workspace-copy-output-props.types";
 import type { RecordEditorWorkspaceCopyPropsInput } from "./record-panel-v2-editor-workspace-copy-props-input.types";
 
-export function buildRecordEditorWorkspaceReminderCopyProps({ detailCopy }: RecordEditorWorkspaceCopyPropsInput): Pick<RecordEditorWorkspaceProps, "createReminderLabel" | "deleteReminderLabel" | "enableReminderLabel" | "markReminderDoneLabel" | "noRemindersLabel" | "pauseReminderLabel" | "reminderNoteLabel" | "reminderNotePlaceholder" | "reminderSectionDescription" | "reminderSectionTitle" | "reminderTitleLabel" | "reminderTitlePlaceholder" | "remindAtLabel" | "savingReminderLabel" | "untitledReminderLabel"> {
+export function buildRecordEditorWorkspaceReminderCopyProps({ detailCopy }: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceReminderCopyProps {
   return {
     createReminderLabel: detailCopy.createReminder,
     deleteReminderLabel: detailCopy.deleteReminder,

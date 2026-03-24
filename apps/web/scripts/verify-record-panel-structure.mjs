@@ -104,6 +104,10 @@ const recordPanelEditorWorkspaceCopyPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-copy-props.ts",
 );
+const recordPanelEditorWorkspaceCopyOutputPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-editor-workspace-copy-output-props.types.ts",
+);
 const recordPanelEditorWorkspaceCopyPropsInputTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-editor-workspace-copy-props-input.types.ts",
@@ -879,6 +883,10 @@ const editorWorkspaceCopyPropsSource = fs.readFileSync(
   recordPanelEditorWorkspaceCopyPropsPath,
   "utf8",
 );
+const editorWorkspaceCopyOutputPropsTypesSource = fs.readFileSync(
+  recordPanelEditorWorkspaceCopyOutputPropsTypesPath,
+  "utf8",
+);
 const editorWorkspaceCopyPropsInputTypesSource = fs.readFileSync(
   recordPanelEditorWorkspaceCopyPropsInputTypesPath,
   "utf8",
@@ -1334,6 +1342,8 @@ const browseWorkspaceCopyPropsLines = browseWorkspaceCopyPropsSource.split(/\r?\
 const browseWorkspacePropsInputTypesLines =
   browseWorkspacePropsInputTypesSource.split(/\r?\n/).length;
 const editorWorkspaceCopyPropsLines = editorWorkspaceCopyPropsSource.split(/\r?\n/).length;
+const editorWorkspaceCopyOutputPropsTypesLines =
+  editorWorkspaceCopyOutputPropsTypesSource.split(/\r?\n/).length;
 const editorWorkspaceCopyPropsInputTypesLines =
   editorWorkspaceCopyPropsInputTypesSource.split(/\r?\n/).length;
 const editorWorkspaceChannelCopyPropsLines =
@@ -2373,6 +2383,7 @@ if (editorWorkspaceCopyPropsInputTypesLines > maxEditorWorkspaceCopyPropsInputTy
 }
 
 for (const requiredEditorWorkspaceCopyPropsImport of [
+  'from "./record-panel-v2-editor-workspace-copy-output-props.types";',
   'from "./record-panel-v2-editor-workspace-copy-props-input.types";',
   'from "./record-panel-v2-editor-workspace-channel-copy-props";',
   'from "./record-panel-v2-editor-workspace-media-copy-props";',
@@ -2386,7 +2397,7 @@ for (const requiredEditorWorkspaceCopyPropsImport of [
 }
 
 for (const requiredEditorWorkspaceCopyPropsUsage of [
-  "export function buildRecordEditorWorkspaceCopyProps({",
+  "}: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceCopyProps {",
   "...buildRecordEditorWorkspaceChannelCopyProps(input)",
   "...buildRecordEditorWorkspaceMediaCopyProps(input)",
   "...buildRecordEditorWorkspaceReminderCopyProps(input)",
@@ -2418,8 +2429,38 @@ if (editorWorkspaceCopyPropsLines > maxEditorWorkspaceCopyPropsLines) {
   );
 }
 
-for (const requiredEditorWorkspaceChannelCopyPropsImport of [
+for (const requiredEditorWorkspaceCopyOutputPropsTypesImport of [
   'from "./record-panel-v2-workspace-props.types";',
+]) {
+  if (!editorWorkspaceCopyOutputPropsTypesSource.includes(requiredEditorWorkspaceCopyOutputPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-copy-output-props.types.ts must import editor copy output contracts: ${requiredEditorWorkspaceCopyOutputPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredEditorWorkspaceCopyOutputPropsTypesUsage of [
+  'export type RecordEditorWorkspaceChannelCopyProps = Pick<RecordEditorWorkspaceProps, "channelInAppLabel" | "channelLabel">;',
+  'export type RecordEditorWorkspaceMediaCopyProps = Pick<RecordEditorWorkspaceProps, "largestFilePrefixLabel" | "noMediaLabel">;',
+  'export type RecordEditorWorkspaceReminderCopyProps = Pick<RecordEditorWorkspaceProps, "createReminderLabel" | "deleteReminderLabel" | "enableReminderLabel" | "markReminderDoneLabel" | "noRemindersLabel" | "pauseReminderLabel" | "reminderNoteLabel" | "reminderNotePlaceholder" | "reminderSectionDescription" | "reminderSectionTitle" | "reminderTitleLabel" | "reminderTitlePlaceholder" | "remindAtLabel" | "savingReminderLabel" | "untitledReminderLabel">;',
+  "export type RecordEditorWorkspaceCopyProps = RecordEditorWorkspaceChannelCopyProps & RecordEditorWorkspaceMediaCopyProps & RecordEditorWorkspaceReminderCopyProps;",
+]) {
+  if (!editorWorkspaceCopyOutputPropsTypesSource.includes(requiredEditorWorkspaceCopyOutputPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-editor-workspace-copy-output-props.types.ts must own editor copy output typing: ${requiredEditorWorkspaceCopyOutputPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxEditorWorkspaceCopyOutputPropsTypesLines = 7;
+if (editorWorkspaceCopyOutputPropsTypesLines > maxEditorWorkspaceCopyOutputPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-editor-workspace-copy-output-props.types.ts exceeded ${maxEditorWorkspaceCopyOutputPropsTypesLines} lines: ${editorWorkspaceCopyOutputPropsTypesLines}`,
+  );
+}
+
+for (const requiredEditorWorkspaceChannelCopyPropsImport of [
+  'from "./record-panel-v2-editor-workspace-copy-output-props.types";',
   'from "./record-panel-v2-editor-workspace-copy-props-input.types";',
 ]) {
   if (!editorWorkspaceChannelCopyPropsSource.includes(requiredEditorWorkspaceChannelCopyPropsImport)) {
@@ -2444,6 +2485,8 @@ for (const requiredEditorWorkspaceChannelCopyPropsUsage of [
 for (const forbiddenEditorWorkspaceChannelCopyPropsToken of [
   "BuildRecordEditorWorkspacePropsInput",
   'Pick<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
+  'from "./record-panel-v2-workspace-props.types";',
+  'Pick<RecordEditorWorkspaceProps, "channelInAppLabel" | "channelLabel">',
 ]) {
   if (editorWorkspaceChannelCopyPropsSource.includes(forbiddenEditorWorkspaceChannelCopyPropsToken)) {
     throw new Error(
@@ -2460,7 +2503,7 @@ if (editorWorkspaceChannelCopyPropsLines > maxEditorWorkspaceChannelCopyPropsLin
 }
 
 for (const requiredEditorWorkspaceMediaCopyPropsImport of [
-  'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-copy-output-props.types";',
   'from "./record-panel-v2-editor-workspace-copy-props-input.types";',
 ]) {
   if (!editorWorkspaceMediaCopyPropsSource.includes(requiredEditorWorkspaceMediaCopyPropsImport)) {
@@ -2485,6 +2528,8 @@ for (const requiredEditorWorkspaceMediaCopyPropsUsage of [
 for (const forbiddenEditorWorkspaceMediaCopyPropsToken of [
   "BuildRecordEditorWorkspacePropsInput",
   'Pick<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
+  'from "./record-panel-v2-workspace-props.types";',
+  'Pick<RecordEditorWorkspaceProps, "largestFilePrefixLabel" | "noMediaLabel">',
 ]) {
   if (editorWorkspaceMediaCopyPropsSource.includes(forbiddenEditorWorkspaceMediaCopyPropsToken)) {
     throw new Error(
@@ -2501,7 +2546,7 @@ if (editorWorkspaceMediaCopyPropsLines > maxEditorWorkspaceMediaCopyPropsLines) 
 }
 
 for (const requiredEditorWorkspaceReminderCopyPropsImport of [
-  'from "./record-panel-v2-workspace-props.types";',
+  'from "./record-panel-v2-editor-workspace-copy-output-props.types";',
   'from "./record-panel-v2-editor-workspace-copy-props-input.types";',
 ]) {
   if (!editorWorkspaceReminderCopyPropsSource.includes(requiredEditorWorkspaceReminderCopyPropsImport)) {
@@ -2527,6 +2572,8 @@ for (const requiredEditorWorkspaceReminderCopyPropsUsage of [
 for (const forbiddenEditorWorkspaceReminderCopyPropsToken of [
   "BuildRecordEditorWorkspacePropsInput",
   'Pick<BuildRecordEditorWorkspacePropsInput, "detailCopy">',
+  'from "./record-panel-v2-workspace-props.types";',
+  'Pick<RecordEditorWorkspaceProps, "createReminderLabel"',
 ]) {
   if (editorWorkspaceReminderCopyPropsSource.includes(forbiddenEditorWorkspaceReminderCopyPropsToken)) {
     throw new Error(

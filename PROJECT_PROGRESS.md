@@ -1420,6 +1420,10 @@ Last updated: 2026-03-24
   - editor-workspace controller wrapper arg contract now lives in `apps/web/components/record-panel-v2-editor-workspace-controller-input.types.ts` instead of remaining embedded across the aggregate, action, display, and formatter wrapper function signatures
   - `apps/web/components/record-panel-v2-editor-workspace-controller-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-controller-action-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-controller-display-input.ts`, and `apps/web/components/record-panel-v2-editor-workspace-controller-formatter-input.ts` now consume the shared wrapper-arg contract behind thinner mapping-only boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace controller wrapper-arg boundary and keeps inline `Pick<RecordPanelShellInput, ...>` signatures out of the controller wrapper modules
+- Record Panel Editor Workspace Copy Output Type Split V1:
+  - editor-workspace channel/media/reminder copy output contracts now live in `apps/web/components/record-panel-v2-editor-workspace-copy-output-props.types.ts` instead of remaining embedded directly in the copy helper and aggregator signatures
+  - `apps/web/components/record-panel-v2-editor-workspace-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-channel-copy-props.ts`, `apps/web/components/record-panel-v2-editor-workspace-media-copy-props.ts`, and `apps/web/components/record-panel-v2-editor-workspace-reminder-copy-props.ts` now consume the extracted output contracts behind thinner copy-mapping boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the editor-workspace copy output-type boundary and keeps inline `Pick<RecordEditorWorkspaceProps, ...>` signatures out of the copy helper modules
 
 ## Next
 - Continue the next product slice
