@@ -1,16 +1,6 @@
 "use client";
-
-import type { RecordItem } from "../lib/types";
-
-export function RecordPanelLegacyListItem({
-  record,
-  selected,
-  onSelectRecord,
-}: {
-  record: RecordItem;
-  selected: boolean;
-  onSelectRecord: (recordId: string) => void;
-}) {
+import type { RecordPanelLegacyListItemProps } from "./record-panel-legacy-list.types";
+export function RecordPanelLegacyListItem({ record, selected, onSelectRecord }: RecordPanelLegacyListItemProps) {
   return (
     <article
       className={`record-card selectable-card ${selected ? "selected" : ""}`}

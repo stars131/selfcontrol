@@ -1,18 +1,8 @@
 "use client";
-
-import type { RecordItem } from "../lib/types";
 import { RecordPanelLegacyListEmpty } from "./record-panel-legacy-list-empty";
 import { RecordPanelLegacyListItem } from "./record-panel-legacy-list-item";
-
-export function RecordPanelLegacyList({
-  records,
-  selectedRecordId,
-  onSelectRecord,
-}: {
-  records: RecordItem[];
-  selectedRecordId: string | null;
-  onSelectRecord: (recordId: string) => void;
-}) {
+import type { RecordPanelLegacyListProps } from "./record-panel-legacy-list.types";
+export function RecordPanelLegacyList({ records, selectedRecordId, onSelectRecord }: RecordPanelLegacyListProps) {
   return (
     <div style={{ marginTop: 20 }} className="record-list">
       {records.length ? (

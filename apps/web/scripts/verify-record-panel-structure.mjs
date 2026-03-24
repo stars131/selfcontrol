@@ -811,6 +811,10 @@ const legacyRecordPanelListPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-list.tsx",
 );
+const legacyRecordPanelListTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-list.types.ts",
+);
 const legacyRecordPanelListItemPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-list-item.tsx",
@@ -875,6 +879,7 @@ const legacyRecordPanelClassificationFieldsSource = fs.readFileSync(
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
 const legacyRecordPanelFormActionsSource = fs.readFileSync(legacyRecordPanelFormActionsPath, "utf8");
 const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "utf8");
+const legacyRecordPanelListTypesSource = fs.readFileSync(legacyRecordPanelListTypesPath, "utf8");
 const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
 const legacyRecordPanelListEmptySource = fs.readFileSync(legacyRecordPanelListEmptyPath, "utf8");
 const legacyRecordPanelStatsSource = fs.readFileSync(legacyRecordPanelStatsPath, "utf8");
@@ -1445,6 +1450,8 @@ const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/
 const legacyRecordPanelFormActionsLines =
   legacyRecordPanelFormActionsSource.split(/\r?\n/).length;
 const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).length;
+const legacyRecordPanelListTypesLines =
+  legacyRecordPanelListTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelListItemLines = legacyRecordPanelListItemSource.split(/\r?\n/).length;
 const legacyRecordPanelListEmptyLines = legacyRecordPanelListEmptySource.split(/\r?\n/).length;
 const legacyRecordPanelStatsLines = legacyRecordPanelStatsSource.split(/\r?\n/).length;
@@ -9286,10 +9293,10 @@ if (legacyRecordPanelStatsGridLines > maxLegacyRecordPanelStatsGridLines) {
 }
 
 for (const requiredLegacyListUsage of [
-  'import type { RecordItem } from "../lib/types";',
   'import { RecordPanelLegacyListEmpty } from "./record-panel-legacy-list-empty";',
   'import { RecordPanelLegacyListItem } from "./record-panel-legacy-list-item";',
-  "export function RecordPanelLegacyList({",
+  'from "./record-panel-legacy-list.types";',
+  "export function RecordPanelLegacyList({ records, selectedRecordId, onSelectRecord }: RecordPanelLegacyListProps)",
   "<RecordPanelLegacyListItem",
   "<RecordPanelLegacyListEmpty",
 ]) {
@@ -9304,6 +9311,9 @@ for (const forbiddenLegacyListToken of [
   "No records yet. Save one from the chat panel or create one manually above.",
   'className={`record-card selectable-card',
   '{record.title || "Untitled"}',
+  "records: RecordItem[];",
+  "selectedRecordId: string | null;",
+  "onSelectRecord: (recordId: string) => void;",
 ]) {
   if (legacyRecordPanelListSource.includes(forbiddenLegacyListToken)) {
     throw new Error(`record-panel-legacy-list.tsx must keep empty-state and card details delegated: ${forbiddenLegacyListToken}`);
@@ -9317,15 +9327,48 @@ if (legacyRecordPanelListLines > maxLegacyRecordPanelListLines) {
   );
 }
 
+for (const requiredLegacyListTypesImport of ['from "../lib/types";']) {
+  if (!legacyRecordPanelListTypesSource.includes(requiredLegacyListTypesImport)) {
+    throw new Error(`record-panel-legacy-list.types.ts must import legacy list contracts: ${requiredLegacyListTypesImport}`);
+  }
+}
+
+for (const requiredLegacyListTypesUsage of [
+  "export type RecordPanelLegacyListSelection = { onSelectRecord: (recordId: string) => void };",
+  "export type RecordPanelLegacyListItemProps = { record: RecordItem; selected: boolean } & RecordPanelLegacyListSelection;",
+  "export type RecordPanelLegacyListProps = { records: RecordItem[]; selectedRecordId: string | null } & RecordPanelLegacyListSelection;",
+]) {
+  if (!legacyRecordPanelListTypesSource.includes(requiredLegacyListTypesUsage)) {
+    throw new Error(`record-panel-legacy-list.types.ts must own shared legacy list typing: ${requiredLegacyListTypesUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelListTypesLines = 6;
+if (legacyRecordPanelListTypesLines > maxLegacyRecordPanelListTypesLines) {
+  throw new Error(
+    `record-panel-legacy-list.types.ts exceeded ${maxLegacyRecordPanelListTypesLines} lines: ${legacyRecordPanelListTypesLines}`,
+  );
+}
+
 for (const requiredLegacyListItemUsage of [
-  'import type { RecordItem } from "../lib/types";',
-  "export function RecordPanelLegacyListItem({",
+  'from "./record-panel-legacy-list.types";',
+  "export function RecordPanelLegacyListItem({ record, selected, onSelectRecord }: RecordPanelLegacyListItemProps)",
   '{record.title || "Untitled"}',
   '{record.content || "No content"}',
   '{record.is_avoid ? <span className="tag">avoid</span> : null}',
 ]) {
   if (!legacyRecordPanelListItemSource.includes(requiredLegacyListItemUsage)) {
     throw new Error(`record-panel-legacy-list-item.tsx must own legacy record-card rendering: ${requiredLegacyListItemUsage}`);
+  }
+}
+
+for (const forbiddenLegacyListItemToken of [
+  "record: RecordItem;",
+  "selected: boolean;",
+  "onSelectRecord: (recordId: string) => void;",
+]) {
+  if (legacyRecordPanelListItemSource.includes(forbiddenLegacyListItemToken)) {
+    throw new Error(`record-panel-legacy-list-item.tsx must keep shared list-item typing delegated: ${forbiddenLegacyListItemToken}`);
   }
 }
 

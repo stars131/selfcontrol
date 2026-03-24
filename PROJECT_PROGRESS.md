@@ -1516,6 +1516,10 @@ Last updated: 2026-03-24
   - shared legacy-stats prop contracts now live in `apps/web/components/record-panel-legacy-stats.types.ts` instead of remaining duplicated inline across the stats wrapper, header, and grid components
   - `apps/web/components/record-panel-legacy-stats.tsx`, `record-panel-legacy-stats-header.tsx`, and `record-panel-legacy-stats-grid.tsx` now consume the shared props contracts behind thinner legacy UI boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared legacy-stats prop boundary and keeps inline stats prop typing out of those UI modules
+- Record Panel Legacy List Shared Props Split V1:
+  - shared legacy-list prop contracts now live in `apps/web/components/record-panel-legacy-list.types.ts` instead of remaining duplicated inline across the list wrapper and record-card item components
+  - `apps/web/components/record-panel-legacy-list.tsx` and `record-panel-legacy-list-item.tsx` now consume the shared props contracts behind thinner legacy list UI boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared legacy-list prop boundary and keeps inline list prop typing out of those UI modules
 
 ## Next
 - Continue the next product slice
