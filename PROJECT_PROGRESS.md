@@ -956,6 +956,10 @@ Last updated: 2026-03-24
   - workspace-shell raw state registration is now divided into dedicated core, conversation, media, and managed state helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-state-values.ts`
   - the top-level state-values module now focuses more narrowly on composing grouped state bundles while preserving the existing external controller contract
   - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these state-group boundaries and dedicated size ceilings for the extracted modules
+- Workspace Export Jobs Controller State and Action Split V1:
+  - workspace export-jobs controller local state registration and export/download action wiring now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-export-jobs-controller.ts`
+  - the top-level export-jobs controller now focuses more narrowly on effect-driven initial loading and returning the existing controller contract
+  - `apps/web/scripts/verify-workspace-export-jobs-structure.mjs` now enforces these controller helper boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice
