@@ -176,6 +176,10 @@ const recordPanelReminderActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-actions.ts",
 );
+const recordPanelReminderSuccessHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-success-helpers.ts",
+);
 const recordPanelReminderHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-helpers.ts",
@@ -362,6 +366,10 @@ const recordSaveHelpersSource = fs.readFileSync(recordPanelRecordSaveHelpersPath
 const recordSavePayloadSource = fs.readFileSync(recordPanelRecordSavePayloadPath, "utf8");
 const recordLocationPayloadSource = fs.readFileSync(recordPanelRecordLocationPayloadPath, "utf8");
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
+const reminderSuccessHelpersSource = fs.readFileSync(
+  recordPanelReminderSuccessHelpersPath,
+  "utf8",
+);
 const reminderHelpersSource = fs.readFileSync(recordPanelReminderHelpersPath, "utf8");
 const reminderPayloadSource = fs.readFileSync(recordPanelReminderPayloadPath, "utf8");
 const mediaStatusActionsSource = fs.readFileSync(recordPanelMediaStatusActionsPath, "utf8");
@@ -440,6 +448,7 @@ const recordSaveHelpersLines = recordSaveHelpersSource.split(/\r?\n/).length;
 const recordSavePayloadLines = recordSavePayloadSource.split(/\r?\n/).length;
 const recordLocationPayloadLines = recordLocationPayloadSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
+const reminderSuccessHelpersLines = reminderSuccessHelpersSource.split(/\r?\n/).length;
 const reminderHelpersLines = reminderHelpersSource.split(/\r?\n/).length;
 const reminderPayloadLines = reminderPayloadSource.split(/\r?\n/).length;
 const mediaStatusActionsLines = mediaStatusActionsSource.split(/\r?\n/).length;
@@ -2017,6 +2026,7 @@ if (recordLocationPayloadLines > maxRecordLocationPayloadLines) {
 
 for (const requiredReminderActionsImport of [
   'from "./record-panel-controller-reminder-helpers";',
+  'from "./record-panel-controller-reminder-success-helpers";',
 ]) {
   if (!reminderActionsSource.includes(requiredReminderActionsImport)) {
     throw new Error(
@@ -2029,6 +2039,7 @@ for (const requiredReminderActionsUsage of [
   "resolveRecordPanelReminderActionInput({",
   "getRecordPanelReminderErrorMessage(",
   "await onCreateReminder(reminderInput.payload)",
+  "applyRecordPanelReminderSuccessState({ setReminderForm })",
 ]) {
   if (!reminderActionsSource.includes(requiredReminderActionsUsage)) {
     throw new Error(
@@ -2043,6 +2054,7 @@ for (const forbiddenReminderActionsToken of [
   "detailCopy.reminderTimeRequiredError",
   "recordId: selectedRecord.id,",
   'channel_code: "in_app"',
+  "setReminderForm((prev) => ({ ...prev, message: \"\", remind_at: \"\" }))",
 ]) {
   if (reminderActionsSource.includes(forbiddenReminderActionsToken)) {
     throw new Error(
@@ -2055,6 +2067,35 @@ const maxReminderActionsLines = 55;
 if (reminderActionsLines > maxReminderActionsLines) {
   throw new Error(
     `record-panel-controller-reminder-actions.ts exceeded ${maxReminderActionsLines} lines: ${reminderActionsLines}`,
+  );
+}
+
+for (const requiredReminderSuccessHelpersImport of [
+  'from "../lib/record-panel-forms";',
+]) {
+  if (!reminderSuccessHelpersSource.includes(requiredReminderSuccessHelpersImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-success-helpers.ts must import reminder success contracts: ${requiredReminderSuccessHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredReminderSuccessHelpersUsage of [
+  "export function applyRecordPanelReminderSuccessState({",
+  "setReminderForm: React.Dispatch<React.SetStateAction<ReminderFormState>>;",
+  'setReminderForm((prev) => ({ ...prev, message: "", remind_at: "" }));',
+]) {
+  if (!reminderSuccessHelpersSource.includes(requiredReminderSuccessHelpersUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-success-helpers.ts must own post-reminder reset behavior: ${requiredReminderSuccessHelpersUsage}`,
+    );
+  }
+}
+
+const maxReminderSuccessHelpersLines = 15;
+if (reminderSuccessHelpersLines > maxReminderSuccessHelpersLines) {
+  throw new Error(
+    `record-panel-controller-reminder-success-helpers.ts exceeded ${maxReminderSuccessHelpersLines} lines: ${reminderSuccessHelpersLines}`,
   );
 }
 

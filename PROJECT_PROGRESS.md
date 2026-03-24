@@ -1132,10 +1132,14 @@ Last updated: 2026-03-24
   - post-save create-mode form reset now lives in `apps/web/components/record-panel-controller-record-save-success-helpers.ts` instead of remaining embedded inside the save action module
   - `apps/web/components/record-panel-controller-record-save-actions.ts` now focuses more narrowly on submit orchestration, validation handoff, and save-state transitions
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-success helper boundary and dedicated size ceilings for both modules
+- Record Panel Reminder Success Helper Split V1:
+  - post-reminder form reset now lives in `apps/web/components/record-panel-controller-reminder-success-helpers.ts` instead of remaining embedded inside the reminder action module
+  - `apps/web/components/record-panel-controller-reminder-actions.ts` now focuses more narrowly on reminder submission orchestration, validation handoff, and saving-state transitions
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder-success helper boundary and dedicated size ceilings for both modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts, especially reminder success flows and helper slices
+- Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper slices
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

@@ -4,6 +4,7 @@ import type { ReminderFormState } from "../lib/record-panel-forms";
 import type { RecordItem } from "../lib/types";
 import type { ControllerProps } from "./record-panel-controller.types";
 import { getRecordPanelReminderErrorMessage, resolveRecordPanelReminderActionInput } from "./record-panel-controller-reminder-helpers";
+import { applyRecordPanelReminderSuccessState } from "./record-panel-controller-reminder-success-helpers";
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
 
 export function createRecordPanelControllerReminderActions({
@@ -37,7 +38,7 @@ export function createRecordPanelControllerReminderActions({
     setError("");
     try {
       await onCreateReminder(reminderInput.payload);
-      setReminderForm((prev) => ({ ...prev, message: "", remind_at: "" }));
+      applyRecordPanelReminderSuccessState({ setReminderForm });
     } catch (caught) {
       setError(getRecordPanelReminderErrorMessage(caught, detailCopy.createReminderError));
     } finally {
