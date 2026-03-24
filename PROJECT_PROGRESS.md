@@ -1312,6 +1312,10 @@ Last updated: 2026-03-24
   - preset save/delete action input contracts now live in `apps/web/components/record-panel-controller-filter-preset-action-input.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-filter-preset-actions.ts`
   - `apps/web/components/record-panel-controller-filter-preset-actions.ts` now focuses on composing preset save/delete actions behind a thinner orchestration boundary, while `apps/web/components/record-panel-controller-filter-actions.ts` consumes the shared extracted contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the preset-action input-type boundary and a dedicated size ceiling for the extracted type module
+- Record Panel Media Transfer Action Input Type Split V3:
+  - media upload/download action input contracts now live in `apps/web/components/record-panel-controller-media-transfer-action-input.types.ts` instead of remaining embedded across the upload, download, and transfer-action modules
+  - `apps/web/components/record-panel-controller-media-upload-action.ts`, `apps/web/components/record-panel-controller-media-download-action.ts`, and `apps/web/components/record-panel-controller-media-transfer-actions.ts` now consume the shared extracted transfer-action contracts behind thinner execution boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-transfer input-type boundary and keeps inline upload/download contract definitions out of the action modules
 
 ## Next
 - Continue the next product slice

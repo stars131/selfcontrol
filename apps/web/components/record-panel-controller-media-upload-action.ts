@@ -1,23 +1,15 @@
 "use client";
 import type { ChangeEvent } from "react";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { RecordItem } from "../lib/types";
-import type { ControllerProps } from "./record-panel-controller.types";
 import { getRecordPanelMediaFileErrorMessage, getRecordPanelMediaFileFallbackMessages, resolveRecordPanelUploadInput } from "./record-panel-controller-media-file-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerMediaUploadActionInput } from "./record-panel-controller-media-transfer-action-input.types";
+
 export function createRecordPanelControllerMediaUploadAction({
   detailCopy,
   onUploadMedia,
   selectedRecord,
   setError,
   setUploading,
-}: {
-  detailCopy: DetailCopy;
-  onUploadMedia: ControllerProps["onUploadMedia"];
-  selectedRecord: RecordItem | null;
-  setError: (value: string) => void;
-  setUploading: (value: boolean) => void;
-}) {
+}: RecordPanelControllerMediaUploadActionInput) {
   const fallbackMessages = getRecordPanelMediaFileFallbackMessages(detailCopy);
   async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
     const uploadInput = resolveRecordPanelUploadInput(event, selectedRecord);

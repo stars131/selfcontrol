@@ -1,23 +1,19 @@
 "use client";
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { MediaAsset } from "../lib/types";
 import { downloadRecordPanelMediaFile, getRecordPanelMediaFileErrorMessage, getRecordPanelMediaFileFallbackMessages } from "./record-panel-controller-media-file-helpers";
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type {
+  RecordPanelControllerMediaDownloadActionInput,
+  RecordPanelControllerMediaDownloadAsset,
+} from "./record-panel-controller-media-transfer-action-input.types";
+
 export function createRecordPanelControllerMediaDownloadAction({
   authToken,
   detailCopy,
   setDownloadingMediaId,
   setError,
   workspaceId,
-}: {
-  authToken: string | null;
-  detailCopy: DetailCopy;
-  setDownloadingMediaId: (value: string | null) => void;
-  setError: (value: string) => void;
-  workspaceId: string;
-}) {
+}: RecordPanelControllerMediaDownloadActionInput) {
   const fallbackMessages = getRecordPanelMediaFileFallbackMessages(detailCopy);
-  async function handleDownloadMedia(asset: MediaAsset) {
+  async function handleDownloadMedia(asset: RecordPanelControllerMediaDownloadAsset) {
     if (!authToken) {
       setError(fallbackMessages.notAuthenticated);
       return;
