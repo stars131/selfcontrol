@@ -964,6 +964,10 @@ Last updated: 2026-03-24
   - provider-settings panel shared prop contracts and feature-card list rendering now live in dedicated modules instead of remaining combined inside `apps/web/components/provider-settings-panel.tsx`
   - the top-level provider-settings panel now focuses more narrowly on copy lookup, controller composition, anchor highlighting, and shell layout while the extracted feature list owns card mapping
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these panel boundaries and dedicated size ceilings for the extracted modules
+- Workspace Shell Initial Load Auth and Runner Split V1:
+  - workspace-shell initial-load token gating, initial-data input mapping, and load execution flow now live in dedicated helper modules instead of remaining combined inside `apps/web/components/use-workspace-shell-initial-load.ts`
+  - the top-level initial-load hook now focuses more narrowly on effect lifecycle and dependency wiring while delegated helpers own redirect, input shaping, and startup execution details
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces these initial-load helper boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

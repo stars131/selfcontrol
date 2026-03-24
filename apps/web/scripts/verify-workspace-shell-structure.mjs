@@ -39,6 +39,18 @@ const workspaceShellInitialLoadPath = path.resolve(
   process.cwd(),
   "components/use-workspace-shell-initial-load.ts",
 );
+const workspaceShellInitialLoadAuthPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-load-auth.ts",
+);
+const workspaceShellInitialLoadDataInputPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-load-data-input.ts",
+);
+const workspaceShellInitialLoadRunnerPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-load-runner.ts",
+);
 const workspaceShellInitialLoadHelpersPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-initial-load-helpers.ts",
@@ -84,6 +96,9 @@ const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
 const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
 const initialLoadSource = fs.readFileSync(workspaceShellInitialLoadPath, "utf8");
+const initialLoadAuthSource = fs.readFileSync(workspaceShellInitialLoadAuthPath, "utf8");
+const initialLoadDataInputSource = fs.readFileSync(workspaceShellInitialLoadDataInputPath, "utf8");
+const initialLoadRunnerSource = fs.readFileSync(workspaceShellInitialLoadRunnerPath, "utf8");
 const initialLoadHelpersSource = fs.readFileSync(workspaceShellInitialLoadHelpersPath, "utf8");
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
@@ -107,6 +122,9 @@ const workspaceShellStatePermissionsLineCount =
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const effectsLineCount = effectsSource.split(/\r?\n/).length;
 const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
+const initialLoadAuthLineCount = initialLoadAuthSource.split(/\r?\n/).length;
+const initialLoadDataInputLineCount = initialLoadDataInputSource.split(/\r?\n/).length;
+const initialLoadRunnerLineCount = initialLoadRunnerSource.split(/\r?\n/).length;
 const initialLoadHelpersLineCount = initialLoadHelpersSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
@@ -629,7 +647,8 @@ if (effectsLineCount > maxEffectsLines) {
 
 for (const requiredInitialLoadImport of [
   'from "./workspace-shell-effects.types";',
-  'from "./workspace-shell-initial-load-helpers";',
+  'from "./workspace-shell-initial-load-auth";',
+  'from "./workspace-shell-initial-load-runner";',
 ]) {
   if (!initialLoadSource.includes(requiredInitialLoadImport)) {
     throw new Error(`use-workspace-shell-initial-load.ts must import delegated initial-load helpers: ${requiredInitialLoadImport}`);
@@ -637,7 +656,8 @@ for (const requiredInitialLoadImport of [
 }
 
 for (const requiredInitialLoadUsage of [
-  "loadWorkspaceShellInitialData({",
+  "readWorkspaceShellInitialToken(router)",
+  "runWorkspaceShellInitialLoad(activeToken, {",
 ]) {
   if (!initialLoadSource.includes(requiredInitialLoadUsage)) {
     throw new Error(`use-workspace-shell-initial-load.ts must delegate initial-load flow: ${requiredInitialLoadUsage}`);
@@ -658,16 +678,79 @@ for (const forbiddenInitialLoadToken of [
   "refreshShareLinkItems(",
   "refreshSearchPresetItems(",
   "refreshAuditLogItems(",
+  "clearStoredSession(",
+  "getStoredToken(",
+  "loadWorkspaceShellInitialData(",
 ]) {
   if (initialLoadSource.includes(forbiddenInitialLoadToken)) {
     throw new Error(`use-workspace-shell-initial-load.ts must keep detailed load steps delegated: ${forbiddenInitialLoadToken}`);
   }
 }
 
-const maxInitialLoadLines = 135;
+const maxInitialLoadLines = 110;
 if (initialLoadLineCount > maxInitialLoadLines) {
   throw new Error(
     `use-workspace-shell-initial-load.ts exceeded ${maxInitialLoadLines} lines: ${initialLoadLineCount}`,
+  );
+}
+
+for (const requiredInitialLoadAuthUsage of [
+  'from "../lib/auth";',
+  'from "./workspace-shell-effects.types";',
+  "export function readWorkspaceShellInitialToken(router: RouterLike): string | null",
+  "getStoredToken()",
+  'router.replace("/login")',
+]) {
+  if (!initialLoadAuthSource.includes(requiredInitialLoadAuthUsage)) {
+    throw new Error(`workspace-shell-initial-load-auth.ts must own token gate logic: ${requiredInitialLoadAuthUsage}`);
+  }
+}
+
+const maxInitialLoadAuthLines = 15;
+if (initialLoadAuthLineCount > maxInitialLoadAuthLines) {
+  throw new Error(
+    `workspace-shell-initial-load-auth.ts exceeded ${maxInitialLoadAuthLines} lines: ${initialLoadAuthLineCount}`,
+  );
+}
+
+for (const requiredInitialLoadDataInputUsage of [
+  'from "./workspace-shell-effects.types";',
+  "export function buildWorkspaceShellInitialDataInput(",
+  "activeToken,",
+  "workspaceId: props.workspaceId",
+  "setMediaStorageSummary: props.setMediaStorageSummary",
+]) {
+  if (!initialLoadDataInputSource.includes(requiredInitialLoadDataInputUsage)) {
+    throw new Error(`workspace-shell-initial-load-data-input.ts must own initial-load input mapping: ${requiredInitialLoadDataInputUsage}`);
+  }
+}
+
+const maxInitialLoadDataInputLines = 35;
+if (initialLoadDataInputLineCount > maxInitialLoadDataInputLines) {
+  throw new Error(
+    `workspace-shell-initial-load-data-input.ts exceeded ${maxInitialLoadDataInputLines} lines: ${initialLoadDataInputLineCount}`,
+  );
+}
+
+for (const requiredInitialLoadRunnerUsage of [
+  'from "../lib/auth";',
+  'from "./workspace-shell-initial-load-data-input";',
+  'from "./workspace-shell-initial-load-helpers";',
+  "export async function runWorkspaceShellInitialLoad(",
+  "props.setToken(activeToken)",
+  "loadWorkspaceShellInitialData(buildWorkspaceShellInitialDataInput(activeToken, props))",
+  "clearStoredSession()",
+  'props.router.replace("/login")',
+]) {
+  if (!initialLoadRunnerSource.includes(requiredInitialLoadRunnerUsage)) {
+    throw new Error(`workspace-shell-initial-load-runner.ts must own initial-load execution flow: ${requiredInitialLoadRunnerUsage}`);
+  }
+}
+
+const maxInitialLoadRunnerLines = 25;
+if (initialLoadRunnerLineCount > maxInitialLoadRunnerLines) {
+  throw new Error(
+    `workspace-shell-initial-load-runner.ts exceeded ${maxInitialLoadRunnerLines} lines: ${initialLoadRunnerLineCount}`,
   );
 }
 
