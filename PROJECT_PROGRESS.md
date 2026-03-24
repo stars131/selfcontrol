@@ -1104,10 +1104,14 @@ Last updated: 2026-03-24
   - dead-letter selection controls and bulk-retry orchestration now live in dedicated action modules instead of remaining combined inside `apps/web/components/record-panel-controller-dead-letter-actions.ts`
   - `apps/web/components/record-panel-controller-dead-letter-actions.ts` now focuses on composing selection and retry actions behind a stable dead-letter boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dead-letter action split and dedicated size ceilings for both extracted modules
+- Record Panel Media Download Helper Split V1:
+  - browser-side media blob download now lives in `apps/web/components/record-panel-controller-media-download.ts` instead of remaining mixed with upload-input parsing and fallback-message helpers
+  - `apps/web/components/record-panel-controller-media-file-helpers.ts` now focuses on upload-input resolution, error formatting, fallback copy, and a stable re-export boundary for download execution
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-download helper boundary and dedicated size ceilings for both modules
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large UI module boundaries around record-panel helper payload/error utilities and adjacent workspace shells
+- Continue simplifying remaining large UI module boundaries around record-panel action payload/input contracts and adjacent workspace shells
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
 
 ## Delivery Rule

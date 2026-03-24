@@ -176,6 +176,10 @@ const recordPanelMediaFileHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-file-helpers.ts",
 );
+const recordPanelMediaDownloadPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-download.ts",
+);
 const recordPanelDeadLetterActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-dead-letter-actions.ts",
@@ -289,6 +293,7 @@ const mediaFileActionsSource = fs.readFileSync(recordPanelMediaFileActionsPath, 
 const mediaTransferActionsSource = fs.readFileSync(recordPanelMediaTransferActionsPath, "utf8");
 const mediaDeleteActionSource = fs.readFileSync(recordPanelMediaDeleteActionPath, "utf8");
 const mediaFileHelpersSource = fs.readFileSync(recordPanelMediaFileHelpersPath, "utf8");
+const mediaDownloadSource = fs.readFileSync(recordPanelMediaDownloadPath, "utf8");
 const deadLetterActionsSource = fs.readFileSync(recordPanelDeadLetterActionsPath, "utf8");
 const deadLetterSelectionActionsSource = fs.readFileSync(
   recordPanelDeadLetterSelectionActionsPath,
@@ -350,6 +355,7 @@ const mediaFileActionsLines = mediaFileActionsSource.split(/\r?\n/).length;
 const mediaTransferActionsLines = mediaTransferActionsSource.split(/\r?\n/).length;
 const mediaDeleteActionLines = mediaDeleteActionSource.split(/\r?\n/).length;
 const mediaFileHelpersLines = mediaFileHelpersSource.split(/\r?\n/).length;
+const mediaDownloadLines = mediaDownloadSource.split(/\r?\n/).length;
 const deadLetterActionsLines = deadLetterActionsSource.split(/\r?\n/).length;
 const deadLetterSelectionActionsLines =
   deadLetterSelectionActionsSource.split(/\r?\n/).length;
@@ -1957,9 +1963,9 @@ if (mediaDeleteActionLines > maxMediaDeleteActionLines) {
 }
 
 for (const requiredMediaFileHelpersImport of [
-  'from "../lib/api";',
   'from "../lib/record-panel-detail";',
   'from "../lib/types";',
+  'from "./record-panel-controller-media-download";',
 ]) {
   if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersImport)) {
     throw new Error(
@@ -1969,12 +1975,10 @@ for (const requiredMediaFileHelpersImport of [
 }
 
 for (const requiredMediaFileHelpersUsage of [
+  'export { downloadRecordPanelMediaFile } from "./record-panel-controller-media-download";',
   "export function getRecordPanelMediaFileErrorMessage(",
   "export function resolveRecordPanelUploadInput(",
-  "export async function downloadRecordPanelMediaFile({",
   "export function getRecordPanelMediaFileFallbackMessages(detailCopy: DetailCopy)",
-  "fetchMediaBlob(",
-  "URL.createObjectURL(",
   "notAuthenticated",
 ]) {
   if (!mediaFileHelpersSource.includes(requiredMediaFileHelpersUsage)) {
@@ -1984,10 +1988,41 @@ for (const requiredMediaFileHelpersUsage of [
   }
 }
 
-const maxMediaFileHelpersLines = 60;
+const maxMediaFileHelpersLines = 40;
 if (mediaFileHelpersLines > maxMediaFileHelpersLines) {
   throw new Error(
     `record-panel-controller-media-file-helpers.ts exceeded ${maxMediaFileHelpersLines} lines: ${mediaFileHelpersLines}`,
+  );
+}
+
+for (const requiredMediaDownloadImport of [
+  'from "../lib/api";',
+  'from "../lib/types";',
+]) {
+  if (!mediaDownloadSource.includes(requiredMediaDownloadImport)) {
+    throw new Error(
+      `record-panel-controller-media-download.ts must import media download contracts: ${requiredMediaDownloadImport}`,
+    );
+  }
+}
+
+for (const requiredMediaDownloadUsage of [
+  "export async function downloadRecordPanelMediaFile({",
+  "fetchMediaBlob(",
+  "URL.createObjectURL(",
+  'anchor.download = asset.original_filename || `${asset.id}.bin`;',
+]) {
+  if (!mediaDownloadSource.includes(requiredMediaDownloadUsage)) {
+    throw new Error(
+      `record-panel-controller-media-download.ts must own browser download details: ${requiredMediaDownloadUsage}`,
+    );
+  }
+}
+
+const maxMediaDownloadLines = 25;
+if (mediaDownloadLines > maxMediaDownloadLines) {
+  throw new Error(
+    `record-panel-controller-media-download.ts exceeded ${maxMediaDownloadLines} lines: ${mediaDownloadLines}`,
   );
 }
 

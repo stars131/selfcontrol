@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 
-import { fetchMediaBlob } from "../lib/api";
 import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-import type { MediaAsset, RecordItem } from "../lib/types";
+import type { RecordItem } from "../lib/types";
+export { downloadRecordPanelMediaFile } from "./record-panel-controller-media-download";
 
 type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
 
@@ -23,24 +23,6 @@ export function resolveRecordPanelUploadInput(
     file,
     recordId: selectedRecord.id,
   };
-}
-
-export async function downloadRecordPanelMediaFile({
-  asset,
-  authToken,
-  workspaceId,
-}: {
-  asset: MediaAsset;
-  authToken: string;
-  workspaceId: string;
-}) {
-  const blob = await fetchMediaBlob(authToken, workspaceId, asset.id);
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = asset.original_filename || `${asset.id}.bin`;
-  anchor.click();
-  URL.revokeObjectURL(url);
 }
 
 export function getRecordPanelMediaFileFallbackMessages(detailCopy: DetailCopy) {
