@@ -1256,6 +1256,10 @@ Last updated: 2026-03-24
   - controller form state now delegates record-form state and supporting reminder/location/error state into dedicated hooks instead of keeping all form-domain state setup inside `apps/web/components/use-record-panel-controller-form-state.ts`
   - `apps/web/components/use-record-panel-controller-form-state.ts` now focuses on composing the specialized form-state hooks behind a thinner state boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the form-state split and dedicated size ceilings for the extracted record-form and supporting-form state hooks
+- Record Panel Save Action Split V3:
+  - record save submit orchestration now lives in a dedicated action module instead of remaining directly inside `apps/web/components/record-panel-controller-record-save-actions.ts`
+  - `apps/web/components/record-panel-controller-record-save-actions.ts` now focuses on acting as a thin stable wrapper around the specialized save-submit action
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save-action split and dedicated size ceilings for the extracted save-submit action module
 
 ## Next
 - Continue the next product slice

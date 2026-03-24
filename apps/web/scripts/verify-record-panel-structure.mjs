@@ -401,6 +401,10 @@ const recordPanelRecordSaveActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-actions.ts",
 );
+const recordPanelRecordSaveSubmitActionPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-submit-action.ts",
+);
 const recordPanelRecordSaveActionInputTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-action-input.types.ts",
@@ -902,6 +906,10 @@ const filterErrorHelpersSource = fs.readFileSync(recordPanelFilterErrorHelpersPa
 const filterPresetNameSource = fs.readFileSync(recordPanelFilterPresetNamePath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
+const recordSaveSubmitActionSource = fs.readFileSync(
+  recordPanelRecordSaveSubmitActionPath,
+  "utf8",
+);
 const recordSaveActionInputTypesSource = fs.readFileSync(
   recordPanelRecordSaveActionInputTypesPath,
   "utf8",
@@ -1125,6 +1133,7 @@ const filterErrorHelpersLines = filterErrorHelpersSource.split(/\r?\n/).length;
 const filterPresetNameLines = filterPresetNameSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
+const recordSaveSubmitActionLines = recordSaveSubmitActionSource.split(/\r?\n/).length;
 const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\n/).length;
 const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
@@ -4679,9 +4688,8 @@ if (recordDeleteHelpersLines > maxRecordDeleteHelpersLines) {
 }
 
 for (const requiredRecordSaveActionsImport of [
-  'from "./record-panel-controller-record-save-helpers";',
+  'from "./record-panel-controller-record-save-submit-action";',
   'from "./record-panel-controller-record-save-action-input.types";',
-  'from "./record-panel-controller-record-save-success-helpers";',
 ]) {
   if (!recordSaveActionsSource.includes(requiredRecordSaveActionsImport)) {
     throw new Error(
@@ -4691,11 +4699,7 @@ for (const requiredRecordSaveActionsImport of [
 }
 
 for (const requiredRecordSaveActionsUsage of [
-  "}: RecordPanelControllerRecordSaveActionInput)",
-  "resolveRecordPanelRecordSaveActionInput({",
-  "getRecordPanelRecordSaveErrorMessage(",
-  "await onSaveRecord(saveInput.payload)",
-  "applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm })",
+  "createRecordPanelControllerRecordSaveSubmitAction(props)",
 ]) {
   if (!recordSaveActionsSource.includes(requiredRecordSaveActionsUsage)) {
     throw new Error(
@@ -4714,6 +4718,11 @@ for (const forbiddenRecordSaveActionsToken of [
   "longitudeInvalidError",
   "extra_data: hasLocation",
   "if (!selectedRecord) {",
+  "resolveRecordPanelRecordSaveActionInput(",
+  "applyRecordPanelRecordSaveSuccessState(",
+  "getRecordPanelRecordSaveErrorMessage(",
+  "await onSaveRecord(saveInput.payload)",
+  "event.preventDefault()",
 ]) {
   if (recordSaveActionsSource.includes(forbiddenRecordSaveActionsToken)) {
     throw new Error(
@@ -4722,10 +4731,45 @@ for (const forbiddenRecordSaveActionsToken of [
   }
 }
 
-const maxRecordSaveActionsLines = 65;
+const maxRecordSaveActionsLines = 10;
 if (recordSaveActionsLines > maxRecordSaveActionsLines) {
   throw new Error(
     `record-panel-controller-record-save-actions.ts exceeded ${maxRecordSaveActionsLines} lines: ${recordSaveActionsLines}`,
+  );
+}
+
+for (const requiredRecordSaveSubmitActionImport of [
+  'from "react";',
+  'from "./record-panel-controller-record-save-helpers";',
+  'from "./record-panel-controller-record-save-action-input.types";',
+  'from "./record-panel-controller-record-save-success-helpers";',
+]) {
+  if (!recordSaveSubmitActionSource.includes(requiredRecordSaveSubmitActionImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-action.ts must import save-submit contracts: ${requiredRecordSaveSubmitActionImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSaveSubmitActionUsage of [
+  "export function createRecordPanelControllerRecordSaveSubmitAction({",
+  "async function handleSubmit(event: FormEvent<HTMLFormElement>)",
+  "resolveRecordPanelRecordSaveActionInput({",
+  "await onSaveRecord(saveInput.payload)",
+  "applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm })",
+  "getRecordPanelRecordSaveErrorMessage(caught, detailCopy.saveRecordError)",
+]) {
+  if (!recordSaveSubmitActionSource.includes(requiredRecordSaveSubmitActionUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-action.ts must own save-submit orchestration: ${requiredRecordSaveSubmitActionUsage}`,
+    );
+  }
+}
+
+const maxRecordSaveSubmitActionLines = 45;
+if (recordSaveSubmitActionLines > maxRecordSaveSubmitActionLines) {
+  throw new Error(
+    `record-panel-controller-record-save-submit-action.ts exceeded ${maxRecordSaveSubmitActionLines} lines: ${recordSaveSubmitActionLines}`,
   );
 }
 
