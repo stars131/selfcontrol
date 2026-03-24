@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-23
+Last updated: 2026-03-24
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -932,6 +932,10 @@ Last updated: 2026-03-23
   - provider-feature-card anchor highlight logic and save/reset action-row rendering now live in dedicated modules instead of remaining inline inside `apps/web/components/provider-feature-card.tsx`
   - the provider-feature-card shell now focuses more narrowly on composing fields, status, media-storage health, and actions while helper modules own local view logic
   - `apps/web/scripts/verify-provider-settings-structure.mjs` now enforces these provider-feature-card helper boundaries and size ceilings
+- Record Search Panel Section Split V1:
+  - record-search-panel shared prop contracts now live in a dedicated types module instead of remaining inline inside `apps/web/components/record-search-panel.tsx`
+  - advanced-search filter fields and preset-save controls now render through dedicated child components while the parent shell focuses on composition, summary, and apply/reset actions
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces these search-panel boundaries and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

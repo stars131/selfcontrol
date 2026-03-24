@@ -158,6 +158,14 @@ verifyLineLimit(reminderToolsPath, 110);
 
 const browseWorkspacePath = "components/record-browse-workspace.tsx";
 const browseWorkspaceSource = readSource(browseWorkspacePath);
+const recordSearchPanelPath = "components/record-search-panel.tsx";
+const recordSearchPanelSource = readSource(recordSearchPanelPath);
+const recordSearchPanelTypesPath = "components/record-search-panel.types.ts";
+const recordSearchPanelTypesSource = readSource(recordSearchPanelTypesPath);
+const recordSearchPanelFilterFieldsPath = "components/record-search-panel-filter-fields.tsx";
+const recordSearchPanelFilterFieldsSource = readSource(recordSearchPanelFilterFieldsPath);
+const recordSearchPanelPresetControlsPath = "components/record-search-panel-preset-controls.tsx";
+const recordSearchPanelPresetControlsSource = readSource(recordSearchPanelPresetControlsPath);
 
 if (!browseWorkspaceSource.includes('import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types";')) {
   throw new Error("record-browse-workspace.tsx must import RecordBrowseWorkspaceProps from record-browse-workspace.types");
@@ -200,5 +208,97 @@ for (const forbiddenToken of [
 }
 
 verifyLineLimit(browseWorkspacePath, 120);
+
+if (!recordSearchPanelSource.includes('import { RecordSearchPanelFilterFields } from "./record-search-panel-filter-fields";')) {
+  throw new Error("record-search-panel.tsx must import RecordSearchPanelFilterFields");
+}
+
+if (!recordSearchPanelSource.includes('import { RecordSearchPanelPresetControls } from "./record-search-panel-preset-controls";')) {
+  throw new Error("record-search-panel.tsx must import RecordSearchPanelPresetControls");
+}
+
+if (!recordSearchPanelSource.includes('import type { RecordSearchPanelProps } from "./record-search-panel.types";')) {
+  throw new Error("record-search-panel.tsx must import RecordSearchPanelProps from record-search-panel.types");
+}
+
+for (const requiredSearchPanelUsage of [
+  "<RecordSearchPanelFilterFields",
+  "<RecordSearchPanelPresetControls",
+]) {
+  if (!recordSearchPanelSource.includes(requiredSearchPanelUsage)) {
+    throw new Error(`record-search-panel.tsx must delegate child section rendering: ${requiredSearchPanelUsage}`);
+  }
+}
+
+for (const forbiddenSearchPanelToken of [
+  'import type { PanelCopy } from "../lib/record-panel-ui";',
+  'import type { RecordFilterState } from "../lib/types";',
+  "type RecordSearchPanelProps = {",
+  'className="inline-fields"',
+  'panelCopy.textQueryPlaceholder',
+  'panelCopy.presetPlaceholder',
+]) {
+  if (recordSearchPanelSource.includes(forbiddenSearchPanelToken)) {
+    throw new Error(`record-search-panel.tsx must keep field and preset internals delegated: ${forbiddenSearchPanelToken}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelPath, 60);
+
+for (const requiredSearchPanelTypesUsage of [
+  "export type RecordSearchPanelProps = {",
+  "filterDraft: RecordFilterState;",
+  "onAvoidOnlyChange: (value: RecordFilterState[\"avoidOnly\"]) => void;",
+]) {
+  if (!recordSearchPanelTypesSource.includes(requiredSearchPanelTypesUsage)) {
+    throw new Error(`record-search-panel.types.ts must own shared search panel prop contracts: ${requiredSearchPanelTypesUsage}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelTypesPath, 25);
+
+for (const requiredFilterFieldsImport of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+]) {
+  if (!recordSearchPanelFilterFieldsSource.includes(requiredFilterFieldsImport)) {
+    throw new Error(`record-search-panel-filter-fields.tsx must import RecordSearchPanelProps: ${requiredFilterFieldsImport}`);
+  }
+}
+
+for (const requiredFilterFieldsUsage of [
+  "export function RecordSearchPanelFilterFields({",
+  "panelCopy.textQuery",
+  "panelCopy.textQueryPlaceholder",
+  "panelCopy.badExperience",
+  "panelCopy.nonAvoidOnly",
+]) {
+  if (!recordSearchPanelFilterFieldsSource.includes(requiredFilterFieldsUsage)) {
+    throw new Error(`record-search-panel-filter-fields.tsx must own filter field rendering: ${requiredFilterFieldsUsage}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelFilterFieldsPath, 60);
+
+for (const requiredPresetControlsImport of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+]) {
+  if (!recordSearchPanelPresetControlsSource.includes(requiredPresetControlsImport)) {
+    throw new Error(`record-search-panel-preset-controls.tsx must import RecordSearchPanelProps: ${requiredPresetControlsImport}`);
+  }
+}
+
+for (const requiredPresetControlsUsage of [
+  "export function RecordSearchPanelPresetControls({",
+  "panelCopy.presetName",
+  "panelCopy.presetPlaceholder",
+  "panelCopy.saveCurrentFilter",
+  "panelCopy.savingPreset",
+]) {
+  if (!recordSearchPanelPresetControlsSource.includes(requiredPresetControlsUsage)) {
+    throw new Error(`record-search-panel-preset-controls.tsx must own preset control rendering: ${requiredPresetControlsUsage}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelPresetControlsPath, 50);
 
 console.log("record workspaces verification passed");
