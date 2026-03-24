@@ -248,6 +248,14 @@ const recordPanelShellViewPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-view-props.ts",
 );
+const recordPanelHeaderPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-header-props.ts",
+);
+const recordPanelHeaderPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-header-props.types.ts",
+);
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
 const recordPanelControllerSyncPath = path.resolve(
   process.cwd(),
@@ -1071,6 +1079,8 @@ const editorWorkspaceControllerFormatterInputSource = fs.readFileSync(
 );
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
 const shellViewPropsSource = fs.readFileSync(recordPanelShellViewPropsPath, "utf8");
+const headerPropsSource = fs.readFileSync(recordPanelHeaderPropsPath, "utf8");
+const headerPropsTypesSource = fs.readFileSync(recordPanelHeaderPropsTypesPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
 const controllerSyncTypesSource = fs.readFileSync(recordPanelControllerSyncTypesPath, "utf8");
@@ -1514,6 +1524,8 @@ const editorWorkspaceControllerFormatterInputLines =
   editorWorkspaceControllerFormatterInputSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
 const shellViewPropsLines = shellViewPropsSource.split(/\r?\n/).length;
+const headerPropsLines = headerPropsSource.split(/\r?\n/).length;
+const headerPropsTypesLines = headerPropsTypesSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
 const controllerSyncTypesLines = controllerSyncTypesSource.split(/\r?\n/).length;
@@ -3919,6 +3931,77 @@ const maxShellViewPropsLines = 30;
 if (shellViewPropsLines > maxShellViewPropsLines) {
   throw new Error(
     `record-panel-v2-shell-view-props.ts exceeded ${maxShellViewPropsLines} lines: ${shellViewPropsLines}`,
+  );
+}
+
+for (const requiredHeaderPropsImport of [
+  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-header-props.types";',
+]) {
+  if (!headerPropsSource.includes(requiredHeaderPropsImport)) {
+    throw new Error(
+      `record-panel-v2-header-props.ts must import delegated header-prop contracts: ${requiredHeaderPropsImport}`,
+    );
+  }
+}
+
+for (const requiredHeaderPropsUsage of [
+  "export function buildRecordPanelHeaderProps({ canWriteWorkspace, onSelectRecord, panelCopy, workspaceId }: BuildRecordPanelHeaderPropsInput): RecordPanelHeaderProps",
+  "onCreateRecord: () => onSelectRecord(null)",
+]) {
+  if (!headerPropsSource.includes(requiredHeaderPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-header-props.ts must keep header prop assembly focused: ${requiredHeaderPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHeaderPropsToken of [
+  'from "./record-panel-v2.types";',
+  "canWriteWorkspace: boolean;",
+  'onSelectRecord: RecordPanelV2Props["onSelectRecord"];',
+  'panelCopy: RecordPanelHeaderProps["panelCopy"];',
+  "workspaceId: string;",
+]) {
+  if (headerPropsSource.includes(forbiddenHeaderPropsToken)) {
+    throw new Error(
+      `record-panel-v2-header-props.ts must keep header prop typing delegated: ${forbiddenHeaderPropsToken}`,
+    );
+  }
+}
+
+const maxHeaderPropsLines = 12;
+if (headerPropsLines > maxHeaderPropsLines) {
+  throw new Error(
+    `record-panel-v2-header-props.ts exceeded ${maxHeaderPropsLines} lines: ${headerPropsLines}`,
+  );
+}
+
+for (const requiredHeaderPropsTypesImport of [
+  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2.types";',
+]) {
+  if (!headerPropsTypesSource.includes(requiredHeaderPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-header-props.types.ts must import header prop input contracts: ${requiredHeaderPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredHeaderPropsTypesUsage of [
+  'export type BuildRecordPanelHeaderPropsInput = { canWriteWorkspace: boolean; onSelectRecord: RecordPanelV2Props["onSelectRecord"]; panelCopy: RecordPanelHeaderProps["panelCopy"]; workspaceId: string };',
+]) {
+  if (!headerPropsTypesSource.includes(requiredHeaderPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-header-props.types.ts must own header prop input typing: ${requiredHeaderPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxHeaderPropsTypesLines = 5;
+if (headerPropsTypesLines > maxHeaderPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-header-props.types.ts exceeded ${maxHeaderPropsTypesLines} lines: ${headerPropsTypesLines}`,
   );
 }
 

@@ -1500,6 +1500,10 @@ Last updated: 2026-03-24
   - view-data hook input contract now lives in `apps/web/components/use-record-panel-controller-view-data.types.ts` instead of remaining embedded directly in the hook signature
   - `apps/web/components/use-record-panel-controller-view-data.ts` now consumes the extracted hook input contract behind a thinner view-data derivation boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the view-data input-type boundary and keeps inline media/record selection typing out of the hook module
+- Record Panel V2 Header Props Input Type Split V1:
+  - header-props builder input contract now lives in `apps/web/components/record-panel-v2-header-props.types.ts` instead of remaining embedded directly in the builder signature
+  - `apps/web/components/record-panel-v2-header-props.ts` now consumes the extracted builder input contract behind a thinner shell-header assembly boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header-props input-type boundary and keeps inline header builder typing out of the shell helper
 
 ## Next
 - Continue the next product slice
