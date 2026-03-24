@@ -1028,6 +1028,10 @@ Last updated: 2026-03-24
   - record-editor workspace main-section prop mapping and support-tools prop mapping now live in dedicated modules instead of remaining combined inside `apps/web/components/record-editor-workspace-sections-props.ts`
   - the top-level sections-props file now focuses more narrowly on acting as a stable re-export boundary while specialized builders own each section contract
   - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this sections-prop re-export boundary and dedicated size ceilings for the extracted modules
+- Editor Workspace Binding Re-export Split V1:
+  - record-editor workspace form field bindings and location-review bindings now live in dedicated modules instead of remaining combined inside `apps/web/components/record-editor-workspace-bindings.ts`
+  - the top-level bindings file now focuses more narrowly on acting as a stable re-export boundary while specialized modules own each state-update closure group
+  - `apps/web/scripts/verify-record-workspaces.mjs` now enforces this bindings re-export boundary and dedicated size ceilings for the extracted modules
 
 ## Next
 - Continue the next product slice

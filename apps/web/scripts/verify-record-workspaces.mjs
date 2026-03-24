@@ -14,6 +14,12 @@ function verifyLineLimit(relativePath, maxAllowedLines) {
 
 const editorWorkspacePath = "components/record-editor-workspace.tsx";
 const editorWorkspaceSource = readSource(editorWorkspacePath);
+const editorWorkspaceBindingsPath = "components/record-editor-workspace-bindings.ts";
+const editorWorkspaceBindingsSource = readSource(editorWorkspaceBindingsPath);
+const editorFieldBindingsPath = "components/record-editor-field-bindings.ts";
+const editorFieldBindingsSource = readSource(editorFieldBindingsPath);
+const editorLocationReviewBindingsPath = "components/record-editor-location-review-bindings.ts";
+const editorLocationReviewBindingsSource = readSource(editorLocationReviewBindingsPath);
 const editorSupportToolsPath = "components/record-editor-support-tools.tsx";
 const editorSupportToolsSource = readSource(editorSupportToolsPath);
 const editorSupportToolsPropsPath = "components/record-editor-support-tools-props.ts";
@@ -65,6 +71,17 @@ if (!editorWorkspaceSource.includes("buildRecordEditorSupportToolsProps(props)")
   throw new Error("record-editor-workspace.tsx must delegate support-tools prop assembly");
 }
 
+for (const requiredWorkspaceBindingsExport of [
+  'export { createRecordEditorFieldBindings } from "./record-editor-field-bindings";',
+  'export { createLocationReviewBindings } from "./record-editor-location-review-bindings";',
+]) {
+  if (!editorWorkspaceBindingsSource.includes(requiredWorkspaceBindingsExport)) {
+    throw new Error(
+      `record-editor-workspace-bindings.ts must remain a stable re-export boundary: ${requiredWorkspaceBindingsExport}`,
+    );
+  }
+}
+
 for (const requiredSectionsPropsExport of [
   'export { buildRecordEditorMainSectionsProps } from "./record-editor-workspace-main-sections-props";',
   'export { buildRecordEditorSupportToolsProps } from "./record-editor-workspace-support-tools-props";',
@@ -104,7 +121,60 @@ for (const forbiddenToken of ["type RecordEditorWorkspaceProps = {", "mediaIssue
 }
 
 verifyLineLimit(editorWorkspacePath, 110);
+verifyLineLimit(editorWorkspaceBindingsPath, 10);
 verifyLineLimit(editorWorkspaceSectionsPropsPath, 10);
+
+for (const requiredFieldBindingsImport of [
+  'import type { RecordFormState } from "../lib/record-panel-forms";',
+]) {
+  if (!editorFieldBindingsSource.includes(requiredFieldBindingsImport)) {
+    throw new Error(
+      `record-editor-field-bindings.ts must import field binding contracts: ${requiredFieldBindingsImport}`,
+    );
+  }
+}
+
+for (const requiredFieldBindingsUsage of [
+  "export function createRecordEditorFieldBindings(",
+  "location: { ...prev.location, address: value, source: \"manual\" }",
+  "location: { ...prev.location, latitude: value, source: \"manual\" }",
+  "location: { ...prev.location, longitude: value, source: \"manual\" }",
+  "location: { ...prev.location, place_name: value, source: \"manual\" }",
+]) {
+  if (!editorFieldBindingsSource.includes(requiredFieldBindingsUsage)) {
+    throw new Error(
+      `record-editor-field-bindings.ts must own form field binding updates: ${requiredFieldBindingsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorFieldBindingsPath, 70);
+
+for (const requiredLocationReviewBindingsImport of [
+  'import type { LocationReviewFormState } from "../lib/record-panel-forms";',
+]) {
+  if (!editorLocationReviewBindingsSource.includes(requiredLocationReviewBindingsImport)) {
+    throw new Error(
+      `record-editor-location-review-bindings.ts must import review binding contracts: ${requiredLocationReviewBindingsImport}`,
+    );
+  }
+}
+
+for (const requiredLocationReviewBindingsUsage of [
+  "export function createLocationReviewBindings(",
+  'status: "confirmed"',
+  'status: "needs_review"',
+  'status: "pending"',
+  "note: value",
+]) {
+  if (!editorLocationReviewBindingsSource.includes(requiredLocationReviewBindingsUsage)) {
+    throw new Error(
+      `record-editor-location-review-bindings.ts must own location-review binding updates: ${requiredLocationReviewBindingsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorLocationReviewBindingsPath, 45);
 
 for (const requiredMainSectionsPropsImport of [
   'import { RecordEditorMainSections } from "./record-editor-main-sections";',
