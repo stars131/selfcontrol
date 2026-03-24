@@ -1,6 +1,6 @@
 "use client";
 
-import type { MediaRetentionReport } from "../lib/types";
+import type { WorkspaceMediaRetentionRiskLabelInput } from "./workspace-media-retention-controller.types";
 
 export function getWorkspaceMediaRetentionActionErrorMessage(
   caught: unknown,
@@ -15,13 +15,7 @@ export function buildWorkspaceMediaRetentionRiskLabel({
   orphanFilesLabel,
   remoteMediaLabel,
   report,
-}: {
-  allHealthyLabel: string;
-  missingFilesLabel: string;
-  orphanFilesLabel: string;
-  remoteMediaLabel: string;
-  report: MediaRetentionReport | null;
-}) {
+}: WorkspaceMediaRetentionRiskLabelInput) {
   if (!report) {
     return "-";
   }

@@ -6,6 +6,14 @@ const retentionControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-media-retention-controller.ts",
 );
+const retentionControllerTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-controller.types.ts",
+);
+const retentionControllerHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-controller-helpers.ts",
+);
 const retentionControllerActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-controller-actions.ts",
@@ -40,6 +48,8 @@ const retentionCardActionHelpersPath = path.resolve(
 );
 const source = fs.readFileSync(retentionCardPath, "utf8");
 const controllerSource = fs.readFileSync(retentionControllerPath, "utf8");
+const retentionControllerTypesSource = fs.readFileSync(retentionControllerTypesPath, "utf8");
+const retentionControllerHelpersSource = fs.readFileSync(retentionControllerHelpersPath, "utf8");
 const retentionControllerActionsSource = fs.readFileSync(retentionControllerActionsPath, "utf8");
 const retentionSelectionActionsSource = fs.readFileSync(retentionSelectionActionsPath, "utf8");
 const retentionExecutionActionsSource = fs.readFileSync(retentionExecutionActionsPath, "utf8");
@@ -50,6 +60,10 @@ const retentionCardCopyHelpersSource = fs.readFileSync(retentionCardCopyHelpersP
 const retentionCardActionHelpersSource = fs.readFileSync(retentionCardActionHelpersPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
+const retentionControllerTypesLineCount =
+  retentionControllerTypesSource.split(/\r?\n/).length;
+const retentionControllerHelpersLineCount =
+  retentionControllerHelpersSource.split(/\r?\n/).length;
 const retentionControllerActionsLineCount =
   retentionControllerActionsSource.split(/\r?\n/).length;
 const retentionSelectionActionsLineCount =
@@ -231,6 +245,58 @@ if (controllerLineCount > maxControllerLines) {
   );
 }
 
+for (const requiredControllerTypesUsage of [
+  "export type WorkspaceMediaRetentionRiskLabelInput = Pick<",
+  '"allHealthyLabel" | "missingFilesLabel" | "orphanFilesLabel" | "remoteMediaLabel"',
+  "report: MediaRetentionReport | null;",
+]) {
+  if (!retentionControllerTypesSource.includes(requiredControllerTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-controller.types.ts must own risk label typing: ${requiredControllerTypesUsage}`,
+    );
+  }
+}
+
+for (const requiredControllerHelpersImport of [
+  'from "./workspace-media-retention-controller.types";',
+]) {
+  if (!retentionControllerHelpersSource.includes(requiredControllerHelpersImport)) {
+    throw new Error(
+      `workspace-media-retention-controller-helpers.ts must import shared risk label contracts: ${requiredControllerHelpersImport}`,
+    );
+  }
+}
+
+for (const requiredControllerHelpersUsage of [
+  "export function buildWorkspaceMediaRetentionRiskLabel({",
+  "}: WorkspaceMediaRetentionRiskLabelInput)",
+  'return "-";',
+]) {
+  if (!retentionControllerHelpersSource.includes(requiredControllerHelpersUsage)) {
+    throw new Error(
+      `workspace-media-retention-controller-helpers.ts must own risk label construction through shared contracts: ${requiredControllerHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerHelpersToken of [
+  'from "../lib/types";',
+  "report: MediaRetentionReport | null;",
+]) {
+  if (retentionControllerHelpersSource.includes(forbiddenControllerHelpersToken)) {
+    throw new Error(
+      `workspace-media-retention-controller-helpers.ts must keep risk label typing delegated: ${forbiddenControllerHelpersToken}`,
+    );
+  }
+}
+
+const maxRetentionControllerHelpersLines = 30;
+if (retentionControllerHelpersLineCount > maxRetentionControllerHelpersLines) {
+  throw new Error(
+    `workspace-media-retention-controller-helpers.ts exceeded ${maxRetentionControllerHelpersLines} lines: ${retentionControllerHelpersLineCount}`,
+  );
+}
+
 for (const requiredControllerActionsImport of [
   'from "./workspace-media-retention-execution-actions";',
   'from "./workspace-media-retention-selection-actions";',
@@ -338,16 +404,44 @@ const retentionDerivedDataPath = path.resolve(
 );
 const retentionDerivedDataSource = fs.readFileSync(retentionDerivedDataPath, "utf8");
 
-if (!retentionDerivedDataSource.includes('from "./workspace-media-retention-controller-helpers";')) {
-  throw new Error(
-    "use-workspace-media-retention-derived-data.ts must import workspace-media-retention-controller-helpers",
-  );
+for (const requiredRetentionDerivedDataImport of [
+  'from "./workspace-media-retention-controller-helpers";',
+  'from "./workspace-media-retention-controller.types";',
+]) {
+  if (!retentionDerivedDataSource.includes(requiredRetentionDerivedDataImport)) {
+    throw new Error(
+      `use-workspace-media-retention-derived-data.ts must import shared retention helpers: ${requiredRetentionDerivedDataImport}`,
+    );
+  }
 }
 
 if (!retentionDerivedDataSource.includes("buildWorkspaceMediaRetentionRiskLabel({")) {
   throw new Error(
     "use-workspace-media-retention-derived-data.ts must delegate risk label construction through buildWorkspaceMediaRetentionRiskLabel",
   );
+}
+
+for (const requiredRetentionDerivedDataUsage of [
+  "export function useWorkspaceMediaRetentionDerivedData({",
+  "}: WorkspaceMediaRetentionRiskLabelInput)",
+  "const storageRiskLabel = useMemo(",
+]) {
+  if (!retentionDerivedDataSource.includes(requiredRetentionDerivedDataUsage)) {
+    throw new Error(
+      `use-workspace-media-retention-derived-data.ts must use shared risk label typing: ${requiredRetentionDerivedDataUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRetentionDerivedDataToken of [
+  "Parameters<typeof buildWorkspaceMediaRetentionRiskLabel>[0][\"report\"]",
+  "report: Parameters<typeof buildWorkspaceMediaRetentionRiskLabel>[0][\"report\"];",
+]) {
+  if (retentionDerivedDataSource.includes(forbiddenRetentionDerivedDataToken)) {
+    throw new Error(
+      `use-workspace-media-retention-derived-data.ts must keep risk label typing delegated: ${forbiddenRetentionDerivedDataToken}`,
+    );
+  }
 }
 
 const retentionCardHelpersPath = path.resolve(

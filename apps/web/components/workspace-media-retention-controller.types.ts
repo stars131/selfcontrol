@@ -29,6 +29,13 @@ export type WorkspaceMediaRetentionCleanupInput = {
   confirmMessage: string;
 };
 
+export type WorkspaceMediaRetentionRiskLabelInput = Pick<
+  UseWorkspaceMediaRetentionControllerProps,
+  "allHealthyLabel" | "missingFilesLabel" | "orphanFilesLabel" | "remoteMediaLabel"
+> & {
+  report: MediaRetentionReport | null;
+};
+
 export type WorkspaceMediaRetentionControllerState = {
   olderThanDays: number;
   setOlderThanDays: (value: number) => void;

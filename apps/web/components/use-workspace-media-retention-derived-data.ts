@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 
 import { buildWorkspaceMediaRetentionRiskLabel } from "./workspace-media-retention-controller-helpers";
+import type { WorkspaceMediaRetentionRiskLabelInput } from "./workspace-media-retention-controller.types";
 
 export function useWorkspaceMediaRetentionDerivedData({
   allHealthyLabel,
@@ -10,13 +11,7 @@ export function useWorkspaceMediaRetentionDerivedData({
   orphanFilesLabel,
   remoteMediaLabel,
   report,
-}: {
-  allHealthyLabel: string;
-  missingFilesLabel: string;
-  orphanFilesLabel: string;
-  remoteMediaLabel: string;
-  report: Parameters<typeof buildWorkspaceMediaRetentionRiskLabel>[0]["report"];
-}) {
+}: WorkspaceMediaRetentionRiskLabelInput) {
   const storageRiskLabel = useMemo(
     () =>
       buildWorkspaceMediaRetentionRiskLabel({

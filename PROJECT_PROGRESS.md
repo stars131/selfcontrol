@@ -1392,6 +1392,10 @@ Last updated: 2026-03-24
   - reminder payload and reminder action resolution contracts now live in `apps/web/components/record-panel-controller-reminder-payload.types.ts` instead of remaining embedded inside `apps/web/components/record-panel-controller-reminder-payload.ts`
   - `apps/web/components/record-panel-controller-reminder-payload.ts` and `apps/web/components/record-panel-controller-reminder-resolution.ts` now consume the shared extracted reminder payload types behind thinner payload-building and resolution boundaries
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder payload type boundary and keeps inline reminder payload contract definitions out of the payload builder module
+- Workspace Media Retention Risk Label Type Split V1:
+  - workspace media retention risk-label input contracts now live in `apps/web/components/workspace-media-retention-controller.types.ts` instead of remaining embedded inside the helper and derived-data hook
+  - `apps/web/components/workspace-media-retention-controller-helpers.ts` and `apps/web/components/use-workspace-media-retention-derived-data.ts` now consume the shared extracted risk-label contract behind thinner helper and hook boundaries
+  - `apps/web/scripts/verify-workspace-media-retention-structure.mjs` now enforces the risk-label type boundary and keeps inline `MediaRetentionReport` input typing plus `Parameters<typeof ...>` report extraction out of the helper and derived-data hook
 
 ## Next
 - Continue the next product slice
