@@ -1524,6 +1524,10 @@ Last updated: 2026-03-24
   - header component prop contract now lives in `apps/web/components/record-panel-header.types.ts` instead of remaining embedded directly in the component signature
   - `apps/web/components/record-panel-header.tsx` now consumes the extracted header prop contract behind a thinner top-header UI boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the header prop boundary and keeps inline header prop typing out of the component module
+- Record Panel Handler-Group Result Type Reuse Split V1:
+  - handler-group state/view-data input types now reuse the existing controller state-result and view-data-result contracts instead of reaching directly into hook return types
+  - `apps/web/components/record-panel-controller-handler-group-state-input.types.ts` and `record-panel-controller-handler-group-view-data-input.types.ts` now depend on thinner result boundaries
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that handler-group input typing stays decoupled from direct hook `ReturnType` aliases
 
 ## Next
 - Continue the next product slice

@@ -5585,7 +5585,7 @@ if (handlerGroupPropsInputTypesLines > maxHandlerGroupPropsInputTypesLines) {
 }
 
 for (const requiredHandlerGroupStateInputTypesImport of [
-  'from "./use-record-panel-controller-state";',
+  'from "./record-panel-controller-state-result.types";',
 ]) {
   if (!handlerGroupStateInputTypesSource.includes(requiredHandlerGroupStateInputTypesImport)) {
     throw new Error(
@@ -5596,12 +5596,25 @@ for (const requiredHandlerGroupStateInputTypesImport of [
 
 for (const requiredHandlerGroupStateInputTypesUsage of [
   "export type RecordPanelControllerHandlerGroupStateInput = Pick<",
+  "BuildRecordPanelControllerStateResultInput,",
   '"setSavingReminder"',
   '"setUploading"',
 ]) {
   if (!handlerGroupStateInputTypesSource.includes(requiredHandlerGroupStateInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-handler-group-state-input.types.ts must own state type slices: ${requiredHandlerGroupStateInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHandlerGroupStateInputTypesToken of [
+  'from "./use-record-panel-controller-state";',
+  "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
+  "ControllerState,",
+]) {
+  if (handlerGroupStateInputTypesSource.includes(forbiddenHandlerGroupStateInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-handler-group-state-input.types.ts must keep hook return typing delegated: ${forbiddenHandlerGroupStateInputTypesToken}`,
     );
   }
 }
@@ -5614,7 +5627,7 @@ if (handlerGroupStateInputTypesLines > maxHandlerGroupStateInputTypesLines) {
 }
 
 for (const requiredHandlerGroupViewDataInputTypesImport of [
-  'from "./use-record-panel-controller-view-data";',
+  'from "./record-panel-controller-view-data-result.types";',
 ]) {
   if (!handlerGroupViewDataInputTypesSource.includes(requiredHandlerGroupViewDataInputTypesImport)) {
     throw new Error(
@@ -5625,11 +5638,24 @@ for (const requiredHandlerGroupViewDataInputTypesImport of [
 
 for (const requiredHandlerGroupViewDataInputTypesUsage of [
   "export type RecordPanelControllerHandlerGroupViewDataInput = Pick<",
+  "BuildRecordPanelControllerViewDataResultInput,",
   '"detailCopy" | "selectedRecord"',
 ]) {
   if (!handlerGroupViewDataInputTypesSource.includes(requiredHandlerGroupViewDataInputTypesUsage)) {
     throw new Error(
       `record-panel-controller-handler-group-view-data-input.types.ts must own view-data type slices: ${requiredHandlerGroupViewDataInputTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHandlerGroupViewDataInputTypesToken of [
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
+  "ControllerViewData,",
+]) {
+  if (handlerGroupViewDataInputTypesSource.includes(forbiddenHandlerGroupViewDataInputTypesToken)) {
+    throw new Error(
+      `record-panel-controller-handler-group-view-data-input.types.ts must keep hook return typing delegated: ${forbiddenHandlerGroupViewDataInputTypesToken}`,
     );
   }
 }

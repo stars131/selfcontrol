@@ -1,10 +1,7 @@
 "use client";
-
-import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
-
-type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
+import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
 export type RecordPanelControllerHandlerGroupViewDataInput = Pick<
-  ControllerViewData,
+  BuildRecordPanelControllerViewDataResultInput,
   "detailCopy" | "selectedRecord"
 >;

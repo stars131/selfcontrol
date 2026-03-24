@@ -1,11 +1,8 @@
 "use client";
-
-import type { useRecordPanelControllerState } from "./use-record-panel-controller-state";
-
-type ControllerState = ReturnType<typeof useRecordPanelControllerState>;
+import type { BuildRecordPanelControllerStateResultInput } from "./record-panel-controller-state-result.types";
 
 export type RecordPanelControllerHandlerGroupStateInput = Pick<
-  ControllerState,
+  BuildRecordPanelControllerStateResultInput,
   | "filterDraft"
   | "form"
   | "locationReviewForm"
