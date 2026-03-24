@@ -5,6 +5,7 @@ import type { useRecordPanelControllerState } from "./use-record-panel-controlle
 import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
 type ControllerState = ReturnType<typeof useRecordPanelControllerState>;
 type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
+export type BuildRecordPanelControllerSyncInputArgs = { props: Pick<ControllerProps, "recordFilter">; state: Pick<ControllerState, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">; viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">; };
 export type RecordPanelControllerSyncInput = { recordFilter: ControllerProps["recordFilter"] } &
   Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord"> &
   Pick<

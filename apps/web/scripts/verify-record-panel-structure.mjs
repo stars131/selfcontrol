@@ -3982,9 +3982,7 @@ if (controllerLines > maxControllerLines) {
 }
 
 for (const requiredControllerSyncInputImport of [
-  'from "./record-panel-controller.types";',
-  'from "./use-record-panel-controller-state";',
-  'from "./use-record-panel-controller-view-data";',
+  'from "./use-record-panel-controller-sync.types";',
 ]) {
   if (!controllerSyncInputSource.includes(requiredControllerSyncInputImport)) {
     throw new Error(
@@ -3995,14 +3993,29 @@ for (const requiredControllerSyncInputImport of [
 
 for (const requiredControllerSyncInputUsage of [
   "export function buildRecordPanelControllerSyncInput({",
-  'props: Pick<ControllerProps, "recordFilter">;',
-  'viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">;',
+  "}: BuildRecordPanelControllerSyncInputArgs) {",
   "actionableDeadLetterIds: viewData.actionableDeadLetterIds,",
   "setSelectedDeadLetterIds: state.setSelectedDeadLetterIds,",
 ]) {
   if (!controllerSyncInputSource.includes(requiredControllerSyncInputUsage)) {
     throw new Error(
       `record-panel-controller-sync-input.ts must own sync-input assembly: ${requiredControllerSyncInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenControllerSyncInputToken of [
+  'from "./record-panel-controller.types";',
+  'from "./use-record-panel-controller-state";',
+  'from "./use-record-panel-controller-view-data";',
+  "type ControllerState = ReturnType<",
+  "type ControllerViewData = ReturnType<",
+  'props: Pick<ControllerProps, "recordFilter">;',
+  'viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">;',
+]) {
+  if (controllerSyncInputSource.includes(forbiddenControllerSyncInputToken)) {
+    throw new Error(
+      `record-panel-controller-sync-input.ts must keep sync-input typing delegated: ${forbiddenControllerSyncInputToken}`,
     );
   }
 }
@@ -4083,6 +4096,7 @@ for (const requiredControllerSyncTypesImport of [
 for (const requiredControllerSyncTypesUsage of [
   "type ControllerState = ReturnType<typeof useRecordPanelControllerState>;",
   "type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;",
+  'export type BuildRecordPanelControllerSyncInputArgs = { props: Pick<ControllerProps, "recordFilter">; state: Pick<ControllerState, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">; viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">; };',
   'export type RecordPanelControllerSyncInput = { recordFilter: ControllerProps["recordFilter"] } &',
   '"actionableDeadLetterIds" | "selectedRecord"',
   '"recordFilter"',

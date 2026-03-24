@@ -1,20 +1,12 @@
 "use client";
 
-import type { ControllerProps } from "./record-panel-controller.types";
-import type { useRecordPanelControllerState } from "./use-record-panel-controller-state";
-import type { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
-type ControllerState = ReturnType<typeof useRecordPanelControllerState>;
-type ControllerViewData = ReturnType<typeof useRecordPanelControllerViewData>;
+import type { BuildRecordPanelControllerSyncInputArgs } from "./use-record-panel-controller-sync.types";
 
 export function buildRecordPanelControllerSyncInput({
   props,
   state,
   viewData,
-}: {
-  props: Pick<ControllerProps, "recordFilter">;
-  state: Pick<ControllerState, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">;
-  viewData: Pick<ControllerViewData, "actionableDeadLetterIds" | "selectedRecord">;
-}) {
+}: BuildRecordPanelControllerSyncInputArgs) {
   return {
     actionableDeadLetterIds: viewData.actionableDeadLetterIds,
     recordFilter: props.recordFilter,
