@@ -1,12 +1,6 @@
 "use client";
-
-export function RecordPanelLegacyStatsHeader({
-  workspaceId,
-  onResetFilter,
-}: {
-  workspaceId: string;
-  onResetFilter: () => Promise<void>;
-}) {
+import type { RecordPanelLegacyStatsHeaderProps } from "./record-panel-legacy-stats.types";
+export function RecordPanelLegacyStatsHeader({ workspaceId, onResetFilter }: RecordPanelLegacyStatsHeaderProps) {
   return (
     <div className="panel-header">
       <div>

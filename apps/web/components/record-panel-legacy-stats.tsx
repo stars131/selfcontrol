@@ -2,20 +2,8 @@
 
 import { RecordPanelLegacyStatsGrid } from "./record-panel-legacy-stats-grid";
 import { RecordPanelLegacyStatsHeader } from "./record-panel-legacy-stats-header";
-
-export function RecordPanelLegacyStats({
-  avoidCount,
-  foodCount,
-  recordCount,
-  workspaceId,
-  onResetFilter,
-}: {
-  avoidCount: number;
-  foodCount: number;
-  recordCount: number;
-  workspaceId: string;
-  onResetFilter: () => Promise<void>;
-}) {
+import type { RecordPanelLegacyStatsProps } from "./record-panel-legacy-stats.types";
+export function RecordPanelLegacyStats({ avoidCount, foodCount, recordCount, workspaceId, onResetFilter }: RecordPanelLegacyStatsProps) {
   return (
     <>
       <RecordPanelLegacyStatsHeader workspaceId={workspaceId} onResetFilter={onResetFilter} />

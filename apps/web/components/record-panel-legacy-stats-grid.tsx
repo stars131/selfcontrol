@@ -1,14 +1,6 @@
 "use client";
-
-export function RecordPanelLegacyStatsGrid({
-  avoidCount,
-  foodCount,
-  recordCount,
-}: {
-  avoidCount: number;
-  foodCount: number;
-  recordCount: number;
-}) {
+import type { RecordPanelLegacyStatsGridProps } from "./record-panel-legacy-stats.types";
+export function RecordPanelLegacyStatsGrid({ avoidCount, foodCount, recordCount }: RecordPanelLegacyStatsGridProps) {
   return (
     <div className="stats-grid">
       <div className="stat-card">

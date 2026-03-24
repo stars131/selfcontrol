@@ -823,6 +823,10 @@ const legacyRecordPanelStatsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-stats.tsx",
 );
+const legacyRecordPanelStatsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-stats.types.ts",
+);
 const legacyRecordPanelStatsHeaderPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-stats-header.tsx",
@@ -874,6 +878,7 @@ const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "
 const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
 const legacyRecordPanelListEmptySource = fs.readFileSync(legacyRecordPanelListEmptyPath, "utf8");
 const legacyRecordPanelStatsSource = fs.readFileSync(legacyRecordPanelStatsPath, "utf8");
+const legacyRecordPanelStatsTypesSource = fs.readFileSync(legacyRecordPanelStatsTypesPath, "utf8");
 const legacyRecordPanelStatsHeaderSource = fs.readFileSync(
   legacyRecordPanelStatsHeaderPath,
   "utf8",
@@ -1443,6 +1448,8 @@ const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).le
 const legacyRecordPanelListItemLines = legacyRecordPanelListItemSource.split(/\r?\n/).length;
 const legacyRecordPanelListEmptyLines = legacyRecordPanelListEmptySource.split(/\r?\n/).length;
 const legacyRecordPanelStatsLines = legacyRecordPanelStatsSource.split(/\r?\n/).length;
+const legacyRecordPanelStatsTypesLines =
+  legacyRecordPanelStatsTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelStatsHeaderLines =
   legacyRecordPanelStatsHeaderSource.split(/\r?\n/).length;
 const legacyRecordPanelStatsGridLines = legacyRecordPanelStatsGridSource.split(/\r?\n/).length;
@@ -9169,7 +9176,8 @@ if (legacyRecordPanelFormMediaLines > maxLegacyRecordPanelFormMediaLines) {
 for (const requiredLegacyStatsUsage of [
   'import { RecordPanelLegacyStatsGrid } from "./record-panel-legacy-stats-grid";',
   'import { RecordPanelLegacyStatsHeader } from "./record-panel-legacy-stats-header";',
-  "export function RecordPanelLegacyStats({",
+  'from "./record-panel-legacy-stats.types";',
+  "export function RecordPanelLegacyStats({ avoidCount, foodCount, recordCount, workspaceId, onResetFilter }: RecordPanelLegacyStatsProps)",
   "<RecordPanelLegacyStatsHeader",
   "<RecordPanelLegacyStatsGrid",
 ]) {
@@ -9184,6 +9192,11 @@ for (const forbiddenLegacyStatsToken of [
   "Structured Results",
   "Visible records",
   "Reset list",
+  "avoidCount: number;",
+  "foodCount: number;",
+  "recordCount: number;",
+  "workspaceId: string;",
+  "onResetFilter: () => Promise<void>;",
 ]) {
   if (legacyRecordPanelStatsSource.includes(forbiddenLegacyStatsToken)) {
     throw new Error(`record-panel-legacy-stats.tsx must keep header/grid details delegated: ${forbiddenLegacyStatsToken}`);
@@ -9197,14 +9210,41 @@ if (legacyRecordPanelStatsLines > maxLegacyRecordPanelStatsLines) {
   );
 }
 
+for (const requiredLegacyStatsTypesUsage of [
+  "export type RecordPanelLegacyStatsHeaderProps = { workspaceId: string; onResetFilter: () => Promise<void> };",
+  "export type RecordPanelLegacyStatsGridProps = { avoidCount: number; foodCount: number; recordCount: number };",
+  "export type RecordPanelLegacyStatsProps = RecordPanelLegacyStatsHeaderProps & RecordPanelLegacyStatsGridProps;",
+]) {
+  if (!legacyRecordPanelStatsTypesSource.includes(requiredLegacyStatsTypesUsage)) {
+    throw new Error(`record-panel-legacy-stats.types.ts must own shared legacy stats typing: ${requiredLegacyStatsTypesUsage}`);
+  }
+}
+
+const maxLegacyRecordPanelStatsTypesLines = 5;
+if (legacyRecordPanelStatsTypesLines > maxLegacyRecordPanelStatsTypesLines) {
+  throw new Error(
+    `record-panel-legacy-stats.types.ts exceeded ${maxLegacyRecordPanelStatsTypesLines} lines: ${legacyRecordPanelStatsTypesLines}`,
+  );
+}
+
 for (const requiredLegacyStatsHeaderUsage of [
-  "export function RecordPanelLegacyStatsHeader({",
+  'from "./record-panel-legacy-stats.types";',
+  "export function RecordPanelLegacyStatsHeader({ workspaceId, onResetFilter }: RecordPanelLegacyStatsHeaderProps)",
   '{workspaceId}',
   "Structured Results",
   "Reset list",
 ]) {
   if (!legacyRecordPanelStatsHeaderSource.includes(requiredLegacyStatsHeaderUsage)) {
     throw new Error(`record-panel-legacy-stats-header.tsx must own legacy stats header rendering: ${requiredLegacyStatsHeaderUsage}`);
+  }
+}
+
+for (const forbiddenLegacyStatsHeaderToken of [
+  "workspaceId: string;",
+  "onResetFilter: () => Promise<void>;",
+]) {
+  if (legacyRecordPanelStatsHeaderSource.includes(forbiddenLegacyStatsHeaderToken)) {
+    throw new Error(`record-panel-legacy-stats-header.tsx must keep shared stats-header typing delegated: ${forbiddenLegacyStatsHeaderToken}`);
   }
 }
 
@@ -9216,7 +9256,8 @@ if (legacyRecordPanelStatsHeaderLines > maxLegacyRecordPanelStatsHeaderLines) {
 }
 
 for (const requiredLegacyStatsGridUsage of [
-  "export function RecordPanelLegacyStatsGrid({",
+  'from "./record-panel-legacy-stats.types";',
+  "export function RecordPanelLegacyStatsGrid({ avoidCount, foodCount, recordCount }: RecordPanelLegacyStatsGridProps)",
   "Visible records",
   "{recordCount}",
   "{foodCount}",
@@ -9224,6 +9265,16 @@ for (const requiredLegacyStatsGridUsage of [
 ]) {
   if (!legacyRecordPanelStatsGridSource.includes(requiredLegacyStatsGridUsage)) {
     throw new Error(`record-panel-legacy-stats-grid.tsx must own legacy stats grid rendering: ${requiredLegacyStatsGridUsage}`);
+  }
+}
+
+for (const forbiddenLegacyStatsGridToken of [
+  "avoidCount: number;",
+  "foodCount: number;",
+  "recordCount: number;",
+]) {
+  if (legacyRecordPanelStatsGridSource.includes(forbiddenLegacyStatsGridToken)) {
+    throw new Error(`record-panel-legacy-stats-grid.tsx must keep shared stats-grid typing delegated: ${forbiddenLegacyStatsGridToken}`);
   }
 }
 
