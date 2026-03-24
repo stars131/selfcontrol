@@ -1456,6 +1456,10 @@ Last updated: 2026-03-24
   - filter-apply action input contract now lives in `apps/web/components/record-panel-controller-filter-apply-action.types.ts` instead of remaining embedded directly in the filter-apply action helper
   - `apps/web/components/record-panel-controller-filter-apply-action.ts` now consumes the extracted filter-apply input contract behind a thinner execution boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the filter-apply input-type boundary and keeps local `DetailCopy` plus inline controller prop typing out of the action helper
+- Record Panel Media Download Input Type Split V1:
+  - media-download input contract now lives in `apps/web/components/record-panel-controller-media-download.types.ts` instead of remaining embedded directly in the browser download helper
+  - `apps/web/components/record-panel-controller-media-download.ts` now consumes the extracted media-download input contract behind a thinner browser-download boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the media-download input-type boundary and keeps inline asset/token/workspace typing out of the download helper
 
 ## Next
 - Continue the next product slice

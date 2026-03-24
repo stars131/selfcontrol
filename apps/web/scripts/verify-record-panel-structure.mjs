@@ -665,6 +665,10 @@ const recordPanelMediaDownloadPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-media-download.ts",
 );
+const recordPanelMediaDownloadTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-media-download.types.ts",
+);
 const recordPanelDeadLetterActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-dead-letter-actions.ts",
@@ -1295,6 +1299,10 @@ const mediaDownloadActionSource = fs.readFileSync(recordPanelMediaDownloadAction
 const mediaDeleteActionSource = fs.readFileSync(recordPanelMediaDeleteActionPath, "utf8");
 const mediaFileHelpersSource = fs.readFileSync(recordPanelMediaFileHelpersPath, "utf8");
 const mediaDownloadSource = fs.readFileSync(recordPanelMediaDownloadPath, "utf8");
+const mediaDownloadTypesSource = fs.readFileSync(
+  recordPanelMediaDownloadTypesPath,
+  "utf8",
+);
 const deadLetterActionsSource = fs.readFileSync(recordPanelDeadLetterActionsPath, "utf8");
 const deadLetterActionInputTypesSource = fs.readFileSync(
   recordPanelDeadLetterActionInputTypesPath,
@@ -1573,6 +1581,7 @@ const mediaDownloadActionLines = mediaDownloadActionSource.split(/\r?\n/).length
 const mediaDeleteActionLines = mediaDeleteActionSource.split(/\r?\n/).length;
 const mediaFileHelpersLines = mediaFileHelpersSource.split(/\r?\n/).length;
 const mediaDownloadLines = mediaDownloadSource.split(/\r?\n/).length;
+const mediaDownloadTypesLines = mediaDownloadTypesSource.split(/\r?\n/).length;
 const deadLetterActionsLines = deadLetterActionsSource.split(/\r?\n/).length;
 const deadLetterActionInputTypesLines =
   deadLetterActionInputTypesSource.split(/\r?\n/).length;
@@ -7655,7 +7664,7 @@ if (mediaFileHelpersLines > maxMediaFileHelpersLines) {
 
 for (const requiredMediaDownloadImport of [
   'from "../lib/api";',
-  'from "../lib/types";',
+  'from "./record-panel-controller-media-download.types";',
 ]) {
   if (!mediaDownloadSource.includes(requiredMediaDownloadImport)) {
     throw new Error(
@@ -7666,6 +7675,7 @@ for (const requiredMediaDownloadImport of [
 
 for (const requiredMediaDownloadUsage of [
   "export async function downloadRecordPanelMediaFile({",
+  "}: DownloadRecordPanelMediaFileInput) {",
   "fetchMediaBlob(",
   "URL.createObjectURL(",
   'anchor.download = asset.original_filename || `${asset.id}.bin`;',
@@ -7677,10 +7687,50 @@ for (const requiredMediaDownloadUsage of [
   }
 }
 
+for (const forbiddenMediaDownloadToken of [
+  'from "../lib/types";',
+  "asset: MediaAsset;",
+  "authToken: string;",
+  "workspaceId: string;",
+]) {
+  if (mediaDownloadSource.includes(forbiddenMediaDownloadToken)) {
+    throw new Error(
+      `record-panel-controller-media-download.ts must keep media download typing delegated: ${forbiddenMediaDownloadToken}`,
+    );
+  }
+}
+
 const maxMediaDownloadLines = 25;
 if (mediaDownloadLines > maxMediaDownloadLines) {
   throw new Error(
     `record-panel-controller-media-download.ts exceeded ${maxMediaDownloadLines} lines: ${mediaDownloadLines}`,
+  );
+}
+
+for (const requiredMediaDownloadTypesImport of [
+  'from "../lib/types";',
+]) {
+  if (!mediaDownloadTypesSource.includes(requiredMediaDownloadTypesImport)) {
+    throw new Error(
+      `record-panel-controller-media-download.types.ts must import media download type contracts: ${requiredMediaDownloadTypesImport}`,
+    );
+  }
+}
+
+for (const requiredMediaDownloadTypesUsage of [
+  'export type DownloadRecordPanelMediaFileInput = { asset: MediaAsset; authToken: string; workspaceId: string };',
+]) {
+  if (!mediaDownloadTypesSource.includes(requiredMediaDownloadTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-media-download.types.ts must own media download type contracts: ${requiredMediaDownloadTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaDownloadTypesLines = 5;
+if (mediaDownloadTypesLines > maxMediaDownloadTypesLines) {
+  throw new Error(
+    `record-panel-controller-media-download.types.ts exceeded ${maxMediaDownloadTypesLines} lines: ${mediaDownloadTypesLines}`,
   );
 }
 
