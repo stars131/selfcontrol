@@ -156,6 +156,10 @@ const recordPanelRecordSaveActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-actions.ts",
 );
+const recordPanelRecordSaveActionInputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-action-input.types.ts",
+);
 const recordPanelRecordSaveSuccessHelpersPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-success-helpers.ts",
@@ -373,6 +377,10 @@ const filterPresetDeleteActionSource = fs.readFileSync(
 const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8");
 const recordSubmitActionsSource = fs.readFileSync(recordPanelRecordSubmitActionsPath, "utf8");
 const recordSaveActionsSource = fs.readFileSync(recordPanelRecordSaveActionsPath, "utf8");
+const recordSaveActionInputTypesSource = fs.readFileSync(
+  recordPanelRecordSaveActionInputTypesPath,
+  "utf8",
+);
 const recordSaveSuccessHelpersSource = fs.readFileSync(
   recordPanelRecordSaveSuccessHelpersPath,
   "utf8",
@@ -464,6 +472,7 @@ const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const recordSubmitActionsLines = recordSubmitActionsSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
+const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\n/).length;
 const recordDeleteActionsLines = recordDeleteActionsSource.split(/\r?\n/).length;
 const recordDeleteHelpersLines = recordDeleteHelpersSource.split(/\r?\n/).length;
@@ -1935,6 +1944,7 @@ if (recordDeleteHelpersLines > maxRecordDeleteHelpersLines) {
 
 for (const requiredRecordSaveActionsImport of [
   'from "./record-panel-controller-record-save-helpers";',
+  'from "./record-panel-controller-record-save-action-input.types";',
   'from "./record-panel-controller-record-save-success-helpers";',
 ]) {
   if (!recordSaveActionsSource.includes(requiredRecordSaveActionsImport)) {
@@ -1945,6 +1955,7 @@ for (const requiredRecordSaveActionsImport of [
 }
 
 for (const requiredRecordSaveActionsUsage of [
+  "}: RecordPanelControllerRecordSaveActionInput)",
   "resolveRecordPanelRecordSaveActionInput({",
   "getRecordPanelRecordSaveErrorMessage(",
   "await onSaveRecord(saveInput.payload)",
@@ -1979,6 +1990,39 @@ const maxRecordSaveActionsLines = 65;
 if (recordSaveActionsLines > maxRecordSaveActionsLines) {
   throw new Error(
     `record-panel-controller-record-save-actions.ts exceeded ${maxRecordSaveActionsLines} lines: ${recordSaveActionsLines}`,
+  );
+}
+
+for (const requiredRecordSaveActionInputTypesImport of [
+  'from "../lib/record-panel-detail";',
+  'from "../lib/record-panel-forms";',
+  'from "../lib/types";',
+  'from "./record-panel-controller.types";',
+]) {
+  if (!recordSaveActionInputTypesSource.includes(requiredRecordSaveActionInputTypesImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-action-input.types.ts must import save action input contracts: ${requiredRecordSaveActionInputTypesImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSaveActionInputTypesUsage of [
+  "export type RecordPanelControllerRecordSaveActionInput = {",
+  "locationReviewForm: LocationReviewFormState;",
+  'onSaveRecord: ControllerProps["onSaveRecord"];',
+  "setForm: React.Dispatch<React.SetStateAction<RecordFormState>>;",
+]) {
+  if (!recordSaveActionInputTypesSource.includes(requiredRecordSaveActionInputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-action-input.types.ts must own save action input typing: ${requiredRecordSaveActionInputTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSaveActionInputTypesLines = 20;
+if (recordSaveActionInputTypesLines > maxRecordSaveActionInputTypesLines) {
+  throw new Error(
+    `record-panel-controller-record-save-action-input.types.ts exceeded ${maxRecordSaveActionInputTypesLines} lines: ${recordSaveActionInputTypesLines}`,
   );
 }
 

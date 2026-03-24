@@ -1144,6 +1144,10 @@ Last updated: 2026-03-24
   - reminder action input contracts now live in `apps/web/components/record-panel-controller-reminder-action-input.types.ts` instead of remaining embedded inside the reminder action module
   - `apps/web/components/record-panel-controller-reminder-actions.ts` now focuses more narrowly on reminder submit orchestration while consuming a shared typed input contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the reminder action input-type boundary and a dedicated size ceiling for the extracted type module
+- Record Panel Record Save Action Input Type Split V1:
+  - record-save action input contracts now live in `apps/web/components/record-panel-controller-record-save-action-input.types.ts` instead of remaining embedded inside the save action module
+  - `apps/web/components/record-panel-controller-record-save-actions.ts` now focuses more narrowly on submit orchestration while consuming a shared typed input contract
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the save action input-type boundary and a dedicated size ceiling for the extracted type module
 
 ## Next
 - Continue the next product slice
