@@ -1280,6 +1280,10 @@ Last updated: 2026-03-24
   - controller view-data result assembly now delegates non-localized fields to `apps/web/components/record-panel-controller-core-view-data-result.ts` and localized copy/formatter fields to `apps/web/components/record-panel-controller-localized-view-data-result.ts`
   - `apps/web/components/record-panel-controller-view-data-result.ts` now focuses on composing the two specialized result builders behind a thinner compatibility boundary
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the split result boundaries and dedicated size ceilings for both extracted controller result modules
+- Record Panel V2 Shell View Split V3:
+  - v2 shell browse/editor/header prop assembly now lives in `apps/web/components/record-panel-v2-shell-view-props.ts` instead of remaining distributed inside `apps/web/components/record-panel-v2.tsx`
+  - `apps/web/components/record-panel-v2.tsx` now focuses more narrowly on controller construction and top-level workspace rendering behind a thinner shell boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the dedicated shell-view prop builder boundary and keeps direct shell prop assembly out of the component
 
 ## Next
 - Continue the next product slice

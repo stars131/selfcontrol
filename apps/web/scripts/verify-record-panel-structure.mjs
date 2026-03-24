@@ -216,6 +216,10 @@ const recordPanelShellPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-props.ts",
 );
+const recordPanelShellViewPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-shell-view-props.ts",
+);
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
 const recordPanelControllerSyncPath = path.resolve(
   process.cwd(),
@@ -829,6 +833,7 @@ const editorWorkspaceControllerFormatterInputSource = fs.readFileSync(
   "utf8",
 );
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
+const shellViewPropsSource = fs.readFileSync(recordPanelShellViewPropsPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
 const controllerDeadLetterSyncSource = fs.readFileSync(
@@ -1126,6 +1131,7 @@ const editorWorkspaceControllerDisplayInputLines =
 const editorWorkspaceControllerFormatterInputLines =
   editorWorkspaceControllerFormatterInputSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
+const shellViewPropsLines = shellViewPropsSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
 const controllerDeadLetterSyncLines = controllerDeadLetterSyncSource.split(/\r?\n/).length;
@@ -1235,10 +1241,6 @@ if (!source.includes('import { useRecordPanelController } from "./use-record-pan
   throw new Error("record-panel-v2.tsx must import useRecordPanelController");
 }
 
-if (!source.includes('from "./record-panel-v2-workspace-props";')) {
-  throw new Error("record-panel-v2.tsx must import record-panel-v2-workspace-props");
-}
-
 if (!source.includes('from "./record-panel-v2-shell-props";')) {
   throw new Error("record-panel-v2.tsx must import record-panel-v2-shell-props");
 }
@@ -1257,28 +1259,8 @@ if (!source.includes("const controller = useRecordPanelController({")) {
   }
 }
 
-if (!source.includes("buildRecordBrowseWorkspaceProps({")) {
-  if (!source.includes("buildRecordBrowseWorkspaceProps(")) {
-    throw new Error("record-panel-v2.tsx must delegate browse workspace prop shaping to buildRecordBrowseWorkspaceProps");
-  }
-}
-
-if (!source.includes("buildRecordEditorWorkspaceProps({")) {
-  if (!source.includes("buildRecordEditorWorkspaceProps(")) {
-    throw new Error("record-panel-v2.tsx must delegate editor workspace prop shaping to buildRecordEditorWorkspaceProps");
-  }
-}
-
-if (!source.includes("buildRecordPanelHeaderProps({")) {
-  throw new Error("record-panel-v2.tsx must delegate header prop shaping to buildRecordPanelHeaderProps");
-}
-
-if (!source.includes("buildRecordBrowseWorkspaceInput({ controller, props })")) {
-  throw new Error("record-panel-v2.tsx must delegate browse workspace input shaping to buildRecordBrowseWorkspaceInput");
-}
-
-if (!source.includes("buildRecordEditorWorkspaceInput({ controller, props })")) {
-  throw new Error("record-panel-v2.tsx must delegate editor workspace input shaping to buildRecordEditorWorkspaceInput");
+if (!source.includes("buildRecordPanelShellViewProps({ controller, props })")) {
+  throw new Error("record-panel-v2.tsx must delegate shell view prop shaping to buildRecordPanelShellViewProps");
 }
 
 if (!source.includes("<RecordPanelHeader")) {
@@ -1304,6 +1286,12 @@ for (const forbiddenToken of [
   "const {\n    locale,",
   "authToken: props.authToken,",
   "onCreateRecord={() => props.onSelectRecord(null)}",
+  'from "./record-panel-v2-workspace-props";',
+  "buildRecordBrowseWorkspaceInput({ controller, props })",
+  "buildRecordEditorWorkspaceInput({ controller, props })",
+  "buildRecordBrowseWorkspaceProps(",
+  "buildRecordEditorWorkspaceProps(",
+  "buildRecordPanelHeaderProps({",
   "<RecordBrowseWorkspace\n          applyPresetLabel=",
   "<RecordEditorWorkspace\n          authToken=",
   '<div className="eyebrow">{panelCopy.workspace}</div>',
@@ -3019,6 +3007,7 @@ for (const requiredShellPropsExport of [
   'export { buildRecordPanelControllerInput } from "./record-panel-v2-controller-input";',
   'export { buildRecordEditorWorkspaceInput } from "./record-panel-v2-editor-workspace-input";',
   'export { buildRecordPanelHeaderProps } from "./record-panel-v2-header-props";',
+  'export { buildRecordPanelShellViewProps } from "./record-panel-v2-shell-view-props";',
 ]) {
   if (!shellPropsSource.includes(requiredShellPropsExport)) {
     throw new Error(`record-panel-v2-shell-props.ts must remain a stable re-export boundary: ${requiredShellPropsExport}`);
@@ -3029,6 +3018,42 @@ const maxShellPropsLines = 10;
 if (shellPropsLines > maxShellPropsLines) {
   throw new Error(
     `record-panel-v2-shell-props.ts exceeded ${maxShellPropsLines} lines: ${shellPropsLines}`,
+  );
+}
+
+for (const requiredShellViewPropsImport of [
+  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-browse-workspace-input";',
+  'from "./record-panel-v2-editor-workspace-input";',
+  'from "./record-panel-v2-header-props";',
+  'from "./record-panel-v2-workspace-props";',
+]) {
+  if (!shellViewPropsSource.includes(requiredShellViewPropsImport)) {
+    throw new Error(
+      `record-panel-v2-shell-view-props.ts must import delegated shell-view contracts: ${requiredShellViewPropsImport}`,
+    );
+  }
+}
+
+for (const requiredShellViewPropsUsage of [
+  "export function buildRecordPanelShellViewProps({ controller, props }: RecordPanelShellInput)",
+  "buildRecordBrowseWorkspaceProps(",
+  "buildRecordBrowseWorkspaceInput({ controller, props })",
+  "buildRecordEditorWorkspaceProps(",
+  "buildRecordEditorWorkspaceInput({ controller, props })",
+  "buildRecordPanelHeaderProps({",
+]) {
+  if (!shellViewPropsSource.includes(requiredShellViewPropsUsage)) {
+    throw new Error(
+      `record-panel-v2-shell-view-props.ts must own shell-view prop assembly: ${requiredShellViewPropsUsage}`,
+    );
+  }
+}
+
+const maxShellViewPropsLines = 30;
+if (shellViewPropsLines > maxShellViewPropsLines) {
+  throw new Error(
+    `record-panel-v2-shell-view-props.ts exceeded ${maxShellViewPropsLines} lines: ${shellViewPropsLines}`,
   );
 }
 
