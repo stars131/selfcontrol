@@ -1540,6 +1540,10 @@ Last updated: 2026-03-24
   - shared controller detail-copy typing now lives in `apps/web/components/record-panel-controller-detail-copy.types.ts` instead of remaining duplicated as local `DetailCopy` aliases across controller action-input type files
   - `record-panel-controller-filter-apply-action.types.ts`, `record-panel-controller-filter-preset-action-input.types.ts`, and `record-panel-controller-dead-letter-action-input.types.ts` now consume the shared detail-copy contract
   - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces the shared detail-copy boundary across those controller action-input type modules
+- Record Panel Controller Detail-Copy Helper Reuse Split V1:
+  - helper modules for preset-name validation, dead-letter retry fallback, and record-delete fallback now reuse the shared controller detail-copy contract instead of local `DetailCopy` aliases
+  - `record-panel-controller-filter-preset-name.ts`, `record-panel-controller-dead-letter-retry-helpers.ts`, and `record-panel-controller-record-delete-helpers.ts` now depend on the shared detail-copy boundary
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces that those helper modules stay decoupled from direct detail-bundle `ReturnType` aliases
 
 ## Next
 - Continue the next product slice

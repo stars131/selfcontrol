@@ -1,10 +1,8 @@
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 type PresetNameResolution = { errorMessage: string } | { presetName: string };
 
 export function resolveRecordPanelPresetName(
-  detailCopy: DetailCopy,
+  detailCopy: RecordPanelControllerDetailCopy,
   presetName: string,
 ): PresetNameResolution {
   const trimmedPresetName = presetName.trim();

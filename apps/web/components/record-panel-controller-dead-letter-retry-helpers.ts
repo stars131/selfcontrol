@@ -1,6 +1,4 @@
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export function getRecordPanelDeadLetterErrorMessage(
   caught: unknown,
@@ -18,6 +16,6 @@ export function getRecordPanelDeadLetterRetryRequest(
     : { retryStates: ["manual_only", "exhausted", "disabled"], limit: 50 };
 }
 
-export function getRecordPanelDeadLetterFallbackMessage(detailCopy: DetailCopy) {
+export function getRecordPanelDeadLetterFallbackMessage(detailCopy: RecordPanelControllerDetailCopy) {
   return detailCopy.bulkRetryError;
 }

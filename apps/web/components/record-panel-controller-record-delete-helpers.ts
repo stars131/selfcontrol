@@ -1,6 +1,4 @@
-import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
-
-type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export function getRecordPanelRecordDeleteErrorMessage(
   caught: unknown,
@@ -9,6 +7,6 @@ export function getRecordPanelRecordDeleteErrorMessage(
   return caught instanceof Error ? caught.message : fallbackMessage;
 }
 
-export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: DetailCopy) {
+export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: RecordPanelControllerDetailCopy) {
   return detailCopy.deleteRecordError;
 }

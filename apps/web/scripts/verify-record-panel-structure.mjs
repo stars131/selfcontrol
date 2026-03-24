@@ -6691,7 +6691,7 @@ if (filterErrorHelpersLines > maxFilterErrorHelpersLines) {
 }
 
 for (const requiredFilterPresetNameImport of [
-  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!filterPresetNameSource.includes(requiredFilterPresetNameImport)) {
     throw new Error(
@@ -6702,11 +6702,24 @@ for (const requiredFilterPresetNameImport of [
 
 for (const requiredFilterPresetNameUsage of [
   "export function resolveRecordPanelPresetName(",
+  "detailCopy: RecordPanelControllerDetailCopy,",
   "presetNameRequiredError",
 ]) {
   if (!filterPresetNameSource.includes(requiredFilterPresetNameUsage)) {
     throw new Error(
       `record-panel-controller-filter-preset-name.ts must own preset-name validation: ${requiredFilterPresetNameUsage}`,
+    );
+  }
+}
+
+for (const forbiddenFilterPresetNameToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy,",
+]) {
+  if (filterPresetNameSource.includes(forbiddenFilterPresetNameToken)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-name.ts must keep detail-copy typing delegated: ${forbiddenFilterPresetNameToken}`,
     );
   }
 }
@@ -6918,7 +6931,7 @@ if (recordDeleteRunActionLines > maxRecordDeleteRunActionLines) {
 }
 
 for (const requiredRecordDeleteHelpersImport of [
-  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!recordDeleteHelpersSource.includes(requiredRecordDeleteHelpersImport)) {
     throw new Error(
@@ -6929,13 +6942,25 @@ for (const requiredRecordDeleteHelpersImport of [
 
 for (const requiredRecordDeleteHelpersUsage of [
   "export function getRecordPanelRecordDeleteErrorMessage(",
-  "export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: DetailCopy)",
+  "export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: RecordPanelControllerDetailCopy)",
   "return caught instanceof Error ? caught.message : fallbackMessage;",
   "return detailCopy.deleteRecordError;",
 ]) {
   if (!recordDeleteHelpersSource.includes(requiredRecordDeleteHelpersUsage)) {
     throw new Error(
       `record-panel-controller-record-delete-helpers.ts must own delete helper details: ${requiredRecordDeleteHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordDeleteHelpersToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy)",
+]) {
+  if (recordDeleteHelpersSource.includes(forbiddenRecordDeleteHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-record-delete-helpers.ts must keep detail-copy typing delegated: ${forbiddenRecordDeleteHelpersToken}`,
     );
   }
 }
@@ -8703,7 +8728,7 @@ if (deadLetterSelectionHelpersLines > maxDeadLetterSelectionHelpersLines) {
 }
 
 for (const requiredDeadLetterRetryHelpersImport of [
-  'from "../lib/record-panel-detail";',
+  'from "./record-panel-controller-detail-copy.types";',
 ]) {
   if (!deadLetterRetryHelpersSource.includes(requiredDeadLetterRetryHelpersImport)) {
     throw new Error(
@@ -8715,13 +8740,25 @@ for (const requiredDeadLetterRetryHelpersImport of [
 for (const requiredDeadLetterRetryHelpersUsage of [
   "export function getRecordPanelDeadLetterErrorMessage(",
   "export function getRecordPanelDeadLetterRetryRequest(",
-  "export function getRecordPanelDeadLetterFallbackMessage(detailCopy: DetailCopy)",
+  "export function getRecordPanelDeadLetterFallbackMessage(detailCopy: RecordPanelControllerDetailCopy)",
   '"manual_only", "exhausted", "disabled"',
   "bulkRetryError",
 ]) {
   if (!deadLetterRetryHelpersSource.includes(requiredDeadLetterRetryHelpersUsage)) {
     throw new Error(
       `record-panel-controller-dead-letter-retry-helpers.ts must own dead-letter retry details: ${requiredDeadLetterRetryHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRetryHelpersToken of [
+  'from "../lib/record-panel-detail";',
+  'type DetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "detailCopy: DetailCopy)",
+]) {
+  if (deadLetterRetryHelpersSource.includes(forbiddenDeadLetterRetryHelpersToken)) {
+    throw new Error(
+      `record-panel-controller-dead-letter-retry-helpers.ts must keep detail-copy typing delegated: ${forbiddenDeadLetterRetryHelpersToken}`,
     );
   }
 }
