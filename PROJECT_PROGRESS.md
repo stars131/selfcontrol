@@ -1795,6 +1795,10 @@ Last updated: 2026-03-25
   - `workspace-entry-sections-grid.tsx` now consumes an extracted `WorkspaceEntrySectionsGridProps` contract instead of keeping a local `Omit<...>` grid prop type inside the component module
   - the new `workspace-entry-sections-grid.types.ts` file keeps the entry grid boundary explicit and reusable while the component remains focused on section composition
   - `verify-workspace-entry-structure.mjs` now enforces that delegated grid prop boundary so workspace entry composition stays thinner and easier to evolve under the enterprise engineering standard
+- Media Storage Overview Leaf Split V1:
+  - `media-storage-overview.tsx` now delegates summary card rendering and provider breakdown tags to `media-storage-overview-summary.tsx` and `media-storage-overview-provider-tags.tsx` instead of keeping both display blocks inline in one component
+  - the new overview `*.types.ts` files keep summary and provider-tag prop contracts explicit and reusable while the parent overview remains focused on orchestration
+  - `verify-record-panel-structure.mjs` now enforces those delegated overview boundaries so media diagnostics stay thinner and easier to evolve under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

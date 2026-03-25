@@ -1056,6 +1056,22 @@ const mediaStorageOverviewTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview.types.ts",
 );
+const mediaStorageOverviewSummaryPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-summary.tsx",
+);
+const mediaStorageOverviewSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-summary.types.ts",
+);
+const mediaStorageOverviewProviderTagsPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-provider-tags.tsx",
+);
+const mediaStorageOverviewProviderTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-provider-tags.types.ts",
+);
 const recordMediaProcessingPanelsPath = path.resolve(
   process.cwd(),
   "components/record-media-processing-panels.tsx",
@@ -2169,6 +2185,22 @@ const mediaAssetCardActionsTypesSource = fs.readFileSync(
 );
 const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
 const mediaStorageOverviewTypesSource = fs.readFileSync(mediaStorageOverviewTypesPath, "utf8");
+const mediaStorageOverviewSummarySource = fs.readFileSync(
+  mediaStorageOverviewSummaryPath,
+  "utf8",
+);
+const mediaStorageOverviewSummaryTypesSource = fs.readFileSync(
+  mediaStorageOverviewSummaryTypesPath,
+  "utf8",
+);
+const mediaStorageOverviewProviderTagsSource = fs.readFileSync(
+  mediaStorageOverviewProviderTagsPath,
+  "utf8",
+);
+const mediaStorageOverviewProviderTagsTypesSource = fs.readFileSync(
+  mediaStorageOverviewProviderTagsTypesPath,
+  "utf8",
+);
 const recordMediaProcessingPanelsSource = fs.readFileSync(recordMediaProcessingPanelsPath, "utf8");
 const recordMediaProcessingPanelsTypesSource = fs.readFileSync(
   recordMediaProcessingPanelsTypesPath,
@@ -3476,6 +3508,14 @@ const mediaAssetSectionTypesLines = mediaAssetSectionTypesSource.split(/\r?\n/).
 const mediaAssetCardActionsTypesLines =
   mediaAssetCardActionsTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
+const mediaStorageOverviewSummaryLines =
+  mediaStorageOverviewSummarySource.split(/\r?\n/).length;
+const mediaStorageOverviewSummaryTypesLines =
+  mediaStorageOverviewSummaryTypesSource.split(/\r?\n/).length;
+const mediaStorageOverviewProviderTagsLines =
+  mediaStorageOverviewProviderTagsSource.split(/\r?\n/).length;
+const mediaStorageOverviewProviderTagsTypesLines =
+  mediaStorageOverviewProviderTagsTypesSource.split(/\r?\n/).length;
 const recordMediaProcessingPanelsTypesLines =
   recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
 const recordMediaSelectedContentPropsLines =
@@ -12993,8 +13033,12 @@ if (recordReminderToolsPanelPropsTypesLines > maxRecordReminderToolsPanelPropsTy
 }
 
 for (const requiredMediaStorageOverviewUsage of [
+  'import { MediaStorageOverviewProviderTags } from "./media-storage-overview-provider-tags";',
+  'import { MediaStorageOverviewSummary } from "./media-storage-overview-summary";',
   'import type { MediaStorageOverviewProps } from "./media-storage-overview.types";',
   "export function MediaStorageOverview({",
+  "<MediaStorageOverviewSummary",
+  "<MediaStorageOverviewProviderTags",
 ]) {
   if (!mediaStorageOverviewSource.includes(requiredMediaStorageOverviewUsage)) {
     throw new Error(
@@ -13003,8 +13047,14 @@ for (const requiredMediaStorageOverviewUsage of [
   }
 }
 
-if (mediaStorageOverviewSource.includes("type MediaStorageOverviewProps = {")) {
-  throw new Error("media-storage-overview.tsx must keep overview prop typing delegated");
+for (const forbiddenMediaStorageOverviewToken of [
+  "type MediaStorageOverviewProps = {",
+  'className="detail-grid"',
+  'Object.entries(mediaProcessingOverview.by_storage_provider)',
+]) {
+  if (mediaStorageOverviewSource.includes(forbiddenMediaStorageOverviewToken)) {
+    throw new Error(`media-storage-overview.tsx must keep overview detail rendering delegated: ${forbiddenMediaStorageOverviewToken}`);
+  }
 }
 
 for (const requiredMediaStorageOverviewTypesUsage of [
@@ -13022,6 +13072,80 @@ const maxMediaStorageOverviewTypesLines = 3;
 if (mediaStorageOverviewTypesLines > maxMediaStorageOverviewTypesLines) {
   throw new Error(
     `media-storage-overview.types.ts exceeded ${maxMediaStorageOverviewTypesLines} lines: ${mediaStorageOverviewTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewSummaryUsage of [
+  'import type { MediaStorageOverviewSummaryProps } from "./media-storage-overview-summary.types";',
+  "}: MediaStorageOverviewSummaryProps) {",
+  'className="detail-grid"',
+  "mediaStorageSummary.missing_file_count",
+  "mediaProcessingOverview.completed_count",
+]) {
+  if (!mediaStorageOverviewSummarySource.includes(requiredMediaStorageOverviewSummaryUsage)) {
+    throw new Error(
+      `media-storage-overview-summary.tsx must own overview summary rendering: ${requiredMediaStorageOverviewSummaryUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewSummaryLines = 85;
+if (mediaStorageOverviewSummaryLines > maxMediaStorageOverviewSummaryLines) {
+  throw new Error(
+    `media-storage-overview-summary.tsx exceeded ${maxMediaStorageOverviewSummaryLines} lines: ${mediaStorageOverviewSummaryLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewSummaryTypesUsage of [
+  'import type { MediaStorageOverviewProps } from "./media-storage-overview.types"; export type MediaStorageOverviewSummaryProps = Pick<MediaStorageOverviewProps, "allTrackedFilesPresentLabel" | "formatFileCountLabel" | "mediaAssetCount" | "mediaProcessingOverview" | "mediaStorageSummary" | "missingFilesLabel" | "needsAttentionLabel" | "processingCompletedLabel" | "queueStateLabel" | "queuedLabel" | "remoteLabel" | "selectedRecordMediaSizeLabel" | "storageHealthLabel" | "storageMixLabel" | "thisRecordMediaLabel" | "workspaceStorageLabel" | "localLabel">;',
+]) {
+  if (!mediaStorageOverviewSummaryTypesSource.includes(requiredMediaStorageOverviewSummaryTypesUsage)) {
+    throw new Error(
+      `media-storage-overview-summary.types.ts must own overview summary prop typing: ${requiredMediaStorageOverviewSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewSummaryTypesLines = 2;
+if (mediaStorageOverviewSummaryTypesLines > maxMediaStorageOverviewSummaryTypesLines) {
+  throw new Error(
+    `media-storage-overview-summary.types.ts exceeded ${maxMediaStorageOverviewSummaryTypesLines} lines: ${mediaStorageOverviewSummaryTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewProviderTagsUsage of [
+  'import type { MediaStorageOverviewProviderTagsProps } from "./media-storage-overview-provider-tags.types";',
+  "}: MediaStorageOverviewProviderTagsProps) {",
+  "Object.entries(mediaProcessingOverview.by_storage_provider)",
+]) {
+  if (!mediaStorageOverviewProviderTagsSource.includes(requiredMediaStorageOverviewProviderTagsUsage)) {
+    throw new Error(
+      `media-storage-overview-provider-tags.tsx must own provider-tag rendering: ${requiredMediaStorageOverviewProviderTagsUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewProviderTagsLines = 25;
+if (mediaStorageOverviewProviderTagsLines > maxMediaStorageOverviewProviderTagsLines) {
+  throw new Error(
+    `media-storage-overview-provider-tags.tsx exceeded ${maxMediaStorageOverviewProviderTagsLines} lines: ${mediaStorageOverviewProviderTagsLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewProviderTagsTypesUsage of [
+  'import type { MediaStorageOverviewProps } from "./media-storage-overview.types"; export type MediaStorageOverviewProviderTagsProps = Pick<MediaStorageOverviewProps, "mediaProcessingOverview">;',
+]) {
+  if (!mediaStorageOverviewProviderTagsTypesSource.includes(requiredMediaStorageOverviewProviderTagsTypesUsage)) {
+    throw new Error(
+      `media-storage-overview-provider-tags.types.ts must own provider-tag prop typing: ${requiredMediaStorageOverviewProviderTagsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewProviderTagsTypesLines = 2;
+if (mediaStorageOverviewProviderTagsTypesLines > maxMediaStorageOverviewProviderTagsTypesLines) {
+  throw new Error(
+    `media-storage-overview-provider-tags.types.ts exceeded ${maxMediaStorageOverviewProviderTagsTypesLines} lines: ${mediaStorageOverviewProviderTagsTypesLines}`,
   );
 }
 
