@@ -1,0 +1,3 @@
+import type { WorkspaceTransferJob } from "../lib/types"; import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";
+export type WorkspaceExportJobsState = { setJobs: (value: WorkspaceTransferJob[] | ((current: WorkspaceTransferJob[]) => WorkspaceTransferJob[])) => void; setLoading: (value: boolean) => void; setActionLoading: (value: boolean) => void; setError: (value: string) => void; setMessage: (value: string) => void };
+export type CreateWorkspaceExportJobsActionsInput = UseWorkspaceExportJobsControllerProps & { state: WorkspaceExportJobsState };

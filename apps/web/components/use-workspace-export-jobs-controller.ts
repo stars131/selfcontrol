@@ -2,17 +2,9 @@
 
 import { useEffect } from "react";
 
+import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";
 import { useWorkspaceExportJobsState } from "./use-workspace-export-jobs-state";
 import { createWorkspaceExportJobsActions } from "./workspace-export-jobs-actions";
-
-type UseWorkspaceExportJobsControllerProps = {
-  token: string;
-  workspaceId: string;
-  loadFailedMessage: string;
-  createFailedMessage: string;
-  downloadFailedMessage: string;
-  queuedMessage: string;
-};
 
 export function useWorkspaceExportJobsController({
   token,

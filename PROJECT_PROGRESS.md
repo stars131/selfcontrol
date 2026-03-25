@@ -1596,6 +1596,10 @@ Last updated: 2026-03-25
   - `use-map-panel-controller.ts` now consumes an extracted input contract from `use-map-panel-controller.types.ts` instead of keeping the full hook argument shape inline
   - the extracted input type reuses `map-panel.types.ts` for the shared panel surface and only adds the map/geocoder refs needed by the hook
   - this keeps the hook boundary thinner and easier to evolve without duplicating panel input contracts
+- Workspace Export Controller Type Split V1:
+  - workspace export hooks and jobs actions now consume extracted type contracts instead of keeping controller props and jobs-action state inline
+  - `use-workspace-export-controller.ts`, `use-workspace-export-jobs-controller.ts`, and `workspace-export-jobs-actions.ts` now depend on dedicated `*.types.ts` contracts
+  - this keeps the export-management surface thinner and easier to update as transfer features expand
 
 ## Next
 - Continue the next product slice

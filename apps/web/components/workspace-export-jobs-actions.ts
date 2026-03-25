@@ -5,25 +5,7 @@ import {
   downloadWorkspaceTransferJob,
   listWorkspaceTransferJobs,
 } from "../lib/api";
-import type { WorkspaceTransferJob } from "../lib/types";
-
-type WorkspaceExportJobsState = {
-  setJobs: (value: WorkspaceTransferJob[] | ((current: WorkspaceTransferJob[]) => WorkspaceTransferJob[])) => void;
-  setLoading: (value: boolean) => void;
-  setActionLoading: (value: boolean) => void;
-  setError: (value: string) => void;
-  setMessage: (value: string) => void;
-};
-
-type CreateWorkspaceExportJobsActionsInput = {
-  token: string;
-  workspaceId: string;
-  loadFailedMessage: string;
-  createFailedMessage: string;
-  downloadFailedMessage: string;
-  queuedMessage: string;
-  state: WorkspaceExportJobsState;
-};
+import type { CreateWorkspaceExportJobsActionsInput } from "./workspace-export-jobs-actions.types";
 
 function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
   return caught instanceof Error ? caught.message : fallbackMessage;

@@ -916,6 +916,30 @@ const mapPanelControllerTypesPath = path.resolve(
   process.cwd(),
   "components/use-map-panel-controller.types.ts",
 );
+const workspaceExportControllerPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-export-controller.ts",
+);
+const workspaceExportControllerTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-export-controller.types.ts",
+);
+const workspaceExportJobsActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-actions.ts",
+);
+const workspaceExportJobsActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-actions.types.ts",
+);
+const workspaceExportJobsControllerPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-export-jobs-controller.ts",
+);
+const workspaceExportJobsControllerTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-export-jobs-controller.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1030,6 +1054,24 @@ const mapPanelControllerResultTypesSource = fs.readFileSync(
 );
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelControllerTypesSource = fs.readFileSync(mapPanelControllerTypesPath, "utf8");
+const workspaceExportControllerSource = fs.readFileSync(workspaceExportControllerPath, "utf8");
+const workspaceExportControllerTypesSource = fs.readFileSync(
+  workspaceExportControllerTypesPath,
+  "utf8",
+);
+const workspaceExportJobsActionsSource = fs.readFileSync(workspaceExportJobsActionsPath, "utf8");
+const workspaceExportJobsActionsTypesSource = fs.readFileSync(
+  workspaceExportJobsActionsTypesPath,
+  "utf8",
+);
+const workspaceExportJobsControllerSource = fs.readFileSync(
+  workspaceExportJobsControllerPath,
+  "utf8",
+);
+const workspaceExportJobsControllerTypesSource = fs.readFileSync(
+  workspaceExportJobsControllerTypesPath,
+  "utf8",
+);
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
   chatPanelActionDerivedDataResultTypesPath,
   "utf8",
@@ -1646,6 +1688,12 @@ const recordMediaSelectedContentPropsLines =
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
+const workspaceExportControllerTypesLines =
+  workspaceExportControllerTypesSource.split(/\r?\n/).length;
+const workspaceExportJobsActionsTypesLines =
+  workspaceExportJobsActionsTypesSource.split(/\r?\n/).length;
+const workspaceExportJobsControllerTypesLines =
+  workspaceExportJobsControllerTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10414,6 +10462,114 @@ const maxMapPanelControllerTypesLines = 3;
 if (mapPanelControllerTypesLines > maxMapPanelControllerTypesLines) {
   throw new Error(
     `use-map-panel-controller.types.ts exceeded ${maxMapPanelControllerTypesLines} lines: ${mapPanelControllerTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportControllerUsage of [
+  'import type { UseWorkspaceExportControllerProps } from "./use-workspace-export-controller.types";',
+  "}: UseWorkspaceExportControllerProps) {",
+]) {
+  if (!workspaceExportControllerSource.includes(requiredWorkspaceExportControllerUsage)) {
+    throw new Error(
+      `use-workspace-export-controller.ts must reuse the extracted export controller input type: ${requiredWorkspaceExportControllerUsage}`,
+    );
+  }
+}
+
+if (workspaceExportControllerSource.includes("type UseWorkspaceExportControllerProps = {")) {
+  throw new Error("use-workspace-export-controller.ts must keep export controller input typing delegated");
+}
+
+for (const requiredWorkspaceExportControllerTypesUsage of [
+  'export type UseWorkspaceExportControllerProps = { token: string; workspaceId: string; workspaceSlug?: string | null; successMessage: string; failedMessage: string };',
+]) {
+  if (!workspaceExportControllerTypesSource.includes(requiredWorkspaceExportControllerTypesUsage)) {
+    throw new Error(
+      `use-workspace-export-controller.types.ts must own export controller input typing: ${requiredWorkspaceExportControllerTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportControllerTypesLines = 2;
+if (workspaceExportControllerTypesLines > maxWorkspaceExportControllerTypesLines) {
+  throw new Error(
+    `use-workspace-export-controller.types.ts exceeded ${maxWorkspaceExportControllerTypesLines} lines: ${workspaceExportControllerTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsControllerUsage of [
+  'import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";',
+  "}: UseWorkspaceExportJobsControllerProps) {",
+]) {
+  if (!workspaceExportJobsControllerSource.includes(requiredWorkspaceExportJobsControllerUsage)) {
+    throw new Error(
+      `use-workspace-export-jobs-controller.ts must reuse the extracted export-jobs controller input type: ${requiredWorkspaceExportJobsControllerUsage}`,
+    );
+  }
+}
+
+if (workspaceExportJobsControllerSource.includes("type UseWorkspaceExportJobsControllerProps = {")) {
+  throw new Error(
+    "use-workspace-export-jobs-controller.ts must keep export-jobs controller input typing delegated",
+  );
+}
+
+for (const requiredWorkspaceExportJobsControllerTypesUsage of [
+  'export type UseWorkspaceExportJobsControllerProps = { token: string; workspaceId: string; loadFailedMessage: string; createFailedMessage: string; downloadFailedMessage: string; queuedMessage: string };',
+]) {
+  if (!workspaceExportJobsControllerTypesSource.includes(requiredWorkspaceExportJobsControllerTypesUsage)) {
+    throw new Error(
+      `use-workspace-export-jobs-controller.types.ts must own export-jobs controller input typing: ${requiredWorkspaceExportJobsControllerTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportJobsControllerTypesLines = 2;
+if (workspaceExportJobsControllerTypesLines > maxWorkspaceExportJobsControllerTypesLines) {
+  throw new Error(
+    `use-workspace-export-jobs-controller.types.ts exceeded ${maxWorkspaceExportJobsControllerTypesLines} lines: ${workspaceExportJobsControllerTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsActionsUsage of [
+  'import type { CreateWorkspaceExportJobsActionsInput } from "./workspace-export-jobs-actions.types";',
+  "}: CreateWorkspaceExportJobsActionsInput) {",
+]) {
+  if (!workspaceExportJobsActionsSource.includes(requiredWorkspaceExportJobsActionsUsage)) {
+    throw new Error(
+      `workspace-export-jobs-actions.ts must reuse the extracted export-jobs action types: ${requiredWorkspaceExportJobsActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceExportJobsActionsToken of [
+  "type WorkspaceExportJobsState = {",
+  "type CreateWorkspaceExportJobsActionsInput = {",
+]) {
+  if (workspaceExportJobsActionsSource.includes(forbiddenWorkspaceExportJobsActionsToken)) {
+    throw new Error(
+      `workspace-export-jobs-actions.ts must keep export-jobs action typing delegated: ${forbiddenWorkspaceExportJobsActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceExportJobsActionsTypesUsage of [
+  'import type { WorkspaceTransferJob } from "../lib/types";',
+  'import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";',
+  "export type WorkspaceExportJobsState = {",
+  "export type CreateWorkspaceExportJobsActionsInput = UseWorkspaceExportJobsControllerProps & { state: WorkspaceExportJobsState };",
+]) {
+  if (!workspaceExportJobsActionsTypesSource.includes(requiredWorkspaceExportJobsActionsTypesUsage)) {
+    throw new Error(
+      `workspace-export-jobs-actions.types.ts must own export-jobs action typing: ${requiredWorkspaceExportJobsActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportJobsActionsTypesLines = 4;
+if (workspaceExportJobsActionsTypesLines > maxWorkspaceExportJobsActionsTypesLines) {
+  throw new Error(
+    `workspace-export-jobs-actions.types.ts exceeded ${maxWorkspaceExportJobsActionsTypesLines} lines: ${workspaceExportJobsActionsTypesLines}`,
   );
 }
 
