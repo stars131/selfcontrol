@@ -1608,6 +1608,10 @@ Last updated: 2026-03-25
   - settings header and overview card components now consume extracted prop contracts instead of keeping locale/workspace/knowledge props inline
   - `workspace-settings-header.tsx` and `workspace-settings-overview-card.tsx` now depend on dedicated `*.types.ts` files
   - this keeps the settings-page presentation layer thinner and more consistent with the broader UI boundary cleanup
+- Workspace Members Section Props Split V1:
+  - `workspace-members-section.tsx` now consumes an extracted props contract instead of repeating member-management props inline
+  - the new shared props type reuses `workspace-settings-managed-sections.types.ts` so the settings-members surface stays aligned with its parent boundary
+  - this keeps member-management UI typing thinner and reduces duplication across settings modules
 
 ## Next
 - Continue the next product slice

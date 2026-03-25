@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types"; export type WorkspaceMembersSectionProps = Pick<WorkspaceSettingsManagedSectionsProps, "copy" | "locale" | "members" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "userId"> & { workspaceRole: "owner" | "editor" };

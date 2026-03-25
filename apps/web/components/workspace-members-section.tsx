@@ -1,8 +1,6 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
-import type { WorkspaceMemberItem } from "../lib/types";
-import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";
+import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types";
 
 export function WorkspaceMembersSection({
   copy,
@@ -14,17 +12,7 @@ export function WorkspaceMembersSection({
   savingMemberId,
   userId,
   workspaceRole,
-}: {
-  copy: WorkspaceSettingsCopy;
-  locale: LocaleCode;
-  members: WorkspaceMemberItem[];
-  onRemoveMember: (memberId: string) => Promise<void>;
-  onUpdateMemberRole: (memberId: string, role: "viewer" | "editor") => Promise<void>;
-  removingMemberId: string;
-  savingMemberId: string;
-  userId?: string;
-  workspaceRole: "owner" | "editor";
-}) {
+}: WorkspaceMembersSectionProps) {
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
       <div className="eyebrow">{copy.membersTitle}</div>

@@ -972,6 +972,14 @@ const workspaceSettingsOverviewCardTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.types.ts",
 );
+const workspaceMembersSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section.tsx",
+);
+const workspaceMembersSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1122,6 +1130,11 @@ const workspaceSettingsOverviewCardSource = fs.readFileSync(
 );
 const workspaceSettingsOverviewCardTypesSource = fs.readFileSync(
   workspaceSettingsOverviewCardTypesPath,
+  "utf8",
+);
+const workspaceMembersSectionSource = fs.readFileSync(workspaceMembersSectionPath, "utf8");
+const workspaceMembersSectionTypesSource = fs.readFileSync(
+  workspaceMembersSectionTypesPath,
   "utf8",
 );
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
@@ -1753,6 +1766,8 @@ const workspaceSettingsHeaderTypesLines =
   workspaceSettingsHeaderTypesSource.split(/\r?\n/).length;
 const workspaceSettingsOverviewCardTypesLines =
   workspaceSettingsOverviewCardTypesSource.split(/\r?\n/).length;
+const workspaceMembersSectionTypesLines =
+  workspaceMembersSectionTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10750,6 +10765,50 @@ const maxWorkspaceSettingsOverviewCardTypesLines = 2;
 if (workspaceSettingsOverviewCardTypesLines > maxWorkspaceSettingsOverviewCardTypesLines) {
   throw new Error(
     `workspace-settings-overview-card.types.ts exceeded ${maxWorkspaceSettingsOverviewCardTypesLines} lines: ${workspaceSettingsOverviewCardTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionUsage of [
+  'import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types";',
+  "}: WorkspaceMembersSectionProps) {",
+]) {
+  if (!workspaceMembersSectionSource.includes(requiredWorkspaceMembersSectionUsage)) {
+    throw new Error(
+      `workspace-members-section.tsx must reuse the extracted members-section props type: ${requiredWorkspaceMembersSectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceMembersSectionToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { WorkspaceMemberItem } from "../lib/types";',
+  'import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";',
+  "copy: WorkspaceSettingsCopy;",
+  "members: WorkspaceMemberItem[];",
+  "type WorkspaceMembersSectionProps = {",
+]) {
+  if (workspaceMembersSectionSource.includes(forbiddenWorkspaceMembersSectionToken)) {
+    throw new Error(
+      `workspace-members-section.tsx must keep members-section prop typing delegated: ${forbiddenWorkspaceMembersSectionToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceMembersSectionTypesUsage of [
+  'import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types";',
+  'export type WorkspaceMembersSectionProps = Pick<WorkspaceSettingsManagedSectionsProps, "copy" | "locale" | "members" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "userId"> & { workspaceRole: "owner" | "editor" };',
+]) {
+  if (!workspaceMembersSectionTypesSource.includes(requiredWorkspaceMembersSectionTypesUsage)) {
+    throw new Error(
+      `workspace-members-section.types.ts must own members-section prop typing: ${requiredWorkspaceMembersSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMembersSectionTypesLines = 2;
+if (workspaceMembersSectionTypesLines > maxWorkspaceMembersSectionTypesLines) {
+  throw new Error(
+    `workspace-members-section.types.ts exceeded ${maxWorkspaceMembersSectionTypesLines} lines: ${workspaceMembersSectionTypesLines}`,
   );
 }
 
