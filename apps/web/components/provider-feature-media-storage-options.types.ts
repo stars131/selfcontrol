@@ -1,0 +1,1 @@
+import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types"; export type ProviderFeatureMediaStorageOptionsProps = { copy: ProviderSettingsCopy; draftItem: ProviderDraft; featureCode: string; onProviderDraftChange: (featureCode: string, patch: Partial<ProviderDraft>) => void };

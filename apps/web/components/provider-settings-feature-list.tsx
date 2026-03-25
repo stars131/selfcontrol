@@ -5,23 +5,7 @@ import {
   buildProviderFeatureCardProps,
   buildProviderSettingsSecretStatusFormatter,
 } from "./provider-settings-panel-helpers";
-import type { ProviderSettingsCopy } from "./provider-settings-copy";
-import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";
-import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
-import type { ProviderDraft } from "./provider-settings-controller.types";
-
-type ProviderSettingsFeatureListProps = Pick<
-  ProviderSettingsPanelProps,
-  "highlightedAnchor" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "providerConfigs" | "refreshingMediaStorageHealth"
-> & {
-  copy: ProviderSettingsCopy;
-  handleProviderDraftChange: ProviderFeatureCardProps["onProviderDraftChange"];
-  handleResetProviderConfig: ProviderFeatureCardProps["onReset"];
-  handleSaveProviderConfig: ProviderFeatureCardProps["onSave"];
-  isProviderDraftDirty: (item: ProviderSettingsPanelProps["providerConfigs"][number]) => boolean;
-  providerDrafts: Record<string, ProviderDraft>;
-  providerSavingCode: string;
-};
+import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";
 
 export function ProviderSettingsFeatureList({
   copy,

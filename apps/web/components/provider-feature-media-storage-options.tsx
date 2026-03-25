@@ -1,7 +1,6 @@
 "use client";
 
-import type { ProviderSettingsCopy } from "./provider-settings-copy";
-import type { ProviderDraft } from "./provider-settings-controller.types";
+import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types";
 
 const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";
 const MEDIA_STORAGE_AUTO_RETRY_OPTION = "auto_retry_enabled";
@@ -31,12 +30,7 @@ export function ProviderFeatureMediaStorageOptions({
   draftItem,
   featureCode,
   onProviderDraftChange,
-}: {
-  copy: ProviderSettingsCopy;
-  draftItem: ProviderDraft;
-  featureCode: string;
-  onProviderDraftChange: (featureCode: string, patch: Partial<ProviderDraft>) => void;
-}) {
+}: ProviderFeatureMediaStorageOptionsProps) {
   return (
     <>
       <label className="muted" style={{ display: "block", marginTop: 10 }}>

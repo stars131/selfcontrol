@@ -1020,6 +1020,30 @@ const workspaceMediaRetentionSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-summary.types.ts",
 );
+const providerFeatureMediaStorageOptionsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-options.tsx",
+);
+const providerFeatureMediaStorageOptionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-options.types.ts",
+);
+const providerSettingsFeatureListPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list.tsx",
+);
+const providerSettingsFeatureListTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list.types.ts",
+);
+const providerSettingsJumpNavPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-jump-nav.tsx",
+);
+const providerSettingsJumpNavTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-jump-nav.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1215,6 +1239,27 @@ const workspaceMediaRetentionSummarySource = fs.readFileSync(
 );
 const workspaceMediaRetentionSummaryTypesSource = fs.readFileSync(
   workspaceMediaRetentionSummaryTypesPath,
+  "utf8",
+);
+const providerFeatureMediaStorageOptionsSource = fs.readFileSync(
+  providerFeatureMediaStorageOptionsPath,
+  "utf8",
+);
+const providerFeatureMediaStorageOptionsTypesSource = fs.readFileSync(
+  providerFeatureMediaStorageOptionsTypesPath,
+  "utf8",
+);
+const providerSettingsFeatureListSource = fs.readFileSync(
+  providerSettingsFeatureListPath,
+  "utf8",
+);
+const providerSettingsFeatureListTypesSource = fs.readFileSync(
+  providerSettingsFeatureListTypesPath,
+  "utf8",
+);
+const providerSettingsJumpNavSource = fs.readFileSync(providerSettingsJumpNavPath, "utf8");
+const providerSettingsJumpNavTypesSource = fs.readFileSync(
+  providerSettingsJumpNavTypesPath,
   "utf8",
 );
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
@@ -1858,6 +1903,12 @@ const workspaceMediaRetentionNoticesTypesLines =
   workspaceMediaRetentionNoticesTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionSummaryTypesLines =
   workspaceMediaRetentionSummaryTypesSource.split(/\r?\n/).length;
+const providerFeatureMediaStorageOptionsTypesLines =
+  providerFeatureMediaStorageOptionsTypesSource.split(/\r?\n/).length;
+const providerSettingsFeatureListTypesLines =
+  providerSettingsFeatureListTypesSource.split(/\r?\n/).length;
+const providerSettingsJumpNavTypesLines =
+  providerSettingsJumpNavTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -11099,6 +11150,130 @@ const maxWorkspaceMediaRetentionNoticesTypesLines = 2;
 if (workspaceMediaRetentionNoticesTypesLines > maxWorkspaceMediaRetentionNoticesTypesLines) {
   throw new Error(
     `workspace-media-retention-notices.types.ts exceeded ${maxWorkspaceMediaRetentionNoticesTypesLines} lines: ${workspaceMediaRetentionNoticesTypesLines}`,
+  );
+}
+
+for (const requiredProviderSettingsJumpNavUsage of [
+  'import type { ProviderSettingsJumpNavProps } from "./provider-settings-jump-nav.types";',
+  "}: ProviderSettingsJumpNavProps) {",
+]) {
+  if (!providerSettingsJumpNavSource.includes(requiredProviderSettingsJumpNavUsage)) {
+    throw new Error(
+      `provider-settings-jump-nav.tsx must reuse the extracted jump-nav props type: ${requiredProviderSettingsJumpNavUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderSettingsJumpNavToken of [
+  'import type { ProviderFeatureConfig } from "../lib/types";',
+  "providerConfigs: ProviderFeatureConfig[];",
+]) {
+  if (providerSettingsJumpNavSource.includes(forbiddenProviderSettingsJumpNavToken)) {
+    throw new Error(
+      `provider-settings-jump-nav.tsx must keep jump-nav prop typing delegated: ${forbiddenProviderSettingsJumpNavToken}`,
+    );
+  }
+}
+
+for (const requiredProviderSettingsJumpNavTypesUsage of [
+  'import type { ProviderFeatureConfig } from "../lib/types"; export type ProviderSettingsJumpNavProps = { jumpToLabel: string; healthSectionLabel: string; providerConfigs: ProviderFeatureConfig[] };',
+]) {
+  if (!providerSettingsJumpNavTypesSource.includes(requiredProviderSettingsJumpNavTypesUsage)) {
+    throw new Error(
+      `provider-settings-jump-nav.types.ts must own jump-nav prop typing: ${requiredProviderSettingsJumpNavTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderSettingsJumpNavTypesLines = 2;
+if (providerSettingsJumpNavTypesLines > maxProviderSettingsJumpNavTypesLines) {
+  throw new Error(
+    `provider-settings-jump-nav.types.ts exceeded ${maxProviderSettingsJumpNavTypesLines} lines: ${providerSettingsJumpNavTypesLines}`,
+  );
+}
+
+for (const requiredProviderSettingsFeatureListUsage of [
+  'import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";',
+  "}: ProviderSettingsFeatureListProps) {",
+]) {
+  if (!providerSettingsFeatureListSource.includes(requiredProviderSettingsFeatureListUsage)) {
+    throw new Error(
+      `provider-settings-feature-list.tsx must reuse the extracted feature-list props type: ${requiredProviderSettingsFeatureListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderSettingsFeatureListToken of [
+  'import type { ProviderSettingsCopy } from "./provider-settings-copy";',
+  'import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  "type ProviderSettingsFeatureListProps = Pick<",
+]) {
+  if (providerSettingsFeatureListSource.includes(forbiddenProviderSettingsFeatureListToken)) {
+    throw new Error(
+      `provider-settings-feature-list.tsx must keep feature-list prop typing delegated: ${forbiddenProviderSettingsFeatureListToken}`,
+    );
+  }
+}
+
+for (const requiredProviderSettingsFeatureListTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types"; import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
+  'export type ProviderSettingsFeatureListProps = Pick<ProviderSettingsPanelProps, "highlightedAnchor" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "providerConfigs" | "refreshingMediaStorageHealth"> & { copy: ProviderSettingsCopy; handleProviderDraftChange: ProviderFeatureCardProps["onProviderDraftChange"]; handleResetProviderConfig: ProviderFeatureCardProps["onReset"]; handleSaveProviderConfig: ProviderFeatureCardProps["onSave"]; isProviderDraftDirty: (item: ProviderSettingsPanelProps["providerConfigs"][number]) => boolean; providerDrafts: Record<string, ProviderDraft>; providerSavingCode: string };',
+]) {
+  if (!providerSettingsFeatureListTypesSource.includes(requiredProviderSettingsFeatureListTypesUsage)) {
+    throw new Error(
+      `provider-settings-feature-list.types.ts must own feature-list prop typing: ${requiredProviderSettingsFeatureListTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderSettingsFeatureListTypesLines = 2;
+if (providerSettingsFeatureListTypesLines > maxProviderSettingsFeatureListTypesLines) {
+  throw new Error(
+    `provider-settings-feature-list.types.ts exceeded ${maxProviderSettingsFeatureListTypesLines} lines: ${providerSettingsFeatureListTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureMediaStorageOptionsUsage of [
+  'import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types";',
+  "}: ProviderFeatureMediaStorageOptionsProps) {",
+]) {
+  if (!providerFeatureMediaStorageOptionsSource.includes(requiredProviderFeatureMediaStorageOptionsUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-options.tsx must reuse the extracted media-storage option props type: ${requiredProviderFeatureMediaStorageOptionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderFeatureMediaStorageOptionsToken of [
+  'import type { ProviderSettingsCopy } from "./provider-settings-copy";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  "copy: ProviderSettingsCopy;",
+  "draftItem: ProviderDraft;",
+]) {
+  if (providerFeatureMediaStorageOptionsSource.includes(forbiddenProviderFeatureMediaStorageOptionsToken)) {
+    throw new Error(
+      `provider-feature-media-storage-options.tsx must keep media-storage option prop typing delegated: ${forbiddenProviderFeatureMediaStorageOptionsToken}`,
+    );
+  }
+}
+
+for (const requiredProviderFeatureMediaStorageOptionsTypesUsage of [
+  'import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types";',
+  'export type ProviderFeatureMediaStorageOptionsProps = { copy: ProviderSettingsCopy; draftItem: ProviderDraft; featureCode: string; onProviderDraftChange: (featureCode: string, patch: Partial<ProviderDraft>) => void };',
+]) {
+  if (!providerFeatureMediaStorageOptionsTypesSource.includes(requiredProviderFeatureMediaStorageOptionsTypesUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-options.types.ts must own media-storage option prop typing: ${requiredProviderFeatureMediaStorageOptionsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureMediaStorageOptionsTypesLines = 2;
+if (providerFeatureMediaStorageOptionsTypesLines > maxProviderFeatureMediaStorageOptionsTypesLines) {
+  throw new Error(
+    `provider-feature-media-storage-options.types.ts exceeded ${maxProviderFeatureMediaStorageOptionsTypesLines} lines: ${providerFeatureMediaStorageOptionsTypesLines}`,
   );
 }
 

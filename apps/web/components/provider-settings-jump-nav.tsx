@@ -1,16 +1,12 @@
 "use client";
 
-import type { ProviderFeatureConfig } from "../lib/types";
+import type { ProviderSettingsJumpNavProps } from "./provider-settings-jump-nav.types";
 
 export function ProviderSettingsJumpNav({
   jumpToLabel,
   healthSectionLabel,
   providerConfigs,
-}: {
-  jumpToLabel: string;
-  healthSectionLabel: string;
-  providerConfigs: ProviderFeatureConfig[];
-}) {
+}: ProviderSettingsJumpNavProps) {
   return (
     <div className="form-stack" style={{ marginTop: 12 }}>
       <div className="eyebrow">{jumpToLabel}</div>

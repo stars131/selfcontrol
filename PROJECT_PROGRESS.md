@@ -1620,6 +1620,10 @@ Last updated: 2026-03-25
   - retention header, summary, lists, and notices components now consume extracted props contracts instead of keeping copy/report/message props inline
   - `workspace-media-retention-header.tsx`, `workspace-media-retention-summary.tsx`, `workspace-media-retention-lists.tsx`, and `workspace-media-retention-notices.tsx` now depend on dedicated `*.types.ts` files
   - this keeps the retention card subtree thinner and more consistent with the broader management-surface boundary cleanup
+- Provider Settings Child Props Split V1:
+  - provider settings jump-nav, feature-list, and media-storage-options components now consume extracted prop contracts instead of keeping provider/config props inline
+  - `provider-settings-jump-nav.tsx`, `provider-settings-feature-list.tsx`, and `provider-feature-media-storage-options.tsx` now depend on dedicated `*.types.ts` files
+  - this keeps the provider-settings subtree thinner and more consistent with the ongoing enterprise UI boundary cleanup
 
 ## Next
 - Continue the next product slice
