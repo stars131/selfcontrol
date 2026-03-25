@@ -1,11 +1,11 @@
 "use client";
 
-import type { WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types";
+import type { CreateWorkspaceMediaRetentionSelectionActionsInput } from "./workspace-media-retention-selection-actions.types";
 
 export function createWorkspaceMediaRetentionSelectionActions({
   report,
   setSelectedMediaIds,
-}: Pick<WorkspaceMediaRetentionControllerState, "report" | "setSelectedMediaIds">) {
+}: CreateWorkspaceMediaRetentionSelectionActionsInput) {
   function toggleSelectedMedia(mediaId: string) {
     setSelectedMediaIds((current) =>
       current.includes(mediaId)

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { escapeHtml } from "../lib/map-panel";
-import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types";
+import type { UseMapPanelAmapMarkersInput } from "./use-map-panel-amap-markers.types";
 
 export function useMapPanelAmapMarkers({
   draftCoordinates,
@@ -12,10 +12,7 @@ export function useMapPanelAmapMarkers({
   mapRef,
   onSelectRecord,
   selectedRecordId,
-}: Pick<
-  UseMapPanelAmapProps,
-  "draftCoordinates" | "draftLocation" | "mappedRecords" | "mapRef" | "onSelectRecord" | "selectedRecordId"
->) {
+}: UseMapPanelAmapMarkersInput) {
   useEffect(() => {
     if (!window.AMap || !mapRef.current) {
       return;

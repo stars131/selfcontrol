@@ -1,0 +1,1 @@
+import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordReminderToolsDerivedPropsInput = Pick<RecordEditorSupportToolsProps, "channelInAppLabel" | "selectedRecord">;

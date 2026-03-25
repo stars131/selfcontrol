@@ -1744,6 +1744,10 @@ Last updated: 2026-03-25
   - `provider-settings-controller-actions.ts`, `record-search-panel-*.tsx`, and `record-panel-legacy-*.tsx` now consume extracted contracts instead of keeping direct `Pick<...>` signatures in those helper and leaf modules
   - the new `*.types.ts` files keep provider-settings controller, search controls, and legacy form subview boundaries explicit and reusable
   - this keeps provider/search orchestration and legacy form presentation typing thinner and more maintainable under the enterprise engineering standard
+- Map, Support, and Helper Input Types Split V1:
+  - `use-provider-settings-draft-sync.ts`, `use-map-panel-amap-*.ts`, `record-panel-controller-filter-preset-*-action.ts`, `record-editor-support-tools-*.ts`, and `workspace-media-retention-selection-actions.ts` now consume extracted input contracts instead of keeping direct `Pick<...>` signatures in those helper modules
+  - the new `*.types.ts` files keep provider draft sync, AMap hook setup, filter preset actions, editor support helpers, and retention selection boundaries explicit and reusable
+  - this keeps map/provider helper orchestration and editor/retention helper typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

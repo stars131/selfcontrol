@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionSelectionActionsInput = Pick<WorkspaceMediaRetentionControllerState, "report" | "setSelectedMediaIds">;

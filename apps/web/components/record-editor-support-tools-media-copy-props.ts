@@ -1,13 +1,13 @@
 "use client";
 
-import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";
+import type { BuildRecordMediaToolsCopyPropsInput } from "./record-editor-support-tools-media-copy-props.types";
 
 export function buildRecordMediaToolsCopyProps({
   deleting,
   panelCopy,
   saving,
   selectedRecord,
-}: Pick<RecordEditorSupportToolsProps, "deleting" | "panelCopy" | "saving" | "selectedRecord">) {
+}: BuildRecordMediaToolsCopyPropsInput) {
   return {
     allTrackedFilesPresentLabel: panelCopy.allTrackedFilesPresent,
     deleteButtonLabel: deleting ? panelCopy.deleting : panelCopy.deleteRecord,

@@ -1,0 +1,1 @@
+import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordMediaToolsCopyPropsInput = Pick<RecordEditorSupportToolsProps, "deleting" | "panelCopy" | "saving" | "selectedRecord">;

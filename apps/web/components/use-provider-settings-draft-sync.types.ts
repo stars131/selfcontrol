@@ -1,0 +1,1 @@
+import type { UseProviderSettingsControllerProps, UseProviderSettingsControllerState } from "./provider-settings-controller.types"; export type UseProviderSettingsDraftSyncInput = Pick<UseProviderSettingsControllerProps, "providerConfigs"> & Pick<UseProviderSettingsControllerState, "setProviderDrafts">;

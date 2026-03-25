@@ -9,7 +9,7 @@ import {
   readLatitudeValue,
   readLongitudeValue,
 } from "../lib/map-panel";
-import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types";
+import type { UseMapPanelAmapInitInput } from "./use-map-panel-amap-init.types";
 
 export function useMapPanelAmapInit({
   amapKey,
@@ -18,10 +18,7 @@ export function useMapPanelAmapInit({
   mapRef,
   onDraftLocationChange,
   setLoadError,
-}: Pick<
-  UseMapPanelAmapProps,
-  "amapKey" | "containerRef" | "geocoderRef" | "mapRef" | "onDraftLocationChange" | "setLoadError"
->) {
+}: UseMapPanelAmapInitInput) {
   const onDraftLocationChangeRef = useRef(onDraftLocationChange);
 
   useEffect(() => {

@@ -1,0 +1,1 @@
+import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types"; export type CreateRecordPanelControllerFilterPresetDeleteActionInput = Pick<RecordPanelControllerFilterPresetActionInput, "detailCopy" | "onDeleteSearchPreset" | "setError">;

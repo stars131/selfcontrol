@@ -555,9 +555,17 @@ const recordPanelFilterPresetSaveActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-save-action.ts",
 );
+const recordPanelFilterPresetSaveActionTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-save-action.types.ts",
+);
 const recordPanelFilterPresetDeleteActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-filter-preset-delete-action.ts",
+);
+const recordPanelFilterPresetDeleteActionTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-filter-preset-delete-action.types.ts",
 );
 const recordPanelFilterHelpersPath = path.resolve(
   process.cwd(),
@@ -1124,6 +1132,22 @@ const useMapPanelSyncTypesPath = path.resolve(
   process.cwd(),
   "components/use-map-panel-sync.types.ts",
 );
+const useMapPanelAmapInitPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-amap-init.ts",
+);
+const useMapPanelAmapInitTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-amap-init.types.ts",
+);
+const useMapPanelAmapMarkersPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-amap-markers.ts",
+);
+const useMapPanelAmapMarkersTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-amap-markers.types.ts",
+);
 const providerSettingsPanelHelpersPath = path.resolve(
   process.cwd(),
   "components/provider-settings-panel-helpers.ts",
@@ -1131,6 +1155,14 @@ const providerSettingsPanelHelpersPath = path.resolve(
 const providerSettingsPanelHelpersTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-panel-helpers.types.ts",
+);
+const useProviderSettingsDraftSyncPath = path.resolve(
+  process.cwd(),
+  "components/use-provider-settings-draft-sync.ts",
+);
+const useProviderSettingsDraftSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-provider-settings-draft-sync.types.ts",
 );
 const workspaceTransferJobCardPath = path.resolve(
   process.cwd(),
@@ -1283,6 +1315,14 @@ const workspaceMediaRetentionActionsPath = path.resolve(
 const workspaceMediaRetentionActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-actions.types.ts",
+);
+const workspaceMediaRetentionSelectionActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-selection-actions.ts",
+);
+const workspaceMediaRetentionSelectionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-selection-actions.types.ts",
 );
 const workspaceMediaRetentionCardActionHelpersPath = path.resolve(
   process.cwd(),
@@ -1796,6 +1836,22 @@ const recordMediaToolsActionsTypesPath = path.resolve(
   process.cwd(),
   "components/record-media-tools-actions.types.ts",
 );
+const recordEditorSupportToolsMediaCopyPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-support-tools-media-copy-props.ts",
+);
+const recordEditorSupportToolsMediaCopyPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-support-tools-media-copy-props.types.ts",
+);
+const recordEditorSupportToolsReminderDerivedPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-support-tools-reminder-derived-props.ts",
+);
+const recordEditorSupportToolsReminderDerivedPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-support-tools-reminder-derived-props.types.ts",
+);
 const recordReminderFormPath = path.resolve(process.cwd(), "components/record-reminder-form.tsx");
 const recordReminderFormTypesPath = path.resolve(
   process.cwd(),
@@ -2113,9 +2169,24 @@ const useMapPanelDerivedDataTypesSource = fs.readFileSync(
 );
 const useMapPanelSyncSource = fs.readFileSync(useMapPanelSyncPath, "utf8");
 const useMapPanelSyncTypesSource = fs.readFileSync(useMapPanelSyncTypesPath, "utf8");
+const useMapPanelAmapInitSource = fs.readFileSync(useMapPanelAmapInitPath, "utf8");
+const useMapPanelAmapInitTypesSource = fs.readFileSync(useMapPanelAmapInitTypesPath, "utf8");
+const useMapPanelAmapMarkersSource = fs.readFileSync(useMapPanelAmapMarkersPath, "utf8");
+const useMapPanelAmapMarkersTypesSource = fs.readFileSync(
+  useMapPanelAmapMarkersTypesPath,
+  "utf8",
+);
 const providerSettingsPanelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "utf8");
 const providerSettingsPanelHelpersTypesSource = fs.readFileSync(
   providerSettingsPanelHelpersTypesPath,
+  "utf8",
+);
+const useProviderSettingsDraftSyncSource = fs.readFileSync(
+  useProviderSettingsDraftSyncPath,
+  "utf8",
+);
+const useProviderSettingsDraftSyncTypesSource = fs.readFileSync(
+  useProviderSettingsDraftSyncTypesPath,
   "utf8",
 );
 const workspaceTransferJobCardSource = fs.readFileSync(workspaceTransferJobCardPath, "utf8");
@@ -2200,6 +2271,14 @@ const workspaceMediaRetentionActionsSource = fs.readFileSync(
 );
 const workspaceMediaRetentionActionsTypesSource = fs.readFileSync(
   workspaceMediaRetentionActionsTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionSelectionActionsSource = fs.readFileSync(
+  workspaceMediaRetentionSelectionActionsPath,
+  "utf8",
+);
+const workspaceMediaRetentionSelectionActionsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionSelectionActionsTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionCardActionHelpersSource = fs.readFileSync(
@@ -2552,6 +2631,22 @@ const recordEditorMetadataFieldsTypesSource = fs.readFileSync(
 const recordMediaToolsActionsSource = fs.readFileSync(recordMediaToolsActionsPath, "utf8");
 const recordMediaToolsActionsTypesSource = fs.readFileSync(
   recordMediaToolsActionsTypesPath,
+  "utf8",
+);
+const recordEditorSupportToolsMediaCopyPropsSource = fs.readFileSync(
+  recordEditorSupportToolsMediaCopyPropsPath,
+  "utf8",
+);
+const recordEditorSupportToolsMediaCopyPropsTypesSource = fs.readFileSync(
+  recordEditorSupportToolsMediaCopyPropsTypesPath,
+  "utf8",
+);
+const recordEditorSupportToolsReminderDerivedPropsSource = fs.readFileSync(
+  recordEditorSupportToolsReminderDerivedPropsPath,
+  "utf8",
+);
+const recordEditorSupportToolsReminderDerivedPropsTypesSource = fs.readFileSync(
+  recordEditorSupportToolsReminderDerivedPropsTypesPath,
   "utf8",
 );
 const recordReminderFormSource = fs.readFileSync(recordReminderFormPath, "utf8");
@@ -3030,8 +3125,16 @@ const filterPresetActionInputTypesSource = fs.readFileSync(
   "utf8",
 );
 const filterPresetSaveActionSource = fs.readFileSync(recordPanelFilterPresetSaveActionPath, "utf8");
+const filterPresetSaveActionTypesSource = fs.readFileSync(
+  recordPanelFilterPresetSaveActionTypesPath,
+  "utf8",
+);
 const filterPresetDeleteActionSource = fs.readFileSync(
   recordPanelFilterPresetDeleteActionPath,
+  "utf8",
+);
+const filterPresetDeleteActionTypesSource = fs.readFileSync(
+  recordPanelFilterPresetDeleteActionTypesPath,
   "utf8",
 );
 const filterHelpersSource = fs.readFileSync(recordPanelFilterHelpersPath, "utf8");
@@ -3283,8 +3386,13 @@ const mapPanelControllerSearchTypesLines =
 const useMapPanelDerivedDataTypesLines =
   useMapPanelDerivedDataTypesSource.split(/\r?\n/).length;
 const useMapPanelSyncTypesLines = useMapPanelSyncTypesSource.split(/\r?\n/).length;
+const useMapPanelAmapInitTypesLines = useMapPanelAmapInitTypesSource.split(/\r?\n/).length;
+const useMapPanelAmapMarkersTypesLines =
+  useMapPanelAmapMarkersTypesSource.split(/\r?\n/).length;
 const providerSettingsPanelHelpersTypesLines =
   providerSettingsPanelHelpersTypesSource.split(/\r?\n/).length;
+const useProviderSettingsDraftSyncTypesLines =
+  useProviderSettingsDraftSyncTypesSource.split(/\r?\n/).length;
 const workspaceTransferJobCardTypesLines =
   workspaceTransferJobCardTypesSource.split(/\r?\n/).length;
 const workspaceTransferJobsListTypesLines =
@@ -3314,6 +3422,8 @@ const workspaceMediaRetentionCardTypesLines =
   workspaceMediaRetentionCardTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionActionsTypesLines =
   workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionSelectionActionsTypesLines =
+  workspaceMediaRetentionSelectionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardActionHelpersTypesLines =
   workspaceMediaRetentionCardActionHelpersTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardCopyHelpersTypesLines =
@@ -3433,6 +3543,10 @@ const recordEditorMetadataFieldsTypesLines =
   recordEditorMetadataFieldsTypesSource.split(/\r?\n/).length;
 const recordMediaToolsActionsTypesLines =
   recordMediaToolsActionsTypesSource.split(/\r?\n/).length;
+const recordEditorSupportToolsMediaCopyPropsTypesLines =
+  recordEditorSupportToolsMediaCopyPropsTypesSource.split(/\r?\n/).length;
+const recordEditorSupportToolsReminderDerivedPropsTypesLines =
+  recordEditorSupportToolsReminderDerivedPropsTypesSource.split(/\r?\n/).length;
 const recordReminderFormTypesLines = recordReminderFormTypesSource.split(/\r?\n/).length;
 const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsTypesLines =
@@ -3638,6 +3752,9 @@ const filterPresetActionInputTypesLines =
   filterPresetActionInputTypesSource.split(/\r?\n/).length;
 const filterPresetSaveActionLines = filterPresetSaveActionSource.split(/\r?\n/).length;
 const filterPresetDeleteActionLines = filterPresetDeleteActionSource.split(/\r?\n/).length;
+const filterPresetSaveActionTypesLines = filterPresetSaveActionTypesSource.split(/\r?\n/).length;
+const filterPresetDeleteActionTypesLines =
+  filterPresetDeleteActionTypesSource.split(/\r?\n/).length;
 const filterHelpersLines = filterHelpersSource.split(/\r?\n/).length;
 const filterErrorHelpersLines = filterErrorHelpersSource.split(/\r?\n/).length;
 const filterPresetNameLines = filterPresetNameSource.split(/\r?\n/).length;
@@ -8621,7 +8738,7 @@ if (filterPresetActionInputTypesLines > maxFilterPresetActionInputTypesLines) {
 
 for (const requiredFilterPresetSaveActionImport of [
   'from "./record-panel-controller-filter-helpers";',
-  'from "./record-panel-controller-filter-preset-action-input.types";',
+  'from "./record-panel-controller-filter-preset-save-action.types";',
 ]) {
   if (!filterPresetSaveActionSource.includes(requiredFilterPresetSaveActionImport)) {
     throw new Error(
@@ -8647,9 +8764,12 @@ for (const forbiddenFilterPresetSaveActionToken of [
   'from "../lib/record-panel-detail";',
   'from "../lib/types";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
   "type DetailCopy =",
+  "RecordPanelControllerFilterPresetActionInput",
   "onCreateSearchPreset: ControllerProps",
   "filterDraft: RecordFilterState;",
+  "}: Pick<",
 ]) {
   if (filterPresetSaveActionSource.includes(forbiddenFilterPresetSaveActionToken)) {
     throw new Error(
@@ -8665,9 +8785,26 @@ if (filterPresetSaveActionLines > maxFilterPresetSaveActionLines) {
   );
 }
 
+for (const requiredFilterPresetSaveActionTypesUsage of [
+  'import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types"; export type CreateRecordPanelControllerFilterPresetSaveActionInput = Pick<RecordPanelControllerFilterPresetActionInput, "detailCopy" | "filterDraft" | "onCreateSearchPreset" | "presetName" | "setError" | "setPresetName">;',
+]) {
+  if (!filterPresetSaveActionTypesSource.includes(requiredFilterPresetSaveActionTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-save-action.types.ts must own preset-save input typing: ${requiredFilterPresetSaveActionTypesUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetSaveActionTypesLines = 2;
+if (filterPresetSaveActionTypesLines > maxFilterPresetSaveActionTypesLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-save-action.types.ts exceeded ${maxFilterPresetSaveActionTypesLines} lines: ${filterPresetSaveActionTypesLines}`,
+  );
+}
+
 for (const requiredFilterPresetDeleteActionImport of [
   'from "./record-panel-controller-filter-helpers";',
-  'from "./record-panel-controller-filter-preset-action-input.types";',
+  'from "./record-panel-controller-filter-preset-delete-action.types";',
 ]) {
   if (!filterPresetDeleteActionSource.includes(requiredFilterPresetDeleteActionImport)) {
     throw new Error(
@@ -8691,8 +8828,11 @@ for (const requiredFilterPresetDeleteActionUsage of [
 for (const forbiddenFilterPresetDeleteActionToken of [
   'from "../lib/record-panel-detail";',
   'from "./record-panel-controller.types";',
+  'from "./record-panel-controller-filter-preset-action-input.types";',
   "type DetailCopy =",
+  "RecordPanelControllerFilterPresetActionInput",
   "onDeleteSearchPreset: ControllerProps",
+  "}: Pick<",
 ]) {
   if (filterPresetDeleteActionSource.includes(forbiddenFilterPresetDeleteActionToken)) {
     throw new Error(
@@ -8705,6 +8845,23 @@ const maxFilterPresetDeleteActionLines = 30;
 if (filterPresetDeleteActionLines > maxFilterPresetDeleteActionLines) {
   throw new Error(
     `record-panel-controller-filter-preset-delete-action.ts exceeded ${maxFilterPresetDeleteActionLines} lines: ${filterPresetDeleteActionLines}`,
+  );
+}
+
+for (const requiredFilterPresetDeleteActionTypesUsage of [
+  'import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types"; export type CreateRecordPanelControllerFilterPresetDeleteActionInput = Pick<RecordPanelControllerFilterPresetActionInput, "detailCopy" | "onDeleteSearchPreset" | "setError">;',
+]) {
+  if (!filterPresetDeleteActionTypesSource.includes(requiredFilterPresetDeleteActionTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-filter-preset-delete-action.types.ts must own preset-delete input typing: ${requiredFilterPresetDeleteActionTypesUsage}`,
+    );
+  }
+}
+
+const maxFilterPresetDeleteActionTypesLines = 2;
+if (filterPresetDeleteActionTypesLines > maxFilterPresetDeleteActionTypesLines) {
+  throw new Error(
+    `record-panel-controller-filter-preset-delete-action.types.ts exceeded ${maxFilterPresetDeleteActionTypesLines} lines: ${filterPresetDeleteActionTypesLines}`,
   );
 }
 
@@ -13262,6 +13419,48 @@ if (useMapPanelSyncTypesLines > maxUseMapPanelSyncTypesLines) {
   );
 }
 
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, forbiddenTokens, typesLine, maxLines, actualLines] of [
+  [
+    "use-map-panel-amap-init",
+    useMapPanelAmapInitSource,
+    useMapPanelAmapInitTypesSource,
+    'import type { UseMapPanelAmapInitInput } from "./use-map-panel-amap-init.types";',
+    "}: UseMapPanelAmapInitInput) {",
+    ["UseMapPanelAmapProps", "}: Pick<"],
+    'import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types"; export type UseMapPanelAmapInitInput = Pick<UseMapPanelAmapProps, "amapKey" | "containerRef" | "geocoderRef" | "mapRef" | "onDraftLocationChange" | "setLoadError">;',
+    2,
+    useMapPanelAmapInitTypesLines,
+  ],
+  [
+    "use-map-panel-amap-markers",
+    useMapPanelAmapMarkersSource,
+    useMapPanelAmapMarkersTypesSource,
+    'import type { UseMapPanelAmapMarkersInput } from "./use-map-panel-amap-markers.types";',
+    "}: UseMapPanelAmapMarkersInput) {",
+    ["UseMapPanelAmapProps", "}: Pick<"],
+    'import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types"; export type UseMapPanelAmapMarkersInput = Pick<UseMapPanelAmapProps, "draftCoordinates" | "draftLocation" | "mappedRecords" | "mapRef" | "onSelectRecord" | "selectedRecordId">;',
+    2,
+    useMapPanelAmapMarkersTypesLines,
+  ],
+]) {
+  for (const requiredUsage of [importLine, signatureLine]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.ts must reuse the extracted map-amap input type: ${requiredUsage}`);
+    }
+  }
+  for (const forbiddenToken of forbiddenTokens) {
+    if (componentSource.includes(forbiddenToken)) {
+      throw new Error(`${componentName}.ts must keep map-amap input typing delegated: ${forbiddenToken}`);
+    }
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own map-amap input typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
+  }
+}
+
 for (const requiredProviderSettingsPanelHelpersUsage of [
   'import type { BuildProviderFeatureCardPropsInput } from "./provider-settings-panel-helpers.types";',
   "}: BuildProviderFeatureCardPropsInput): ProviderFeatureCardProps {",
@@ -13300,6 +13499,46 @@ const maxProviderSettingsPanelHelpersTypesLines = 2;
 if (providerSettingsPanelHelpersTypesLines > maxProviderSettingsPanelHelpersTypesLines) {
   throw new Error(
     `provider-settings-panel-helpers.types.ts exceeded ${maxProviderSettingsPanelHelpersTypesLines} lines: ${providerSettingsPanelHelpersTypesLines}`,
+  );
+}
+
+for (const requiredUseProviderSettingsDraftSyncUsage of [
+  'import type { UseProviderSettingsDraftSyncInput } from "./use-provider-settings-draft-sync.types";',
+  "}: UseProviderSettingsDraftSyncInput) {",
+]) {
+  if (!useProviderSettingsDraftSyncSource.includes(requiredUseProviderSettingsDraftSyncUsage)) {
+    throw new Error(
+      `use-provider-settings-draft-sync.ts must reuse the extracted provider-draft-sync input type: ${requiredUseProviderSettingsDraftSyncUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseProviderSettingsDraftSyncToken of [
+  "UseProviderSettingsControllerProps",
+  "UseProviderSettingsControllerState",
+  "}: Pick<",
+]) {
+  if (useProviderSettingsDraftSyncSource.includes(forbiddenUseProviderSettingsDraftSyncToken)) {
+    throw new Error(
+      `use-provider-settings-draft-sync.ts must keep provider-draft-sync input typing delegated: ${forbiddenUseProviderSettingsDraftSyncToken}`,
+    );
+  }
+}
+
+for (const requiredUseProviderSettingsDraftSyncTypesUsage of [
+  'import type { UseProviderSettingsControllerProps, UseProviderSettingsControllerState } from "./provider-settings-controller.types"; export type UseProviderSettingsDraftSyncInput = Pick<UseProviderSettingsControllerProps, "providerConfigs"> & Pick<UseProviderSettingsControllerState, "setProviderDrafts">;',
+]) {
+  if (!useProviderSettingsDraftSyncTypesSource.includes(requiredUseProviderSettingsDraftSyncTypesUsage)) {
+    throw new Error(
+      `use-provider-settings-draft-sync.types.ts must own provider-draft-sync input typing: ${requiredUseProviderSettingsDraftSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxUseProviderSettingsDraftSyncTypesLines = 2;
+if (useProviderSettingsDraftSyncTypesLines > maxUseProviderSettingsDraftSyncTypesLines) {
+  throw new Error(
+    `use-provider-settings-draft-sync.types.ts exceeded ${maxUseProviderSettingsDraftSyncTypesLines} lines: ${useProviderSettingsDraftSyncTypesLines}`,
   );
 }
 
@@ -13838,6 +14077,45 @@ const maxWorkspaceMediaRetentionActionsTypesLines = 2;
 if (workspaceMediaRetentionActionsTypesLines > maxWorkspaceMediaRetentionActionsTypesLines) {
   throw new Error(
     `workspace-media-retention-actions.types.ts exceeded ${maxWorkspaceMediaRetentionActionsTypesLines} lines: ${workspaceMediaRetentionActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionSelectionActionsUsage of [
+  'import type { CreateWorkspaceMediaRetentionSelectionActionsInput } from "./workspace-media-retention-selection-actions.types";',
+  "}: CreateWorkspaceMediaRetentionSelectionActionsInput) {",
+]) {
+  if (!workspaceMediaRetentionSelectionActionsSource.includes(requiredWorkspaceMediaRetentionSelectionActionsUsage)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.ts must reuse the extracted retention-selection input type: ${requiredWorkspaceMediaRetentionSelectionActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceMediaRetentionSelectionActionsToken of [
+  "WorkspaceMediaRetentionControllerState",
+  "}: Pick<",
+]) {
+  if (workspaceMediaRetentionSelectionActionsSource.includes(forbiddenWorkspaceMediaRetentionSelectionActionsToken)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.ts must keep retention-selection input typing delegated: ${forbiddenWorkspaceMediaRetentionSelectionActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceMediaRetentionSelectionActionsTypesUsage of [
+  'import type { WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionSelectionActionsInput = Pick<WorkspaceMediaRetentionControllerState, "report" | "setSelectedMediaIds">;',
+]) {
+  if (!workspaceMediaRetentionSelectionActionsTypesSource.includes(requiredWorkspaceMediaRetentionSelectionActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.types.ts must own retention-selection input typing: ${requiredWorkspaceMediaRetentionSelectionActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionSelectionActionsTypesLines = 2;
+if (workspaceMediaRetentionSelectionActionsTypesLines > maxWorkspaceMediaRetentionSelectionActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-selection-actions.types.ts exceeded ${maxWorkspaceMediaRetentionSelectionActionsTypesLines} lines: ${workspaceMediaRetentionSelectionActionsTypesLines}`,
   );
 }
 
@@ -16516,6 +16794,48 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
   }
   if (!componentTypesSource.includes(typesLine)) {
     throw new Error(`${componentName}.types.ts must own leaf prop typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
+  }
+}
+
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, forbiddenTokens, typesLine, maxLines, actualLines] of [
+  [
+    "record-editor-support-tools-media-copy-props",
+    recordEditorSupportToolsMediaCopyPropsSource,
+    recordEditorSupportToolsMediaCopyPropsTypesSource,
+    'import type { BuildRecordMediaToolsCopyPropsInput } from "./record-editor-support-tools-media-copy-props.types";',
+    "}: BuildRecordMediaToolsCopyPropsInput) {",
+    ["RecordEditorSupportToolsProps", "}: Pick<"],
+    'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordMediaToolsCopyPropsInput = Pick<RecordEditorSupportToolsProps, "deleting" | "panelCopy" | "saving" | "selectedRecord">;',
+    2,
+    recordEditorSupportToolsMediaCopyPropsTypesLines,
+  ],
+  [
+    "record-editor-support-tools-reminder-derived-props",
+    recordEditorSupportToolsReminderDerivedPropsSource,
+    recordEditorSupportToolsReminderDerivedPropsTypesSource,
+    'import type { BuildRecordReminderToolsDerivedPropsInput } from "./record-editor-support-tools-reminder-derived-props.types";',
+    "}: BuildRecordReminderToolsDerivedPropsInput) {",
+    ["RecordEditorSupportToolsProps", "}: Pick<"],
+    'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordReminderToolsDerivedPropsInput = Pick<RecordEditorSupportToolsProps, "channelInAppLabel" | "selectedRecord">;',
+    2,
+    recordEditorSupportToolsReminderDerivedPropsTypesLines,
+  ],
+]) {
+  for (const requiredUsage of [importLine, signatureLine]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.ts must reuse the extracted support-tools input type: ${requiredUsage}`);
+    }
+  }
+  for (const forbiddenToken of forbiddenTokens) {
+    if (componentSource.includes(forbiddenToken)) {
+      throw new Error(`${componentName}.ts must keep support-tools input typing delegated: ${forbiddenToken}`);
+    }
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own support-tools input typing: ${typesLine}`);
   }
   if (actualLines > maxLines) {
     throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);

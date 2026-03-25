@@ -1,6 +1,6 @@
 "use client";
 import { getRecordPanelFilterErrorMessage, resolveRecordPanelPresetName } from "./record-panel-controller-filter-helpers";
-import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types";
+import type { CreateRecordPanelControllerFilterPresetSaveActionInput } from "./record-panel-controller-filter-preset-save-action.types";
 
 export function createRecordPanelControllerFilterPresetSaveAction({
   detailCopy,
@@ -9,10 +9,7 @@ export function createRecordPanelControllerFilterPresetSaveAction({
   presetName,
   setError,
   setPresetName,
-}: Pick<
-  RecordPanelControllerFilterPresetActionInput,
-  "detailCopy" | "filterDraft" | "onCreateSearchPreset" | "presetName" | "setError" | "setPresetName"
->) {
+}: CreateRecordPanelControllerFilterPresetSaveActionInput) {
   async function handleSavePreset() {
     const presetInput = resolveRecordPanelPresetName(detailCopy, presetName);
     if ("errorMessage" in presetInput) {

@@ -1,12 +1,12 @@
 "use client";
 import { getRecordPanelFilterErrorMessage } from "./record-panel-controller-filter-helpers";
-import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types";
+import type { CreateRecordPanelControllerFilterPresetDeleteActionInput } from "./record-panel-controller-filter-preset-delete-action.types";
 
 export function createRecordPanelControllerFilterPresetDeleteAction({
   detailCopy,
   onDeleteSearchPreset,
   setError,
-}: Pick<RecordPanelControllerFilterPresetActionInput, "detailCopy" | "onDeleteSearchPreset" | "setError">) {
+}: CreateRecordPanelControllerFilterPresetDeleteActionInput) {
   async function handleDeletePreset(presetId: string) {
     setError("");
     try {

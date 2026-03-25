@@ -1,0 +1,1 @@
+import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types"; export type UseMapPanelAmapMarkersInput = Pick<UseMapPanelAmapProps, "draftCoordinates" | "draftLocation" | "mappedRecords" | "mapRef" | "onSelectRecord" | "selectedRecordId">;

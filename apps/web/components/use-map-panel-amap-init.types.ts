@@ -1,0 +1,1 @@
+import type { UseMapPanelAmapProps } from "./use-map-panel-amap.types"; export type UseMapPanelAmapInitInput = Pick<UseMapPanelAmapProps, "amapKey" | "containerRef" | "geocoderRef" | "mapRef" | "onDraftLocationChange" | "setLoadError">;
