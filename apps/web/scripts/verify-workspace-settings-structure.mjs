@@ -26,6 +26,18 @@ const workspaceSettingsProviderSectionTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-provider-section.types.ts",
 );
+const workspaceSettingsOverviewCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-card.tsx",
+);
+const workspaceSettingsOverviewDetailsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-details.tsx",
+);
+const workspaceSettingsOverviewDetailsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-details.types.ts",
+);
 const workspaceSettingsManagedSectionsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-managed-sections.tsx",
@@ -65,6 +77,12 @@ const loadingShellSource = fs.readFileSync(workspaceSettingsLoadingShellPath, "u
 const loadingShellTypesSource = fs.readFileSync(workspaceSettingsLoadingShellTypesPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const providerSectionTypesSource = fs.readFileSync(workspaceSettingsProviderSectionTypesPath, "utf8");
+const overviewCardSource = fs.readFileSync(workspaceSettingsOverviewCardPath, "utf8");
+const overviewDetailsSource = fs.readFileSync(workspaceSettingsOverviewDetailsPath, "utf8");
+const overviewDetailsTypesSource = fs.readFileSync(
+  workspaceSettingsOverviewDetailsTypesPath,
+  "utf8",
+);
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
 const managedToolsSource = fs.readFileSync(workspaceSettingsManagedToolsPath, "utf8");
 const managedToolsTypesSource = fs.readFileSync(workspaceSettingsManagedToolsTypesPath, "utf8");
@@ -79,6 +97,9 @@ const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const providerSectionTypesLineCount = providerSectionTypesSource.split(/\r?\n/).length;
+const overviewCardLineCount = overviewCardSource.split(/\r?\n/).length;
+const overviewDetailsLineCount = overviewDetailsSource.split(/\r?\n/).length;
+const overviewDetailsTypesLineCount = overviewDetailsTypesSource.split(/\r?\n/).length;
 const managedSectionsLineCount = managedSectionsSource.split(/\r?\n/).length;
 const managedToolsLineCount = managedToolsSource.split(/\r?\n/).length;
 const managedToolsTypesLineCount = managedToolsTypesSource.split(/\r?\n/).length;
@@ -356,6 +377,65 @@ for (const requiredProviderSectionTypesUsage of [
 
 if (providerSectionTypesLineCount > 35) {
   throw new Error(`workspace-settings-provider-section.types.ts exceeded 35 lines: ${providerSectionTypesLineCount}`);
+}
+
+for (const requiredOverviewCardUsage of [
+  'import { WorkspaceSettingsOverviewDetails } from "./workspace-settings-overview-details";',
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";',
+  "}: WorkspaceSettingsOverviewCardProps) {",
+  "<WorkspaceSettingsOverviewDetails",
+]) {
+  if (!overviewCardSource.includes(requiredOverviewCardUsage)) {
+    throw new Error(`workspace-settings-overview-card.tsx must delegate overview details rendering: ${requiredOverviewCardUsage}`);
+  }
+}
+
+for (const forbiddenOverviewCardToken of [
+  'process.env.NEXT_PUBLIC_API_BASE_URL',
+  'process.env.NEXT_PUBLIC_AMAP_KEY',
+  'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
+]) {
+  if (overviewCardSource.includes(forbiddenOverviewCardToken)) {
+    throw new Error(`workspace-settings-overview-card.tsx must keep overview-detail internals delegated: ${forbiddenOverviewCardToken}`);
+  }
+}
+
+if (overviewCardLineCount > 20) {
+  throw new Error(`workspace-settings-overview-card.tsx exceeded 20 lines: ${overviewCardLineCount}`);
+}
+
+for (const requiredOverviewDetailsUsage of [
+  'import type { WorkspaceSettingsOverviewDetailsProps } from "./workspace-settings-overview-details.types";',
+  "}: WorkspaceSettingsOverviewDetailsProps) {",
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
+  'process.env.NEXT_PUBLIC_API_BASE_URL',
+  'process.env.NEXT_PUBLIC_AMAP_KEY',
+  'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
+]) {
+  if (!overviewDetailsSource.includes(requiredOverviewDetailsUsage)) {
+    throw new Error(`workspace-settings-overview-details.tsx must own overview detail-grid rendering: ${requiredOverviewDetailsUsage}`);
+  }
+}
+
+if (overviewDetailsSource.includes("type WorkspaceSettingsOverviewDetailsProps = Pick<")) {
+  throw new Error("workspace-settings-overview-details.tsx must keep overview-details prop typing delegated");
+}
+
+if (overviewDetailsLineCount > 30) {
+  throw new Error(`workspace-settings-overview-details.tsx exceeded 30 lines: ${overviewDetailsLineCount}`);
+}
+
+for (const requiredOverviewDetailsTypesUsage of [
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types"; export type WorkspaceSettingsOverviewDetailsProps = Pick<WorkspaceSettingsOverviewCardProps, "copy" | "knowledgeStats">;',
+]) {
+  if (!overviewDetailsTypesSource.includes(requiredOverviewDetailsTypesUsage)) {
+    throw new Error(`workspace-settings-overview-details.types.ts must own overview-details prop typing: ${requiredOverviewDetailsTypesUsage}`);
+  }
+}
+
+if (overviewDetailsTypesLineCount > 2) {
+  throw new Error(`workspace-settings-overview-details.types.ts exceeded 2 lines: ${overviewDetailsTypesLineCount}`);
 }
 
 for (const requiredControllerImport of [

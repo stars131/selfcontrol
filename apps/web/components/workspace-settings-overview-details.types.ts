@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types"; export type WorkspaceSettingsOverviewDetailsProps = Pick<WorkspaceSettingsOverviewCardProps, "copy" | "knowledgeStats">;

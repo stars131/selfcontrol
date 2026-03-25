@@ -1859,6 +1859,10 @@ Last updated: 2026-03-25
   - `workspace-export-card.tsx` now delegates export title, description, and note rendering to `workspace-export-summary.tsx` instead of keeping the static summary block inline beside the controls leaf
   - the new `workspace-export-summary.types.ts` file keeps the export-summary contract explicit and reusable while the parent export card remains focused on controller wiring and action control composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-structure.mjs` now enforce that delegated export-summary boundary, exact one-line type contract, and line-count ceilings so future export-card updates stay safer and easier to maintain
+- Workspace Settings Overview Details Split V1:
+  - `workspace-settings-overview-card.tsx` now delegates environment and knowledge-stat detail-grid rendering to `workspace-settings-overview-details.tsx` instead of keeping all overview tiles inline inside the card shell
+  - the new `workspace-settings-overview-details.types.ts` file keeps the overview-details contract explicit and reusable while the parent overview card remains focused on summary copy and composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated overview-details boundary, exact one-line type contract, and line-count ceilings so future settings-overview updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

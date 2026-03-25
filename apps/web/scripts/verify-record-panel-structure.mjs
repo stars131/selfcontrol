@@ -1340,6 +1340,14 @@ const workspaceSettingsOverviewCardPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.tsx",
 );
+const workspaceSettingsOverviewDetailsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-details.tsx",
+);
+const workspaceSettingsOverviewDetailsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-details.types.ts",
+);
 const workspaceSettingsOverviewCardTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.types.ts",
@@ -2523,6 +2531,14 @@ const workspaceSettingsHeaderTypesSource = fs.readFileSync(
 );
 const workspaceSettingsOverviewCardSource = fs.readFileSync(
   workspaceSettingsOverviewCardPath,
+  "utf8",
+);
+const workspaceSettingsOverviewDetailsSource = fs.readFileSync(
+  workspaceSettingsOverviewDetailsPath,
+  "utf8",
+);
+const workspaceSettingsOverviewDetailsTypesSource = fs.readFileSync(
+  workspaceSettingsOverviewDetailsTypesPath,
   "utf8",
 );
 const workspaceSettingsOverviewCardTypesSource = fs.readFileSync(
@@ -3852,6 +3868,10 @@ const workspaceExportJobsListTypesLines =
   workspaceExportJobsListTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsControllerTypesLines =
   workspaceExportJobsControllerTypesSource.split(/\r?\n/).length;
+const workspaceSettingsOverviewDetailsLines =
+  workspaceSettingsOverviewDetailsSource.split(/\r?\n/).length;
+const workspaceSettingsOverviewDetailsTypesLines =
+  workspaceSettingsOverviewDetailsTypesSource.split(/\r?\n/).length;
 const workspaceSettingsHeaderTypesLines =
   workspaceSettingsHeaderTypesSource.split(/\r?\n/).length;
 const workspaceSettingsOverviewCardTypesLines =
@@ -14795,8 +14815,10 @@ if (workspaceSettingsHeaderTypesLines > maxWorkspaceSettingsHeaderTypesLines) {
 }
 
 for (const requiredWorkspaceSettingsOverviewCardUsage of [
+  'import { WorkspaceSettingsOverviewDetails } from "./workspace-settings-overview-details";',
   'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";',
   "}: WorkspaceSettingsOverviewCardProps) {",
+  "<WorkspaceSettingsOverviewDetails",
 ]) {
   if (!workspaceSettingsOverviewCardSource.includes(requiredWorkspaceSettingsOverviewCardUsage)) {
     throw new Error(
@@ -14808,12 +14830,59 @@ for (const requiredWorkspaceSettingsOverviewCardUsage of [
 for (const forbiddenWorkspaceSettingsOverviewCardToken of [
   'import type { KnowledgeStats } from "../lib/types";',
   "type WorkspaceSettingsOverviewCardProps = {",
+  'process.env.NEXT_PUBLIC_API_BASE_URL',
+  'process.env.NEXT_PUBLIC_AMAP_KEY',
+  'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
 ]) {
   if (workspaceSettingsOverviewCardSource.includes(forbiddenWorkspaceSettingsOverviewCardToken)) {
     throw new Error(
       `workspace-settings-overview-card.tsx must keep settings overview prop typing delegated: ${forbiddenWorkspaceSettingsOverviewCardToken}`,
     );
   }
+}
+
+for (const requiredWorkspaceSettingsOverviewDetailsUsage of [
+  'import type { WorkspaceSettingsOverviewDetailsProps } from "./workspace-settings-overview-details.types";',
+  "}: WorkspaceSettingsOverviewDetailsProps) {",
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
+  'process.env.NEXT_PUBLIC_API_BASE_URL',
+  'process.env.NEXT_PUBLIC_AMAP_KEY',
+  'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
+]) {
+  if (!workspaceSettingsOverviewDetailsSource.includes(requiredWorkspaceSettingsOverviewDetailsUsage)) {
+    throw new Error(
+      `workspace-settings-overview-details.tsx must reuse the extracted overview-details props type: ${requiredWorkspaceSettingsOverviewDetailsUsage}`,
+    );
+  }
+}
+
+if (workspaceSettingsOverviewDetailsSource.includes("type WorkspaceSettingsOverviewDetailsProps = Pick<")) {
+  throw new Error("workspace-settings-overview-details.tsx must keep overview-details prop typing delegated");
+}
+
+const maxWorkspaceSettingsOverviewDetailsLines = 30;
+if (workspaceSettingsOverviewDetailsLines > maxWorkspaceSettingsOverviewDetailsLines) {
+  throw new Error(
+    `workspace-settings-overview-details.tsx exceeded ${maxWorkspaceSettingsOverviewDetailsLines} lines: ${workspaceSettingsOverviewDetailsLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsOverviewDetailsTypesUsage of [
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types"; export type WorkspaceSettingsOverviewDetailsProps = Pick<WorkspaceSettingsOverviewCardProps, "copy" | "knowledgeStats">;',
+]) {
+  if (!workspaceSettingsOverviewDetailsTypesSource.includes(requiredWorkspaceSettingsOverviewDetailsTypesUsage)) {
+    throw new Error(
+      `workspace-settings-overview-details.types.ts must own overview-details prop typing: ${requiredWorkspaceSettingsOverviewDetailsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsOverviewDetailsTypesLines = 2;
+if (workspaceSettingsOverviewDetailsTypesLines > maxWorkspaceSettingsOverviewDetailsTypesLines) {
+  throw new Error(
+    `workspace-settings-overview-details.types.ts exceeded ${maxWorkspaceSettingsOverviewDetailsTypesLines} lines: ${workspaceSettingsOverviewDetailsTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceSettingsOverviewCardTypesUsage of [
