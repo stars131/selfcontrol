@@ -1,19 +1,6 @@
 "use client";
 
-import type { RecordFilterState, SearchPresetItem } from "../lib/types";
-
-type SearchPresetListProps = {
-  presets: SearchPresetItem[];
-  filteringRecords: boolean;
-  canWriteWorkspace: boolean;
-  savedPresetLabel: string;
-  applyPresetLabel: string;
-  deletePresetLabel: string;
-  emptyLabel: string;
-  summarizeRecordFilterLabel: (filter: RecordFilterState) => string;
-  onApplyPreset: (filter: RecordFilterState) => Promise<void>;
-  onDeletePreset: (presetId: string) => Promise<void>;
-};
+import type { SearchPresetListProps } from "./search-preset-list.types";
 
 export function SearchPresetList({
   presets,

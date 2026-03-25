@@ -1648,6 +1648,10 @@ Last updated: 2026-03-25
   - `share-preview-client.tsx` and `workspace-entry-loading-shell.tsx` now consume extracted prop contracts instead of keeping inline prop shapes in the component signatures
   - the new `share-preview-client.types.ts` and `workspace-entry-loading-shell.types.ts` files keep share-entry presentation boundaries explicit and easier to evolve safely
   - this keeps the remaining entry/share leaf components thinner and more maintainable under the enterprise engineering standard
+- Record Browse Leaf Props Split V1:
+  - `record-summary-card.tsx`, `record-results-view-switcher.tsx`, `search-preset-list.tsx`, and `record-panel-stats.tsx` now consume extracted prop contracts instead of keeping local prop shapes in the component modules
+  - the new `record-summary-card.types.ts`, `record-results-view-switcher.types.ts`, `search-preset-list.types.ts`, and `record-panel-stats.types.ts` files keep record-browse leaf boundaries explicit and easier to evolve independently
+  - this keeps the record browse subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

@@ -1159,6 +1159,29 @@ const workspaceEntryLoadingShellTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.types.ts",
 );
+const recordSummaryCardPath = path.resolve(process.cwd(), "components/record-summary-card.tsx");
+const recordSummaryCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-summary-card.types.ts",
+);
+const recordResultsViewSwitcherPath = path.resolve(
+  process.cwd(),
+  "components/record-results-view-switcher.tsx",
+);
+const recordResultsViewSwitcherTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-results-view-switcher.types.ts",
+);
+const searchPresetListPath = path.resolve(process.cwd(), "components/search-preset-list.tsx");
+const searchPresetListTypesPath = path.resolve(
+  process.cwd(),
+  "components/search-preset-list.types.ts",
+);
+const recordPanelStatsPath = path.resolve(process.cwd(), "components/record-panel-stats.tsx");
+const recordPanelStatsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-stats.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -1417,6 +1440,17 @@ const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
   workspaceEntryLoadingShellTypesPath,
   "utf8",
 );
+const recordSummaryCardSource = fs.readFileSync(recordSummaryCardPath, "utf8");
+const recordSummaryCardTypesSource = fs.readFileSync(recordSummaryCardTypesPath, "utf8");
+const recordResultsViewSwitcherSource = fs.readFileSync(recordResultsViewSwitcherPath, "utf8");
+const recordResultsViewSwitcherTypesSource = fs.readFileSync(
+  recordResultsViewSwitcherTypesPath,
+  "utf8",
+);
+const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
+const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
+const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
+const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -2075,6 +2109,11 @@ const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
+const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).length;
+const recordResultsViewSwitcherTypesLines =
+  recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
+const searchPresetListTypesLines = searchPresetListTypesSource.split(/\r?\n/).length;
+const recordPanelStatsTypesLines = recordPanelStatsTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -12097,6 +12136,150 @@ const maxWorkspaceEntryLoadingShellTypesLines = 2;
 if (workspaceEntryLoadingShellTypesLines > maxWorkspaceEntryLoadingShellTypesLines) {
   throw new Error(
     `workspace-entry-loading-shell.types.ts exceeded ${maxWorkspaceEntryLoadingShellTypesLines} lines: ${workspaceEntryLoadingShellTypesLines}`,
+  );
+}
+
+for (const requiredRecordSummaryCardUsage of [
+  'import type { RecordSummaryCardProps } from "./record-summary-card.types";',
+  "}: RecordSummaryCardProps) {",
+]) {
+  if (!recordSummaryCardSource.includes(requiredRecordSummaryCardUsage)) {
+    throw new Error(
+      `record-summary-card.tsx must reuse the extracted summary-card props type: ${requiredRecordSummaryCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSummaryCardToken of [
+  'import type { RecordItem } from "../lib/types";',
+  "type RecordSummaryCardProps = {",
+]) {
+  if (recordSummaryCardSource.includes(forbiddenRecordSummaryCardToken)) {
+    throw new Error(
+      `record-summary-card.tsx must keep summary-card prop typing delegated: ${forbiddenRecordSummaryCardToken}`,
+    );
+  }
+}
+
+for (const requiredRecordSummaryCardTypesUsage of [
+  'import type { RecordItem } from "../lib/types"; import type { RecordResultsSharedCardProps } from "./record-results-view.types"; export type RecordSummaryCardProps = Pick<RecordResultsSharedCardProps, "avoidLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "mapPrefixLabel" | "noContentLabel" | "onSelectRecord" | "ratingPrefixLabel" | "unknownPlaceLabel" | "untitledRecordLabel"> & { isSelected: boolean; record: RecordItem };',
+]) {
+  if (!recordSummaryCardTypesSource.includes(requiredRecordSummaryCardTypesUsage)) {
+    throw new Error(
+      `record-summary-card.types.ts must own summary-card prop typing: ${requiredRecordSummaryCardTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSummaryCardTypesLines = 2;
+if (recordSummaryCardTypesLines > maxRecordSummaryCardTypesLines) {
+  throw new Error(
+    `record-summary-card.types.ts exceeded ${maxRecordSummaryCardTypesLines} lines: ${recordSummaryCardTypesLines}`,
+  );
+}
+
+for (const requiredRecordResultsViewSwitcherUsage of [
+  'import type { RecordResultsViewSwitcherProps } from "./record-results-view-switcher.types";',
+  "}: RecordResultsViewSwitcherProps) {",
+]) {
+  if (!recordResultsViewSwitcherSource.includes(requiredRecordResultsViewSwitcherUsage)) {
+    throw new Error(
+      `record-results-view-switcher.tsx must reuse the extracted results-switcher props type: ${requiredRecordResultsViewSwitcherUsage}`,
+    );
+  }
+}
+
+if (recordResultsViewSwitcherSource.includes("type RecordResultsViewSwitcherProps = {")) {
+  throw new Error(
+    "record-results-view-switcher.tsx must keep results-switcher prop typing delegated",
+  );
+}
+
+for (const requiredRecordResultsViewSwitcherTypesUsage of [
+  'import type { RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsViewSwitcherProps = Pick<RecordResultsViewProps, "flatListViewLabel" | "onViewModeChange" | "timelineViewLabel" | "viewMode">;',
+]) {
+  if (!recordResultsViewSwitcherTypesSource.includes(requiredRecordResultsViewSwitcherTypesUsage)) {
+    throw new Error(
+      `record-results-view-switcher.types.ts must own results-switcher prop typing: ${requiredRecordResultsViewSwitcherTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordResultsViewSwitcherTypesLines = 2;
+if (recordResultsViewSwitcherTypesLines > maxRecordResultsViewSwitcherTypesLines) {
+  throw new Error(
+    `record-results-view-switcher.types.ts exceeded ${maxRecordResultsViewSwitcherTypesLines} lines: ${recordResultsViewSwitcherTypesLines}`,
+  );
+}
+
+for (const requiredSearchPresetListUsage of [
+  'import type { SearchPresetListProps } from "./search-preset-list.types";',
+  "}: SearchPresetListProps) {",
+]) {
+  if (!searchPresetListSource.includes(requiredSearchPresetListUsage)) {
+    throw new Error(
+      `search-preset-list.tsx must reuse the extracted preset-list props type: ${requiredSearchPresetListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSearchPresetListToken of [
+  'import type { RecordFilterState, SearchPresetItem } from "../lib/types";',
+  "type SearchPresetListProps = {",
+]) {
+  if (searchPresetListSource.includes(forbiddenSearchPresetListToken)) {
+    throw new Error(
+      `search-preset-list.tsx must keep preset-list prop typing delegated: ${forbiddenSearchPresetListToken}`,
+    );
+  }
+}
+
+for (const requiredSearchPresetListTypesUsage of [
+  'import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types"; export type SearchPresetListProps = Pick<RecordBrowseWorkspaceProps, "applyPresetLabel" | "canWriteWorkspace" | "deletePresetLabel" | "filteringRecords" | "onApplyPreset" | "onDeletePreset" | "savedPresetLabel" | "summarizeRecordFilterLabel"> & { emptyLabel: string; presets: RecordBrowseWorkspaceProps["searchPresets"] };',
+]) {
+  if (!searchPresetListTypesSource.includes(requiredSearchPresetListTypesUsage)) {
+    throw new Error(
+      `search-preset-list.types.ts must own preset-list prop typing: ${requiredSearchPresetListTypesUsage}`,
+    );
+  }
+}
+
+const maxSearchPresetListTypesLines = 2;
+if (searchPresetListTypesLines > maxSearchPresetListTypesLines) {
+  throw new Error(
+    `search-preset-list.types.ts exceeded ${maxSearchPresetListTypesLines} lines: ${searchPresetListTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelStatsUsage of [
+  'import type { RecordPanelStatsProps } from "./record-panel-stats.types";',
+  "}: RecordPanelStatsProps) {",
+]) {
+  if (!recordPanelStatsSource.includes(requiredRecordPanelStatsUsage)) {
+    throw new Error(
+      `record-panel-stats.tsx must reuse the extracted panel-stats props type: ${requiredRecordPanelStatsUsage}`,
+    );
+  }
+}
+
+if (recordPanelStatsSource.includes("type RecordPanelStatsProps = {")) {
+  throw new Error("record-panel-stats.tsx must keep panel-stats prop typing delegated");
+}
+
+for (const requiredRecordPanelStatsTypesUsage of [
+  'export type RecordPanelStatsProps = { visibleRecordsLabel: string; foodLabel: string; avoidLabel: string; visibleRecordCount: number; foodCount: number; avoidCount: number };',
+]) {
+  if (!recordPanelStatsTypesSource.includes(requiredRecordPanelStatsTypesUsage)) {
+    throw new Error(
+      `record-panel-stats.types.ts must own panel-stats prop typing: ${requiredRecordPanelStatsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelStatsTypesLines = 2;
+if (recordPanelStatsTypesLines > maxRecordPanelStatsTypesLines) {
+  throw new Error(
+    `record-panel-stats.types.ts exceeded ${maxRecordPanelStatsTypesLines} lines: ${recordPanelStatsTypesLines}`,
   );
 }
 

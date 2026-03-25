@@ -1,13 +1,6 @@
 "use client";
 
-type RecordPanelStatsProps = {
-  visibleRecordsLabel: string;
-  foodLabel: string;
-  avoidLabel: string;
-  visibleRecordCount: number;
-  foodCount: number;
-  avoidCount: number;
-};
+import type { RecordPanelStatsProps } from "./record-panel-stats.types";
 
 export function RecordPanelStats({
   visibleRecordsLabel,

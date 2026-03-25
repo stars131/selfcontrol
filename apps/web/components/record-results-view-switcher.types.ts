@@ -1,0 +1,1 @@
+import type { RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsViewSwitcherProps = Pick<RecordResultsViewProps, "flatListViewLabel" | "onViewModeChange" | "timelineViewLabel" | "viewMode">;

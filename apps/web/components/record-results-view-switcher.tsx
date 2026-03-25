@@ -1,11 +1,6 @@
 "use client";
 
-type RecordResultsViewSwitcherProps = {
-  flatListViewLabel: string;
-  onViewModeChange: (mode: "timeline" | "list") => void;
-  timelineViewLabel: string;
-  viewMode: "timeline" | "list";
-};
+import type { RecordResultsViewSwitcherProps } from "./record-results-view-switcher.types";
 
 export function RecordResultsViewSwitcher({
   flatListViewLabel,

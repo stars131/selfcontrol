@@ -2,21 +2,7 @@
 
 import { readLocationReview } from "../lib/location";
 import { readLocationForm } from "../lib/record-panel-forms";
-import type { RecordItem } from "../lib/types";
-
-type RecordSummaryCardProps = {
-  record: RecordItem;
-  isSelected: boolean;
-  untitledRecordLabel: string;
-  noContentLabel: string;
-  unknownPlaceLabel: string;
-  ratingPrefixLabel: string;
-  avoidLabel: string;
-  mapPrefixLabel: string;
-  formatRecordTimestampLabel: (record: RecordItem) => string;
-  formatReviewStatusLabel: (value?: string | null) => string;
-  onSelectRecord: (recordId: string) => void;
-};
+import type { RecordSummaryCardProps } from "./record-summary-card.types";
 
 export function RecordSummaryCard({
   record,
