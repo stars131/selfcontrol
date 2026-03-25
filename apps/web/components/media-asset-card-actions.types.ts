@@ -1,0 +1,1 @@
+import type { MediaAssetCardProps } from "./media-asset-card.types"; export type MediaAssetCardActionsProps = Pick<MediaAssetCardProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "downloadingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset" | "onDownloadMedia" | "onRefreshMedia" | "onRetryMediaProcessing" | "refreshingMediaId" | "retryingMediaId">;

@@ -1,0 +1,1 @@
+import type { RefObject } from "react"; import type { MapPanelProps } from "./map-panel.types"; import type { MapPanelControllerState } from "./map-panel-controller-result.types"; export type MapPanelContentProps = Pick<MapPanelProps, "draftLocation" | "onSelectRecord" | "selectedRecordId"> & { containerRef: RefObject<HTMLDivElement | null>; controller: MapPanelControllerState };

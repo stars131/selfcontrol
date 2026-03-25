@@ -1,22 +1,11 @@
 "use client";
 
-import type { RefObject } from "react";
-
-import type { LocationDraft } from "../lib/map-panel";
 import { MapDrilldownCard } from "./map-drilldown-card";
 import { MapPanelHeader } from "./map-panel-header";
 import { MapSearchForm } from "./map-search-form";
 import { MapStatusNotices } from "./map-status-notices";
 import { MappedRecordsList } from "./mapped-records-list";
-import type { MapPanelControllerState } from "./map-panel-controller-result.types";
-
-type MapPanelContentProps = {
-  containerRef: RefObject<HTMLDivElement | null>;
-  controller: MapPanelControllerState;
-  draftLocation?: LocationDraft | null;
-  onSelectRecord: (recordId: string | null) => void;
-  selectedRecordId: string | null;
-};
+import type { MapPanelContentProps } from "./map-panel-content.types";
 
 export function MapPanelContent({
   containerRef,

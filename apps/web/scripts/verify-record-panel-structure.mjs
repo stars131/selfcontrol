@@ -896,6 +896,14 @@ const mediaAssetSectionTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-section.types.ts",
 );
+const mediaAssetCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-actions.tsx",
+);
+const mediaAssetCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-actions.types.ts",
+);
 const mediaStorageOverviewPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview.tsx",
@@ -917,6 +925,10 @@ const recordMediaSelectedContentPropsPath = path.resolve(
   "components/record-media-selected-content-props.ts",
 );
 const mapPanelContentPath = path.resolve(process.cwd(), "components/map-panel-content.tsx");
+const mapPanelContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-content.types.ts",
+);
 const mapPanelControllerResultTypesPath = path.resolve(
   process.cwd(),
   "components/map-panel-controller-result.types.ts",
@@ -1258,6 +1270,11 @@ const workspaceShellStateResultTypesSource = fs.readFileSync(
 );
 const mediaAssetSectionSource = fs.readFileSync(mediaAssetSectionPath, "utf8");
 const mediaAssetSectionTypesSource = fs.readFileSync(mediaAssetSectionTypesPath, "utf8");
+const mediaAssetCardActionsSource = fs.readFileSync(mediaAssetCardActionsPath, "utf8");
+const mediaAssetCardActionsTypesSource = fs.readFileSync(
+  mediaAssetCardActionsTypesPath,
+  "utf8",
+);
 const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
 const mediaStorageOverviewTypesSource = fs.readFileSync(mediaStorageOverviewTypesPath, "utf8");
 const recordMediaProcessingPanelsSource = fs.readFileSync(recordMediaProcessingPanelsPath, "utf8");
@@ -1270,6 +1287,7 @@ const recordMediaSelectedContentPropsSource = fs.readFileSync(
   "utf8",
 );
 const mapPanelContentSource = fs.readFileSync(mapPanelContentPath, "utf8");
+const mapPanelContentTypesSource = fs.readFileSync(mapPanelContentTypesPath, "utf8");
 const mapPanelControllerResultTypesSource = fs.readFileSync(
   mapPanelControllerResultTypesPath,
   "utf8",
@@ -2046,11 +2064,14 @@ const workspaceShellRouterTypesLines = workspaceShellRouterTypesSource.split(/\r
 const workspaceShellStateResultTypesLines =
   workspaceShellStateResultTypesSource.split(/\r?\n/).length;
 const mediaAssetSectionTypesLines = mediaAssetSectionTypesSource.split(/\r?\n/).length;
+const mediaAssetCardActionsTypesLines =
+  mediaAssetCardActionsTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
 const recordMediaProcessingPanelsTypesLines =
   recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
 const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
+const mapPanelContentTypesLines = mapPanelContentTypesSource.split(/\r?\n/).length;
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
@@ -10862,26 +10883,85 @@ if (mediaAssetSectionTypesLines > maxMediaAssetSectionTypesLines) {
   );
 }
 
+for (const requiredMediaAssetCardActionsUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
+  "}: MediaAssetCardActionsProps) {",
+]) {
+  if (!mediaAssetCardActionsSource.includes(requiredMediaAssetCardActionsUsage)) {
+    throw new Error(
+      `media-asset-card-actions.tsx must reuse the extracted media-action props type: ${requiredMediaAssetCardActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardActionsToken of [
+  'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
+  'import type { MediaAsset } from "../lib/types";',
+  "type MediaAssetCardActionsProps = {",
+]) {
+  if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
+    throw new Error(
+      `media-asset-card-actions.tsx must keep media-action prop typing delegated: ${forbiddenMediaAssetCardActionsToken}`,
+    );
+  }
+}
+
+for (const requiredMediaAssetCardActionsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type MediaAssetCardActionsProps = Pick<MediaAssetCardProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "downloadingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset" | "onDownloadMedia" | "onRefreshMedia" | "onRetryMediaProcessing" | "refreshingMediaId" | "retryingMediaId">;',
+]) {
+  if (!mediaAssetCardActionsTypesSource.includes(requiredMediaAssetCardActionsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-actions.types.ts must own media-action prop typing: ${requiredMediaAssetCardActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardActionsTypesLines = 2;
+if (mediaAssetCardActionsTypesLines > maxMediaAssetCardActionsTypesLines) {
+  throw new Error(
+    `media-asset-card-actions.types.ts exceeded ${maxMediaAssetCardActionsTypesLines} lines: ${mediaAssetCardActionsTypesLines}`,
+  );
+}
+
 for (const requiredMapPanelContentUsage of [
-  'import type { MapPanelControllerState } from "./map-panel-controller-result.types";',
-  "controller: MapPanelControllerState;",
+  'import type { MapPanelContentProps } from "./map-panel-content.types";',
+  "}: MapPanelContentProps) {",
 ]) {
   if (!mapPanelContentSource.includes(requiredMapPanelContentUsage)) {
     throw new Error(
-      `map-panel-content.tsx must reuse the map controller result boundary: ${requiredMapPanelContentUsage}`,
+      `map-panel-content.tsx must reuse the extracted map-content props type: ${requiredMapPanelContentUsage}`,
     );
   }
 }
 
 for (const forbiddenMapPanelContentToken of [
-  'from "./use-map-panel-controller"',
-  "ReturnType<typeof useMapPanelController>",
+  'import type { RefObject } from "react";',
+  'import type { LocationDraft } from "../lib/map-panel";',
+  'import type { MapPanelControllerState } from "./map-panel-controller-result.types";',
+  "type MapPanelContentProps = {",
 ]) {
   if (mapPanelContentSource.includes(forbiddenMapPanelContentToken)) {
     throw new Error(
-      `map-panel-content.tsx must keep map controller result inference delegated: ${forbiddenMapPanelContentToken}`,
+      `map-panel-content.tsx must keep map-content prop typing delegated: ${forbiddenMapPanelContentToken}`,
     );
   }
+}
+
+for (const requiredMapPanelContentTypesUsage of [
+  'import type { RefObject } from "react"; import type { MapPanelProps } from "./map-panel.types"; import type { MapPanelControllerState } from "./map-panel-controller-result.types"; export type MapPanelContentProps = Pick<MapPanelProps, "draftLocation" | "onSelectRecord" | "selectedRecordId"> & { containerRef: RefObject<HTMLDivElement | null>; controller: MapPanelControllerState };',
+]) {
+  if (!mapPanelContentTypesSource.includes(requiredMapPanelContentTypesUsage)) {
+    throw new Error(
+      `map-panel-content.types.ts must own map-content prop typing: ${requiredMapPanelContentTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelContentTypesLines = 2;
+if (mapPanelContentTypesLines > maxMapPanelContentTypesLines) {
+  throw new Error(
+    `map-panel-content.types.ts exceeded ${maxMapPanelContentTypesLines} lines: ${mapPanelContentTypesLines}`,
+  );
 }
 
 if (mapPanelControllerSource.includes("export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;")) {

@@ -1652,6 +1652,10 @@ Last updated: 2026-03-25
   - `record-summary-card.tsx`, `record-results-view-switcher.tsx`, `search-preset-list.tsx`, and `record-panel-stats.tsx` now consume extracted prop contracts instead of keeping local prop shapes in the component modules
   - the new `record-summary-card.types.ts`, `record-results-view-switcher.types.ts`, `search-preset-list.types.ts`, and `record-panel-stats.types.ts` files keep record-browse leaf boundaries explicit and easier to evolve independently
   - this keeps the record browse subtree thinner and more maintainable under the enterprise engineering standard
+- Map Panel Content and Media Action Props Split V1:
+  - `map-panel-content.tsx` and `media-asset-card-actions.tsx` now consume extracted prop contracts instead of keeping local prop shapes in the component modules
+  - the new `map-panel-content.types.ts` and `media-asset-card-actions.types.ts` files keep map/media leaf boundaries explicit and easier to evolve independently
+  - this keeps the map and media presentation subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

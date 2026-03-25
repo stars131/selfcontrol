@@ -1,21 +1,6 @@
 "use client";
 
-import type { MediaIssueCopy } from "../lib/record-panel-ui";
-import type { MediaAsset } from "../lib/types";
-
-type MediaAssetCardActionsProps = {
-  asset: MediaAsset;
-  canWriteWorkspace: boolean;
-  mediaIssueCopy: MediaIssueCopy;
-  downloadingMediaId: string | null;
-  refreshingMediaId: string | null;
-  retryingMediaId: string | null;
-  deletingMediaId: string | null;
-  onDownloadMedia: (asset: MediaAsset) => Promise<void>;
-  onRefreshMedia: (mediaId: string) => Promise<void>;
-  onRetryMediaProcessing: (mediaId: string) => Promise<void>;
-  onDeleteMediaAsset: (mediaId: string) => Promise<void>;
-};
+import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
 
 export function MediaAssetCardActions({
   asset,
