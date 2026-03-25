@@ -1,0 +1,1 @@
+import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types"; export type WorkspaceExportControlsActionProps = Pick<WorkspaceExportControlsProps, "buttonLabel" | "loading" | "ownerOnlyLabel" | "role" | "onDownload">;

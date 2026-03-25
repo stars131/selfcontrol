@@ -1867,6 +1867,10 @@ Last updated: 2026-03-25
   - `workspace-settings-provider-section.tsx` now delegates viewer-only provider-access notice rendering to `workspace-settings-provider-viewer-notice.tsx` instead of keeping the viewer branch markup inline beside the managed-provider panel branch
   - the new `workspace-settings-provider-viewer-notice.types.ts` file keeps the viewer-notice contract explicit and reusable while the parent provider section remains focused on branch selection
   - `verify-workspace-settings-structure.mjs` now enforces that delegated provider viewer-notice boundary, exact one-line type contract, and line-count ceilings so future provider-section updates stay safer and easier to maintain
+- Workspace Export Controls Leaves Split V1:
+  - `workspace-export-controls.tsx` now delegates owner/editor action branching and success/error notice rendering to `workspace-export-controls-action.tsx` and `workspace-export-controls-status.tsx` instead of keeping both concerns inline inside the controls shell
+  - the new export-controls `*.types.ts` files keep the action and status contracts explicit and reusable while the parent controls component remains focused on composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-structure.mjs` now enforce those delegated export-controls boundaries, exact one-line type contracts, and line-count ceilings so future export-control updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

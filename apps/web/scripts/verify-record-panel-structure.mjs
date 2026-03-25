@@ -1276,6 +1276,22 @@ const workspaceExportControlsPath = path.resolve(
   process.cwd(),
   "components/workspace-export-controls.tsx",
 );
+const workspaceExportControlsActionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-controls-action.tsx",
+);
+const workspaceExportControlsActionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-controls-action.types.ts",
+);
+const workspaceExportControlsStatusPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-controls-status.tsx",
+);
+const workspaceExportControlsStatusTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-controls-status.types.ts",
+);
 const workspaceExportControlsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-controls.types.ts",
@@ -2476,6 +2492,22 @@ const workspaceExportSummaryTypesSource = fs.readFileSync(
 );
 const workspaceExportCardTypesSource = fs.readFileSync(workspaceExportCardTypesPath, "utf8");
 const workspaceExportControlsSource = fs.readFileSync(workspaceExportControlsPath, "utf8");
+const workspaceExportControlsActionSource = fs.readFileSync(
+  workspaceExportControlsActionPath,
+  "utf8",
+);
+const workspaceExportControlsActionTypesSource = fs.readFileSync(
+  workspaceExportControlsActionTypesPath,
+  "utf8",
+);
+const workspaceExportControlsStatusSource = fs.readFileSync(
+  workspaceExportControlsStatusPath,
+  "utf8",
+);
+const workspaceExportControlsStatusTypesSource = fs.readFileSync(
+  workspaceExportControlsStatusTypesPath,
+  "utf8",
+);
 const workspaceExportControlsTypesSource = fs.readFileSync(
   workspaceExportControlsTypesPath,
   "utf8",
@@ -3846,6 +3878,15 @@ const workspaceEntryJobActionsTypesLines =
 const workspaceExportSummaryLines = workspaceExportSummarySource.split(/\r?\n/).length;
 const workspaceExportSummaryTypesLines =
   workspaceExportSummaryTypesSource.split(/\r?\n/).length;
+const workspaceExportControlsLines = workspaceExportControlsSource.split(/\r?\n/).length;
+const workspaceExportControlsActionLines =
+  workspaceExportControlsActionSource.split(/\r?\n/).length;
+const workspaceExportControlsActionTypesLines =
+  workspaceExportControlsActionTypesSource.split(/\r?\n/).length;
+const workspaceExportControlsStatusLines =
+  workspaceExportControlsStatusSource.split(/\r?\n/).length;
+const workspaceExportControlsStatusTypesLines =
+  workspaceExportControlsStatusTypesSource.split(/\r?\n/).length;
 const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControlsTypesLines =
   workspaceExportControlsTypesSource.split(/\r?\n/).length;
@@ -14525,8 +14566,12 @@ if (workspaceExportCardTypesLines > maxWorkspaceExportCardTypesLines) {
 }
 
 for (const requiredWorkspaceExportControlsUsage of [
+  'import { WorkspaceExportControlsAction } from "./workspace-export-controls-action";',
+  'import { WorkspaceExportControlsStatus } from "./workspace-export-controls-status";',
   'import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types";',
   "}: WorkspaceExportControlsProps) {",
+  "<WorkspaceExportControlsAction",
+  "<WorkspaceExportControlsStatus",
 ]) {
   if (!workspaceExportControlsSource.includes(requiredWorkspaceExportControlsUsage)) {
     throw new Error(
@@ -14535,8 +14580,108 @@ for (const requiredWorkspaceExportControlsUsage of [
   }
 }
 
-if (workspaceExportControlsSource.includes("type WorkspaceExportControlsProps = {")) {
-  throw new Error("workspace-export-controls.tsx must keep export-controls prop typing delegated");
+for (const forbiddenWorkspaceExportControlsToken of [
+  "type WorkspaceExportControlsProps = {",
+  'role === "owner" ? (',
+  '<button className="button secondary" disabled={loading} type="button" onClick={onDownload}>',
+  '<div className="notice error" style={{ marginTop: 16 }}>{error}</div>',
+  '<div className="notice" style={{ marginTop: 16 }}>{success}</div>',
+]) {
+  if (workspaceExportControlsSource.includes(forbiddenWorkspaceExportControlsToken)) {
+    throw new Error(
+      `workspace-export-controls.tsx must keep export-controls internals delegated: ${forbiddenWorkspaceExportControlsToken}`,
+    );
+  }
+}
+
+const maxWorkspaceExportControlsLines = 15;
+if (workspaceExportControlsLines > maxWorkspaceExportControlsLines) {
+  throw new Error(
+    `workspace-export-controls.tsx exceeded ${maxWorkspaceExportControlsLines} lines: ${workspaceExportControlsLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportControlsActionUsage of [
+  'import type { WorkspaceExportControlsActionProps } from "./workspace-export-controls-action.types";',
+  "}: WorkspaceExportControlsActionProps) {",
+  'role === "owner" ? (',
+  '<button className="button secondary" disabled={loading} type="button" onClick={onDownload}>',
+  "{ownerOnlyLabel}",
+]) {
+  if (!workspaceExportControlsActionSource.includes(requiredWorkspaceExportControlsActionUsage)) {
+    throw new Error(
+      `workspace-export-controls-action.tsx must reuse the extracted export-controls action props type: ${requiredWorkspaceExportControlsActionUsage}`,
+    );
+  }
+}
+
+if (workspaceExportControlsActionSource.includes("type WorkspaceExportControlsActionProps = Pick<")) {
+  throw new Error("workspace-export-controls-action.tsx must keep export-controls action prop typing delegated");
+}
+
+const maxWorkspaceExportControlsActionLines = 20;
+if (workspaceExportControlsActionLines > maxWorkspaceExportControlsActionLines) {
+  throw new Error(
+    `workspace-export-controls-action.tsx exceeded ${maxWorkspaceExportControlsActionLines} lines: ${workspaceExportControlsActionLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportControlsActionTypesUsage of [
+  'import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types"; export type WorkspaceExportControlsActionProps = Pick<WorkspaceExportControlsProps, "buttonLabel" | "loading" | "ownerOnlyLabel" | "role" | "onDownload">;',
+]) {
+  if (!workspaceExportControlsActionTypesSource.includes(requiredWorkspaceExportControlsActionTypesUsage)) {
+    throw new Error(
+      `workspace-export-controls-action.types.ts must own export-controls action prop typing: ${requiredWorkspaceExportControlsActionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportControlsActionTypesLines = 2;
+if (workspaceExportControlsActionTypesLines > maxWorkspaceExportControlsActionTypesLines) {
+  throw new Error(
+    `workspace-export-controls-action.types.ts exceeded ${maxWorkspaceExportControlsActionTypesLines} lines: ${workspaceExportControlsActionTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportControlsStatusUsage of [
+  'import type { WorkspaceExportControlsStatusProps } from "./workspace-export-controls-status.types";',
+  "}: WorkspaceExportControlsStatusProps) {",
+  '<div className="notice error" style={{ marginTop: 16 }}>{error}</div>',
+  '<div className="notice" style={{ marginTop: 16 }}>{success}</div>',
+]) {
+  if (!workspaceExportControlsStatusSource.includes(requiredWorkspaceExportControlsStatusUsage)) {
+    throw new Error(
+      `workspace-export-controls-status.tsx must reuse the extracted export-controls status props type: ${requiredWorkspaceExportControlsStatusUsage}`,
+    );
+  }
+}
+
+if (workspaceExportControlsStatusSource.includes("type WorkspaceExportControlsStatusProps = Pick<")) {
+  throw new Error("workspace-export-controls-status.tsx must keep export-controls status prop typing delegated");
+}
+
+const maxWorkspaceExportControlsStatusLines = 14;
+if (workspaceExportControlsStatusLines > maxWorkspaceExportControlsStatusLines) {
+  throw new Error(
+    `workspace-export-controls-status.tsx exceeded ${maxWorkspaceExportControlsStatusLines} lines: ${workspaceExportControlsStatusLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportControlsStatusTypesUsage of [
+  'import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types"; export type WorkspaceExportControlsStatusProps = Pick<WorkspaceExportControlsProps, "error" | "success">;',
+]) {
+  if (!workspaceExportControlsStatusTypesSource.includes(requiredWorkspaceExportControlsStatusTypesUsage)) {
+    throw new Error(
+      `workspace-export-controls-status.types.ts must own export-controls status prop typing: ${requiredWorkspaceExportControlsStatusTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportControlsStatusTypesLines = 2;
+if (workspaceExportControlsStatusTypesLines > maxWorkspaceExportControlsStatusTypesLines) {
+  throw new Error(
+    `workspace-export-controls-status.types.ts exceeded ${maxWorkspaceExportControlsStatusTypesLines} lines: ${workspaceExportControlsStatusTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceExportControlsTypesUsage of [
