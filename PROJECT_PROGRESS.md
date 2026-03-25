@@ -1843,6 +1843,10 @@ Last updated: 2026-03-25
   - `provider-settings-panel.tsx` now delegates title, subtitle, and error notice rendering to `provider-settings-panel-intro.tsx` instead of keeping that intro block inline above the jump nav and feature list
   - the new `provider-settings-panel-intro.types.ts` file keeps the intro contract explicit and reusable while the parent settings panel remains focused on controller wiring, anchor styling, nav, and list composition
   - `verify-provider-settings-structure.mjs` now enforces that delegated intro boundary, exact one-line type contract, and line-count ceilings so future provider settings shell updates stay safer and easier to maintain
+- Workspace Export Jobs List Item Split V1:
+  - `workspace-export-jobs-list.tsx` now delegates single job-card rendering to `workspace-export-jobs-list-item.tsx` instead of keeping job metadata, download action, and error notice markup inline inside the list map
+  - the new `workspace-export-jobs-list-item.types.ts` file keeps the per-job list-item contract explicit and reusable while the parent list remains focused on empty-state and iteration behavior
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-job list-item boundary, exact one-line type contract, and line-count ceilings so future export-job UI updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

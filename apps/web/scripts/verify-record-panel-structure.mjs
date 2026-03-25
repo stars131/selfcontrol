@@ -1292,6 +1292,14 @@ const workspaceExportJobsListPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list.tsx",
 );
+const workspaceExportJobsListItemPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item.tsx",
+);
+const workspaceExportJobsListItemTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item.types.ts",
+);
 const workspaceExportJobsListTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list.types.ts",
@@ -2459,6 +2467,14 @@ const workspaceExportJobsCardTypesSource = fs.readFileSync(
   "utf8",
 );
 const workspaceExportJobsListSource = fs.readFileSync(workspaceExportJobsListPath, "utf8");
+const workspaceExportJobsListItemSource = fs.readFileSync(
+  workspaceExportJobsListItemPath,
+  "utf8",
+);
+const workspaceExportJobsListItemTypesSource = fs.readFileSync(
+  workspaceExportJobsListItemTypesPath,
+  "utf8",
+);
 const workspaceExportJobsListTypesSource = fs.readFileSync(
   workspaceExportJobsListTypesPath,
   "utf8",
@@ -3791,6 +3807,11 @@ const workspaceExportJobsActionsTypesLines =
   workspaceExportJobsActionsTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsCardTypesLines =
   workspaceExportJobsCardTypesSource.split(/\r?\n/).length;
+const workspaceExportJobsListLines = workspaceExportJobsListSource.split(/\r?\n/).length;
+const workspaceExportJobsListItemLines =
+  workspaceExportJobsListItemSource.split(/\r?\n/).length;
+const workspaceExportJobsListItemTypesLines =
+  workspaceExportJobsListItemTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsListTypesLines =
   workspaceExportJobsListTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsControllerTypesLines =
@@ -14508,8 +14529,10 @@ if (workspaceExportJobsCardTypesLines > maxWorkspaceExportJobsCardTypesLines) {
 }
 
 for (const requiredWorkspaceExportJobsListUsage of [
+  'import { WorkspaceExportJobsListItem } from "./workspace-export-jobs-list-item";',
   'import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types";',
   "}: WorkspaceExportJobsListProps) {",
+  "<WorkspaceExportJobsListItem",
 ]) {
   if (!workspaceExportJobsListSource.includes(requiredWorkspaceExportJobsListUsage)) {
     throw new Error(
@@ -14522,12 +14545,64 @@ for (const forbiddenWorkspaceExportJobsListToken of [
   'import type { LocaleCode } from "../lib/locale";',
   'import type { WorkspaceTransferJob } from "../lib/types";',
   "type WorkspaceExportJobsListProps = {",
+  'new Date(job.created_at).toLocaleString(locale)',
+  'job.status === "completed"',
+  'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
 ]) {
   if (workspaceExportJobsListSource.includes(forbiddenWorkspaceExportJobsListToken)) {
     throw new Error(
       `workspace-export-jobs-list.tsx must keep export-jobs-list prop typing delegated: ${forbiddenWorkspaceExportJobsListToken}`,
     );
   }
+}
+
+const maxWorkspaceExportJobsListLines = 30;
+if (workspaceExportJobsListLines > maxWorkspaceExportJobsListLines) {
+  throw new Error(
+    `workspace-export-jobs-list.tsx exceeded ${maxWorkspaceExportJobsListLines} lines: ${workspaceExportJobsListLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsListItemUsage of [
+  'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";',
+  "}: WorkspaceExportJobsListItemProps) {",
+  'new Date(job.created_at).toLocaleString(locale)',
+  'job.status === "completed"',
+  'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
+]) {
+  if (!workspaceExportJobsListItemSource.includes(requiredWorkspaceExportJobsListItemUsage)) {
+    throw new Error(
+      `workspace-export-jobs-list-item.tsx must own single-job export rendering: ${requiredWorkspaceExportJobsListItemUsage}`,
+    );
+  }
+}
+
+if (workspaceExportJobsListItemSource.includes("type WorkspaceExportJobsListItemProps = Pick<")) {
+  throw new Error("workspace-export-jobs-list-item.tsx must keep list-item prop typing delegated");
+}
+
+const maxWorkspaceExportJobsListItemLines = 35;
+if (workspaceExportJobsListItemLines > maxWorkspaceExportJobsListItemLines) {
+  throw new Error(
+    `workspace-export-jobs-list-item.tsx exceeded ${maxWorkspaceExportJobsListItemLines} lines: ${workspaceExportJobsListItemLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsListItemTypesUsage of [
+  'import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types"; export type WorkspaceExportJobsListItemProps = Pick<WorkspaceExportJobsListProps, "actionLoading" | "downloadLabel" | "locale" | "onDownload"> & { job: WorkspaceExportJobsListProps["jobs"][number] };',
+]) {
+  if (!workspaceExportJobsListItemTypesSource.includes(requiredWorkspaceExportJobsListItemTypesUsage)) {
+    throw new Error(
+      `workspace-export-jobs-list-item.types.ts must own export-jobs list-item prop typing: ${requiredWorkspaceExportJobsListItemTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportJobsListItemTypesLines = 2;
+if (workspaceExportJobsListItemTypesLines > maxWorkspaceExportJobsListItemTypesLines) {
+  throw new Error(
+    `workspace-export-jobs-list-item.types.ts exceeded ${maxWorkspaceExportJobsListItemTypesLines} lines: ${workspaceExportJobsListItemTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceExportJobsListTypesUsage of [
