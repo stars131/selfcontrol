@@ -924,6 +924,14 @@ const workspaceExportControllerTypesPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-controller.types.ts",
 );
+const workspaceExportCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-card.tsx",
+);
+const workspaceExportCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-card.types.ts",
+);
 const workspaceExportJobsActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-actions.ts",
@@ -931,6 +939,14 @@ const workspaceExportJobsActionsPath = path.resolve(
 const workspaceExportJobsActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-actions.types.ts",
+);
+const workspaceExportJobsCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-card.tsx",
+);
+const workspaceExportJobsCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-card.types.ts",
 );
 const workspaceExportJobsControllerPath = path.resolve(
   process.cwd(),
@@ -1054,6 +1070,8 @@ const mapPanelControllerResultTypesSource = fs.readFileSync(
 );
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelControllerTypesSource = fs.readFileSync(mapPanelControllerTypesPath, "utf8");
+const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
+const workspaceExportCardTypesSource = fs.readFileSync(workspaceExportCardTypesPath, "utf8");
 const workspaceExportControllerSource = fs.readFileSync(workspaceExportControllerPath, "utf8");
 const workspaceExportControllerTypesSource = fs.readFileSync(
   workspaceExportControllerTypesPath,
@@ -1062,6 +1080,11 @@ const workspaceExportControllerTypesSource = fs.readFileSync(
 const workspaceExportJobsActionsSource = fs.readFileSync(workspaceExportJobsActionsPath, "utf8");
 const workspaceExportJobsActionsTypesSource = fs.readFileSync(
   workspaceExportJobsActionsTypesPath,
+  "utf8",
+);
+const workspaceExportJobsCardSource = fs.readFileSync(workspaceExportJobsCardPath, "utf8");
+const workspaceExportJobsCardTypesSource = fs.readFileSync(
+  workspaceExportJobsCardTypesPath,
   "utf8",
 );
 const workspaceExportJobsControllerSource = fs.readFileSync(
@@ -1688,10 +1711,13 @@ const recordMediaSelectedContentPropsLines =
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
+const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControllerTypesLines =
   workspaceExportControllerTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsActionsTypesLines =
   workspaceExportJobsActionsTypesSource.split(/\r?\n/).length;
+const workspaceExportJobsCardTypesLines =
+  workspaceExportJobsCardTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsControllerTypesLines =
   workspaceExportJobsControllerTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
@@ -10497,6 +10523,47 @@ if (workspaceExportControllerTypesLines > maxWorkspaceExportControllerTypesLines
   );
 }
 
+for (const requiredWorkspaceExportCardUsage of [
+  'import type { WorkspaceExportCardProps } from "./workspace-export-card.types";',
+  "}: WorkspaceExportCardProps) {",
+]) {
+  if (!workspaceExportCardSource.includes(requiredWorkspaceExportCardUsage)) {
+    throw new Error(
+      `workspace-export-card.tsx must reuse the extracted export card props type: ${requiredWorkspaceExportCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceExportCardToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  "token: string;",
+  'role: "owner" | "editor";',
+]) {
+  if (workspaceExportCardSource.includes(forbiddenWorkspaceExportCardToken)) {
+    throw new Error(
+      `workspace-export-card.tsx must keep export card prop typing delegated: ${forbiddenWorkspaceExportCardToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceExportCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'export type WorkspaceExportCardProps = { token: string; workspaceId: string; workspaceSlug?: string | null; locale: LocaleCode; role: "owner" | "editor" };',
+]) {
+  if (!workspaceExportCardTypesSource.includes(requiredWorkspaceExportCardTypesUsage)) {
+    throw new Error(
+      `workspace-export-card.types.ts must own export card prop typing: ${requiredWorkspaceExportCardTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportCardTypesLines = 2;
+if (workspaceExportCardTypesLines > maxWorkspaceExportCardTypesLines) {
+  throw new Error(
+    `workspace-export-card.types.ts exceeded ${maxWorkspaceExportCardTypesLines} lines: ${workspaceExportCardTypesLines}`,
+  );
+}
+
 for (const requiredWorkspaceExportJobsControllerUsage of [
   'import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";',
   "}: UseWorkspaceExportJobsControllerProps) {",
@@ -10528,6 +10595,47 @@ const maxWorkspaceExportJobsControllerTypesLines = 2;
 if (workspaceExportJobsControllerTypesLines > maxWorkspaceExportJobsControllerTypesLines) {
   throw new Error(
     `use-workspace-export-jobs-controller.types.ts exceeded ${maxWorkspaceExportJobsControllerTypesLines} lines: ${workspaceExportJobsControllerTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsCardUsage of [
+  'import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types";',
+  "}: WorkspaceExportJobsCardProps) {",
+]) {
+  if (!workspaceExportJobsCardSource.includes(requiredWorkspaceExportJobsCardUsage)) {
+    throw new Error(
+      `workspace-export-jobs-card.tsx must reuse the extracted export-jobs card props type: ${requiredWorkspaceExportJobsCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceExportJobsCardToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  "token: string;",
+  'role: "owner" | "editor";',
+]) {
+  if (workspaceExportJobsCardSource.includes(forbiddenWorkspaceExportJobsCardToken)) {
+    throw new Error(
+      `workspace-export-jobs-card.tsx must keep export-jobs card prop typing delegated: ${forbiddenWorkspaceExportJobsCardToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceExportJobsCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'export type WorkspaceExportJobsCardProps = { token: string; workspaceId: string; locale: LocaleCode; role: "owner" | "editor" };',
+]) {
+  if (!workspaceExportJobsCardTypesSource.includes(requiredWorkspaceExportJobsCardTypesUsage)) {
+    throw new Error(
+      `workspace-export-jobs-card.types.ts must own export-jobs card prop typing: ${requiredWorkspaceExportJobsCardTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportJobsCardTypesLines = 2;
+if (workspaceExportJobsCardTypesLines > maxWorkspaceExportJobsCardTypesLines) {
+  throw new Error(
+    `workspace-export-jobs-card.types.ts exceeded ${maxWorkspaceExportJobsCardTypesLines} lines: ${workspaceExportJobsCardTypesLines}`,
   );
 }
 

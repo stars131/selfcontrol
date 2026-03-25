@@ -1600,6 +1600,10 @@ Last updated: 2026-03-25
   - workspace export hooks and jobs actions now consume extracted type contracts instead of keeping controller props and jobs-action state inline
   - `use-workspace-export-controller.ts`, `use-workspace-export-jobs-controller.ts`, and `workspace-export-jobs-actions.ts` now depend on dedicated `*.types.ts` contracts
   - this keeps the export-management surface thinner and easier to update as transfer features expand
+- Workspace Export Card Props Split V1:
+  - workspace export card components now consume extracted prop contracts instead of keeping locale/token/role props inline
+  - `workspace-export-card.tsx` and `workspace-export-jobs-card.tsx` now depend on dedicated `*.types.ts` files
+  - this keeps the export UI surface thinner and more consistent with the surrounding maintainability pass
 
 ## Next
 - Continue the next product slice

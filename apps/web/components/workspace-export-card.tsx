@@ -1,8 +1,8 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
 import { getWorkspaceExportCopy } from "./workspace-export-copy";
 import { WorkspaceExportControls } from "./workspace-export-controls";
+import type { WorkspaceExportCardProps } from "./workspace-export-card.types";
 import { useWorkspaceExportController } from "./use-workspace-export-controller";
 
 export function WorkspaceExportCard({
@@ -11,13 +11,7 @@ export function WorkspaceExportCard({
   workspaceSlug,
   locale,
   role,
-}: {
-  token: string;
-  workspaceId: string;
-  workspaceSlug?: string | null;
-  locale: LocaleCode;
-  role: "owner" | "editor";
-}) {
+}: WorkspaceExportCardProps) {
   const copy = getWorkspaceExportCopy(locale);
   const { loading, error, success, handleDownload } = useWorkspaceExportController({
     token,

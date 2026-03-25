@@ -1,8 +1,8 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
 import { getWorkspaceExportJobsCopy } from "./workspace-export-jobs-copy";
 import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";
+import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types";
 import { useWorkspaceExportJobsController } from "./use-workspace-export-jobs-controller";
 
 export function WorkspaceExportJobsCard({
@@ -10,12 +10,7 @@ export function WorkspaceExportJobsCard({
   workspaceId,
   locale,
   role,
-}: {
-  token: string;
-  workspaceId: string;
-  locale: LocaleCode;
-  role: "owner" | "editor";
-}) {
+}: WorkspaceExportJobsCardProps) {
   const copy = getWorkspaceExportJobsCopy(locale);
   const {
     jobs,

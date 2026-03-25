@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; export type WorkspaceExportCardProps = { token: string; workspaceId: string; workspaceSlug?: string | null; locale: LocaleCode; role: "owner" | "editor" };
