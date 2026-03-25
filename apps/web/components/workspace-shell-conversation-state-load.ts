@@ -2,11 +2,12 @@
 
 import { createConversation, listConversations } from "../lib/api";
 import { loadConversationMessagesForWorkspace } from "../lib/workspace-shell-refresh";
-import type { LoadWorkspaceShellConversationStateInput } from "./workspace-shell-conversation-state-load.types";
+import type {
+  LoadWorkspaceShellConversationStateInput,
+  WorkspaceShellLoadRole,
+} from "./workspace-shell-conversation-state-load.types";
 
-type WorkspaceRole = "owner" | "editor" | "viewer";
-
-function canManageWorkspace(role: WorkspaceRole) {
+function canManageWorkspace(role: WorkspaceShellLoadRole) {
   return role === "owner" || role === "editor";
 }
 

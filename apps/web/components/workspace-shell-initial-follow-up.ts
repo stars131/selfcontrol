@@ -7,8 +7,6 @@ import {
 import type { LoadWorkspaceShellInitialFollowUpInput } from "./workspace-shell-initial-follow-up.types";
 import { loadWorkspaceShellManagedState } from "./workspace-shell-managed-state-load";
 
-type WorkspaceRole = "owner" | "editor" | "viewer";
-
 export async function loadWorkspaceShellInitialFollowUp({
   activeToken,
   role,

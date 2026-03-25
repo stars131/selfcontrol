@@ -6,10 +6,9 @@ import {
   refreshShareLinkItems,
 } from "../lib/workspace-shell-refresh";
 import type { LoadWorkspaceShellManagedStateInput } from "./workspace-shell-managed-state-load.types";
+import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";
 
-type WorkspaceRole = "owner" | "editor" | "viewer";
-
-function canManageWorkspace(role: WorkspaceRole) {
+function canManageWorkspace(role: WorkspaceShellLoadRole) {
   return role === "owner" || role === "editor";
 }
 

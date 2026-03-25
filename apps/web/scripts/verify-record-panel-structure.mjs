@@ -12347,7 +12347,9 @@ if (workspaceShellClientPanelsPropsTypesLines > maxWorkspaceShellClientPanelsPro
 }
 
 for (const requiredWorkspaceShellConversationStateLoadUsage of [
-  'import type { LoadWorkspaceShellConversationStateInput } from "./workspace-shell-conversation-state-load.types";',
+  'from "./workspace-shell-conversation-state-load.types";',
+  "LoadWorkspaceShellConversationStateInput,",
+  "WorkspaceShellLoadRole,",
   "}: LoadWorkspaceShellConversationStateInput) {",
 ]) {
   if (!workspaceShellConversationStateLoadSource.includes(requiredWorkspaceShellConversationStateLoadUsage)) {
@@ -12359,6 +12361,7 @@ for (const requiredWorkspaceShellConversationStateLoadUsage of [
 
 for (const forbiddenWorkspaceShellConversationStateLoadToken of [
   'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
   "}: {",
 ]) {
   if (workspaceShellConversationStateLoadSource.includes(forbiddenWorkspaceShellConversationStateLoadToken)) {
@@ -12387,6 +12390,7 @@ if (workspaceShellConversationStateLoadTypesLines > maxWorkspaceShellConversatio
 
 for (const requiredWorkspaceShellManagedStateLoadUsage of [
   'import type { LoadWorkspaceShellManagedStateInput } from "./workspace-shell-managed-state-load.types";',
+  'import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";',
   "}: LoadWorkspaceShellManagedStateInput) {",
 ]) {
   if (!workspaceShellManagedStateLoadSource.includes(requiredWorkspaceShellManagedStateLoadUsage)) {
@@ -12398,6 +12402,7 @@ for (const requiredWorkspaceShellManagedStateLoadUsage of [
 
 for (const forbiddenWorkspaceShellManagedStateLoadToken of [
   'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
   "}: {",
 ]) {
   if (workspaceShellManagedStateLoadSource.includes(forbiddenWorkspaceShellManagedStateLoadToken)) {
@@ -12437,6 +12442,7 @@ for (const requiredWorkspaceShellInitialFollowUpUsage of [
 
 for (const forbiddenWorkspaceShellInitialFollowUpToken of [
   'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
   "}: {",
 ]) {
   if (workspaceShellInitialFollowUpSource.includes(forbiddenWorkspaceShellInitialFollowUpToken)) {
@@ -12506,6 +12512,7 @@ if (workspaceShellInitialLoadHelpersTypesLines > maxWorkspaceShellInitialLoadHel
 
 for (const requiredWorkspaceShellInitialBootstrapUsage of [
   'import type { LoadWorkspaceShellInitialBootstrapInput } from "./workspace-shell-initial-bootstrap.types";',
+  'import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";',
   "}: LoadWorkspaceShellInitialBootstrapInput) {",
 ]) {
   if (!workspaceShellInitialBootstrapSource.includes(requiredWorkspaceShellInitialBootstrapUsage)) {
@@ -12517,6 +12524,7 @@ for (const requiredWorkspaceShellInitialBootstrapUsage of [
 
 for (const forbiddenWorkspaceShellInitialBootstrapToken of [
   'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
   "}: {",
 ]) {
   if (workspaceShellInitialBootstrapSource.includes(forbiddenWorkspaceShellInitialBootstrapToken)) {
