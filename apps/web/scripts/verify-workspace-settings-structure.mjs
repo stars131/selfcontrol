@@ -58,6 +58,22 @@ const workspaceSettingsManagedToolsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-managed-tools.types.ts",
 );
+const workspaceSettingsHeaderPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header.tsx",
+);
+const workspaceSettingsHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header.types.ts",
+);
+const workspaceSettingsHeaderActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header-actions.tsx",
+);
+const workspaceSettingsHeaderActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header-actions.types.ts",
+);
 const workspaceSettingsControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-settings-controller.ts",
@@ -99,6 +115,13 @@ const overviewDetailsTypesSource = fs.readFileSync(
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
 const managedToolsSource = fs.readFileSync(workspaceSettingsManagedToolsPath, "utf8");
 const managedToolsTypesSource = fs.readFileSync(workspaceSettingsManagedToolsTypesPath, "utf8");
+const headerSource = fs.readFileSync(workspaceSettingsHeaderPath, "utf8");
+const headerTypesSource = fs.readFileSync(workspaceSettingsHeaderTypesPath, "utf8");
+const headerActionsSource = fs.readFileSync(workspaceSettingsHeaderActionsPath, "utf8");
+const headerActionsTypesSource = fs.readFileSync(
+  workspaceSettingsHeaderActionsTypesPath,
+  "utf8",
+);
 const controllerSource = fs.readFileSync(workspaceSettingsControllerPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceSettingsActionsPath, "utf8");
 const actionErrorSource = fs.readFileSync(workspaceSettingsActionErrorPath, "utf8");
@@ -120,6 +143,10 @@ const overviewDetailsTypesLineCount = overviewDetailsTypesSource.split(/\r?\n/).
 const managedSectionsLineCount = managedSectionsSource.split(/\r?\n/).length;
 const managedToolsLineCount = managedToolsSource.split(/\r?\n/).length;
 const managedToolsTypesLineCount = managedToolsTypesSource.split(/\r?\n/).length;
+const headerLineCount = headerSource.split(/\r?\n/).length;
+const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
+const headerActionsLineCount = headerActionsSource.split(/\r?\n/).length;
+const headerActionsTypesLineCount = headerActionsTypesSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const actionErrorLineCount = actionErrorSource.split(/\r?\n/).length;
@@ -428,6 +455,80 @@ for (const requiredLoadingShellTypesUsage of [
 
 if (loadingShellTypesLineCount > 3) {
   throw new Error(`workspace-settings-loading-shell.types.ts exceeded 3 lines: ${loadingShellTypesLineCount}`);
+}
+
+for (const requiredHeaderUsage of [
+  'import { WorkspaceSettingsHeaderActions } from "./workspace-settings-header-actions";',
+  'import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types";',
+  "}: WorkspaceSettingsHeaderProps) {",
+  "<WorkspaceSettingsHeaderActions",
+]) {
+  if (!headerSource.includes(requiredHeaderUsage)) {
+    throw new Error(`workspace-settings-header.tsx must delegate header actions: ${requiredHeaderUsage}`);
+  }
+}
+
+for (const forbiddenHeaderToken of [
+  'import Link from "next/link";',
+  'import { LanguageSwitcher } from "./language-switcher";',
+  '<div className="hero-actions">',
+  "<LanguageSwitcher",
+  "<Link className=\"button secondary\"",
+]) {
+  if (headerSource.includes(forbiddenHeaderToken)) {
+    throw new Error(`workspace-settings-header.tsx must keep action-group internals delegated: ${forbiddenHeaderToken}`);
+  }
+}
+
+if (headerLineCount > 25) {
+  throw new Error(`workspace-settings-header.tsx exceeded 25 lines: ${headerLineCount}`);
+}
+
+for (const requiredHeaderTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { Workspace } from "../lib/types"; import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";',
+  "export type WorkspaceSettingsHeaderProps = { copy: WorkspaceSettingsCopy; locale: LocaleCode; onLocaleChange: (locale: LocaleCode) => void; username?: string | null; workspace?: Workspace | null; workspaceId: string };",
+]) {
+  if (!headerTypesSource.includes(requiredHeaderTypesUsage)) {
+    throw new Error(`workspace-settings-header.types.ts must own settings-header prop typing: ${requiredHeaderTypesUsage}`);
+  }
+}
+
+if (headerTypesLineCount > 2) {
+  throw new Error(`workspace-settings-header.types.ts exceeded 2 lines: ${headerTypesLineCount}`);
+}
+
+for (const requiredHeaderActionsUsage of [
+  'import Link from "next/link";',
+  'import { LanguageSwitcher } from "./language-switcher";',
+  'import type { WorkspaceSettingsHeaderActionsProps } from "./workspace-settings-header-actions.types";',
+  "}: WorkspaceSettingsHeaderActionsProps) {",
+  '<div className="hero-actions">',
+  "<LanguageSwitcher",
+  "<Link className=\"button secondary\"",
+]) {
+  if (!headerActionsSource.includes(requiredHeaderActionsUsage)) {
+    throw new Error(`workspace-settings-header-actions.tsx must own action-group rendering: ${requiredHeaderActionsUsage}`);
+  }
+}
+
+if (headerActionsSource.includes("type WorkspaceSettingsHeaderActionsProps = Pick<")) {
+  throw new Error("workspace-settings-header-actions.tsx must keep header-actions prop typing delegated");
+}
+
+if (headerActionsLineCount > 20) {
+  throw new Error(`workspace-settings-header-actions.tsx exceeded 20 lines: ${headerActionsLineCount}`);
+}
+
+for (const requiredHeaderActionsTypesUsage of [
+  'import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types"; export type WorkspaceSettingsHeaderActionsProps = Pick<WorkspaceSettingsHeaderProps, "copy" | "locale" | "onLocaleChange" | "workspaceId">;',
+]) {
+  if (!headerActionsTypesSource.includes(requiredHeaderActionsTypesUsage)) {
+    throw new Error(`workspace-settings-header-actions.types.ts must own header-actions prop typing: ${requiredHeaderActionsTypesUsage}`);
+  }
+}
+
+if (headerActionsTypesLineCount > 2) {
+  throw new Error(`workspace-settings-header-actions.types.ts exceeded 2 lines: ${headerActionsTypesLineCount}`);
 }
 
 for (const requiredProviderSectionTypesUsage of [

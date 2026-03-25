@@ -1871,6 +1871,10 @@ Last updated: 2026-03-25
   - `workspace-export-controls.tsx` now delegates owner/editor action branching and success/error notice rendering to `workspace-export-controls-action.tsx` and `workspace-export-controls-status.tsx` instead of keeping both concerns inline inside the controls shell
   - the new export-controls `*.types.ts` files keep the action and status contracts explicit and reusable while the parent controls component remains focused on composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-structure.mjs` now enforce those delegated export-controls boundaries, exact one-line type contracts, and line-count ceilings so future export-control updates stay safer and easier to maintain
+- Workspace Settings Header Actions Split V1:
+  - `workspace-settings-header.tsx` now delegates language-switcher and back-link rendering to `workspace-settings-header-actions.tsx` instead of keeping the header action group inline beside the title block
+  - the new `workspace-settings-header-actions.types.ts` file keeps the header-actions contract explicit and reusable while the parent header remains focused on identity copy and layout composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated header-actions boundary, exact one-line type contract, and line-count ceilings so future settings-header updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

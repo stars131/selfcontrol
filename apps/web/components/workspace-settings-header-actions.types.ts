@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types"; export type WorkspaceSettingsHeaderActionsProps = Pick<WorkspaceSettingsHeaderProps, "copy" | "locale" | "onLocaleChange" | "workspaceId">;
