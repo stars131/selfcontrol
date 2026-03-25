@@ -1656,6 +1656,10 @@ Last updated: 2026-03-25
   - `map-panel-content.tsx` and `media-asset-card-actions.tsx` now consume extracted prop contracts instead of keeping local prop shapes in the component modules
   - the new `map-panel-content.types.ts` and `media-asset-card-actions.types.ts` files keep map/media leaf boundaries explicit and easier to evolve independently
   - this keeps the map and media presentation subtree thinner and more maintainable under the enterprise engineering standard
+- Workspace Retention Actions Props Split V1:
+  - `workspace-media-retention-actions.tsx` now consumes an extracted props contract instead of keeping the action surface shape in the component module
+  - `workspace-media-retention-card-action-helpers.ts` now imports the shared retention-actions contract from the dedicated `workspace-media-retention-actions.types.ts` boundary
+  - this keeps retention action typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

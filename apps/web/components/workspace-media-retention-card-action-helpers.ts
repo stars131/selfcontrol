@@ -1,5 +1,5 @@
 import type { MediaRetentionActionResult } from "./workspace-media-retention-controller.types";
-import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions";
+import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";
 import type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
 
 export function buildWorkspaceMediaRetentionActionMessage({

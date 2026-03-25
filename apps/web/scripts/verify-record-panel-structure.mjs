@@ -1034,6 +1034,14 @@ const workspaceMediaRetentionHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-header.types.ts",
 );
+const workspaceMediaRetentionActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-actions.tsx",
+);
+const workspaceMediaRetentionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-actions.types.ts",
+);
 const workspaceMediaRetentionListsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-lists.tsx",
@@ -1353,6 +1361,14 @@ const workspaceMediaRetentionCardSource = fs.readFileSync(
 );
 const workspaceMediaRetentionCardTypesSource = fs.readFileSync(
   workspaceMediaRetentionCardTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionActionsSource = fs.readFileSync(
+  workspaceMediaRetentionActionsPath,
+  "utf8",
+);
+const workspaceMediaRetentionActionsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionActionsTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionHeaderSource = fs.readFileSync(
@@ -2096,6 +2112,8 @@ const workspaceMembersSectionTypesLines =
   workspaceMembersSectionTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardTypesLines =
   workspaceMediaRetentionCardTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionActionsTypesLines =
+  workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionHeaderTypesLines =
   workspaceMediaRetentionHeaderTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionListsTypesLines =
@@ -11412,6 +11430,40 @@ const maxWorkspaceMediaRetentionCardTypesLines = 2;
 if (workspaceMediaRetentionCardTypesLines > maxWorkspaceMediaRetentionCardTypesLines) {
   throw new Error(
     `workspace-media-retention-card.types.ts exceeded ${maxWorkspaceMediaRetentionCardTypesLines} lines: ${workspaceMediaRetentionCardTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionActionsUsage of [
+  'import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";',
+  "}: WorkspaceMediaRetentionActionsProps) {",
+]) {
+  if (!workspaceMediaRetentionActionsSource.includes(requiredWorkspaceMediaRetentionActionsUsage)) {
+    throw new Error(
+      `workspace-media-retention-actions.tsx must reuse the extracted retention-actions props type: ${requiredWorkspaceMediaRetentionActionsUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionActionsSource.includes("export type WorkspaceMediaRetentionActionsProps = {")) {
+  throw new Error(
+    "workspace-media-retention-actions.tsx must keep retention-actions prop typing delegated",
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionActionsTypesUsage of [
+  'export type WorkspaceMediaRetentionActionsProps = { actionLoading: boolean; archiveConfirmSelected: string; archiveSelectedLabel: string; canDeleteOrphans: boolean; canSelectAll: boolean; clearSelectionLabel: string; deleteOrphansLabel: string; deleteSelectedLabel: string; editorReadOnly: string; onArchive: (confirmMessage: string) => Promise<void>; onCleanupOrphans: () => Promise<void>; onCleanupSelected: () => Promise<void>; onClearSelection: () => void; onSelectAllCandidates: () => void; ownerActions: string; processingLabel: string; role: "owner" | "editor"; selectedCount: number; selectedSummary: string; selectAllLabel: string };',
+]) {
+  if (!workspaceMediaRetentionActionsTypesSource.includes(requiredWorkspaceMediaRetentionActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-actions.types.ts must own retention-actions prop typing: ${requiredWorkspaceMediaRetentionActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionActionsTypesLines = 2;
+if (workspaceMediaRetentionActionsTypesLines > maxWorkspaceMediaRetentionActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-actions.types.ts exceeded ${maxWorkspaceMediaRetentionActionsTypesLines} lines: ${workspaceMediaRetentionActionsTypesLines}`,
   );
 }
 

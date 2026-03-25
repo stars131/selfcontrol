@@ -1,27 +1,6 @@
 "use client";
 
-export type WorkspaceMediaRetentionActionsProps = {
-  actionLoading: boolean;
-  archiveConfirmSelected: string;
-  archiveSelectedLabel: string;
-  canDeleteOrphans: boolean;
-  canSelectAll: boolean;
-  clearSelectionLabel: string;
-  deleteOrphansLabel: string;
-  deleteSelectedLabel: string;
-  editorReadOnly: string;
-  onArchive: (confirmMessage: string) => Promise<void>;
-  onCleanupOrphans: () => Promise<void>;
-  onCleanupSelected: () => Promise<void>;
-  onClearSelection: () => void;
-  onSelectAllCandidates: () => void;
-  ownerActions: string;
-  processingLabel: string;
-  role: "owner" | "editor";
-  selectedCount: number;
-  selectedSummary: string;
-  selectAllLabel: string;
-};
+import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";
 
 export function WorkspaceMediaRetentionActions({
   actionLoading,
