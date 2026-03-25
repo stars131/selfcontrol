@@ -1807,6 +1807,10 @@ Last updated: 2026-03-25
   - `location-review-panel.tsx` now delegates review form fields and review action buttons to `location-review-form-fields.tsx` and `location-review-actions.tsx` instead of keeping those controls inline with the panel shell
   - the new location-review `*.types.ts` files keep review-form and review-action prop contracts explicit and reusable while the panel remains focused on composition with the existing status and history leaves
   - `verify-record-panel-structure.mjs` now enforces those delegated review leaf boundaries, exact one-line type contracts, and line-count ceilings so future location-review updates stay safer and easier to maintain
+- Media Storage Health Header and Metadata Leaves Split V1:
+  - `media-storage-health-card.tsx` now delegates status-and-refresh rendering and metadata rendering to `media-storage-health-header.tsx` and `media-storage-health-metadata.tsx` instead of keeping those sections inline beside the capabilities leaf
+  - the new media-storage-health `*.types.ts` files keep health-header and health-metadata prop contracts explicit and reusable while the card remains focused on shell composition and anchor wiring
+  - `verify-record-panel-structure.mjs` now enforces those delegated health leaf boundaries, exact one-line type contracts, and line-count ceilings so future provider-health updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

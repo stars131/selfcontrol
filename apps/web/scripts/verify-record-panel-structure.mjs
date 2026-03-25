@@ -2006,6 +2006,26 @@ const mediaStorageHealthCapabilitiesTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-capabilities.types.ts",
 );
+const mediaStorageHealthCardPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-card.tsx",
+);
+const mediaStorageHealthHeaderPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-header.tsx",
+);
+const mediaStorageHealthHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-header.types.ts",
+);
+const mediaStorageHealthMetadataPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-metadata.tsx",
+);
+const mediaStorageHealthMetadataTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-metadata.types.ts",
+);
 const recordResultsListViewPath = path.resolve(
   process.cwd(),
   "components/record-results-list-view.tsx",
@@ -2906,12 +2926,23 @@ const deadLetterRecoveryPanelContentTypesSource = fs.readFileSync(
   deadLetterRecoveryPanelContentTypesPath,
   "utf8",
 );
+const mediaStorageHealthCardSource = fs.readFileSync(mediaStorageHealthCardPath, "utf8");
 const mediaStorageHealthCapabilitiesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesPath,
   "utf8",
 );
 const mediaStorageHealthCapabilitiesTypesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesTypesPath,
+  "utf8",
+);
+const mediaStorageHealthHeaderSource = fs.readFileSync(mediaStorageHealthHeaderPath, "utf8");
+const mediaStorageHealthHeaderTypesSource = fs.readFileSync(
+  mediaStorageHealthHeaderTypesPath,
+  "utf8",
+);
+const mediaStorageHealthMetadataSource = fs.readFileSync(mediaStorageHealthMetadataPath, "utf8");
+const mediaStorageHealthMetadataTypesSource = fs.readFileSync(
+  mediaStorageHealthMetadataTypesPath,
   "utf8",
 );
 const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
@@ -3812,8 +3843,15 @@ const deadLetterRecoveryItemCardTagsTypesLines =
   deadLetterRecoveryItemCardTagsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryPanelContentTypesLines =
   deadLetterRecoveryPanelContentTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthCardLines = mediaStorageHealthCardSource.split(/\r?\n/).length;
 const mediaStorageHealthCapabilitiesTypesLines =
   mediaStorageHealthCapabilitiesTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthHeaderLines = mediaStorageHealthHeaderSource.split(/\r?\n/).length;
+const mediaStorageHealthHeaderTypesLines =
+  mediaStorageHealthHeaderTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
+const mediaStorageHealthMetadataTypesLines =
+  mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
 const recordResultsListViewTypesLines =
   recordResultsListViewTypesSource.split(/\r?\n/).length;
 const recordResultsTimelineViewTypesLines =
@@ -17570,6 +17608,129 @@ const maxProviderFeatureCardStatusTypesLines = 2;
 if (providerFeatureCardStatusTypesLines > maxProviderFeatureCardStatusTypesLines) {
   throw new Error(
     `provider-feature-card-status.types.ts exceeded ${maxProviderFeatureCardStatusTypesLines} lines: ${providerFeatureCardStatusTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthCardUsage of [
+  'import { MediaStorageHealthCapabilities } from "./media-storage-health-capabilities";',
+  'import { MediaStorageHealthHeader } from "./media-storage-health-header";',
+  'import { MediaStorageHealthMetadata } from "./media-storage-health-metadata";',
+  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types";',
+  "}: MediaStorageHealthCardProps) {",
+  "<MediaStorageHealthHeader",
+  "<MediaStorageHealthCapabilities",
+  "<MediaStorageHealthMetadata",
+]) {
+  if (!mediaStorageHealthCardSource.includes(requiredMediaStorageHealthCardUsage)) {
+    throw new Error(
+      `media-storage-health-card.tsx must delegate health card sections to extracted leaves: ${requiredMediaStorageHealthCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaStorageHealthCardToken of [
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  '<div className="tag-row">',
+  "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
+  'mediaStorageHealth.warnings.join(" ")',
+]) {
+  if (mediaStorageHealthCardSource.includes(forbiddenMediaStorageHealthCardToken)) {
+    throw new Error(
+      `media-storage-health-card.tsx must keep health-card internals delegated: ${forbiddenMediaStorageHealthCardToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthCardLines = 45;
+if (mediaStorageHealthCardLines > maxMediaStorageHealthCardLines) {
+  throw new Error(
+    `media-storage-health-card.tsx exceeded ${maxMediaStorageHealthCardLines} lines: ${mediaStorageHealthCardLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthHeaderUsage of [
+  'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";',
+  "}: MediaStorageHealthHeaderProps) {",
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  "onClick={() => void onRefreshMediaStorageHealth()}",
+  "{mediaStorageHealth.message}",
+]) {
+  if (!mediaStorageHealthHeaderSource.includes(requiredMediaStorageHealthHeaderUsage)) {
+    throw new Error(
+      `media-storage-health-header.tsx must reuse the extracted health-header props type: ${requiredMediaStorageHealthHeaderUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthHeaderSource.includes("type MediaStorageHealthHeaderProps = Pick<")) {
+  throw new Error("media-storage-health-header.tsx must keep health-header prop typing delegated");
+}
+
+const maxMediaStorageHealthHeaderLines = 40;
+if (mediaStorageHealthHeaderLines > maxMediaStorageHealthHeaderLines) {
+  throw new Error(
+    `media-storage-health-header.tsx exceeded ${maxMediaStorageHealthHeaderLines} lines: ${mediaStorageHealthHeaderLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthHeaderTypesUsage of [
+  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types"; export type MediaStorageHealthHeaderProps = Pick<MediaStorageHealthCardProps, "copy" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthHeaderTypesSource.includes(requiredMediaStorageHealthHeaderTypesUsage)) {
+    throw new Error(
+      `media-storage-health-header.types.ts must own health-header prop typing: ${requiredMediaStorageHealthHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthHeaderTypesLines = 2;
+if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) {
+  throw new Error(
+    `media-storage-health-header.types.ts exceeded ${maxMediaStorageHealthHeaderTypesLines} lines: ${mediaStorageHealthHeaderTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthMetadataUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
+  "}: MediaStorageHealthMetadataProps) {",
+  '<div className="tag-row">',
+  "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
+  'mediaStorageHealth.warnings.join(" ")',
+]) {
+  if (!mediaStorageHealthMetadataSource.includes(requiredMediaStorageHealthMetadataUsage)) {
+    throw new Error(
+      `media-storage-health-metadata.tsx must reuse the extracted health-metadata props type: ${requiredMediaStorageHealthMetadataUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthMetadataSource.includes("type MediaStorageHealthMetadataProps = Pick<")) {
+  throw new Error(
+    "media-storage-health-metadata.tsx must keep health-metadata prop typing delegated",
+  );
+}
+
+const maxMediaStorageHealthMetadataLines = 50;
+if (mediaStorageHealthMetadataLines > maxMediaStorageHealthMetadataLines) {
+  throw new Error(
+    `media-storage-health-metadata.tsx exceeded ${maxMediaStorageHealthMetadataLines} lines: ${mediaStorageHealthMetadataLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthMetadataTypesUsage of [
+  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types"; export type MediaStorageHealthMetadataProps = Pick<MediaStorageHealthCardProps, "copy" | "formatSecretStatus" | "locale" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthMetadataTypesSource.includes(requiredMediaStorageHealthMetadataTypesUsage)) {
+    throw new Error(
+      `media-storage-health-metadata.types.ts must own health-metadata prop typing: ${requiredMediaStorageHealthMetadataTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthMetadataTypesLines = 2;
+if (mediaStorageHealthMetadataTypesLines > maxMediaStorageHealthMetadataTypesLines) {
+  throw new Error(
+    `media-storage-health-metadata.types.ts exceeded ${maxMediaStorageHealthMetadataTypesLines} lines: ${mediaStorageHealthMetadataTypesLines}`,
   );
 }
 

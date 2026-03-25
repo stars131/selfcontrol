@@ -1,0 +1,36 @@
+"use client";
+
+import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";
+
+export function MediaStorageHealthHeader({
+  copy,
+  mediaStorageHealth,
+  onRefreshMediaStorageHealth,
+  refreshingMediaStorageHealth,
+}: MediaStorageHealthHeaderProps) {
+  return (
+    <>
+      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div>
+          <div className="eyebrow">{copy.storageHealth}</div>
+          <div style={{ marginTop: 8, fontWeight: 600 }}>
+            {mediaStorageHealth.status}
+          </div>
+        </div>
+        {onRefreshMediaStorageHealth ? (
+          <button
+            className="button secondary"
+            disabled={refreshingMediaStorageHealth}
+            type="button"
+            onClick={() => void onRefreshMediaStorageHealth()}
+          >
+            {refreshingMediaStorageHealth ? copy.refreshing : copy.refreshHealth}
+          </button>
+        ) : null}
+      </div>
+      <div className="muted" style={{ lineHeight: 1.6 }}>
+        {mediaStorageHealth.message}
+      </div>
+    </>
+  );
+}
