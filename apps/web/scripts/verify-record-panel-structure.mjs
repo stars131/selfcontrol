@@ -869,6 +869,31 @@ const workspaceShellStateResultTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-state-result.types.ts",
 );
+const mediaAssetSectionPath = path.resolve(process.cwd(), "components/media-asset-section.tsx");
+const mediaAssetSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-section.types.ts",
+);
+const mediaStorageOverviewPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview.tsx",
+);
+const mediaStorageOverviewTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview.types.ts",
+);
+const recordMediaProcessingPanelsPath = path.resolve(
+  process.cwd(),
+  "components/record-media-processing-panels.tsx",
+);
+const recordMediaProcessingPanelsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-media-processing-panels.types.ts",
+);
+const recordMediaSelectedContentPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-media-selected-content-props.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -937,6 +962,19 @@ const workspaceShellRefreshersResultTypesSource = fs.readFileSync(
 const workspaceShellRouterTypesSource = fs.readFileSync(workspaceShellRouterTypesPath, "utf8");
 const workspaceShellStateResultTypesSource = fs.readFileSync(
   workspaceShellStateResultTypesPath,
+  "utf8",
+);
+const mediaAssetSectionSource = fs.readFileSync(mediaAssetSectionPath, "utf8");
+const mediaAssetSectionTypesSource = fs.readFileSync(mediaAssetSectionTypesPath, "utf8");
+const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
+const mediaStorageOverviewTypesSource = fs.readFileSync(mediaStorageOverviewTypesPath, "utf8");
+const recordMediaProcessingPanelsSource = fs.readFileSync(recordMediaProcessingPanelsPath, "utf8");
+const recordMediaProcessingPanelsTypesSource = fs.readFileSync(
+  recordMediaProcessingPanelsTypesPath,
+  "utf8",
+);
+const recordMediaSelectedContentPropsSource = fs.readFileSync(
+  recordMediaSelectedContentPropsPath,
   "utf8",
 );
 const source = fs.readFileSync(recordPanelPath, "utf8");
@@ -1528,6 +1566,12 @@ const workspaceShellRefreshersResultTypesLines =
 const workspaceShellRouterTypesLines = workspaceShellRouterTypesSource.split(/\r?\n/).length;
 const workspaceShellStateResultTypesLines =
   workspaceShellStateResultTypesSource.split(/\r?\n/).length;
+const mediaAssetSectionTypesLines = mediaAssetSectionTypesSource.split(/\r?\n/).length;
+const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
+const recordMediaProcessingPanelsTypesLines =
+  recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
+const recordMediaSelectedContentPropsLines =
+  recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -9966,6 +10010,143 @@ const maxWorkspaceShellStateResultTypesLines = 3;
 if (workspaceShellStateResultTypesLines > maxWorkspaceShellStateResultTypesLines) {
   throw new Error(
     `workspace-shell-state-result.types.ts exceeded ${maxWorkspaceShellStateResultTypesLines} lines: ${workspaceShellStateResultTypesLines}`,
+  );
+}
+
+for (const requiredRecordMediaSelectedContentPropsUsage of [
+  'import type { MediaAssetSectionProps } from "./media-asset-section.types";',
+  'import type { MediaStorageOverviewProps } from "./media-storage-overview.types";',
+  'import type { RecordMediaProcessingPanelsProps } from "./record-media-processing-panels.types";',
+  "export function buildMediaStorageOverviewProps(",
+  "export function buildRecordMediaProcessingPanelsProps(",
+  "export function buildMediaAssetSectionProps(",
+]) {
+  if (!recordMediaSelectedContentPropsSource.includes(requiredRecordMediaSelectedContentPropsUsage)) {
+    throw new Error(
+      `record-media-selected-content-props.ts must reuse explicit media child props contracts: ${requiredRecordMediaSelectedContentPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordMediaSelectedContentPropsToken of [
+  "ComponentProps",
+  'from "./media-asset-section";',
+  'from "./media-storage-overview";',
+  'from "./record-media-processing-panels";',
+]) {
+  if (recordMediaSelectedContentPropsSource.includes(forbiddenRecordMediaSelectedContentPropsToken)) {
+    throw new Error(
+      `record-media-selected-content-props.ts must keep component-signature inference delegated: ${forbiddenRecordMediaSelectedContentPropsToken}`,
+    );
+  }
+}
+
+const maxRecordMediaSelectedContentPropsLines = 80;
+if (recordMediaSelectedContentPropsLines > maxRecordMediaSelectedContentPropsLines) {
+  throw new Error(
+    `record-media-selected-content-props.ts exceeded ${maxRecordMediaSelectedContentPropsLines} lines: ${recordMediaSelectedContentPropsLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewUsage of [
+  'import type { MediaStorageOverviewProps } from "./media-storage-overview.types";',
+  "export function MediaStorageOverview({",
+]) {
+  if (!mediaStorageOverviewSource.includes(requiredMediaStorageOverviewUsage)) {
+    throw new Error(
+      `media-storage-overview.tsx must import delegated media overview props: ${requiredMediaStorageOverviewUsage}`,
+    );
+  }
+}
+
+if (mediaStorageOverviewSource.includes("type MediaStorageOverviewProps = {")) {
+  throw new Error("media-storage-overview.tsx must keep overview prop typing delegated");
+}
+
+for (const requiredMediaStorageOverviewTypesUsage of [
+  'import type { MediaProcessingOverview, MediaStorageSummary } from "../lib/types";',
+  "export type MediaStorageOverviewProps = {",
+]) {
+  if (!mediaStorageOverviewTypesSource.includes(requiredMediaStorageOverviewTypesUsage)) {
+    throw new Error(
+      `media-storage-overview.types.ts must own overview prop typing: ${requiredMediaStorageOverviewTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewTypesLines = 3;
+if (mediaStorageOverviewTypesLines > maxMediaStorageOverviewTypesLines) {
+  throw new Error(
+    `media-storage-overview.types.ts exceeded ${maxMediaStorageOverviewTypesLines} lines: ${mediaStorageOverviewTypesLines}`,
+  );
+}
+
+for (const requiredRecordMediaProcessingPanelsUsage of [
+  'import type { RecordMediaProcessingPanelsProps } from "./record-media-processing-panels.types";',
+  "export function RecordMediaProcessingPanels({",
+]) {
+  if (!recordMediaProcessingPanelsSource.includes(requiredRecordMediaProcessingPanelsUsage)) {
+    throw new Error(
+      `record-media-processing-panels.tsx must import delegated media processing props: ${requiredRecordMediaProcessingPanelsUsage}`,
+    );
+  }
+}
+
+if (recordMediaProcessingPanelsSource.includes("type RecordMediaProcessingPanelsProps = Pick<")) {
+  throw new Error(
+    "record-media-processing-panels.tsx must keep processing-panel prop typing delegated",
+  );
+}
+
+for (const requiredRecordMediaProcessingPanelsTypesUsage of [
+  'import type { RecordMediaToolsProps } from "./record-media-tools.types";',
+  "export type RecordMediaProcessingPanelsProps = Pick<RecordMediaToolsProps,",
+]) {
+  if (!recordMediaProcessingPanelsTypesSource.includes(requiredRecordMediaProcessingPanelsTypesUsage)) {
+    throw new Error(
+      `record-media-processing-panels.types.ts must own processing-panel prop typing: ${requiredRecordMediaProcessingPanelsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordMediaProcessingPanelsTypesLines = 3;
+if (recordMediaProcessingPanelsTypesLines > maxRecordMediaProcessingPanelsTypesLines) {
+  throw new Error(
+    `record-media-processing-panels.types.ts exceeded ${maxRecordMediaProcessingPanelsTypesLines} lines: ${recordMediaProcessingPanelsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetSectionUsage of [
+  'import type { MediaAssetSectionProps } from "./media-asset-section.types";',
+  "export function MediaAssetSection({",
+]) {
+  if (!mediaAssetSectionSource.includes(requiredMediaAssetSectionUsage)) {
+    throw new Error(
+      `media-asset-section.tsx must import delegated media asset props: ${requiredMediaAssetSectionUsage}`,
+    );
+  }
+}
+
+if (mediaAssetSectionSource.includes("type MediaAssetSectionProps = {")) {
+  throw new Error("media-asset-section.tsx must keep media asset prop typing delegated");
+}
+
+for (const requiredMediaAssetSectionTypesUsage of [
+  'import type { MediaAsset } from "../lib/types";',
+  'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
+  "export type MediaAssetSectionProps = {",
+]) {
+  if (!mediaAssetSectionTypesSource.includes(requiredMediaAssetSectionTypesUsage)) {
+    throw new Error(
+      `media-asset-section.types.ts must own media asset prop typing: ${requiredMediaAssetSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetSectionTypesLines = 4;
+if (mediaAssetSectionTypesLines > maxMediaAssetSectionTypesLines) {
+  throw new Error(
+    `media-asset-section.types.ts exceeded ${maxMediaAssetSectionTypesLines} lines: ${mediaAssetSectionTypesLines}`,
   );
 }
 

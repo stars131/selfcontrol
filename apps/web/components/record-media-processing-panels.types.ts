@@ -1,0 +1,2 @@
+import type { RecordMediaToolsProps } from "./record-media-tools.types";
+export type RecordMediaProcessingPanelsProps = Pick<RecordMediaToolsProps, "bulkRetryingDeadLetter" | "canWriteWorkspace" | "formatHistoryTimestampLabel" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "mediaProcessingOverview" | "onBulkRetryAllDeadLetter" | "onBulkRetrySelectedDeadLetter" | "onClearDeadLetterSelection" | "onRetryMediaProcessing" | "onSelectAllDeadLetter" | "onToggleDeadLetterSelection" | "retryingMediaId" | "selectedDeadLetterIds" | "workspaceId">;

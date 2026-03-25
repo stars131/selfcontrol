@@ -1,15 +1,7 @@
-"use client";
-
-import type { ComponentProps } from "react";
-
-import { MediaAssetSection } from "./media-asset-section";
-import { MediaStorageOverview } from "./media-storage-overview";
-import { RecordMediaProcessingPanels } from "./record-media-processing-panels";
+import type { MediaAssetSectionProps } from "./media-asset-section.types";
+import type { MediaStorageOverviewProps } from "./media-storage-overview.types";
+import type { RecordMediaProcessingPanelsProps } from "./record-media-processing-panels.types";
 import type { RecordMediaSelectedContentProps } from "./record-media-selected-content.types";
-
-type MediaStorageOverviewProps = ComponentProps<typeof MediaStorageOverview>;
-type RecordMediaProcessingPanelsProps = ComponentProps<typeof RecordMediaProcessingPanels>;
-type MediaAssetSectionProps = ComponentProps<typeof MediaAssetSection>;
 
 export function buildMediaStorageOverviewProps(
   props: RecordMediaSelectedContentProps,

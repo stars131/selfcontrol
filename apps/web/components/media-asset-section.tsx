@@ -1,29 +1,7 @@
 "use client";
 
 import { MediaAssetCard } from "./media-asset-card";
-import type { MediaAsset } from "../lib/types";
-import type { MediaIssueCopy } from "../lib/record-panel-ui";
-
-type MediaAssetSectionProps = {
-  authToken: string | null;
-  canWriteWorkspace: boolean;
-  workspaceId: string;
-  mediaAssets: MediaAsset[];
-  mediaIssueCopy: MediaIssueCopy;
-  noMediaLabel: string;
-  largestFilePrefixLabel: string;
-  largestItemName: string | null;
-  largestItemSizeLabel: string | null;
-  downloadingMediaId: string | null;
-  refreshingMediaId: string | null;
-  retryingMediaId: string | null;
-  deletingMediaId: string | null;
-  formatHistoryTimestampLabel: (value?: string | null) => string;
-  onDeleteMediaAsset: (mediaId: string) => Promise<void>;
-  onDownloadMedia: (asset: MediaAsset) => Promise<void>;
-  onRefreshMedia: (mediaId: string) => Promise<void>;
-  onRetryMediaProcessing: (mediaId: string) => Promise<void>;
-};
+import type { MediaAssetSectionProps } from "./media-asset-section.types";
 
 export function MediaAssetSection({
   authToken,

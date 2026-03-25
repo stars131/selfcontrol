@@ -1576,6 +1576,10 @@ Last updated: 2026-03-25
   - workspace-shell client shared types now re-export explicit state/actions/refreshers/router boundaries instead of inferring them inline from component props or `useRouter()`
   - `workspace-shell-client-props.types.ts` now depends on `workspace-shell-*.types.ts` boundary files and the existing `workspace-shell-panels.types.ts` contract
   - this keeps shell client prop mappers stable against unrelated hook, router, and panel implementation signature changes
+- Record Media Selected-Content Explicit Props Split V1:
+  - media selected-content prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
+  - `media-storage-overview.tsx`, `record-media-processing-panels.tsx`, and `media-asset-section.tsx` now import dedicated `*.types.ts` prop contracts shared with `record-media-selected-content-props.ts`
+  - this keeps media workspace prop mapping stable against unrelated child component signature changes
 
 ## Next
 - Continue the next product slice

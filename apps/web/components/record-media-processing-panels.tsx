@@ -2,27 +2,7 @@
 
 import { DeadLetterRecoveryPanel } from "./dead-letter-recovery-panel";
 import { RecentMediaIssuesPanel } from "./recent-media-issues-panel";
-import type { RecordMediaToolsProps } from "./record-media-tools.types";
-
-type RecordMediaProcessingPanelsProps = Pick<
-  RecordMediaToolsProps,
-  | "bulkRetryingDeadLetter"
-  | "canWriteWorkspace"
-  | "formatHistoryTimestampLabel"
-  | "locale"
-  | "mediaDeadLetterOverview"
-  | "mediaIssueCopy"
-  | "mediaProcessingOverview"
-  | "onBulkRetryAllDeadLetter"
-  | "onBulkRetrySelectedDeadLetter"
-  | "onClearDeadLetterSelection"
-  | "onRetryMediaProcessing"
-  | "onSelectAllDeadLetter"
-  | "onToggleDeadLetterSelection"
-  | "retryingMediaId"
-  | "selectedDeadLetterIds"
-  | "workspaceId"
->;
+import type { RecordMediaProcessingPanelsProps } from "./record-media-processing-panels.types";
 
 export function RecordMediaProcessingPanels({
   bulkRetryingDeadLetter,

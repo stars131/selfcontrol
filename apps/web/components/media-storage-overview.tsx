@@ -1,26 +1,6 @@
 "use client";
 
-import type { MediaProcessingOverview, MediaStorageSummary } from "../lib/types";
-
-type MediaStorageOverviewProps = {
-  mediaAssetCount: number;
-  selectedRecordMediaSizeLabel: string;
-  mediaStorageSummary: MediaStorageSummary | null;
-  mediaProcessingOverview: MediaProcessingOverview | null;
-  thisRecordMediaLabel: string;
-  workspaceStorageLabel: string;
-  storageHealthLabel: string;
-  missingFilesLabel: string;
-  allTrackedFilesPresentLabel: string;
-  processingCompletedLabel: string;
-  needsAttentionLabel: string;
-  queueStateLabel: string;
-  queuedLabel: string;
-  storageMixLabel: string;
-  localLabel: string;
-  remoteLabel: string;
-  formatFileCountLabel: (count: number) => string;
-};
+import type { MediaStorageOverviewProps } from "./media-storage-overview.types";
 
 export function MediaStorageOverview({
   mediaAssetCount,
