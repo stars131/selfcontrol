@@ -1763,6 +1763,10 @@ Last updated: 2026-03-25
 - Workspace Shell Shared Role Reuse V1:
   - `workspace-shell-conversation-state-load.ts`, `workspace-shell-managed-state-load.ts`, and `workspace-shell-initial-bootstrap.ts` now reuse the shared `WorkspaceShellLoadRole` contract instead of repeating local `WorkspaceRole` aliases, and the shell verifier now enforces that shared-role boundary
   - this removes duplicated shell role typing and keeps workspace-shell load/bootstrap orchestration more consistent and maintainable under the enterprise engineering standard
+- Filter Preset Name Result Type Split V1:
+  - `record-panel-controller-filter-preset-name.ts` now consumes an extracted result union instead of keeping a local preset-name resolution type, and the record-panel verifier now enforces that delegated result contract
+  - the new `record-panel-controller-filter-preset-name.types.ts` file keeps preset-name result typing explicit and reusable
+  - this keeps filter helper typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

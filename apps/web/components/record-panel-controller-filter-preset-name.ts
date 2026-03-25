@@ -1,5 +1,5 @@
 import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
-type PresetNameResolution = { errorMessage: string } | { presetName: string };
+import type { PresetNameResolution } from "./record-panel-controller-filter-preset-name.types";
 
 export function resolveRecordPanelPresetName(
   detailCopy: RecordPanelControllerDetailCopy,
