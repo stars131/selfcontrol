@@ -1,23 +1,10 @@
 "use client";
 
-import { type AMapGeocoderInstance, type AMapMapInstance, type LocationDraft } from "../lib/map-panel";
-import type { LocationFilterState, RecordItem } from "../lib/types";
 import { createMapPanelControllerActions } from "./map-panel-controller-actions";
 import { useMapPanelDerivedData } from "./use-map-panel-derived-data";
 import { useMapPanelControllerState } from "./use-map-panel-controller-state";
+import type { UseMapPanelControllerProps } from "./use-map-panel-controller.types";
 import { useMapPanelSync } from "./use-map-panel-sync";
-
-type UseMapPanelControllerProps = {
-  records: RecordItem[];
-  selectedRecordId: string | null;
-  locationFilter: LocationFilterState;
-  filteringRecords: boolean;
-  onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>;
-  draftLocation?: LocationDraft | null;
-  onDraftLocationChange?: (next: LocationDraft) => void;
-  geocoderRef: { current: AMapGeocoderInstance | null };
-  mapRef: { current: AMapMapInstance | null };
-};
 
 export function useMapPanelController({
   records,

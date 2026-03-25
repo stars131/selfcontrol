@@ -912,6 +912,10 @@ const mapPanelControllerResultTypesPath = path.resolve(
   "components/map-panel-controller-result.types.ts",
 );
 const mapPanelControllerPath = path.resolve(process.cwd(), "components/use-map-panel-controller.ts");
+const mapPanelControllerTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-controller.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1025,6 +1029,7 @@ const mapPanelControllerResultTypesSource = fs.readFileSync(
   "utf8",
 );
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
+const mapPanelControllerTypesSource = fs.readFileSync(mapPanelControllerTypesPath, "utf8");
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
   chatPanelActionDerivedDataResultTypesPath,
   "utf8",
@@ -1640,6 +1645,7 @@ const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
+const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10349,6 +10355,31 @@ if (mapPanelControllerSource.includes("export type MapPanelControllerState = Ret
   throw new Error("use-map-panel-controller.ts must keep the controller result boundary delegated");
 }
 
+for (const requiredMapPanelControllerUsage of [
+  'import type { UseMapPanelControllerProps } from "./use-map-panel-controller.types";',
+  "}: UseMapPanelControllerProps) {",
+]) {
+  if (!mapPanelControllerSource.includes(requiredMapPanelControllerUsage)) {
+    throw new Error(
+      `use-map-panel-controller.ts must reuse the extracted map controller input type: ${requiredMapPanelControllerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapPanelControllerToken of [
+  "type UseMapPanelControllerProps = {",
+  "AMapGeocoderInstance",
+  "AMapMapInstance",
+  "LocationFilterState",
+  "RecordItem[]",
+]) {
+  if (mapPanelControllerSource.includes(forbiddenMapPanelControllerToken)) {
+    throw new Error(
+      `use-map-panel-controller.ts must keep map controller input typing delegated: ${forbiddenMapPanelControllerToken}`,
+    );
+  }
+}
+
 for (const requiredMapPanelControllerResultTypesUsage of [
   'import type { useMapPanelController } from "./use-map-panel-controller";',
   "export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;",
@@ -10364,6 +10395,25 @@ const maxMapPanelControllerResultTypesLines = 3;
 if (mapPanelControllerResultTypesLines > maxMapPanelControllerResultTypesLines) {
   throw new Error(
     `map-panel-controller-result.types.ts exceeded ${maxMapPanelControllerResultTypesLines} lines: ${mapPanelControllerResultTypesLines}`,
+  );
+}
+
+for (const requiredMapPanelControllerTypesUsage of [
+  'import { type AMapGeocoderInstance, type AMapMapInstance } from "../lib/map-panel";',
+  'import type { MapPanelProps } from "./map-panel.types";',
+  'export type UseMapPanelControllerProps = Omit<MapPanelProps, "onSelectRecord"> & { geocoderRef: { current: AMapGeocoderInstance | null }; mapRef: { current: AMapMapInstance | null } };',
+]) {
+  if (!mapPanelControllerTypesSource.includes(requiredMapPanelControllerTypesUsage)) {
+    throw new Error(
+      `use-map-panel-controller.types.ts must own the map controller input boundary: ${requiredMapPanelControllerTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelControllerTypesLines = 3;
+if (mapPanelControllerTypesLines > maxMapPanelControllerTypesLines) {
+  throw new Error(
+    `use-map-panel-controller.types.ts exceeded ${maxMapPanelControllerTypesLines} lines: ${mapPanelControllerTypesLines}`,
   );
 }
 

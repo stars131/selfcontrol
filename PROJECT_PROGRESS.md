@@ -1592,6 +1592,10 @@ Last updated: 2026-03-25
   - map-panel content typing now reuses a dedicated controller result boundary file instead of importing a `ReturnType` alias from the hook module
   - `map-panel-content.tsx` now depends on `map-panel-controller-result.types.ts`, and `use-map-panel-controller.ts` no longer exports its own inferred result alias
   - this keeps map-panel view composition less coupled to the hook module’s internal typing
+- Map Panel Controller Input Type Split V1:
+  - `use-map-panel-controller.ts` now consumes an extracted input contract from `use-map-panel-controller.types.ts` instead of keeping the full hook argument shape inline
+  - the extracted input type reuses `map-panel.types.ts` for the shared panel surface and only adds the map/geocoder refs needed by the hook
+  - this keeps the hook boundary thinner and easier to evolve without duplicating panel input contracts
 
 ## Next
 - Continue the next product slice
