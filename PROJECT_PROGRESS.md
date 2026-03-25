@@ -1779,6 +1779,10 @@ Last updated: 2026-03-25
   - `verify-chat-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now match the already-extracted chat content/action-input and workspace-settings loading-shell type boundaries instead of expecting inline prop or input definitions in source modules
   - the verifier suite now enforces delegated `chat-panel-content-props.types.ts`, `chat-panel-action-handler-inputs.types.ts`, and `workspace-settings-loading-shell.types.ts` contracts, and the full web verify suite passes end-to-end again
   - this keeps chat/settings orchestration edges aligned with the same enterprise refactor standard and reduces future verifier drift risk
+- Provider Media Storage Option Helpers Split V1:
+  - `provider-feature-media-storage-options.tsx` now delegates media-storage option key constants, value readers, and patch building to extracted helper modules instead of keeping those details inline in the component
+  - the new `provider-feature-media-storage-options.helpers.ts` and `provider-feature-media-storage-options.helpers.types.ts` files keep option parsing and patch construction explicit, reusable, and easier to evolve safely
+  - `verify-record-panel-structure.mjs` now enforces that delegated helper boundary so this provider-settings leaf stays thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

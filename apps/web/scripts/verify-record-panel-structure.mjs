@@ -1424,6 +1424,14 @@ const providerFeatureMediaStorageOptionsTypesPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-options.types.ts",
 );
+const providerFeatureMediaStorageOptionsHelpersPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-options.helpers.ts",
+);
+const providerFeatureMediaStorageOptionsHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-options.helpers.types.ts",
+);
 const providerSettingsFeatureListPath = path.resolve(
   process.cwd(),
   "components/provider-settings-feature-list.tsx",
@@ -2402,6 +2410,14 @@ const providerFeatureMediaStorageOptionsSource = fs.readFileSync(
 );
 const providerFeatureMediaStorageOptionsTypesSource = fs.readFileSync(
   providerFeatureMediaStorageOptionsTypesPath,
+  "utf8",
+);
+const providerFeatureMediaStorageOptionsHelpersSource = fs.readFileSync(
+  providerFeatureMediaStorageOptionsHelpersPath,
+  "utf8",
+);
+const providerFeatureMediaStorageOptionsHelpersTypesSource = fs.readFileSync(
+  providerFeatureMediaStorageOptionsHelpersTypesPath,
   "utf8",
 );
 const providerSettingsFeatureListSource = fs.readFileSync(
@@ -3505,6 +3521,10 @@ const providerFeatureCardFieldsTypesLines =
   providerFeatureCardFieldsTypesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsTypesLines =
   providerFeatureMediaStorageOptionsTypesSource.split(/\r?\n/).length;
+const providerFeatureMediaStorageOptionsHelpersLines =
+  providerFeatureMediaStorageOptionsHelpersSource.split(/\r?\n/).length;
+const providerFeatureMediaStorageOptionsHelpersTypesLines =
+  providerFeatureMediaStorageOptionsHelpersTypesSource.split(/\r?\n/).length;
 const providerSettingsFeatureListTypesLines =
   providerSettingsFeatureListTypesSource.split(/\r?\n/).length;
 const providerSettingsJumpNavTypesLines =
@@ -14699,8 +14719,12 @@ if (providerSettingsFeatureListTypesLines > maxProviderSettingsFeatureListTypesL
 }
 
 for (const requiredProviderFeatureMediaStorageOptionsUsage of [
+  'from "./provider-feature-media-storage-options.helpers";',
   'import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types";',
   "}: ProviderFeatureMediaStorageOptionsProps) {",
+  "readProviderFeatureMediaStorageBooleanOption(",
+  "readProviderFeatureMediaStorageTextOption(",
+  "buildProviderFeatureMediaStorageOptionsPatch(",
 ]) {
   if (!providerFeatureMediaStorageOptionsSource.includes(requiredProviderFeatureMediaStorageOptionsUsage)) {
     throw new Error(
@@ -14712,6 +14736,12 @@ for (const requiredProviderFeatureMediaStorageOptionsUsage of [
 for (const forbiddenProviderFeatureMediaStorageOptionsToken of [
   'import type { ProviderSettingsCopy } from "./provider-settings-copy";',
   'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  'const MEDIA_STORAGE_FALLBACK_OPTION = "fallback_to_local_on_upload_failure";',
+  'const MEDIA_STORAGE_AUTO_RETRY_OPTION = "auto_retry_enabled";',
+  'const MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION = "remote_retry_max_attempts";',
+  'const MEDIA_STORAGE_RETRY_BACKOFF_OPTION = "remote_retry_backoff_seconds";',
+  "function readBooleanOption(",
+  "function readTextOption(",
   "copy: ProviderSettingsCopy;",
   "draftItem: ProviderDraft;",
 ]) {
@@ -14737,6 +14767,51 @@ const maxProviderFeatureMediaStorageOptionsTypesLines = 2;
 if (providerFeatureMediaStorageOptionsTypesLines > maxProviderFeatureMediaStorageOptionsTypesLines) {
   throw new Error(
     `provider-feature-media-storage-options.types.ts exceeded ${maxProviderFeatureMediaStorageOptionsTypesLines} lines: ${providerFeatureMediaStorageOptionsTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureMediaStorageOptionsHelpersUsage of [
+  'from "./provider-settings-controller.types";',
+  'from "./provider-feature-media-storage-options.helpers.types";',
+  'export const MEDIA_STORAGE_FALLBACK_OPTION: ProviderFeatureMediaStorageOptionKey =',
+  'export const MEDIA_STORAGE_AUTO_RETRY_OPTION: ProviderFeatureMediaStorageOptionKey =',
+  'export const MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION: ProviderFeatureMediaStorageOptionKey =',
+  'export const MEDIA_STORAGE_RETRY_BACKOFF_OPTION: ProviderFeatureMediaStorageOptionKey =',
+  "export function readProviderFeatureMediaStorageBooleanOption(",
+  "export function readProviderFeatureMediaStorageTextOption(",
+  "export function buildProviderFeatureMediaStorageOptionsPatch(",
+]) {
+  if (!providerFeatureMediaStorageOptionsHelpersSource.includes(requiredProviderFeatureMediaStorageOptionsHelpersUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-options.helpers.ts must own media-storage option helper logic: ${requiredProviderFeatureMediaStorageOptionsHelpersUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureMediaStorageOptionsHelpersLines = 55;
+if (providerFeatureMediaStorageOptionsHelpersLines > maxProviderFeatureMediaStorageOptionsHelpersLines) {
+  throw new Error(
+    `provider-feature-media-storage-options.helpers.ts exceeded ${maxProviderFeatureMediaStorageOptionsHelpersLines} lines: ${providerFeatureMediaStorageOptionsHelpersLines}`,
+  );
+}
+
+for (const requiredProviderFeatureMediaStorageOptionsHelpersTypesUsage of [
+  'import type { ProviderDraft } from "./provider-settings-controller.types"; export type ProviderFeatureMediaStorageOptionKey = "fallback_to_local_on_upload_failure" | "auto_retry_enabled" | "remote_retry_max_attempts" | "remote_retry_backoff_seconds"; export type ProviderFeatureMediaStorageOptionsPatch = Pick<ProviderDraft, "options_json">;',
+]) {
+  if (!providerFeatureMediaStorageOptionsHelpersTypesSource.includes(requiredProviderFeatureMediaStorageOptionsHelpersTypesUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-options.helpers.types.ts must own media-storage option helper typing: ${requiredProviderFeatureMediaStorageOptionsHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureMediaStorageOptionsHelpersTypesLines = 2;
+if (
+  providerFeatureMediaStorageOptionsHelpersTypesLines >
+  maxProviderFeatureMediaStorageOptionsHelpersTypesLines
+) {
+  throw new Error(
+    `provider-feature-media-storage-options.helpers.types.ts exceeded ${maxProviderFeatureMediaStorageOptionsHelpersTypesLines} lines: ${providerFeatureMediaStorageOptionsHelpersTypesLines}`,
   );
 }
 

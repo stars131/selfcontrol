@@ -1,0 +1,1 @@
+import type { ProviderDraft } from "./provider-settings-controller.types"; export type ProviderFeatureMediaStorageOptionKey = "fallback_to_local_on_upload_failure" | "auto_retry_enabled" | "remote_retry_max_attempts" | "remote_retry_backoff_seconds"; export type ProviderFeatureMediaStorageOptionsPatch = Pick<ProviderDraft, "options_json">;
