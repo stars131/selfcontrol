@@ -1783,6 +1783,10 @@ Last updated: 2026-03-25
   - `provider-feature-media-storage-options.tsx` now delegates media-storage option key constants, value readers, and patch building to extracted helper modules instead of keeping those details inline in the component
   - the new `provider-feature-media-storage-options.helpers.ts` and `provider-feature-media-storage-options.helpers.types.ts` files keep option parsing and patch construction explicit, reusable, and easier to evolve safely
   - `verify-record-panel-structure.mjs` now enforces that delegated helper boundary so this provider-settings leaf stays thinner and more maintainable under the enterprise engineering standard
+- Workspace Members Item Split V1:
+  - `workspace-members-section.tsx` now delegates per-member card rendering to an extracted `workspace-members-section-item.tsx` leaf instead of keeping row protection, role controls, and action rendering inline in the list component
+  - the new `workspace-members-section-item.types.ts` file keeps the member-item prop contract explicit and reusable while the parent section now stays focused on section framing, list mapping, and empty-state handling
+  - `verify-record-panel-structure.mjs` now enforces that delegated member-item boundary so workspace membership management remains thinner and easier to evolve under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
