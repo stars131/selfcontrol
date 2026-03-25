@@ -1,0 +1,1 @@
+import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelPresetControlsProps = Pick<RecordSearchPanelProps, "canWriteWorkspace" | "onPresetNameChange" | "onSavePreset" | "panelCopy" | "presetName" | "savingSearchPreset">;

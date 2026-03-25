@@ -1,13 +1,13 @@
 "use client";
 
-import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";
+import type { RecordPanelLegacyFormMediaProps } from "./record-panel-legacy-form-media.types";
 
 export function RecordPanelLegacyFormMedia({
   handleUpload,
   mediaAssets,
   selectedRecord,
   uploading,
-}: Pick<RecordPanelLegacyFormProps, "handleUpload" | "mediaAssets" | "selectedRecord" | "uploading">) {
+}: RecordPanelLegacyFormMediaProps) {
   if (!selectedRecord) {
     return null;
   }

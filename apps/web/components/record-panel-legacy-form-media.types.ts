@@ -1,0 +1,1 @@
+import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyFormMediaProps = Pick<RecordPanelLegacyFormProps, "handleUpload" | "mediaAssets" | "selectedRecord" | "uploading">;

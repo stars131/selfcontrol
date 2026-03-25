@@ -1,13 +1,13 @@
 "use client";
 
-import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";
+import type { RecordPanelLegacyFormActionsProps } from "./record-panel-legacy-form-actions.types";
 
 export function RecordPanelLegacyFormActions({
   deleting,
   handleDelete,
   saving,
   selectedRecord,
-}: Pick<RecordPanelLegacyFormProps, "deleting" | "handleDelete" | "saving" | "selectedRecord">) {
+}: RecordPanelLegacyFormActionsProps) {
   return (
     <div className="action-row">
       <button className="button" disabled={saving} type="submit">

@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecordSearchPanelProps } from "./record-search-panel.types";
+import type { RecordSearchPanelPresetControlsProps } from "./record-search-panel-preset-controls.types";
 
 export function RecordSearchPanelPresetControls({
   canWriteWorkspace,
@@ -9,15 +9,7 @@ export function RecordSearchPanelPresetControls({
   panelCopy,
   presetName,
   savingSearchPreset,
-}: Pick<
-  RecordSearchPanelProps,
-  | "canWriteWorkspace"
-  | "onPresetNameChange"
-  | "onSavePreset"
-  | "panelCopy"
-  | "presetName"
-  | "savingSearchPreset"
->) {
+}: RecordSearchPanelPresetControlsProps) {
   return (
     <div className="inline-fields">
       <label className="field">

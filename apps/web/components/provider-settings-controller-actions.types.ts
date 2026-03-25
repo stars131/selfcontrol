@@ -1,0 +1,1 @@
+import type { UseProviderSettingsControllerProps, UseProviderSettingsControllerState } from "./provider-settings-controller.types"; export type CreateProviderSettingsControllerActionsInput = Pick<UseProviderSettingsControllerProps, "onSaveProviderConfig"> & Pick<UseProviderSettingsControllerState, "providerDrafts" | "setError" | "setProviderDrafts" | "setProviderSavingCode">;

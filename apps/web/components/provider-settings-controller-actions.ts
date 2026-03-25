@@ -6,10 +6,9 @@ import {
   buildProviderDraftPatch,
   isProviderDraftDirty as readProviderDraftDirty,
 } from "./provider-settings-draft-helpers";
+import type { CreateProviderSettingsControllerActionsInput } from "./provider-settings-controller-actions.types";
 import type {
   ProviderDraft,
-  UseProviderSettingsControllerProps,
-  UseProviderSettingsControllerState,
 } from "./provider-settings-controller.types";
 
 function getProviderSettingsActionErrorMessage(caught: unknown, fallbackMessage: string) {
@@ -22,11 +21,7 @@ export function createProviderSettingsControllerActions({
   setError,
   setProviderDrafts,
   setProviderSavingCode,
-}: Pick<UseProviderSettingsControllerProps, "onSaveProviderConfig"> &
-  Pick<
-    UseProviderSettingsControllerState,
-    "providerDrafts" | "setError" | "setProviderDrafts" | "setProviderSavingCode"
-  >) {
+}: CreateProviderSettingsControllerActionsInput) {
   function handleProviderDraftChange(featureCode: string, patch: Partial<ProviderDraft>) {
     setProviderDrafts((current) => buildProviderDraftPatch(current, featureCode, patch));
   }

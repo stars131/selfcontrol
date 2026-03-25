@@ -1,11 +1,11 @@
 "use client";
 
-import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";
+import type { RecordPanelLegacyPrimaryFieldsProps } from "./record-panel-legacy-primary-fields.types";
 
 export function RecordPanelLegacyPrimaryFields({
   form,
   setForm,
-}: Pick<RecordPanelLegacyFormProps, "form" | "setForm">) {
+}: RecordPanelLegacyPrimaryFieldsProps) {
   return (
     <>
       <label className="field">

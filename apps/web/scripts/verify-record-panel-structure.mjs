@@ -829,21 +829,41 @@ const legacyRecordPanelFormFieldsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-fields.tsx",
 );
+const legacyRecordPanelFormFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-fields.types.ts",
+);
 const legacyRecordPanelPrimaryFieldsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-primary-fields.tsx",
+);
+const legacyRecordPanelPrimaryFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-primary-fields.types.ts",
 );
 const legacyRecordPanelClassificationFieldsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-classification-fields.tsx",
 );
+const legacyRecordPanelClassificationFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-classification-fields.types.ts",
+);
 const legacyRecordPanelFormMediaPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-media.tsx",
 );
+const legacyRecordPanelFormMediaTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-media.types.ts",
+);
 const legacyRecordPanelFormActionsPath = path.resolve(
   process.cwd(),
   "components/record-panel-legacy-form-actions.tsx",
+);
+const legacyRecordPanelFormActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-legacy-form-actions.types.ts",
 );
 const legacyRecordPanelListPath = path.resolve(
   process.cwd(),
@@ -1139,6 +1159,30 @@ const workspaceEntryJobActionsTypesPath = path.resolve(
 const workspaceExportControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-controller.ts",
+);
+const providerSettingsControllerActionsPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-controller-actions.ts",
+);
+const providerSettingsControllerActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-controller-actions.types.ts",
+);
+const recordSearchPanelFilterFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-filter-fields.tsx",
+);
+const recordSearchPanelFilterFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-filter-fields.types.ts",
+);
+const recordSearchPanelPresetControlsPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-preset-controls.tsx",
+);
+const recordSearchPanelPresetControlsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-preset-controls.types.ts",
 );
 const workspaceExportControllerTypesPath = path.resolve(
   process.cwd(),
@@ -1839,16 +1883,36 @@ const legacyRecordPanelUploadActionSource = fs.readFileSync(
 const legacyRecordPanelFormSource = fs.readFileSync(legacyRecordPanelFormPath, "utf8");
 const legacyRecordPanelFormTypesSource = fs.readFileSync(legacyRecordPanelFormTypesPath, "utf8");
 const legacyRecordPanelFormFieldsSource = fs.readFileSync(legacyRecordPanelFormFieldsPath, "utf8");
+const legacyRecordPanelFormFieldsTypesSource = fs.readFileSync(
+  legacyRecordPanelFormFieldsTypesPath,
+  "utf8",
+);
 const legacyRecordPanelPrimaryFieldsSource = fs.readFileSync(
   legacyRecordPanelPrimaryFieldsPath,
+  "utf8",
+);
+const legacyRecordPanelPrimaryFieldsTypesSource = fs.readFileSync(
+  legacyRecordPanelPrimaryFieldsTypesPath,
   "utf8",
 );
 const legacyRecordPanelClassificationFieldsSource = fs.readFileSync(
   legacyRecordPanelClassificationFieldsPath,
   "utf8",
 );
+const legacyRecordPanelClassificationFieldsTypesSource = fs.readFileSync(
+  legacyRecordPanelClassificationFieldsTypesPath,
+  "utf8",
+);
 const legacyRecordPanelFormMediaSource = fs.readFileSync(legacyRecordPanelFormMediaPath, "utf8");
+const legacyRecordPanelFormMediaTypesSource = fs.readFileSync(
+  legacyRecordPanelFormMediaTypesPath,
+  "utf8",
+);
 const legacyRecordPanelFormActionsSource = fs.readFileSync(legacyRecordPanelFormActionsPath, "utf8");
+const legacyRecordPanelFormActionsTypesSource = fs.readFileSync(
+  legacyRecordPanelFormActionsTypesPath,
+  "utf8",
+);
 const legacyRecordPanelListSource = fs.readFileSync(legacyRecordPanelListPath, "utf8");
 const legacyRecordPanelListTypesSource = fs.readFileSync(legacyRecordPanelListTypesPath, "utf8");
 const legacyRecordPanelListItemSource = fs.readFileSync(legacyRecordPanelListItemPath, "utf8");
@@ -2494,6 +2558,30 @@ const recordReminderFormSource = fs.readFileSync(recordReminderFormPath, "utf8")
 const recordReminderFormTypesSource = fs.readFileSync(recordReminderFormTypesPath, "utf8");
 const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
 const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
+const providerSettingsControllerActionsSource = fs.readFileSync(
+  providerSettingsControllerActionsPath,
+  "utf8",
+);
+const providerSettingsControllerActionsTypesSource = fs.readFileSync(
+  providerSettingsControllerActionsTypesPath,
+  "utf8",
+);
+const recordSearchPanelFilterFieldsSource = fs.readFileSync(
+  recordSearchPanelFilterFieldsPath,
+  "utf8",
+);
+const recordSearchPanelFilterFieldsTypesSource = fs.readFileSync(
+  recordSearchPanelFilterFieldsTypesPath,
+  "utf8",
+);
+const recordSearchPanelPresetControlsSource = fs.readFileSync(
+  recordSearchPanelPresetControlsPath,
+  "utf8",
+);
+const recordSearchPanelPresetControlsTypesSource = fs.readFileSync(
+  recordSearchPanelPresetControlsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardActionsSource = fs.readFileSync(
   deadLetterRecoveryItemCardActionsPath,
   "utf8",
@@ -3104,13 +3192,23 @@ const legacyRecordPanelUploadActionLines = legacyRecordPanelUploadActionSource.s
 const legacyRecordPanelFormLines = legacyRecordPanelFormSource.split(/\r?\n/).length;
 const legacyRecordPanelFormTypesLines = legacyRecordPanelFormTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormFieldsLines = legacyRecordPanelFormFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelFormFieldsTypesLines =
+  legacyRecordPanelFormFieldsTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelPrimaryFieldsLines =
   legacyRecordPanelPrimaryFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelPrimaryFieldsTypesLines =
+  legacyRecordPanelPrimaryFieldsTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelClassificationFieldsLines =
   legacyRecordPanelClassificationFieldsSource.split(/\r?\n/).length;
+const legacyRecordPanelClassificationFieldsTypesLines =
+  legacyRecordPanelClassificationFieldsTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormMediaLines = legacyRecordPanelFormMediaSource.split(/\r?\n/).length;
+const legacyRecordPanelFormMediaTypesLines =
+  legacyRecordPanelFormMediaTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelFormActionsLines =
   legacyRecordPanelFormActionsSource.split(/\r?\n/).length;
+const legacyRecordPanelFormActionsTypesLines =
+  legacyRecordPanelFormActionsTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelListLines = legacyRecordPanelListSource.split(/\r?\n/).length;
 const legacyRecordPanelListTypesLines =
   legacyRecordPanelListTypesSource.split(/\r?\n/).length;
@@ -3251,6 +3349,8 @@ const workspaceSettingsMemberActionsTypesLines =
   workspaceSettingsMemberActionsTypesSource.split(/\r?\n/).length;
 const workspaceSettingsProviderActionsTypesLines =
   workspaceSettingsProviderActionsTypesSource.split(/\r?\n/).length;
+const providerSettingsControllerActionsTypesLines =
+  providerSettingsControllerActionsTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionHandlerInputsTypesLines =
@@ -3303,6 +3403,10 @@ const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).
 const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
 const searchPresetListTypesLines = searchPresetListTypesSource.split(/\r?\n/).length;
+const recordSearchPanelFilterFieldsTypesLines =
+  recordSearchPanelFilterFieldsTypesSource.split(/\r?\n/).length;
+const recordSearchPanelPresetControlsTypesLines =
+  recordSearchPanelPresetControlsTypesSource.split(/\r?\n/).length;
 const recordPanelStatsTypesLines = recordPanelStatsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryTypesLines =
   deadLetterRecoverySummaryTypesSource.split(/\r?\n/).length;
@@ -11420,25 +11524,6 @@ if (legacyRecordPanelFormLines > maxLegacyRecordPanelFormLines) {
   );
 }
 
-for (const requiredLegacyFormActionsUsage of [
-  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
-  "export function RecordPanelLegacyFormActions({",
-  'className="action-row"',
-  '"Saving..."',
-  '"Delete record"',
-]) {
-  if (!legacyRecordPanelFormActionsSource.includes(requiredLegacyFormActionsUsage)) {
-    throw new Error(`record-panel-legacy-form-actions.tsx must own legacy form action rendering: ${requiredLegacyFormActionsUsage}`);
-  }
-}
-
-const maxLegacyRecordPanelFormActionsLines = 30;
-if (legacyRecordPanelFormActionsLines > maxLegacyRecordPanelFormActionsLines) {
-  throw new Error(
-    `record-panel-legacy-form-actions.tsx exceeded ${maxLegacyRecordPanelFormActionsLines} lines: ${legacyRecordPanelFormActionsLines}`,
-  );
-}
-
 for (const requiredLegacyFormTypesUsage of [
   "export type RecordPanelLegacyFormProps = {",
   "mediaAssets: MediaAsset[];",
@@ -11456,27 +11541,112 @@ if (legacyRecordPanelFormTypesLines > maxLegacyRecordPanelFormTypesLines) {
   );
 }
 
-for (const requiredLegacyFormFieldsUsage of [
-  'import { RecordPanelLegacyClassificationFields } from "./record-panel-legacy-classification-fields";',
-  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
-  'import { RecordPanelLegacyPrimaryFields } from "./record-panel-legacy-primary-fields";',
-  "export function RecordPanelLegacyFormFields({",
-  "<RecordPanelLegacyPrimaryFields",
-  "<RecordPanelLegacyClassificationFields",
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, requiredSourceTokens, forbiddenTokens, typesLine, maxLines, actualLines] of [
+  [
+    "record-panel-legacy-form-fields",
+    legacyRecordPanelFormFieldsSource,
+    legacyRecordPanelFormFieldsTypesSource,
+    'import type { RecordPanelLegacyFormFieldsProps } from "./record-panel-legacy-form-fields.types";',
+    "}: RecordPanelLegacyFormFieldsProps) {",
+    [
+      'import { RecordPanelLegacyClassificationFields } from "./record-panel-legacy-classification-fields";',
+      'import { RecordPanelLegacyPrimaryFields } from "./record-panel-legacy-primary-fields";',
+      "<RecordPanelLegacyPrimaryFields",
+      "<RecordPanelLegacyClassificationFields",
+    ],
+    [
+      'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+      "}: Pick<RecordPanelLegacyFormProps",
+      'placeholder="Optional title"',
+      'placeholder="Write a note, food review, or reminder"',
+      '<option value="memo">',
+      "Avoid item",
+    ],
+    'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyFormFieldsProps = Pick<RecordPanelLegacyFormProps, "form" | "setForm">;',
+    2,
+    legacyRecordPanelFormFieldsTypesLines,
+  ],
+  [
+    "record-panel-legacy-primary-fields",
+    legacyRecordPanelPrimaryFieldsSource,
+    legacyRecordPanelPrimaryFieldsTypesSource,
+    'import type { RecordPanelLegacyPrimaryFieldsProps } from "./record-panel-legacy-primary-fields.types";',
+    "}: RecordPanelLegacyPrimaryFieldsProps) {",
+    ['placeholder="Optional title"', 'placeholder="Write a note, food review, or reminder"'],
+    [
+      'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+      "}: Pick<RecordPanelLegacyFormProps",
+    ],
+    'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyPrimaryFieldsProps = Pick<RecordPanelLegacyFormProps, "form" | "setForm">;',
+    2,
+    legacyRecordPanelPrimaryFieldsTypesLines,
+  ],
+  [
+    "record-panel-legacy-classification-fields",
+    legacyRecordPanelClassificationFieldsSource,
+    legacyRecordPanelClassificationFieldsTypesSource,
+    'import type { RecordPanelLegacyClassificationFieldsProps } from "./record-panel-legacy-classification-fields.types";',
+    "}: RecordPanelLegacyClassificationFieldsProps) {",
+    [
+      '<option value="memo">memo</option>',
+      '<option value="bad_experience">bad_experience</option>',
+      'placeholder="1-5"',
+      "Avoid item",
+    ],
+    [
+      'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+      "}: Pick<RecordPanelLegacyFormProps",
+    ],
+    'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyClassificationFieldsProps = Pick<RecordPanelLegacyFormProps, "form" | "setForm">;',
+    2,
+    legacyRecordPanelClassificationFieldsTypesLines,
+  ],
+  [
+    "record-panel-legacy-form-media",
+    legacyRecordPanelFormMediaSource,
+    legacyRecordPanelFormMediaTypesSource,
+    'import type { RecordPanelLegacyFormMediaProps } from "./record-panel-legacy-form-media.types";',
+    "}: RecordPanelLegacyFormMediaProps) {",
+    ["if (!selectedRecord) {", "Uploading media...", "No media uploaded for this record yet."],
+    [
+      'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+      "}: Pick<RecordPanelLegacyFormProps",
+    ],
+    'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyFormMediaProps = Pick<RecordPanelLegacyFormProps, "handleUpload" | "mediaAssets" | "selectedRecord" | "uploading">;',
+    2,
+    legacyRecordPanelFormMediaTypesLines,
+  ],
+  [
+    "record-panel-legacy-form-actions",
+    legacyRecordPanelFormActionsSource,
+    legacyRecordPanelFormActionsTypesSource,
+    'import type { RecordPanelLegacyFormActionsProps } from "./record-panel-legacy-form-actions.types";',
+    "}: RecordPanelLegacyFormActionsProps) {",
+    ['className="action-row"', '"Saving..."', '"Delete record"'],
+    [
+      'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
+      "}: Pick<RecordPanelLegacyFormProps",
+    ],
+    'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyFormActionsProps = Pick<RecordPanelLegacyFormProps, "deleting" | "handleDelete" | "saving" | "selectedRecord">;',
+    2,
+    legacyRecordPanelFormActionsTypesLines,
+  ],
 ]) {
-  if (!legacyRecordPanelFormFieldsSource.includes(requiredLegacyFormFieldsUsage)) {
-    throw new Error(`record-panel-legacy-form-fields.tsx must own editable field rendering: ${requiredLegacyFormFieldsUsage}`);
+  for (const requiredUsage of [importLine, signatureLine, ...requiredSourceTokens]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.tsx must reuse the extracted legacy leaf props type: ${requiredUsage}`);
+    }
   }
-}
-
-for (const forbiddenLegacyFormFieldsToken of [
-  'placeholder="Optional title"',
-  'placeholder="Write a note, food review, or reminder"',
-  '<option value="memo">',
-  "Avoid item",
-]) {
-  if (legacyRecordPanelFormFieldsSource.includes(forbiddenLegacyFormFieldsToken)) {
-    throw new Error(`record-panel-legacy-form-fields.tsx must keep primary/classification field details delegated: ${forbiddenLegacyFormFieldsToken}`);
+  for (const forbiddenToken of forbiddenTokens) {
+    if (componentSource.includes(forbiddenToken)) {
+      throw new Error(`${componentName}.tsx must keep legacy leaf prop typing delegated: ${forbiddenToken}`);
+    }
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own legacy leaf prop typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
   }
 }
 
@@ -11487,35 +11657,11 @@ if (legacyRecordPanelFormFieldsLines > maxLegacyRecordPanelFormFieldsLines) {
   );
 }
 
-for (const requiredLegacyPrimaryFieldsUsage of [
-  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
-  "export function RecordPanelLegacyPrimaryFields({",
-  'placeholder="Optional title"',
-  'placeholder="Write a note, food review, or reminder"',
-]) {
-  if (!legacyRecordPanelPrimaryFieldsSource.includes(requiredLegacyPrimaryFieldsUsage)) {
-    throw new Error(`record-panel-legacy-primary-fields.tsx must own title/content field rendering: ${requiredLegacyPrimaryFieldsUsage}`);
-  }
-}
-
 const maxLegacyRecordPanelPrimaryFieldsLines = 35;
 if (legacyRecordPanelPrimaryFieldsLines > maxLegacyRecordPanelPrimaryFieldsLines) {
   throw new Error(
     `record-panel-legacy-primary-fields.tsx exceeded ${maxLegacyRecordPanelPrimaryFieldsLines} lines: ${legacyRecordPanelPrimaryFieldsLines}`,
   );
-}
-
-for (const requiredLegacyClassificationFieldsUsage of [
-  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
-  "export function RecordPanelLegacyClassificationFields({",
-  '<option value="memo">memo</option>',
-  '<option value="bad_experience">bad_experience</option>',
-  'placeholder="1-5"',
-  "Avoid item",
-]) {
-  if (!legacyRecordPanelClassificationFieldsSource.includes(requiredLegacyClassificationFieldsUsage)) {
-    throw new Error(`record-panel-legacy-classification-fields.tsx must own type/rating/avoid rendering: ${requiredLegacyClassificationFieldsUsage}`);
-  }
 }
 
 const maxLegacyRecordPanelClassificationFieldsLines = 45;
@@ -11525,22 +11671,17 @@ if (legacyRecordPanelClassificationFieldsLines > maxLegacyRecordPanelClassificat
   );
 }
 
-for (const requiredLegacyFormMediaUsage of [
-  'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
-  "export function RecordPanelLegacyFormMedia({",
-  "if (!selectedRecord) {",
-  "Uploading media...",
-  "No media uploaded for this record yet.",
-]) {
-  if (!legacyRecordPanelFormMediaSource.includes(requiredLegacyFormMediaUsage)) {
-    throw new Error(`record-panel-legacy-form-media.tsx must own media rendering: ${requiredLegacyFormMediaUsage}`);
-  }
-}
-
 const maxLegacyRecordPanelFormMediaLines = 45;
 if (legacyRecordPanelFormMediaLines > maxLegacyRecordPanelFormMediaLines) {
   throw new Error(
     `record-panel-legacy-form-media.tsx exceeded ${maxLegacyRecordPanelFormMediaLines} lines: ${legacyRecordPanelFormMediaLines}`,
+  );
+}
+
+const maxLegacyRecordPanelFormActionsLines = 30;
+if (legacyRecordPanelFormActionsLines > maxLegacyRecordPanelFormActionsLines) {
+  throw new Error(
+    `record-panel-legacy-form-actions.tsx exceeded ${maxLegacyRecordPanelFormActionsLines} lines: ${legacyRecordPanelFormActionsLines}`,
   );
 }
 
@@ -14400,6 +14541,46 @@ if (workspaceSettingsProviderActionsTypesLines > maxWorkspaceSettingsProviderAct
   );
 }
 
+for (const requiredProviderSettingsControllerActionsUsage of [
+  'import type { CreateProviderSettingsControllerActionsInput } from "./provider-settings-controller-actions.types";',
+  "}: CreateProviderSettingsControllerActionsInput) {",
+]) {
+  if (!providerSettingsControllerActionsSource.includes(requiredProviderSettingsControllerActionsUsage)) {
+    throw new Error(
+      `provider-settings-controller-actions.ts must reuse the extracted provider-settings action input type: ${requiredProviderSettingsControllerActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderSettingsControllerActionsToken of [
+  "UseProviderSettingsControllerProps",
+  "UseProviderSettingsControllerState",
+  "}: Pick<",
+]) {
+  if (providerSettingsControllerActionsSource.includes(forbiddenProviderSettingsControllerActionsToken)) {
+    throw new Error(
+      `provider-settings-controller-actions.ts must keep provider-settings action typing delegated: ${forbiddenProviderSettingsControllerActionsToken}`,
+    );
+  }
+}
+
+for (const requiredProviderSettingsControllerActionsTypesUsage of [
+  'import type { UseProviderSettingsControllerProps, UseProviderSettingsControllerState } from "./provider-settings-controller.types"; export type CreateProviderSettingsControllerActionsInput = Pick<UseProviderSettingsControllerProps, "onSaveProviderConfig"> & Pick<UseProviderSettingsControllerState, "providerDrafts" | "setError" | "setProviderDrafts" | "setProviderSavingCode">;',
+]) {
+  if (!providerSettingsControllerActionsTypesSource.includes(requiredProviderSettingsControllerActionsTypesUsage)) {
+    throw new Error(
+      `provider-settings-controller-actions.types.ts must own provider-settings action typing: ${requiredProviderSettingsControllerActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderSettingsControllerActionsTypesLines = 2;
+if (providerSettingsControllerActionsTypesLines > maxProviderSettingsControllerActionsTypesLines) {
+  throw new Error(
+    `provider-settings-controller-actions.types.ts exceeded ${maxProviderSettingsControllerActionsTypesLines} lines: ${providerSettingsControllerActionsTypesLines}`,
+  );
+}
+
 for (const requiredWorkspaceExportJobsActionsUsage of [
   'import type { CreateWorkspaceExportJobsActionsInput } from "./workspace-export-jobs-actions.types";',
   "}: CreateWorkspaceExportJobsActionsInput) {",
@@ -15852,6 +16033,84 @@ const maxSearchPresetListTypesLines = 2;
 if (searchPresetListTypesLines > maxSearchPresetListTypesLines) {
   throw new Error(
     `search-preset-list.types.ts exceeded ${maxSearchPresetListTypesLines} lines: ${searchPresetListTypesLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelFilterFieldsUsage of [
+  'import type { RecordSearchPanelFilterFieldsProps } from "./record-search-panel-filter-fields.types";',
+  "}: RecordSearchPanelFilterFieldsProps) {",
+]) {
+  if (!recordSearchPanelFilterFieldsSource.includes(requiredRecordSearchPanelFilterFieldsUsage)) {
+    throw new Error(
+      `record-search-panel-filter-fields.tsx must reuse the extracted filter-fields props type: ${requiredRecordSearchPanelFilterFieldsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSearchPanelFilterFieldsToken of [
+  "RecordSearchPanelProps",
+  "}: Pick<",
+]) {
+  if (recordSearchPanelFilterFieldsSource.includes(forbiddenRecordSearchPanelFilterFieldsToken)) {
+    throw new Error(
+      `record-search-panel-filter-fields.tsx must keep filter-fields prop typing delegated: ${forbiddenRecordSearchPanelFilterFieldsToken}`,
+    );
+  }
+}
+
+for (const requiredRecordSearchPanelFilterFieldsTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelFilterFieldsProps = Pick<RecordSearchPanelProps, "filterDraft" | "onAvoidOnlyChange" | "onQueryChange" | "onTypeCodeChange" | "panelCopy">;',
+]) {
+  if (!recordSearchPanelFilterFieldsTypesSource.includes(requiredRecordSearchPanelFilterFieldsTypesUsage)) {
+    throw new Error(
+      `record-search-panel-filter-fields.types.ts must own filter-fields prop typing: ${requiredRecordSearchPanelFilterFieldsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelFilterFieldsTypesLines = 2;
+if (recordSearchPanelFilterFieldsTypesLines > maxRecordSearchPanelFilterFieldsTypesLines) {
+  throw new Error(
+    `record-search-panel-filter-fields.types.ts exceeded ${maxRecordSearchPanelFilterFieldsTypesLines} lines: ${recordSearchPanelFilterFieldsTypesLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelPresetControlsUsage of [
+  'import type { RecordSearchPanelPresetControlsProps } from "./record-search-panel-preset-controls.types";',
+  "}: RecordSearchPanelPresetControlsProps) {",
+]) {
+  if (!recordSearchPanelPresetControlsSource.includes(requiredRecordSearchPanelPresetControlsUsage)) {
+    throw new Error(
+      `record-search-panel-preset-controls.tsx must reuse the extracted preset-controls props type: ${requiredRecordSearchPanelPresetControlsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSearchPanelPresetControlsToken of [
+  "RecordSearchPanelProps",
+  "}: Pick<",
+]) {
+  if (recordSearchPanelPresetControlsSource.includes(forbiddenRecordSearchPanelPresetControlsToken)) {
+    throw new Error(
+      `record-search-panel-preset-controls.tsx must keep preset-controls prop typing delegated: ${forbiddenRecordSearchPanelPresetControlsToken}`,
+    );
+  }
+}
+
+for (const requiredRecordSearchPanelPresetControlsTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelPresetControlsProps = Pick<RecordSearchPanelProps, "canWriteWorkspace" | "onPresetNameChange" | "onSavePreset" | "panelCopy" | "presetName" | "savingSearchPreset">;',
+]) {
+  if (!recordSearchPanelPresetControlsTypesSource.includes(requiredRecordSearchPanelPresetControlsTypesUsage)) {
+    throw new Error(
+      `record-search-panel-preset-controls.types.ts must own preset-controls prop typing: ${requiredRecordSearchPanelPresetControlsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelPresetControlsTypesLines = 2;
+if (recordSearchPanelPresetControlsTypesLines > maxRecordSearchPanelPresetControlsTypesLines) {
+  throw new Error(
+    `record-search-panel-preset-controls.types.ts exceeded ${maxRecordSearchPanelPresetControlsTypesLines} lines: ${recordSearchPanelPresetControlsTypesLines}`,
   );
 }
 

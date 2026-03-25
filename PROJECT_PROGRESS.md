@@ -1740,6 +1740,10 @@ Last updated: 2026-03-25
   - `dead-letter-recovery-item-card-*.tsx`, `dead-letter-recovery-panel-content.tsx`, `media-storage-health-capabilities.tsx`, and `record-results-*-view.tsx` now consume extracted prop contracts instead of keeping local `Pick<...>` or combined leaf types in those modules
   - the new dead-letter/results `*.types.ts` files keep item-card, panel-content, storage-capabilities, and results-view leaf boundaries explicit and reusable
   - this keeps results and diagnostics presentation typing thinner and more maintainable under the enterprise engineering standard
+- Provider, Search, and Legacy Form Props Split V1:
+  - `provider-settings-controller-actions.ts`, `record-search-panel-*.tsx`, and `record-panel-legacy-*.tsx` now consume extracted contracts instead of keeping direct `Pick<...>` signatures in those helper and leaf modules
+  - the new `*.types.ts` files keep provider-settings controller, search controls, and legacy form subview boundaries explicit and reusable
+  - this keeps provider/search orchestration and legacy form presentation typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

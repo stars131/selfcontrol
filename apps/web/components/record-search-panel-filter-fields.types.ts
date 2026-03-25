@@ -1,0 +1,1 @@
+import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelFilterFieldsProps = Pick<RecordSearchPanelProps, "filterDraft" | "onAvoidOnlyChange" | "onQueryChange" | "onTypeCodeChange" | "panelCopy">;

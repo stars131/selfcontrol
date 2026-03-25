@@ -1,8 +1,8 @@
 "use client";
 
-import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";
+import type { RecordPanelLegacyClassificationFieldsProps } from "./record-panel-legacy-classification-fields.types";
 
-export function RecordPanelLegacyClassificationFields({ form, setForm }: Pick<RecordPanelLegacyFormProps, "form" | "setForm">) {
+export function RecordPanelLegacyClassificationFields({ form, setForm }: RecordPanelLegacyClassificationFieldsProps) {
   return (
     <div className="inline-fields">
       <label className="field">

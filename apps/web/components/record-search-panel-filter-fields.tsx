@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecordSearchPanelProps } from "./record-search-panel.types";
+import type { RecordSearchPanelFilterFieldsProps } from "./record-search-panel-filter-fields.types";
 
 export function RecordSearchPanelFilterFields({
   filterDraft,
@@ -8,10 +8,7 @@ export function RecordSearchPanelFilterFields({
   onQueryChange,
   onTypeCodeChange,
   panelCopy,
-}: Pick<
-  RecordSearchPanelProps,
-  "filterDraft" | "onAvoidOnlyChange" | "onQueryChange" | "onTypeCodeChange" | "panelCopy"
->) {
+}: RecordSearchPanelFilterFieldsProps) {
   return (
     <div className="inline-fields">
       <label className="field">
@@ -42,7 +39,11 @@ export function RecordSearchPanelFilterFields({
         <select
           className="input"
           value={filterDraft.avoidOnly}
-          onChange={(event) => onAvoidOnlyChange(event.target.value as RecordSearchPanelProps["filterDraft"]["avoidOnly"])}
+          onChange={(event) =>
+            onAvoidOnlyChange(
+              event.target.value as RecordSearchPanelFilterFieldsProps["filterDraft"]["avoidOnly"],
+            )
+          }
         >
           <option value="all">{panelCopy.allRecords}</option>
           <option value="avoid">{panelCopy.avoidOnlyOption}</option>
