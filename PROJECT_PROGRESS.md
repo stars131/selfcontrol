@@ -1847,6 +1847,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-list.tsx` now delegates single job-card rendering to `workspace-export-jobs-list-item.tsx` instead of keeping job metadata, download action, and error notice markup inline inside the list map
   - the new `workspace-export-jobs-list-item.types.ts` file keeps the per-job list-item contract explicit and reusable while the parent list remains focused on empty-state and iteration behavior
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-job list-item boundary, exact one-line type contract, and line-count ceilings so future export-job UI updates stay safer and easier to maintain
+- Workspace Export Jobs Header Split V1:
+  - `workspace-export-jobs-card.tsx` now delegates export-job heading and toolbar actions to `workspace-export-jobs-header.tsx` instead of keeping copy layout and refresh/queue buttons inline inside the card shell
+  - the new `workspace-export-jobs-header.types.ts` file keeps the header contract explicit and reusable while the parent card remains focused on controller wiring, notices, and job-list composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-job header boundary, exact one-line type contract, and line-count ceilings so future export-job card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

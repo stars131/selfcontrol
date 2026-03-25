@@ -18,6 +18,14 @@ const exportJobsListPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list.tsx",
 );
+const exportJobsHeaderPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-header.tsx",
+);
+const exportJobsHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-header.types.ts",
+);
 const exportJobsListItemPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.tsx",
@@ -31,6 +39,8 @@ const controllerSource = fs.readFileSync(exportJobsControllerPath, "utf8");
 const stateSource = fs.readFileSync(exportJobsStatePath, "utf8");
 const actionsSource = fs.readFileSync(exportJobsActionsPath, "utf8");
 const listSource = fs.readFileSync(exportJobsListPath, "utf8");
+const headerSource = fs.readFileSync(exportJobsHeaderPath, "utf8");
+const headerTypesSource = fs.readFileSync(exportJobsHeaderTypesPath, "utf8");
 const listItemSource = fs.readFileSync(exportJobsListItemPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
@@ -38,6 +48,8 @@ const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const stateLineCount = stateSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const listLineCount = listSource.split(/\r?\n/).length;
+const headerLineCount = headerSource.split(/\r?\n/).length;
+const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
 const listItemLineCount = listItemSource.split(/\r?\n/).length;
 const listItemTypesLineCount = listItemTypesSource.split(/\r?\n/).length;
 
@@ -53,6 +65,10 @@ if (!source.includes('import { getWorkspaceExportJobsCopy } from "./workspace-ex
   throw new Error("workspace-export-jobs-card.tsx must import getWorkspaceExportJobsCopy");
 }
 
+if (!source.includes('import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";')) {
+  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsHeader");
+}
+
 if (!source.includes('import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";')) {
   throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsList");
 }
@@ -63,6 +79,10 @@ if (!source.includes("getWorkspaceExportJobsCopy(locale)")) {
 
 if (!source.includes("<WorkspaceExportJobsList")) {
   throw new Error("workspace-export-jobs-card.tsx must delegate export-job list rendering");
+}
+
+if (!source.includes("<WorkspaceExportJobsHeader")) {
+  throw new Error("workspace-export-jobs-card.tsx must delegate export-job header rendering");
 }
 
 for (const requiredListUsage of [
@@ -87,6 +107,39 @@ for (const forbiddenListToken of [
 
 if (listLineCount > 30) {
   throw new Error(`workspace-export-jobs-list.tsx exceeded 30 lines: ${listLineCount}`);
+}
+
+for (const requiredHeaderUsage of [
+  'import type { WorkspaceExportJobsHeaderProps } from "./workspace-export-jobs-header.types";',
+  "}: WorkspaceExportJobsHeaderProps) {",
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>',
+  "onClick={onLoadJobs}",
+  "onClick={onCreateJob}",
+  'role === "owner" ? (',
+]) {
+  if (!headerSource.includes(requiredHeaderUsage)) {
+    throw new Error(`workspace-export-jobs-header.tsx must own export-job heading and toolbar rendering: ${requiredHeaderUsage}`);
+  }
+}
+
+if (headerSource.includes("type WorkspaceExportJobsHeaderProps = {")) {
+  throw new Error("workspace-export-jobs-header.tsx must keep header prop typing delegated");
+}
+
+if (headerLineCount > 35) {
+  throw new Error(`workspace-export-jobs-header.tsx exceeded 35 lines: ${headerLineCount}`);
+}
+
+for (const requiredHeaderTypesUsage of [
+  'import { getWorkspaceExportJobsCopy } from "./workspace-export-jobs-copy"; export type WorkspaceExportJobsHeaderProps = { actionLoading: boolean; copy: ReturnType<typeof getWorkspaceExportJobsCopy>; loading: boolean; onCreateJob: () => void; onLoadJobs: () => void; role: "owner" | "editor" };',
+]) {
+  if (!headerTypesSource.includes(requiredHeaderTypesUsage)) {
+    throw new Error(`workspace-export-jobs-header.types.ts must own header prop typing: ${requiredHeaderTypesUsage}`);
+  }
+}
+
+if (headerTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-header.types.ts exceeded 2 lines: ${headerTypesLineCount}`);
 }
 
 for (const requiredListItemUsage of [
@@ -129,13 +182,16 @@ for (const forbiddenToken of [
   "const handleDownload =",
   "const COPY:",
   "jobs.map((job) =>",
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>',
+  "onClick={() => void loadJobs()}",
+  "onClick={() => void handleCreateJob()}",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-export-jobs-card.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 100;
+const maxAllowedLines = 80;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-export-jobs-card.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
