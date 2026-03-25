@@ -894,6 +894,30 @@ const recordMediaSelectedContentPropsPath = path.resolve(
   process.cwd(),
   "components/record-media-selected-content-props.ts",
 );
+const chatPanelActionDerivedDataResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-action-derived-data-result.types.ts",
+);
+const chatPanelActionHandlerInputsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-action-handler-inputs.ts",
+);
+const chatPanelActionStateResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-action-state-result.types.ts",
+);
+const chatPanelActionsResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-actions-result.types.ts",
+);
+const chatPanelContentPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content-props.ts",
+);
+const chatPanelContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -977,6 +1001,21 @@ const recordMediaSelectedContentPropsSource = fs.readFileSync(
   recordMediaSelectedContentPropsPath,
   "utf8",
 );
+const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
+  chatPanelActionDerivedDataResultTypesPath,
+  "utf8",
+);
+const chatPanelActionHandlerInputsSource = fs.readFileSync(
+  chatPanelActionHandlerInputsPath,
+  "utf8",
+);
+const chatPanelActionStateResultTypesSource = fs.readFileSync(
+  chatPanelActionStateResultTypesPath,
+  "utf8",
+);
+const chatPanelActionsResultTypesSource = fs.readFileSync(chatPanelActionsResultTypesPath, "utf8");
+const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
+const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -1572,6 +1611,12 @@ const recordMediaProcessingPanelsTypesLines =
   recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
 const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
+const chatPanelActionDerivedDataResultTypesLines =
+  chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
+const chatPanelActionStateResultTypesLines =
+  chatPanelActionStateResultTypesSource.split(/\r?\n/).length;
+const chatPanelActionsResultTypesLines =
+  chatPanelActionsResultTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -10147,6 +10192,130 @@ const maxMediaAssetSectionTypesLines = 4;
 if (mediaAssetSectionTypesLines > maxMediaAssetSectionTypesLines) {
   throw new Error(
     `media-asset-section.types.ts exceeded ${maxMediaAssetSectionTypesLines} lines: ${mediaAssetSectionTypesLines}`,
+  );
+}
+
+for (const requiredChatPanelActionHandlerInputsUsage of [
+  'import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types";',
+  'import type { ChatPanelActionState } from "./chat-panel-action-state-result.types";',
+  "derivedData: ChatPanelActionDerivedData;",
+  "state: ChatPanelActionState;",
+]) {
+  if (!chatPanelActionHandlerInputsSource.includes(requiredChatPanelActionHandlerInputsUsage)) {
+    throw new Error(
+      `chat-panel-action-handler-inputs.ts must reuse chat action result boundaries: ${requiredChatPanelActionHandlerInputsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelActionHandlerInputsToken of [
+  'from "./use-chat-panel-action-derived-data";',
+  'from "./use-chat-panel-action-state";',
+  "ReturnType<typeof useChatPanelActionDerivedData>",
+  "ReturnType<typeof useChatPanelActionState>",
+]) {
+  if (chatPanelActionHandlerInputsSource.includes(forbiddenChatPanelActionHandlerInputsToken)) {
+    throw new Error(
+      `chat-panel-action-handler-inputs.ts must keep hook result inference delegated: ${forbiddenChatPanelActionHandlerInputsToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelContentPropsUsage of [
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types";',
+  "actions: ChatPanelActions;",
+]) {
+  if (!chatPanelContentPropsSource.includes(requiredChatPanelContentPropsUsage)) {
+    throw new Error(
+      `chat-panel-content-props.ts must reuse the chat actions result boundary: ${requiredChatPanelContentPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelContentPropsToken of [
+  "ReturnType<typeof import(",
+  'from "./use-chat-panel-actions"',
+]) {
+  if (chatPanelContentPropsSource.includes(forbiddenChatPanelContentPropsToken)) {
+    throw new Error(
+      `chat-panel-content-props.ts must keep chat action inference delegated: ${forbiddenChatPanelContentPropsToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelContentTypesUsage of [
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types";',
+  "ChatPanelActions;",
+]) {
+  if (!chatPanelContentTypesSource.includes(requiredChatPanelContentTypesUsage)) {
+    throw new Error(
+      `chat-panel-content.types.ts must reuse the chat actions result boundary: ${requiredChatPanelContentTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelContentTypesToken of [
+  "ReturnType<",
+  'from "./use-chat-panel-actions"',
+]) {
+  if (chatPanelContentTypesSource.includes(forbiddenChatPanelContentTypesToken)) {
+    throw new Error(
+      `chat-panel-content.types.ts must keep chat action inference delegated: ${forbiddenChatPanelContentTypesToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelActionDerivedDataResultTypesUsage of [
+  'import type { useChatPanelActionDerivedData } from "./use-chat-panel-action-derived-data";',
+  "export type ChatPanelActionDerivedData = ReturnType<typeof useChatPanelActionDerivedData>;",
+]) {
+  if (!chatPanelActionDerivedDataResultTypesSource.includes(requiredChatPanelActionDerivedDataResultTypesUsage)) {
+    throw new Error(
+      `chat-panel-action-derived-data-result.types.ts must own the derived-data result boundary: ${requiredChatPanelActionDerivedDataResultTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelActionDerivedDataResultTypesLines = 3;
+if (chatPanelActionDerivedDataResultTypesLines > maxChatPanelActionDerivedDataResultTypesLines) {
+  throw new Error(
+    `chat-panel-action-derived-data-result.types.ts exceeded ${maxChatPanelActionDerivedDataResultTypesLines} lines: ${chatPanelActionDerivedDataResultTypesLines}`,
+  );
+}
+
+for (const requiredChatPanelActionStateResultTypesUsage of [
+  'import type { useChatPanelActionState } from "./use-chat-panel-action-state";',
+  "export type ChatPanelActionState = ReturnType<typeof useChatPanelActionState>;",
+]) {
+  if (!chatPanelActionStateResultTypesSource.includes(requiredChatPanelActionStateResultTypesUsage)) {
+    throw new Error(
+      `chat-panel-action-state-result.types.ts must own the state result boundary: ${requiredChatPanelActionStateResultTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelActionStateResultTypesLines = 3;
+if (chatPanelActionStateResultTypesLines > maxChatPanelActionStateResultTypesLines) {
+  throw new Error(
+    `chat-panel-action-state-result.types.ts exceeded ${maxChatPanelActionStateResultTypesLines} lines: ${chatPanelActionStateResultTypesLines}`,
+  );
+}
+
+for (const requiredChatPanelActionsResultTypesUsage of [
+  'import type { useChatPanelActions } from "./use-chat-panel-actions";',
+  "export type ChatPanelActions = ReturnType<typeof useChatPanelActions>;",
+]) {
+  if (!chatPanelActionsResultTypesSource.includes(requiredChatPanelActionsResultTypesUsage)) {
+    throw new Error(
+      `chat-panel-actions-result.types.ts must own the actions result boundary: ${requiredChatPanelActionsResultTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelActionsResultTypesLines = 3;
+if (chatPanelActionsResultTypesLines > maxChatPanelActionsResultTypesLines) {
+  throw new Error(
+    `chat-panel-actions-result.types.ts exceeded ${maxChatPanelActionsResultTypesLines} lines: ${chatPanelActionsResultTypesLines}`,
   );
 }
 

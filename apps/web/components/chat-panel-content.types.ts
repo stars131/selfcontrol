@@ -1,10 +1,7 @@
 "use client";
 
+import type { ChatPanelActions } from "./chat-panel-actions-result.types";
 import type { ChatPanelProps } from "./chat-panel.types";
-
-type ChatPanelActionBindings = ReturnType<
-  typeof import("./use-chat-panel-actions").useChatPanelActions
->;
 
 export type ChatPanelContentProps = Pick<
   ChatPanelProps,
@@ -31,7 +28,7 @@ export type ChatPanelContentProps = Pick<
   | "providerConfigs"
   | "shareLinks"
 > &
-  ChatPanelActionBindings;
+  ChatPanelActions;
 
 export type ChatPanelManagementContentProps = Pick<
   ChatPanelContentProps,

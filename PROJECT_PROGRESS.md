@@ -1580,6 +1580,10 @@ Last updated: 2026-03-25
   - media selected-content prop builders now reuse explicit child-component prop contracts instead of local `ComponentProps<typeof ...>` aliases
   - `media-storage-overview.tsx`, `record-media-processing-panels.tsx`, and `media-asset-section.tsx` now import dedicated `*.types.ts` prop contracts shared with `record-media-selected-content-props.ts`
   - this keeps media workspace prop mapping stable against unrelated child component signature changes
+- Chat Panel Result Boundary Reuse Split V1:
+  - chat-panel content and handler-input builders now reuse dedicated action/state/derived-data result boundary files instead of local hook `ReturnType` aliases
+  - `chat-panel-content.types.ts`, `chat-panel-content-props.ts`, and `chat-panel-action-handler-inputs.ts` now depend on `chat-panel-*-result.types.ts` contracts
+  - this keeps chat composition layers stable against unrelated hook implementation signature changes
 
 ## Next
 - Continue the next product slice

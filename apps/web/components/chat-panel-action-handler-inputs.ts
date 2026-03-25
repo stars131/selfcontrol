@@ -1,10 +1,8 @@
 "use client";
 
 import type { NotificationItem } from "../lib/types";
-import type { useChatPanelActionDerivedData } from "./use-chat-panel-action-derived-data";
-import type { useChatPanelActionState } from "./use-chat-panel-action-state";
-
-type ChatPanelActionState = ReturnType<typeof useChatPanelActionState>;
+import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types";
+import type { ChatPanelActionState } from "./chat-panel-action-state-result.types";
 
 export type UseChatPanelActionsProps = {
   latestSharePath: string;
@@ -70,7 +68,7 @@ export function buildChatPanelActionsResult({
   shareHandlers,
   state,
 }: {
-  derivedData: ReturnType<typeof useChatPanelActionDerivedData>;
+  derivedData: ChatPanelActionDerivedData;
   operatorHandlers: {
     handleRefreshAuditLogs: () => Promise<void>;
     handleReindexKnowledge: () => Promise<void>;

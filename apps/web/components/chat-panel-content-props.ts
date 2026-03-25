@@ -1,9 +1,8 @@
 "use client";
 
+import type { ChatPanelActions } from "./chat-panel-actions-result.types";
 import type { ChatPanelContentProps } from "./chat-panel-content.types";
 import type { ChatPanelProps } from "./chat-panel.types";
-
-type ChatPanelActions = ReturnType<typeof import("./use-chat-panel-actions").useChatPanelActions>;
 
 export function buildChatPanelContentProps({
   actions,
