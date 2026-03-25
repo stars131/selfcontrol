@@ -1,0 +1,1 @@
+import type { MediaStorageOverviewSummaryProps } from "./media-storage-overview-summary.types"; export type MediaStorageOverviewProcessingGridProps = Pick<MediaStorageOverviewSummaryProps, "localLabel" | "mediaProcessingOverview" | "needsAttentionLabel" | "processingCompletedLabel" | "queueStateLabel" | "queuedLabel" | "remoteLabel" | "storageMixLabel">;

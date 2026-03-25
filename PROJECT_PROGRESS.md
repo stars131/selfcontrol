@@ -1815,6 +1815,10 @@ Last updated: 2026-03-25
   - `dead-letter-recovery-item-card.tsx` now delegates selectable item header rendering and attempt-status rendering to `dead-letter-recovery-item-card-header.tsx` and `dead-letter-recovery-item-card-status.tsx` instead of keeping those sections inline with the action footer
   - the new dead-letter-item `*.types.ts` files keep header and status prop contracts explicit and reusable while the parent card remains focused on settings-link wiring and action composition
   - `verify-record-panel-structure.mjs` now enforces those delegated dead-letter item leaf boundaries, exact one-line type contracts, and line-count ceilings so future recovery-card updates stay safer and easier to maintain
+- Media Storage Overview Summary Grid Leaves Split V1:
+  - `media-storage-overview-summary.tsx` now delegates usage-summary cards and processing-summary cards to `media-storage-overview-usage-grid.tsx` and `media-storage-overview-processing-grid.tsx` instead of keeping both grids inline in a single summary leaf
+  - the new media-storage-overview `*.types.ts` files keep usage-grid and processing-grid prop contracts explicit and reusable while the summary component remains focused on orchestration
+  - `verify-record-panel-structure.mjs` now enforces those delegated overview-grid boundaries, exact one-line type contracts, and line-count ceilings so future storage-summary updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

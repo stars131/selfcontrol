@@ -1064,6 +1064,22 @@ const mediaStorageOverviewSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview-summary.types.ts",
 );
+const mediaStorageOverviewUsageGridPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-usage-grid.tsx",
+);
+const mediaStorageOverviewUsageGridTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-usage-grid.types.ts",
+);
+const mediaStorageOverviewProcessingGridPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-processing-grid.tsx",
+);
+const mediaStorageOverviewProcessingGridTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-overview-processing-grid.types.ts",
+);
 const mediaStorageOverviewProviderTagsPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview-provider-tags.tsx",
@@ -2267,6 +2283,22 @@ const mediaStorageOverviewSummarySource = fs.readFileSync(
 );
 const mediaStorageOverviewSummaryTypesSource = fs.readFileSync(
   mediaStorageOverviewSummaryTypesPath,
+  "utf8",
+);
+const mediaStorageOverviewUsageGridSource = fs.readFileSync(
+  mediaStorageOverviewUsageGridPath,
+  "utf8",
+);
+const mediaStorageOverviewUsageGridTypesSource = fs.readFileSync(
+  mediaStorageOverviewUsageGridTypesPath,
+  "utf8",
+);
+const mediaStorageOverviewProcessingGridSource = fs.readFileSync(
+  mediaStorageOverviewProcessingGridPath,
+  "utf8",
+);
+const mediaStorageOverviewProcessingGridTypesSource = fs.readFileSync(
+  mediaStorageOverviewProcessingGridTypesPath,
   "utf8",
 );
 const mediaStorageOverviewProviderTagsSource = fs.readFileSync(
@@ -3643,6 +3675,14 @@ const mediaStorageOverviewSummaryLines =
   mediaStorageOverviewSummarySource.split(/\r?\n/).length;
 const mediaStorageOverviewSummaryTypesLines =
   mediaStorageOverviewSummaryTypesSource.split(/\r?\n/).length;
+const mediaStorageOverviewUsageGridLines =
+  mediaStorageOverviewUsageGridSource.split(/\r?\n/).length;
+const mediaStorageOverviewUsageGridTypesLines =
+  mediaStorageOverviewUsageGridTypesSource.split(/\r?\n/).length;
+const mediaStorageOverviewProcessingGridLines =
+  mediaStorageOverviewProcessingGridSource.split(/\r?\n/).length;
+const mediaStorageOverviewProcessingGridTypesLines =
+  mediaStorageOverviewProcessingGridTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewProviderTagsLines =
   mediaStorageOverviewProviderTagsSource.split(/\r?\n/).length;
 const mediaStorageOverviewProviderTagsTypesLines =
@@ -13241,11 +13281,12 @@ if (mediaStorageOverviewTypesLines > maxMediaStorageOverviewTypesLines) {
 }
 
 for (const requiredMediaStorageOverviewSummaryUsage of [
+  'import { MediaStorageOverviewProcessingGrid } from "./media-storage-overview-processing-grid";',
+  'import { MediaStorageOverviewUsageGrid } from "./media-storage-overview-usage-grid";',
   'import type { MediaStorageOverviewSummaryProps } from "./media-storage-overview-summary.types";',
   "}: MediaStorageOverviewSummaryProps) {",
-  'className="detail-grid"',
-  "mediaStorageSummary.missing_file_count",
-  "mediaProcessingOverview.completed_count",
+  "<MediaStorageOverviewUsageGrid",
+  "<MediaStorageOverviewProcessingGrid",
 ]) {
   if (!mediaStorageOverviewSummarySource.includes(requiredMediaStorageOverviewSummaryUsage)) {
     throw new Error(
@@ -13254,7 +13295,19 @@ for (const requiredMediaStorageOverviewSummaryUsage of [
   }
 }
 
-const maxMediaStorageOverviewSummaryLines = 85;
+for (const forbiddenMediaStorageOverviewSummaryToken of [
+  'className="detail-grid"',
+  "mediaStorageSummary.missing_file_count",
+  "mediaProcessingOverview.completed_count",
+]) {
+  if (mediaStorageOverviewSummarySource.includes(forbiddenMediaStorageOverviewSummaryToken)) {
+    throw new Error(
+      `media-storage-overview-summary.tsx must keep overview grid rendering delegated: ${forbiddenMediaStorageOverviewSummaryToken}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewSummaryLines = 55;
 if (mediaStorageOverviewSummaryLines > maxMediaStorageOverviewSummaryLines) {
   throw new Error(
     `media-storage-overview-summary.tsx exceeded ${maxMediaStorageOverviewSummaryLines} lines: ${mediaStorageOverviewSummaryLines}`,
@@ -13275,6 +13328,91 @@ const maxMediaStorageOverviewSummaryTypesLines = 2;
 if (mediaStorageOverviewSummaryTypesLines > maxMediaStorageOverviewSummaryTypesLines) {
   throw new Error(
     `media-storage-overview-summary.types.ts exceeded ${maxMediaStorageOverviewSummaryTypesLines} lines: ${mediaStorageOverviewSummaryTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewUsageGridUsage of [
+  'import type { MediaStorageOverviewUsageGridProps } from "./media-storage-overview-usage-grid.types";',
+  "}: MediaStorageOverviewUsageGridProps) {",
+  'className="detail-grid"',
+  "mediaStorageSummary.missing_file_count",
+]) {
+  if (!mediaStorageOverviewUsageGridSource.includes(requiredMediaStorageOverviewUsageGridUsage)) {
+    throw new Error(
+      `media-storage-overview-usage-grid.tsx must own overview usage rendering: ${requiredMediaStorageOverviewUsageGridUsage}`,
+    );
+  }
+}
+
+if (mediaStorageOverviewUsageGridSource.includes("type MediaStorageOverviewUsageGridProps = Pick<")) {
+  throw new Error("media-storage-overview-usage-grid.tsx must keep usage-grid prop typing delegated");
+}
+
+const maxMediaStorageOverviewUsageGridLines = 45;
+if (mediaStorageOverviewUsageGridLines > maxMediaStorageOverviewUsageGridLines) {
+  throw new Error(
+    `media-storage-overview-usage-grid.tsx exceeded ${maxMediaStorageOverviewUsageGridLines} lines: ${mediaStorageOverviewUsageGridLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewUsageGridTypesUsage of [
+  'import type { MediaStorageOverviewSummaryProps } from "./media-storage-overview-summary.types"; export type MediaStorageOverviewUsageGridProps = Pick<MediaStorageOverviewSummaryProps, "allTrackedFilesPresentLabel" | "formatFileCountLabel" | "mediaAssetCount" | "mediaStorageSummary" | "missingFilesLabel" | "selectedRecordMediaSizeLabel" | "storageHealthLabel" | "thisRecordMediaLabel" | "workspaceStorageLabel">;',
+]) {
+  if (!mediaStorageOverviewUsageGridTypesSource.includes(requiredMediaStorageOverviewUsageGridTypesUsage)) {
+    throw new Error(
+      `media-storage-overview-usage-grid.types.ts must own usage-grid prop typing: ${requiredMediaStorageOverviewUsageGridTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewUsageGridTypesLines = 2;
+if (mediaStorageOverviewUsageGridTypesLines > maxMediaStorageOverviewUsageGridTypesLines) {
+  throw new Error(
+    `media-storage-overview-usage-grid.types.ts exceeded ${maxMediaStorageOverviewUsageGridTypesLines} lines: ${mediaStorageOverviewUsageGridTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewProcessingGridUsage of [
+  'import type { MediaStorageOverviewProcessingGridProps } from "./media-storage-overview-processing-grid.types";',
+  "}: MediaStorageOverviewProcessingGridProps) {",
+  "if (!mediaProcessingOverview) {",
+  "mediaProcessingOverview.completed_count",
+  "mediaProcessingOverview.local_item_count",
+]) {
+  if (!mediaStorageOverviewProcessingGridSource.includes(requiredMediaStorageOverviewProcessingGridUsage)) {
+    throw new Error(
+      `media-storage-overview-processing-grid.tsx must own overview processing rendering: ${requiredMediaStorageOverviewProcessingGridUsage}`,
+    );
+  }
+}
+
+if (mediaStorageOverviewProcessingGridSource.includes("type MediaStorageOverviewProcessingGridProps = Pick<")) {
+  throw new Error(
+    "media-storage-overview-processing-grid.tsx must keep processing-grid prop typing delegated",
+  );
+}
+
+const maxMediaStorageOverviewProcessingGridLines = 50;
+if (mediaStorageOverviewProcessingGridLines > maxMediaStorageOverviewProcessingGridLines) {
+  throw new Error(
+    `media-storage-overview-processing-grid.tsx exceeded ${maxMediaStorageOverviewProcessingGridLines} lines: ${mediaStorageOverviewProcessingGridLines}`,
+  );
+}
+
+for (const requiredMediaStorageOverviewProcessingGridTypesUsage of [
+  'import type { MediaStorageOverviewSummaryProps } from "./media-storage-overview-summary.types"; export type MediaStorageOverviewProcessingGridProps = Pick<MediaStorageOverviewSummaryProps, "localLabel" | "mediaProcessingOverview" | "needsAttentionLabel" | "processingCompletedLabel" | "queueStateLabel" | "queuedLabel" | "remoteLabel" | "storageMixLabel">;',
+]) {
+  if (!mediaStorageOverviewProcessingGridTypesSource.includes(requiredMediaStorageOverviewProcessingGridTypesUsage)) {
+    throw new Error(
+      `media-storage-overview-processing-grid.types.ts must own processing-grid prop typing: ${requiredMediaStorageOverviewProcessingGridTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageOverviewProcessingGridTypesLines = 2;
+if (mediaStorageOverviewProcessingGridTypesLines > maxMediaStorageOverviewProcessingGridTypesLines) {
+  throw new Error(
+    `media-storage-overview-processing-grid.types.ts exceeded ${maxMediaStorageOverviewProcessingGridTypesLines} lines: ${mediaStorageOverviewProcessingGridTypesLines}`,
   );
 }
 
