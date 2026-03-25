@@ -1,6 +1,7 @@
 "use client";
 
 import { getChatPanelActionErrorMessage } from "./chat-panel-action-helpers";
+import type { CreateChatPanelOperatorHandlersInput } from "./chat-panel-operator-handlers.types";
 
 export function createChatPanelOperatorHandlers({
   draft,
@@ -14,19 +15,7 @@ export function createChatPanelOperatorHandlers({
   setRefreshingAudit,
   setReindexing,
   setSyncing,
-}: {
-  draft: string;
-  onRefreshAuditLogs: () => Promise<void>;
-  onReindexKnowledge: () => Promise<void>;
-  onSendMessage: (message: string) => Promise<void>;
-  onSyncNotifications: () => Promise<void>;
-  setDraft: (value: string) => void;
-  setError: (value: string) => void;
-  setLoading: (value: boolean) => void;
-  setRefreshingAudit: (value: boolean) => void;
-  setReindexing: (value: boolean) => void;
-  setSyncing: (value: boolean) => void;
-}) {
+}: CreateChatPanelOperatorHandlersInput) {
   return {
     async handleSend() {
       const value = draft.trim();

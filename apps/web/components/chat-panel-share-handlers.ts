@@ -4,6 +4,7 @@ import {
   buildCreateShareLinkInput,
   getChatPanelActionErrorMessage,
 } from "./chat-panel-action-helpers";
+import type { CreateChatPanelShareHandlersInput } from "./chat-panel-share-handlers.types";
 
 export function createChatPanelShareHandlers({
   onCreateShareLink,
@@ -16,22 +17,7 @@ export function createChatPanelShareHandlers({
   shareMaxUses,
   shareName,
   sharePermission,
-}: {
-  onCreateShareLink: (input: {
-    name?: string;
-    permission_code: string;
-    max_uses?: number | null;
-  }) => Promise<void>;
-  onDisableShareLink: (shareLinkId: string) => Promise<void>;
-  setCreatingShare: (value: boolean) => void;
-  setDisablingShareId: (value: string) => void;
-  setError: (value: string) => void;
-  setShareMaxUses: (value: string) => void;
-  setShareName: (value: string) => void;
-  shareMaxUses: string;
-  shareName: string;
-  sharePermission: string;
-}) {
+}: CreateChatPanelShareHandlersInput) {
   return {
     async handleCreateShareLink() {
       setCreatingShare(true);

@@ -1,6 +1,7 @@
 "use client";
 
 import type { NotificationItem } from "../lib/types";
+import type { BuildCreateShareLinkInput } from "./chat-panel-action-helpers.types";
 
 export function buildChatShareUrl(path: string) {
   if (typeof window === "undefined") {
@@ -21,11 +22,7 @@ export function buildCreateShareLinkInput({
   shareMaxUses,
   shareName,
   sharePermission,
-}: {
-  shareMaxUses: string;
-  shareName: string;
-  sharePermission: string;
-}) {
+}: BuildCreateShareLinkInput) {
   return {
     name: shareName || undefined,
     permission_code: sharePermission,
