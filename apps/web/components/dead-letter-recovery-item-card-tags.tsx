@@ -1,13 +1,13 @@
 "use client";
 
 import { getMediaIssueLabel, getProcessingStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
-import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types";
+import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types";
 
 export function DeadLetterRecoveryItemCardTags({
   item,
   locale,
   mediaIssueCopy,
-}: Pick<DeadLetterRecoveryItemCardProps, "item" | "locale" | "mediaIssueCopy">) {
+}: DeadLetterRecoveryItemCardTagsProps) {
   const issueLabel = getMediaIssueLabel(locale, item);
 
   return (

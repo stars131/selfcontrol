@@ -1,11 +1,7 @@
 "use client";
 
 import { renderRecordSummaryCard } from "./record-results-shared";
-import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types";
-
-type RecordResultsListViewProps = Pick<RecordResultsViewProps, "noRecordsLabel" | "records"> & {
-  sharedCardProps: RecordResultsSharedCardProps;
-};
+import type { RecordResultsListViewProps } from "./record-results-list-view.types";
 
 export function RecordResultsListView({
   noRecordsLabel,

@@ -1,7 +1,7 @@
 "use client";
 
 import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";
-import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";
+import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";
 
 export function DeadLetterRecoveryPanelContent({
   bulkRetryingDeadLetter,
@@ -15,20 +15,7 @@ export function DeadLetterRecoveryPanelContent({
   retryingMediaId,
   selectedDeadLetterIds,
   workspaceId,
-}: Pick<
-  DeadLetterRecoveryPanelProps,
-  | "bulkRetryingDeadLetter"
-  | "canWriteWorkspace"
-  | "formatHistoryTimestampLabel"
-  | "locale"
-  | "mediaDeadLetterOverview"
-  | "mediaIssueCopy"
-  | "onRetryMediaProcessing"
-  | "onToggleSelection"
-  | "retryingMediaId"
-  | "selectedDeadLetterIds"
-  | "workspaceId"
->) {
+}: DeadLetterRecoveryPanelContentProps) {
   if (!mediaDeadLetterOverview?.items.length) {
     return <div className="notice">{mediaIssueCopy.noDeadLetter}</div>;
   }

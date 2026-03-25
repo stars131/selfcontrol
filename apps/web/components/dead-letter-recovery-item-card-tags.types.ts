@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryItemCardTagsProps = Pick<DeadLetterRecoveryItemCardProps, "item" | "locale" | "mediaIssueCopy">;

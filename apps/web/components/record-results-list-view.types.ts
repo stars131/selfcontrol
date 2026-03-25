@@ -1,0 +1,1 @@
+import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsListViewProps = Pick<RecordResultsViewProps, "noRecordsLabel" | "records"> & { sharedCardProps: RecordResultsSharedCardProps };

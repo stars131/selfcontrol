@@ -1,11 +1,12 @@
 "use client";
 
 import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types";
+import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types";
 
 export function MediaStorageHealthCapabilities({
   copy,
   mediaStorageHealth,
-}: Pick<MediaStorageHealthCardProps, "copy" | "mediaStorageHealth">) {
+}: MediaStorageHealthCapabilitiesProps) {
   return (
     <div className="detail-grid">
       <div className="subtle-card">

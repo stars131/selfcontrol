@@ -1762,6 +1762,54 @@ const recordReminderListTypesPath = path.resolve(
   process.cwd(),
   "components/record-reminder-list.types.ts",
 );
+const deadLetterRecoveryItemCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-actions.tsx",
+);
+const deadLetterRecoveryItemCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-actions.types.ts",
+);
+const deadLetterRecoveryItemCardTagsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-tags.tsx",
+);
+const deadLetterRecoveryItemCardTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-tags.types.ts",
+);
+const deadLetterRecoveryPanelContentPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-content.tsx",
+);
+const deadLetterRecoveryPanelContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-content.types.ts",
+);
+const mediaStorageHealthCapabilitiesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-capabilities.tsx",
+);
+const mediaStorageHealthCapabilitiesTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-capabilities.types.ts",
+);
+const recordResultsListViewPath = path.resolve(
+  process.cwd(),
+  "components/record-results-list-view.tsx",
+);
+const recordResultsListViewTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-results-list-view.types.ts",
+);
+const recordResultsTimelineViewPath = path.resolve(
+  process.cwd(),
+  "components/record-results-timeline-view.tsx",
+);
+const recordResultsTimelineViewTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-results-timeline-view.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -2446,6 +2494,51 @@ const recordReminderFormSource = fs.readFileSync(recordReminderFormPath, "utf8")
 const recordReminderFormTypesSource = fs.readFileSync(recordReminderFormTypesPath, "utf8");
 const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
 const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
+const deadLetterRecoveryItemCardActionsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardActionsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardActionsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardActionsTypesPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardTagsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardTagsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardTagsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardTagsTypesPath,
+  "utf8",
+);
+const deadLetterRecoveryPanelContentSource = fs.readFileSync(
+  deadLetterRecoveryPanelContentPath,
+  "utf8",
+);
+const deadLetterRecoveryPanelContentTypesSource = fs.readFileSync(
+  deadLetterRecoveryPanelContentTypesPath,
+  "utf8",
+);
+const mediaStorageHealthCapabilitiesSource = fs.readFileSync(
+  mediaStorageHealthCapabilitiesPath,
+  "utf8",
+);
+const mediaStorageHealthCapabilitiesTypesSource = fs.readFileSync(
+  mediaStorageHealthCapabilitiesTypesPath,
+  "utf8",
+);
+const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
+const recordResultsListViewTypesSource = fs.readFileSync(
+  recordResultsListViewTypesPath,
+  "utf8",
+);
+const recordResultsTimelineViewSource = fs.readFileSync(
+  recordResultsTimelineViewPath,
+  "utf8",
+);
+const recordResultsTimelineViewTypesSource = fs.readFileSync(
+  recordResultsTimelineViewTypesPath,
+  "utf8",
+);
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -3238,6 +3331,18 @@ const recordMediaToolsActionsTypesLines =
   recordMediaToolsActionsTypesSource.split(/\r?\n/).length;
 const recordReminderFormTypesLines = recordReminderFormTypesSource.split(/\r?\n/).length;
 const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardActionsTypesLines =
+  deadLetterRecoveryItemCardActionsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardTagsTypesLines =
+  deadLetterRecoveryItemCardTagsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryPanelContentTypesLines =
+  deadLetterRecoveryPanelContentTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthCapabilitiesTypesLines =
+  mediaStorageHealthCapabilitiesTypesSource.split(/\r?\n/).length;
+const recordResultsListViewTypesLines =
+  recordResultsListViewTypesSource.split(/\r?\n/).length;
+const recordResultsTimelineViewTypesLines =
+  recordResultsTimelineViewTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -16140,6 +16245,90 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; export type RecordReminderListProps = Pick<RecordReminderPanelProps, "canWriteWorkspace" | "deleteReminderLabel" | "enableReminderLabel" | "formatReminderEnabledLabel" | "formatReminderStatusLabel" | "formatReminderTimestampLabel" | "markReminderDoneLabel" | "noRemindersLabel" | "onDeleteReminder" | "onMarkReminderDone" | "onToggleReminderEnabled" | "pauseReminderLabel" | "reminders" | "selectedRecordTitle" | "untitledReminderLabel">;',
     2,
     recordReminderListTypesLines,
+  ],
+]) {
+  for (const requiredUsage of [importLine, signatureLine]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.tsx must reuse the extracted leaf props type: ${requiredUsage}`);
+    }
+  }
+  if (componentSource.includes(forbiddenLine)) {
+    throw new Error(`${componentName}.tsx must keep leaf prop typing delegated`);
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own leaf prop typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
+  }
+}
+
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, forbiddenLine, typesLine, maxLines, actualLines] of [
+  [
+    "dead-letter-recovery-item-card-actions",
+    deadLetterRecoveryItemCardActionsSource,
+    deadLetterRecoveryItemCardActionsTypesSource,
+    'import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types";',
+    "}: DeadLetterRecoveryItemCardActionsProps) {",
+    "}: Pick<",
+    'import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryItemCardActionsProps = Pick<DeadLetterRecoveryItemCardProps, "item" | "canWriteWorkspace" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId"> & { settingsHref: string | null };',
+    2,
+    deadLetterRecoveryItemCardActionsTypesLines,
+  ],
+  [
+    "dead-letter-recovery-item-card-tags",
+    deadLetterRecoveryItemCardTagsSource,
+    deadLetterRecoveryItemCardTagsTypesSource,
+    'import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types";',
+    "}: DeadLetterRecoveryItemCardTagsProps) {",
+    "}: Pick<DeadLetterRecoveryItemCardProps",
+    'import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryItemCardTagsProps = Pick<DeadLetterRecoveryItemCardProps, "item" | "locale" | "mediaIssueCopy">;',
+    2,
+    deadLetterRecoveryItemCardTagsTypesLines,
+  ],
+  [
+    "dead-letter-recovery-panel-content",
+    deadLetterRecoveryPanelContentSource,
+    deadLetterRecoveryPanelContentTypesSource,
+    'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";',
+    "}: DeadLetterRecoveryPanelContentProps) {",
+    "}: Pick<",
+    'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryPanelContentProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "canWriteWorkspace" | "formatHistoryTimestampLabel" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onRetryMediaProcessing" | "onToggleSelection" | "retryingMediaId" | "selectedDeadLetterIds" | "workspaceId">;',
+    2,
+    deadLetterRecoveryPanelContentTypesLines,
+  ],
+  [
+    "media-storage-health-capabilities",
+    mediaStorageHealthCapabilitiesSource,
+    mediaStorageHealthCapabilitiesTypesSource,
+    'import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types";',
+    "}: MediaStorageHealthCapabilitiesProps) {",
+    "}: Pick<MediaStorageHealthCardProps",
+    'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types"; export type MediaStorageHealthCapabilitiesProps = Pick<MediaStorageHealthCardProps, "copy" | "mediaStorageHealth">;',
+    2,
+    mediaStorageHealthCapabilitiesTypesLines,
+  ],
+  [
+    "record-results-list-view",
+    recordResultsListViewSource,
+    recordResultsListViewTypesSource,
+    'import type { RecordResultsListViewProps } from "./record-results-list-view.types";',
+    "}: RecordResultsListViewProps) {",
+    "type RecordResultsListViewProps = Pick<",
+    'import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsListViewProps = Pick<RecordResultsViewProps, "noRecordsLabel" | "records"> & { sharedCardProps: RecordResultsSharedCardProps };',
+    2,
+    recordResultsListViewTypesLines,
+  ],
+  [
+    "record-results-timeline-view",
+    recordResultsTimelineViewSource,
+    recordResultsTimelineViewTypesSource,
+    'import type { RecordResultsTimelineViewProps } from "./record-results-timeline-view.types";',
+    "}: RecordResultsTimelineViewProps) {",
+    "type RecordResultsTimelineViewProps = Pick<",
+    'import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsTimelineViewProps = Pick<RecordResultsViewProps, "formatAvoidCountLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "noRecordsLabel" | "timelineDayLabel" | "timelineDays"> & { sharedCardProps: RecordResultsSharedCardProps };',
+    2,
+    recordResultsTimelineViewTypesLines,
   ],
 ]) {
   for (const requiredUsage of [importLine, signatureLine]) {

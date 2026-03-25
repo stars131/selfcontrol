@@ -1,19 +1,7 @@
 "use client";
 
 import { renderRecordSummaryCard } from "./record-results-shared";
-import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types";
-
-type RecordResultsTimelineViewProps = Pick<
-  RecordResultsViewProps,
-  | "formatAvoidCountLabel"
-  | "formatTimelineCountLabel"
-  | "formatTimelineDateLabel"
-  | "noRecordsLabel"
-  | "timelineDayLabel"
-  | "timelineDays"
-> & {
-  sharedCardProps: RecordResultsSharedCardProps;
-};
+import type { RecordResultsTimelineViewProps } from "./record-results-timeline-view.types";
 
 export function RecordResultsTimelineView({
   formatAvoidCountLabel,

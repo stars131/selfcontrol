@@ -1,0 +1,1 @@
+import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsTimelineViewProps = Pick<RecordResultsViewProps, "formatAvoidCountLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "noRecordsLabel" | "timelineDayLabel" | "timelineDays"> & { sharedCardProps: RecordResultsSharedCardProps };

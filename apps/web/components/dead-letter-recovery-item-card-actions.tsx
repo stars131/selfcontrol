@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { canRetryMediaIssue } from "../lib/record-panel-media";
-import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types";
+import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types";
 
 export function DeadLetterRecoveryItemCardActions({
   item,
@@ -12,12 +12,7 @@ export function DeadLetterRecoveryItemCardActions({
   onRetryMediaProcessing,
   retryingMediaId,
   settingsHref,
-}: Pick<
-  DeadLetterRecoveryItemCardProps,
-  "item" | "canWriteWorkspace" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId"
-> & {
-  settingsHref: string | null;
-}) {
+}: DeadLetterRecoveryItemCardActionsProps) {
   if (!canWriteWorkspace && !settingsHref) {
     return null;
   }
