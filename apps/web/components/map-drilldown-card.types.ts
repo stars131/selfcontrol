@@ -1,0 +1,1 @@
+import type { LocationFilterState } from "../lib/types"; export type MapDrilldownCardProps = { filterDraft: LocationFilterState; filteringRecords: boolean; onApplyFilter: () => Promise<void>; onClearFilter: () => Promise<void>; onFilterDraftChange: (updater: (current: LocationFilterState) => LocationFilterState) => void; onUseMappedOnly: () => Promise<void> };

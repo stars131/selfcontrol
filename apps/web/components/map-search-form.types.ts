@@ -1,0 +1,1 @@
+import type { FormEventHandler } from "react"; export type MapSearchFormProps = { onSearchQueryChange: (value: string) => void; onSubmit: FormEventHandler<HTMLFormElement>; searchQuery: string; searching: boolean };

@@ -1688,6 +1688,10 @@ Last updated: 2026-03-25
   - `provider-settings-panel-helpers.ts` and `workspace-transfer-job-card.tsx` now consume extracted input and prop contracts instead of keeping inline object shapes in those modules
   - the new `provider-settings-panel-helpers.types.ts` and `workspace-transfer-job-card.types.ts` files keep provider helper and transfer-job card boundaries explicit and reusable
   - this keeps provider-settings and transfer-job typing thinner and more maintainable under the enterprise engineering standard
+- Map Leaf Props Split V1:
+  - `map-drilldown-card.tsx`, `map-status-notices.tsx`, `map-panel-header.tsx`, `mapped-records-list.tsx`, and `map-search-form.tsx` now consume extracted prop contracts instead of keeping inline signatures in those map leaf components
+  - the new map leaf `*.types.ts` files keep drill-down, status, header, mapped-record list, and search-form boundaries explicit and reusable
+  - this keeps the map presentation subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

@@ -1,0 +1,1 @@
+import type { MappedRecord } from "../lib/map-panel"; import type { MapPanelProps } from "./map-panel.types"; export type MappedRecordsListProps = { mappedRecords: MappedRecord[]; onSelectRecord: MapPanelProps["onSelectRecord"]; selectedRecordId: string | null };

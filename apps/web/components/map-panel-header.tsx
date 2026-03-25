@@ -1,16 +1,13 @@
 "use client";
 
+import type { MapPanelHeaderProps } from "./map-panel-header.types";
+
 export function MapPanelHeader({
   confirmedCount,
   isEditable,
   mappedCount,
   needsReviewCount,
-}: {
-  confirmedCount: number;
-  isEditable: boolean;
-  mappedCount: number;
-  needsReviewCount: number;
-}) {
+}: MapPanelHeaderProps) {
   return (
     <>
       <div className="eyebrow">Map</div>

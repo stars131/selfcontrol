@@ -929,6 +929,31 @@ const mapPanelContentTypesPath = path.resolve(
   process.cwd(),
   "components/map-panel-content.types.ts",
 );
+const mapDrilldownCardPath = path.resolve(process.cwd(), "components/map-drilldown-card.tsx");
+const mapDrilldownCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-drilldown-card.types.ts",
+);
+const mapStatusNoticesPath = path.resolve(process.cwd(), "components/map-status-notices.tsx");
+const mapStatusNoticesTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-status-notices.types.ts",
+);
+const mapPanelHeaderPath = path.resolve(process.cwd(), "components/map-panel-header.tsx");
+const mapPanelHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-header.types.ts",
+);
+const mappedRecordsListPath = path.resolve(process.cwd(), "components/mapped-records-list.tsx");
+const mappedRecordsListTypesPath = path.resolve(
+  process.cwd(),
+  "components/mapped-records-list.types.ts",
+);
+const mapSearchFormPath = path.resolve(process.cwd(), "components/map-search-form.tsx");
+const mapSearchFormTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-search-form.types.ts",
+);
 const mapPanelControllerResultTypesPath = path.resolve(
   process.cwd(),
   "components/map-panel-controller-result.types.ts",
@@ -1438,6 +1463,16 @@ const recordMediaSelectedContentPropsSource = fs.readFileSync(
 );
 const mapPanelContentSource = fs.readFileSync(mapPanelContentPath, "utf8");
 const mapPanelContentTypesSource = fs.readFileSync(mapPanelContentTypesPath, "utf8");
+const mapDrilldownCardSource = fs.readFileSync(mapDrilldownCardPath, "utf8");
+const mapDrilldownCardTypesSource = fs.readFileSync(mapDrilldownCardTypesPath, "utf8");
+const mapStatusNoticesSource = fs.readFileSync(mapStatusNoticesPath, "utf8");
+const mapStatusNoticesTypesSource = fs.readFileSync(mapStatusNoticesTypesPath, "utf8");
+const mapPanelHeaderSource = fs.readFileSync(mapPanelHeaderPath, "utf8");
+const mapPanelHeaderTypesSource = fs.readFileSync(mapPanelHeaderTypesPath, "utf8");
+const mappedRecordsListSource = fs.readFileSync(mappedRecordsListPath, "utf8");
+const mappedRecordsListTypesSource = fs.readFileSync(mappedRecordsListTypesPath, "utf8");
+const mapSearchFormSource = fs.readFileSync(mapSearchFormPath, "utf8");
+const mapSearchFormTypesSource = fs.readFileSync(mapSearchFormTypesPath, "utf8");
 const mapPanelControllerResultTypesSource = fs.readFileSync(
   mapPanelControllerResultTypesPath,
   "utf8",
@@ -2309,6 +2344,11 @@ const recordMediaProcessingPanelsTypesLines =
 const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
 const mapPanelContentTypesLines = mapPanelContentTypesSource.split(/\r?\n/).length;
+const mapDrilldownCardTypesLines = mapDrilldownCardTypesSource.split(/\r?\n/).length;
+const mapStatusNoticesTypesLines = mapStatusNoticesTypesSource.split(/\r?\n/).length;
+const mapPanelHeaderTypesLines = mapPanelHeaderTypesSource.split(/\r?\n/).length;
+const mappedRecordsListTypesLines = mappedRecordsListTypesSource.split(/\r?\n/).length;
+const mapSearchFormTypesLines = mapSearchFormTypesSource.split(/\r?\n/).length;
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
@@ -11228,6 +11268,187 @@ const maxMapPanelContentTypesLines = 2;
 if (mapPanelContentTypesLines > maxMapPanelContentTypesLines) {
   throw new Error(
     `map-panel-content.types.ts exceeded ${maxMapPanelContentTypesLines} lines: ${mapPanelContentTypesLines}`,
+  );
+}
+
+for (const requiredMapDrilldownCardUsage of [
+  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types";',
+  "}: MapDrilldownCardProps) {",
+]) {
+  if (!mapDrilldownCardSource.includes(requiredMapDrilldownCardUsage)) {
+    throw new Error(
+      `map-drilldown-card.tsx must reuse the extracted map drill-down props type: ${requiredMapDrilldownCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapDrilldownCardToken of [
+  'import type { LocationFilterState } from "../lib/types";',
+  "}: {",
+]) {
+  if (mapDrilldownCardSource.includes(forbiddenMapDrilldownCardToken)) {
+    throw new Error(
+      `map-drilldown-card.tsx must keep map drill-down prop typing delegated: ${forbiddenMapDrilldownCardToken}`,
+    );
+  }
+}
+
+for (const requiredMapDrilldownCardTypesUsage of [
+  'import type { LocationFilterState } from "../lib/types"; export type MapDrilldownCardProps = { filterDraft: LocationFilterState; filteringRecords: boolean; onApplyFilter: () => Promise<void>; onClearFilter: () => Promise<void>; onFilterDraftChange: (updater: (current: LocationFilterState) => LocationFilterState) => void; onUseMappedOnly: () => Promise<void> };',
+]) {
+  if (!mapDrilldownCardTypesSource.includes(requiredMapDrilldownCardTypesUsage)) {
+    throw new Error(
+      `map-drilldown-card.types.ts must own map drill-down prop typing: ${requiredMapDrilldownCardTypesUsage}`,
+    );
+  }
+}
+
+const maxMapDrilldownCardTypesLines = 2;
+if (mapDrilldownCardTypesLines > maxMapDrilldownCardTypesLines) {
+  throw new Error(
+    `map-drilldown-card.types.ts exceeded ${maxMapDrilldownCardTypesLines} lines: ${mapDrilldownCardTypesLines}`,
+  );
+}
+
+for (const requiredMapStatusNoticesUsage of [
+  'import type { MapStatusNoticesProps } from "./map-status-notices.types";',
+  "}: MapStatusNoticesProps) {",
+]) {
+  if (!mapStatusNoticesSource.includes(requiredMapStatusNoticesUsage)) {
+    throw new Error(
+      `map-status-notices.tsx must reuse the extracted map status props type: ${requiredMapStatusNoticesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapStatusNoticesToken of [
+  'import type { LocationDraft } from "../lib/map-panel";',
+  "}: {",
+]) {
+  if (mapStatusNoticesSource.includes(forbiddenMapStatusNoticesToken)) {
+    throw new Error(
+      `map-status-notices.tsx must keep map status prop typing delegated: ${forbiddenMapStatusNoticesToken}`,
+    );
+  }
+}
+
+for (const requiredMapStatusNoticesTypesUsage of [
+  'import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; isEditable: boolean; loadError: string; mappedRecordCount: number; searchError: string };',
+]) {
+  if (!mapStatusNoticesTypesSource.includes(requiredMapStatusNoticesTypesUsage)) {
+    throw new Error(
+      `map-status-notices.types.ts must own map status prop typing: ${requiredMapStatusNoticesTypesUsage}`,
+    );
+  }
+}
+
+const maxMapStatusNoticesTypesLines = 2;
+if (mapStatusNoticesTypesLines > maxMapStatusNoticesTypesLines) {
+  throw new Error(
+    `map-status-notices.types.ts exceeded ${maxMapStatusNoticesTypesLines} lines: ${mapStatusNoticesTypesLines}`,
+  );
+}
+
+for (const requiredMapPanelHeaderUsage of [
+  'import type { MapPanelHeaderProps } from "./map-panel-header.types";',
+  "}: MapPanelHeaderProps) {",
+]) {
+  if (!mapPanelHeaderSource.includes(requiredMapPanelHeaderUsage)) {
+    throw new Error(
+      `map-panel-header.tsx must reuse the extracted map header props type: ${requiredMapPanelHeaderUsage}`,
+    );
+  }
+}
+
+if (mapPanelHeaderSource.includes("}: {")) {
+  throw new Error("map-panel-header.tsx must keep map header prop typing delegated");
+}
+
+for (const requiredMapPanelHeaderTypesUsage of [
+  'export type MapPanelHeaderProps = { confirmedCount: number; isEditable: boolean; mappedCount: number; needsReviewCount: number };',
+]) {
+  if (!mapPanelHeaderTypesSource.includes(requiredMapPanelHeaderTypesUsage)) {
+    throw new Error(
+      `map-panel-header.types.ts must own map header prop typing: ${requiredMapPanelHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelHeaderTypesLines = 2;
+if (mapPanelHeaderTypesLines > maxMapPanelHeaderTypesLines) {
+  throw new Error(
+    `map-panel-header.types.ts exceeded ${maxMapPanelHeaderTypesLines} lines: ${mapPanelHeaderTypesLines}`,
+  );
+}
+
+for (const requiredMappedRecordsListUsage of [
+  'import type { MappedRecordsListProps } from "./mapped-records-list.types";',
+  "}: MappedRecordsListProps) {",
+]) {
+  if (!mappedRecordsListSource.includes(requiredMappedRecordsListUsage)) {
+    throw new Error(
+      `mapped-records-list.tsx must reuse the extracted mapped-records props type: ${requiredMappedRecordsListUsage}`,
+    );
+  }
+}
+
+if (mappedRecordsListSource.includes("}: {")) {
+  throw new Error("mapped-records-list.tsx must keep mapped-records prop typing delegated");
+}
+
+for (const requiredMappedRecordsListTypesUsage of [
+  'import type { MappedRecord } from "../lib/map-panel"; import type { MapPanelProps } from "./map-panel.types"; export type MappedRecordsListProps = { mappedRecords: MappedRecord[]; onSelectRecord: MapPanelProps["onSelectRecord"]; selectedRecordId: string | null };',
+]) {
+  if (!mappedRecordsListTypesSource.includes(requiredMappedRecordsListTypesUsage)) {
+    throw new Error(
+      `mapped-records-list.types.ts must own mapped-records prop typing: ${requiredMappedRecordsListTypesUsage}`,
+    );
+  }
+}
+
+const maxMappedRecordsListTypesLines = 2;
+if (mappedRecordsListTypesLines > maxMappedRecordsListTypesLines) {
+  throw new Error(
+    `mapped-records-list.types.ts exceeded ${maxMappedRecordsListTypesLines} lines: ${mappedRecordsListTypesLines}`,
+  );
+}
+
+for (const requiredMapSearchFormUsage of [
+  'import type { MapSearchFormProps } from "./map-search-form.types";',
+  "}: MapSearchFormProps) {",
+]) {
+  if (!mapSearchFormSource.includes(requiredMapSearchFormUsage)) {
+    throw new Error(
+      `map-search-form.tsx must reuse the extracted map search props type: ${requiredMapSearchFormUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapSearchFormToken of [
+  'import type { FormEventHandler } from "react";',
+  "}: {",
+]) {
+  if (mapSearchFormSource.includes(forbiddenMapSearchFormToken)) {
+    throw new Error(
+      `map-search-form.tsx must keep map search prop typing delegated: ${forbiddenMapSearchFormToken}`,
+    );
+  }
+}
+
+for (const requiredMapSearchFormTypesUsage of [
+  'import type { FormEventHandler } from "react"; export type MapSearchFormProps = { onSearchQueryChange: (value: string) => void; onSubmit: FormEventHandler<HTMLFormElement>; searchQuery: string; searching: boolean };',
+]) {
+  if (!mapSearchFormTypesSource.includes(requiredMapSearchFormTypesUsage)) {
+    throw new Error(
+      `map-search-form.types.ts must own map search prop typing: ${requiredMapSearchFormTypesUsage}`,
+    );
+  }
+}
+
+const maxMapSearchFormTypesLines = 2;
+if (mapSearchFormTypesLines > maxMapSearchFormTypesLines) {
+  throw new Error(
+    `map-search-form.types.ts exceeded ${maxMapSearchFormTypesLines} lines: ${mapSearchFormTypesLines}`,
   );
 }
 

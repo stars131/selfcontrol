@@ -1,6 +1,6 @@
 "use client";
 
-import type { LocationDraft } from "../lib/map-panel";
+import type { MapStatusNoticesProps } from "./map-status-notices.types";
 
 export function MapStatusNotices({
   draftCoordinates,
@@ -9,14 +9,7 @@ export function MapStatusNotices({
   loadError,
   mappedRecordCount,
   searchError,
-}: {
-  draftCoordinates: [number, number] | null;
-  draftLocation?: LocationDraft | null;
-  isEditable: boolean;
-  loadError: string;
-  mappedRecordCount: number;
-  searchError: string;
-}) {
+}: MapStatusNoticesProps) {
   return (
     <>
       {loadError ? (

@@ -1,0 +1,1 @@
+import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; isEditable: boolean; loadError: string; mappedRecordCount: number; searchError: string };

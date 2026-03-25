@@ -1,21 +1,12 @@
 "use client";
 
+import type { MappedRecordsListProps } from "./mapped-records-list.types";
+
 export function MappedRecordsList({
   mappedRecords,
   onSelectRecord,
   selectedRecordId,
-}: {
-  mappedRecords: Array<{
-    id: string;
-    placeName: string;
-    address: string;
-    latitude: number;
-    longitude: number;
-    reviewStatus: string;
-  }>;
-  onSelectRecord: (recordId: string) => void;
-  selectedRecordId: string | null;
-}) {
+}: MappedRecordsListProps) {
   if (!mappedRecords.length) {
     return null;
   }

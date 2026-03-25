@@ -1,6 +1,6 @@
 "use client";
 
-import type { LocationFilterState } from "../lib/types";
+import type { MapDrilldownCardProps } from "./map-drilldown-card.types";
 
 export function MapDrilldownCard({
   filterDraft,
@@ -9,14 +9,7 @@ export function MapDrilldownCard({
   onClearFilter,
   onFilterDraftChange,
   onUseMappedOnly,
-}: {
-  filterDraft: LocationFilterState;
-  filteringRecords: boolean;
-  onApplyFilter: () => Promise<void>;
-  onClearFilter: () => Promise<void>;
-  onFilterDraftChange: (updater: (current: LocationFilterState) => LocationFilterState) => void;
-  onUseMappedOnly: () => Promise<void>;
-}) {
+}: MapDrilldownCardProps) {
   return (
     <div className="record-card form-stack" style={{ marginTop: 12 }}>
       <div className="eyebrow">Map drill-down</div>
@@ -43,7 +36,7 @@ export function MapDrilldownCard({
             onChange={(event) =>
               onFilterDraftChange((current) => ({
                 ...current,
-                mappedOnly: event.target.value as LocationFilterState["mappedOnly"],
+                mappedOnly: event.target.value as MapDrilldownCardProps["filterDraft"]["mappedOnly"],
               }))
             }
           >
@@ -60,7 +53,7 @@ export function MapDrilldownCard({
             onChange={(event) =>
               onFilterDraftChange((current) => ({
                 ...current,
-                reviewStatus: event.target.value as LocationFilterState["reviewStatus"],
+                reviewStatus: event.target.value as MapDrilldownCardProps["filterDraft"]["reviewStatus"],
               }))
             }
           >

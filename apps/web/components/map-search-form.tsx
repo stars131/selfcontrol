@@ -1,18 +1,13 @@
 "use client";
 
-import type { FormEventHandler } from "react";
+import type { MapSearchFormProps } from "./map-search-form.types";
 
 export function MapSearchForm({
   onSearchQueryChange,
   onSubmit,
   searchQuery,
   searching,
-}: {
-  onSearchQueryChange: (value: string) => void;
-  onSubmit: FormEventHandler<HTMLFormElement>;
-  searchQuery: string;
-  searching: boolean;
-}) {
+}: MapSearchFormProps) {
   return (
     <form className="composer" style={{ marginTop: 12 }} onSubmit={onSubmit}>
       <div className="inline-fields">
