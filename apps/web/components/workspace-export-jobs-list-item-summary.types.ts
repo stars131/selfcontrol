@@ -1,0 +1,1 @@
+import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types"; export type WorkspaceExportJobsListItemSummaryProps = Pick<WorkspaceExportJobsListItemProps, "job" | "locale">;

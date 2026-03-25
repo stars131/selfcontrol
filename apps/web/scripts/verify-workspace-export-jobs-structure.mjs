@@ -46,6 +46,14 @@ const exportJobsListItemPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.tsx",
 );
+const exportJobsListItemSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-summary.tsx",
+);
+const exportJobsListItemSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-summary.types.ts",
+);
 const exportJobsListItemTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.types.ts",
@@ -62,6 +70,8 @@ const headerTypesSource = fs.readFileSync(exportJobsHeaderTypesPath, "utf8");
 const noticesSource = fs.readFileSync(exportJobsNoticesPath, "utf8");
 const noticesTypesSource = fs.readFileSync(exportJobsNoticesTypesPath, "utf8");
 const listItemSource = fs.readFileSync(exportJobsListItemPath, "utf8");
+const listItemSummarySource = fs.readFileSync(exportJobsListItemSummaryPath, "utf8");
+const listItemSummaryTypesSource = fs.readFileSync(exportJobsListItemSummaryTypesPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
@@ -75,6 +85,8 @@ const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
 const noticesLineCount = noticesSource.split(/\r?\n/).length;
 const noticesTypesLineCount = noticesTypesSource.split(/\r?\n/).length;
 const listItemLineCount = listItemSource.split(/\r?\n/).length;
+const listItemSummaryLineCount = listItemSummarySource.split(/\r?\n/).length;
+const listItemSummaryTypesLineCount = listItemSummaryTypesSource.split(/\r?\n/).length;
 const listItemTypesLineCount = listItemTypesSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useWorkspaceExportJobsController } from "./use-workspace-export-jobs-controller";')) {
@@ -247,9 +259,10 @@ if (noticesTypesLineCount > 2) {
 }
 
 for (const requiredListItemUsage of [
+  'import { WorkspaceExportJobsListItemSummary } from "./workspace-export-jobs-list-item-summary";',
   'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";',
   "}: WorkspaceExportJobsListItemProps) {",
-  'new Date(job.created_at).toLocaleString(locale)',
+  "<WorkspaceExportJobsListItemSummary",
   'job.status === "completed"',
   'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
 ]) {
@@ -258,8 +271,50 @@ for (const requiredListItemUsage of [
   }
 }
 
-if (listItemLineCount > 35) {
-  throw new Error(`workspace-export-jobs-list-item.tsx exceeded 35 lines: ${listItemLineCount}`);
+for (const forbiddenListItemToken of [
+  'new Date(job.created_at).toLocaleString(locale)',
+  '<div className="eyebrow">{job.job_type} / {job.status}</div>',
+  '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
+]) {
+  if (listItemSource.includes(forbiddenListItemToken)) {
+    throw new Error(`workspace-export-jobs-list-item.tsx must keep summary details delegated: ${forbiddenListItemToken}`);
+  }
+}
+
+if (listItemLineCount > 22) {
+  throw new Error(`workspace-export-jobs-list-item.tsx exceeded 22 lines: ${listItemLineCount}`);
+}
+
+for (const requiredListItemSummaryUsage of [
+  'import type { WorkspaceExportJobsListItemSummaryProps } from "./workspace-export-jobs-list-item-summary.types";',
+  "}: WorkspaceExportJobsListItemSummaryProps) {",
+  '<div className="eyebrow">{job.job_type} / {job.status}</div>',
+  '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
+  'new Date(job.created_at).toLocaleString(locale)',
+]) {
+  if (!listItemSummarySource.includes(requiredListItemSummaryUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-summary.tsx must own summary rendering: ${requiredListItemSummaryUsage}`);
+  }
+}
+
+if (listItemSummarySource.includes("type WorkspaceExportJobsListItemSummaryProps = Pick<")) {
+  throw new Error("workspace-export-jobs-list-item-summary.tsx must keep summary prop typing delegated");
+}
+
+if (listItemSummaryLineCount > 14) {
+  throw new Error(`workspace-export-jobs-list-item-summary.tsx exceeded 14 lines: ${listItemSummaryLineCount}`);
+}
+
+for (const requiredListItemSummaryTypesUsage of [
+  'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types"; export type WorkspaceExportJobsListItemSummaryProps = Pick<WorkspaceExportJobsListItemProps, "job" | "locale">;',
+]) {
+  if (!listItemSummaryTypesSource.includes(requiredListItemSummaryTypesUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-summary.types.ts must own summary prop typing: ${requiredListItemSummaryTypesUsage}`);
+  }
+}
+
+if (listItemSummaryTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-list-item-summary.types.ts exceeded 2 lines: ${listItemSummaryTypesLineCount}`);
 }
 
 for (const requiredListItemTypesUsage of [
