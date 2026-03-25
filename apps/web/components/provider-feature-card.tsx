@@ -1,8 +1,9 @@
 "use client";
 
-import { MediaStorageHealthCard } from "./media-storage-health-card";
 import { ProviderFeatureCardActions } from "./provider-feature-card-actions";
 import { ProviderFeatureCardFields } from "./provider-feature-card-fields";
+import { ProviderFeatureCardHeader } from "./provider-feature-card-header";
+import { ProviderFeatureCardHealthSection } from "./provider-feature-card-health-section";
 import { readProviderFeatureCardAnchorHighlightClass } from "./provider-feature-card-helpers";
 import { ProviderFeatureCardStatus } from "./provider-feature-card-status";
 import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
@@ -28,8 +29,7 @@ export function ProviderFeatureCard({
       className={`message${readProviderFeatureCardAnchorHighlightClass(`provider-${item.feature_code}`, highlightedAnchor)}`}
       id={`provider-${item.feature_code}`}
     >
-      <div className="eyebrow">{item.feature_label}</div>
-      <div style={{ marginTop: 8, lineHeight: 1.6 }}>{item.feature_description}</div>
+      <ProviderFeatureCardHeader item={item} />
       <ProviderFeatureCardFields
         copy={copy}
         draftItem={draftItem}
@@ -42,18 +42,16 @@ export function ProviderFeatureCard({
         isDirty={isDirty}
         item={item}
       />
-      {item.feature_code === "media_storage" && mediaStorageHealth ? (
-        <MediaStorageHealthCard
-          copy={copy}
-          formatSecretStatus={formatSecretStatus}
-          highlightedAnchor={highlightedAnchor}
-          locale={locale}
-          mediaStorageHealth={mediaStorageHealth}
-          onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
-          readAnchorHighlightClass={readProviderFeatureCardAnchorHighlightClass}
-          refreshingMediaStorageHealth={refreshingMediaStorageHealth}
-        />
-      ) : null}
+      <ProviderFeatureCardHealthSection
+        copy={copy}
+        formatSecretStatus={formatSecretStatus}
+        highlightedAnchor={highlightedAnchor}
+        item={item}
+        locale={locale}
+        mediaStorageHealth={mediaStorageHealth}
+        onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
+        refreshingMediaStorageHealth={refreshingMediaStorageHealth}
+      />
       <ProviderFeatureCardActions
         copy={copy}
         isDirty={isDirty}

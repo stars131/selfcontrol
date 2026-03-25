@@ -1,0 +1,1 @@
+import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardHealthSectionProps = Pick<ProviderFeatureCardProps, "copy" | "formatSecretStatus" | "highlightedAnchor" | "item" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;

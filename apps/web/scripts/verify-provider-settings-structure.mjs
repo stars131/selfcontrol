@@ -46,6 +46,43 @@ const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
 const providerFeatureCardSource = fs.readFileSync(providerFeatureCardPath, "utf8");
 const providerFeatureCardLineCount = providerFeatureCardSource.split(/\r?\n/).length;
+const providerFeatureCardHeaderPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-header.tsx",
+);
+const providerFeatureCardHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-header.types.ts",
+);
+const providerFeatureCardHealthSectionPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-health-section.tsx",
+);
+const providerFeatureCardHealthSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-health-section.types.ts",
+);
+const providerFeatureCardHeaderSource = fs.readFileSync(providerFeatureCardHeaderPath, "utf8");
+const providerFeatureCardHeaderTypesSource = fs.readFileSync(
+  providerFeatureCardHeaderTypesPath,
+  "utf8",
+);
+const providerFeatureCardHealthSectionSource = fs.readFileSync(
+  providerFeatureCardHealthSectionPath,
+  "utf8",
+);
+const providerFeatureCardHealthSectionTypesSource = fs.readFileSync(
+  providerFeatureCardHealthSectionTypesPath,
+  "utf8",
+);
+const providerFeatureCardHeaderLineCount =
+  providerFeatureCardHeaderSource.split(/\r?\n/).length;
+const providerFeatureCardHeaderTypesLineCount =
+  providerFeatureCardHeaderTypesSource.split(/\r?\n/).length;
+const providerFeatureCardHealthSectionLineCount =
+  providerFeatureCardHealthSectionSource.split(/\r?\n/).length;
+const providerFeatureCardHealthSectionTypesLineCount =
+  providerFeatureCardHealthSectionTypesSource.split(/\r?\n/).length;
 const providerFeatureCardActionsPath = path.resolve(
   process.cwd(),
   "components/provider-feature-card-actions.tsx",
@@ -225,12 +262,16 @@ if (panelTypesLineCount > maxPanelTypesLines) {
   throw new Error(`provider-settings-panel.types.ts exceeded ${maxPanelTypesLines} lines: ${panelTypesLineCount}`);
 }
 
-if (!providerFeatureCardSource.includes('import { MediaStorageHealthCard } from "./media-storage-health-card";')) {
-  throw new Error("provider-feature-card.tsx must import MediaStorageHealthCard");
-}
-
 if (!providerFeatureCardSource.includes('import { ProviderFeatureCardActions } from "./provider-feature-card-actions";')) {
   throw new Error("provider-feature-card.tsx must import ProviderFeatureCardActions");
+}
+
+if (!providerFeatureCardSource.includes('import { ProviderFeatureCardHeader } from "./provider-feature-card-header";')) {
+  throw new Error("provider-feature-card.tsx must import ProviderFeatureCardHeader");
+}
+
+if (!providerFeatureCardSource.includes('import { ProviderFeatureCardHealthSection } from "./provider-feature-card-health-section";')) {
+  throw new Error("provider-feature-card.tsx must import ProviderFeatureCardHealthSection");
 }
 
 if (!providerFeatureCardSource.includes('import { readProviderFeatureCardAnchorHighlightClass } from "./provider-feature-card-helpers";')) {
@@ -253,12 +294,16 @@ if (!providerFeatureCardFieldsSource.includes('import { ProviderFeatureMediaStor
   throw new Error("provider-feature-card-fields.tsx must import ProviderFeatureMediaStorageOptions");
 }
 
-if (!providerFeatureCardSource.includes("<MediaStorageHealthCard")) {
-  throw new Error("provider-feature-card.tsx must render MediaStorageHealthCard for media storage health presentation");
-}
-
 if (!providerFeatureCardSource.includes("<ProviderFeatureCardActions")) {
   throw new Error("provider-feature-card.tsx must delegate action row rendering to ProviderFeatureCardActions");
+}
+
+if (!providerFeatureCardSource.includes("<ProviderFeatureCardHeader")) {
+  throw new Error("provider-feature-card.tsx must delegate feature heading rendering to ProviderFeatureCardHeader");
+}
+
+if (!providerFeatureCardSource.includes("<ProviderFeatureCardHealthSection")) {
+  throw new Error("provider-feature-card.tsx must delegate media storage health rendering to ProviderFeatureCardHealthSection");
 }
 
 for (const forbiddenProviderFeatureCardToken of [
@@ -267,6 +312,8 @@ for (const forbiddenProviderFeatureCardToken of [
   'className="action-row"',
   "copy.reset",
   "copy.saveProvider",
+  '<div className="eyebrow">{item.feature_label}</div>',
+  "item.feature_code === \"media_storage\" && mediaStorageHealth ? (",
 ]) {
   if (providerFeatureCardSource.includes(forbiddenProviderFeatureCardToken)) {
     throw new Error(
@@ -373,6 +420,90 @@ if (!providerFeatureCardSource.includes("<ProviderFeatureCardFields")) {
 
 if (!providerFeatureCardSource.includes("<ProviderFeatureCardStatus")) {
   throw new Error("provider-feature-card.tsx must delegate provider status rendering to ProviderFeatureCardStatus");
+}
+
+for (const requiredProviderFeatureCardHeaderUsage of [
+  'import type { ProviderFeatureCardHeaderProps } from "./provider-feature-card-header.types";',
+  "}: ProviderFeatureCardHeaderProps) {",
+  "item.feature_label",
+  "item.feature_description",
+]) {
+  if (!providerFeatureCardHeaderSource.includes(requiredProviderFeatureCardHeaderUsage)) {
+    throw new Error(
+      `provider-feature-card-header.tsx must reuse the extracted provider-header props type: ${requiredProviderFeatureCardHeaderUsage}`,
+    );
+  }
+}
+
+if (providerFeatureCardHeaderSource.includes("type ProviderFeatureCardHeaderProps = Pick<")) {
+  throw new Error("provider-feature-card-header.tsx must keep provider-header prop typing delegated");
+}
+
+const maxProviderFeatureCardHeaderLines = 15;
+if (providerFeatureCardHeaderLineCount > maxProviderFeatureCardHeaderLines) {
+  throw new Error(
+    `provider-feature-card-header.tsx exceeded ${maxProviderFeatureCardHeaderLines} lines: ${providerFeatureCardHeaderLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardHeaderTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardHeaderProps = Pick<ProviderFeatureCardProps, "item">;',
+]) {
+  if (!providerFeatureCardHeaderTypesSource.includes(requiredProviderFeatureCardHeaderTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-header.types.ts must own provider-header prop typing: ${requiredProviderFeatureCardHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardHeaderTypesLines = 2;
+if (providerFeatureCardHeaderTypesLineCount > maxProviderFeatureCardHeaderTypesLines) {
+  throw new Error(
+    `provider-feature-card-header.types.ts exceeded ${maxProviderFeatureCardHeaderTypesLines} lines: ${providerFeatureCardHeaderTypesLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardHealthSectionUsage of [
+  'import { MediaStorageHealthCard } from "./media-storage-health-card";',
+  'import { readProviderFeatureCardAnchorHighlightClass } from "./provider-feature-card-helpers";',
+  'import type { ProviderFeatureCardHealthSectionProps } from "./provider-feature-card-health-section.types";',
+  "}: ProviderFeatureCardHealthSectionProps) {",
+  'item.feature_code !== "media_storage" || !mediaStorageHealth',
+  "<MediaStorageHealthCard",
+]) {
+  if (!providerFeatureCardHealthSectionSource.includes(requiredProviderFeatureCardHealthSectionUsage)) {
+    throw new Error(
+      `provider-feature-card-health-section.tsx must reuse the extracted provider-health props type: ${requiredProviderFeatureCardHealthSectionUsage}`,
+    );
+  }
+}
+
+if (providerFeatureCardHealthSectionSource.includes("type ProviderFeatureCardHealthSectionProps = Pick<")) {
+  throw new Error("provider-feature-card-health-section.tsx must keep provider-health prop typing delegated");
+}
+
+const maxProviderFeatureCardHealthSectionLines = 35;
+if (providerFeatureCardHealthSectionLineCount > maxProviderFeatureCardHealthSectionLines) {
+  throw new Error(
+    `provider-feature-card-health-section.tsx exceeded ${maxProviderFeatureCardHealthSectionLines} lines: ${providerFeatureCardHealthSectionLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardHealthSectionTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardHealthSectionProps = Pick<ProviderFeatureCardProps, "copy" | "formatSecretStatus" | "highlightedAnchor" | "item" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;',
+]) {
+  if (!providerFeatureCardHealthSectionTypesSource.includes(requiredProviderFeatureCardHealthSectionTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-health-section.types.ts must own provider-health prop typing: ${requiredProviderFeatureCardHealthSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardHealthSectionTypesLines = 2;
+if (providerFeatureCardHealthSectionTypesLineCount > maxProviderFeatureCardHealthSectionTypesLines) {
+  throw new Error(
+    `provider-feature-card-health-section.types.ts exceeded ${maxProviderFeatureCardHealthSectionTypesLines} lines: ${providerFeatureCardHealthSectionTypesLineCount}`,
+  );
 }
 
 for (const forbiddenToken of [

@@ -1827,6 +1827,10 @@ Last updated: 2026-03-25
   - `record-reminder-form.tsx` now delegates reminder input fields and submit-action rendering to `record-reminder-form-fields.tsx` and `record-reminder-form-actions.tsx` instead of keeping both sections inline in the form component
   - the new reminder-form `*.types.ts` files keep fields and action prop contracts explicit and reusable while the parent form remains focused on orchestration
   - `verify-record-panel-structure.mjs` and `verify-record-reminder-panel-structure.mjs` now enforce those delegated reminder-form boundaries, exact one-line type contracts, and line-count ceilings so future reminder UI updates stay safer and easier to maintain
+- Provider Feature Header and Health Leaves Split V1:
+  - `provider-feature-card.tsx` now delegates feature heading/description rendering and media-storage health-section rendering to `provider-feature-card-header.tsx` and `provider-feature-card-health-section.tsx` instead of keeping those sections inline with the card shell
+  - the new provider-feature-card `*.types.ts` files keep header and health-section prop contracts explicit and reusable while the parent card remains focused on shell composition
+  - `verify-provider-settings-structure.mjs` now enforces those delegated provider-card boundaries, exact one-line type contracts, and line-count ceilings so future provider-settings updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
