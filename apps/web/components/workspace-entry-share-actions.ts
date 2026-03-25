@@ -6,18 +6,12 @@ import {
   extractWorkspaceShareToken,
   getWorkspaceEntryActionErrorMessage,
 } from "./workspace-entry-controller-helpers";
-import type {
-  RouterLike,
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { CreateWorkspaceEntryShareActionsInput } from "./workspace-entry-share-actions.types";
 
 export function createWorkspaceEntryShareActions({
   router,
   state,
-}: {
-  router: RouterLike;
-  state: WorkspaceEntryControllerState;
-}) {
+}: CreateWorkspaceEntryShareActionsInput) {
   const {
     setError,
     setJoining,

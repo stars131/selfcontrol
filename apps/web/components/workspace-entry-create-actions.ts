@@ -4,18 +4,12 @@ import type { FormEvent } from "react";
 
 import { createWorkspace } from "../lib/api";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
-import type {
-  RouterLike,
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { CreateWorkspaceEntryCreateActionsInput } from "./workspace-entry-create-actions.types";
 
 export function createWorkspaceEntryCreateActions({
   router,
   state,
-}: {
-  router: RouterLike;
-  state: WorkspaceEntryControllerState;
-}) {
+}: CreateWorkspaceEntryCreateActionsInput) {
   const { name, setCreating, setError, setName, setWorkspaces, token } = state;
 
   const handleCreate = async (

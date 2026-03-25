@@ -9,20 +9,13 @@ import {
   getWorkspaceEntryActionErrorMessage,
   slugifyWorkspaceName,
 } from "./workspace-entry-controller-helpers";
-import type {
-  RouterLike,
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { CreateWorkspaceEntryImportActionsInput } from "./workspace-entry-import-actions.types";
 
 export function createWorkspaceEntryImportActions({
   loadTransferJobs,
   router,
   state,
-}: {
-  loadTransferJobs: (activeToken: string) => Promise<void>;
-  router: RouterLike;
-  state: WorkspaceEntryControllerState;
-}) {
+}: CreateWorkspaceEntryImportActionsInput) {
   const {
     fileInputRef,
     importFile,

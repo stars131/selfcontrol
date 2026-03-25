@@ -2,16 +2,13 @@
 
 import { createWorkspaceEntryJobActions } from "./workspace-entry-job-actions";
 import { createWorkspaceEntryShareActions } from "./workspace-entry-share-actions";
-import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types";
 import { createWorkspaceEntryWorkspaceActions } from "./workspace-entry-workspace-actions";
+import type { CreateWorkspaceEntryControllerActionsInput } from "./workspace-entry-controller-actions.types";
 
 export function createWorkspaceEntryControllerActions({
   router,
   state,
-}: {
-  router: RouterLike;
-  state: WorkspaceEntryControllerState;
-}) {
+}: CreateWorkspaceEntryControllerActionsInput) {
   const jobActions = createWorkspaceEntryJobActions({
     setError: state.setError,
     setJobsLoading: state.setJobsLoading,

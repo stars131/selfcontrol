@@ -1696,6 +1696,10 @@ Last updated: 2026-03-25
   - `use-workspace-entry-controller-derived-data.ts`, `use-workspace-entry-load.ts`, `use-workspace-settings-anchor.ts`, and `use-workspace-settings-load.ts` now consume extracted input contracts instead of keeping inline hook input object shapes in those modules
   - the new workspace hook `*.types.ts` files keep entry-derived-data, entry-load, settings-anchor, and settings-load boundaries explicit and reusable
   - this keeps workspace hook typing thinner and more maintainable under the enterprise engineering standard
+- Workspace Entry Action Input Types Split V1:
+  - `workspace-entry-controller-actions.ts`, `workspace-entry-create-actions.ts`, `workspace-entry-import-actions.ts`, `workspace-entry-workspace-actions.ts`, and `workspace-entry-share-actions.ts` now consume extracted input contracts instead of keeping inline action-builder input object shapes in those modules
+  - the new workspace-entry action `*.types.ts` files keep controller, create, import, workspace, and share action boundaries explicit and reusable
+  - this keeps workspace entry action orchestration thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

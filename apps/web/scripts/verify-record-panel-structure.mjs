@@ -1378,6 +1378,46 @@ const useWorkspaceEntryLoadTypesPath = path.resolve(
   process.cwd(),
   "components/use-workspace-entry-load.types.ts",
 );
+const workspaceEntryControllerActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-controller-actions.ts",
+);
+const workspaceEntryControllerActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-controller-actions.types.ts",
+);
+const workspaceEntryCreateActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-create-actions.ts",
+);
+const workspaceEntryCreateActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-create-actions.types.ts",
+);
+const workspaceEntryImportActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-import-actions.ts",
+);
+const workspaceEntryImportActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-import-actions.types.ts",
+);
+const workspaceEntryWorkspaceActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-workspace-actions.ts",
+);
+const workspaceEntryWorkspaceActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-workspace-actions.types.ts",
+);
+const workspaceEntryShareActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-share-actions.ts",
+);
+const workspaceEntryShareActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-share-actions.types.ts",
+);
 const recordSummaryCardPath = path.resolve(process.cwd(), "components/record-summary-card.tsx");
 const recordSummaryCardTypesPath = path.resolve(
   process.cwd(),
@@ -1783,6 +1823,37 @@ const useWorkspaceEntryControllerDerivedDataTypesSource = fs.readFileSync(
 const useWorkspaceEntryLoadSource = fs.readFileSync(useWorkspaceEntryLoadPath, "utf8");
 const useWorkspaceEntryLoadTypesSource = fs.readFileSync(
   useWorkspaceEntryLoadTypesPath,
+  "utf8",
+);
+const workspaceEntryControllerActionsSource = fs.readFileSync(
+  workspaceEntryControllerActionsPath,
+  "utf8",
+);
+const workspaceEntryControllerActionsTypesSource = fs.readFileSync(
+  workspaceEntryControllerActionsTypesPath,
+  "utf8",
+);
+const workspaceEntryCreateActionsSource = fs.readFileSync(workspaceEntryCreateActionsPath, "utf8");
+const workspaceEntryCreateActionsTypesSource = fs.readFileSync(
+  workspaceEntryCreateActionsTypesPath,
+  "utf8",
+);
+const workspaceEntryImportActionsSource = fs.readFileSync(workspaceEntryImportActionsPath, "utf8");
+const workspaceEntryImportActionsTypesSource = fs.readFileSync(
+  workspaceEntryImportActionsTypesPath,
+  "utf8",
+);
+const workspaceEntryWorkspaceActionsSource = fs.readFileSync(
+  workspaceEntryWorkspaceActionsPath,
+  "utf8",
+);
+const workspaceEntryWorkspaceActionsTypesSource = fs.readFileSync(
+  workspaceEntryWorkspaceActionsTypesPath,
+  "utf8",
+);
+const workspaceEntryShareActionsSource = fs.readFileSync(workspaceEntryShareActionsPath, "utf8");
+const workspaceEntryShareActionsTypesSource = fs.readFileSync(
+  workspaceEntryShareActionsTypesPath,
   "utf8",
 );
 const recordSummaryCardSource = fs.readFileSync(recordSummaryCardPath, "utf8");
@@ -2499,6 +2570,16 @@ const workspaceEntryLoadingShellTypesLines =
 const useWorkspaceEntryControllerDerivedDataTypesLines =
   useWorkspaceEntryControllerDerivedDataTypesSource.split(/\r?\n/).length;
 const useWorkspaceEntryLoadTypesLines = useWorkspaceEntryLoadTypesSource.split(/\r?\n/).length;
+const workspaceEntryControllerActionsTypesLines =
+  workspaceEntryControllerActionsTypesSource.split(/\r?\n/).length;
+const workspaceEntryCreateActionsTypesLines =
+  workspaceEntryCreateActionsTypesSource.split(/\r?\n/).length;
+const workspaceEntryImportActionsTypesLines =
+  workspaceEntryImportActionsTypesSource.split(/\r?\n/).length;
+const workspaceEntryWorkspaceActionsTypesLines =
+  workspaceEntryWorkspaceActionsTypesSource.split(/\r?\n/).length;
+const workspaceEntryShareActionsTypesLines =
+  workspaceEntryShareActionsTypesSource.split(/\r?\n/).length;
 const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).length;
 const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
@@ -13659,6 +13740,206 @@ const maxUseWorkspaceEntryLoadTypesLines = 2;
 if (useWorkspaceEntryLoadTypesLines > maxUseWorkspaceEntryLoadTypesLines) {
   throw new Error(
     `use-workspace-entry-load.types.ts exceeded ${maxUseWorkspaceEntryLoadTypesLines} lines: ${useWorkspaceEntryLoadTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryControllerActionsUsage of [
+  'import type { CreateWorkspaceEntryControllerActionsInput } from "./workspace-entry-controller-actions.types";',
+  "}: CreateWorkspaceEntryControllerActionsInput) {",
+]) {
+  if (!workspaceEntryControllerActionsSource.includes(requiredWorkspaceEntryControllerActionsUsage)) {
+    throw new Error(
+      `workspace-entry-controller-actions.ts must reuse the extracted entry-controller action input type: ${requiredWorkspaceEntryControllerActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryControllerActionsToken of [
+  "RouterLike",
+  "WorkspaceEntryControllerState",
+  "}: {",
+]) {
+  if (workspaceEntryControllerActionsSource.includes(forbiddenWorkspaceEntryControllerActionsToken)) {
+    throw new Error(
+      `workspace-entry-controller-actions.ts must keep entry-controller action typing delegated: ${forbiddenWorkspaceEntryControllerActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryControllerActionsTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryControllerActionsInput = { router: RouterLike; state: WorkspaceEntryControllerState };',
+]) {
+  if (!workspaceEntryControllerActionsTypesSource.includes(requiredWorkspaceEntryControllerActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-controller-actions.types.ts must own entry-controller action typing: ${requiredWorkspaceEntryControllerActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryControllerActionsTypesLines = 2;
+if (workspaceEntryControllerActionsTypesLines > maxWorkspaceEntryControllerActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-controller-actions.types.ts exceeded ${maxWorkspaceEntryControllerActionsTypesLines} lines: ${workspaceEntryControllerActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryCreateActionsUsage of [
+  'import type { CreateWorkspaceEntryCreateActionsInput } from "./workspace-entry-create-actions.types";',
+  "}: CreateWorkspaceEntryCreateActionsInput) {",
+]) {
+  if (!workspaceEntryCreateActionsSource.includes(requiredWorkspaceEntryCreateActionsUsage)) {
+    throw new Error(
+      `workspace-entry-create-actions.ts must reuse the extracted entry-create action input type: ${requiredWorkspaceEntryCreateActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryCreateActionsToken of [
+  "RouterLike",
+  "WorkspaceEntryControllerState",
+  "}: {",
+]) {
+  if (workspaceEntryCreateActionsSource.includes(forbiddenWorkspaceEntryCreateActionsToken)) {
+    throw new Error(
+      `workspace-entry-create-actions.ts must keep entry-create action typing delegated: ${forbiddenWorkspaceEntryCreateActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryCreateActionsTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryCreateActionsInput = { router: RouterLike; state: WorkspaceEntryControllerState };',
+]) {
+  if (!workspaceEntryCreateActionsTypesSource.includes(requiredWorkspaceEntryCreateActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-create-actions.types.ts must own entry-create action typing: ${requiredWorkspaceEntryCreateActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryCreateActionsTypesLines = 2;
+if (workspaceEntryCreateActionsTypesLines > maxWorkspaceEntryCreateActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-create-actions.types.ts exceeded ${maxWorkspaceEntryCreateActionsTypesLines} lines: ${workspaceEntryCreateActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryImportActionsUsage of [
+  'import type { CreateWorkspaceEntryImportActionsInput } from "./workspace-entry-import-actions.types";',
+  "}: CreateWorkspaceEntryImportActionsInput) {",
+]) {
+  if (!workspaceEntryImportActionsSource.includes(requiredWorkspaceEntryImportActionsUsage)) {
+    throw new Error(
+      `workspace-entry-import-actions.ts must reuse the extracted entry-import action input type: ${requiredWorkspaceEntryImportActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryImportActionsToken of [
+  "RouterLike",
+  "WorkspaceEntryControllerState",
+  "}: {",
+]) {
+  if (workspaceEntryImportActionsSource.includes(forbiddenWorkspaceEntryImportActionsToken)) {
+    throw new Error(
+      `workspace-entry-import-actions.ts must keep entry-import action typing delegated: ${forbiddenWorkspaceEntryImportActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryImportActionsTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryImportActionsInput = { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike; state: WorkspaceEntryControllerState };',
+]) {
+  if (!workspaceEntryImportActionsTypesSource.includes(requiredWorkspaceEntryImportActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-import-actions.types.ts must own entry-import action typing: ${requiredWorkspaceEntryImportActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryImportActionsTypesLines = 2;
+if (workspaceEntryImportActionsTypesLines > maxWorkspaceEntryImportActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-import-actions.types.ts exceeded ${maxWorkspaceEntryImportActionsTypesLines} lines: ${workspaceEntryImportActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryWorkspaceActionsUsage of [
+  'import type { CreateWorkspaceEntryWorkspaceActionsInput } from "./workspace-entry-workspace-actions.types";',
+  "}: CreateWorkspaceEntryWorkspaceActionsInput) {",
+]) {
+  if (!workspaceEntryWorkspaceActionsSource.includes(requiredWorkspaceEntryWorkspaceActionsUsage)) {
+    throw new Error(
+      `workspace-entry-workspace-actions.ts must reuse the extracted entry-workspace action input type: ${requiredWorkspaceEntryWorkspaceActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryWorkspaceActionsToken of [
+  "RouterLike",
+  "WorkspaceEntryControllerState",
+  "}: {",
+]) {
+  if (workspaceEntryWorkspaceActionsSource.includes(forbiddenWorkspaceEntryWorkspaceActionsToken)) {
+    throw new Error(
+      `workspace-entry-workspace-actions.ts must keep entry-workspace action typing delegated: ${forbiddenWorkspaceEntryWorkspaceActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryWorkspaceActionsTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryWorkspaceActionsInput = { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike; state: WorkspaceEntryControllerState };',
+]) {
+  if (!workspaceEntryWorkspaceActionsTypesSource.includes(requiredWorkspaceEntryWorkspaceActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-workspace-actions.types.ts must own entry-workspace action typing: ${requiredWorkspaceEntryWorkspaceActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryWorkspaceActionsTypesLines = 2;
+if (workspaceEntryWorkspaceActionsTypesLines > maxWorkspaceEntryWorkspaceActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-workspace-actions.types.ts exceeded ${maxWorkspaceEntryWorkspaceActionsTypesLines} lines: ${workspaceEntryWorkspaceActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryShareActionsUsage of [
+  'import type { CreateWorkspaceEntryShareActionsInput } from "./workspace-entry-share-actions.types";',
+  "}: CreateWorkspaceEntryShareActionsInput) {",
+]) {
+  if (!workspaceEntryShareActionsSource.includes(requiredWorkspaceEntryShareActionsUsage)) {
+    throw new Error(
+      `workspace-entry-share-actions.ts must reuse the extracted entry-share action input type: ${requiredWorkspaceEntryShareActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryShareActionsToken of [
+  "RouterLike",
+  "WorkspaceEntryControllerState",
+  "}: {",
+]) {
+  if (workspaceEntryShareActionsSource.includes(forbiddenWorkspaceEntryShareActionsToken)) {
+    throw new Error(
+      `workspace-entry-share-actions.ts must keep entry-share action typing delegated: ${forbiddenWorkspaceEntryShareActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryShareActionsTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryShareActionsInput = { router: RouterLike; state: WorkspaceEntryControllerState };',
+]) {
+  if (!workspaceEntryShareActionsTypesSource.includes(requiredWorkspaceEntryShareActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-share-actions.types.ts must own entry-share action typing: ${requiredWorkspaceEntryShareActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryShareActionsTypesLines = 2;
+if (workspaceEntryShareActionsTypesLines > maxWorkspaceEntryShareActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-share-actions.types.ts exceeded ${maxWorkspaceEntryShareActionsTypesLines} lines: ${workspaceEntryShareActionsTypesLines}`,
   );
 }
 
