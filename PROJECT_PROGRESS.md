@@ -1803,6 +1803,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-actions.tsx` now delegates owner-only buttons and editor read-only messaging to `workspace-media-retention-owner-actions.tsx` and `workspace-media-retention-editor-notice.tsx` instead of keeping both branches inline in the parent card
   - the new retention-action `*.types.ts` files keep owner-action and editor-notice prop contracts explicit and reusable while the parent action panel remains focused on role-based orchestration
   - `verify-workspace-media-retention-structure.mjs` and `verify-record-panel-structure.mjs` now enforce those delegated leaf boundaries, exact one-line type contracts, and line-count ceilings so future retention updates stay safer and easier to maintain
+- Location Review Form and Actions Leaves Split V1:
+  - `location-review-panel.tsx` now delegates review form fields and review action buttons to `location-review-form-fields.tsx` and `location-review-actions.tsx` instead of keeping those controls inline with the panel shell
+  - the new location-review `*.types.ts` files keep review-form and review-action prop contracts explicit and reusable while the panel remains focused on composition with the existing status and history leaves
+  - `verify-record-panel-structure.mjs` now enforces those delegated review leaf boundaries, exact one-line type contracts, and line-count ceilings so future location-review updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

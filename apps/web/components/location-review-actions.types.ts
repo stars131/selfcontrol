@@ -1,0 +1,1 @@
+import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewActionsProps = Pick<LocationReviewPanelProps, "canWriteWorkspace" | "onMarkConfirmed" | "onMarkNeedsReview" | "onResetReview" | "panelCopy">;
