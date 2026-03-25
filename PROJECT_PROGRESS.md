@@ -1879,6 +1879,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs notices boundary, exact one-line type contract, and line-count ceilings so future export-jobs updates stay safer and easier to maintain
+- Workspace Export Jobs Header Actions Split V1:
+  - `workspace-export-jobs-header.tsx` now delegates refresh/queue button rendering to `workspace-export-jobs-header-actions.tsx` instead of keeping the action group inline beside the export-job title block
+  - the new `workspace-export-jobs-header-actions.types.ts` file keeps the header-actions contract explicit and reusable while the parent header remains focused on heading copy and shell layout
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs header-actions boundary, exact one-line type contract, and line-count ceilings so future export-jobs header updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
