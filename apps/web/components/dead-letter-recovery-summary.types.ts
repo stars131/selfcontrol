@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoverySummaryProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;

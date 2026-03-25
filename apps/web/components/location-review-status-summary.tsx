@@ -1,14 +1,6 @@
 "use client";
 
-import type { LocationReviewPanelProps } from "./location-review-panel.types";
-
-type LocationReviewStatusSummaryProps = Pick<
-  LocationReviewPanelProps,
-  | "formatHistoryTimestampLabel"
-  | "formatReviewStatusLabel"
-  | "panelCopy"
-  | "selectedLocationReview"
->;
+import type { LocationReviewStatusSummaryProps } from "./location-review-status-summary.types";
 
 export function LocationReviewStatusSummary({
   formatHistoryTimestampLabel,

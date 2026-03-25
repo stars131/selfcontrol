@@ -1651,6 +1651,62 @@ const recordPanelStatsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-stats.types.ts",
 );
+const deadLetterRecoverySummaryPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary.tsx",
+);
+const deadLetterRecoverySummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary.types.ts",
+);
+const deadLetterRecoverySummaryActionsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-actions.tsx",
+);
+const deadLetterRecoverySummaryActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-actions.types.ts",
+);
+const deadLetterRecoverySummaryStatsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-stats.tsx",
+);
+const deadLetterRecoverySummaryStatsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-stats.types.ts",
+);
+const locationReviewHistoryListPath = path.resolve(
+  process.cwd(),
+  "components/location-review-history-list.tsx",
+);
+const locationReviewHistoryListTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-history-list.types.ts",
+);
+const locationReviewStatusSummaryPath = path.resolve(
+  process.cwd(),
+  "components/location-review-status-summary.tsx",
+);
+const locationReviewStatusSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-status-summary.types.ts",
+);
+const recentMediaIssueCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-actions.tsx",
+);
+const recentMediaIssueCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-actions.types.ts",
+);
+const recentMediaIssueCardTagsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-tags.tsx",
+);
+const recentMediaIssueCardTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-tags.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -2260,6 +2316,50 @@ const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
 const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
 const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
 const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
+const deadLetterRecoverySummarySource = fs.readFileSync(deadLetterRecoverySummaryPath, "utf8");
+const deadLetterRecoverySummaryTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryTypesPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryActionsSource = fs.readFileSync(
+  deadLetterRecoverySummaryActionsPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryActionsTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryActionsTypesPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryStatsSource = fs.readFileSync(
+  deadLetterRecoverySummaryStatsPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryStatsTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryStatsTypesPath,
+  "utf8",
+);
+const locationReviewHistoryListSource = fs.readFileSync(locationReviewHistoryListPath, "utf8");
+const locationReviewHistoryListTypesSource = fs.readFileSync(
+  locationReviewHistoryListTypesPath,
+  "utf8",
+);
+const locationReviewStatusSummarySource = fs.readFileSync(
+  locationReviewStatusSummaryPath,
+  "utf8",
+);
+const locationReviewStatusSummaryTypesSource = fs.readFileSync(
+  locationReviewStatusSummaryTypesPath,
+  "utf8",
+);
+const recentMediaIssueCardActionsSource = fs.readFileSync(recentMediaIssueCardActionsPath, "utf8");
+const recentMediaIssueCardActionsTypesSource = fs.readFileSync(
+  recentMediaIssueCardActionsTypesPath,
+  "utf8",
+);
+const recentMediaIssueCardTagsSource = fs.readFileSync(recentMediaIssueCardTagsPath, "utf8");
+const recentMediaIssueCardTagsTypesSource = fs.readFileSync(
+  recentMediaIssueCardTagsTypesPath,
+  "utf8",
+);
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -3025,6 +3125,20 @@ const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
 const searchPresetListTypesLines = searchPresetListTypesSource.split(/\r?\n/).length;
 const recordPanelStatsTypesLines = recordPanelStatsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryTypesLines =
+  deadLetterRecoverySummaryTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryActionsTypesLines =
+  deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryStatsTypesLines =
+  deadLetterRecoverySummaryStatsTypesSource.split(/\r?\n/).length;
+const locationReviewHistoryListTypesLines =
+  locationReviewHistoryListTypesSource.split(/\r?\n/).length;
+const locationReviewStatusSummaryTypesLines =
+  locationReviewStatusSummaryTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionsTypesLines =
+  recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardTagsTypesLines =
+  recentMediaIssueCardTagsTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -15566,6 +15680,234 @@ const maxRecordPanelStatsTypesLines = 2;
 if (recordPanelStatsTypesLines > maxRecordPanelStatsTypesLines) {
   throw new Error(
     `record-panel-stats.types.ts exceeded ${maxRecordPanelStatsTypesLines} lines: ${recordPanelStatsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryUsage of [
+  'import type { DeadLetterRecoverySummaryProps } from "./dead-letter-recovery-summary.types";',
+  "}: DeadLetterRecoverySummaryProps) {",
+]) {
+  if (!deadLetterRecoverySummarySource.includes(requiredDeadLetterRecoverySummaryUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary.tsx must reuse the extracted dead-letter summary props type: ${requiredDeadLetterRecoverySummaryUsage}`,
+    );
+  }
+}
+
+if (deadLetterRecoverySummarySource.includes("type DeadLetterRecoverySummaryProps = Pick<")) {
+  throw new Error("dead-letter-recovery-summary.tsx must keep dead-letter summary prop typing delegated");
+}
+
+for (const requiredDeadLetterRecoverySummaryTypesUsage of [
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoverySummaryProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;',
+]) {
+  if (!deadLetterRecoverySummaryTypesSource.includes(requiredDeadLetterRecoverySummaryTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary.types.ts must own dead-letter summary prop typing: ${requiredDeadLetterRecoverySummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryTypesLines = 2;
+if (deadLetterRecoverySummaryTypesLines > maxDeadLetterRecoverySummaryTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary.types.ts exceeded ${maxDeadLetterRecoverySummaryTypesLines} lines: ${deadLetterRecoverySummaryTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryActionsUsage of [
+  'import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types";',
+  "}: DeadLetterRecoverySummaryActionsProps) {",
+]) {
+  if (!deadLetterRecoverySummaryActionsSource.includes(requiredDeadLetterRecoverySummaryActionsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-actions.tsx must reuse the extracted dead-letter summary-actions props type: ${requiredDeadLetterRecoverySummaryActionsUsage}`,
+    );
+  }
+}
+
+if (deadLetterRecoverySummaryActionsSource.includes("type DeadLetterRecoverySummaryActionsProps = Pick<")) {
+  throw new Error(
+    "dead-letter-recovery-summary-actions.tsx must keep dead-letter summary-actions prop typing delegated",
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryActionsTypesUsage of [
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoverySummaryActionsProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;',
+]) {
+  if (!deadLetterRecoverySummaryActionsTypesSource.includes(requiredDeadLetterRecoverySummaryActionsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-actions.types.ts must own dead-letter summary-actions prop typing: ${requiredDeadLetterRecoverySummaryActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryActionsTypesLines = 2;
+if (deadLetterRecoverySummaryActionsTypesLines > maxDeadLetterRecoverySummaryActionsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-actions.types.ts exceeded ${maxDeadLetterRecoverySummaryActionsTypesLines} lines: ${deadLetterRecoverySummaryActionsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryStatsUsage of [
+  'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";',
+  "}: DeadLetterRecoverySummaryStatsProps) {",
+]) {
+  if (!deadLetterRecoverySummaryStatsSource.includes(requiredDeadLetterRecoverySummaryStatsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-stats.tsx must reuse the extracted dead-letter summary-stats props type: ${requiredDeadLetterRecoverySummaryStatsUsage}`,
+    );
+  }
+}
+
+if (deadLetterRecoverySummaryStatsSource.includes("type DeadLetterRecoverySummaryStatsProps = Pick<")) {
+  throw new Error(
+    "dead-letter-recovery-summary-stats.tsx must keep dead-letter summary-stats prop typing delegated",
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryStatsTypesUsage of [
+  'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoverySummaryStatsProps = Pick<DeadLetterRecoveryPanelProps, "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy">;',
+]) {
+  if (!deadLetterRecoverySummaryStatsTypesSource.includes(requiredDeadLetterRecoverySummaryStatsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-stats.types.ts must own dead-letter summary-stats prop typing: ${requiredDeadLetterRecoverySummaryStatsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryStatsTypesLines = 2;
+if (deadLetterRecoverySummaryStatsTypesLines > maxDeadLetterRecoverySummaryStatsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-stats.types.ts exceeded ${maxDeadLetterRecoverySummaryStatsTypesLines} lines: ${deadLetterRecoverySummaryStatsTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewHistoryListUsage of [
+  'import type { LocationReviewHistoryListProps } from "./location-review-history-list.types";',
+  "}: LocationReviewHistoryListProps) {",
+]) {
+  if (!locationReviewHistoryListSource.includes(requiredLocationReviewHistoryListUsage)) {
+    throw new Error(
+      `location-review-history-list.tsx must reuse the extracted location-history props type: ${requiredLocationReviewHistoryListUsage}`,
+    );
+  }
+}
+
+if (locationReviewHistoryListSource.includes("type LocationReviewHistoryListProps = Pick<")) {
+  throw new Error("location-review-history-list.tsx must keep location-history prop typing delegated");
+}
+
+for (const requiredLocationReviewHistoryListTypesUsage of [
+  'import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewHistoryListProps = Pick<LocationReviewPanelProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "panelCopy" | "selectedLocationHistory" | "summarizeHistoryActionLabel">;',
+]) {
+  if (!locationReviewHistoryListTypesSource.includes(requiredLocationReviewHistoryListTypesUsage)) {
+    throw new Error(
+      `location-review-history-list.types.ts must own location-history prop typing: ${requiredLocationReviewHistoryListTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewHistoryListTypesLines = 2;
+if (locationReviewHistoryListTypesLines > maxLocationReviewHistoryListTypesLines) {
+  throw new Error(
+    `location-review-history-list.types.ts exceeded ${maxLocationReviewHistoryListTypesLines} lines: ${locationReviewHistoryListTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewStatusSummaryUsage of [
+  'import type { LocationReviewStatusSummaryProps } from "./location-review-status-summary.types";',
+  "}: LocationReviewStatusSummaryProps) {",
+]) {
+  if (!locationReviewStatusSummarySource.includes(requiredLocationReviewStatusSummaryUsage)) {
+    throw new Error(
+      `location-review-status-summary.tsx must reuse the extracted location-status props type: ${requiredLocationReviewStatusSummaryUsage}`,
+    );
+  }
+}
+
+if (locationReviewStatusSummarySource.includes("type LocationReviewStatusSummaryProps = Pick<")) {
+  throw new Error("location-review-status-summary.tsx must keep location-status prop typing delegated");
+}
+
+for (const requiredLocationReviewStatusSummaryTypesUsage of [
+  'import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewStatusSummaryProps = Pick<LocationReviewPanelProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "panelCopy" | "selectedLocationReview">;',
+]) {
+  if (!locationReviewStatusSummaryTypesSource.includes(requiredLocationReviewStatusSummaryTypesUsage)) {
+    throw new Error(
+      `location-review-status-summary.types.ts must own location-status prop typing: ${requiredLocationReviewStatusSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewStatusSummaryTypesLines = 2;
+if (locationReviewStatusSummaryTypesLines > maxLocationReviewStatusSummaryTypesLines) {
+  throw new Error(
+    `location-review-status-summary.types.ts exceeded ${maxLocationReviewStatusSummaryTypesLines} lines: ${locationReviewStatusSummaryTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardActionsUsage of [
+  'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
+  "}: RecentMediaIssueCardActionsProps) {",
+]) {
+  if (!recentMediaIssueCardActionsSource.includes(requiredRecentMediaIssueCardActionsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-actions.tsx must reuse the extracted recent-media actions props type: ${requiredRecentMediaIssueCardActionsUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardActionsSource.includes("}: Pick<")) {
+  throw new Error("recent-media-issue-card-actions.tsx must keep recent-media actions prop typing delegated");
+}
+
+for (const requiredRecentMediaIssueCardActionsTypesUsage of [
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type RecentMediaIssueCardActionsProps = Pick<RecentMediaIssueCardProps, "canWriteWorkspace" | "issue" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId"> & { settingsHref: string | null };',
+]) {
+  if (!recentMediaIssueCardActionsTypesSource.includes(requiredRecentMediaIssueCardActionsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-actions.types.ts must own recent-media actions prop typing: ${requiredRecentMediaIssueCardActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardActionsTypesLines = 2;
+if (recentMediaIssueCardActionsTypesLines > maxRecentMediaIssueCardActionsTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-actions.types.ts exceeded ${maxRecentMediaIssueCardActionsTypesLines} lines: ${recentMediaIssueCardActionsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardTagsUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
+  "}: RecentMediaIssueCardTagsProps) {",
+]) {
+  if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-tags.tsx must reuse the extracted recent-media tags props type: ${requiredRecentMediaIssueCardTagsUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardTagsSource.includes("}: Pick<RecentMediaIssueCardProps")) {
+  throw new Error("recent-media-issue-card-tags.tsx must keep recent-media tags prop typing delegated");
+}
+
+for (const requiredRecentMediaIssueCardTagsTypesUsage of [
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type RecentMediaIssueCardTagsProps = Pick<RecentMediaIssueCardProps, "issue" | "locale" | "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssueCardTagsTypesSource.includes(requiredRecentMediaIssueCardTagsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-tags.types.ts must own recent-media tags prop typing: ${requiredRecentMediaIssueCardTagsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardTagsTypesLines = 2;
+if (recentMediaIssueCardTagsTypesLines > maxRecentMediaIssueCardTagsTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-tags.types.ts exceeded ${maxRecentMediaIssueCardTagsTypesLines} lines: ${recentMediaIssueCardTagsTypesLines}`,
   );
 }
 

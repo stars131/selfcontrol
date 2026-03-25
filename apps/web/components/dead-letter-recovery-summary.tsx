@@ -1,8 +1,7 @@
 "use client";
 import { DeadLetterRecoverySummaryActions } from "./dead-letter-recovery-summary-actions";
 import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";
-import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";
-type DeadLetterRecoverySummaryProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;
+import type { DeadLetterRecoverySummaryProps } from "./dead-letter-recovery-summary.types";
 
 export function DeadLetterRecoverySummary({
   bulkRetryingDeadLetter,

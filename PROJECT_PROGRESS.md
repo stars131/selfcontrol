@@ -1728,6 +1728,10 @@ Last updated: 2026-03-25
   - `use-workspace-shell-notification-effect.ts`, `use-workspace-shell-selection-effects.ts`, `workspace-shell-record-filter-actions.ts`, `workspace-entry-job-actions.ts`, and `workspace-transfer-jobs-list.tsx` now consume extracted effect/action/list contracts instead of keeping direct `Pick<...>` signatures in those modules
   - the new `*.types.ts` files keep workspace notification, selection, location-filter, entry-job, and transfer-jobs-list boundaries explicit and reusable
   - this keeps workspace shell and entry side-effect edges thinner and more maintainable under the enterprise engineering standard
+- Recovery and Review Leaf Props Split V1:
+  - `dead-letter-recovery-summary*.tsx`, `location-review-*.tsx`, and `recent-media-issue-card-*.tsx` now consume extracted prop contracts instead of keeping local `Pick<...>` leaf types in those modules
+  - the new recovery/review `*.types.ts` files keep dead-letter summary, location review, and recent-media issue leaf boundaries explicit and reusable
+  - this keeps leaf presentation typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

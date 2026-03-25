@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoverySummaryStatsProps = Pick<DeadLetterRecoveryPanelProps, "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy">;

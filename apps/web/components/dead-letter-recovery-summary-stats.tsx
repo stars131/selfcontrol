@@ -1,12 +1,7 @@
 "use client";
 
 import { getMediaIssueLabel, getRetryStateLabel } from "../lib/media-issue-display";
-import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";
-
-type DeadLetterRecoverySummaryStatsProps = Pick<
-  DeadLetterRecoveryPanelProps,
-  "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy"
->;
+import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";
 
 export function DeadLetterRecoverySummaryStats({
   locale,

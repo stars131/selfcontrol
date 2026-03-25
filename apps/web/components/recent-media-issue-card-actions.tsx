@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { canRetryMediaIssue } from "../lib/record-panel-media";
-import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
+import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";
 
 export function RecentMediaIssueCardActions({
   canWriteWorkspace,
@@ -12,12 +12,7 @@ export function RecentMediaIssueCardActions({
   onRetryMediaProcessing,
   retryingMediaId,
   settingsHref,
-}: Pick<
-  RecentMediaIssueCardProps,
-  "canWriteWorkspace" | "issue" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId"
-> & {
-  settingsHref: string | null;
-}) {
+}: RecentMediaIssueCardActionsProps) {
   const retrying = retryingMediaId === issue.media_id;
 
   if (!canWriteWorkspace && !settingsHref) {

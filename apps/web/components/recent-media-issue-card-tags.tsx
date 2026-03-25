@@ -1,13 +1,13 @@
 "use client";
 
 import { getMediaIssueLabel, getProcessingStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
-import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
+import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";
 
 export function RecentMediaIssueCardTags({
   issue,
   locale,
   mediaIssueCopy,
-}: Pick<RecentMediaIssueCardProps, "issue" | "locale" | "mediaIssueCopy">) {
+}: RecentMediaIssueCardTagsProps) {
   const issueLabel = getMediaIssueLabel(locale, issue);
 
   return (

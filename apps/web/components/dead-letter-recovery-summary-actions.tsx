@@ -1,6 +1,5 @@
 "use client";
-import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types";
-type DeadLetterRecoverySummaryActionsProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;
+import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types";
 
 export function DeadLetterRecoverySummaryActions({
   bulkRetryingDeadLetter,
