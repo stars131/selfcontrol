@@ -1624,6 +1624,10 @@ Last updated: 2026-03-25
   - provider settings jump-nav, feature-list, and media-storage-options components now consume extracted prop contracts instead of keeping provider/config props inline
   - `provider-settings-jump-nav.tsx`, `provider-settings-feature-list.tsx`, and `provider-feature-media-storage-options.tsx` now depend on dedicated `*.types.ts` files
   - this keeps the provider-settings subtree thinner and more consistent with the ongoing enterprise UI boundary cleanup
+- Workspace Export Controls and Jobs List Props Split V1:
+  - export controls and jobs-list components now consume extracted prop contracts instead of keeping export UI props inline
+  - `workspace-export-controls.tsx` and `workspace-export-jobs-list.tsx` now depend on dedicated `*.types.ts` files
+  - this keeps the export card subtree thinner and more consistent with the broader management-surface boundary cleanup
 
 ## Next
 - Continue the next product slice

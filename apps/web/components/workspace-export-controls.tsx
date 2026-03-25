@@ -1,14 +1,6 @@
 "use client";
 
-type WorkspaceExportControlsProps = {
-  buttonLabel: string;
-  error: string;
-  loading: boolean;
-  ownerOnlyLabel: string;
-  role: "owner" | "editor";
-  success: string;
-  onDownload: () => void;
-};
+import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types";
 
 export function WorkspaceExportControls({
   buttonLabel,

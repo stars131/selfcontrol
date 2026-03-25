@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; import type { WorkspaceTransferJob } from "../lib/types"; export type WorkspaceExportJobsListProps = { actionLoading: boolean; downloadLabel: string; emptyLabel: string; jobs: WorkspaceTransferJob[]; locale: LocaleCode; onDownload: (jobId: string) => Promise<void> };

@@ -1,16 +1,6 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
-import type { WorkspaceTransferJob } from "../lib/types";
-
-type WorkspaceExportJobsListProps = {
-  actionLoading: boolean;
-  downloadLabel: string;
-  emptyLabel: string;
-  jobs: WorkspaceTransferJob[];
-  locale: LocaleCode;
-  onDownload: (jobId: string) => Promise<void>;
-};
+import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types";
 
 export function WorkspaceExportJobsList({
   actionLoading,
