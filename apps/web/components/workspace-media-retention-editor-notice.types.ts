@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types"; export type WorkspaceMediaRetentionEditorNoticeProps = Pick<WorkspaceMediaRetentionActionsProps, "editorReadOnly">;

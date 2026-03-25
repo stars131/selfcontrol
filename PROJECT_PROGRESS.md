@@ -1799,6 +1799,10 @@ Last updated: 2026-03-25
   - `media-storage-overview.tsx` now delegates summary card rendering and provider breakdown tags to `media-storage-overview-summary.tsx` and `media-storage-overview-provider-tags.tsx` instead of keeping both display blocks inline in one component
   - the new overview `*.types.ts` files keep summary and provider-tag prop contracts explicit and reusable while the parent overview remains focused on orchestration
   - `verify-record-panel-structure.mjs` now enforces those delegated overview boundaries so media diagnostics stay thinner and easier to evolve under the enterprise engineering standard
+- Workspace Retention Action Leaves Split V1:
+  - `workspace-media-retention-actions.tsx` now delegates owner-only buttons and editor read-only messaging to `workspace-media-retention-owner-actions.tsx` and `workspace-media-retention-editor-notice.tsx` instead of keeping both branches inline in the parent card
+  - the new retention-action `*.types.ts` files keep owner-action and editor-notice prop contracts explicit and reusable while the parent action panel remains focused on role-based orchestration
+  - `verify-workspace-media-retention-structure.mjs` and `verify-record-panel-structure.mjs` now enforce those delegated leaf boundaries, exact one-line type contracts, and line-count ceilings so future retention updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

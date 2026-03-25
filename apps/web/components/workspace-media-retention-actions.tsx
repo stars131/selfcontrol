@@ -1,5 +1,7 @@
 "use client";
 
+import { WorkspaceMediaRetentionEditorNotice } from "./workspace-media-retention-editor-notice";
+import { WorkspaceMediaRetentionOwnerActions } from "./workspace-media-retention-owner-actions";
 import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";
 
 export function WorkspaceMediaRetentionActions({
@@ -28,53 +30,27 @@ export function WorkspaceMediaRetentionActions({
     <section className="subtle-card" style={{ marginTop: 16 }}>
       <div className="eyebrow">{ownerActions}</div>
       {role === "owner" ? (
-        <div className="form-stack" style={{ marginTop: 12 }}>
-          <div className="muted">{selectedSummary}: {selectedCount}</div>
-          <div className="action-row">
-            <button
-              className="button secondary"
-              disabled={actionLoading || !canSelectAll}
-              type="button"
-              onClick={onSelectAllCandidates}
-            >
-              {selectAllLabel}
-            </button>
-            <button
-              className="button secondary"
-              disabled={actionLoading || !selectedCount}
-              type="button"
-              onClick={onClearSelection}
-            >
-              {clearSelectionLabel}
-            </button>
-            <button
-              className="button secondary"
-              disabled={actionLoading || !selectedCount}
-              type="button"
-              onClick={() => void onArchive(archiveConfirmSelected)}
-            >
-              {actionLoading ? processingLabel : archiveSelectedLabel}
-            </button>
-            <button
-              className="button secondary"
-              disabled={actionLoading || !selectedCount}
-              type="button"
-              onClick={() => void onCleanupSelected()}
-            >
-              {actionLoading ? processingLabel : deleteSelectedLabel}
-            </button>
-            <button
-              className="button secondary"
-              disabled={actionLoading || !canDeleteOrphans}
-              type="button"
-              onClick={() => void onCleanupOrphans()}
-            >
-              {actionLoading ? processingLabel : deleteOrphansLabel}
-            </button>
-          </div>
-        </div>
+        <WorkspaceMediaRetentionOwnerActions
+          actionLoading={actionLoading}
+          archiveConfirmSelected={archiveConfirmSelected}
+          archiveSelectedLabel={archiveSelectedLabel}
+          canDeleteOrphans={canDeleteOrphans}
+          canSelectAll={canSelectAll}
+          clearSelectionLabel={clearSelectionLabel}
+          deleteOrphansLabel={deleteOrphansLabel}
+          deleteSelectedLabel={deleteSelectedLabel}
+          onArchive={onArchive}
+          onCleanupOrphans={onCleanupOrphans}
+          onCleanupSelected={onCleanupSelected}
+          onClearSelection={onClearSelection}
+          onSelectAllCandidates={onSelectAllCandidates}
+          processingLabel={processingLabel}
+          selectedCount={selectedCount}
+          selectedSummary={selectedSummary}
+          selectAllLabel={selectAllLabel}
+        />
       ) : (
-        <div className="notice" style={{ marginTop: 12 }}>{editorReadOnly}</div>
+        <WorkspaceMediaRetentionEditorNotice editorReadOnly={editorReadOnly} />
       )}
     </section>
   );
