@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
+import type { ProviderFeatureCardActionsProps } from "./provider-feature-card-actions.types";
 
 export function ProviderFeatureCardActions({
   copy,
@@ -9,10 +9,7 @@ export function ProviderFeatureCardActions({
   onReset,
   onSave,
   providerSavingCode,
-}: Pick<
-  ProviderFeatureCardProps,
-  "copy" | "isDirty" | "item" | "onReset" | "onSave" | "providerSavingCode"
->) {
+}: ProviderFeatureCardActionsProps) {
   return (
     <div className="action-row" style={{ marginTop: 10 }}>
       <button

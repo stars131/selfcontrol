@@ -1040,6 +1040,22 @@ const providerFeatureMediaStorageOptionsPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-options.tsx",
 );
+const providerFeatureCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-actions.tsx",
+);
+const providerFeatureCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-actions.types.ts",
+);
+const providerFeatureCardFieldsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-fields.tsx",
+);
+const providerFeatureCardFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-fields.types.ts",
+);
 const providerFeatureMediaStorageOptionsTypesPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-options.types.ts",
@@ -1059,6 +1075,14 @@ const providerSettingsJumpNavPath = path.resolve(
 const providerSettingsJumpNavTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-jump-nav.types.ts",
+);
+const workspaceSettingsLoadingShellPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-loading-shell.tsx",
+);
+const workspaceSettingsLoadingShellTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-loading-shell.types.ts",
 );
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
@@ -1267,6 +1291,16 @@ const workspaceMediaRetentionSummaryTypesSource = fs.readFileSync(
   workspaceMediaRetentionSummaryTypesPath,
   "utf8",
 );
+const providerFeatureCardActionsSource = fs.readFileSync(providerFeatureCardActionsPath, "utf8");
+const providerFeatureCardActionsTypesSource = fs.readFileSync(
+  providerFeatureCardActionsTypesPath,
+  "utf8",
+);
+const providerFeatureCardFieldsSource = fs.readFileSync(providerFeatureCardFieldsPath, "utf8");
+const providerFeatureCardFieldsTypesSource = fs.readFileSync(
+  providerFeatureCardFieldsTypesPath,
+  "utf8",
+);
 const providerFeatureMediaStorageOptionsSource = fs.readFileSync(
   providerFeatureMediaStorageOptionsPath,
   "utf8",
@@ -1286,6 +1320,14 @@ const providerSettingsFeatureListTypesSource = fs.readFileSync(
 const providerSettingsJumpNavSource = fs.readFileSync(providerSettingsJumpNavPath, "utf8");
 const providerSettingsJumpNavTypesSource = fs.readFileSync(
   providerSettingsJumpNavTypesPath,
+  "utf8",
+);
+const workspaceSettingsLoadingShellSource = fs.readFileSync(
+  workspaceSettingsLoadingShellPath,
+  "utf8",
+);
+const workspaceSettingsLoadingShellTypesSource = fs.readFileSync(
+  workspaceSettingsLoadingShellTypesPath,
   "utf8",
 );
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
@@ -1933,12 +1975,18 @@ const workspaceMediaRetentionNoticesTypesLines =
   workspaceMediaRetentionNoticesTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionSummaryTypesLines =
   workspaceMediaRetentionSummaryTypesSource.split(/\r?\n/).length;
+const providerFeatureCardActionsTypesLines =
+  providerFeatureCardActionsTypesSource.split(/\r?\n/).length;
+const providerFeatureCardFieldsTypesLines =
+  providerFeatureCardFieldsTypesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsTypesLines =
   providerFeatureMediaStorageOptionsTypesSource.split(/\r?\n/).length;
 const providerSettingsFeatureListTypesLines =
   providerSettingsFeatureListTypesSource.split(/\r?\n/).length;
 const providerSettingsJumpNavTypesLines =
   providerSettingsJumpNavTypesSource.split(/\r?\n/).length;
+const workspaceSettingsLoadingShellTypesLines =
+  workspaceSettingsLoadingShellTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -11294,6 +11342,84 @@ if (providerSettingsJumpNavTypesLines > maxProviderSettingsJumpNavTypesLines) {
   );
 }
 
+for (const requiredProviderFeatureCardActionsUsage of [
+  'import type { ProviderFeatureCardActionsProps } from "./provider-feature-card-actions.types";',
+  "}: ProviderFeatureCardActionsProps) {",
+]) {
+  if (!providerFeatureCardActionsSource.includes(requiredProviderFeatureCardActionsUsage)) {
+    throw new Error(
+      `provider-feature-card-actions.tsx must reuse the extracted feature-card-actions props type: ${requiredProviderFeatureCardActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderFeatureCardActionsToken of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+  "Pick<",
+]) {
+  if (providerFeatureCardActionsSource.includes(forbiddenProviderFeatureCardActionsToken)) {
+    throw new Error(
+      `provider-feature-card-actions.tsx must keep feature-card-actions prop typing delegated: ${forbiddenProviderFeatureCardActionsToken}`,
+    );
+  }
+}
+
+for (const requiredProviderFeatureCardActionsTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardActionsProps = Pick<ProviderFeatureCardProps, "copy" | "isDirty" | "item" | "onReset" | "onSave" | "providerSavingCode">;',
+]) {
+  if (!providerFeatureCardActionsTypesSource.includes(requiredProviderFeatureCardActionsTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-actions.types.ts must own feature-card-actions prop typing: ${requiredProviderFeatureCardActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardActionsTypesLines = 2;
+if (providerFeatureCardActionsTypesLines > maxProviderFeatureCardActionsTypesLines) {
+  throw new Error(
+    `provider-feature-card-actions.types.ts exceeded ${maxProviderFeatureCardActionsTypesLines} lines: ${providerFeatureCardActionsTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardFieldsUsage of [
+  'import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types";',
+  "}: ProviderFeatureCardFieldsProps) {",
+]) {
+  if (!providerFeatureCardFieldsSource.includes(requiredProviderFeatureCardFieldsUsage)) {
+    throw new Error(
+      `provider-feature-card-fields.tsx must reuse the extracted feature-card-fields props type: ${requiredProviderFeatureCardFieldsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderFeatureCardFieldsToken of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+  "type ProviderFeatureCardFieldsProps = Pick<",
+]) {
+  if (providerFeatureCardFieldsSource.includes(forbiddenProviderFeatureCardFieldsToken)) {
+    throw new Error(
+      `provider-feature-card-fields.tsx must keep feature-card-fields prop typing delegated: ${forbiddenProviderFeatureCardFieldsToken}`,
+    );
+  }
+}
+
+for (const requiredProviderFeatureCardFieldsTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardFieldsProps = Pick<ProviderFeatureCardProps, "copy" | "draftItem" | "item" | "onProviderDraftChange">;',
+]) {
+  if (!providerFeatureCardFieldsTypesSource.includes(requiredProviderFeatureCardFieldsTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-fields.types.ts must own feature-card-fields prop typing: ${requiredProviderFeatureCardFieldsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardFieldsTypesLines = 2;
+if (providerFeatureCardFieldsTypesLines > maxProviderFeatureCardFieldsTypesLines) {
+  throw new Error(
+    `provider-feature-card-fields.types.ts exceeded ${maxProviderFeatureCardFieldsTypesLines} lines: ${providerFeatureCardFieldsTypesLines}`,
+  );
+}
+
 for (const requiredProviderSettingsFeatureListUsage of [
   'import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";',
   "}: ProviderSettingsFeatureListProps) {",
@@ -11376,6 +11502,40 @@ const maxProviderFeatureMediaStorageOptionsTypesLines = 2;
 if (providerFeatureMediaStorageOptionsTypesLines > maxProviderFeatureMediaStorageOptionsTypesLines) {
   throw new Error(
     `provider-feature-media-storage-options.types.ts exceeded ${maxProviderFeatureMediaStorageOptionsTypesLines} lines: ${providerFeatureMediaStorageOptionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsLoadingShellUsage of [
+  'import type { WorkspaceSettingsLoadingShellProps } from "./workspace-settings-loading-shell.types";',
+  "}: WorkspaceSettingsLoadingShellProps) {",
+]) {
+  if (!workspaceSettingsLoadingShellSource.includes(requiredWorkspaceSettingsLoadingShellUsage)) {
+    throw new Error(
+      `workspace-settings-loading-shell.tsx must reuse the extracted loading-shell props type: ${requiredWorkspaceSettingsLoadingShellUsage}`,
+    );
+  }
+}
+
+if (workspaceSettingsLoadingShellSource.includes("loadingLabel }: { loadingLabel: string }")) {
+  throw new Error(
+    "workspace-settings-loading-shell.tsx must keep loading-shell prop typing delegated",
+  );
+}
+
+for (const requiredWorkspaceSettingsLoadingShellTypesUsage of [
+  'export type WorkspaceSettingsLoadingShellProps = { loadingLabel: string };',
+]) {
+  if (!workspaceSettingsLoadingShellTypesSource.includes(requiredWorkspaceSettingsLoadingShellTypesUsage)) {
+    throw new Error(
+      `workspace-settings-loading-shell.types.ts must own loading-shell prop typing: ${requiredWorkspaceSettingsLoadingShellTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsLoadingShellTypesLines = 2;
+if (workspaceSettingsLoadingShellTypesLines > maxWorkspaceSettingsLoadingShellTypesLines) {
+  throw new Error(
+    `workspace-settings-loading-shell.types.ts exceeded ${maxWorkspaceSettingsLoadingShellTypesLines} lines: ${workspaceSettingsLoadingShellTypesLines}`,
   );
 }
 

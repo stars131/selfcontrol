@@ -1,12 +1,7 @@
 "use client";
 
 import { ProviderFeatureMediaStorageOptions } from "./provider-feature-media-storage-options";
-import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
-
-type ProviderFeatureCardFieldsProps = Pick<
-  ProviderFeatureCardProps,
-  "copy" | "draftItem" | "item" | "onProviderDraftChange"
->;
+import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types";
 
 export function ProviderFeatureCardFields({
   copy,

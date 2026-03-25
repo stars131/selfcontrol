@@ -1,0 +1,1 @@
+import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardFieldsProps = Pick<ProviderFeatureCardProps, "copy" | "draftItem" | "item" | "onProviderDraftChange">;

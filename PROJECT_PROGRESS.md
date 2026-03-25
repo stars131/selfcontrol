@@ -1628,6 +1628,10 @@ Last updated: 2026-03-25
   - export controls and jobs-list components now consume extracted prop contracts instead of keeping export UI props inline
   - `workspace-export-controls.tsx` and `workspace-export-jobs-list.tsx` now depend on dedicated `*.types.ts` files
   - this keeps the export card subtree thinner and more consistent with the broader management-surface boundary cleanup
+- Provider Feature Card Child Props and Settings Loading Shell Split V1:
+  - provider feature card action/field components now consume extracted prop contracts instead of inlining `Pick<ProviderFeatureCardProps, ...>` inside the component files
+  - `workspace-settings-loading-shell.tsx` now also consumes an extracted loading-shell prop type instead of keeping its inline shape in the function signature
+  - this keeps provider/settings presentation components thinner and more consistent with the enterprise boundary cleanup
 
 ## Next
 - Continue the next product slice

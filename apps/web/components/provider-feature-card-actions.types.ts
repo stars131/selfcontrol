@@ -1,0 +1,1 @@
+import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardActionsProps = Pick<ProviderFeatureCardProps, "copy" | "isDirty" | "item" | "onReset" | "onSave" | "providerSavingCode">;
