@@ -1,23 +1,7 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
-import type { MediaRetentionReport } from "../lib/types";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
-
-type WorkspaceMediaRetentionListsCopy = {
-  largestTitle: string;
-  noLargestItems: string;
-  candidatesTitle: string;
-  noCandidates: string;
-  selectLabel: string;
-  createdAt: string;
-  ageDays: string;
-  days: string;
-  missing: string;
-  archived: string;
-  primary: string;
-  remoteReference?: string;
-};
+import type { WorkspaceMediaRetentionListsProps } from "./workspace-media-retention-lists.types";
 
 export function WorkspaceMediaRetentionLists({
   actionLoading,
@@ -27,15 +11,7 @@ export function WorkspaceMediaRetentionLists({
   report,
   role,
   selectedMediaIds,
-}: {
-  actionLoading: boolean;
-  copy: WorkspaceMediaRetentionListsCopy;
-  locale: LocaleCode;
-  onToggleSelected: (mediaId: string) => void;
-  report: MediaRetentionReport | null;
-  role: "owner" | "editor";
-  selectedMediaIds: string[];
-}) {
+}: WorkspaceMediaRetentionListsProps) {
   return (
     <div className="two-column-grid" style={{ marginTop: 16 }}>
       <section className="subtle-card">

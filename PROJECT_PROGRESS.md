@@ -1616,6 +1616,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-card.tsx` now consumes an extracted props contract instead of keeping locale/token/role props inline
   - the new card prop type keeps the retention settings surface aligned with the other settings/export card boundaries
   - this keeps the retention UI layer thinner and more consistent with the ongoing enterprise maintainability pass
+- Workspace Media Retention Child Props Split V1:
+  - retention header, summary, lists, and notices components now consume extracted props contracts instead of keeping copy/report/message props inline
+  - `workspace-media-retention-header.tsx`, `workspace-media-retention-summary.tsx`, `workspace-media-retention-lists.tsx`, and `workspace-media-retention-notices.tsx` now depend on dedicated `*.types.ts` files
+  - this keeps the retention card subtree thinner and more consistent with the broader management-surface boundary cleanup
 
 ## Next
 - Continue the next product slice

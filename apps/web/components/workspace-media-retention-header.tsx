@@ -1,14 +1,6 @@
 "use client";
 
-type WorkspaceMediaRetentionHeaderCopy = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  threshold: string;
-  days: string;
-  refresh: string;
-  refreshing: string;
-};
+import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types";
 
 export function WorkspaceMediaRetentionHeader({
   copy,
@@ -16,13 +8,7 @@ export function WorkspaceMediaRetentionHeader({
   olderThanDays,
   onOlderThanDaysChange,
   onRefresh,
-}: {
-  copy: WorkspaceMediaRetentionHeaderCopy;
-  loading: boolean;
-  olderThanDays: number;
-  onOlderThanDaysChange: (value: number) => void;
-  onRefresh: () => Promise<void>;
-}) {
+}: WorkspaceMediaRetentionHeaderProps) {
   return (
     <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
       <div>

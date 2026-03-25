@@ -1,14 +1,12 @@
 "use client";
 
+import type { WorkspaceMediaRetentionNoticesProps } from "./workspace-media-retention-notices.types";
+
 export function WorkspaceMediaRetentionNotices({
   actionError,
   actionMessage,
   error,
-}: {
-  actionError: string;
-  actionMessage: string;
-  error: string;
-}) {
+}: WorkspaceMediaRetentionNoticesProps) {
   return (
     <>
       {error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null}

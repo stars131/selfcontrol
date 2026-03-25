@@ -1,29 +1,13 @@
 "use client";
 
-import type { MediaRetentionReport } from "../lib/types";
-
-type WorkspaceMediaRetentionSummaryCopy = {
-  agedMedia: string;
-  archivedMedia: string;
-  cleanupNote: string;
-  oldestMedia: string;
-  orphanFiles: string;
-  storageRisk: string;
-  totalTracked: string;
-  days: string;
-};
+import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types";
 
 export function WorkspaceMediaRetentionSummary({
   copy,
   remoteMediaLabel,
   report,
   storageRiskLabel,
-}: {
-  copy: WorkspaceMediaRetentionSummaryCopy;
-  remoteMediaLabel: string;
-  report: MediaRetentionReport | null;
-  storageRiskLabel: string;
-}) {
+}: WorkspaceMediaRetentionSummaryProps) {
   return (
     <>
       <div className="detail-grid" style={{ marginTop: 16 }}>
