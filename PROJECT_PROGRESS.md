@@ -1775,6 +1775,10 @@ Last updated: 2026-03-25
   - `verify-auth-forms-structure.mjs`, `verify-dead-letter-recovery-structure.mjs`, `verify-media-asset-card-structure.mjs`, and `verify-record-media-tools-structure.mjs` now match the already-extracted leaf `*.types.ts` boundaries instead of expecting direct panel-prop imports inside those leaf components
   - the verifier suite now enforces exact one-line type-file contracts and 2-line ceilings for auth frame props, dead-letter summary/item/content props, media preview content props, and recent-media issue tag/action props
   - this keeps leaf presentation boundaries explicit and makes future UI refactors easier to verify under the enterprise engineering standard
+- Chat and Workspace Settings Verifier Sync V1:
+  - `verify-chat-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now match the already-extracted chat content/action-input and workspace-settings loading-shell type boundaries instead of expecting inline prop or input definitions in source modules
+  - the verifier suite now enforces delegated `chat-panel-content-props.types.ts`, `chat-panel-action-handler-inputs.types.ts`, and `workspace-settings-loading-shell.types.ts` contracts, and the full web verify suite passes end-to-end again
+  - this keeps chat/settings orchestration edges aligned with the same enterprise refactor standard and reduces future verifier drift risk
 
 ## Next
 - Continue the next product slice

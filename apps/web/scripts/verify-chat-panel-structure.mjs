@@ -9,7 +9,17 @@ const chatPanelContentPropsPath = path.resolve(
   "components/chat-panel-content-props.ts",
 );
 const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
+const chatPanelContentPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content-props.types.ts",
+);
+const chatPanelContentPropsTypesSource = fs.readFileSync(
+  chatPanelContentPropsTypesPath,
+  "utf8",
+);
 const chatPanelContentPropsLineCount = chatPanelContentPropsSource.split(/\r?\n/).length;
+const chatPanelContentPropsTypesLineCount =
+  chatPanelContentPropsTypesSource.split(/\r?\n/).length;
 const chatPanelContentPath = path.resolve(process.cwd(), "components/chat-panel-content.tsx");
 const chatPanelContentSource = fs.readFileSync(chatPanelContentPath, "utf8");
 const chatPanelContentLineCount = chatPanelContentSource.split(/\r?\n/).length;
@@ -53,12 +63,22 @@ const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
 );
+const chatPanelActionHandlerInputsTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-action-handler-inputs.types.ts",
+);
 const chatPanelActionHandlerInputsSource = fs.readFileSync(
   chatPanelActionHandlerInputsPath,
   "utf8",
 );
+const chatPanelActionHandlerInputsTypesSource = fs.readFileSync(
+  chatPanelActionHandlerInputsTypesPath,
+  "utf8",
+);
 const chatPanelActionHandlerInputsLineCount =
   chatPanelActionHandlerInputsSource.split(/\r?\n/).length;
+const chatPanelActionHandlerInputsTypesLineCount =
+  chatPanelActionHandlerInputsTypesSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -136,7 +156,8 @@ if (chatPanelContentLineCount > maxContentLines) {
 }
 
 for (const requiredContentTypeUsage of [
-  'type ChatPanelActionBindings = ReturnType<',
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types";',
+  "ChatPanelActions;",
   "export type ChatPanelContentProps = Pick<",
   "export type ChatPanelManagementContentProps = Pick<",
   "export type ChatPanelConversationContentProps = Pick<",
@@ -144,6 +165,17 @@ for (const requiredContentTypeUsage of [
   if (!chatPanelContentTypesSource.includes(requiredContentTypeUsage)) {
     throw new Error(
       `chat-panel-content.types.ts must own shared chat content prop contracts: ${requiredContentTypeUsage}`,
+    );
+  }
+}
+
+for (const forbiddenContentTypeToken of [
+  "ReturnType<",
+  'from "./use-chat-panel-actions"',
+]) {
+  if (chatPanelContentTypesSource.includes(forbiddenContentTypeToken)) {
+    throw new Error(
+      `chat-panel-content.types.ts must keep chat action inference delegated: ${forbiddenContentTypeToken}`,
     );
   }
 }
@@ -346,8 +378,7 @@ if (lineCount > maxAllowedLines) {
 
 for (const requiredContentPropsUsage of [
   "export function buildChatPanelContentProps({",
-  "actions: ChatPanelActions;",
-  "props: ChatPanelProps;",
+  "}: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
   "creatingShare: actions.creatingShare,",
   "activeConversationId: props.activeConversationId,",
   "unreadCount: actions.unreadCount,",
@@ -355,6 +386,18 @@ for (const requiredContentPropsUsage of [
   if (!chatPanelContentPropsSource.includes(requiredContentPropsUsage)) {
     throw new Error(
       `chat-panel-content-props.ts must own content prop assembly: ${requiredContentPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenContentPropsToken of [
+  "actions: ChatPanelActions;",
+  "props: ChatPanelProps;",
+  "type BuildChatPanelContentPropsInput = {",
+]) {
+  if (chatPanelContentPropsSource.includes(forbiddenContentPropsToken)) {
+    throw new Error(
+      `chat-panel-content-props.ts must keep content-prop input typing delegated: ${forbiddenContentPropsToken}`,
     );
   }
 }
@@ -376,6 +419,22 @@ const maxContentPropsLines = 70;
 if (chatPanelContentPropsLineCount > maxContentPropsLines) {
   throw new Error(
     `chat-panel-content-props.ts exceeded ${maxContentPropsLines} lines: ${chatPanelContentPropsLineCount}`,
+  );
+}
+
+for (const requiredContentPropsTypesUsage of [
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types"; import type { ChatPanelProps } from "./chat-panel.types"; export type BuildChatPanelContentPropsInput = { actions: ChatPanelActions; props: ChatPanelProps };',
+]) {
+  if (!chatPanelContentPropsTypesSource.includes(requiredContentPropsTypesUsage)) {
+    throw new Error(
+      `chat-panel-content-props.types.ts must own content-prop input typing: ${requiredContentPropsTypesUsage}`,
+    );
+  }
+}
+
+if (chatPanelContentPropsTypesLineCount > 2) {
+  throw new Error(
+    `chat-panel-content-props.types.ts exceeded 2 lines: ${chatPanelContentPropsTypesLineCount}`,
   );
 }
 
@@ -402,16 +461,32 @@ for (const forbiddenActionsToken of [
 }
 
 for (const requiredActionHandlerInputsUsage of [
-  "export type UseChatPanelActionsProps = {",
+  'from "./chat-panel-action-handler-inputs.types";',
   "export function buildChatPanelOperatorHandlerInput(",
   "export function buildChatPanelShareHandlerInput(",
   "export function buildChatPanelActionsResult(",
+  "}: BuildChatPanelOperatorHandlerInput) {",
+  "}: BuildChatPanelShareHandlerInput) {",
+  "}: BuildChatPanelActionsResultInput) {",
   "draft: state.draft,",
   "unreadCount: derivedData.unreadCount,",
 ]) {
   if (!chatPanelActionHandlerInputsSource.includes(requiredActionHandlerInputsUsage)) {
     throw new Error(
       `chat-panel-action-handler-inputs.ts must own action input/result shaping: ${requiredActionHandlerInputsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenActionHandlerInputsTypingToken of [
+  "export type UseChatPanelActionsProps = {",
+  "export type BuildChatPanelOperatorHandlerInput = {",
+  "export type BuildChatPanelShareHandlerInput = {",
+  "export type BuildChatPanelActionsResultInput = {",
+]) {
+  if (chatPanelActionHandlerInputsSource.includes(forbiddenActionHandlerInputsTypingToken)) {
+    throw new Error(
+      `chat-panel-action-handler-inputs.ts must keep action input/result typing delegated: ${forbiddenActionHandlerInputsTypingToken}`,
     );
   }
 }
@@ -433,6 +508,23 @@ const maxActionHandlerInputsLines = 120;
 if (chatPanelActionHandlerInputsLineCount > maxActionHandlerInputsLines) {
   throw new Error(
     `chat-panel-action-handler-inputs.ts exceeded ${maxActionHandlerInputsLines} lines: ${chatPanelActionHandlerInputsLineCount}`,
+  );
+}
+
+for (const requiredActionHandlerInputsTypesUsage of [
+  'import type { NotificationItem } from "../lib/types"; import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types"; import type { ChatPanelActionState } from "./chat-panel-action-state-result.types"; export type UseChatPanelActionsProps = { latestSharePath: string; notifications: NotificationItem[]; onCreateShareLink: (input: { name?: string; permission_code: string; max_uses?: number | null }) => Promise<void>; onDisableShareLink: (shareLinkId: string) => Promise<void>; onRefreshAuditLogs: () => Promise<void>; onReindexKnowledge: () => Promise<void>; onSyncNotifications: () => Promise<void>; onSendMessage: (message: string) => Promise<void> };',
+  'export type BuildChatPanelOperatorHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelShareHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
+]) {
+  if (!chatPanelActionHandlerInputsTypesSource.includes(requiredActionHandlerInputsTypesUsage)) {
+    throw new Error(
+      `chat-panel-action-handler-inputs.types.ts must own action input/result typing: ${requiredActionHandlerInputsTypesUsage}`,
+    );
+  }
+}
+
+if (chatPanelActionHandlerInputsTypesLineCount > 3) {
+  throw new Error(
+    `chat-panel-action-handler-inputs.types.ts exceeded 3 lines: ${chatPanelActionHandlerInputsTypesLineCount}`,
   );
 }
 

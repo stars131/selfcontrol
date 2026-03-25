@@ -14,6 +14,10 @@ const workspaceSettingsLoadingShellPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-loading-shell.tsx",
 );
+const workspaceSettingsLoadingShellTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-loading-shell.types.ts",
+);
 const workspaceSettingsProviderSectionPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-provider-section.tsx",
@@ -50,6 +54,7 @@ const source = fs.readFileSync(workspaceSettingsPath, "utf8");
 const clientHelpersSource = fs.readFileSync(workspaceSettingsClientHelpersPath, "utf8");
 const clientTypesSource = fs.readFileSync(workspaceSettingsClientTypesPath, "utf8");
 const loadingShellSource = fs.readFileSync(workspaceSettingsLoadingShellPath, "utf8");
+const loadingShellTypesSource = fs.readFileSync(workspaceSettingsLoadingShellTypesPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const providerSectionTypesSource = fs.readFileSync(workspaceSettingsProviderSectionTypesPath, "utf8");
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
@@ -62,6 +67,7 @@ const lineCount = source.split(/\r?\n/).length;
 const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
+const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const providerSectionTypesLineCount = providerSectionTypesSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
@@ -244,7 +250,8 @@ if (clientTypesLineCount > 5) {
 }
 
 for (const requiredLoadingShellUsage of [
-  "export function WorkspaceSettingsLoadingShell({ loadingLabel }: { loadingLabel: string })",
+  'import type { WorkspaceSettingsLoadingShellProps } from "./workspace-settings-loading-shell.types";',
+  "export function WorkspaceSettingsLoadingShell({ loadingLabel }: WorkspaceSettingsLoadingShellProps)",
   'className="panel auth-panel"',
   "{loadingLabel}",
 ]) {
@@ -253,8 +260,24 @@ for (const requiredLoadingShellUsage of [
   }
 }
 
-if (loadingShellLineCount > 15) {
-  throw new Error(`workspace-settings-loading-shell.tsx exceeded 15 lines: ${loadingShellLineCount}`);
+if (loadingShellSource.includes("export function WorkspaceSettingsLoadingShell({ loadingLabel }: { loadingLabel: string })")) {
+  throw new Error("workspace-settings-loading-shell.tsx must keep loading-shell prop typing delegated");
+}
+
+if (loadingShellLineCount > 16) {
+  throw new Error(`workspace-settings-loading-shell.tsx exceeded 16 lines: ${loadingShellLineCount}`);
+}
+
+for (const requiredLoadingShellTypesUsage of [
+  'export type WorkspaceSettingsLoadingShellProps = { loadingLabel: string };',
+]) {
+  if (!loadingShellTypesSource.includes(requiredLoadingShellTypesUsage)) {
+    throw new Error(`workspace-settings-loading-shell.types.ts must own loading-shell prop typing: ${requiredLoadingShellTypesUsage}`);
+  }
+}
+
+if (loadingShellTypesLineCount > 3) {
+  throw new Error(`workspace-settings-loading-shell.types.ts exceeded 3 lines: ${loadingShellTypesLineCount}`);
 }
 
 for (const requiredProviderSectionTypesUsage of [
