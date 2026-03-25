@@ -22,6 +22,14 @@ const providerSettingsFeatureListTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-feature-list.types.ts",
 );
+const providerSettingsPanelIntroPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-intro.tsx",
+);
+const providerSettingsPanelIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-intro.types.ts",
+);
 const providerSettingsFeatureListItemPath = path.resolve(
   process.cwd(),
   "components/provider-settings-feature-list-item.tsx",
@@ -41,6 +49,8 @@ const panelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "ut
 const panelHelpersTypesSource = fs.readFileSync(providerSettingsPanelHelpersTypesPath, "utf8");
 const featureListSource = fs.readFileSync(providerSettingsFeatureListPath, "utf8");
 const featureListTypesSource = fs.readFileSync(providerSettingsFeatureListTypesPath, "utf8");
+const panelIntroSource = fs.readFileSync(providerSettingsPanelIntroPath, "utf8");
+const panelIntroTypesSource = fs.readFileSync(providerSettingsPanelIntroTypesPath, "utf8");
 const featureListItemSource = fs.readFileSync(providerSettingsFeatureListItemPath, "utf8");
 const featureListItemTypesSource = fs.readFileSync(
   providerSettingsFeatureListItemTypesPath,
@@ -54,6 +64,8 @@ const panelHelpersLineCount = panelHelpersSource.split(/\r?\n/).length;
 const panelHelpersTypesLineCount = panelHelpersTypesSource.split(/\r?\n/).length;
 const featureListLineCount = featureListSource.split(/\r?\n/).length;
 const featureListTypesLineCount = featureListTypesSource.split(/\r?\n/).length;
+const panelIntroLineCount = panelIntroSource.split(/\r?\n/).length;
+const panelIntroTypesLineCount = panelIntroTypesSource.split(/\r?\n/).length;
 const featureListItemLineCount = featureListItemSource.split(/\r?\n/).length;
 const featureListItemTypesLineCount = featureListItemTypesSource.split(/\r?\n/).length;
 const panelTypesLineCount = panelTypesSource.split(/\r?\n/).length;
@@ -163,6 +175,10 @@ if (!source.includes('import { ProviderSettingsFeatureList } from "./provider-se
   throw new Error("provider-settings-panel.tsx must import ProviderSettingsFeatureList");
 }
 
+if (!source.includes('import { ProviderSettingsPanelIntro } from "./provider-settings-panel-intro";')) {
+  throw new Error("provider-settings-panel.tsx must import ProviderSettingsPanelIntro");
+}
+
 if (!source.includes('import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";')) {
   throw new Error("provider-settings-panel.tsx must import ProviderSettingsPanelProps");
 }
@@ -177,6 +193,10 @@ if (!source.includes("useProviderSettingsController({")) {
 
 if (!source.includes("<ProviderSettingsFeatureList")) {
   throw new Error("provider-settings-panel.tsx must delegate feature list rendering to ProviderSettingsFeatureList");
+}
+
+if (!source.includes("<ProviderSettingsPanelIntro")) {
+  throw new Error("provider-settings-panel.tsx must delegate intro rendering to ProviderSettingsPanelIntro");
 }
 
 if (!source.includes("getProviderSettingsCopy(locale)")) {
@@ -200,6 +220,8 @@ for (const forbiddenPanelToken of [
   'className="record-list compact-list"',
   "providerConfigs.map((item) => {",
   "type ProviderSettingsPanelProps = {",
+  '<div className="eyebrow">{copy.title}</div>',
+  "{error ? <div className=\"notice error\" style={{ marginTop: 12 }}>{error}</div> : null}",
 ]) {
   if (source.includes(forbiddenPanelToken)) {
     throw new Error(`provider-settings-panel.tsx must keep feature-list and props internals delegated: ${forbiddenPanelToken}`);
@@ -209,6 +231,40 @@ for (const forbiddenPanelToken of [
 const maxAllowedLines = 90;
 if (lineCount > maxAllowedLines) {
   throw new Error(`provider-settings-panel.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
+}
+
+for (const requiredPanelIntroUsage of [
+  'import type { ProviderSettingsPanelIntroProps } from "./provider-settings-panel-intro.types";',
+  "}: ProviderSettingsPanelIntroProps) {",
+  "copy.title",
+  "copy.subtitle",
+  'className="notice error"',
+]) {
+  if (!panelIntroSource.includes(requiredPanelIntroUsage)) {
+    throw new Error(`provider-settings-panel-intro.tsx must own intro rendering: ${requiredPanelIntroUsage}`);
+  }
+}
+
+if (panelIntroSource.includes("type ProviderSettingsPanelIntroProps =")) {
+  throw new Error("provider-settings-panel-intro.tsx must keep intro prop typing delegated");
+}
+
+const maxPanelIntroLines = 20;
+if (panelIntroLineCount > maxPanelIntroLines) {
+  throw new Error(`provider-settings-panel-intro.tsx exceeded ${maxPanelIntroLines} lines: ${panelIntroLineCount}`);
+}
+
+for (const requiredPanelIntroTypesUsage of [
+  'import type { ProviderSettingsCopy } from "./provider-settings-copy"; export type ProviderSettingsPanelIntroProps = { copy: Pick<ProviderSettingsCopy, "subtitle" | "title">; error: string };',
+]) {
+  if (!panelIntroTypesSource.includes(requiredPanelIntroTypesUsage)) {
+    throw new Error(`provider-settings-panel-intro.types.ts must own intro prop typing: ${requiredPanelIntroTypesUsage}`);
+  }
+}
+
+const maxPanelIntroTypesLines = 2;
+if (panelIntroTypesLineCount > maxPanelIntroTypesLines) {
+  throw new Error(`provider-settings-panel-intro.types.ts exceeded ${maxPanelIntroTypesLines} lines: ${panelIntroTypesLineCount}`);
 }
 
 for (const requiredFeatureListImport of [

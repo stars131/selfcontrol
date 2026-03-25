@@ -1839,6 +1839,10 @@ Last updated: 2026-03-25
   - `record-reminder-item-card.tsx` now delegates reminder summary rendering and action-button rendering to `record-reminder-item-card-summary.tsx` and `record-reminder-item-card-actions.tsx` instead of keeping both sections inline in the item card
   - the new reminder-item `*.types.ts` files keep summary and actions prop contracts explicit and reusable while the parent item card remains focused on shell composition
   - `verify-record-reminder-panel-structure.mjs` now enforces those delegated reminder-item boundaries, exact one-line type contracts, and line-count ceilings so future reminder-card updates stay safer and easier to maintain
+- Provider Settings Intro Leaf Split V1:
+  - `provider-settings-panel.tsx` now delegates title, subtitle, and error notice rendering to `provider-settings-panel-intro.tsx` instead of keeping that intro block inline above the jump nav and feature list
+  - the new `provider-settings-panel-intro.types.ts` file keeps the intro contract explicit and reusable while the parent settings panel remains focused on controller wiring, anchor styling, nav, and list composition
+  - `verify-provider-settings-structure.mjs` now enforces that delegated intro boundary, exact one-line type contract, and line-count ceilings so future provider settings shell updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

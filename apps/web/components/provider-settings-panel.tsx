@@ -2,6 +2,7 @@
 
 import { getProviderSettingsCopy } from "./provider-settings-copy";
 import { ProviderSettingsFeatureList } from "./provider-settings-feature-list";
+import { ProviderSettingsPanelIntro } from "./provider-settings-panel-intro";
 import {
   readProviderSettingsAnchorHighlightClass,
 } from "./provider-settings-panel-helpers";
@@ -37,11 +38,7 @@ export function ProviderSettingsPanel({
       className={`record-card${readProviderSettingsAnchorHighlightClass("provider-settings", highlightedAnchor)}`}
       id="provider-settings"
     >
-      <div className="eyebrow">{copy.title}</div>
-      <div className="muted" style={{ marginTop: 8 }}>
-        {copy.subtitle}
-      </div>
-      {error ? <div className="notice error" style={{ marginTop: 12 }}>{error}</div> : null}
+      <ProviderSettingsPanelIntro copy={copy} error={error} />
       <ProviderSettingsJumpNav
         healthSectionLabel={copy.healthSection}
         jumpToLabel={copy.jumpTo}
