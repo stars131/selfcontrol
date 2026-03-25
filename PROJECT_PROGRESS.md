@@ -1644,6 +1644,10 @@ Last updated: 2026-03-25
   - `auth-form-frame.tsx` and `media-asset-card-metadata.tsx` now consume extracted prop contracts instead of keeping local prop shapes inside the component modules
   - the new `auth-form-frame.types.ts` and `media-asset-card-metadata.types.ts` files keep entry/auth and media metadata presentation boundaries explicit and easier to evolve safely
   - this keeps cross-surface UI building blocks thinner and more maintainable under the enterprise engineering standard
+- Share Preview and Entry Loading Props Split V1:
+  - `share-preview-client.tsx` and `workspace-entry-loading-shell.tsx` now consume extracted prop contracts instead of keeping inline prop shapes in the component signatures
+  - the new `share-preview-client.types.ts` and `workspace-entry-loading-shell.types.ts` files keep share-entry presentation boundaries explicit and easier to evolve safely
+  - this keeps the remaining entry/share leaf components thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import { acceptShareToken, previewShareToken } from "../lib/api";
 import { getStoredToken } from "../lib/auth";
 import type { SharePreview } from "../lib/types";
+import type { SharePreviewClientProps } from "./share-preview-client.types";
 
-export function SharePreviewClient({ tokenValue }: { tokenValue: string }) {
+export function SharePreviewClient({ tokenValue }: SharePreviewClientProps) {
   const router = useRouter();
   const [preview, setPreview] = useState<SharePreview | null>(null);
   const [loading, setLoading] = useState(true);

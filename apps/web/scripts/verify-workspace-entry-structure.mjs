@@ -14,6 +14,10 @@ const workspaceEntryLoadingShellPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.tsx",
 );
+const workspaceEntryLoadingShellTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-loading-shell.types.ts",
+);
 const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/workspace-entry-main-panel.tsx");
 const workspaceTransferJobsSectionPath = path.resolve(
   process.cwd(),
@@ -56,6 +60,7 @@ const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const clientHelpersSource = fs.readFileSync(workspaceEntryClientHelpersPath, "utf8");
 const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8");
 const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
+const loadingShellTypesSource = fs.readFileSync(workspaceEntryLoadingShellTypesPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const transferJobsSectionSource = fs.readFileSync(workspaceTransferJobsSectionPath, "utf8");
 const transferJobsSectionTypesSource = fs.readFileSync(workspaceTransferJobsSectionTypesPath, "utf8");
@@ -74,6 +79,7 @@ const lineCount = source.split(/\r?\n/).length;
 const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
+const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const transferJobsSectionLineCount = transferJobsSectionSource.split(/\r?\n/).length;
 const transferJobsSectionTypesLineCount = transferJobsSectionTypesSource.split(/\r?\n/).length;
@@ -231,7 +237,8 @@ if (clientTypesLineCount > 3) {
 }
 
 for (const requiredLoadingShellUsage of [
-  "export function WorkspaceEntryLoadingShell({ loadingLabel }: { loadingLabel: string })",
+  'import type { WorkspaceEntryLoadingShellProps } from "./workspace-entry-loading-shell.types";',
+  "export function WorkspaceEntryLoadingShell({ loadingLabel }: WorkspaceEntryLoadingShellProps)",
   'className="panel auth-panel"',
   "{loadingLabel}",
 ]) {
@@ -240,8 +247,28 @@ for (const requiredLoadingShellUsage of [
   }
 }
 
+if (loadingShellSource.includes("loadingLabel }: { loadingLabel: string }")) {
+  throw new Error("workspace-entry-loading-shell.tsx must keep entry loading-shell prop typing delegated");
+}
+
 if (loadingShellLineCount > 15) {
   throw new Error(`workspace-entry-loading-shell.tsx exceeded 15 lines: ${loadingShellLineCount}`);
+}
+
+for (const requiredLoadingShellTypesUsage of [
+  'export type WorkspaceEntryLoadingShellProps = { loadingLabel: string };',
+]) {
+  if (!loadingShellTypesSource.includes(requiredLoadingShellTypesUsage)) {
+    throw new Error(
+      `workspace-entry-loading-shell.types.ts must own entry loading-shell props: ${requiredLoadingShellTypesUsage}`,
+    );
+  }
+}
+
+if (loadingShellTypesLineCount > 3) {
+  throw new Error(
+    `workspace-entry-loading-shell.types.ts exceeded 3 lines: ${loadingShellTypesLineCount}`,
+  );
 }
 
 for (const requiredTransferJobsSectionImport of [

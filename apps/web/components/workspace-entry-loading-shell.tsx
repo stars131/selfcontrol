@@ -1,6 +1,7 @@
 "use client";
 
-export function WorkspaceEntryLoadingShell({ loadingLabel }: { loadingLabel: string }) {
+import type { WorkspaceEntryLoadingShellProps } from "./workspace-entry-loading-shell.types";
+export function WorkspaceEntryLoadingShell({ loadingLabel }: WorkspaceEntryLoadingShellProps) {
   return (
     <main className="page-shell">
       <section className="panel auth-panel">

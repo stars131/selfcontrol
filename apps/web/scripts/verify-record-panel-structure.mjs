@@ -1146,6 +1146,19 @@ const mediaAssetCardMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata.types.ts",
 );
+const sharePreviewClientPath = path.resolve(process.cwd(), "components/share-preview-client.tsx");
+const sharePreviewClientTypesPath = path.resolve(
+  process.cwd(),
+  "components/share-preview-client.types.ts",
+);
+const workspaceEntryLoadingShellPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-loading-shell.tsx",
+);
+const workspaceEntryLoadingShellTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-loading-shell.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -1397,6 +1410,13 @@ const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
 const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
 const mediaAssetCardMetadataTypesSource = fs.readFileSync(mediaAssetCardMetadataTypesPath, "utf8");
+const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
+const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
+const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
+const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
+  workspaceEntryLoadingShellTypesPath,
+  "utf8",
+);
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -2052,6 +2072,9 @@ const chatPanelHeaderTypesLines = chatPanelHeaderTypesSource.split(/\r?\n/).leng
 const chatPanelComposerTypesLines = chatPanelComposerTypesSource.split(/\r?\n/).length;
 const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
+const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
+const workspaceEntryLoadingShellTypesLines =
+  workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -12008,6 +12031,72 @@ const maxMediaAssetCardMetadataTypesLines = 2;
 if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
   throw new Error(
     `media-asset-card-metadata.types.ts exceeded ${maxMediaAssetCardMetadataTypesLines} lines: ${mediaAssetCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredSharePreviewClientUsage of [
+  'import type { SharePreviewClientProps } from "./share-preview-client.types";',
+  "}: SharePreviewClientProps) {",
+]) {
+  if (!sharePreviewClientSource.includes(requiredSharePreviewClientUsage)) {
+    throw new Error(
+      `share-preview-client.tsx must reuse the extracted share-preview props type: ${requiredSharePreviewClientUsage}`,
+    );
+  }
+}
+
+if (sharePreviewClientSource.includes("tokenValue }: { tokenValue: string }")) {
+  throw new Error("share-preview-client.tsx must keep share-preview prop typing delegated");
+}
+
+for (const requiredSharePreviewClientTypesUsage of [
+  'export type SharePreviewClientProps = { tokenValue: string };',
+]) {
+  if (!sharePreviewClientTypesSource.includes(requiredSharePreviewClientTypesUsage)) {
+    throw new Error(
+      `share-preview-client.types.ts must own share-preview prop typing: ${requiredSharePreviewClientTypesUsage}`,
+    );
+  }
+}
+
+const maxSharePreviewClientTypesLines = 2;
+if (sharePreviewClientTypesLines > maxSharePreviewClientTypesLines) {
+  throw new Error(
+    `share-preview-client.types.ts exceeded ${maxSharePreviewClientTypesLines} lines: ${sharePreviewClientTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryLoadingShellUsage of [
+  'import type { WorkspaceEntryLoadingShellProps } from "./workspace-entry-loading-shell.types";',
+  "}: WorkspaceEntryLoadingShellProps) {",
+]) {
+  if (!workspaceEntryLoadingShellSource.includes(requiredWorkspaceEntryLoadingShellUsage)) {
+    throw new Error(
+      `workspace-entry-loading-shell.tsx must reuse the extracted entry-loading props type: ${requiredWorkspaceEntryLoadingShellUsage}`,
+    );
+  }
+}
+
+if (workspaceEntryLoadingShellSource.includes("loadingLabel }: { loadingLabel: string }")) {
+  throw new Error(
+    "workspace-entry-loading-shell.tsx must keep entry-loading prop typing delegated",
+  );
+}
+
+for (const requiredWorkspaceEntryLoadingShellTypesUsage of [
+  'export type WorkspaceEntryLoadingShellProps = { loadingLabel: string };',
+]) {
+  if (!workspaceEntryLoadingShellTypesSource.includes(requiredWorkspaceEntryLoadingShellTypesUsage)) {
+    throw new Error(
+      `workspace-entry-loading-shell.types.ts must own entry-loading prop typing: ${requiredWorkspaceEntryLoadingShellTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryLoadingShellTypesLines = 2;
+if (workspaceEntryLoadingShellTypesLines > maxWorkspaceEntryLoadingShellTypesLines) {
+  throw new Error(
+    `workspace-entry-loading-shell.types.ts exceeded ${maxWorkspaceEntryLoadingShellTypesLines} lines: ${workspaceEntryLoadingShellTypesLines}`,
   );
 }
 
