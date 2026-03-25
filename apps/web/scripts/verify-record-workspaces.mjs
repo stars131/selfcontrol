@@ -39,6 +39,11 @@ const editorSupportToolsMediaPropsSource = readSource(editorSupportToolsMediaPro
 const editorSupportToolsMediaCopyPropsPath =
   "components/record-editor-support-tools-media-copy-props.ts";
 const editorSupportToolsMediaCopyPropsSource = readSource(editorSupportToolsMediaCopyPropsPath);
+const editorSupportToolsMediaCopyPropsTypesPath =
+  "components/record-editor-support-tools-media-copy-props.types.ts";
+const editorSupportToolsMediaCopyPropsTypesSource = readSource(
+  editorSupportToolsMediaCopyPropsTypesPath,
+);
 const editorSupportToolsMediaPassThroughPropsPath =
   "components/record-editor-support-tools-media-pass-through-props.ts";
 const editorSupportToolsMediaPassThroughPropsSource = readSource(
@@ -56,6 +61,11 @@ const editorSupportToolsReminderDerivedPropsPath =
 const editorSupportToolsReminderDerivedPropsSource = readSource(
   editorSupportToolsReminderDerivedPropsPath,
 );
+const editorSupportToolsReminderDerivedPropsTypesPath =
+  "components/record-editor-support-tools-reminder-derived-props.types.ts";
+const editorSupportToolsReminderDerivedPropsTypesSource = readSource(
+  editorSupportToolsReminderDerivedPropsTypesPath,
+);
 const editorSupportToolsReminderPassThroughPropsPath =
   "components/record-editor-support-tools-reminder-pass-through-props.ts";
 const editorSupportToolsReminderPassThroughPropsSource = readSource(
@@ -71,6 +81,10 @@ const editorWorkspaceSupportToolsPropsPath =
 const editorWorkspaceSupportToolsPropsSource = readSource(editorWorkspaceSupportToolsPropsPath);
 const reminderToolsPath = "components/record-reminder-tools.tsx";
 const reminderToolsSource = readSource(reminderToolsPath);
+const reminderToolsBindingsPath = "components/record-reminder-tools-bindings.ts";
+const reminderToolsBindingsSource = readSource(reminderToolsBindingsPath);
+const reminderToolsBindingsTypesPath = "components/record-reminder-tools-bindings.types.ts";
+const reminderToolsBindingsTypesSource = readSource(reminderToolsBindingsTypesPath);
 
 if (!editorWorkspaceSource.includes('from "./record-editor-workspace-bindings";')) {
   throw new Error("record-editor-workspace.tsx must import record-editor-workspace-bindings");
@@ -476,11 +490,22 @@ for (const forbiddenSupportToolsMediaPropsToken of [
 verifyLineLimit(editorSupportToolsMediaPropsPath, 35);
 
 for (const requiredSupportToolsMediaCopyPropsImport of [
-  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  'import type { BuildRecordMediaToolsCopyPropsInput } from "./record-editor-support-tools-media-copy-props.types";',
 ]) {
   if (!editorSupportToolsMediaCopyPropsSource.includes(requiredSupportToolsMediaCopyPropsImport)) {
     throw new Error(
       `record-editor-support-tools-media-copy-props.ts must import media support-tool contracts: ${requiredSupportToolsMediaCopyPropsImport}`,
+    );
+  }
+}
+
+for (const forbiddenSupportToolsMediaCopyPropsToken of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  "}: Pick<",
+]) {
+  if (editorSupportToolsMediaCopyPropsSource.includes(forbiddenSupportToolsMediaCopyPropsToken)) {
+    throw new Error(
+      `record-editor-support-tools-media-copy-props.ts must keep media copy input typing delegated: ${forbiddenSupportToolsMediaCopyPropsToken}`,
     );
   }
 }
@@ -500,6 +525,17 @@ for (const requiredSupportToolsMediaCopyPropsUsage of [
 }
 
 verifyLineLimit(editorSupportToolsMediaCopyPropsPath, 35);
+for (const requiredSupportToolsMediaCopyPropsTypesUsage of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordMediaToolsCopyPropsInput = Pick<RecordEditorSupportToolsProps, "deleting" | "panelCopy" | "saving" | "selectedRecord">;',
+]) {
+  if (!editorSupportToolsMediaCopyPropsTypesSource.includes(requiredSupportToolsMediaCopyPropsTypesUsage)) {
+    throw new Error(
+      `record-editor-support-tools-media-copy-props.types.ts must own media copy input typing: ${requiredSupportToolsMediaCopyPropsTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsMediaCopyPropsTypesPath, 2);
 
 for (const requiredSupportToolsMediaPassThroughPropsImport of [
   'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
@@ -620,11 +656,22 @@ for (const forbiddenSupportToolsReminderPropsToken of [
 verifyLineLimit(editorSupportToolsReminderPropsPath, 30);
 
 for (const requiredSupportToolsReminderDerivedPropsImport of [
-  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  'import type { BuildRecordReminderToolsDerivedPropsInput } from "./record-editor-support-tools-reminder-derived-props.types";',
 ]) {
   if (!editorSupportToolsReminderDerivedPropsSource.includes(requiredSupportToolsReminderDerivedPropsImport)) {
     throw new Error(
       `record-editor-support-tools-reminder-derived-props.ts must import reminder support-tool contracts: ${requiredSupportToolsReminderDerivedPropsImport}`,
+    );
+  }
+}
+
+for (const forbiddenSupportToolsReminderDerivedPropsToken of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
+  "}: Pick<",
+]) {
+  if (editorSupportToolsReminderDerivedPropsSource.includes(forbiddenSupportToolsReminderDerivedPropsToken)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-derived-props.ts must keep reminder derived input typing delegated: ${forbiddenSupportToolsReminderDerivedPropsToken}`,
     );
   }
 }
@@ -643,6 +690,17 @@ for (const requiredSupportToolsReminderDerivedPropsUsage of [
 }
 
 verifyLineLimit(editorSupportToolsReminderDerivedPropsPath, 20);
+for (const requiredSupportToolsReminderDerivedPropsTypesUsage of [
+  'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types"; export type BuildRecordReminderToolsDerivedPropsInput = Pick<RecordEditorSupportToolsProps, "channelInAppLabel" | "selectedRecord">;',
+]) {
+  if (!editorSupportToolsReminderDerivedPropsTypesSource.includes(requiredSupportToolsReminderDerivedPropsTypesUsage)) {
+    throw new Error(
+      `record-editor-support-tools-reminder-derived-props.types.ts must own reminder derived input typing: ${requiredSupportToolsReminderDerivedPropsTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(editorSupportToolsReminderDerivedPropsTypesPath, 2);
 
 for (const requiredSupportToolsReminderPassThroughPropsImport of [
   'import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";',
@@ -669,6 +727,53 @@ for (const requiredSupportToolsReminderPassThroughPropsUsage of [
 }
 
 verifyLineLimit(editorSupportToolsReminderPassThroughPropsPath, 20);
+
+for (const requiredReminderToolsBindingsImport of [
+  'import type { CreateRecordReminderBindingsInput } from "./record-reminder-tools-bindings.types";',
+]) {
+  if (!reminderToolsBindingsSource.includes(requiredReminderToolsBindingsImport)) {
+    throw new Error(
+      `record-reminder-tools-bindings.ts must import reminder bindings contracts: ${requiredReminderToolsBindingsImport}`,
+    );
+  }
+}
+
+for (const forbiddenReminderToolsBindingsToken of [
+  'import type { RecordReminderToolsProps } from "./record-reminder-tools.types";',
+  "type RecordReminderBindingsParams = Pick<",
+]) {
+  if (reminderToolsBindingsSource.includes(forbiddenReminderToolsBindingsToken)) {
+    throw new Error(
+      `record-reminder-tools-bindings.ts must keep reminder bindings input typing delegated: ${forbiddenReminderToolsBindingsToken}`,
+    );
+  }
+}
+
+for (const requiredReminderToolsBindingsUsage of [
+  "export function createRecordReminderBindings({",
+  "onMarkReminderDone(reminder: { id: string })",
+  "onToggleReminderEnabled(reminder: { id: string; is_enabled: boolean })",
+]) {
+  if (!reminderToolsBindingsSource.includes(requiredReminderToolsBindingsUsage)) {
+    throw new Error(
+      `record-reminder-tools-bindings.ts must own reminder bindings behavior: ${requiredReminderToolsBindingsUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(reminderToolsBindingsPath, 35);
+
+for (const requiredReminderToolsBindingsTypesUsage of [
+  'import type { RecordReminderToolsProps } from "./record-reminder-tools.types"; export type CreateRecordReminderBindingsInput = Pick<RecordReminderToolsProps, "onUpdateReminder" | "setReminderForm">;',
+]) {
+  if (!reminderToolsBindingsTypesSource.includes(requiredReminderToolsBindingsTypesUsage)) {
+    throw new Error(
+      `record-reminder-tools-bindings.types.ts must own reminder bindings input typing: ${requiredReminderToolsBindingsTypesUsage}`,
+    );
+  }
+}
+
+verifyLineLimit(reminderToolsBindingsTypesPath, 2);
 
 if (!reminderToolsSource.includes('import type { RecordReminderToolsProps } from "./record-reminder-tools.types";')) {
   throw new Error("record-reminder-tools.tsx must import RecordReminderToolsProps from record-reminder-tools.types");
@@ -714,8 +819,18 @@ const recordSearchPanelTypesPath = "components/record-search-panel.types.ts";
 const recordSearchPanelTypesSource = readSource(recordSearchPanelTypesPath);
 const recordSearchPanelFilterFieldsPath = "components/record-search-panel-filter-fields.tsx";
 const recordSearchPanelFilterFieldsSource = readSource(recordSearchPanelFilterFieldsPath);
+const recordSearchPanelFilterFieldsTypesPath =
+  "components/record-search-panel-filter-fields.types.ts";
+const recordSearchPanelFilterFieldsTypesSource = readSource(
+  recordSearchPanelFilterFieldsTypesPath,
+);
 const recordSearchPanelPresetControlsPath = "components/record-search-panel-preset-controls.tsx";
 const recordSearchPanelPresetControlsSource = readSource(recordSearchPanelPresetControlsPath);
+const recordSearchPanelPresetControlsTypesPath =
+  "components/record-search-panel-preset-controls.types.ts";
+const recordSearchPanelPresetControlsTypesSource = readSource(
+  recordSearchPanelPresetControlsTypesPath,
+);
 
 if (!browseWorkspaceSource.includes('import type { RecordBrowseWorkspaceProps } from "./record-browse-workspace.types";')) {
   throw new Error("record-browse-workspace.tsx must import RecordBrowseWorkspaceProps from record-browse-workspace.types");
@@ -808,10 +923,19 @@ for (const requiredSearchPanelTypesUsage of [
 verifyLineLimit(recordSearchPanelTypesPath, 25);
 
 for (const requiredFilterFieldsImport of [
-  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+  'import type { RecordSearchPanelFilterFieldsProps } from "./record-search-panel-filter-fields.types";',
 ]) {
   if (!recordSearchPanelFilterFieldsSource.includes(requiredFilterFieldsImport)) {
-    throw new Error(`record-search-panel-filter-fields.tsx must import RecordSearchPanelProps: ${requiredFilterFieldsImport}`);
+    throw new Error(`record-search-panel-filter-fields.tsx must import delegated filter field props: ${requiredFilterFieldsImport}`);
+  }
+}
+
+for (const forbiddenFilterFieldsToken of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+  "}: Pick<",
+]) {
+  if (recordSearchPanelFilterFieldsSource.includes(forbiddenFilterFieldsToken)) {
+    throw new Error(`record-search-panel-filter-fields.tsx must keep filter field typing delegated: ${forbiddenFilterFieldsToken}`);
   }
 }
 
@@ -828,12 +952,30 @@ for (const requiredFilterFieldsUsage of [
 }
 
 verifyLineLimit(recordSearchPanelFilterFieldsPath, 60);
+for (const requiredFilterFieldsTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelFilterFieldsProps = Pick<RecordSearchPanelProps, "filterDraft" | "onAvoidOnlyChange" | "onQueryChange" | "onTypeCodeChange" | "panelCopy">;',
+]) {
+  if (!recordSearchPanelFilterFieldsTypesSource.includes(requiredFilterFieldsTypesUsage)) {
+    throw new Error(`record-search-panel-filter-fields.types.ts must own filter field typing: ${requiredFilterFieldsTypesUsage}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelFilterFieldsTypesPath, 2);
 
 for (const requiredPresetControlsImport of [
-  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+  'import type { RecordSearchPanelPresetControlsProps } from "./record-search-panel-preset-controls.types";',
 ]) {
   if (!recordSearchPanelPresetControlsSource.includes(requiredPresetControlsImport)) {
-    throw new Error(`record-search-panel-preset-controls.tsx must import RecordSearchPanelProps: ${requiredPresetControlsImport}`);
+    throw new Error(`record-search-panel-preset-controls.tsx must import delegated preset control props: ${requiredPresetControlsImport}`);
+  }
+}
+
+for (const forbiddenPresetControlsToken of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+  "}: Pick<",
+]) {
+  if (recordSearchPanelPresetControlsSource.includes(forbiddenPresetControlsToken)) {
+    throw new Error(`record-search-panel-preset-controls.tsx must keep preset control typing delegated: ${forbiddenPresetControlsToken}`);
   }
 }
 
@@ -850,5 +992,14 @@ for (const requiredPresetControlsUsage of [
 }
 
 verifyLineLimit(recordSearchPanelPresetControlsPath, 50);
+for (const requiredPresetControlsTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelPresetControlsProps = Pick<RecordSearchPanelProps, "canWriteWorkspace" | "onPresetNameChange" | "onSavePreset" | "panelCopy" | "presetName" | "savingSearchPreset">;',
+]) {
+  if (!recordSearchPanelPresetControlsTypesSource.includes(requiredPresetControlsTypesUsage)) {
+    throw new Error(`record-search-panel-preset-controls.types.ts must own preset control typing: ${requiredPresetControlsTypesUsage}`);
+  }
+}
+
+verifyLineLimit(recordSearchPanelPresetControlsTypesPath, 2);
 
 console.log("record workspaces verification passed");

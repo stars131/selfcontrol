@@ -1752,6 +1752,10 @@ Last updated: 2026-03-25
   - `use-workspace-media-retention-report.ts`, `workspace-media-retention-controller-actions.ts`, and `workspace-media-retention-execution-actions.ts` now consume extracted input contracts instead of keeping direct `Pick<...>` signatures in those retention control modules
   - the new `*.types.ts` files keep retention report loading, controller action composition, and execution action boundaries explicit and reusable
   - this keeps retention controller orchestration thinner and more maintainable under the enterprise engineering standard
+- Reminder Binding Input Types and Workspace Verifier Sync V1:
+  - `record-reminder-tools-bindings.ts` now consumes an extracted input contract instead of keeping a local `Pick<...>` reminder binding type, and the workspace verifier now tracks the already-extracted search/support helper type boundaries
+  - the new `record-reminder-tools-bindings.types.ts` file keeps reminder binding inputs explicit and reusable while `verify-record-workspaces.mjs` now enforces the current delegated helper/type layout
+  - this keeps reminder tooling and workspace-level verification aligned and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
