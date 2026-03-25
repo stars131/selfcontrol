@@ -1,16 +1,6 @@
 "use client";
 
-import type { RefObject } from "react";
-
-type WorkspaceImportCopy = {
-  importEyebrow: string;
-  importTitle: string;
-  importArchive: string;
-  importName: string;
-  importSlug: string;
-  importWorkspace: string;
-  queueImportJob: string;
-};
+import type { WorkspaceImportSectionProps } from "./workspace-import-section.types";
 
 export function WorkspaceImportSection({
   copy,
@@ -25,20 +15,7 @@ export function WorkspaceImportSection({
   onImportFileChange,
   onImportWorkspace,
   onQueueImportJob,
-}: {
-  copy: WorkspaceImportCopy;
-  fileInputRef: RefObject<HTMLInputElement | null>;
-  importName: string;
-  importSlug: string;
-  importFile: File | null;
-  importing: boolean;
-  queueingImportJob: boolean;
-  onImportNameChange: (value: string) => void;
-  onImportSlugChange: (value: string) => void;
-  onImportFileChange: (file: File | null) => void;
-  onImportWorkspace: () => Promise<void>;
-  onQueueImportJob: () => Promise<void>;
-}) {
+}: WorkspaceImportSectionProps) {
   return (
     <section className="record-card">
       <div className="eyebrow">{copy.importEyebrow}</div>

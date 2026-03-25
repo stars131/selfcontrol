@@ -1,15 +1,7 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
 import { LanguageSwitcher } from "./language-switcher";
-
-type WorkspaceEntryHeaderCopy = {
-  eyebrow: string;
-  title: string;
-  signedInAs: string;
-  signedIn: string;
-  signOut: string;
-};
+import type { WorkspaceEntryHeaderProps } from "./workspace-entry-header.types";
 
 export function WorkspaceEntryHeader({
   copy,
@@ -17,13 +9,7 @@ export function WorkspaceEntryHeader({
   username,
   onLocaleChange,
   onLogout,
-}: {
-  copy: WorkspaceEntryHeaderCopy;
-  locale: LocaleCode;
-  username?: string | null;
-  onLocaleChange: (nextLocale: LocaleCode) => void;
-  onLogout: () => void;
-}) {
+}: WorkspaceEntryHeaderProps) {
   return (
     <div className="panel-header">
       <div>

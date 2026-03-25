@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; export type WorkspaceEntryHeaderCopy = { eyebrow: string; title: string; signedInAs: string; signedIn: string; signOut: string }; export type WorkspaceEntryHeaderProps = { copy: WorkspaceEntryHeaderCopy; locale: LocaleCode; username?: string | null; onLocaleChange: (nextLocale: LocaleCode) => void; onLogout: () => void };

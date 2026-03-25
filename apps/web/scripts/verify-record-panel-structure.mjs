@@ -1386,6 +1386,43 @@ const workspaceEntryLoadingShellTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.types.ts",
 );
+const workspaceEntryHeaderPath = path.resolve(process.cwd(), "components/workspace-entry-header.tsx");
+const workspaceEntryHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-header.types.ts",
+);
+const workspaceCreateSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-create-section.tsx",
+);
+const workspaceCreateSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-create-section.types.ts",
+);
+const workspaceJoinSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-join-section.tsx",
+);
+const workspaceJoinSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-join-section.types.ts",
+);
+const workspaceImportSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-import-section.tsx",
+);
+const workspaceImportSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-import-section.types.ts",
+);
+const workspaceListSectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-list-section.tsx",
+);
+const workspaceListSectionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-list-section.types.ts",
+);
 const useWorkspaceEntryControllerDerivedDataPath = path.resolve(
   process.cwd(),
   "components/use-workspace-entry-controller-derived-data.ts",
@@ -1855,6 +1892,31 @@ const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPat
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
   workspaceEntryLoadingShellTypesPath,
+  "utf8",
+);
+const workspaceEntryHeaderSource = fs.readFileSync(workspaceEntryHeaderPath, "utf8");
+const workspaceEntryHeaderTypesSource = fs.readFileSync(
+  workspaceEntryHeaderTypesPath,
+  "utf8",
+);
+const workspaceCreateSectionSource = fs.readFileSync(workspaceCreateSectionPath, "utf8");
+const workspaceCreateSectionTypesSource = fs.readFileSync(
+  workspaceCreateSectionTypesPath,
+  "utf8",
+);
+const workspaceJoinSectionSource = fs.readFileSync(workspaceJoinSectionPath, "utf8");
+const workspaceJoinSectionTypesSource = fs.readFileSync(
+  workspaceJoinSectionTypesPath,
+  "utf8",
+);
+const workspaceImportSectionSource = fs.readFileSync(workspaceImportSectionPath, "utf8");
+const workspaceImportSectionTypesSource = fs.readFileSync(
+  workspaceImportSectionTypesPath,
+  "utf8",
+);
+const workspaceListSectionSource = fs.readFileSync(workspaceListSectionPath, "utf8");
+const workspaceListSectionTypesSource = fs.readFileSync(
+  workspaceListSectionTypesPath,
   "utf8",
 );
 const useWorkspaceEntryControllerDerivedDataSource = fs.readFileSync(
@@ -2618,6 +2680,11 @@ const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
+const workspaceEntryHeaderTypesLines = workspaceEntryHeaderTypesSource.split(/\r?\n/).length;
+const workspaceCreateSectionTypesLines = workspaceCreateSectionTypesSource.split(/\r?\n/).length;
+const workspaceJoinSectionTypesLines = workspaceJoinSectionTypesSource.split(/\r?\n/).length;
+const workspaceImportSectionTypesLines = workspaceImportSectionTypesSource.split(/\r?\n/).length;
+const workspaceListSectionTypesLines = workspaceListSectionTypesSource.split(/\r?\n/).length;
 const useWorkspaceEntryControllerDerivedDataTypesLines =
   useWorkspaceEntryControllerDerivedDataTypesSource.split(/\r?\n/).length;
 const useWorkspaceEntryLoadTypesLines = useWorkspaceEntryLoadTypesSource.split(/\r?\n/).length;
@@ -13835,6 +13902,206 @@ const maxWorkspaceEntryLoadingShellTypesLines = 2;
 if (workspaceEntryLoadingShellTypesLines > maxWorkspaceEntryLoadingShellTypesLines) {
   throw new Error(
     `workspace-entry-loading-shell.types.ts exceeded ${maxWorkspaceEntryLoadingShellTypesLines} lines: ${workspaceEntryLoadingShellTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryHeaderUsage of [
+  'import type { WorkspaceEntryHeaderProps } from "./workspace-entry-header.types";',
+  "}: WorkspaceEntryHeaderProps) {",
+]) {
+  if (!workspaceEntryHeaderSource.includes(requiredWorkspaceEntryHeaderUsage)) {
+    throw new Error(
+      `workspace-entry-header.tsx must reuse the extracted entry-header props type: ${requiredWorkspaceEntryHeaderUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryHeaderToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  "type WorkspaceEntryHeaderCopy = {",
+  "}: {",
+]) {
+  if (workspaceEntryHeaderSource.includes(forbiddenWorkspaceEntryHeaderToken)) {
+    throw new Error(
+      `workspace-entry-header.tsx must keep entry-header prop typing delegated: ${forbiddenWorkspaceEntryHeaderToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryHeaderTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; export type WorkspaceEntryHeaderCopy = { eyebrow: string; title: string; signedInAs: string; signedIn: string; signOut: string }; export type WorkspaceEntryHeaderProps = { copy: WorkspaceEntryHeaderCopy; locale: LocaleCode; username?: string | null; onLocaleChange: (nextLocale: LocaleCode) => void; onLogout: () => void };',
+]) {
+  if (!workspaceEntryHeaderTypesSource.includes(requiredWorkspaceEntryHeaderTypesUsage)) {
+    throw new Error(
+      `workspace-entry-header.types.ts must own entry-header prop typing: ${requiredWorkspaceEntryHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryHeaderTypesLines = 2;
+if (workspaceEntryHeaderTypesLines > maxWorkspaceEntryHeaderTypesLines) {
+  throw new Error(
+    `workspace-entry-header.types.ts exceeded ${maxWorkspaceEntryHeaderTypesLines} lines: ${workspaceEntryHeaderTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceCreateSectionUsage of [
+  'import type { WorkspaceCreateSectionProps } from "./workspace-create-section.types";',
+  "}: WorkspaceCreateSectionProps) {",
+]) {
+  if (!workspaceCreateSectionSource.includes(requiredWorkspaceCreateSectionUsage)) {
+    throw new Error(
+      `workspace-create-section.tsx must reuse the extracted create-section props type: ${requiredWorkspaceCreateSectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceCreateSectionToken of [
+  'import type { FormEvent } from "react";',
+  "type WorkspaceCreateCopy = {",
+  "}: {",
+]) {
+  if (workspaceCreateSectionSource.includes(forbiddenWorkspaceCreateSectionToken)) {
+    throw new Error(
+      `workspace-create-section.tsx must keep create-section prop typing delegated: ${forbiddenWorkspaceCreateSectionToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceCreateSectionTypesUsage of [
+  'import type { FormEvent } from "react"; export type WorkspaceCreateCopy = { createEyebrow: string; createTitle: string; name: string; slugPreview: string; createWorkspace: string }; export type WorkspaceCreateSectionProps = { copy: WorkspaceCreateCopy; name: string; suggestedSlug: string; creating: boolean; onNameChange: (value: string) => void; onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void> };',
+]) {
+  if (!workspaceCreateSectionTypesSource.includes(requiredWorkspaceCreateSectionTypesUsage)) {
+    throw new Error(
+      `workspace-create-section.types.ts must own create-section prop typing: ${requiredWorkspaceCreateSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceCreateSectionTypesLines = 2;
+if (workspaceCreateSectionTypesLines > maxWorkspaceCreateSectionTypesLines) {
+  throw new Error(
+    `workspace-create-section.types.ts exceeded ${maxWorkspaceCreateSectionTypesLines} lines: ${workspaceCreateSectionTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceJoinSectionUsage of [
+  'import type { WorkspaceJoinSectionProps } from "./workspace-join-section.types";',
+  "}: WorkspaceJoinSectionProps) {",
+]) {
+  if (!workspaceJoinSectionSource.includes(requiredWorkspaceJoinSectionUsage)) {
+    throw new Error(
+      `workspace-join-section.tsx must reuse the extracted join-section props type: ${requiredWorkspaceJoinSectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceJoinSectionToken of [
+  'import type { SharePreview } from "../lib/types";',
+  "type WorkspaceJoinCopy = {",
+  "}: {",
+]) {
+  if (workspaceJoinSectionSource.includes(forbiddenWorkspaceJoinSectionToken)) {
+    throw new Error(
+      `workspace-join-section.tsx must keep join-section prop typing delegated: ${forbiddenWorkspaceJoinSectionToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceJoinSectionTypesUsage of [
+  'import type { SharePreview } from "../lib/types"; export type WorkspaceJoinCopy = { joinEyebrow: string; joinTitle: string; sharePlaceholder: string; previewShare: string; joinWorkspace: string }; export type WorkspaceJoinSectionProps = { copy: WorkspaceJoinCopy; shareTokenInput: string; previewing: boolean; joining: boolean; sharePreview: SharePreview | null; onShareTokenInputChange: (value: string) => void; onPreviewShare: () => Promise<void>; onAcceptShare: () => Promise<void> };',
+]) {
+  if (!workspaceJoinSectionTypesSource.includes(requiredWorkspaceJoinSectionTypesUsage)) {
+    throw new Error(
+      `workspace-join-section.types.ts must own join-section prop typing: ${requiredWorkspaceJoinSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceJoinSectionTypesLines = 2;
+if (workspaceJoinSectionTypesLines > maxWorkspaceJoinSectionTypesLines) {
+  throw new Error(
+    `workspace-join-section.types.ts exceeded ${maxWorkspaceJoinSectionTypesLines} lines: ${workspaceJoinSectionTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceImportSectionUsage of [
+  'import type { WorkspaceImportSectionProps } from "./workspace-import-section.types";',
+  "}: WorkspaceImportSectionProps) {",
+]) {
+  if (!workspaceImportSectionSource.includes(requiredWorkspaceImportSectionUsage)) {
+    throw new Error(
+      `workspace-import-section.tsx must reuse the extracted import-section props type: ${requiredWorkspaceImportSectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceImportSectionToken of [
+  'import type { RefObject } from "react";',
+  "type WorkspaceImportCopy = {",
+  "}: {",
+]) {
+  if (workspaceImportSectionSource.includes(forbiddenWorkspaceImportSectionToken)) {
+    throw new Error(
+      `workspace-import-section.tsx must keep import-section prop typing delegated: ${forbiddenWorkspaceImportSectionToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceImportSectionTypesUsage of [
+  'import type { RefObject } from "react"; export type WorkspaceImportCopy = { importEyebrow: string; importTitle: string; importArchive: string; importName: string; importSlug: string; importWorkspace: string; queueImportJob: string }; export type WorkspaceImportSectionProps = { copy: WorkspaceImportCopy; fileInputRef: RefObject<HTMLInputElement | null>; importName: string; importSlug: string; importFile: File | null; importing: boolean; queueingImportJob: boolean; onImportNameChange: (value: string) => void; onImportSlugChange: (value: string) => void; onImportFileChange: (file: File | null) => void; onImportWorkspace: () => Promise<void>; onQueueImportJob: () => Promise<void> };',
+]) {
+  if (!workspaceImportSectionTypesSource.includes(requiredWorkspaceImportSectionTypesUsage)) {
+    throw new Error(
+      `workspace-import-section.types.ts must own import-section prop typing: ${requiredWorkspaceImportSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceImportSectionTypesLines = 2;
+if (workspaceImportSectionTypesLines > maxWorkspaceImportSectionTypesLines) {
+  throw new Error(
+    `workspace-import-section.types.ts exceeded ${maxWorkspaceImportSectionTypesLines} lines: ${workspaceImportSectionTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceListSectionUsage of [
+  'import type { WorkspaceListSectionProps } from "./workspace-list-section.types";',
+  "}: WorkspaceListSectionProps) {",
+]) {
+  if (!workspaceListSectionSource.includes(requiredWorkspaceListSectionUsage)) {
+    throw new Error(
+      `workspace-list-section.tsx must reuse the extracted list-section props type: ${requiredWorkspaceListSectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceListSectionToken of [
+  'import type { Workspace } from "../lib/types";',
+  "type WorkspaceListCopy = {",
+  "}: {",
+]) {
+  if (workspaceListSectionSource.includes(forbiddenWorkspaceListSectionToken)) {
+    throw new Error(
+      `workspace-list-section.tsx must keep list-section prop typing delegated: ${forbiddenWorkspaceListSectionToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceListSectionTypesUsage of [
+  'import type { Workspace } from "../lib/types"; export type WorkspaceListCopy = { listEyebrow: string; listTitle: string; openWorkspace: string; settings: string; noWorkspace: string }; export type WorkspaceListSectionProps = { copy: WorkspaceListCopy; workspaces: Workspace[] };',
+]) {
+  if (!workspaceListSectionTypesSource.includes(requiredWorkspaceListSectionTypesUsage)) {
+    throw new Error(
+      `workspace-list-section.types.ts must own list-section prop typing: ${requiredWorkspaceListSectionTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceListSectionTypesLines = 2;
+if (workspaceListSectionTypesLines > maxWorkspaceListSectionTypesLines) {
+  throw new Error(
+    `workspace-list-section.types.ts exceeded ${maxWorkspaceListSectionTypesLines} lines: ${workspaceListSectionTypesLines}`,
   );
 }
 

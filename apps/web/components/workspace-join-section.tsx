@@ -1,14 +1,6 @@
 "use client";
 
-import type { SharePreview } from "../lib/types";
-
-type WorkspaceJoinCopy = {
-  joinEyebrow: string;
-  joinTitle: string;
-  sharePlaceholder: string;
-  previewShare: string;
-  joinWorkspace: string;
-};
+import type { WorkspaceJoinSectionProps } from "./workspace-join-section.types";
 
 export function WorkspaceJoinSection({
   copy,
@@ -19,16 +11,7 @@ export function WorkspaceJoinSection({
   onShareTokenInputChange,
   onPreviewShare,
   onAcceptShare,
-}: {
-  copy: WorkspaceJoinCopy;
-  shareTokenInput: string;
-  previewing: boolean;
-  joining: boolean;
-  sharePreview: SharePreview | null;
-  onShareTokenInputChange: (value: string) => void;
-  onPreviewShare: () => Promise<void>;
-  onAcceptShare: () => Promise<void>;
-}) {
+}: WorkspaceJoinSectionProps) {
   return (
     <section className="record-card">
       <div className="eyebrow">{copy.joinEyebrow}</div>

@@ -1,14 +1,6 @@
 "use client";
 
-import type { FormEvent } from "react";
-
-type WorkspaceCreateCopy = {
-  createEyebrow: string;
-  createTitle: string;
-  name: string;
-  slugPreview: string;
-  createWorkspace: string;
-};
+import type { WorkspaceCreateSectionProps } from "./workspace-create-section.types";
 
 export function WorkspaceCreateSection({
   copy,
@@ -17,14 +9,7 @@ export function WorkspaceCreateSection({
   creating,
   onNameChange,
   onSubmit,
-}: {
-  copy: WorkspaceCreateCopy;
-  name: string;
-  suggestedSlug: string;
-  creating: boolean;
-  onNameChange: (value: string) => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
-}) {
+}: WorkspaceCreateSectionProps) {
   return (
     <section className="record-card">
       <div className="eyebrow">{copy.createEyebrow}</div>

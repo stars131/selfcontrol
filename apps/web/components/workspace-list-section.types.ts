@@ -1,0 +1,1 @@
+import type { Workspace } from "../lib/types"; export type WorkspaceListCopy = { listEyebrow: string; listTitle: string; openWorkspace: string; settings: string; noWorkspace: string }; export type WorkspaceListSectionProps = { copy: WorkspaceListCopy; workspaces: Workspace[] };

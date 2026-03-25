@@ -2,23 +2,12 @@
 
 import Link from "next/link";
 
-import type { Workspace } from "../lib/types";
-
-type WorkspaceListCopy = {
-  listEyebrow: string;
-  listTitle: string;
-  openWorkspace: string;
-  settings: string;
-  noWorkspace: string;
-};
+import type { WorkspaceListSectionProps } from "./workspace-list-section.types";
 
 export function WorkspaceListSection({
   copy,
   workspaces,
-}: {
-  copy: WorkspaceListCopy;
-  workspaces: Workspace[];
-}) {
+}: WorkspaceListSectionProps) {
   return (
     <section className="record-card" style={{ gridColumn: "1 / -1" }}>
       <div className="eyebrow">{copy.listEyebrow}</div>

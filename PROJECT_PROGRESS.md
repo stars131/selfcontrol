@@ -1704,6 +1704,10 @@ Last updated: 2026-03-25
   - `workspace-settings-actions.ts`, `workspace-settings-member-actions.ts`, and `workspace-settings-provider-actions.ts` now consume extracted input contracts instead of keeping inline action-builder input object shapes in those modules
   - the new workspace-settings action `*.types.ts` files keep settings controller, member, and provider action boundaries explicit and reusable
   - this keeps workspace settings action orchestration thinner and more maintainable under the enterprise engineering standard
+- Workspace Entry Leaf Props Split V1:
+  - `workspace-entry-header.tsx`, `workspace-create-section.tsx`, `workspace-join-section.tsx`, `workspace-import-section.tsx`, and `workspace-list-section.tsx` now consume extracted prop contracts instead of keeping inline signatures or local copy shapes in those leaf components
+  - the new workspace-entry leaf `*.types.ts` files keep entry header, create, join, import, and list boundaries explicit and reusable
+  - this keeps the workspace entry presentation subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
