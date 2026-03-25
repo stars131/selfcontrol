@@ -1476,6 +1476,22 @@ const providerFeatureCardFieldsTypesPath = path.resolve(
   process.cwd(),
   "components/provider-feature-card-fields.types.ts",
 );
+const providerFeatureCardEnabledTogglePath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-enabled-toggle.tsx",
+);
+const providerFeatureCardEnabledToggleTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-enabled-toggle.types.ts",
+);
+const providerFeatureCardCoreFieldsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-core-fields.tsx",
+);
+const providerFeatureCardCoreFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-core-fields.types.ts",
+);
 const providerFeatureMediaStorageOptionsTypesPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-options.types.ts",
@@ -2590,6 +2606,22 @@ const providerFeatureCardActionsTypesSource = fs.readFileSync(
 const providerFeatureCardFieldsSource = fs.readFileSync(providerFeatureCardFieldsPath, "utf8");
 const providerFeatureCardFieldsTypesSource = fs.readFileSync(
   providerFeatureCardFieldsTypesPath,
+  "utf8",
+);
+const providerFeatureCardEnabledToggleSource = fs.readFileSync(
+  providerFeatureCardEnabledTogglePath,
+  "utf8",
+);
+const providerFeatureCardEnabledToggleTypesSource = fs.readFileSync(
+  providerFeatureCardEnabledToggleTypesPath,
+  "utf8",
+);
+const providerFeatureCardCoreFieldsSource = fs.readFileSync(
+  providerFeatureCardCoreFieldsPath,
+  "utf8",
+);
+const providerFeatureCardCoreFieldsTypesSource = fs.readFileSync(
+  providerFeatureCardCoreFieldsTypesPath,
   "utf8",
 );
 const providerFeatureMediaStorageOptionsSource = fs.readFileSync(
@@ -3785,8 +3817,18 @@ const workspaceMediaRetentionSummaryTypesLines =
 const mediaRetentionItemCardTypesLines = mediaRetentionItemCardTypesSource.split(/\r?\n/).length;
 const providerFeatureCardActionsTypesLines =
   providerFeatureCardActionsTypesSource.split(/\r?\n/).length;
+const providerFeatureCardFieldsLines =
+  providerFeatureCardFieldsSource.split(/\r?\n/).length;
 const providerFeatureCardFieldsTypesLines =
   providerFeatureCardFieldsTypesSource.split(/\r?\n/).length;
+const providerFeatureCardEnabledToggleLines =
+  providerFeatureCardEnabledToggleSource.split(/\r?\n/).length;
+const providerFeatureCardEnabledToggleTypesLines =
+  providerFeatureCardEnabledToggleTypesSource.split(/\r?\n/).length;
+const providerFeatureCardCoreFieldsLines =
+  providerFeatureCardCoreFieldsSource.split(/\r?\n/).length;
+const providerFeatureCardCoreFieldsTypesLines =
+  providerFeatureCardCoreFieldsTypesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsTypesLines =
   providerFeatureMediaStorageOptionsTypesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsHelpersLines =
@@ -15288,8 +15330,13 @@ if (providerFeatureCardActionsTypesLines > maxProviderFeatureCardActionsTypesLin
 }
 
 for (const requiredProviderFeatureCardFieldsUsage of [
+  'import { ProviderFeatureCardCoreFields } from "./provider-feature-card-core-fields";',
+  'import { ProviderFeatureCardEnabledToggle } from "./provider-feature-card-enabled-toggle";',
+  'import { ProviderFeatureMediaStorageOptions } from "./provider-feature-media-storage-options";',
   'import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types";',
   "}: ProviderFeatureCardFieldsProps) {",
+  "<ProviderFeatureCardEnabledToggle",
+  "<ProviderFeatureCardCoreFields",
 ]) {
   if (!providerFeatureCardFieldsSource.includes(requiredProviderFeatureCardFieldsUsage)) {
     throw new Error(
@@ -15301,12 +15348,22 @@ for (const requiredProviderFeatureCardFieldsUsage of [
 for (const forbiddenProviderFeatureCardFieldsToken of [
   'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
   "type ProviderFeatureCardFieldsProps = Pick<",
+  'checked={draftItem.is_enabled}',
+  'value={draftItem.provider_code}',
+  'placeholder={copy.modelName}',
 ]) {
   if (providerFeatureCardFieldsSource.includes(forbiddenProviderFeatureCardFieldsToken)) {
     throw new Error(
       `provider-feature-card-fields.tsx must keep feature-card-fields prop typing delegated: ${forbiddenProviderFeatureCardFieldsToken}`,
     );
   }
+}
+
+const maxProviderFeatureCardFieldsLines = 45;
+if (providerFeatureCardFieldsLines > maxProviderFeatureCardFieldsLines) {
+  throw new Error(
+    `provider-feature-card-fields.tsx exceeded ${maxProviderFeatureCardFieldsLines} lines: ${providerFeatureCardFieldsLines}`,
+  );
 }
 
 for (const requiredProviderFeatureCardFieldsTypesUsage of [
@@ -15323,6 +15380,94 @@ const maxProviderFeatureCardFieldsTypesLines = 2;
 if (providerFeatureCardFieldsTypesLines > maxProviderFeatureCardFieldsTypesLines) {
   throw new Error(
     `provider-feature-card-fields.types.ts exceeded ${maxProviderFeatureCardFieldsTypesLines} lines: ${providerFeatureCardFieldsTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardEnabledToggleUsage of [
+  'import type { ProviderFeatureCardEnabledToggleProps } from "./provider-feature-card-enabled-toggle.types";',
+  "}: ProviderFeatureCardEnabledToggleProps) {",
+  'checked={draftItem.is_enabled}',
+  'onProviderDraftChange(item.feature_code, { is_enabled: event.target.checked })',
+]) {
+  if (!providerFeatureCardEnabledToggleSource.includes(requiredProviderFeatureCardEnabledToggleUsage)) {
+    throw new Error(
+      `provider-feature-card-enabled-toggle.tsx must reuse the extracted enabled-toggle props type: ${requiredProviderFeatureCardEnabledToggleUsage}`,
+    );
+  }
+}
+
+if (providerFeatureCardEnabledToggleSource.includes("type ProviderFeatureCardEnabledToggleProps = Pick<")) {
+  throw new Error(
+    "provider-feature-card-enabled-toggle.tsx must keep enabled-toggle prop typing delegated",
+  );
+}
+
+const maxProviderFeatureCardEnabledToggleLines = 25;
+if (providerFeatureCardEnabledToggleLines > maxProviderFeatureCardEnabledToggleLines) {
+  throw new Error(
+    `provider-feature-card-enabled-toggle.tsx exceeded ${maxProviderFeatureCardEnabledToggleLines} lines: ${providerFeatureCardEnabledToggleLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardEnabledToggleTypesUsage of [
+  'import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types"; export type ProviderFeatureCardEnabledToggleProps = Pick<ProviderFeatureCardFieldsProps, "copy" | "draftItem" | "item" | "onProviderDraftChange">;',
+]) {
+  if (!providerFeatureCardEnabledToggleTypesSource.includes(requiredProviderFeatureCardEnabledToggleTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-enabled-toggle.types.ts must own enabled-toggle prop typing: ${requiredProviderFeatureCardEnabledToggleTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardEnabledToggleTypesLines = 2;
+if (providerFeatureCardEnabledToggleTypesLines > maxProviderFeatureCardEnabledToggleTypesLines) {
+  throw new Error(
+    `provider-feature-card-enabled-toggle.types.ts exceeded ${maxProviderFeatureCardEnabledToggleTypesLines} lines: ${providerFeatureCardEnabledToggleTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardCoreFieldsUsage of [
+  'import type { ProviderFeatureCardCoreFieldsProps } from "./provider-feature-card-core-fields.types";',
+  "}: ProviderFeatureCardCoreFieldsProps) {",
+  'value={draftItem.provider_code}',
+  'placeholder={copy.modelName}',
+  'placeholder={copy.apiBaseUrl}',
+  'placeholder={copy.apiKeyEnvName}',
+]) {
+  if (!providerFeatureCardCoreFieldsSource.includes(requiredProviderFeatureCardCoreFieldsUsage)) {
+    throw new Error(
+      `provider-feature-card-core-fields.tsx must reuse the extracted core-fields props type: ${requiredProviderFeatureCardCoreFieldsUsage}`,
+    );
+  }
+}
+
+if (providerFeatureCardCoreFieldsSource.includes("type ProviderFeatureCardCoreFieldsProps = Pick<")) {
+  throw new Error(
+    "provider-feature-card-core-fields.tsx must keep core-fields prop typing delegated",
+  );
+}
+
+const maxProviderFeatureCardCoreFieldsLines = 60;
+if (providerFeatureCardCoreFieldsLines > maxProviderFeatureCardCoreFieldsLines) {
+  throw new Error(
+    `provider-feature-card-core-fields.tsx exceeded ${maxProviderFeatureCardCoreFieldsLines} lines: ${providerFeatureCardCoreFieldsLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardCoreFieldsTypesUsage of [
+  'import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types"; export type ProviderFeatureCardCoreFieldsProps = Pick<ProviderFeatureCardFieldsProps, "copy" | "draftItem" | "item" | "onProviderDraftChange">;',
+]) {
+  if (!providerFeatureCardCoreFieldsTypesSource.includes(requiredProviderFeatureCardCoreFieldsTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-core-fields.types.ts must own core-fields prop typing: ${requiredProviderFeatureCardCoreFieldsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardCoreFieldsTypesLines = 2;
+if (providerFeatureCardCoreFieldsTypesLines > maxProviderFeatureCardCoreFieldsTypesLines) {
+  throw new Error(
+    `provider-feature-card-core-fields.types.ts exceeded ${maxProviderFeatureCardCoreFieldsTypesLines} lines: ${providerFeatureCardCoreFieldsTypesLines}`,
   );
 }
 

@@ -1,0 +1,1 @@
+import type { ProviderFeatureCardFieldsProps } from "./provider-feature-card-fields.types"; export type ProviderFeatureCardEnabledToggleProps = Pick<ProviderFeatureCardFieldsProps, "copy" | "draftItem" | "item" | "onProviderDraftChange">;

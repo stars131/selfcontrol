@@ -1819,6 +1819,10 @@ Last updated: 2026-03-25
   - `media-storage-overview-summary.tsx` now delegates usage-summary cards and processing-summary cards to `media-storage-overview-usage-grid.tsx` and `media-storage-overview-processing-grid.tsx` instead of keeping both grids inline in a single summary leaf
   - the new media-storage-overview `*.types.ts` files keep usage-grid and processing-grid prop contracts explicit and reusable while the summary component remains focused on orchestration
   - `verify-record-panel-structure.mjs` now enforces those delegated overview-grid boundaries, exact one-line type contracts, and line-count ceilings so future storage-summary updates stay safer and easier to maintain
+- Provider Feature Toggle and Core Fields Leaves Split V1:
+  - `provider-feature-card-fields.tsx` now delegates enabled-toggle rendering and core provider input rendering to `provider-feature-card-enabled-toggle.tsx` and `provider-feature-card-core-fields.tsx` instead of keeping all base controls inline beside the media-storage options leaf
+  - the new provider-feature `*.types.ts` files keep enabled-toggle and core-fields prop contracts explicit and reusable while the parent fields component remains focused on feature-specific composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated provider-field boundaries, exact one-line type contracts, and line-count ceilings so future provider-settings updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
