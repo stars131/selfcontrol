@@ -2,19 +2,8 @@
 
 import Link from "next/link";
 
-import type { LocaleCode } from "../lib/locale";
-import type { Workspace } from "../lib/types";
 import { LanguageSwitcher } from "./language-switcher";
-import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";
-
-type WorkspaceSettingsHeaderProps = {
-  copy: WorkspaceSettingsCopy;
-  locale: LocaleCode;
-  onLocaleChange: (locale: LocaleCode) => void;
-  username?: string | null;
-  workspace?: Workspace | null;
-  workspaceId: string;
-};
+import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types";
 
 export function WorkspaceSettingsHeader({
   copy,

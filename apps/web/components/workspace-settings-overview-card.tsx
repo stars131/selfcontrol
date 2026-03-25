@@ -1,12 +1,6 @@
 "use client";
 
-import type { KnowledgeStats } from "../lib/types";
-import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";
-
-type WorkspaceSettingsOverviewCardProps = {
-  copy: WorkspaceSettingsCopy;
-  knowledgeStats: KnowledgeStats | null;
-};
+import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";
 
 export function WorkspaceSettingsOverviewCard({
   copy,

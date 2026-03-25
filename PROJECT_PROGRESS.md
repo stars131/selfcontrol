@@ -1604,6 +1604,10 @@ Last updated: 2026-03-25
   - workspace export card components now consume extracted prop contracts instead of keeping locale/token/role props inline
   - `workspace-export-card.tsx` and `workspace-export-jobs-card.tsx` now depend on dedicated `*.types.ts` files
   - this keeps the export UI surface thinner and more consistent with the surrounding maintainability pass
+- Workspace Settings Header and Overview Props Split V1:
+  - settings header and overview card components now consume extracted prop contracts instead of keeping locale/workspace/knowledge props inline
+  - `workspace-settings-header.tsx` and `workspace-settings-overview-card.tsx` now depend on dedicated `*.types.ts` files
+  - this keeps the settings-page presentation layer thinner and more consistent with the broader UI boundary cleanup
 
 ## Next
 - Continue the next product slice

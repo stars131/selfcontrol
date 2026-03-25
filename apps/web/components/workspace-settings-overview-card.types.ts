@@ -1,0 +1,1 @@
+import type { KnowledgeStats } from "../lib/types"; import type { WorkspaceSettingsCopy } from "./workspace-settings-copy"; export type WorkspaceSettingsOverviewCardProps = { copy: WorkspaceSettingsCopy; knowledgeStats: KnowledgeStats | null };

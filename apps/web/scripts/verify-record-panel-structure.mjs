@@ -956,6 +956,22 @@ const workspaceExportJobsControllerTypesPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-jobs-controller.types.ts",
 );
+const workspaceSettingsHeaderPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header.tsx",
+);
+const workspaceSettingsHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header.types.ts",
+);
+const workspaceSettingsOverviewCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-card.tsx",
+);
+const workspaceSettingsOverviewCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-card.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1093,6 +1109,19 @@ const workspaceExportJobsControllerSource = fs.readFileSync(
 );
 const workspaceExportJobsControllerTypesSource = fs.readFileSync(
   workspaceExportJobsControllerTypesPath,
+  "utf8",
+);
+const workspaceSettingsHeaderSource = fs.readFileSync(workspaceSettingsHeaderPath, "utf8");
+const workspaceSettingsHeaderTypesSource = fs.readFileSync(
+  workspaceSettingsHeaderTypesPath,
+  "utf8",
+);
+const workspaceSettingsOverviewCardSource = fs.readFileSync(
+  workspaceSettingsOverviewCardPath,
+  "utf8",
+);
+const workspaceSettingsOverviewCardTypesSource = fs.readFileSync(
+  workspaceSettingsOverviewCardTypesPath,
   "utf8",
 );
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
@@ -1720,6 +1749,10 @@ const workspaceExportJobsCardTypesLines =
   workspaceExportJobsCardTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsControllerTypesLines =
   workspaceExportJobsControllerTypesSource.split(/\r?\n/).length;
+const workspaceSettingsHeaderTypesLines =
+  workspaceSettingsHeaderTypesSource.split(/\r?\n/).length;
+const workspaceSettingsOverviewCardTypesLines =
+  workspaceSettingsOverviewCardTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10636,6 +10669,87 @@ const maxWorkspaceExportJobsCardTypesLines = 2;
 if (workspaceExportJobsCardTypesLines > maxWorkspaceExportJobsCardTypesLines) {
   throw new Error(
     `workspace-export-jobs-card.types.ts exceeded ${maxWorkspaceExportJobsCardTypesLines} lines: ${workspaceExportJobsCardTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsHeaderUsage of [
+  'import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types";',
+  "}: WorkspaceSettingsHeaderProps) {",
+]) {
+  if (!workspaceSettingsHeaderSource.includes(requiredWorkspaceSettingsHeaderUsage)) {
+    throw new Error(
+      `workspace-settings-header.tsx must reuse the extracted settings header props type: ${requiredWorkspaceSettingsHeaderUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceSettingsHeaderToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { Workspace } from "../lib/types";',
+  "type WorkspaceSettingsHeaderProps = {",
+]) {
+  if (workspaceSettingsHeaderSource.includes(forbiddenWorkspaceSettingsHeaderToken)) {
+    throw new Error(
+      `workspace-settings-header.tsx must keep settings header prop typing delegated: ${forbiddenWorkspaceSettingsHeaderToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceSettingsHeaderTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { Workspace } from "../lib/types"; import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";',
+  "export type WorkspaceSettingsHeaderProps = { copy: WorkspaceSettingsCopy; locale: LocaleCode; onLocaleChange: (locale: LocaleCode) => void; username?: string | null; workspace?: Workspace | null; workspaceId: string };",
+]) {
+  if (!workspaceSettingsHeaderTypesSource.includes(requiredWorkspaceSettingsHeaderTypesUsage)) {
+    throw new Error(
+      `workspace-settings-header.types.ts must own settings header prop typing: ${requiredWorkspaceSettingsHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsHeaderTypesLines = 2;
+if (workspaceSettingsHeaderTypesLines > maxWorkspaceSettingsHeaderTypesLines) {
+  throw new Error(
+    `workspace-settings-header.types.ts exceeded ${maxWorkspaceSettingsHeaderTypesLines} lines: ${workspaceSettingsHeaderTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsOverviewCardUsage of [
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";',
+  "}: WorkspaceSettingsOverviewCardProps) {",
+]) {
+  if (!workspaceSettingsOverviewCardSource.includes(requiredWorkspaceSettingsOverviewCardUsage)) {
+    throw new Error(
+      `workspace-settings-overview-card.tsx must reuse the extracted settings overview props type: ${requiredWorkspaceSettingsOverviewCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceSettingsOverviewCardToken of [
+  'import type { KnowledgeStats } from "../lib/types";',
+  "type WorkspaceSettingsOverviewCardProps = {",
+]) {
+  if (workspaceSettingsOverviewCardSource.includes(forbiddenWorkspaceSettingsOverviewCardToken)) {
+    throw new Error(
+      `workspace-settings-overview-card.tsx must keep settings overview prop typing delegated: ${forbiddenWorkspaceSettingsOverviewCardToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceSettingsOverviewCardTypesUsage of [
+  'import type { KnowledgeStats } from "../lib/types"; import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";',
+  "export type WorkspaceSettingsOverviewCardProps = { copy: WorkspaceSettingsCopy; knowledgeStats: KnowledgeStats | null };",
+]) {
+  if (!workspaceSettingsOverviewCardTypesSource.includes(requiredWorkspaceSettingsOverviewCardTypesUsage)) {
+    throw new Error(
+      `workspace-settings-overview-card.types.ts must own settings overview prop typing: ${requiredWorkspaceSettingsOverviewCardTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsOverviewCardTypesLines = 2;
+if (workspaceSettingsOverviewCardTypesLines > maxWorkspaceSettingsOverviewCardTypesLines) {
+  throw new Error(
+    `workspace-settings-overview-card.types.ts exceeded ${maxWorkspaceSettingsOverviewCardTypesLines} lines: ${workspaceSettingsOverviewCardTypesLines}`,
   );
 }
 
