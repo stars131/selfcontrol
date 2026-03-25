@@ -1676,6 +1676,10 @@ Last updated: 2026-03-25
   - `chat-panel-action-helpers.ts`, `chat-panel-operator-handlers.ts`, and `chat-panel-share-handlers.ts` now consume extracted input contracts instead of keeping inline object shapes in the helper and handler modules
   - the new `chat-panel-action-helpers.types.ts`, `chat-panel-operator-handlers.types.ts`, and `chat-panel-share-handlers.types.ts` files keep chat helper and handler inputs explicit and reusable
   - this keeps chat helper orchestration typing thinner and more maintainable under the enterprise engineering standard
+- Chat Derived-Data and Content-Props Input Types Split V1:
+  - `use-chat-panel-action-derived-data.ts` and `chat-panel-content-props.ts` now consume extracted input contracts instead of keeping inline input object shapes in the hook and prop-builder modules
+  - the new `use-chat-panel-action-derived-data.types.ts` and `chat-panel-content-props.types.ts` files keep chat derived-data and content-prop builder inputs explicit and reusable
+  - this keeps chat composition typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

@@ -2,15 +2,12 @@
 
 import type { ChatPanelActions } from "./chat-panel-actions-result.types";
 import type { ChatPanelContentProps } from "./chat-panel-content.types";
-import type { ChatPanelProps } from "./chat-panel.types";
+import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";
 
 export function buildChatPanelContentProps({
   actions,
   props,
-}: {
-  actions: ChatPanelActions;
-  props: ChatPanelProps;
-}): ChatPanelContentProps {
+}: BuildChatPanelContentPropsInput): ChatPanelContentProps {
   return {
     activeConversationId: props.activeConversationId,
     auditLogs: props.auditLogs,

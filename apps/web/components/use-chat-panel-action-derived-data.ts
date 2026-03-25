@@ -2,19 +2,16 @@
 
 import { useMemo } from "react";
 
-import type { NotificationItem } from "../lib/types";
 import {
   buildChatShareUrl,
   countUnreadNotifications,
 } from "./chat-panel-action-helpers";
+import type { UseChatPanelActionDerivedDataInput } from "./use-chat-panel-action-derived-data.types";
 
 export function useChatPanelActionDerivedData({
   latestSharePath,
   notifications,
-}: {
-  latestSharePath: string;
-  notifications: NotificationItem[];
-}) {
+}: UseChatPanelActionDerivedDataInput) {
   const unreadCount = countUnreadNotifications(notifications);
   const latestShareUrl = useMemo(
     () => (latestSharePath ? buildChatShareUrl(latestSharePath) : ""),
