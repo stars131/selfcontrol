@@ -5,14 +5,7 @@ import { WorkspaceImportSection } from "./workspace-import-section";
 import { WorkspaceJoinSection } from "./workspace-join-section";
 import { WorkspaceListSection } from "./workspace-list-section";
 import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";
-import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types";
-
-type WorkspaceEntrySectionsGridProps = Omit<
-  WorkspaceEntryMainPanelProps,
-  "error" | "locale" | "onLocaleChange" | "onLogout" | "username"
-> & {
-  locale: WorkspaceEntryMainPanelProps["locale"];
-};
+import type { WorkspaceEntrySectionsGridProps } from "./workspace-entry-sections-grid.types";
 
 export function WorkspaceEntrySectionsGrid({
   copy,

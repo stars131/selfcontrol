@@ -1,0 +1,1 @@
+import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types"; export type WorkspaceEntrySectionsGridProps = Omit<WorkspaceEntryMainPanelProps, "error" | "locale" | "onLocaleChange" | "onLogout" | "username"> & { locale: WorkspaceEntryMainPanelProps["locale"] };

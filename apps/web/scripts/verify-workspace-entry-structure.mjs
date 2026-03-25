@@ -23,6 +23,14 @@ const workspaceEntryLoadingShellTypesPath = path.resolve(
   "components/workspace-entry-loading-shell.types.ts",
 );
 const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/workspace-entry-main-panel.tsx");
+const workspaceEntrySectionsGridPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-sections-grid.tsx",
+);
+const workspaceEntrySectionsGridTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-sections-grid.types.ts",
+);
 const workspaceTransferJobsSectionPath = path.resolve(
   process.cwd(),
   "components/workspace-transfer-jobs-section.tsx",
@@ -75,6 +83,8 @@ const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8")
 const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const loadingShellTypesSource = fs.readFileSync(workspaceEntryLoadingShellTypesPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
+const sectionsGridSource = fs.readFileSync(workspaceEntrySectionsGridPath, "utf8");
+const sectionsGridTypesSource = fs.readFileSync(workspaceEntrySectionsGridTypesPath, "utf8");
 const transferJobsSectionSource = fs.readFileSync(workspaceTransferJobsSectionPath, "utf8");
 const transferJobsSectionTypesSource = fs.readFileSync(workspaceTransferJobsSectionTypesPath, "utf8");
 const transferJobsListSource = fs.readFileSync(workspaceTransferJobsListPath, "utf8");
@@ -97,6 +107,8 @@ const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
+const sectionsGridLineCount = sectionsGridSource.split(/\r?\n/).length;
+const sectionsGridTypesLineCount = sectionsGridTypesSource.split(/\r?\n/).length;
 const transferJobsSectionLineCount = transferJobsSectionSource.split(/\r?\n/).length;
 const transferJobsSectionTypesLineCount = transferJobsSectionTypesSource.split(/\r?\n/).length;
 const transferJobsListLineCount = transferJobsListSource.split(/\r?\n/).length;
@@ -183,6 +195,58 @@ for (const forbiddenMainPanelToken of [
   if (mainPanelSource.includes(forbiddenMainPanelToken)) {
     throw new Error(`workspace-entry-main-panel.tsx must keep entry sections delegated: ${forbiddenMainPanelToken}`);
   }
+}
+
+for (const requiredSectionsGridImport of [
+  'import { WorkspaceCreateSection } from "./workspace-create-section";',
+  'import { WorkspaceImportSection } from "./workspace-import-section";',
+  'import { WorkspaceJoinSection } from "./workspace-join-section";',
+  'import { WorkspaceListSection } from "./workspace-list-section";',
+  'import { WorkspaceTransferJobsSection } from "./workspace-transfer-jobs-section";',
+  'import type { WorkspaceEntrySectionsGridProps } from "./workspace-entry-sections-grid.types";',
+]) {
+  if (!sectionsGridSource.includes(requiredSectionsGridImport)) {
+    throw new Error(`workspace-entry-sections-grid.tsx must import delegated entry leaf sections: ${requiredSectionsGridImport}`);
+  }
+}
+
+for (const requiredSectionsGridUsage of [
+  "<WorkspaceCreateSection",
+  "<WorkspaceJoinSection",
+  "<WorkspaceImportSection",
+  "<WorkspaceListSection",
+  "<WorkspaceTransferJobsSection",
+  "}: WorkspaceEntrySectionsGridProps) {",
+]) {
+  if (!sectionsGridSource.includes(requiredSectionsGridUsage)) {
+    throw new Error(`workspace-entry-sections-grid.tsx must compose delegated grid sections: ${requiredSectionsGridUsage}`);
+  }
+}
+
+for (const forbiddenSectionsGridToken of [
+  'import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types";',
+  "type WorkspaceEntrySectionsGridProps = Omit<",
+]) {
+  if (sectionsGridSource.includes(forbiddenSectionsGridToken)) {
+    throw new Error(`workspace-entry-sections-grid.tsx must keep grid prop typing delegated: ${forbiddenSectionsGridToken}`);
+  }
+}
+
+const maxSectionsGridLines = 95;
+if (sectionsGridLineCount > maxSectionsGridLines) {
+  throw new Error(`workspace-entry-sections-grid.tsx exceeded ${maxSectionsGridLines} lines: ${sectionsGridLineCount}`);
+}
+
+for (const requiredSectionsGridTypesUsage of [
+  'import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types"; export type WorkspaceEntrySectionsGridProps = Omit<WorkspaceEntryMainPanelProps, "error" | "locale" | "onLocaleChange" | "onLogout" | "username"> & { locale: WorkspaceEntryMainPanelProps["locale"] };',
+]) {
+  if (!sectionsGridTypesSource.includes(requiredSectionsGridTypesUsage)) {
+    throw new Error(`workspace-entry-sections-grid.types.ts must own grid prop typing: ${requiredSectionsGridTypesUsage}`);
+  }
+}
+
+if (sectionsGridTypesLineCount > 2) {
+  throw new Error(`workspace-entry-sections-grid.types.ts exceeded 2 lines: ${sectionsGridTypesLineCount}`);
 }
 
 for (const forbiddenToken of [
