@@ -1,31 +1,17 @@
 "use client";
 
-import type { NotificationItem } from "../lib/types";
 import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types";
 import type { ChatPanelActionState } from "./chat-panel-action-state-result.types";
-
-export type UseChatPanelActionsProps = {
-  latestSharePath: string;
-  notifications: NotificationItem[];
-  onCreateShareLink: (input: {
-    name?: string;
-    permission_code: string;
-    max_uses?: number | null;
-  }) => Promise<void>;
-  onDisableShareLink: (shareLinkId: string) => Promise<void>;
-  onRefreshAuditLogs: () => Promise<void>;
-  onReindexKnowledge: () => Promise<void>;
-  onSyncNotifications: () => Promise<void>;
-  onSendMessage: (message: string) => Promise<void>;
-};
+import type {
+  BuildChatPanelActionsResultInput,
+  BuildChatPanelOperatorHandlerInput,
+  BuildChatPanelShareHandlerInput,
+} from "./chat-panel-action-handler-inputs.types";
 
 export function buildChatPanelOperatorHandlerInput({
   props,
   state,
-}: {
-  props: UseChatPanelActionsProps;
-  state: ChatPanelActionState;
-}) {
+}: BuildChatPanelOperatorHandlerInput) {
   return {
     draft: state.draft,
     onRefreshAuditLogs: props.onRefreshAuditLogs,
@@ -44,10 +30,7 @@ export function buildChatPanelOperatorHandlerInput({
 export function buildChatPanelShareHandlerInput({
   props,
   state,
-}: {
-  props: UseChatPanelActionsProps;
-  state: ChatPanelActionState;
-}) {
+}: BuildChatPanelShareHandlerInput) {
   return {
     onCreateShareLink: props.onCreateShareLink,
     onDisableShareLink: props.onDisableShareLink,
@@ -67,20 +50,7 @@ export function buildChatPanelActionsResult({
   operatorHandlers,
   shareHandlers,
   state,
-}: {
-  derivedData: ChatPanelActionDerivedData;
-  operatorHandlers: {
-    handleRefreshAuditLogs: () => Promise<void>;
-    handleReindexKnowledge: () => Promise<void>;
-    handleSend: () => Promise<void>;
-    handleSyncNotifications: () => Promise<void>;
-  };
-  shareHandlers: {
-    handleCreateShareLink: () => Promise<void>;
-    handleDisableShareLink: (shareLinkId: string) => Promise<void>;
-  };
-  state: ChatPanelActionState;
-}) {
+}: BuildChatPanelActionsResultInput) {
   return {
     draft: state.draft,
     loading: state.loading,

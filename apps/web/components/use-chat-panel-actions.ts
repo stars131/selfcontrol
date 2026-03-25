@@ -4,8 +4,8 @@ import {
   buildChatPanelActionsResult,
   buildChatPanelOperatorHandlerInput,
   buildChatPanelShareHandlerInput,
-  type UseChatPanelActionsProps,
 } from "./chat-panel-action-handler-inputs";
+import type { UseChatPanelActionsProps } from "./chat-panel-action-handler-inputs.types";
 import { createChatPanelOperatorHandlers } from "./chat-panel-operator-handlers";
 import { createChatPanelShareHandlers } from "./chat-panel-share-handlers";
 import { useChatPanelActionDerivedData } from "./use-chat-panel-action-derived-data";

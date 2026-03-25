@@ -1130,6 +1130,10 @@ const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
 );
+const chatPanelActionHandlerInputsTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-action-handler-inputs.types.ts",
+);
 const chatPanelActionStateResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-state-result.types.ts",
@@ -1138,6 +1142,7 @@ const chatPanelActionsResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-actions-result.types.ts",
 );
+const useChatPanelActionsPath = path.resolve(process.cwd(), "components/use-chat-panel-actions.ts");
 const chatPanelContentPropsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-content-props.ts",
@@ -1514,11 +1519,16 @@ const chatPanelActionHandlerInputsSource = fs.readFileSync(
   chatPanelActionHandlerInputsPath,
   "utf8",
 );
+const chatPanelActionHandlerInputsTypesSource = fs.readFileSync(
+  chatPanelActionHandlerInputsTypesPath,
+  "utf8",
+);
 const chatPanelActionStateResultTypesSource = fs.readFileSync(
   chatPanelActionStateResultTypesPath,
   "utf8",
 );
 const chatPanelActionsResultTypesSource = fs.readFileSync(chatPanelActionsResultTypesPath, "utf8");
+const useChatPanelActionsSource = fs.readFileSync(useChatPanelActionsPath, "utf8");
 const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
 const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
 const chatMessageThreadSource = fs.readFileSync(chatMessageThreadPath, "utf8");
@@ -2217,6 +2227,8 @@ const workspaceSettingsLoadingShellTypesLines =
   workspaceSettingsLoadingShellTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
+const chatPanelActionHandlerInputsTypesLines =
+  chatPanelActionHandlerInputsTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
   chatPanelActionStateResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionsResultTypesLines =
@@ -12035,10 +12047,13 @@ if (workspaceExportJobsActionsTypesLines > maxWorkspaceExportJobsActionsTypesLin
 }
 
 for (const requiredChatPanelActionHandlerInputsUsage of [
+  'import type {',
+  'from "./chat-panel-action-handler-inputs.types";',
   'import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types";',
   'import type { ChatPanelActionState } from "./chat-panel-action-state-result.types";',
-  "derivedData: ChatPanelActionDerivedData;",
-  "state: ChatPanelActionState;",
+  "}: BuildChatPanelOperatorHandlerInput) {",
+  "}: BuildChatPanelShareHandlerInput) {",
+  "}: BuildChatPanelActionsResultInput) {",
 ]) {
   if (!chatPanelActionHandlerInputsSource.includes(requiredChatPanelActionHandlerInputsUsage)) {
     throw new Error(
@@ -12048,8 +12063,11 @@ for (const requiredChatPanelActionHandlerInputsUsage of [
 }
 
 for (const forbiddenChatPanelActionHandlerInputsToken of [
+  'import type { NotificationItem } from "../lib/types";',
+  "export type UseChatPanelActionsProps = {",
   'from "./use-chat-panel-action-derived-data";',
   'from "./use-chat-panel-action-state";',
+  "}: {",
   "ReturnType<typeof useChatPanelActionDerivedData>",
   "ReturnType<typeof useChatPanelActionState>",
 ]) {
@@ -12058,6 +12076,39 @@ for (const forbiddenChatPanelActionHandlerInputsToken of [
       `chat-panel-action-handler-inputs.ts must keep hook result inference delegated: ${forbiddenChatPanelActionHandlerInputsToken}`,
     );
   }
+}
+
+for (const requiredChatPanelActionHandlerInputsTypesUsage of [
+  'import type { NotificationItem } from "../lib/types"; import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types"; import type { ChatPanelActionState } from "./chat-panel-action-state-result.types"; export type UseChatPanelActionsProps = { latestSharePath: string; notifications: NotificationItem[]; onCreateShareLink: (input: { name?: string; permission_code: string; max_uses?: number | null }) => Promise<void>; onDisableShareLink: (shareLinkId: string) => Promise<void>; onRefreshAuditLogs: () => Promise<void>; onReindexKnowledge: () => Promise<void>; onSyncNotifications: () => Promise<void>; onSendMessage: (message: string) => Promise<void> };',
+  'export type BuildChatPanelOperatorHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelShareHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
+]) {
+  if (!chatPanelActionHandlerInputsTypesSource.includes(requiredChatPanelActionHandlerInputsTypesUsage)) {
+    throw new Error(
+      `chat-panel-action-handler-inputs.types.ts must own chat action handler input typing: ${requiredChatPanelActionHandlerInputsTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelActionHandlerInputsTypesLines = 3;
+if (chatPanelActionHandlerInputsTypesLines > maxChatPanelActionHandlerInputsTypesLines) {
+  throw new Error(
+    `chat-panel-action-handler-inputs.types.ts exceeded ${maxChatPanelActionHandlerInputsTypesLines} lines: ${chatPanelActionHandlerInputsTypesLines}`,
+  );
+}
+
+for (const requiredUseChatPanelActionsUsage of [
+  'import type { UseChatPanelActionsProps } from "./chat-panel-action-handler-inputs.types";',
+  "export function useChatPanelActions(props: UseChatPanelActionsProps) {",
+]) {
+  if (!useChatPanelActionsSource.includes(requiredUseChatPanelActionsUsage)) {
+    throw new Error(
+      `use-chat-panel-actions.ts must reuse the extracted chat action props boundary: ${requiredUseChatPanelActionsUsage}`,
+    );
+  }
+}
+
+if (useChatPanelActionsSource.includes('type UseChatPanelActionsProps,')) {
+  throw new Error("use-chat-panel-actions.ts must keep chat action props typing delegated");
 }
 
 for (const requiredChatPanelContentPropsUsage of [

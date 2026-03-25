@@ -1668,6 +1668,10 @@ Last updated: 2026-03-25
   - `chat-conversation-bar.tsx`, `chat-message-sources.tsx`, `chat-audit-logs-card.tsx`, `chat-knowledge-card.tsx`, `chat-notifications-card.tsx`, and `chat-share-links-card.tsx` now consume extracted prop contracts instead of keeping inline signatures or local shapes in the component modules
   - the new chat leaf `*.types.ts` files keep conversation, source, audit, knowledge, notification, and share-link boundaries explicit and reusable
   - this keeps the chat presentation subtree thinner and more maintainable under the enterprise engineering standard
+- Chat Action Handler Input Types Split V1:
+  - `chat-panel-action-handler-inputs.ts` now consumes extracted handler-input contracts instead of keeping shared action props and inline builder input shapes inside the helper module
+  - `use-chat-panel-actions.ts` now imports `UseChatPanelActionsProps` from the dedicated `chat-panel-action-handler-inputs.types.ts` boundary
+  - this keeps chat action orchestration typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
