@@ -2,8 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 const authFormFramePath = path.resolve(process.cwd(), "components/auth-form-frame.tsx");
+const authFormFrameTypesPath = path.resolve(process.cwd(), "components/auth-form-frame.types.ts");
 const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
+const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const authFormFrameLines = authFormFrameSource.split(/\r?\n/).length;
+const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 
 for (const [relativePath, getterName, maxAllowedLines] of [
   ["components/login-form.tsx", "getLoginFormCopy", 95],
@@ -61,7 +64,8 @@ for (const [relativePath, getterName, maxAllowedLines] of [
 
 for (const requiredFrameToken of [
   'import { LanguageSwitcher } from "./language-switcher";',
-  'type AuthFormFrameProps = {',
+  'import type { AuthFormFrameProps } from "./auth-form-frame.types";',
+  "}: AuthFormFrameProps) {",
   "<LanguageSwitcher locale={locale} onChange={onLocaleChange} />",
   '<Link className="button secondary" href={alternateHref}>',
   '<main className="page-shell">',
@@ -71,8 +75,28 @@ for (const requiredFrameToken of [
   }
 }
 
+for (const forbiddenFrameToken of [
+  "type AuthFormFrameProps = {",
+]) {
+  if (authFormFrameSource.includes(forbiddenFrameToken)) {
+    throw new Error(`components/auth-form-frame.tsx must keep auth frame prop typing delegated: ${forbiddenFrameToken}`);
+  }
+}
+
 if (authFormFrameLines > 50) {
   throw new Error(`components/auth-form-frame.tsx exceeded 50 lines: ${authFormFrameLines}`);
+}
+
+for (const requiredFrameTypesToken of [
+  'import type { ReactNode } from "react"; import type { LocaleCode } from "../lib/locale"; export type AuthFormFrameProps = { alternateHref: string; alternateLabel: string; children: ReactNode; eyebrow: string; locale: LocaleCode; onLocaleChange: (locale: LocaleCode) => void; title: string };',
+]) {
+  if (!authFormFrameTypesSource.includes(requiredFrameTypesToken)) {
+    throw new Error(`components/auth-form-frame.types.ts must own auth frame prop typing: ${requiredFrameTypesToken}`);
+  }
+}
+
+if (authFormFrameTypesLines > 2) {
+  throw new Error(`components/auth-form-frame.types.ts exceeded 2 lines: ${authFormFrameTypesLines}`);
 }
 
 console.log("auth-form structure verification passed");

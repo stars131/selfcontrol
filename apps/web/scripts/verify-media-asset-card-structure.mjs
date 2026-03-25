@@ -16,6 +16,9 @@ const previewHookLineCount = previewHookSource.split(/\r?\n/).length;
 const previewContentPath = path.resolve(process.cwd(), "components/media-preview-content.tsx");
 const previewContentSource = fs.readFileSync(previewContentPath, "utf8");
 const previewContentLineCount = previewContentSource.split(/\r?\n/).length;
+const previewContentTypesPath = path.resolve(process.cwd(), "components/media-preview-content.types.ts");
+const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8");
+const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
@@ -148,7 +151,8 @@ if (previewHookLineCount > 90) {
 }
 
 for (const requiredPreviewContentUsage of [
-  'from "./media-preview.types";',
+  'import type { MediaPreviewContentProps } from "./media-preview-content.types";',
+  "}: MediaPreviewContentProps) {",
   "if (!previewable) {",
   "Loading preview...",
   "Preview not ready.",
@@ -162,8 +166,29 @@ for (const requiredPreviewContentUsage of [
   }
 }
 
+for (const forbiddenPreviewContentToken of [
+  'from "./media-preview.types";',
+  "type MediaPreviewContentProps =",
+]) {
+  if (previewContentSource.includes(forbiddenPreviewContentToken)) {
+    throw new Error(`media-preview-content.tsx must keep preview content prop typing delegated: ${forbiddenPreviewContentToken}`);
+  }
+}
+
 if (previewContentLineCount > 50) {
   throw new Error(`media-preview-content.tsx exceeded 50 lines: ${previewContentLineCount}`);
+}
+
+for (const requiredPreviewContentTypesUsage of [
+  'import type { MediaPreviewControllerResult, MediaPreviewProps } from "./media-preview.types"; export type MediaPreviewContentProps = Pick<MediaPreviewProps, "asset"> & MediaPreviewControllerResult;',
+]) {
+  if (!previewContentTypesSource.includes(requiredPreviewContentTypesUsage)) {
+    throw new Error(`media-preview-content.types.ts must own preview content prop typing: ${requiredPreviewContentTypesUsage}`);
+  }
+}
+
+if (previewContentTypesLineCount > 2) {
+  throw new Error(`media-preview-content.types.ts exceeded 2 lines: ${previewContentTypesLineCount}`);
 }
 
 console.log("media-asset-card structure verification passed");
