@@ -1042,6 +1042,14 @@ const workspaceMediaRetentionActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-actions.types.ts",
 );
+const workspaceMediaRetentionCardActionHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-action-helpers.ts",
+);
+const workspaceMediaRetentionCardActionHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-action-helpers.types.ts",
+);
 const workspaceMediaRetentionListsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-lists.tsx",
@@ -1369,6 +1377,14 @@ const workspaceMediaRetentionActionsSource = fs.readFileSync(
 );
 const workspaceMediaRetentionActionsTypesSource = fs.readFileSync(
   workspaceMediaRetentionActionsTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardActionHelpersSource = fs.readFileSync(
+  workspaceMediaRetentionCardActionHelpersPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardActionHelpersTypesSource = fs.readFileSync(
+  workspaceMediaRetentionCardActionHelpersTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionHeaderSource = fs.readFileSync(
@@ -2114,6 +2130,8 @@ const workspaceMediaRetentionCardTypesLines =
   workspaceMediaRetentionCardTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionActionsTypesLines =
   workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionCardActionHelpersTypesLines =
+  workspaceMediaRetentionCardActionHelpersTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionHeaderTypesLines =
   workspaceMediaRetentionHeaderTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionListsTypesLines =
@@ -11464,6 +11482,48 @@ const maxWorkspaceMediaRetentionActionsTypesLines = 2;
 if (workspaceMediaRetentionActionsTypesLines > maxWorkspaceMediaRetentionActionsTypesLines) {
   throw new Error(
     `workspace-media-retention-actions.types.ts exceeded ${maxWorkspaceMediaRetentionActionsTypesLines} lines: ${workspaceMediaRetentionActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionCardActionHelpersUsage of [
+  'import type {',
+  'from "./workspace-media-retention-card-action-helpers.types";',
+  "}: BuildWorkspaceMediaRetentionActionMessageInput) {",
+  "}: BuildWorkspaceMediaRetentionActionsPropsInput): WorkspaceMediaRetentionActionsProps {",
+]) {
+  if (!workspaceMediaRetentionCardActionHelpersSource.includes(requiredWorkspaceMediaRetentionCardActionHelpersUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-action-helpers.ts must reuse extracted helper input types: ${requiredWorkspaceMediaRetentionCardActionHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceMediaRetentionCardActionHelpersToken of [
+  "}: {",
+  "actionResult: MediaRetentionActionResult | null;",
+  "handleArchive: WorkspaceMediaRetentionActionsProps[\"onArchive\"];",
+]) {
+  if (workspaceMediaRetentionCardActionHelpersSource.includes(forbiddenWorkspaceMediaRetentionCardActionHelpersToken)) {
+    throw new Error(
+      `workspace-media-retention-card-action-helpers.ts must keep helper input typing delegated: ${forbiddenWorkspaceMediaRetentionCardActionHelpersToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceMediaRetentionCardActionHelpersTypesUsage of [
+  'import type { MediaRetentionActionResult } from "./workspace-media-retention-controller.types"; import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types"; import type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy"; export type BuildWorkspaceMediaRetentionActionMessageInput = { actionResult: MediaRetentionActionResult | null; archiveCompleted: string; cleanupCompleted: string }; export type BuildWorkspaceMediaRetentionActionsPropsInput = { actionLoading: boolean; clearSelection: () => void; copy: WorkspaceMediaRetentionCopy; handleArchive: WorkspaceMediaRetentionActionsProps["onArchive"]; handleCleanup: (input: { mediaIds: string[]; purgeOrphanFiles: boolean; confirmMessage: string }) => Promise<void>; report: { orphan_file_count?: number; retention_candidates: Array<{ media_id: string }> } | null; role: WorkspaceMediaRetentionActionsProps["role"]; selectAllCandidates: () => void; selectedMediaIds: string[] };',
+]) {
+  if (!workspaceMediaRetentionCardActionHelpersTypesSource.includes(requiredWorkspaceMediaRetentionCardActionHelpersTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-action-helpers.types.ts must own helper input typing: ${requiredWorkspaceMediaRetentionCardActionHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionCardActionHelpersTypesLines = 2;
+if (workspaceMediaRetentionCardActionHelpersTypesLines > maxWorkspaceMediaRetentionCardActionHelpersTypesLines) {
+  throw new Error(
+    `workspace-media-retention-card-action-helpers.types.ts exceeded ${maxWorkspaceMediaRetentionCardActionHelpersTypesLines} lines: ${workspaceMediaRetentionCardActionHelpersTypesLines}`,
   );
 }
 

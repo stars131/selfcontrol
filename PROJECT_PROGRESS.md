@@ -1660,6 +1660,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-actions.tsx` now consumes an extracted props contract instead of keeping the action surface shape in the component module
   - `workspace-media-retention-card-action-helpers.ts` now imports the shared retention-actions contract from the dedicated `workspace-media-retention-actions.types.ts` boundary
   - this keeps retention action typing thinner and more maintainable under the enterprise engineering standard
+- Workspace Retention Action Helper Input Types Split V1:
+  - `workspace-media-retention-card-action-helpers.ts` now consumes extracted helper-input contracts instead of keeping inline input object shapes in the helper module
+  - the new `workspace-media-retention-card-action-helpers.types.ts` file keeps retention action-message and action-props input boundaries explicit and reusable
+  - this keeps retention helper typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

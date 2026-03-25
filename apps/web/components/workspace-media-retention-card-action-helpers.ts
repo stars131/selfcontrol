@@ -1,16 +1,14 @@
-import type { MediaRetentionActionResult } from "./workspace-media-retention-controller.types";
 import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";
-import type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
+import type {
+  BuildWorkspaceMediaRetentionActionMessageInput,
+  BuildWorkspaceMediaRetentionActionsPropsInput,
+} from "./workspace-media-retention-card-action-helpers.types";
 
 export function buildWorkspaceMediaRetentionActionMessage({
   actionResult,
   archiveCompleted,
   cleanupCompleted,
-}: {
-  actionResult: MediaRetentionActionResult | null;
-  archiveCompleted: string;
-  cleanupCompleted: string;
-}) {
+}: BuildWorkspaceMediaRetentionActionMessageInput) {
   if (actionResult?.kind === "archive") {
     return `${archiveCompleted}: ${actionResult.result.candidate_media_count} / ${actionResult.result.candidate_media_size_label}`;
   }
@@ -32,24 +30,7 @@ export function buildWorkspaceMediaRetentionActionsProps({
   role,
   selectAllCandidates,
   selectedMediaIds,
-}: {
-  actionLoading: boolean;
-  clearSelection: () => void;
-  copy: WorkspaceMediaRetentionCopy;
-  handleArchive: WorkspaceMediaRetentionActionsProps["onArchive"];
-  handleCleanup: (input: {
-    mediaIds: string[];
-    purgeOrphanFiles: boolean;
-    confirmMessage: string;
-  }) => Promise<void>;
-  report: {
-    orphan_file_count?: number;
-    retention_candidates: Array<{ media_id: string }>;
-  } | null;
-  role: WorkspaceMediaRetentionActionsProps["role"];
-  selectAllCandidates: () => void;
-  selectedMediaIds: string[];
-}): WorkspaceMediaRetentionActionsProps {
+}: BuildWorkspaceMediaRetentionActionsPropsInput): WorkspaceMediaRetentionActionsProps {
   return {
     actionLoading,
     archiveConfirmSelected: copy.archiveConfirmSelected,
