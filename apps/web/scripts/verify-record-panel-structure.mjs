@@ -869,6 +869,16 @@ const workspaceShellClientPropsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-client-props.types.ts",
 );
+const workspaceShellClientPath = path.resolve(process.cwd(), "components/workspace-shell-client.tsx");
+const workspaceShellClientTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-client.types.ts",
+);
+const workspaceShellFramePath = path.resolve(process.cwd(), "components/workspace-shell-frame.tsx");
+const workspaceShellFrameTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-frame.types.ts",
+);
 const workspaceShellRefreshersResultTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-refreshers-result.types.ts",
@@ -1169,6 +1179,10 @@ const workspaceShellClientPropsTypesSource = fs.readFileSync(
   workspaceShellClientPropsTypesPath,
   "utf8",
 );
+const workspaceShellClientSource = fs.readFileSync(workspaceShellClientPath, "utf8");
+const workspaceShellClientTypesSource = fs.readFileSync(workspaceShellClientTypesPath, "utf8");
+const workspaceShellFrameSource = fs.readFileSync(workspaceShellFramePath, "utf8");
+const workspaceShellFrameTypesSource = fs.readFileSync(workspaceShellFrameTypesPath, "utf8");
 const workspaceShellRefreshersResultTypesSource = fs.readFileSync(
   workspaceShellRefreshersResultTypesPath,
   "utf8",
@@ -1932,6 +1946,8 @@ const workspaceShellActionsResultTypesLines =
   workspaceShellActionsResultTypesSource.split(/\r?\n/).length;
 const workspaceShellClientPropsTypesLines =
   workspaceShellClientPropsTypesSource.split(/\r?\n/).length;
+const workspaceShellClientTypesLines = workspaceShellClientTypesSource.split(/\r?\n/).length;
+const workspaceShellFrameTypesLines = workspaceShellFrameTypesSource.split(/\r?\n/).length;
 const workspaceShellRefreshersResultTypesLines =
   workspaceShellRefreshersResultTypesSource.split(/\r?\n/).length;
 const workspaceShellRouterTypesLines = workspaceShellRouterTypesSource.split(/\r?\n/).length;
@@ -10450,6 +10466,77 @@ const maxWorkspaceShellClientPropsTypesLines = 7;
 if (workspaceShellClientPropsTypesLines > maxWorkspaceShellClientPropsTypesLines) {
   throw new Error(
     `workspace-shell-client-props.types.ts exceeded ${maxWorkspaceShellClientPropsTypesLines} lines: ${workspaceShellClientPropsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceShellClientUsage of [
+  'import type { WorkspaceShellClientProps } from "./workspace-shell-client.types";',
+  "}: WorkspaceShellClientProps) {",
+]) {
+  if (!workspaceShellClientSource.includes(requiredWorkspaceShellClientUsage)) {
+    throw new Error(
+      `workspace-shell-client.tsx must reuse the extracted shell-client props type: ${requiredWorkspaceShellClientUsage}`,
+    );
+  }
+}
+
+if (workspaceShellClientSource.includes("workspaceId }: { workspaceId: string }")) {
+  throw new Error("workspace-shell-client.tsx must keep shell-client prop typing delegated");
+}
+
+for (const requiredWorkspaceShellClientTypesUsage of [
+  'export type WorkspaceShellClientProps = { workspaceId: string };',
+]) {
+  if (!workspaceShellClientTypesSource.includes(requiredWorkspaceShellClientTypesUsage)) {
+    throw new Error(
+      `workspace-shell-client.types.ts must own shell-client prop typing: ${requiredWorkspaceShellClientTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceShellClientTypesLines = 2;
+if (workspaceShellClientTypesLines > maxWorkspaceShellClientTypesLines) {
+  throw new Error(
+    `workspace-shell-client.types.ts exceeded ${maxWorkspaceShellClientTypesLines} lines: ${workspaceShellClientTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceShellFrameUsage of [
+  'import type { WorkspaceShellFrameProps } from "./workspace-shell-frame.types";',
+  "}: WorkspaceShellFrameProps) {",
+]) {
+  if (!workspaceShellFrameSource.includes(requiredWorkspaceShellFrameUsage)) {
+    throw new Error(
+      `workspace-shell-frame.tsx must reuse the extracted shell-frame props type: ${requiredWorkspaceShellFrameUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceShellFrameToken of [
+  'import type { ReactNode } from "react";',
+  "type WorkspaceShellFrameProps = {",
+]) {
+  if (workspaceShellFrameSource.includes(forbiddenWorkspaceShellFrameToken)) {
+    throw new Error(
+      `workspace-shell-frame.tsx must keep shell-frame prop typing delegated: ${forbiddenWorkspaceShellFrameToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceShellFrameTypesUsage of [
+  'import type { ReactNode } from "react"; export type WorkspaceShellFrameProps = { children: ReactNode; error: string; loading: boolean };',
+]) {
+  if (!workspaceShellFrameTypesSource.includes(requiredWorkspaceShellFrameTypesUsage)) {
+    throw new Error(
+      `workspace-shell-frame.types.ts must own shell-frame prop typing: ${requiredWorkspaceShellFrameTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceShellFrameTypesLines = 2;
+if (workspaceShellFrameTypesLines > maxWorkspaceShellFrameTypesLines) {
+  throw new Error(
+    `workspace-shell-frame.types.ts exceeded ${maxWorkspaceShellFrameTypesLines} lines: ${workspaceShellFrameTypesLines}`,
   );
 }
 

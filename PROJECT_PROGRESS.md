@@ -1632,6 +1632,10 @@ Last updated: 2026-03-25
   - provider feature card action/field components now consume extracted prop contracts instead of inlining `Pick<ProviderFeatureCardProps, ...>` inside the component files
   - `workspace-settings-loading-shell.tsx` now also consumes an extracted loading-shell prop type instead of keeping its inline shape in the function signature
   - this keeps provider/settings presentation components thinner and more consistent with the enterprise boundary cleanup
+- Workspace Shell Client and Frame Props Split V1:
+  - `workspace-shell-client.tsx` and `workspace-shell-frame.tsx` now consume extracted prop contracts instead of keeping inline or local prop shapes inside shell components
+  - the new `workspace-shell-client.types.ts` and `workspace-shell-frame.types.ts` files keep the workspace shell entry boundary explicit and easier to evolve safely
+  - this keeps top-level workspace composition modules thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

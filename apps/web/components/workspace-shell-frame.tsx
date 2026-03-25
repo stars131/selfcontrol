@@ -1,10 +1,4 @@
-import type { ReactNode } from "react";
-
-type WorkspaceShellFrameProps = {
-  children: ReactNode;
-  error: string;
-  loading: boolean;
-};
+import type { WorkspaceShellFrameProps } from "./workspace-shell-frame.types";
 
 export function WorkspaceShellFrame({
   children,
