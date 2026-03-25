@@ -11,10 +11,7 @@ import {
   listWorkspaceMembers,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
-import type {
-  RouterLike,
-  UseWorkspaceSettingsControllerState,
-} from "./workspace-settings-controller.types";
+import type { UseWorkspaceSettingsLoadInput } from "./use-workspace-settings-load.types";
 
 function getWorkspaceSettingsLoadErrorMessage(caught: unknown) {
   return caught instanceof Error ? caught.message : "Failed to load settings";
@@ -24,11 +21,7 @@ export function useWorkspaceSettingsLoad({
   router,
   state,
   workspaceId,
-}: {
-  router: RouterLike;
-  state: UseWorkspaceSettingsControllerState;
-  workspaceId: string;
-}) {
+}: UseWorkspaceSettingsLoadInput) {
   const {
     setError,
     setKnowledgeStats,

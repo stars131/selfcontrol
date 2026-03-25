@@ -1,0 +1,1 @@
+import type { RouterLike, UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type UseWorkspaceSettingsLoadInput = { router: RouterLike; state: UseWorkspaceSettingsControllerState; workspaceId: string };

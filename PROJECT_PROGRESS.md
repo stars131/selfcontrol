@@ -1692,6 +1692,10 @@ Last updated: 2026-03-25
   - `map-drilldown-card.tsx`, `map-status-notices.tsx`, `map-panel-header.tsx`, `mapped-records-list.tsx`, and `map-search-form.tsx` now consume extracted prop contracts instead of keeping inline signatures in those map leaf components
   - the new map leaf `*.types.ts` files keep drill-down, status, header, mapped-record list, and search-form boundaries explicit and reusable
   - this keeps the map presentation subtree thinner and more maintainable under the enterprise engineering standard
+- Workspace Entry and Settings Hook Input Types Split V1:
+  - `use-workspace-entry-controller-derived-data.ts`, `use-workspace-entry-load.ts`, `use-workspace-settings-anchor.ts`, and `use-workspace-settings-load.ts` now consume extracted input contracts instead of keeping inline hook input object shapes in those modules
+  - the new workspace hook `*.types.ts` files keep entry-derived-data, entry-load, settings-anchor, and settings-load boundaries explicit and reusable
+  - this keeps workspace hook typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

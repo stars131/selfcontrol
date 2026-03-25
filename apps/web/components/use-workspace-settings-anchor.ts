@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import type { UseWorkspaceSettingsAnchorInput } from "./use-workspace-settings-anchor.types";
 
 export function useWorkspaceSettingsAnchor({
   highlightedAnchor,
   providerConfigCount,
   healthCheckedAt,
   setHighlightedAnchor,
-}: {
-  highlightedAnchor: string | null;
-  providerConfigCount: number;
-  healthCheckedAt?: string | null;
-  setHighlightedAnchor: (value: string | null) => void;
-}) {
+}: UseWorkspaceSettingsAnchorInput) {
   useEffect(() => {
     const syncHighlightedAnchor = () => {
       const anchor = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";

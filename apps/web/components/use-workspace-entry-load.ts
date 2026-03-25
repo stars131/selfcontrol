@@ -2,13 +2,10 @@
 
 import { useEffect } from "react";
 
-import { getCurrentUser, listWorkspaceTransferJobs, listWorkspaces } from "../lib/api";
+import { getCurrentUser, listWorkspaces } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
-import type {
-  RouterLike,
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { UseWorkspaceEntryLoadInput } from "./use-workspace-entry-load.types";
 
 export function useWorkspaceEntryLoad({
   loadTransferJobs,
@@ -18,15 +15,7 @@ export function useWorkspaceEntryLoad({
   setToken,
   setUser,
   setWorkspaces,
-}: {
-  loadTransferJobs: (activeToken: string) => Promise<void>;
-  router: RouterLike;
-  setError: WorkspaceEntryControllerState["setError"];
-  setLoading: WorkspaceEntryControllerState["setLoading"];
-  setToken: WorkspaceEntryControllerState["setToken"];
-  setUser: WorkspaceEntryControllerState["setUser"];
-  setWorkspaces: WorkspaceEntryControllerState["setWorkspaces"];
-}) {
+}: UseWorkspaceEntryLoadInput) {
   useEffect(() => {
     const nextToken = getStoredToken();
     if (!nextToken) {

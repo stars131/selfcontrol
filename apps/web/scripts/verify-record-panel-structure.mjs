@@ -1192,6 +1192,22 @@ const workspaceSettingsLoadingShellTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-loading-shell.types.ts",
 );
+const useWorkspaceSettingsAnchorPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-settings-anchor.ts",
+);
+const useWorkspaceSettingsAnchorTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-settings-anchor.types.ts",
+);
+const useWorkspaceSettingsLoadPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-settings-load.ts",
+);
+const useWorkspaceSettingsLoadTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-settings-load.types.ts",
+);
 const useChatPanelActionDerivedDataPath = path.resolve(
   process.cwd(),
   "components/use-chat-panel-action-derived-data.ts",
@@ -1345,6 +1361,22 @@ const workspaceEntryLoadingShellPath = path.resolve(
 const workspaceEntryLoadingShellTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.types.ts",
+);
+const useWorkspaceEntryControllerDerivedDataPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-controller-derived-data.ts",
+);
+const useWorkspaceEntryControllerDerivedDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-controller-derived-data.types.ts",
+);
+const useWorkspaceEntryLoadPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-load.ts",
+);
+const useWorkspaceEntryLoadTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-entry-load.types.ts",
 );
 const recordSummaryCardPath = path.resolve(process.cwd(), "components/record-summary-card.tsx");
 const recordSummaryCardTypesPath = path.resolve(
@@ -1654,6 +1686,16 @@ const workspaceSettingsLoadingShellTypesSource = fs.readFileSync(
   workspaceSettingsLoadingShellTypesPath,
   "utf8",
 );
+const useWorkspaceSettingsAnchorSource = fs.readFileSync(useWorkspaceSettingsAnchorPath, "utf8");
+const useWorkspaceSettingsAnchorTypesSource = fs.readFileSync(
+  useWorkspaceSettingsAnchorTypesPath,
+  "utf8",
+);
+const useWorkspaceSettingsLoadSource = fs.readFileSync(useWorkspaceSettingsLoadPath, "utf8");
+const useWorkspaceSettingsLoadTypesSource = fs.readFileSync(
+  useWorkspaceSettingsLoadTypesPath,
+  "utf8",
+);
 const useChatPanelActionDerivedDataSource = fs.readFileSync(
   useChatPanelActionDerivedDataPath,
   "utf8",
@@ -1728,6 +1770,19 @@ const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPat
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
   workspaceEntryLoadingShellTypesPath,
+  "utf8",
+);
+const useWorkspaceEntryControllerDerivedDataSource = fs.readFileSync(
+  useWorkspaceEntryControllerDerivedDataPath,
+  "utf8",
+);
+const useWorkspaceEntryControllerDerivedDataTypesSource = fs.readFileSync(
+  useWorkspaceEntryControllerDerivedDataTypesPath,
+  "utf8",
+);
+const useWorkspaceEntryLoadSource = fs.readFileSync(useWorkspaceEntryLoadPath, "utf8");
+const useWorkspaceEntryLoadTypesSource = fs.readFileSync(
+  useWorkspaceEntryLoadTypesPath,
   "utf8",
 );
 const recordSummaryCardSource = fs.readFileSync(recordSummaryCardPath, "utf8");
@@ -2408,6 +2463,10 @@ const providerSettingsJumpNavTypesLines =
   providerSettingsJumpNavTypesSource.split(/\r?\n/).length;
 const workspaceSettingsLoadingShellTypesLines =
   workspaceSettingsLoadingShellTypesSource.split(/\r?\n/).length;
+const useWorkspaceSettingsAnchorTypesLines =
+  useWorkspaceSettingsAnchorTypesSource.split(/\r?\n/).length;
+const useWorkspaceSettingsLoadTypesLines =
+  useWorkspaceSettingsLoadTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionHandlerInputsTypesLines =
@@ -2437,6 +2496,9 @@ const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
+const useWorkspaceEntryControllerDerivedDataTypesLines =
+  useWorkspaceEntryControllerDerivedDataTypesSource.split(/\r?\n/).length;
+const useWorkspaceEntryLoadTypesLines = useWorkspaceEntryLoadTypesSource.split(/\r?\n/).length;
 const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).length;
 const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
@@ -12618,6 +12680,77 @@ if (workspaceSettingsLoadingShellTypesLines > maxWorkspaceSettingsLoadingShellTy
   );
 }
 
+for (const requiredUseWorkspaceSettingsAnchorUsage of [
+  'import type { UseWorkspaceSettingsAnchorInput } from "./use-workspace-settings-anchor.types";',
+  "}: UseWorkspaceSettingsAnchorInput) {",
+]) {
+  if (!useWorkspaceSettingsAnchorSource.includes(requiredUseWorkspaceSettingsAnchorUsage)) {
+    throw new Error(
+      `use-workspace-settings-anchor.ts must reuse the extracted settings-anchor input type: ${requiredUseWorkspaceSettingsAnchorUsage}`,
+    );
+  }
+}
+
+if (useWorkspaceSettingsAnchorSource.includes("}: {")) {
+  throw new Error("use-workspace-settings-anchor.ts must keep settings-anchor input typing delegated");
+}
+
+for (const requiredUseWorkspaceSettingsAnchorTypesUsage of [
+  'export type UseWorkspaceSettingsAnchorInput = { highlightedAnchor: string | null; providerConfigCount: number; healthCheckedAt?: string | null; setHighlightedAnchor: (value: string | null) => void };',
+]) {
+  if (!useWorkspaceSettingsAnchorTypesSource.includes(requiredUseWorkspaceSettingsAnchorTypesUsage)) {
+    throw new Error(
+      `use-workspace-settings-anchor.types.ts must own settings-anchor input typing: ${requiredUseWorkspaceSettingsAnchorTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceSettingsAnchorTypesLines = 2;
+if (useWorkspaceSettingsAnchorTypesLines > maxUseWorkspaceSettingsAnchorTypesLines) {
+  throw new Error(
+    `use-workspace-settings-anchor.types.ts exceeded ${maxUseWorkspaceSettingsAnchorTypesLines} lines: ${useWorkspaceSettingsAnchorTypesLines}`,
+  );
+}
+
+for (const requiredUseWorkspaceSettingsLoadUsage of [
+  'import type { UseWorkspaceSettingsLoadInput } from "./use-workspace-settings-load.types";',
+  "}: UseWorkspaceSettingsLoadInput) {",
+]) {
+  if (!useWorkspaceSettingsLoadSource.includes(requiredUseWorkspaceSettingsLoadUsage)) {
+    throw new Error(
+      `use-workspace-settings-load.ts must reuse the extracted settings-load input type: ${requiredUseWorkspaceSettingsLoadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseWorkspaceSettingsLoadToken of [
+  'import type { RouterLike, UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types";',
+  "}: {",
+]) {
+  if (useWorkspaceSettingsLoadSource.includes(forbiddenUseWorkspaceSettingsLoadToken)) {
+    throw new Error(
+      `use-workspace-settings-load.ts must keep settings-load input typing delegated: ${forbiddenUseWorkspaceSettingsLoadToken}`,
+    );
+  }
+}
+
+for (const requiredUseWorkspaceSettingsLoadTypesUsage of [
+  'import type { RouterLike, UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type UseWorkspaceSettingsLoadInput = { router: RouterLike; state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+]) {
+  if (!useWorkspaceSettingsLoadTypesSource.includes(requiredUseWorkspaceSettingsLoadTypesUsage)) {
+    throw new Error(
+      `use-workspace-settings-load.types.ts must own settings-load input typing: ${requiredUseWorkspaceSettingsLoadTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceSettingsLoadTypesLines = 2;
+if (useWorkspaceSettingsLoadTypesLines > maxUseWorkspaceSettingsLoadTypesLines) {
+  throw new Error(
+    `use-workspace-settings-load.types.ts exceeded ${maxUseWorkspaceSettingsLoadTypesLines} lines: ${useWorkspaceSettingsLoadTypesLines}`,
+  );
+}
+
 for (const requiredWorkspaceExportJobsActionsUsage of [
   'import type { CreateWorkspaceExportJobsActionsInput } from "./workspace-export-jobs-actions.types";',
   "}: CreateWorkspaceExportJobsActionsInput) {",
@@ -13453,6 +13586,79 @@ const maxWorkspaceEntryLoadingShellTypesLines = 2;
 if (workspaceEntryLoadingShellTypesLines > maxWorkspaceEntryLoadingShellTypesLines) {
   throw new Error(
     `workspace-entry-loading-shell.types.ts exceeded ${maxWorkspaceEntryLoadingShellTypesLines} lines: ${workspaceEntryLoadingShellTypesLines}`,
+  );
+}
+
+for (const requiredUseWorkspaceEntryControllerDerivedDataUsage of [
+  'import type { UseWorkspaceEntryControllerDerivedDataInput } from "./use-workspace-entry-controller-derived-data.types";',
+  "}: UseWorkspaceEntryControllerDerivedDataInput) {",
+]) {
+  if (!useWorkspaceEntryControllerDerivedDataSource.includes(requiredUseWorkspaceEntryControllerDerivedDataUsage)) {
+    throw new Error(
+      `use-workspace-entry-controller-derived-data.ts must reuse the extracted entry-derived-data input type: ${requiredUseWorkspaceEntryControllerDerivedDataUsage}`,
+    );
+  }
+}
+
+if (useWorkspaceEntryControllerDerivedDataSource.includes("}: {")) {
+  throw new Error(
+    "use-workspace-entry-controller-derived-data.ts must keep entry-derived-data input typing delegated",
+  );
+}
+
+for (const requiredUseWorkspaceEntryControllerDerivedDataTypesUsage of [
+  'export type UseWorkspaceEntryControllerDerivedDataInput = { name: string; shareTokenInput: string };',
+]) {
+  if (!useWorkspaceEntryControllerDerivedDataTypesSource.includes(requiredUseWorkspaceEntryControllerDerivedDataTypesUsage)) {
+    throw new Error(
+      `use-workspace-entry-controller-derived-data.types.ts must own entry-derived-data input typing: ${requiredUseWorkspaceEntryControllerDerivedDataTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceEntryControllerDerivedDataTypesLines = 2;
+if (useWorkspaceEntryControllerDerivedDataTypesLines > maxUseWorkspaceEntryControllerDerivedDataTypesLines) {
+  throw new Error(
+    `use-workspace-entry-controller-derived-data.types.ts exceeded ${maxUseWorkspaceEntryControllerDerivedDataTypesLines} lines: ${useWorkspaceEntryControllerDerivedDataTypesLines}`,
+  );
+}
+
+for (const requiredUseWorkspaceEntryLoadUsage of [
+  'import type { UseWorkspaceEntryLoadInput } from "./use-workspace-entry-load.types";',
+  "}: UseWorkspaceEntryLoadInput) {",
+]) {
+  if (!useWorkspaceEntryLoadSource.includes(requiredUseWorkspaceEntryLoadUsage)) {
+    throw new Error(
+      `use-workspace-entry-load.ts must reuse the extracted entry-load input type: ${requiredUseWorkspaceEntryLoadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseWorkspaceEntryLoadToken of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types";',
+  "}: {",
+]) {
+  if (useWorkspaceEntryLoadSource.includes(forbiddenUseWorkspaceEntryLoadToken)) {
+    throw new Error(
+      `use-workspace-entry-load.ts must keep entry-load input typing delegated: ${forbiddenUseWorkspaceEntryLoadToken}`,
+    );
+  }
+}
+
+for (const requiredUseWorkspaceEntryLoadTypesUsage of [
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type UseWorkspaceEntryLoadInput = { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike; setError: WorkspaceEntryControllerState["setError"]; setLoading: WorkspaceEntryControllerState["setLoading"]; setToken: WorkspaceEntryControllerState["setToken"]; setUser: WorkspaceEntryControllerState["setUser"]; setWorkspaces: WorkspaceEntryControllerState["setWorkspaces"] };',
+]) {
+  if (!useWorkspaceEntryLoadTypesSource.includes(requiredUseWorkspaceEntryLoadTypesUsage)) {
+    throw new Error(
+      `use-workspace-entry-load.types.ts must own entry-load input typing: ${requiredUseWorkspaceEntryLoadTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceEntryLoadTypesLines = 2;
+if (useWorkspaceEntryLoadTypesLines > maxUseWorkspaceEntryLoadTypesLines) {
+  throw new Error(
+    `use-workspace-entry-load.types.ts exceeded ${maxUseWorkspaceEntryLoadTypesLines} lines: ${useWorkspaceEntryLoadTypesLines}`,
   );
 }
 
