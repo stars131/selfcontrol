@@ -1835,6 +1835,10 @@ Last updated: 2026-03-25
   - `provider-settings-feature-list.tsx` now delegates per-feature draft lookup and `ProviderFeatureCard` prop assembly to `provider-settings-feature-list-item.tsx` instead of keeping those details inline inside the list map
   - the new `provider-settings-feature-list-item.types.ts` file keeps the per-item list contract explicit and reusable while the parent feature list remains focused on formatter creation and list iteration
   - `verify-provider-settings-structure.mjs` now enforces that delegated list-item boundary, exact one-line type contract, and line-count ceilings so future provider list updates stay safer and easier to maintain
+- Reminder Item Summary and Actions Leaves Split V1:
+  - `record-reminder-item-card.tsx` now delegates reminder summary rendering and action-button rendering to `record-reminder-item-card-summary.tsx` and `record-reminder-item-card-actions.tsx` instead of keeping both sections inline in the item card
+  - the new reminder-item `*.types.ts` files keep summary and actions prop contracts explicit and reusable while the parent item card remains focused on shell composition
+  - `verify-record-reminder-panel-structure.mjs` now enforces those delegated reminder-item boundaries, exact one-line type contracts, and line-count ceilings so future reminder-card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

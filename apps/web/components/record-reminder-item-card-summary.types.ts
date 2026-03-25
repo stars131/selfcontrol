@@ -1,0 +1,1 @@
+import type { RecordReminderItemCardProps } from "./record-reminder-panel.types"; export type RecordReminderItemCardSummaryProps = Pick<RecordReminderItemCardProps, "formatReminderEnabledLabel" | "formatReminderStatusLabel" | "formatReminderTimestampLabel" | "reminder" | "selectedRecordTitle" | "untitledReminderLabel">;

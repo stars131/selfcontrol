@@ -1,0 +1,1 @@
+import type { RecordReminderItemCardProps } from "./record-reminder-panel.types"; export type RecordReminderItemCardActionsProps = Pick<RecordReminderItemCardProps, "canWriteWorkspace" | "deleteReminderLabel" | "enableReminderLabel" | "markReminderDoneLabel" | "onDeleteReminder" | "onMarkReminderDone" | "onToggleReminderEnabled" | "pauseReminderLabel" | "reminder">;
