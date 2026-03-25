@@ -1748,6 +1748,10 @@ Last updated: 2026-03-25
   - `use-provider-settings-draft-sync.ts`, `use-map-panel-amap-*.ts`, `record-panel-controller-filter-preset-*-action.ts`, `record-editor-support-tools-*.ts`, and `workspace-media-retention-selection-actions.ts` now consume extracted input contracts instead of keeping direct `Pick<...>` signatures in those helper modules
   - the new `*.types.ts` files keep provider draft sync, AMap hook setup, filter preset actions, editor support helpers, and retention selection boundaries explicit and reusable
   - this keeps map/provider helper orchestration and editor/retention helper typing thinner and more maintainable under the enterprise engineering standard
+- Retention Controller Input Types Split V1:
+  - `use-workspace-media-retention-report.ts`, `workspace-media-retention-controller-actions.ts`, and `workspace-media-retention-execution-actions.ts` now consume extracted input contracts instead of keeping direct `Pick<...>` signatures in those retention control modules
+  - the new `*.types.ts` files keep retention report loading, controller action composition, and execution action boundaries explicit and reusable
+  - this keeps retention controller orchestration thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

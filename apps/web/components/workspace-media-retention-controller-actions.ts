@@ -2,10 +2,7 @@
 
 import { createWorkspaceMediaRetentionExecutionActions } from "./workspace-media-retention-execution-actions";
 import { createWorkspaceMediaRetentionSelectionActions } from "./workspace-media-retention-selection-actions";
-import type {
-  UseWorkspaceMediaRetentionControllerProps,
-  WorkspaceMediaRetentionControllerState,
-} from "./workspace-media-retention-controller.types";
+import type { CreateWorkspaceMediaRetentionControllerActionsInput } from "./workspace-media-retention-controller-actions.types";
 
 export function createWorkspaceMediaRetentionControllerActions({
   actionFailedMessage,
@@ -19,22 +16,7 @@ export function createWorkspaceMediaRetentionControllerActions({
   setSelectedMediaIds,
   token,
   workspaceId,
-}: Pick<
-  UseWorkspaceMediaRetentionControllerProps,
-  "actionFailedMessage" | "token" | "workspaceId"
-> &
-  Pick<
-    WorkspaceMediaRetentionControllerState,
-    | "olderThanDays"
-    | "report"
-    | "selectedMediaIds"
-    | "setActionError"
-    | "setActionLoading"
-    | "setActionResult"
-    | "setSelectedMediaIds"
-  > & {
-    loadReport: (threshold: number) => Promise<void>;
-  }) {
+}: CreateWorkspaceMediaRetentionControllerActionsInput) {
   const selectionActions = createWorkspaceMediaRetentionSelectionActions({
     report,
     setSelectedMediaIds,

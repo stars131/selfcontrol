@@ -2,10 +2,9 @@
 
 import { archiveMediaRetention, cleanupMediaRetention } from "../lib/api";
 import { getWorkspaceMediaRetentionActionErrorMessage } from "./workspace-media-retention-controller-helpers";
+import type { CreateWorkspaceMediaRetentionExecutionActionsInput } from "./workspace-media-retention-execution-actions.types";
 import type {
-  UseWorkspaceMediaRetentionControllerProps,
   WorkspaceMediaRetentionCleanupInput,
-  WorkspaceMediaRetentionControllerState,
 } from "./workspace-media-retention-controller.types";
 
 export function createWorkspaceMediaRetentionExecutionActions({
@@ -18,20 +17,7 @@ export function createWorkspaceMediaRetentionExecutionActions({
   setActionResult,
   token,
   workspaceId,
-}: Pick<
-  UseWorkspaceMediaRetentionControllerProps,
-  "actionFailedMessage" | "token" | "workspaceId"
-> &
-  Pick<
-    WorkspaceMediaRetentionControllerState,
-    | "olderThanDays"
-    | "selectedMediaIds"
-    | "setActionError"
-    | "setActionLoading"
-    | "setActionResult"
-  > & {
-    loadReport: (threshold: number) => Promise<void>;
-  }) {
+}: CreateWorkspaceMediaRetentionExecutionActionsInput) {
   async function handleArchive(confirmMessage: string) {
     if (!selectedMediaIds.length || !window.confirm(confirmMessage)) {
       return;

@@ -4,10 +4,7 @@ import { useCallback, useEffect } from "react";
 
 import { getMediaRetentionReport } from "../lib/api";
 import { getWorkspaceMediaRetentionActionErrorMessage } from "./workspace-media-retention-controller-helpers";
-import type {
-  UseWorkspaceMediaRetentionControllerProps,
-  WorkspaceMediaRetentionControllerState,
-} from "./workspace-media-retention-controller.types";
+import type { UseWorkspaceMediaRetentionReportInput } from "./use-workspace-media-retention-report.types";
 
 export function useWorkspaceMediaRetentionReport({
   loadFailedMessage,
@@ -18,14 +15,7 @@ export function useWorkspaceMediaRetentionReport({
   setSelectedMediaIds,
   token,
   workspaceId,
-}: Pick<
-  UseWorkspaceMediaRetentionControllerProps,
-  "loadFailedMessage" | "token" | "workspaceId"
-> &
-  Pick<
-    WorkspaceMediaRetentionControllerState,
-    "olderThanDays" | "setError" | "setLoading" | "setReport" | "setSelectedMediaIds"
-  >) {
+}: UseWorkspaceMediaRetentionReportInput) {
   const loadReport = useCallback(
     async (threshold: number) => {
       setLoading(true);

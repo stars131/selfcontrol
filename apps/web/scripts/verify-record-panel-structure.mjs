@@ -1324,6 +1324,30 @@ const workspaceMediaRetentionSelectionActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-selection-actions.types.ts",
 );
+const useWorkspaceMediaRetentionReportPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-media-retention-report.ts",
+);
+const useWorkspaceMediaRetentionReportTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-media-retention-report.types.ts",
+);
+const workspaceMediaRetentionControllerActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-controller-actions.ts",
+);
+const workspaceMediaRetentionControllerActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-controller-actions.types.ts",
+);
+const workspaceMediaRetentionExecutionActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-execution-actions.ts",
+);
+const workspaceMediaRetentionExecutionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-execution-actions.types.ts",
+);
 const workspaceMediaRetentionCardActionHelpersPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-card-action-helpers.ts",
@@ -2279,6 +2303,30 @@ const workspaceMediaRetentionSelectionActionsSource = fs.readFileSync(
 );
 const workspaceMediaRetentionSelectionActionsTypesSource = fs.readFileSync(
   workspaceMediaRetentionSelectionActionsTypesPath,
+  "utf8",
+);
+const useWorkspaceMediaRetentionReportSource = fs.readFileSync(
+  useWorkspaceMediaRetentionReportPath,
+  "utf8",
+);
+const useWorkspaceMediaRetentionReportTypesSource = fs.readFileSync(
+  useWorkspaceMediaRetentionReportTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionControllerActionsSource = fs.readFileSync(
+  workspaceMediaRetentionControllerActionsPath,
+  "utf8",
+);
+const workspaceMediaRetentionControllerActionsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionControllerActionsTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionExecutionActionsSource = fs.readFileSync(
+  workspaceMediaRetentionExecutionActionsPath,
+  "utf8",
+);
+const workspaceMediaRetentionExecutionActionsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionExecutionActionsTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionCardActionHelpersSource = fs.readFileSync(
@@ -3424,6 +3472,12 @@ const workspaceMediaRetentionActionsTypesLines =
   workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionSelectionActionsTypesLines =
   workspaceMediaRetentionSelectionActionsTypesSource.split(/\r?\n/).length;
+const useWorkspaceMediaRetentionReportTypesLines =
+  useWorkspaceMediaRetentionReportTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionControllerActionsTypesLines =
+  workspaceMediaRetentionControllerActionsTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionExecutionActionsTypesLines =
+  workspaceMediaRetentionExecutionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardActionHelpersTypesLines =
   workspaceMediaRetentionCardActionHelpersTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardCopyHelpersTypesLines =
@@ -14117,6 +14171,59 @@ if (workspaceMediaRetentionSelectionActionsTypesLines > maxWorkspaceMediaRetenti
   throw new Error(
     `workspace-media-retention-selection-actions.types.ts exceeded ${maxWorkspaceMediaRetentionSelectionActionsTypesLines} lines: ${workspaceMediaRetentionSelectionActionsTypesLines}`,
   );
+}
+
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, forbiddenTokens, typesLine, maxLines, actualLines] of [
+  [
+    "use-workspace-media-retention-report",
+    useWorkspaceMediaRetentionReportSource,
+    useWorkspaceMediaRetentionReportTypesSource,
+    'import type { UseWorkspaceMediaRetentionReportInput } from "./use-workspace-media-retention-report.types";',
+    "}: UseWorkspaceMediaRetentionReportInput) {",
+    ["UseWorkspaceMediaRetentionControllerProps", "WorkspaceMediaRetentionControllerState", "}: Pick<"],
+    'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type UseWorkspaceMediaRetentionReportInput = Pick<UseWorkspaceMediaRetentionControllerProps, "loadFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "setError" | "setLoading" | "setReport" | "setSelectedMediaIds">;',
+    2,
+    useWorkspaceMediaRetentionReportTypesLines,
+  ],
+  [
+    "workspace-media-retention-controller-actions",
+    workspaceMediaRetentionControllerActionsSource,
+    workspaceMediaRetentionControllerActionsTypesSource,
+    'import type { CreateWorkspaceMediaRetentionControllerActionsInput } from "./workspace-media-retention-controller-actions.types";',
+    "}: CreateWorkspaceMediaRetentionControllerActionsInput) {",
+    ["UseWorkspaceMediaRetentionControllerProps", "WorkspaceMediaRetentionControllerState", "}: Pick<"],
+    'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionControllerActionsInput = Pick<UseWorkspaceMediaRetentionControllerProps, "actionFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "report" | "selectedMediaIds" | "setActionError" | "setActionLoading" | "setActionResult" | "setSelectedMediaIds"> & { loadReport: (threshold: number) => Promise<void> };',
+    2,
+    workspaceMediaRetentionControllerActionsTypesLines,
+  ],
+  [
+    "workspace-media-retention-execution-actions",
+    workspaceMediaRetentionExecutionActionsSource,
+    workspaceMediaRetentionExecutionActionsTypesSource,
+    'import type { CreateWorkspaceMediaRetentionExecutionActionsInput } from "./workspace-media-retention-execution-actions.types";',
+    "}: CreateWorkspaceMediaRetentionExecutionActionsInput) {",
+    ["UseWorkspaceMediaRetentionControllerProps", "WorkspaceMediaRetentionControllerState", "}: Pick<"],
+    'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionExecutionActionsInput = Pick<UseWorkspaceMediaRetentionControllerProps, "actionFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "selectedMediaIds" | "setActionError" | "setActionLoading" | "setActionResult"> & { loadReport: (threshold: number) => Promise<void> };',
+    2,
+    workspaceMediaRetentionExecutionActionsTypesLines,
+  ],
+]) {
+  for (const requiredUsage of [importLine, signatureLine]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.ts must reuse the extracted retention input type: ${requiredUsage}`);
+    }
+  }
+  for (const forbiddenToken of forbiddenTokens) {
+    if (componentSource.includes(forbiddenToken)) {
+      throw new Error(`${componentName}.ts must keep retention input typing delegated: ${forbiddenToken}`);
+    }
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own retention input typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
+  }
 }
 
 for (const requiredWorkspaceMediaRetentionCardActionHelpersUsage of [
