@@ -1640,6 +1640,10 @@ Last updated: 2026-03-25
   - `chat-panel-header.tsx`, `chat-panel-composer.tsx`, and `chat-message-thread.tsx` now consume extracted prop contracts instead of keeping local or inline prop shapes inside the component modules
   - the new `chat-panel-header.types.ts`, `chat-panel-composer.types.ts`, and `chat-message-thread.types.ts` files keep the chat presentation boundary explicit and easier to evolve independently
   - this keeps the chat subtree thinner and more maintainable under the enterprise engineering standard
+- Auth Frame and Media Metadata Props Split V1:
+  - `auth-form-frame.tsx` and `media-asset-card-metadata.tsx` now consume extracted prop contracts instead of keeping local prop shapes inside the component modules
+  - the new `auth-form-frame.types.ts` and `media-asset-card-metadata.types.ts` files keep entry/auth and media metadata presentation boundaries explicit and easier to evolve safely
+  - this keeps cross-surface UI building blocks thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

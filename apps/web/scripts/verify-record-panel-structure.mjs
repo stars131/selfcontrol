@@ -1133,6 +1133,19 @@ const chatPanelComposerTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-composer.types.ts",
 );
+const authFormFramePath = path.resolve(process.cwd(), "components/auth-form-frame.tsx");
+const authFormFrameTypesPath = path.resolve(
+  process.cwd(),
+  "components/auth-form-frame.types.ts",
+);
+const mediaAssetCardMetadataPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata.tsx",
+);
+const mediaAssetCardMetadataTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -1380,6 +1393,10 @@ const chatPanelHeaderSource = fs.readFileSync(chatPanelHeaderPath, "utf8");
 const chatPanelHeaderTypesSource = fs.readFileSync(chatPanelHeaderTypesPath, "utf8");
 const chatPanelComposerSource = fs.readFileSync(chatPanelComposerPath, "utf8");
 const chatPanelComposerTypesSource = fs.readFileSync(chatPanelComposerTypesPath, "utf8");
+const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
+const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
+const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
+const mediaAssetCardMetadataTypesSource = fs.readFileSync(mediaAssetCardMetadataTypesPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -2033,6 +2050,8 @@ const chatPanelActionsResultTypesLines =
 const chatMessageThreadTypesLines = chatMessageThreadTypesSource.split(/\r?\n/).length;
 const chatPanelHeaderTypesLines = chatPanelHeaderTypesSource.split(/\r?\n/).length;
 const chatPanelComposerTypesLines = chatPanelComposerTypesSource.split(/\r?\n/).length;
+const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -11909,6 +11928,86 @@ const maxChatPanelComposerTypesLines = 2;
 if (chatPanelComposerTypesLines > maxChatPanelComposerTypesLines) {
   throw new Error(
     `chat-panel-composer.types.ts exceeded ${maxChatPanelComposerTypesLines} lines: ${chatPanelComposerTypesLines}`,
+  );
+}
+
+for (const requiredAuthFormFrameUsage of [
+  'import type { AuthFormFrameProps } from "./auth-form-frame.types";',
+  "}: AuthFormFrameProps) {",
+]) {
+  if (!authFormFrameSource.includes(requiredAuthFormFrameUsage)) {
+    throw new Error(
+      `auth-form-frame.tsx must reuse the extracted auth-frame props type: ${requiredAuthFormFrameUsage}`,
+    );
+  }
+}
+
+for (const forbiddenAuthFormFrameToken of [
+  'import type { ReactNode } from "react";',
+  'import type { LocaleCode } from "../lib/locale";',
+  "type AuthFormFrameProps = {",
+]) {
+  if (authFormFrameSource.includes(forbiddenAuthFormFrameToken)) {
+    throw new Error(
+      `auth-form-frame.tsx must keep auth-frame prop typing delegated: ${forbiddenAuthFormFrameToken}`,
+    );
+  }
+}
+
+for (const requiredAuthFormFrameTypesUsage of [
+  'import type { ReactNode } from "react"; import type { LocaleCode } from "../lib/locale"; export type AuthFormFrameProps = { alternateHref: string; alternateLabel: string; children: ReactNode; eyebrow: string; locale: LocaleCode; onLocaleChange: (locale: LocaleCode) => void; title: string };',
+]) {
+  if (!authFormFrameTypesSource.includes(requiredAuthFormFrameTypesUsage)) {
+    throw new Error(
+      `auth-form-frame.types.ts must own auth-frame prop typing: ${requiredAuthFormFrameTypesUsage}`,
+    );
+  }
+}
+
+const maxAuthFormFrameTypesLines = 2;
+if (authFormFrameTypesLines > maxAuthFormFrameTypesLines) {
+  throw new Error(
+    `auth-form-frame.types.ts exceeded ${maxAuthFormFrameTypesLines} lines: ${authFormFrameTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
+  "}: MediaAssetCardMetadataProps) {",
+]) {
+  if (!mediaAssetCardMetadataSource.includes(requiredMediaAssetCardMetadataUsage)) {
+    throw new Error(
+      `media-asset-card-metadata.tsx must reuse the extracted metadata props type: ${requiredMediaAssetCardMetadataUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardMetadataToken of [
+  'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
+  'import type { MediaAsset } from "../lib/types";',
+  "type MediaAssetCardMetadataProps = {",
+]) {
+  if (mediaAssetCardMetadataSource.includes(forbiddenMediaAssetCardMetadataToken)) {
+    throw new Error(
+      `media-asset-card-metadata.tsx must keep metadata prop typing delegated: ${forbiddenMediaAssetCardMetadataToken}`,
+    );
+  }
+}
+
+for (const requiredMediaAssetCardMetadataTypesUsage of [
+  'import type { MediaIssueCopy } from "../lib/record-panel-ui"; import type { MediaAsset } from "../lib/types"; export type MediaAssetCardMetadataProps = { asset: MediaAsset; mediaIssueCopy: MediaIssueCopy; formatHistoryTimestampLabel: (value?: string | null) => string };',
+]) {
+  if (!mediaAssetCardMetadataTypesSource.includes(requiredMediaAssetCardMetadataTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata.types.ts must own metadata prop typing: ${requiredMediaAssetCardMetadataTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataTypesLines = 2;
+if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
+  throw new Error(
+    `media-asset-card-metadata.types.ts exceeded ${maxMediaAssetCardMetadataTypesLines} lines: ${mediaAssetCardMetadataTypesLines}`,
   );
 }
 

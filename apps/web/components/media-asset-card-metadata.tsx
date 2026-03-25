@@ -2,14 +2,7 @@
 
 import { formatMediaSize } from "../lib/record-panel-format";
 import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";
-import type { MediaIssueCopy } from "../lib/record-panel-ui";
-import type { MediaAsset } from "../lib/types";
-
-type MediaAssetCardMetadataProps = {
-  asset: MediaAsset;
-  mediaIssueCopy: MediaIssueCopy;
-  formatHistoryTimestampLabel: (value?: string | null) => string;
-};
+import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";
 
 export function MediaAssetCardMetadata({
   asset,

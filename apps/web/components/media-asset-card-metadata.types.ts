@@ -1,0 +1,1 @@
+import type { MediaIssueCopy } from "../lib/record-panel-ui"; import type { MediaAsset } from "../lib/types"; export type MediaAssetCardMetadataProps = { asset: MediaAsset; mediaIssueCopy: MediaIssueCopy; formatHistoryTimestampLabel: (value?: string | null) => string };

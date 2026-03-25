@@ -1,20 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
-
-import type { LocaleCode } from "../lib/locale";
+import type { AuthFormFrameProps } from "./auth-form-frame.types";
 import { LanguageSwitcher } from "./language-switcher";
-
-type AuthFormFrameProps = {
-  alternateHref: string;
-  alternateLabel: string;
-  children: ReactNode;
-  eyebrow: string;
-  locale: LocaleCode;
-  onLocaleChange: (locale: LocaleCode) => void;
-  title: string;
-};
 
 export function AuthFormFrame({
   alternateHref,
