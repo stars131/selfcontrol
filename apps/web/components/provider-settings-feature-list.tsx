@@ -1,10 +1,7 @@
 "use client";
 
-import { ProviderFeatureCard } from "./provider-feature-card";
-import {
-  buildProviderFeatureCardProps,
-  buildProviderSettingsSecretStatusFormatter,
-} from "./provider-settings-panel-helpers";
+import { ProviderSettingsFeatureListItem } from "./provider-settings-feature-list-item";
+import { buildProviderSettingsSecretStatusFormatter } from "./provider-settings-panel-helpers";
 import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";
 
 export function ProviderSettingsFeatureList({
@@ -26,35 +23,25 @@ export function ProviderSettingsFeatureList({
 
   return (
     <div className="record-list compact-list" style={{ marginTop: 12 }}>
-      {providerConfigs.map((item) => {
-        const draftItem = providerDrafts[item.feature_code];
-        if (!draftItem) {
-          return null;
-        }
-        const isDirty = isProviderDraftDirty(item);
-
-        return (
-          <ProviderFeatureCard
-            {...buildProviderFeatureCardProps({
-              copy,
-              draftItem,
-              formatSecretStatus,
-              highlightedAnchor,
-              isDirty,
-              item,
-              locale,
-              mediaStorageHealth,
-              onProviderDraftChange: handleProviderDraftChange,
-              onRefreshMediaStorageHealth,
-              onReset: handleResetProviderConfig,
-              onSave: handleSaveProviderConfig,
-              providerSavingCode,
-              refreshingMediaStorageHealth,
-            })}
-            key={item.feature_code}
-          />
-        );
-      })}
+      {providerConfigs.map((item) => (
+        <ProviderSettingsFeatureListItem
+          copy={copy}
+          formatSecretStatus={formatSecretStatus}
+          handleProviderDraftChange={handleProviderDraftChange}
+          handleResetProviderConfig={handleResetProviderConfig}
+          handleSaveProviderConfig={handleSaveProviderConfig}
+          highlightedAnchor={highlightedAnchor}
+          isProviderDraftDirty={isProviderDraftDirty}
+          item={item}
+          key={item.feature_code}
+          locale={locale}
+          mediaStorageHealth={mediaStorageHealth}
+          onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
+          providerDrafts={providerDrafts}
+          providerSavingCode={providerSavingCode}
+          refreshingMediaStorageHealth={refreshingMediaStorageHealth}
+        />
+      ))}
     </div>
   );
 }

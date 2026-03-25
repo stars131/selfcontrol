@@ -1831,6 +1831,10 @@ Last updated: 2026-03-25
   - `provider-feature-card.tsx` now delegates feature heading/description rendering and media-storage health-section rendering to `provider-feature-card-header.tsx` and `provider-feature-card-health-section.tsx` instead of keeping those sections inline with the card shell
   - the new provider-feature-card `*.types.ts` files keep header and health-section prop contracts explicit and reusable while the parent card remains focused on shell composition
   - `verify-provider-settings-structure.mjs` now enforces those delegated provider-card boundaries, exact one-line type contracts, and line-count ceilings so future provider-settings updates stay safer and easier to maintain
+- Provider Feature List Item Split V1:
+  - `provider-settings-feature-list.tsx` now delegates per-feature draft lookup and `ProviderFeatureCard` prop assembly to `provider-settings-feature-list-item.tsx` instead of keeping those details inline inside the list map
+  - the new `provider-settings-feature-list-item.types.ts` file keeps the per-item list contract explicit and reusable while the parent feature list remains focused on formatter creation and list iteration
+  - `verify-provider-settings-structure.mjs` now enforces that delegated list-item boundary, exact one-line type contract, and line-count ceilings so future provider list updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

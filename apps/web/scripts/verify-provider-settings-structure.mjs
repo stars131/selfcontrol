@@ -22,6 +22,14 @@ const providerSettingsFeatureListTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-feature-list.types.ts",
 );
+const providerSettingsFeatureListItemPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list-item.tsx",
+);
+const providerSettingsFeatureListItemTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list-item.types.ts",
+);
 const providerSettingsPanelTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-panel.types.ts",
@@ -33,6 +41,11 @@ const panelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "ut
 const panelHelpersTypesSource = fs.readFileSync(providerSettingsPanelHelpersTypesPath, "utf8");
 const featureListSource = fs.readFileSync(providerSettingsFeatureListPath, "utf8");
 const featureListTypesSource = fs.readFileSync(providerSettingsFeatureListTypesPath, "utf8");
+const featureListItemSource = fs.readFileSync(providerSettingsFeatureListItemPath, "utf8");
+const featureListItemTypesSource = fs.readFileSync(
+  providerSettingsFeatureListItemTypesPath,
+  "utf8",
+);
 const panelTypesSource = fs.readFileSync(providerSettingsPanelTypesPath, "utf8");
 const copySource = fs.readFileSync(providerSettingsCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
@@ -41,6 +54,8 @@ const panelHelpersLineCount = panelHelpersSource.split(/\r?\n/).length;
 const panelHelpersTypesLineCount = panelHelpersTypesSource.split(/\r?\n/).length;
 const featureListLineCount = featureListSource.split(/\r?\n/).length;
 const featureListTypesLineCount = featureListTypesSource.split(/\r?\n/).length;
+const featureListItemLineCount = featureListItemSource.split(/\r?\n/).length;
+const featureListItemTypesLineCount = featureListItemTypesSource.split(/\r?\n/).length;
 const panelTypesLineCount = panelTypesSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
@@ -197,7 +212,7 @@ if (lineCount > maxAllowedLines) {
 }
 
 for (const requiredFeatureListImport of [
-  'import { ProviderFeatureCard } from "./provider-feature-card";',
+  'import { ProviderSettingsFeatureListItem } from "./provider-settings-feature-list-item";',
   'from "./provider-settings-panel-helpers";',
   'import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";',
 ]) {
@@ -208,10 +223,10 @@ for (const requiredFeatureListImport of [
 
 for (const requiredFeatureListUsage of [
   "buildProviderSettingsSecretStatusFormatter(copy)",
-  "buildProviderFeatureCardProps({",
-  "providerConfigs.map((item) => {",
-  "<ProviderFeatureCard",
-  "isProviderDraftDirty(item)",
+  "providerConfigs.map((item) => (",
+  "<ProviderSettingsFeatureListItem",
+  "formatSecretStatus={formatSecretStatus}",
+  "item={item}",
   "}: ProviderSettingsFeatureListProps) {",
 ]) {
   if (!featureListSource.includes(requiredFeatureListUsage)) {
@@ -223,13 +238,16 @@ for (const forbiddenFeatureListToken of [
   'import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
   'import type { ProviderDraft } from "./provider-settings-controller.types";',
   "type ProviderSettingsFeatureListProps = Pick<",
+  'import { ProviderFeatureCard } from "./provider-feature-card";',
+  "buildProviderFeatureCardProps({",
+  "isProviderDraftDirty(item)",
 ]) {
   if (featureListSource.includes(forbiddenFeatureListToken)) {
     throw new Error(`provider-settings-feature-list.tsx must keep feature-list prop typing delegated: ${forbiddenFeatureListToken}`);
   }
 }
 
-const maxFeatureListLines = 85;
+const maxFeatureListLines = 65;
 if (featureListLineCount > maxFeatureListLines) {
   throw new Error(`provider-settings-feature-list.tsx exceeded ${maxFeatureListLines} lines: ${featureListLineCount}`);
 }
@@ -245,6 +263,55 @@ for (const requiredFeatureListTypesUsage of [
 const maxFeatureListTypesLines = 2;
 if (featureListTypesLineCount > maxFeatureListTypesLines) {
   throw new Error(`provider-settings-feature-list.types.ts exceeded ${maxFeatureListTypesLines} lines: ${featureListTypesLineCount}`);
+}
+
+for (const requiredFeatureListItemImport of [
+  'import { ProviderFeatureCard } from "./provider-feature-card";',
+  'from "./provider-settings-panel-helpers";',
+  'import type { ProviderSettingsFeatureListItemProps } from "./provider-settings-feature-list-item.types";',
+]) {
+  if (!featureListItemSource.includes(requiredFeatureListItemImport)) {
+    throw new Error(`provider-settings-feature-list-item.tsx must import delegated list-item dependencies: ${requiredFeatureListItemImport}`);
+  }
+}
+
+for (const requiredFeatureListItemUsage of [
+  "buildProviderFeatureCardProps({",
+  "providerDrafts[item.feature_code]",
+  "isProviderDraftDirty(item)",
+  "<ProviderFeatureCard",
+  "}: ProviderSettingsFeatureListItemProps) {",
+]) {
+  if (!featureListItemSource.includes(requiredFeatureListItemUsage)) {
+    throw new Error(`provider-settings-feature-list-item.tsx must own per-feature card rendering: ${requiredFeatureListItemUsage}`);
+  }
+}
+
+for (const forbiddenFeatureListItemToken of [
+  'import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";',
+  "type ProviderSettingsFeatureListItemProps =",
+]) {
+  if (featureListItemSource.includes(forbiddenFeatureListItemToken)) {
+    throw new Error(`provider-settings-feature-list-item.tsx must keep list-item prop typing delegated: ${forbiddenFeatureListItemToken}`);
+  }
+}
+
+const maxFeatureListItemLines = 50;
+if (featureListItemLineCount > maxFeatureListItemLines) {
+  throw new Error(`provider-settings-feature-list-item.tsx exceeded ${maxFeatureListItemLines} lines: ${featureListItemLineCount}`);
+}
+
+for (const requiredFeatureListItemTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types"; export type ProviderSettingsFeatureListItemProps = Omit<ProviderSettingsFeatureListProps, "providerConfigs"> & { formatSecretStatus: ProviderFeatureCardProps["formatSecretStatus"]; item: ProviderSettingsFeatureListProps["providerConfigs"][number] };',
+]) {
+  if (!featureListItemTypesSource.includes(requiredFeatureListItemTypesUsage)) {
+    throw new Error(`provider-settings-feature-list-item.types.ts must own list-item prop typing: ${requiredFeatureListItemTypesUsage}`);
+  }
+}
+
+const maxFeatureListItemTypesLines = 2;
+if (featureListItemTypesLineCount > maxFeatureListItemTypesLines) {
+  throw new Error(`provider-settings-feature-list-item.types.ts exceeded ${maxFeatureListItemTypesLines} lines: ${featureListItemTypesLineCount}`);
 }
 
 for (const requiredPanelTypesUsage of [
