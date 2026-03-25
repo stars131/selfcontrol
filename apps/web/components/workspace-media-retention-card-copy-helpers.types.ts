@@ -1,0 +1,1 @@
+export type BuildWorkspaceMediaRetentionControllerInputArgs = { actionFailedMessage: string; allHealthyLabel: string; loadFailedMessage: string; missingFilesLabel: string; orphanFilesLabel: string; remoteMediaLabel: string; token: string; workspaceId: string };

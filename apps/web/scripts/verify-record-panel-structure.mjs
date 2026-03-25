@@ -106,6 +106,22 @@ const recordPanelBrowseWorkspaceRecordPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-record-props.ts",
 );
+const recordEditorWorkspaceMainSectionsPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-workspace-main-sections-props.ts",
+);
+const recordEditorWorkspaceMainSectionsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-workspace-main-sections-props.types.ts",
+);
+const recordReminderToolsPanelPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-tools-panel-props.ts",
+);
+const recordReminderToolsPanelPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-tools-panel-props.types.ts",
+);
 const recordPanelBrowseWorkspaceOutputPropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-output-props.types.ts",
@@ -1192,6 +1208,14 @@ const workspaceMediaRetentionCardActionHelpersTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-card-action-helpers.types.ts",
 );
+const workspaceMediaRetentionCardCopyHelpersPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-copy-helpers.ts",
+);
+const workspaceMediaRetentionCardCopyHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card-copy-helpers.types.ts",
+);
 const workspaceMediaRetentionListsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-lists.tsx",
@@ -1751,6 +1775,22 @@ const recordMediaSelectedContentPropsSource = fs.readFileSync(
   recordMediaSelectedContentPropsPath,
   "utf8",
 );
+const recordEditorWorkspaceMainSectionsPropsSource = fs.readFileSync(
+  recordEditorWorkspaceMainSectionsPropsPath,
+  "utf8",
+);
+const recordEditorWorkspaceMainSectionsPropsTypesSource = fs.readFileSync(
+  recordEditorWorkspaceMainSectionsPropsTypesPath,
+  "utf8",
+);
+const recordReminderToolsPanelPropsSource = fs.readFileSync(
+  recordReminderToolsPanelPropsPath,
+  "utf8",
+);
+const recordReminderToolsPanelPropsTypesSource = fs.readFileSync(
+  recordReminderToolsPanelPropsTypesPath,
+  "utf8",
+);
 const mapPanelContentSource = fs.readFileSync(mapPanelContentPath, "utf8");
 const mapPanelContentTypesSource = fs.readFileSync(mapPanelContentTypesPath, "utf8");
 const mapDrilldownCardSource = fs.readFileSync(mapDrilldownCardPath, "utf8");
@@ -1871,6 +1911,14 @@ const workspaceMediaRetentionCardActionHelpersSource = fs.readFileSync(
 );
 const workspaceMediaRetentionCardActionHelpersTypesSource = fs.readFileSync(
   workspaceMediaRetentionCardActionHelpersTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardCopyHelpersSource = fs.readFileSync(
+  workspaceMediaRetentionCardCopyHelpersPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardCopyHelpersTypesSource = fs.readFileSync(
+  workspaceMediaRetentionCardCopyHelpersTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionHeaderSource = fs.readFileSync(
@@ -2758,6 +2806,10 @@ const recordMediaProcessingPanelsTypesLines =
   recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
 const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
+const recordEditorWorkspaceMainSectionsPropsTypesLines =
+  recordEditorWorkspaceMainSectionsPropsTypesSource.split(/\r?\n/).length;
+const recordReminderToolsPanelPropsTypesLines =
+  recordReminderToolsPanelPropsTypesSource.split(/\r?\n/).length;
 const mapPanelContentTypesLines = mapPanelContentTypesSource.split(/\r?\n/).length;
 const mapDrilldownCardTypesLines = mapDrilldownCardTypesSource.split(/\r?\n/).length;
 const mapStatusNoticesTypesLines = mapStatusNoticesTypesSource.split(/\r?\n/).length;
@@ -2803,6 +2855,8 @@ const workspaceMediaRetentionActionsTypesLines =
   workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardActionHelpersTypesLines =
   workspaceMediaRetentionCardActionHelpersTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionCardCopyHelpersTypesLines =
+  workspaceMediaRetentionCardCopyHelpersTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionHeaderTypesLines =
   workspaceMediaRetentionHeaderTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionListsTypesLines =
@@ -11889,6 +11943,79 @@ if (recordMediaSelectedContentPropsLines > maxRecordMediaSelectedContentPropsLin
   );
 }
 
+for (const requiredRecordEditorWorkspaceMainSectionsPropsUsage of [
+  'import type { BuildRecordEditorMainSectionsPropsInput } from "./record-editor-workspace-main-sections-props.types";',
+  "}: BuildRecordEditorMainSectionsPropsInput): RecordEditorMainSectionsProps {",
+]) {
+  if (!recordEditorWorkspaceMainSectionsPropsSource.includes(requiredRecordEditorWorkspaceMainSectionsPropsUsage)) {
+    throw new Error(
+      `record-editor-workspace-main-sections-props.ts must reuse the extracted editor-main-sections input type: ${requiredRecordEditorWorkspaceMainSectionsPropsUsage}`,
+    );
+  }
+}
+
+if (recordEditorWorkspaceMainSectionsPropsSource.includes("}: {")) {
+  throw new Error(
+    "record-editor-workspace-main-sections-props.ts must keep editor-main-sections input typing delegated",
+  );
+}
+
+for (const requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage of [
+  'import type { RecordEditorMainSectionsProps } from "./record-editor-main-sections.types"; import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types"; export type BuildRecordEditorMainSectionsPropsInput = { fieldBindings: RecordEditorMainSectionsProps["fieldBindings"]; locationReviewBindings: RecordEditorMainSectionsProps["locationReviewBindings"]; props: RecordEditorWorkspaceProps };',
+]) {
+  if (!recordEditorWorkspaceMainSectionsPropsTypesSource.includes(requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage)) {
+    throw new Error(
+      `record-editor-workspace-main-sections-props.types.ts must own editor-main-sections input typing: ${requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordEditorWorkspaceMainSectionsPropsTypesLines = 2;
+if (recordEditorWorkspaceMainSectionsPropsTypesLines > maxRecordEditorWorkspaceMainSectionsPropsTypesLines) {
+  throw new Error(
+    `record-editor-workspace-main-sections-props.types.ts exceeded ${maxRecordEditorWorkspaceMainSectionsPropsTypesLines} lines: ${recordEditorWorkspaceMainSectionsPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecordReminderToolsPanelPropsUsage of [
+  'import type { BuildRecordReminderPanelPropsInput } from "./record-reminder-tools-panel-props.types";',
+  "}: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {",
+]) {
+  if (!recordReminderToolsPanelPropsSource.includes(requiredRecordReminderToolsPanelPropsUsage)) {
+    throw new Error(
+      `record-reminder-tools-panel-props.ts must reuse the extracted reminder-panel input type: ${requiredRecordReminderToolsPanelPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderToolsPanelPropsToken of [
+  "type ReminderBindings = Pick<",
+  "}: {",
+]) {
+  if (recordReminderToolsPanelPropsSource.includes(forbiddenRecordReminderToolsPanelPropsToken)) {
+    throw new Error(
+      `record-reminder-tools-panel-props.ts must keep reminder-panel input typing delegated: ${forbiddenRecordReminderToolsPanelPropsToken}`,
+    );
+  }
+}
+
+for (const requiredRecordReminderToolsPanelPropsTypesUsage of [
+  'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; import type { RecordReminderToolsProps } from "./record-reminder-tools.types"; export type ReminderBindings = Pick<RecordReminderPanelProps, "onMarkReminderDone" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "onToggleReminderEnabled">; export type BuildRecordReminderPanelPropsInput = { bindings: ReminderBindings; props: RecordReminderToolsProps };',
+]) {
+  if (!recordReminderToolsPanelPropsTypesSource.includes(requiredRecordReminderToolsPanelPropsTypesUsage)) {
+    throw new Error(
+      `record-reminder-tools-panel-props.types.ts must own reminder-panel input typing: ${requiredRecordReminderToolsPanelPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordReminderToolsPanelPropsTypesLines = 2;
+if (recordReminderToolsPanelPropsTypesLines > maxRecordReminderToolsPanelPropsTypesLines) {
+  throw new Error(
+    `record-reminder-tools-panel-props.types.ts exceeded ${maxRecordReminderToolsPanelPropsTypesLines} lines: ${recordReminderToolsPanelPropsTypesLines}`,
+  );
+}
+
 for (const requiredMediaStorageOverviewUsage of [
   'import type { MediaStorageOverviewProps } from "./media-storage-overview.types";',
   "export function MediaStorageOverview({",
@@ -13020,6 +13147,40 @@ const maxWorkspaceMediaRetentionCardActionHelpersTypesLines = 2;
 if (workspaceMediaRetentionCardActionHelpersTypesLines > maxWorkspaceMediaRetentionCardActionHelpersTypesLines) {
   throw new Error(
     `workspace-media-retention-card-action-helpers.types.ts exceeded ${maxWorkspaceMediaRetentionCardActionHelpersTypesLines} lines: ${workspaceMediaRetentionCardActionHelpersTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionCardCopyHelpersUsage of [
+  'import type { BuildWorkspaceMediaRetentionControllerInputArgs } from "./workspace-media-retention-card-copy-helpers.types";',
+  "}: BuildWorkspaceMediaRetentionControllerInputArgs) {",
+]) {
+  if (!workspaceMediaRetentionCardCopyHelpersSource.includes(requiredWorkspaceMediaRetentionCardCopyHelpersUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-copy-helpers.ts must reuse the extracted retention-copy helper input type: ${requiredWorkspaceMediaRetentionCardCopyHelpersUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionCardCopyHelpersSource.includes("}: {")) {
+  throw new Error(
+    "workspace-media-retention-card-copy-helpers.ts must keep retention-copy helper input typing delegated",
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionCardCopyHelpersTypesUsage of [
+  'export type BuildWorkspaceMediaRetentionControllerInputArgs = { actionFailedMessage: string; allHealthyLabel: string; loadFailedMessage: string; missingFilesLabel: string; orphanFilesLabel: string; remoteMediaLabel: string; token: string; workspaceId: string };',
+]) {
+  if (!workspaceMediaRetentionCardCopyHelpersTypesSource.includes(requiredWorkspaceMediaRetentionCardCopyHelpersTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-card-copy-helpers.types.ts must own retention-copy helper input typing: ${requiredWorkspaceMediaRetentionCardCopyHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionCardCopyHelpersTypesLines = 2;
+if (workspaceMediaRetentionCardCopyHelpersTypesLines > maxWorkspaceMediaRetentionCardCopyHelpersTypesLines) {
+  throw new Error(
+    `workspace-media-retention-card-copy-helpers.types.ts exceeded ${maxWorkspaceMediaRetentionCardCopyHelpersTypesLines} lines: ${workspaceMediaRetentionCardCopyHelpersTypesLines}`,
   );
 }
 

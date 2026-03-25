@@ -2,23 +2,12 @@
 
 import type { RecordReminderPanelProps } from "./record-reminder-panel.types";
 import type { RecordReminderToolsProps } from "./record-reminder-tools.types";
-
-type ReminderBindings = Pick<
-  RecordReminderPanelProps,
-  | "onMarkReminderDone"
-  | "onMessageChange"
-  | "onRemindAtChange"
-  | "onTitleChange"
-  | "onToggleReminderEnabled"
->;
+import type { BuildRecordReminderPanelPropsInput } from "./record-reminder-tools-panel-props.types";
 
 export function buildRecordReminderPanelProps({
   bindings,
   props,
-}: {
-  bindings: ReminderBindings;
-  props: RecordReminderToolsProps;
-}): RecordReminderPanelProps {
+}: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {
   return {
     canWriteWorkspace: props.canWriteWorkspace,
     channelInApp: props.channelInApp,

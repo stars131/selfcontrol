@@ -2,6 +2,7 @@ import type { LocaleCode } from "../lib/locale";
 
 import { getWorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
 import type { WorkspaceMediaRetentionCopy } from "./workspace-media-retention-copy";
+import type { BuildWorkspaceMediaRetentionControllerInputArgs } from "./workspace-media-retention-card-copy-helpers.types";
 
 export function buildWorkspaceMediaRetentionCopyBundle(locale: LocaleCode): {
   copy: WorkspaceMediaRetentionCopy;
@@ -26,16 +27,7 @@ export function buildWorkspaceMediaRetentionControllerInput({
   remoteMediaLabel,
   token,
   workspaceId,
-}: {
-  actionFailedMessage: string;
-  allHealthyLabel: string;
-  loadFailedMessage: string;
-  missingFilesLabel: string;
-  orphanFilesLabel: string;
-  remoteMediaLabel: string;
-  token: string;
-  workspaceId: string;
-}) {
+}: BuildWorkspaceMediaRetentionControllerInputArgs) {
   return {
     token,
     workspaceId,

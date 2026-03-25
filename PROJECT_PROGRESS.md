@@ -1720,6 +1720,10 @@ Last updated: 2026-03-25
   - `workspace-shell-conversation-state-load.ts`, `workspace-shell-managed-state-load.ts`, `workspace-shell-initial-follow-up.ts`, `workspace-shell-initial-load-helpers.ts`, and `workspace-shell-initial-bootstrap.ts` now consume extracted input contracts instead of keeping inline load input object shapes in those modules
   - the new workspace-shell initial-load `*.types.ts` files keep conversation-state, managed-state, follow-up, initial-load, and bootstrap boundaries explicit and reusable
   - this keeps workspace shell load orchestration typing thinner and more maintainable under the enterprise engineering standard
+- Reminder, Editor, and Retention Helper Input Types Split V1:
+  - `record-reminder-tools-panel-props.ts`, `record-editor-workspace-main-sections-props.ts`, and `workspace-media-retention-card-copy-helpers.ts` now consume extracted input contracts instead of keeping inline helper input object shapes in those modules
+  - the new helper `*.types.ts` files keep reminder-panel, editor-main-sections, and retention-controller input boundaries explicit and reusable
+  - this keeps these helper orchestration edges thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
