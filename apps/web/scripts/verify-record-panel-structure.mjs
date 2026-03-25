@@ -980,6 +980,14 @@ const workspaceMembersSectionTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-members-section.types.ts",
 );
+const workspaceMediaRetentionCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card.tsx",
+);
+const workspaceMediaRetentionCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-card.types.ts",
+);
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1135,6 +1143,14 @@ const workspaceSettingsOverviewCardTypesSource = fs.readFileSync(
 const workspaceMembersSectionSource = fs.readFileSync(workspaceMembersSectionPath, "utf8");
 const workspaceMembersSectionTypesSource = fs.readFileSync(
   workspaceMembersSectionTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardSource = fs.readFileSync(
+  workspaceMediaRetentionCardPath,
+  "utf8",
+);
+const workspaceMediaRetentionCardTypesSource = fs.readFileSync(
+  workspaceMediaRetentionCardTypesPath,
   "utf8",
 );
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
@@ -1768,6 +1784,8 @@ const workspaceSettingsOverviewCardTypesLines =
   workspaceSettingsOverviewCardTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionTypesLines =
   workspaceMembersSectionTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionCardTypesLines =
+  workspaceMediaRetentionCardTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10809,6 +10827,46 @@ const maxWorkspaceMembersSectionTypesLines = 2;
 if (workspaceMembersSectionTypesLines > maxWorkspaceMembersSectionTypesLines) {
   throw new Error(
     `workspace-members-section.types.ts exceeded ${maxWorkspaceMembersSectionTypesLines} lines: ${workspaceMembersSectionTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionCardUsage of [
+  'import type { WorkspaceMediaRetentionCardProps } from "./workspace-media-retention-card.types";',
+  "}: WorkspaceMediaRetentionCardProps) {",
+]) {
+  if (!workspaceMediaRetentionCardSource.includes(requiredWorkspaceMediaRetentionCardUsage)) {
+    throw new Error(
+      `workspace-media-retention-card.tsx must reuse the extracted retention-card props type: ${requiredWorkspaceMediaRetentionCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceMediaRetentionCardToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  "token: string;",
+  'role: "owner" | "editor";',
+]) {
+  if (workspaceMediaRetentionCardSource.includes(forbiddenWorkspaceMediaRetentionCardToken)) {
+    throw new Error(
+      `workspace-media-retention-card.tsx must keep retention-card prop typing delegated: ${forbiddenWorkspaceMediaRetentionCardToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceMediaRetentionCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; export type WorkspaceMediaRetentionCardProps = { token: string; workspaceId: string; locale: LocaleCode; role: "owner" | "editor" };',
+]) {
+  if (!workspaceMediaRetentionCardTypesSource.includes(requiredWorkspaceMediaRetentionCardTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-card.types.ts must own retention-card prop typing: ${requiredWorkspaceMediaRetentionCardTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionCardTypesLines = 2;
+if (workspaceMediaRetentionCardTypesLines > maxWorkspaceMediaRetentionCardTypesLines) {
+  throw new Error(
+    `workspace-media-retention-card.types.ts exceeded ${maxWorkspaceMediaRetentionCardTypesLines} lines: ${workspaceMediaRetentionCardTypesLines}`,
   );
 }
 

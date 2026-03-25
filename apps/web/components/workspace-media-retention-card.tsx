@@ -1,6 +1,5 @@
 "use client";
 
-import type { LocaleCode } from "../lib/locale";
 import { MediaRetentionItemCard } from "./media-retention-item-card";
 import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
 import {
@@ -9,6 +8,7 @@ import {
   buildWorkspaceMediaRetentionControllerInput,
   buildWorkspaceMediaRetentionCopyBundle,
 } from "./workspace-media-retention-card-helpers";
+import type { WorkspaceMediaRetentionCardProps } from "./workspace-media-retention-card.types";
 import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";
 import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
 import { WorkspaceMediaRetentionNotices } from "./workspace-media-retention-notices";
@@ -22,12 +22,7 @@ export function WorkspaceMediaRetentionCard({
   workspaceId,
   locale,
   role,
-}: {
-  token: string;
-  workspaceId: string;
-  locale: LocaleCode;
-  role: "owner" | "editor";
-}) {
+}: WorkspaceMediaRetentionCardProps) {
   const { copy, remoteMediaLabel, remoteReferenceLabel } = buildWorkspaceMediaRetentionCopyBundle(locale);
   const {
     olderThanDays,
