@@ -6,6 +6,25 @@ const panelSource = fs.readFileSync(panelPath, "utf8");
 const panelLineCount = panelSource.split(/\r?\n/).length;
 const formPath = path.resolve(process.cwd(), "components/record-reminder-form.tsx");
 const formSource = fs.readFileSync(formPath, "utf8");
+const formLineCount = formSource.split(/\r?\n/).length;
+const formFieldsPath = path.resolve(process.cwd(), "components/record-reminder-form-fields.tsx");
+const formFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-fields.types.ts",
+);
+const formActionsPath = path.resolve(process.cwd(), "components/record-reminder-form-actions.tsx");
+const formActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-actions.types.ts",
+);
+const formFieldsSource = fs.readFileSync(formFieldsPath, "utf8");
+const formFieldsTypesSource = fs.readFileSync(formFieldsTypesPath, "utf8");
+const formActionsSource = fs.readFileSync(formActionsPath, "utf8");
+const formActionsTypesSource = fs.readFileSync(formActionsTypesPath, "utf8");
+const formFieldsLineCount = formFieldsSource.split(/\r?\n/).length;
+const formActionsLineCount = formActionsSource.split(/\r?\n/).length;
+const formFieldsTypesLineCount = formFieldsTypesSource.split(/\r?\n/).length;
+const formActionsTypesLineCount = formActionsTypesSource.split(/\r?\n/).length;
 const itemCardPath = path.resolve(process.cwd(), "components/record-reminder-item-card.tsx");
 const itemCardSource = fs.readFileSync(itemCardPath, "utf8");
 
@@ -29,8 +48,66 @@ if (!panelSource.includes("<RecordReminderList")) {
   throw new Error("record-reminder-panel.tsx must delegate reminder list rendering");
 }
 
-if (!formSource.includes('type="datetime-local"')) {
-  throw new Error("record-reminder-form.tsx must keep datetime input rendering");
+for (const requiredFormUsage of [
+  'import { RecordReminderFormActions } from "./record-reminder-form-actions";',
+  'import { RecordReminderFormFields } from "./record-reminder-form-fields";',
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types";',
+  "<RecordReminderFormFields",
+  "<RecordReminderFormActions",
+]) {
+  if (!formSource.includes(requiredFormUsage)) {
+    throw new Error(`record-reminder-form.tsx must delegate reminder form sections: ${requiredFormUsage}`);
+  }
+}
+
+for (const forbiddenFormToken of [
+  'type="datetime-local"',
+  'className="action-row"',
+  'placeholder={reminderNotePlaceholder}',
+  'onClick={() => void onCreateReminder()}',
+]) {
+  if (formSource.includes(forbiddenFormToken)) {
+    throw new Error(`record-reminder-form.tsx must keep fields and actions delegated: ${forbiddenFormToken}`);
+  }
+}
+
+for (const requiredFormFieldsUsage of [
+  'import type { RecordReminderFormFieldsProps } from "./record-reminder-form-fields.types";',
+  "}: RecordReminderFormFieldsProps) {",
+  'type="datetime-local"',
+  'placeholder={reminderNotePlaceholder}',
+  'onChange={(event) => onTitleChange(event.target.value)}',
+]) {
+  if (!formFieldsSource.includes(requiredFormFieldsUsage)) {
+    throw new Error(`record-reminder-form-fields.tsx must own reminder field rendering: ${requiredFormFieldsUsage}`);
+  }
+}
+
+for (const requiredFormActionsUsage of [
+  'import type { RecordReminderFormActionsProps } from "./record-reminder-form-actions.types";',
+  "}: RecordReminderFormActionsProps) {",
+  'className="action-row"',
+  'onClick={() => void onCreateReminder()}',
+]) {
+  if (!formActionsSource.includes(requiredFormActionsUsage)) {
+    throw new Error(`record-reminder-form-actions.tsx must own reminder submit rendering: ${requiredFormActionsUsage}`);
+  }
+}
+
+for (const requiredFormFieldsTypesUsage of [
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types"; export type RecordReminderFormFieldsProps = Pick<RecordReminderFormProps, "canWriteWorkspace" | "channelInApp" | "channelLabel" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "remindAtLabel" | "reminderForm" | "reminderNoteLabel" | "reminderNotePlaceholder" | "reminderTitleLabel" | "reminderTitlePlaceholder">;',
+]) {
+  if (!formFieldsTypesSource.includes(requiredFormFieldsTypesUsage)) {
+    throw new Error(`record-reminder-form-fields.types.ts must own field prop typing: ${requiredFormFieldsTypesUsage}`);
+  }
+}
+
+for (const requiredFormActionsTypesUsage of [
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types"; export type RecordReminderFormActionsProps = Pick<RecordReminderFormProps, "canWriteWorkspace" | "createReminderLabel" | "onCreateReminder" | "savingReminder" | "savingReminderLabel">;',
+]) {
+  if (!formActionsTypesSource.includes(requiredFormActionsTypesUsage)) {
+    throw new Error(`record-reminder-form-actions.types.ts must own action prop typing: ${requiredFormActionsTypesUsage}`);
+  }
 }
 
 if (!itemCardSource.includes('reminder.status !== "completed"')) {
@@ -46,6 +123,31 @@ for (const forbiddenToken of [
   if (panelSource.includes(forbiddenToken)) {
     throw new Error(`record-reminder-panel.tsx must keep form and item rendering delegated: ${forbiddenToken}`);
   }
+}
+
+const maxFormLines = 55;
+if (formLineCount > maxFormLines) {
+  throw new Error(`record-reminder-form.tsx exceeded ${maxFormLines} lines: ${formLineCount}`);
+}
+
+const maxFormFieldsLines = 65;
+if (formFieldsLineCount > maxFormFieldsLines) {
+  throw new Error(`record-reminder-form-fields.tsx exceeded ${maxFormFieldsLines} lines: ${formFieldsLineCount}`);
+}
+
+const maxFormActionsLines = 25;
+if (formActionsLineCount > maxFormActionsLines) {
+  throw new Error(`record-reminder-form-actions.tsx exceeded ${maxFormActionsLines} lines: ${formActionsLineCount}`);
+}
+
+const maxFormFieldsTypesLines = 2;
+if (formFieldsTypesLineCount > maxFormFieldsTypesLines) {
+  throw new Error(`record-reminder-form-fields.types.ts exceeded ${maxFormFieldsTypesLines} lines: ${formFieldsTypesLineCount}`);
+}
+
+const maxFormActionsTypesLines = 2;
+if (formActionsTypesLineCount > maxFormActionsTypesLines) {
+  throw new Error(`record-reminder-form-actions.types.ts exceeded ${maxFormActionsTypesLines} lines: ${formActionsTypesLineCount}`);
 }
 
 const maxAllowedLines = 85;

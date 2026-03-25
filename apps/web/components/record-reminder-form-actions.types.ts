@@ -1,0 +1,1 @@
+import type { RecordReminderFormProps } from "./record-reminder-form.types"; export type RecordReminderFormActionsProps = Pick<RecordReminderFormProps, "canWriteWorkspace" | "createReminderLabel" | "onCreateReminder" | "savingReminder" | "savingReminderLabel">;

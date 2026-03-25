@@ -2001,6 +2001,22 @@ const recordReminderFormTypesPath = path.resolve(
   process.cwd(),
   "components/record-reminder-form.types.ts",
 );
+const recordReminderFormFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-fields.tsx",
+);
+const recordReminderFormFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-fields.types.ts",
+);
+const recordReminderFormActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-actions.tsx",
+);
+const recordReminderFormActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form-actions.types.ts",
+);
 const recordReminderListPath = path.resolve(process.cwd(), "components/record-reminder-list.tsx");
 const recordReminderListTypesPath = path.resolve(
   process.cwd(),
@@ -2960,6 +2976,16 @@ const recordEditorSupportToolsReminderDerivedPropsTypesSource = fs.readFileSync(
 );
 const recordReminderFormSource = fs.readFileSync(recordReminderFormPath, "utf8");
 const recordReminderFormTypesSource = fs.readFileSync(recordReminderFormTypesPath, "utf8");
+const recordReminderFormFieldsSource = fs.readFileSync(recordReminderFormFieldsPath, "utf8");
+const recordReminderFormFieldsTypesSource = fs.readFileSync(
+  recordReminderFormFieldsTypesPath,
+  "utf8",
+);
+const recordReminderFormActionsSource = fs.readFileSync(recordReminderFormActionsPath, "utf8");
+const recordReminderFormActionsTypesSource = fs.readFileSync(
+  recordReminderFormActionsTypesPath,
+  "utf8",
+);
 const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
 const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
 const providerSettingsControllerActionsSource = fs.readFileSync(
@@ -3954,7 +3980,14 @@ const recordEditorSupportToolsMediaCopyPropsTypesLines =
   recordEditorSupportToolsMediaCopyPropsTypesSource.split(/\r?\n/).length;
 const recordEditorSupportToolsReminderDerivedPropsTypesLines =
   recordEditorSupportToolsReminderDerivedPropsTypesSource.split(/\r?\n/).length;
+const recordReminderFormLines = recordReminderFormSource.split(/\r?\n/).length;
 const recordReminderFormTypesLines = recordReminderFormTypesSource.split(/\r?\n/).length;
+const recordReminderFormFieldsLines = recordReminderFormFieldsSource.split(/\r?\n/).length;
+const recordReminderFormFieldsTypesLines =
+  recordReminderFormFieldsTypesSource.split(/\r?\n/).length;
+const recordReminderFormActionsLines = recordReminderFormActionsSource.split(/\r?\n/).length;
+const recordReminderFormActionsTypesLines =
+  recordReminderFormActionsTypesSource.split(/\r?\n/).length;
 const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardLines = deadLetterRecoveryItemCardSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsTypesLines =
@@ -17937,6 +17970,123 @@ const maxProviderFeatureCardStatusTypesLines = 2;
 if (providerFeatureCardStatusTypesLines > maxProviderFeatureCardStatusTypesLines) {
   throw new Error(
     `provider-feature-card-status.types.ts exceeded ${maxProviderFeatureCardStatusTypesLines} lines: ${providerFeatureCardStatusTypesLines}`,
+  );
+}
+
+for (const requiredRecordReminderFormUsage of [
+  'import { RecordReminderFormActions } from "./record-reminder-form-actions";',
+  'import { RecordReminderFormFields } from "./record-reminder-form-fields";',
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types";',
+  "<RecordReminderFormFields",
+  "<RecordReminderFormActions",
+]) {
+  if (!recordReminderFormSource.includes(requiredRecordReminderFormUsage)) {
+    throw new Error(
+      `record-reminder-form.tsx must delegate reminder form sections to extracted leaves: ${requiredRecordReminderFormUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderFormToken of [
+  'type="datetime-local"',
+  'className="action-row"',
+  'placeholder={reminderNotePlaceholder}',
+  'onClick={() => void onCreateReminder()}',
+]) {
+  if (recordReminderFormSource.includes(forbiddenRecordReminderFormToken)) {
+    throw new Error(
+      `record-reminder-form.tsx must keep reminder field and action rendering delegated: ${forbiddenRecordReminderFormToken}`,
+    );
+  }
+}
+
+const maxRecordReminderFormLines = 55;
+if (recordReminderFormLines > maxRecordReminderFormLines) {
+  throw new Error(
+    `record-reminder-form.tsx exceeded ${maxRecordReminderFormLines} lines: ${recordReminderFormLines}`,
+  );
+}
+
+for (const requiredRecordReminderFormFieldsUsage of [
+  'import type { RecordReminderFormFieldsProps } from "./record-reminder-form-fields.types";',
+  "}: RecordReminderFormFieldsProps) {",
+  'type="datetime-local"',
+  'placeholder={reminderNotePlaceholder}',
+  'onChange={(event) => onTitleChange(event.target.value)}',
+]) {
+  if (!recordReminderFormFieldsSource.includes(requiredRecordReminderFormFieldsUsage)) {
+    throw new Error(
+      `record-reminder-form-fields.tsx must reuse the extracted reminder-fields props type: ${requiredRecordReminderFormFieldsUsage}`,
+    );
+  }
+}
+
+if (recordReminderFormFieldsSource.includes("type RecordReminderFormFieldsProps = Pick<")) {
+  throw new Error("record-reminder-form-fields.tsx must keep reminder-fields prop typing delegated");
+}
+
+const maxRecordReminderFormFieldsLines = 65;
+if (recordReminderFormFieldsLines > maxRecordReminderFormFieldsLines) {
+  throw new Error(
+    `record-reminder-form-fields.tsx exceeded ${maxRecordReminderFormFieldsLines} lines: ${recordReminderFormFieldsLines}`,
+  );
+}
+
+for (const requiredRecordReminderFormFieldsTypesUsage of [
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types"; export type RecordReminderFormFieldsProps = Pick<RecordReminderFormProps, "canWriteWorkspace" | "channelInApp" | "channelLabel" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "remindAtLabel" | "reminderForm" | "reminderNoteLabel" | "reminderNotePlaceholder" | "reminderTitleLabel" | "reminderTitlePlaceholder">;',
+]) {
+  if (!recordReminderFormFieldsTypesSource.includes(requiredRecordReminderFormFieldsTypesUsage)) {
+    throw new Error(
+      `record-reminder-form-fields.types.ts must own reminder-fields prop typing: ${requiredRecordReminderFormFieldsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordReminderFormFieldsTypesLines = 2;
+if (recordReminderFormFieldsTypesLines > maxRecordReminderFormFieldsTypesLines) {
+  throw new Error(
+    `record-reminder-form-fields.types.ts exceeded ${maxRecordReminderFormFieldsTypesLines} lines: ${recordReminderFormFieldsTypesLines}`,
+  );
+}
+
+for (const requiredRecordReminderFormActionsUsage of [
+  'import type { RecordReminderFormActionsProps } from "./record-reminder-form-actions.types";',
+  "}: RecordReminderFormActionsProps) {",
+  'className="action-row"',
+  'onClick={() => void onCreateReminder()}',
+]) {
+  if (!recordReminderFormActionsSource.includes(requiredRecordReminderFormActionsUsage)) {
+    throw new Error(
+      `record-reminder-form-actions.tsx must reuse the extracted reminder-actions props type: ${requiredRecordReminderFormActionsUsage}`,
+    );
+  }
+}
+
+if (recordReminderFormActionsSource.includes("type RecordReminderFormActionsProps = Pick<")) {
+  throw new Error("record-reminder-form-actions.tsx must keep reminder-actions prop typing delegated");
+}
+
+const maxRecordReminderFormActionsLines = 25;
+if (recordReminderFormActionsLines > maxRecordReminderFormActionsLines) {
+  throw new Error(
+    `record-reminder-form-actions.tsx exceeded ${maxRecordReminderFormActionsLines} lines: ${recordReminderFormActionsLines}`,
+  );
+}
+
+for (const requiredRecordReminderFormActionsTypesUsage of [
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types"; export type RecordReminderFormActionsProps = Pick<RecordReminderFormProps, "canWriteWorkspace" | "createReminderLabel" | "onCreateReminder" | "savingReminder" | "savingReminderLabel">;',
+]) {
+  if (!recordReminderFormActionsTypesSource.includes(requiredRecordReminderFormActionsTypesUsage)) {
+    throw new Error(
+      `record-reminder-form-actions.types.ts must own reminder-actions prop typing: ${requiredRecordReminderFormActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordReminderFormActionsTypesLines = 2;
+if (recordReminderFormActionsTypesLines > maxRecordReminderFormActionsTypesLines) {
+  throw new Error(
+    `record-reminder-form-actions.types.ts exceeded ${maxRecordReminderFormActionsTypesLines} lines: ${recordReminderFormActionsTypesLines}`,
   );
 }
 

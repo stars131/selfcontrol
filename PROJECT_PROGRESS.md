@@ -1823,6 +1823,10 @@ Last updated: 2026-03-25
   - `provider-feature-card-fields.tsx` now delegates enabled-toggle rendering and core provider input rendering to `provider-feature-card-enabled-toggle.tsx` and `provider-feature-card-core-fields.tsx` instead of keeping all base controls inline beside the media-storage options leaf
   - the new provider-feature `*.types.ts` files keep enabled-toggle and core-fields prop contracts explicit and reusable while the parent fields component remains focused on feature-specific composition
   - `verify-record-panel-structure.mjs` now enforces those delegated provider-field boundaries, exact one-line type contracts, and line-count ceilings so future provider-settings updates stay safer and easier to maintain
+- Reminder Form Fields and Actions Leaves Split V1:
+  - `record-reminder-form.tsx` now delegates reminder input fields and submit-action rendering to `record-reminder-form-fields.tsx` and `record-reminder-form-actions.tsx` instead of keeping both sections inline in the form component
+  - the new reminder-form `*.types.ts` files keep fields and action prop contracts explicit and reusable while the parent form remains focused on orchestration
+  - `verify-record-panel-structure.mjs` and `verify-record-reminder-panel-structure.mjs` now enforce those delegated reminder-form boundaries, exact one-line type contracts, and line-count ceilings so future reminder UI updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
