@@ -1,6 +1,7 @@
 "use client";
 
 import type { LocaleCode } from "../lib/locale";
+import type { LanguageSwitcherProps } from "./language-switcher.types";
 
 const LABEL_BY_LOCALE: Record<LocaleCode, string> = {
   "zh-CN": "语言",
@@ -17,10 +18,7 @@ const DISPLAY_OPTIONS: Array<{ value: LocaleCode; label: string }> = [
 export function LanguageSwitcher({
   locale,
   onChange,
-}: {
-  locale: LocaleCode;
-  onChange: (locale: LocaleCode) => void;
-}) {
+}: LanguageSwitcherProps) {
   return (
     <label className="locale-switcher">
       <span className="field-label">{LABEL_BY_LOCALE[locale]}</span>

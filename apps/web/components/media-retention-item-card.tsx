@@ -1,18 +1,7 @@
 "use client";
 
 import type { LocaleCode } from "../lib/locale";
-import type { MediaRetentionItem } from "../lib/types";
-
-type MediaRetentionItemCopy = {
-  createdAt: string;
-  ageDays: string;
-  days: string;
-  missing: string;
-  archived: string;
-  primary: string;
-  remoteReference?: string;
-  selectLabel: string;
-};
+import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";
 
 function formatCreatedAt(value: string, locale: LocaleCode) {
   return new Date(value).toLocaleString(locale);
@@ -26,15 +15,7 @@ export function MediaRetentionItemCard({
   onToggleSelected,
   selectable = false,
   selected = false,
-}: {
-  actionLoading?: boolean;
-  copy: MediaRetentionItemCopy;
-  item: MediaRetentionItem;
-  locale: LocaleCode;
-  onToggleSelected?: (mediaId: string) => void;
-  selectable?: boolean;
-  selected?: boolean;
-}) {
+}: MediaRetentionItemCardProps) {
   const remoteReferenceLabel = copy.remoteReference ?? "Remote reference";
 
   return (

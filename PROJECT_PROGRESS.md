@@ -1708,6 +1708,10 @@ Last updated: 2026-03-25
   - `workspace-entry-header.tsx`, `workspace-create-section.tsx`, `workspace-join-section.tsx`, `workspace-import-section.tsx`, and `workspace-list-section.tsx` now consume extracted prop contracts instead of keeping inline signatures or local copy shapes in those leaf components
   - the new workspace-entry leaf `*.types.ts` files keep entry header, create, join, import, and list boundaries explicit and reusable
   - this keeps the workspace entry presentation subtree thinner and more maintainable under the enterprise engineering standard
+- Language Switcher and Retention Item Props Split V1:
+  - `language-switcher.tsx` and `media-retention-item-card.tsx` now consume extracted prop contracts instead of keeping inline signatures or local copy shapes in those leaf components
+  - the new `language-switcher.types.ts` and `media-retention-item-card.types.ts` files keep locale switcher and retention item boundaries explicit and reusable
+  - this keeps shared leaf component typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

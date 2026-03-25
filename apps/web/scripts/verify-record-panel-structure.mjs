@@ -1144,6 +1144,14 @@ const workspaceMediaRetentionSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-summary.types.ts",
 );
+const mediaRetentionItemCardPath = path.resolve(
+  process.cwd(),
+  "components/media-retention-item-card.tsx",
+);
+const mediaRetentionItemCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-retention-item-card.types.ts",
+);
 const providerFeatureMediaStorageOptionsPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-options.tsx",
@@ -1385,6 +1393,11 @@ const workspaceEntryLoadingShellPath = path.resolve(
 const workspaceEntryLoadingShellTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.types.ts",
+);
+const languageSwitcherPath = path.resolve(process.cwd(), "components/language-switcher.tsx");
+const languageSwitcherTypesPath = path.resolve(
+  process.cwd(),
+  "components/language-switcher.types.ts",
 );
 const workspaceEntryHeaderPath = path.resolve(process.cwd(), "components/workspace-entry-header.tsx");
 const workspaceEntryHeaderTypesPath = path.resolve(
@@ -1748,6 +1761,11 @@ const workspaceMediaRetentionSummaryTypesSource = fs.readFileSync(
   workspaceMediaRetentionSummaryTypesPath,
   "utf8",
 );
+const mediaRetentionItemCardSource = fs.readFileSync(mediaRetentionItemCardPath, "utf8");
+const mediaRetentionItemCardTypesSource = fs.readFileSync(
+  mediaRetentionItemCardTypesPath,
+  "utf8",
+);
 const providerFeatureCardActionsSource = fs.readFileSync(providerFeatureCardActionsPath, "utf8");
 const providerFeatureCardActionsTypesSource = fs.readFileSync(
   providerFeatureCardActionsTypesPath,
@@ -1894,6 +1912,8 @@ const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
   workspaceEntryLoadingShellTypesPath,
   "utf8",
 );
+const languageSwitcherSource = fs.readFileSync(languageSwitcherPath, "utf8");
+const languageSwitcherTypesSource = fs.readFileSync(languageSwitcherTypesPath, "utf8");
 const workspaceEntryHeaderSource = fs.readFileSync(workspaceEntryHeaderPath, "utf8");
 const workspaceEntryHeaderTypesSource = fs.readFileSync(
   workspaceEntryHeaderTypesPath,
@@ -2629,6 +2649,7 @@ const workspaceMediaRetentionNoticesTypesLines =
   workspaceMediaRetentionNoticesTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionSummaryTypesLines =
   workspaceMediaRetentionSummaryTypesSource.split(/\r?\n/).length;
+const mediaRetentionItemCardTypesLines = mediaRetentionItemCardTypesSource.split(/\r?\n/).length;
 const providerFeatureCardActionsTypesLines =
   providerFeatureCardActionsTypesSource.split(/\r?\n/).length;
 const providerFeatureCardFieldsTypesLines =
@@ -2680,6 +2701,7 @@ const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
+const languageSwitcherTypesLines = languageSwitcherTypesSource.split(/\r?\n/).length;
 const workspaceEntryHeaderTypesLines = workspaceEntryHeaderTypesSource.split(/\r?\n/).length;
 const workspaceCreateSectionTypesLines = workspaceCreateSectionTypesSource.split(/\r?\n/).length;
 const workspaceJoinSectionTypesLines = workspaceJoinSectionTypesSource.split(/\r?\n/).length;
@@ -12563,6 +12585,46 @@ if (workspaceMediaRetentionSummaryTypesLines > maxWorkspaceMediaRetentionSummary
   );
 }
 
+for (const requiredMediaRetentionItemCardUsage of [
+  'import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";',
+  "}: MediaRetentionItemCardProps) {",
+]) {
+  if (!mediaRetentionItemCardSource.includes(requiredMediaRetentionItemCardUsage)) {
+    throw new Error(
+      `media-retention-item-card.tsx must reuse the extracted retention-item props type: ${requiredMediaRetentionItemCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaRetentionItemCardToken of [
+  'import type { MediaRetentionItem } from "../lib/types";',
+  "type MediaRetentionItemCopy = {",
+  "}: {",
+]) {
+  if (mediaRetentionItemCardSource.includes(forbiddenMediaRetentionItemCardToken)) {
+    throw new Error(
+      `media-retention-item-card.tsx must keep retention-item prop typing delegated: ${forbiddenMediaRetentionItemCardToken}`,
+    );
+  }
+}
+
+for (const requiredMediaRetentionItemCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { MediaRetentionItem } from "../lib/types"; export type MediaRetentionItemCopy = { createdAt: string; ageDays: string; days: string; missing: string; archived: string; primary: string; remoteReference?: string; selectLabel: string }; export type MediaRetentionItemCardProps = { actionLoading?: boolean; copy: MediaRetentionItemCopy; item: MediaRetentionItem; locale: LocaleCode; onToggleSelected?: (mediaId: string) => void; selectable?: boolean; selected?: boolean };',
+]) {
+  if (!mediaRetentionItemCardTypesSource.includes(requiredMediaRetentionItemCardTypesUsage)) {
+    throw new Error(
+      `media-retention-item-card.types.ts must own retention-item prop typing: ${requiredMediaRetentionItemCardTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaRetentionItemCardTypesLines = 2;
+if (mediaRetentionItemCardTypesLines > maxMediaRetentionItemCardTypesLines) {
+  throw new Error(
+    `media-retention-item-card.types.ts exceeded ${maxMediaRetentionItemCardTypesLines} lines: ${mediaRetentionItemCardTypesLines}`,
+  );
+}
+
 for (const requiredWorkspaceMediaRetentionListsUsage of [
   'import type { WorkspaceMediaRetentionListsProps } from "./workspace-media-retention-lists.types";',
   "}: WorkspaceMediaRetentionListsProps) {",
@@ -13868,6 +13930,38 @@ const maxSharePreviewClientTypesLines = 2;
 if (sharePreviewClientTypesLines > maxSharePreviewClientTypesLines) {
   throw new Error(
     `share-preview-client.types.ts exceeded ${maxSharePreviewClientTypesLines} lines: ${sharePreviewClientTypesLines}`,
+  );
+}
+
+for (const requiredLanguageSwitcherUsage of [
+  'import type { LanguageSwitcherProps } from "./language-switcher.types";',
+  "}: LanguageSwitcherProps) {",
+]) {
+  if (!languageSwitcherSource.includes(requiredLanguageSwitcherUsage)) {
+    throw new Error(
+      `language-switcher.tsx must reuse the extracted language-switcher props type: ${requiredLanguageSwitcherUsage}`,
+    );
+  }
+}
+
+if (languageSwitcherSource.includes("}: {")) {
+  throw new Error("language-switcher.tsx must keep language-switcher prop typing delegated");
+}
+
+for (const requiredLanguageSwitcherTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; export type LanguageSwitcherProps = { locale: LocaleCode; onChange: (locale: LocaleCode) => void };',
+]) {
+  if (!languageSwitcherTypesSource.includes(requiredLanguageSwitcherTypesUsage)) {
+    throw new Error(
+      `language-switcher.types.ts must own language-switcher prop typing: ${requiredLanguageSwitcherTypesUsage}`,
+    );
+  }
+}
+
+const maxLanguageSwitcherTypesLines = 2;
+if (languageSwitcherTypesLines > maxLanguageSwitcherTypesLines) {
+  throw new Error(
+    `language-switcher.types.ts exceeded ${maxLanguageSwitcherTypesLines} lines: ${languageSwitcherTypesLines}`,
   );
 }
 
