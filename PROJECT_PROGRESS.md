@@ -1811,6 +1811,10 @@ Last updated: 2026-03-25
   - `media-storage-health-card.tsx` now delegates status-and-refresh rendering and metadata rendering to `media-storage-health-header.tsx` and `media-storage-health-metadata.tsx` instead of keeping those sections inline beside the capabilities leaf
   - the new media-storage-health `*.types.ts` files keep health-header and health-metadata prop contracts explicit and reusable while the card remains focused on shell composition and anchor wiring
   - `verify-record-panel-structure.mjs` now enforces those delegated health leaf boundaries, exact one-line type contracts, and line-count ceilings so future provider-health updates stay safer and easier to maintain
+- Dead Letter Item Header and Status Leaves Split V1:
+  - `dead-letter-recovery-item-card.tsx` now delegates selectable item header rendering and attempt-status rendering to `dead-letter-recovery-item-card-header.tsx` and `dead-letter-recovery-item-card-status.tsx` instead of keeping those sections inline with the action footer
+  - the new dead-letter-item `*.types.ts` files keep header and status prop contracts explicit and reusable while the parent card remains focused on settings-link wiring and action composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated dead-letter item leaf boundaries, exact one-line type contracts, and line-count ceilings so future recovery-card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

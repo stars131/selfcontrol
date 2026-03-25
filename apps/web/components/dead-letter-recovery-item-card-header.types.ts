@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryItemCardHeaderProps = Pick<DeadLetterRecoveryItemCardProps, "bulkRetryingDeadLetter" | "canWriteWorkspace" | "item" | "locale" | "mediaIssueCopy" | "onToggleSelection" | "selectedDeadLetterIds">;
