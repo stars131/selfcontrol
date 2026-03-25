@@ -1684,6 +1684,10 @@ Last updated: 2026-03-25
   - `map-panel-controller-actions.ts`, `map-panel-controller-search.ts`, `use-map-panel-derived-data.ts`, and `use-map-panel-sync.ts` now consume extracted input contracts instead of keeping inline input object shapes in those map helper modules
   - the new map helper `*.types.ts` files keep controller-action, search, derived-data, and sync inputs explicit and reusable
   - this keeps map helper typing thinner and more maintainable under the enterprise engineering standard
+- Provider Settings and Transfer Job Input Types Split V1:
+  - `provider-settings-panel-helpers.ts` and `workspace-transfer-job-card.tsx` now consume extracted input and prop contracts instead of keeping inline object shapes in those modules
+  - the new `provider-settings-panel-helpers.types.ts` and `workspace-transfer-job-card.types.ts` files keep provider helper and transfer-job card boundaries explicit and reusable
+  - this keeps provider-settings and transfer-job typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

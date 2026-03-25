@@ -967,6 +967,22 @@ const useMapPanelSyncTypesPath = path.resolve(
   process.cwd(),
   "components/use-map-panel-sync.types.ts",
 );
+const providerSettingsPanelHelpersPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-helpers.ts",
+);
+const providerSettingsPanelHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-helpers.types.ts",
+);
+const workspaceTransferJobCardPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-job-card.tsx",
+);
+const workspaceTransferJobCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-job-card.types.ts",
+);
 const workspaceExportControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-controller.ts",
@@ -1445,6 +1461,16 @@ const useMapPanelDerivedDataTypesSource = fs.readFileSync(
 );
 const useMapPanelSyncSource = fs.readFileSync(useMapPanelSyncPath, "utf8");
 const useMapPanelSyncTypesSource = fs.readFileSync(useMapPanelSyncTypesPath, "utf8");
+const providerSettingsPanelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "utf8");
+const providerSettingsPanelHelpersTypesSource = fs.readFileSync(
+  providerSettingsPanelHelpersTypesPath,
+  "utf8",
+);
+const workspaceTransferJobCardSource = fs.readFileSync(workspaceTransferJobCardPath, "utf8");
+const workspaceTransferJobCardTypesSource = fs.readFileSync(
+  workspaceTransferJobCardTypesPath,
+  "utf8",
+);
 const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
 const workspaceExportCardTypesSource = fs.readFileSync(workspaceExportCardTypesPath, "utf8");
 const workspaceExportControlsSource = fs.readFileSync(workspaceExportControlsPath, "utf8");
@@ -2293,6 +2319,10 @@ const mapPanelControllerSearchTypesLines =
 const useMapPanelDerivedDataTypesLines =
   useMapPanelDerivedDataTypesSource.split(/\r?\n/).length;
 const useMapPanelSyncTypesLines = useMapPanelSyncTypesSource.split(/\r?\n/).length;
+const providerSettingsPanelHelpersTypesLines =
+  providerSettingsPanelHelpersTypesSource.split(/\r?\n/).length;
+const workspaceTransferJobCardTypesLines =
+  workspaceTransferJobCardTypesSource.split(/\r?\n/).length;
 const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControlsTypesLines =
   workspaceExportControlsTypesSource.split(/\r?\n/).length;
@@ -11425,6 +11455,88 @@ const maxUseMapPanelSyncTypesLines = 2;
 if (useMapPanelSyncTypesLines > maxUseMapPanelSyncTypesLines) {
   throw new Error(
     `use-map-panel-sync.types.ts exceeded ${maxUseMapPanelSyncTypesLines} lines: ${useMapPanelSyncTypesLines}`,
+  );
+}
+
+for (const requiredProviderSettingsPanelHelpersUsage of [
+  'import type { BuildProviderFeatureCardPropsInput } from "./provider-settings-panel-helpers.types";',
+  "}: BuildProviderFeatureCardPropsInput): ProviderFeatureCardProps {",
+]) {
+  if (!providerSettingsPanelHelpersSource.includes(requiredProviderSettingsPanelHelpersUsage)) {
+    throw new Error(
+      `provider-settings-panel-helpers.ts must reuse the extracted provider helper input type: ${requiredProviderSettingsPanelHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderSettingsPanelHelpersToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  "}: {",
+]) {
+  if (providerSettingsPanelHelpersSource.includes(forbiddenProviderSettingsPanelHelpersToken)) {
+    throw new Error(
+      `provider-settings-panel-helpers.ts must keep provider helper input typing delegated: ${forbiddenProviderSettingsPanelHelpersToken}`,
+    );
+  }
+}
+
+for (const requiredProviderSettingsPanelHelpersTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types"; import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types"; export type BuildProviderFeatureCardPropsInput = { copy: ProviderSettingsCopy; draftItem: ProviderDraft; formatSecretStatus: ProviderFeatureCardProps["formatSecretStatus"]; highlightedAnchor?: string | null; isDirty: boolean; item: ProviderFeatureConfig; locale: LocaleCode; mediaStorageHealth?: MediaStorageProviderHealth | null; onProviderDraftChange: ProviderFeatureCardProps["onProviderDraftChange"]; onRefreshMediaStorageHealth?: (() => Promise<void>) | null; onReset: ProviderFeatureCardProps["onReset"]; onSave: ProviderFeatureCardProps["onSave"]; providerSavingCode: string; refreshingMediaStorageHealth?: boolean };',
+]) {
+  if (!providerSettingsPanelHelpersTypesSource.includes(requiredProviderSettingsPanelHelpersTypesUsage)) {
+    throw new Error(
+      `provider-settings-panel-helpers.types.ts must own provider helper input typing: ${requiredProviderSettingsPanelHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderSettingsPanelHelpersTypesLines = 2;
+if (providerSettingsPanelHelpersTypesLines > maxProviderSettingsPanelHelpersTypesLines) {
+  throw new Error(
+    `provider-settings-panel-helpers.types.ts exceeded ${maxProviderSettingsPanelHelpersTypesLines} lines: ${providerSettingsPanelHelpersTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceTransferJobCardUsage of [
+  'import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";',
+  "}: WorkspaceTransferJobCardProps) {",
+]) {
+  if (!workspaceTransferJobCardSource.includes(requiredWorkspaceTransferJobCardUsage)) {
+    throw new Error(
+      `workspace-transfer-job-card.tsx must reuse the extracted transfer-job props type: ${requiredWorkspaceTransferJobCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceTransferJobCardToken of [
+  'import type { LocaleCode } from "../lib/locale";',
+  'import type { WorkspaceTransferJob } from "../lib/types";',
+  'import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types";',
+  "}: {",
+]) {
+  if (workspaceTransferJobCardSource.includes(forbiddenWorkspaceTransferJobCardToken)) {
+    throw new Error(
+      `workspace-transfer-job-card.tsx must keep transfer-job prop typing delegated: ${forbiddenWorkspaceTransferJobCardToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceTransferJobCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { WorkspaceTransferJob } from "../lib/types"; import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobCardProps = { copy: WorkspaceTransferJobsCopy; job: WorkspaceTransferJob; locale: LocaleCode; onDownloadTransferJob: (jobId: string) => Promise<void> };',
+]) {
+  if (!workspaceTransferJobCardTypesSource.includes(requiredWorkspaceTransferJobCardTypesUsage)) {
+    throw new Error(
+      `workspace-transfer-job-card.types.ts must own transfer-job prop typing: ${requiredWorkspaceTransferJobCardTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceTransferJobCardTypesLines = 2;
+if (workspaceTransferJobCardTypesLines > maxWorkspaceTransferJobCardTypesLines) {
+  throw new Error(
+    `workspace-transfer-job-card.types.ts exceeded ${maxWorkspaceTransferJobCardTypesLines} lines: ${workspaceTransferJobCardTypesLines}`,
   );
 }
 

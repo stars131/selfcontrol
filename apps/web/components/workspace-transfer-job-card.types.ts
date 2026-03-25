@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; import type { WorkspaceTransferJob } from "../lib/types"; import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobCardProps = { copy: WorkspaceTransferJobsCopy; job: WorkspaceTransferJob; locale: LocaleCode; onDownloadTransferJob: (jobId: string) => Promise<void> };

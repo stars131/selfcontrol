@@ -2,21 +2,14 @@
 
 import Link from "next/link";
 
-import type { LocaleCode } from "../lib/locale";
-import type { WorkspaceTransferJob } from "../lib/types";
-import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types";
+import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";
 
 export function WorkspaceTransferJobCard({
   copy,
   job,
   locale,
   onDownloadTransferJob,
-}: {
-  copy: WorkspaceTransferJobsCopy;
-  job: WorkspaceTransferJob;
-  locale: LocaleCode;
-  onDownloadTransferJob: (jobId: string) => Promise<void>;
-}) {
+}: WorkspaceTransferJobCardProps) {
   const importedWorkspaceId =
     job.job_type === "import" && typeof job.result_json.workspace_id === "string"
       ? job.result_json.workspace_id
