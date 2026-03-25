@@ -1588,6 +1588,10 @@ Last updated: 2026-03-25
   - `record-panel-v2` shell and workspace core type modules now reuse explicit header, workspace, detail-copy, and controller-output boundaries instead of inferring them from component or hook signatures
   - `record-panel-v2-shell-props.types.ts` now depends on `record-panel-header.types.ts` and `record-panel-controller-output.types.ts`, while `record-panel-v2-workspace-props-core.types.ts` now depends on `record-browse-workspace.types.ts`, `record-editor-workspace.types.ts`, and `record-panel-detail-copy.types.ts`
   - this keeps the v2 shell/workspace composition layer more stable against unrelated UI and controller implementation changes
+- Map Panel Controller Result Boundary Split V1:
+  - map-panel content typing now reuses a dedicated controller result boundary file instead of importing a `ReturnType` alias from the hook module
+  - `map-panel-content.tsx` now depends on `map-panel-controller-result.types.ts`, and `use-map-panel-controller.ts` no longer exports its own inferred result alias
+  - this keeps map-panel view composition less coupled to the hook module’s internal typing
 
 ## Next
 - Continue the next product slice

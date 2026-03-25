@@ -8,7 +8,7 @@ import { MapPanelHeader } from "./map-panel-header";
 import { MapSearchForm } from "./map-search-form";
 import { MapStatusNotices } from "./map-status-notices";
 import { MappedRecordsList } from "./mapped-records-list";
-import type { MapPanelControllerState } from "./use-map-panel-controller";
+import type { MapPanelControllerState } from "./map-panel-controller-result.types";
 
 type MapPanelContentProps = {
   containerRef: RefObject<HTMLDivElement | null>;

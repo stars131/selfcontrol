@@ -19,8 +19,6 @@ type UseMapPanelControllerProps = {
   mapRef: { current: AMapMapInstance | null };
 };
 
-export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;
-
 export function useMapPanelController({
   records,
   selectedRecordId,

@@ -906,6 +906,12 @@ const recordMediaSelectedContentPropsPath = path.resolve(
   process.cwd(),
   "components/record-media-selected-content-props.ts",
 );
+const mapPanelContentPath = path.resolve(process.cwd(), "components/map-panel-content.tsx");
+const mapPanelControllerResultTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-result.types.ts",
+);
+const mapPanelControllerPath = path.resolve(process.cwd(), "components/use-map-panel-controller.ts");
 const chatPanelActionDerivedDataResultTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-derived-data-result.types.ts",
@@ -1013,6 +1019,12 @@ const recordMediaSelectedContentPropsSource = fs.readFileSync(
   recordMediaSelectedContentPropsPath,
   "utf8",
 );
+const mapPanelContentSource = fs.readFileSync(mapPanelContentPath, "utf8");
+const mapPanelControllerResultTypesSource = fs.readFileSync(
+  mapPanelControllerResultTypesPath,
+  "utf8",
+);
+const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
   chatPanelActionDerivedDataResultTypesPath,
   "utf8",
@@ -1626,6 +1638,8 @@ const recordMediaProcessingPanelsTypesLines =
   recordMediaProcessingPanelsTypesSource.split(/\r?\n/).length;
 const recordMediaSelectedContentPropsLines =
   recordMediaSelectedContentPropsSource.split(/\r?\n/).length;
+const mapPanelControllerResultTypesLines =
+  mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionStateResultTypesLines =
@@ -10306,6 +10320,50 @@ const maxMediaAssetSectionTypesLines = 4;
 if (mediaAssetSectionTypesLines > maxMediaAssetSectionTypesLines) {
   throw new Error(
     `media-asset-section.types.ts exceeded ${maxMediaAssetSectionTypesLines} lines: ${mediaAssetSectionTypesLines}`,
+  );
+}
+
+for (const requiredMapPanelContentUsage of [
+  'import type { MapPanelControllerState } from "./map-panel-controller-result.types";',
+  "controller: MapPanelControllerState;",
+]) {
+  if (!mapPanelContentSource.includes(requiredMapPanelContentUsage)) {
+    throw new Error(
+      `map-panel-content.tsx must reuse the map controller result boundary: ${requiredMapPanelContentUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapPanelContentToken of [
+  'from "./use-map-panel-controller"',
+  "ReturnType<typeof useMapPanelController>",
+]) {
+  if (mapPanelContentSource.includes(forbiddenMapPanelContentToken)) {
+    throw new Error(
+      `map-panel-content.tsx must keep map controller result inference delegated: ${forbiddenMapPanelContentToken}`,
+    );
+  }
+}
+
+if (mapPanelControllerSource.includes("export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;")) {
+  throw new Error("use-map-panel-controller.ts must keep the controller result boundary delegated");
+}
+
+for (const requiredMapPanelControllerResultTypesUsage of [
+  'import type { useMapPanelController } from "./use-map-panel-controller";',
+  "export type MapPanelControllerState = ReturnType<typeof useMapPanelController>;",
+]) {
+  if (!mapPanelControllerResultTypesSource.includes(requiredMapPanelControllerResultTypesUsage)) {
+    throw new Error(
+      `map-panel-controller-result.types.ts must own the map controller result boundary: ${requiredMapPanelControllerResultTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelControllerResultTypesLines = 3;
+if (mapPanelControllerResultTypesLines > maxMapPanelControllerResultTypesLines) {
+  throw new Error(
+    `map-panel-controller-result.types.ts exceeded ${maxMapPanelControllerResultTypesLines} lines: ${mapPanelControllerResultTypesLines}`,
   );
 }
 
