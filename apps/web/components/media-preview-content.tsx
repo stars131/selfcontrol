@@ -1,8 +1,6 @@
 "use client";
 
-import type { MediaPreviewControllerResult, MediaPreviewProps } from "./media-preview.types";
-
-type MediaPreviewContentProps = Pick<MediaPreviewProps, "asset"> & MediaPreviewControllerResult;
+import type { MediaPreviewContentProps } from "./media-preview-content.types";
 
 export function MediaPreviewContent({
   asset,

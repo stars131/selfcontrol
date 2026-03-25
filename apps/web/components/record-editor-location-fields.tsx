@@ -1,18 +1,6 @@
 "use client";
 
-import type { RecordEditorFieldsProps } from "./record-editor-fields.types";
-
-type RecordEditorLocationFieldsProps = Pick<
-  RecordEditorFieldsProps,
-  | "canWriteWorkspace"
-  | "form"
-  | "onAddressChange"
-  | "onAvoidChange"
-  | "onLatitudeChange"
-  | "onLongitudeChange"
-  | "onPlaceNameChange"
-  | "panelCopy"
->;
+import type { RecordEditorLocationFieldsProps } from "./record-editor-location-fields.types";
 
 export function RecordEditorLocationFields({
   canWriteWorkspace,

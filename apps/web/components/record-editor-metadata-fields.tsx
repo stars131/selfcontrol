@@ -1,16 +1,6 @@
 "use client";
 
-import type { RecordEditorFieldsProps } from "./record-editor-fields.types";
-
-type RecordEditorMetadataFieldsProps = Pick<
-  RecordEditorFieldsProps,
-  | "canWriteWorkspace"
-  | "form"
-  | "onOccurredAtChange"
-  | "onRatingChange"
-  | "onTypeCodeChange"
-  | "panelCopy"
->;
+import type { RecordEditorMetadataFieldsProps } from "./record-editor-metadata-fields.types";
 
 export function RecordEditorMetadataFields({
   canWriteWorkspace,

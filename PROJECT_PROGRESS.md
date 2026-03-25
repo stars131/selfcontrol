@@ -1732,6 +1732,10 @@ Last updated: 2026-03-25
   - `dead-letter-recovery-summary*.tsx`, `location-review-*.tsx`, and `recent-media-issue-card-*.tsx` now consume extracted prop contracts instead of keeping local `Pick<...>` leaf types in those modules
   - the new recovery/review `*.types.ts` files keep dead-letter summary, location review, and recent-media issue leaf boundaries explicit and reusable
   - this keeps leaf presentation typing thinner and more maintainable under the enterprise engineering standard
+- Editor and Reminder Leaf Props Split V1:
+  - `media-preview-content.tsx`, `provider-feature-card-status.tsx`, `record-editor-*.tsx`, `record-media-tools-actions.tsx`, and `record-reminder-*.tsx` now consume extracted prop contracts instead of keeping local `Pick<...>` or combined leaf types in those modules
+  - the new editor/reminder `*.types.ts` files keep media-preview, provider-status, editor field groups, media-tools actions, and reminder leaf boundaries explicit and reusable
+  - this keeps editor and reminder presentation typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

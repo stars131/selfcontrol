@@ -1,0 +1,1 @@
+import type { RecordMediaToolsProps } from "./record-media-tools.types"; export type RecordMediaToolsActionsProps = Pick<RecordMediaToolsProps, "canWriteWorkspace" | "deleteButtonLabel" | "deleting" | "error" | "hasSelectedRecord" | "onDelete" | "onUpload" | "saveButtonLabel" | "saving" | "uploadAttachmentLabel" | "uploading" | "uploadingMediaLabel">;

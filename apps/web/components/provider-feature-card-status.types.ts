@@ -1,0 +1,1 @@
+import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardStatusProps = Pick<ProviderFeatureCardProps, "copy" | "formatSecretStatus" | "isDirty" | "item">;

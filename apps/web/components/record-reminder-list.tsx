@@ -1,26 +1,7 @@
 "use client";
 
-import type { RecordReminderPanelProps } from "./record-reminder-panel.types";
 import { RecordReminderItemCard } from "./record-reminder-item-card";
-
-type RecordReminderListProps = Pick<
-  RecordReminderPanelProps,
-  | "canWriteWorkspace"
-  | "deleteReminderLabel"
-  | "enableReminderLabel"
-  | "formatReminderEnabledLabel"
-  | "formatReminderStatusLabel"
-  | "formatReminderTimestampLabel"
-  | "markReminderDoneLabel"
-  | "noRemindersLabel"
-  | "onDeleteReminder"
-  | "onMarkReminderDone"
-  | "onToggleReminderEnabled"
-  | "pauseReminderLabel"
-  | "reminders"
-  | "selectedRecordTitle"
-  | "untitledReminderLabel"
->;
+import type { RecordReminderListProps } from "./record-reminder-list.types";
 
 export function RecordReminderList({
   canWriteWorkspace,

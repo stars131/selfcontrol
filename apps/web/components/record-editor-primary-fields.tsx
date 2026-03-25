@@ -1,11 +1,6 @@
 "use client";
 
-import type { RecordEditorFieldsProps } from "./record-editor-fields.types";
-
-type RecordEditorPrimaryFieldsProps = Pick<
-  RecordEditorFieldsProps,
-  "canWriteWorkspace" | "editorLabel" | "form" | "onContentChange" | "onTitleChange" | "panelCopy"
->;
+import type { RecordEditorPrimaryFieldsProps } from "./record-editor-primary-fields.types";
 
 export function RecordEditorPrimaryFields({
   canWriteWorkspace,

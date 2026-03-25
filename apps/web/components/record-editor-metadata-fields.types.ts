@@ -1,0 +1,1 @@
+import type { RecordEditorFieldsProps } from "./record-editor-fields.types"; export type RecordEditorMetadataFieldsProps = Pick<RecordEditorFieldsProps, "canWriteWorkspace" | "form" | "onOccurredAtChange" | "onRatingChange" | "onTypeCodeChange" | "panelCopy">;

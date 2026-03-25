@@ -1,0 +1,1 @@
+import type { RecordEditorFieldsProps } from "./record-editor-fields.types"; export type RecordEditorLocationFieldsProps = Pick<RecordEditorFieldsProps, "canWriteWorkspace" | "form" | "onAddressChange" | "onAvoidChange" | "onLatitudeChange" | "onLongitudeChange" | "onPlaceNameChange" | "panelCopy">;

@@ -1,26 +1,6 @@
 "use client";
 
-import type { RecordReminderPanelProps } from "./record-reminder-panel.types";
-
-type RecordReminderFormProps = Pick<
-  RecordReminderPanelProps,
-  | "canWriteWorkspace"
-  | "channelInApp"
-  | "channelLabel"
-  | "createReminderLabel"
-  | "onCreateReminder"
-  | "onMessageChange"
-  | "onRemindAtChange"
-  | "onTitleChange"
-  | "remindAtLabel"
-  | "reminderForm"
-  | "reminderNoteLabel"
-  | "reminderNotePlaceholder"
-  | "reminderTitleLabel"
-  | "reminderTitlePlaceholder"
-  | "savingReminder"
-  | "savingReminderLabel"
->;
+import type { RecordReminderFormProps } from "./record-reminder-form.types";
 
 export function RecordReminderForm({
   canWriteWorkspace,

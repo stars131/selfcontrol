@@ -1,11 +1,6 @@
 "use client";
 
-import type { ProviderFeatureCardProps } from "./provider-feature-card.types";
-
-type ProviderFeatureCardStatusProps = Pick<
-  ProviderFeatureCardProps,
-  "copy" | "formatSecretStatus" | "isDirty" | "item"
->;
+import type { ProviderFeatureCardStatusProps } from "./provider-feature-card-status.types";
 
 export function ProviderFeatureCardStatus({
   copy,

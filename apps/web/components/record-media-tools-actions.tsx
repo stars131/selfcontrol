@@ -1,22 +1,6 @@
 "use client";
 
-import type { RecordMediaToolsProps } from "./record-media-tools.types";
-
-type RecordMediaToolsActionsProps = Pick<
-  RecordMediaToolsProps,
-  | "canWriteWorkspace"
-  | "deleteButtonLabel"
-  | "deleting"
-  | "error"
-  | "hasSelectedRecord"
-  | "onDelete"
-  | "onUpload"
-  | "saveButtonLabel"
-  | "saving"
-  | "uploadAttachmentLabel"
-  | "uploading"
-  | "uploadingMediaLabel"
->;
+import type { RecordMediaToolsActionsProps } from "./record-media-tools-actions.types";
 
 export function RecordMediaToolsActions({
   canWriteWorkspace,

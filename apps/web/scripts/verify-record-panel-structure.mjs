@@ -1707,6 +1707,61 @@ const recentMediaIssueCardTagsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-tags.types.ts",
 );
+const mediaPreviewContentPath = path.resolve(process.cwd(), "components/media-preview-content.tsx");
+const mediaPreviewContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-preview-content.types.ts",
+);
+const providerFeatureCardStatusPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-status.tsx",
+);
+const providerFeatureCardStatusTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-status.types.ts",
+);
+const recordEditorLocationFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-location-fields.tsx",
+);
+const recordEditorLocationFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-location-fields.types.ts",
+);
+const recordEditorPrimaryFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-primary-fields.tsx",
+);
+const recordEditorPrimaryFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-primary-fields.types.ts",
+);
+const recordEditorMetadataFieldsPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-metadata-fields.tsx",
+);
+const recordEditorMetadataFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-editor-metadata-fields.types.ts",
+);
+const recordMediaToolsActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-media-tools-actions.tsx",
+);
+const recordMediaToolsActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-media-tools-actions.types.ts",
+);
+const recordReminderFormPath = path.resolve(process.cwd(), "components/record-reminder-form.tsx");
+const recordReminderFormTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-form.types.ts",
+);
+const recordReminderListPath = path.resolve(process.cwd(), "components/record-reminder-list.tsx");
+const recordReminderListTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-list.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -2360,6 +2415,37 @@ const recentMediaIssueCardTagsTypesSource = fs.readFileSync(
   recentMediaIssueCardTagsTypesPath,
   "utf8",
 );
+const mediaPreviewContentSource = fs.readFileSync(mediaPreviewContentPath, "utf8");
+const mediaPreviewContentTypesSource = fs.readFileSync(mediaPreviewContentTypesPath, "utf8");
+const providerFeatureCardStatusSource = fs.readFileSync(providerFeatureCardStatusPath, "utf8");
+const providerFeatureCardStatusTypesSource = fs.readFileSync(
+  providerFeatureCardStatusTypesPath,
+  "utf8",
+);
+const recordEditorLocationFieldsSource = fs.readFileSync(recordEditorLocationFieldsPath, "utf8");
+const recordEditorLocationFieldsTypesSource = fs.readFileSync(
+  recordEditorLocationFieldsTypesPath,
+  "utf8",
+);
+const recordEditorPrimaryFieldsSource = fs.readFileSync(recordEditorPrimaryFieldsPath, "utf8");
+const recordEditorPrimaryFieldsTypesSource = fs.readFileSync(
+  recordEditorPrimaryFieldsTypesPath,
+  "utf8",
+);
+const recordEditorMetadataFieldsSource = fs.readFileSync(recordEditorMetadataFieldsPath, "utf8");
+const recordEditorMetadataFieldsTypesSource = fs.readFileSync(
+  recordEditorMetadataFieldsTypesPath,
+  "utf8",
+);
+const recordMediaToolsActionsSource = fs.readFileSync(recordMediaToolsActionsPath, "utf8");
+const recordMediaToolsActionsTypesSource = fs.readFileSync(
+  recordMediaToolsActionsTypesPath,
+  "utf8",
+);
+const recordReminderFormSource = fs.readFileSync(recordReminderFormPath, "utf8");
+const recordReminderFormTypesSource = fs.readFileSync(recordReminderFormTypesPath, "utf8");
+const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
+const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -3139,6 +3225,19 @@ const recentMediaIssueCardActionsTypesLines =
   recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLines =
   recentMediaIssueCardTagsTypesSource.split(/\r?\n/).length;
+const mediaPreviewContentTypesLines = mediaPreviewContentTypesSource.split(/\r?\n/).length;
+const providerFeatureCardStatusTypesLines =
+  providerFeatureCardStatusTypesSource.split(/\r?\n/).length;
+const recordEditorLocationFieldsTypesLines =
+  recordEditorLocationFieldsTypesSource.split(/\r?\n/).length;
+const recordEditorPrimaryFieldsTypesLines =
+  recordEditorPrimaryFieldsTypesSource.split(/\r?\n/).length;
+const recordEditorMetadataFieldsTypesLines =
+  recordEditorMetadataFieldsTypesSource.split(/\r?\n/).length;
+const recordMediaToolsActionsTypesLines =
+  recordMediaToolsActionsTypesSource.split(/\r?\n/).length;
+const recordReminderFormTypesLines = recordReminderFormTypesSource.split(/\r?\n/).length;
+const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -15909,6 +16008,154 @@ if (recentMediaIssueCardTagsTypesLines > maxRecentMediaIssueCardTagsTypesLines) 
   throw new Error(
     `recent-media-issue-card-tags.types.ts exceeded ${maxRecentMediaIssueCardTagsTypesLines} lines: ${recentMediaIssueCardTagsTypesLines}`,
   );
+}
+
+for (const requiredMediaPreviewContentUsage of [
+  'import type { MediaPreviewContentProps } from "./media-preview-content.types";',
+  "}: MediaPreviewContentProps) {",
+]) {
+  if (!mediaPreviewContentSource.includes(requiredMediaPreviewContentUsage)) {
+    throw new Error(
+      `media-preview-content.tsx must reuse the extracted media-preview-content props type: ${requiredMediaPreviewContentUsage}`,
+    );
+  }
+}
+
+if (mediaPreviewContentSource.includes("type MediaPreviewContentProps =")) {
+  throw new Error("media-preview-content.tsx must keep media-preview-content prop typing delegated");
+}
+
+for (const requiredMediaPreviewContentTypesUsage of [
+  'import type { MediaPreviewControllerResult, MediaPreviewProps } from "./media-preview.types"; export type MediaPreviewContentProps = Pick<MediaPreviewProps, "asset"> & MediaPreviewControllerResult;',
+]) {
+  if (!mediaPreviewContentTypesSource.includes(requiredMediaPreviewContentTypesUsage)) {
+    throw new Error(
+      `media-preview-content.types.ts must own media-preview-content prop typing: ${requiredMediaPreviewContentTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaPreviewContentTypesLines = 2;
+if (mediaPreviewContentTypesLines > maxMediaPreviewContentTypesLines) {
+  throw new Error(
+    `media-preview-content.types.ts exceeded ${maxMediaPreviewContentTypesLines} lines: ${mediaPreviewContentTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureCardStatusUsage of [
+  'import type { ProviderFeatureCardStatusProps } from "./provider-feature-card-status.types";',
+  "}: ProviderFeatureCardStatusProps) {",
+]) {
+  if (!providerFeatureCardStatusSource.includes(requiredProviderFeatureCardStatusUsage)) {
+    throw new Error(
+      `provider-feature-card-status.tsx must reuse the extracted provider-status props type: ${requiredProviderFeatureCardStatusUsage}`,
+    );
+  }
+}
+
+if (providerFeatureCardStatusSource.includes("type ProviderFeatureCardStatusProps = Pick<")) {
+  throw new Error("provider-feature-card-status.tsx must keep provider-status prop typing delegated");
+}
+
+for (const requiredProviderFeatureCardStatusTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardStatusProps = Pick<ProviderFeatureCardProps, "copy" | "formatSecretStatus" | "isDirty" | "item">;',
+]) {
+  if (!providerFeatureCardStatusTypesSource.includes(requiredProviderFeatureCardStatusTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-status.types.ts must own provider-status prop typing: ${requiredProviderFeatureCardStatusTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardStatusTypesLines = 2;
+if (providerFeatureCardStatusTypesLines > maxProviderFeatureCardStatusTypesLines) {
+  throw new Error(
+    `provider-feature-card-status.types.ts exceeded ${maxProviderFeatureCardStatusTypesLines} lines: ${providerFeatureCardStatusTypesLines}`,
+  );
+}
+
+for (const [componentName, componentSource, componentTypesSource, importLine, signatureLine, forbiddenLine, typesLine, maxLines, actualLines] of [
+  [
+    "record-editor-location-fields",
+    recordEditorLocationFieldsSource,
+    recordEditorLocationFieldsTypesSource,
+    'import type { RecordEditorLocationFieldsProps } from "./record-editor-location-fields.types";',
+    "}: RecordEditorLocationFieldsProps) {",
+    "type RecordEditorLocationFieldsProps = Pick<",
+    'import type { RecordEditorFieldsProps } from "./record-editor-fields.types"; export type RecordEditorLocationFieldsProps = Pick<RecordEditorFieldsProps, "canWriteWorkspace" | "form" | "onAddressChange" | "onAvoidChange" | "onLatitudeChange" | "onLongitudeChange" | "onPlaceNameChange" | "panelCopy">;',
+    2,
+    recordEditorLocationFieldsTypesLines,
+  ],
+  [
+    "record-editor-primary-fields",
+    recordEditorPrimaryFieldsSource,
+    recordEditorPrimaryFieldsTypesSource,
+    'import type { RecordEditorPrimaryFieldsProps } from "./record-editor-primary-fields.types";',
+    "}: RecordEditorPrimaryFieldsProps) {",
+    "type RecordEditorPrimaryFieldsProps = Pick<",
+    'import type { RecordEditorFieldsProps } from "./record-editor-fields.types"; export type RecordEditorPrimaryFieldsProps = Pick<RecordEditorFieldsProps, "canWriteWorkspace" | "editorLabel" | "form" | "onContentChange" | "onTitleChange" | "panelCopy">;',
+    2,
+    recordEditorPrimaryFieldsTypesLines,
+  ],
+  [
+    "record-editor-metadata-fields",
+    recordEditorMetadataFieldsSource,
+    recordEditorMetadataFieldsTypesSource,
+    'import type { RecordEditorMetadataFieldsProps } from "./record-editor-metadata-fields.types";',
+    "}: RecordEditorMetadataFieldsProps) {",
+    "type RecordEditorMetadataFieldsProps = Pick<",
+    'import type { RecordEditorFieldsProps } from "./record-editor-fields.types"; export type RecordEditorMetadataFieldsProps = Pick<RecordEditorFieldsProps, "canWriteWorkspace" | "form" | "onOccurredAtChange" | "onRatingChange" | "onTypeCodeChange" | "panelCopy">;',
+    2,
+    recordEditorMetadataFieldsTypesLines,
+  ],
+  [
+    "record-media-tools-actions",
+    recordMediaToolsActionsSource,
+    recordMediaToolsActionsTypesSource,
+    'import type { RecordMediaToolsActionsProps } from "./record-media-tools-actions.types";',
+    "}: RecordMediaToolsActionsProps) {",
+    "type RecordMediaToolsActionsProps = Pick<",
+    'import type { RecordMediaToolsProps } from "./record-media-tools.types"; export type RecordMediaToolsActionsProps = Pick<RecordMediaToolsProps, "canWriteWorkspace" | "deleteButtonLabel" | "deleting" | "error" | "hasSelectedRecord" | "onDelete" | "onUpload" | "saveButtonLabel" | "saving" | "uploadAttachmentLabel" | "uploading" | "uploadingMediaLabel">;',
+    2,
+    recordMediaToolsActionsTypesLines,
+  ],
+  [
+    "record-reminder-form",
+    recordReminderFormSource,
+    recordReminderFormTypesSource,
+    'import type { RecordReminderFormProps } from "./record-reminder-form.types";',
+    "}: RecordReminderFormProps) {",
+    "type RecordReminderFormProps = Pick<",
+    'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; export type RecordReminderFormProps = Pick<RecordReminderPanelProps, "canWriteWorkspace" | "channelInApp" | "channelLabel" | "createReminderLabel" | "onCreateReminder" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "remindAtLabel" | "reminderForm" | "reminderNoteLabel" | "reminderNotePlaceholder" | "reminderTitleLabel" | "reminderTitlePlaceholder" | "savingReminder" | "savingReminderLabel">;',
+    2,
+    recordReminderFormTypesLines,
+  ],
+  [
+    "record-reminder-list",
+    recordReminderListSource,
+    recordReminderListTypesSource,
+    'import type { RecordReminderListProps } from "./record-reminder-list.types";',
+    "}: RecordReminderListProps) {",
+    "type RecordReminderListProps = Pick<",
+    'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; export type RecordReminderListProps = Pick<RecordReminderPanelProps, "canWriteWorkspace" | "deleteReminderLabel" | "enableReminderLabel" | "formatReminderEnabledLabel" | "formatReminderStatusLabel" | "formatReminderTimestampLabel" | "markReminderDoneLabel" | "noRemindersLabel" | "onDeleteReminder" | "onMarkReminderDone" | "onToggleReminderEnabled" | "pauseReminderLabel" | "reminders" | "selectedRecordTitle" | "untitledReminderLabel">;',
+    2,
+    recordReminderListTypesLines,
+  ],
+]) {
+  for (const requiredUsage of [importLine, signatureLine]) {
+    if (!componentSource.includes(requiredUsage)) {
+      throw new Error(`${componentName}.tsx must reuse the extracted leaf props type: ${requiredUsage}`);
+    }
+  }
+  if (componentSource.includes(forbiddenLine)) {
+    throw new Error(`${componentName}.tsx must keep leaf prop typing delegated`);
+  }
+  if (!componentTypesSource.includes(typesLine)) {
+    throw new Error(`${componentName}.types.ts must own leaf prop typing: ${typesLine}`);
+  }
+  if (actualLines > maxLines) {
+    throw new Error(`${componentName}.types.ts exceeded ${maxLines} lines: ${actualLines}`);
+  }
 }
 
 console.log("record-panel structure verification passed");
