@@ -1851,6 +1851,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-card.tsx` now delegates export-job heading and toolbar actions to `workspace-export-jobs-header.tsx` instead of keeping copy layout and refresh/queue buttons inline inside the card shell
   - the new `workspace-export-jobs-header.types.ts` file keeps the header contract explicit and reusable while the parent card remains focused on controller wiring, notices, and job-list composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-job header boundary, exact one-line type contract, and line-count ceilings so future export-job card updates stay safer and easier to maintain
+- Workspace Settings Managed Tools Split V1:
+  - `workspace-settings-managed-sections.tsx` now delegates managed export/retention tool composition to `workspace-settings-managed-tools.tsx` instead of keeping the three management cards inline beside the members area
+  - the new `workspace-settings-managed-tools.types.ts` file keeps the managed-tools contract explicit and reusable while the parent managed-sections component remains focused on high-level workspace settings layout
+  - `verify-workspace-settings-structure.mjs` now enforces that delegated managed-tools boundary, exact one-line type contract, and line-count ceilings so future settings-page updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

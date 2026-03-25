@@ -30,6 +30,14 @@ const workspaceSettingsManagedSectionsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-managed-sections.tsx",
 );
+const workspaceSettingsManagedToolsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-managed-tools.tsx",
+);
+const workspaceSettingsManagedToolsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-managed-tools.types.ts",
+);
 const workspaceSettingsControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-settings-controller.ts",
@@ -58,6 +66,8 @@ const loadingShellTypesSource = fs.readFileSync(workspaceSettingsLoadingShellTyp
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const providerSectionTypesSource = fs.readFileSync(workspaceSettingsProviderSectionTypesPath, "utf8");
 const managedSectionsSource = fs.readFileSync(workspaceSettingsManagedSectionsPath, "utf8");
+const managedToolsSource = fs.readFileSync(workspaceSettingsManagedToolsPath, "utf8");
+const managedToolsTypesSource = fs.readFileSync(workspaceSettingsManagedToolsTypesPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceSettingsControllerPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceSettingsActionsPath, "utf8");
 const actionErrorSource = fs.readFileSync(workspaceSettingsActionErrorPath, "utf8");
@@ -69,6 +79,9 @@ const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const providerSectionTypesLineCount = providerSectionTypesSource.split(/\r?\n/).length;
+const managedSectionsLineCount = managedSectionsSource.split(/\r?\n/).length;
+const managedToolsLineCount = managedToolsSource.split(/\r?\n/).length;
+const managedToolsTypesLineCount = managedToolsTypesSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const actionErrorLineCount = actionErrorSource.split(/\r?\n/).length;
@@ -150,9 +163,8 @@ for (const forbiddenProviderSectionToken of [
 
 for (const requiredManagedImport of [
   'import { WorkspaceMembersSection } from "./workspace-members-section";',
-  'import { WorkspaceExportCard } from "./workspace-export-card";',
-  'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
-  'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+  'import { WorkspaceSettingsManagedTools } from "./workspace-settings-managed-tools";',
+  'import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types";',
 ]) {
   if (!managedSectionsSource.includes(requiredManagedImport)) {
     throw new Error(`workspace-settings-managed-sections.tsx must import delegated managed sections: ${requiredManagedImport}`);
@@ -161,13 +173,64 @@ for (const requiredManagedImport of [
 
 for (const requiredManagedUsage of [
   "<WorkspaceMembersSection",
-  "<WorkspaceExportCard",
-  "<WorkspaceExportJobsCard",
-  "<WorkspaceMediaRetentionCard",
+  "<WorkspaceSettingsManagedTools",
+  "}: WorkspaceSettingsManagedSectionsProps) {",
 ]) {
   if (!managedSectionsSource.includes(requiredManagedUsage)) {
     throw new Error(`workspace-settings-managed-sections.tsx must compose delegated managed sections: ${requiredManagedUsage}`);
   }
+}
+
+for (const forbiddenManagedSectionsToken of [
+  'import { WorkspaceExportCard } from "./workspace-export-card";',
+  'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
+  'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+  "<WorkspaceExportCard",
+  "<WorkspaceExportJobsCard",
+  "<WorkspaceMediaRetentionCard",
+]) {
+  if (managedSectionsSource.includes(forbiddenManagedSectionsToken)) {
+    throw new Error(`workspace-settings-managed-sections.tsx must keep managed tools delegated: ${forbiddenManagedSectionsToken}`);
+  }
+}
+
+if (managedSectionsLineCount > 35) {
+  throw new Error(`workspace-settings-managed-sections.tsx exceeded 35 lines: ${managedSectionsLineCount}`);
+}
+
+for (const requiredManagedToolsUsage of [
+  'import { WorkspaceExportCard } from "./workspace-export-card";',
+  'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
+  'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+  'import type { WorkspaceSettingsManagedToolsProps } from "./workspace-settings-managed-tools.types";',
+  "}: WorkspaceSettingsManagedToolsProps) {",
+  "<WorkspaceMediaRetentionCard",
+  "<WorkspaceExportCard",
+  "<WorkspaceExportJobsCard",
+]) {
+  if (!managedToolsSource.includes(requiredManagedToolsUsage)) {
+    throw new Error(`workspace-settings-managed-tools.tsx must own managed-tool composition: ${requiredManagedToolsUsage}`);
+  }
+}
+
+if (managedToolsSource.includes("type WorkspaceSettingsManagedToolsProps = Pick<")) {
+  throw new Error("workspace-settings-managed-tools.tsx must keep managed-tools prop typing delegated");
+}
+
+if (managedToolsLineCount > 25) {
+  throw new Error(`workspace-settings-managed-tools.tsx exceeded 25 lines: ${managedToolsLineCount}`);
+}
+
+for (const requiredManagedToolsTypesUsage of [
+  'import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types"; export type WorkspaceSettingsManagedToolsProps = Pick<WorkspaceSettingsManagedSectionsProps, "locale" | "workspaceId" | "workspaceSlug"> & { managedRole: "owner" | "editor"; token: string };',
+]) {
+  if (!managedToolsTypesSource.includes(requiredManagedToolsTypesUsage)) {
+    throw new Error(`workspace-settings-managed-tools.types.ts must own managed-tools prop typing: ${requiredManagedToolsTypesUsage}`);
+  }
+}
+
+if (managedToolsTypesLineCount > 2) {
+  throw new Error(`workspace-settings-managed-tools.types.ts exceeded 2 lines: ${managedToolsTypesLineCount}`);
 }
 
 for (const forbiddenToken of [

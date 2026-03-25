@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types"; export type WorkspaceSettingsManagedToolsProps = Pick<WorkspaceSettingsManagedSectionsProps, "locale" | "workspaceId" | "workspaceSlug"> & { managedRole: "owner" | "editor"; token: string };
