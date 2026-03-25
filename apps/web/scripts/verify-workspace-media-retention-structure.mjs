@@ -18,13 +18,33 @@ const retentionControllerActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-controller-actions.ts",
 );
+const retentionControllerActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-controller-actions.types.ts",
+);
 const retentionSelectionActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-selection-actions.ts",
 );
+const retentionSelectionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-selection-actions.types.ts",
+);
 const retentionExecutionActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-execution-actions.ts",
+);
+const retentionExecutionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-execution-actions.types.ts",
+);
+const retentionReportHookPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-media-retention-report.ts",
+);
+const retentionReportHookTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-media-retention-report.types.ts",
 );
 const retentionCopyPath = path.resolve(
   process.cwd(),
@@ -33,6 +53,10 @@ const retentionCopyPath = path.resolve(
 const retentionActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-actions.tsx",
+);
+const retentionActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-actions.types.ts",
 );
 const retentionNoticesPath = path.resolve(
   process.cwd(),
@@ -51,10 +75,25 @@ const controllerSource = fs.readFileSync(retentionControllerPath, "utf8");
 const retentionControllerTypesSource = fs.readFileSync(retentionControllerTypesPath, "utf8");
 const retentionControllerHelpersSource = fs.readFileSync(retentionControllerHelpersPath, "utf8");
 const retentionControllerActionsSource = fs.readFileSync(retentionControllerActionsPath, "utf8");
+const retentionControllerActionsTypesSource = fs.readFileSync(
+  retentionControllerActionsTypesPath,
+  "utf8",
+);
 const retentionSelectionActionsSource = fs.readFileSync(retentionSelectionActionsPath, "utf8");
+const retentionSelectionActionsTypesSource = fs.readFileSync(
+  retentionSelectionActionsTypesPath,
+  "utf8",
+);
 const retentionExecutionActionsSource = fs.readFileSync(retentionExecutionActionsPath, "utf8");
+const retentionExecutionActionsTypesSource = fs.readFileSync(
+  retentionExecutionActionsTypesPath,
+  "utf8",
+);
+const retentionReportHookSource = fs.readFileSync(retentionReportHookPath, "utf8");
+const retentionReportHookTypesSource = fs.readFileSync(retentionReportHookTypesPath, "utf8");
 const copySource = fs.readFileSync(retentionCopyPath, "utf8");
 const retentionActionsSource = fs.readFileSync(retentionActionsPath, "utf8");
+const retentionActionsTypesSource = fs.readFileSync(retentionActionsTypesPath, "utf8");
 const retentionNoticesSource = fs.readFileSync(retentionNoticesPath, "utf8");
 const retentionCardCopyHelpersSource = fs.readFileSync(retentionCardCopyHelpersPath, "utf8");
 const retentionCardActionHelpersSource = fs.readFileSync(retentionCardActionHelpersPath, "utf8");
@@ -66,12 +105,22 @@ const retentionControllerHelpersLineCount =
   retentionControllerHelpersSource.split(/\r?\n/).length;
 const retentionControllerActionsLineCount =
   retentionControllerActionsSource.split(/\r?\n/).length;
+const retentionControllerActionsTypesLineCount =
+  retentionControllerActionsTypesSource.split(/\r?\n/).length;
 const retentionSelectionActionsLineCount =
   retentionSelectionActionsSource.split(/\r?\n/).length;
+const retentionSelectionActionsTypesLineCount =
+  retentionSelectionActionsTypesSource.split(/\r?\n/).length;
 const retentionExecutionActionsLineCount =
   retentionExecutionActionsSource.split(/\r?\n/).length;
+const retentionExecutionActionsTypesLineCount =
+  retentionExecutionActionsTypesSource.split(/\r?\n/).length;
+const retentionReportHookLineCount = retentionReportHookSource.split(/\r?\n/).length;
+const retentionReportHookTypesLineCount =
+  retentionReportHookTypesSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const retentionActionsLineCount = retentionActionsSource.split(/\r?\n/).length;
+const retentionActionsTypesLineCount = retentionActionsTypesSource.split(/\r?\n/).length;
 const retentionNoticesLineCount = retentionNoticesSource.split(/\r?\n/).length;
 const retentionCardCopyHelpersLineCount =
   retentionCardCopyHelpersSource.split(/\r?\n/).length;
@@ -79,6 +128,66 @@ const retentionCardActionHelpersLineCount =
   retentionCardActionHelpersSource.split(/\r?\n/).length;
 const retentionListsPath = path.resolve(process.cwd(), "components/workspace-media-retention-lists.tsx");
 const retentionListsSource = fs.readFileSync(retentionListsPath, "utf8");
+
+for (const requiredRetentionReportHookImport of [
+  'from "../lib/api";',
+  'from "./workspace-media-retention-controller-helpers";',
+  'import type { UseWorkspaceMediaRetentionReportInput } from "./use-workspace-media-retention-report.types";',
+]) {
+  if (!retentionReportHookSource.includes(requiredRetentionReportHookImport)) {
+    throw new Error(
+      `use-workspace-media-retention-report.ts must import delegated report-loading dependencies: ${requiredRetentionReportHookImport}`,
+    );
+  }
+}
+
+for (const requiredRetentionReportHookUsage of [
+  "export function useWorkspaceMediaRetentionReport({",
+  "}: UseWorkspaceMediaRetentionReportInput) {",
+  "const loadReport = useCallback(",
+  "void loadReport(olderThanDays);",
+]) {
+  if (!retentionReportHookSource.includes(requiredRetentionReportHookUsage)) {
+    throw new Error(
+      `use-workspace-media-retention-report.ts must own report loading through the extracted input type: ${requiredRetentionReportHookUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRetentionReportHookToken of [
+  'from "./workspace-media-retention-controller.types";',
+  "type UseWorkspaceMediaRetentionReportInput = Pick<",
+]) {
+  if (retentionReportHookSource.includes(forbiddenRetentionReportHookToken)) {
+    throw new Error(
+      `use-workspace-media-retention-report.ts must keep report input typing delegated: ${forbiddenRetentionReportHookToken}`,
+    );
+  }
+}
+
+const maxRetentionReportHookLines = 55;
+if (retentionReportHookLineCount > maxRetentionReportHookLines) {
+  throw new Error(
+    `use-workspace-media-retention-report.ts exceeded ${maxRetentionReportHookLines} lines: ${retentionReportHookLineCount}`,
+  );
+}
+
+for (const requiredRetentionReportHookTypesUsage of [
+  'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type UseWorkspaceMediaRetentionReportInput = Pick<UseWorkspaceMediaRetentionControllerProps, "loadFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "setError" | "setLoading" | "setReport" | "setSelectedMediaIds">;',
+]) {
+  if (!retentionReportHookTypesSource.includes(requiredRetentionReportHookTypesUsage)) {
+    throw new Error(
+      `use-workspace-media-retention-report.types.ts must own report input typing: ${requiredRetentionReportHookTypesUsage}`,
+    );
+  }
+}
+
+const maxRetentionReportHookTypesLines = 2;
+if (retentionReportHookTypesLineCount > maxRetentionReportHookTypesLines) {
+  throw new Error(
+    `use-workspace-media-retention-report.types.ts exceeded ${maxRetentionReportHookTypesLines} lines: ${retentionReportHookTypesLineCount}`,
+  );
+}
 
 if (!source.includes('useWorkspaceMediaRetentionController')) {
   throw new Error("workspace-media-retention-card.tsx must use useWorkspaceMediaRetentionController");
@@ -300,7 +409,7 @@ if (retentionControllerHelpersLineCount > maxRetentionControllerHelpersLines) {
 for (const requiredControllerActionsImport of [
   'from "./workspace-media-retention-execution-actions";',
   'from "./workspace-media-retention-selection-actions";',
-  'from "./workspace-media-retention-controller.types";',
+  'from "./workspace-media-retention-controller-actions.types";',
 ]) {
   if (!retentionControllerActionsSource.includes(requiredControllerActionsImport)) {
     throw new Error(
@@ -310,6 +419,8 @@ for (const requiredControllerActionsImport of [
 }
 
 for (const requiredControllerActionsUsage of [
+  "export function createWorkspaceMediaRetentionControllerActions({",
+  "}: CreateWorkspaceMediaRetentionControllerActionsInput) {",
   "createWorkspaceMediaRetentionSelectionActions({",
   "createWorkspaceMediaRetentionExecutionActions({",
   "...selectionActions",
@@ -325,6 +436,8 @@ for (const requiredControllerActionsUsage of [
 for (const forbiddenControllerActionsToken of [
   'from "../lib/api";',
   'from "./workspace-media-retention-controller-helpers";',
+  'from "./workspace-media-retention-controller.types";',
+  "type CreateWorkspaceMediaRetentionControllerActionsInput = Pick<",
   "function toggleSelectedMedia",
   "function selectAllCandidates",
   "function clearSelection",
@@ -345,8 +458,36 @@ if (retentionControllerActionsLineCount > maxRetentionControllerActionsLines) {
   );
 }
 
+for (const requiredControllerActionsTypesUsage of [
+  'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionControllerActionsInput = Pick<UseWorkspaceMediaRetentionControllerProps, "actionFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "report" | "selectedMediaIds" | "setActionError" | "setActionLoading" | "setActionResult" | "setSelectedMediaIds"> & { loadReport: (threshold: number) => Promise<void> };',
+]) {
+  if (!retentionControllerActionsTypesSource.includes(requiredControllerActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-controller-actions.types.ts must own controller action input typing: ${requiredControllerActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRetentionControllerActionsTypesLines = 2;
+if (retentionControllerActionsTypesLineCount > maxRetentionControllerActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-controller-actions.types.ts exceeded ${maxRetentionControllerActionsTypesLines} lines: ${retentionControllerActionsTypesLineCount}`,
+  );
+}
+
+for (const requiredSelectionActionsImport of [
+  'import type { CreateWorkspaceMediaRetentionSelectionActionsInput } from "./workspace-media-retention-selection-actions.types";',
+]) {
+  if (!retentionSelectionActionsSource.includes(requiredSelectionActionsImport)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.ts must import delegated selection input typing: ${requiredSelectionActionsImport}`,
+    );
+  }
+}
+
 for (const requiredSelectionActionsUsage of [
   "export function createWorkspaceMediaRetentionSelectionActions({",
+  "}: CreateWorkspaceMediaRetentionSelectionActionsInput) {",
   "function toggleSelectedMedia(mediaId: string)",
   "function selectAllCandidates()",
   "function clearSelection()",
@@ -358,6 +499,16 @@ for (const requiredSelectionActionsUsage of [
   }
 }
 
+for (const forbiddenSelectionActionsToken of [
+  "type CreateWorkspaceMediaRetentionSelectionActionsInput = Pick<",
+]) {
+  if (retentionSelectionActionsSource.includes(forbiddenSelectionActionsToken)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.ts must keep selection input typing delegated: ${forbiddenSelectionActionsToken}`,
+    );
+  }
+}
+
 const maxRetentionSelectionActionsLines = 35;
 if (retentionSelectionActionsLineCount > maxRetentionSelectionActionsLines) {
   throw new Error(
@@ -365,9 +516,27 @@ if (retentionSelectionActionsLineCount > maxRetentionSelectionActionsLines) {
   );
 }
 
+for (const requiredSelectionActionsTypesUsage of [
+  'import type { WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionSelectionActionsInput = Pick<WorkspaceMediaRetentionControllerState, "report" | "setSelectedMediaIds">;',
+]) {
+  if (!retentionSelectionActionsTypesSource.includes(requiredSelectionActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-selection-actions.types.ts must own selection input typing: ${requiredSelectionActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRetentionSelectionActionsTypesLines = 2;
+if (retentionSelectionActionsTypesLineCount > maxRetentionSelectionActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-selection-actions.types.ts exceeded ${maxRetentionSelectionActionsTypesLines} lines: ${retentionSelectionActionsTypesLineCount}`,
+  );
+}
+
 for (const requiredExecutionActionsImport of [
   'from "../lib/api";',
   'from "./workspace-media-retention-controller-helpers";',
+  'from "./workspace-media-retention-execution-actions.types";',
   'from "./workspace-media-retention-controller.types";',
 ]) {
   if (!retentionExecutionActionsSource.includes(requiredExecutionActionsImport)) {
@@ -379,6 +548,7 @@ for (const requiredExecutionActionsImport of [
 
 for (const requiredExecutionActionsUsage of [
   "export function createWorkspaceMediaRetentionExecutionActions({",
+  "}: CreateWorkspaceMediaRetentionExecutionActionsInput) {",
   "async function handleArchive(confirmMessage: string)",
   "async function handleCleanup({",
   "archiveMediaRetention(token, workspaceId, {",
@@ -391,10 +561,38 @@ for (const requiredExecutionActionsUsage of [
   }
 }
 
+for (const forbiddenExecutionActionsToken of [
+  'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types";',
+  "type CreateWorkspaceMediaRetentionExecutionActionsInput = Pick<",
+]) {
+  if (retentionExecutionActionsSource.includes(forbiddenExecutionActionsToken)) {
+    throw new Error(
+      `workspace-media-retention-execution-actions.ts must keep execution input typing delegated: ${forbiddenExecutionActionsToken}`,
+    );
+  }
+}
+
 const maxRetentionExecutionActionsLines = 95;
 if (retentionExecutionActionsLineCount > maxRetentionExecutionActionsLines) {
   throw new Error(
     `workspace-media-retention-execution-actions.ts exceeded ${maxRetentionExecutionActionsLines} lines: ${retentionExecutionActionsLineCount}`,
+  );
+}
+
+for (const requiredExecutionActionsTypesUsage of [
+  'import type { UseWorkspaceMediaRetentionControllerProps, WorkspaceMediaRetentionControllerState } from "./workspace-media-retention-controller.types"; export type CreateWorkspaceMediaRetentionExecutionActionsInput = Pick<UseWorkspaceMediaRetentionControllerProps, "actionFailedMessage" | "token" | "workspaceId"> & Pick<WorkspaceMediaRetentionControllerState, "olderThanDays" | "selectedMediaIds" | "setActionError" | "setActionLoading" | "setActionResult"> & { loadReport: (threshold: number) => Promise<void> };',
+]) {
+  if (!retentionExecutionActionsTypesSource.includes(requiredExecutionActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-execution-actions.types.ts must own execution input typing: ${requiredExecutionActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRetentionExecutionActionsTypesLines = 2;
+if (retentionExecutionActionsTypesLineCount > maxRetentionExecutionActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-execution-actions.types.ts exceeded ${maxRetentionExecutionActionsTypesLines} lines: ${retentionExecutionActionsTypesLineCount}`,
   );
 }
 
@@ -512,7 +710,7 @@ if (retentionCardCopyHelpersLineCount > maxRetentionCardCopyHelpersLines) {
   );
 }
 
-for (const requiredActionHelpersImport of ['from "./workspace-media-retention-actions";']) {
+for (const requiredActionHelpersImport of ['from "./workspace-media-retention-actions.types";']) {
   if (!retentionCardActionHelpersSource.includes(requiredActionHelpersImport)) {
     throw new Error(
       `workspace-media-retention-card-action-helpers.ts must import delegated action props typing: ${requiredActionHelpersImport}`,
@@ -542,8 +740,9 @@ if (retentionCardActionHelpersLineCount > maxRetentionCardActionHelpersLines) {
 }
 
 for (const requiredActionsUsage of [
-  "export type WorkspaceMediaRetentionActionsProps = {",
+  'import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types";',
   "export function WorkspaceMediaRetentionActions({",
+  "}: WorkspaceMediaRetentionActionsProps) {",
 ]) {
   if (!retentionActionsSource.includes(requiredActionsUsage)) {
     throw new Error(
@@ -552,10 +751,37 @@ for (const requiredActionsUsage of [
   }
 }
 
+for (const forbiddenActionsToken of [
+  "export type WorkspaceMediaRetentionActionsProps = {",
+]) {
+  if (retentionActionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(
+      `workspace-media-retention-actions.tsx must keep action prop typing delegated: ${forbiddenActionsToken}`,
+    );
+  }
+}
+
 const maxRetentionActionsLines = 110;
 if (retentionActionsLineCount > maxRetentionActionsLines) {
   throw new Error(
     `workspace-media-retention-actions.tsx exceeded ${maxRetentionActionsLines} lines: ${retentionActionsLineCount}`,
+  );
+}
+
+for (const requiredActionsTypesUsage of [
+  'export type WorkspaceMediaRetentionActionsProps = { actionLoading: boolean; archiveConfirmSelected: string; archiveSelectedLabel: string; canDeleteOrphans: boolean; canSelectAll: boolean; clearSelectionLabel: string; deleteOrphansLabel: string; deleteSelectedLabel: string; editorReadOnly: string; onArchive: (confirmMessage: string) => Promise<void>; onCleanupOrphans: () => Promise<void>; onCleanupSelected: () => Promise<void>; onClearSelection: () => void; onSelectAllCandidates: () => void; ownerActions: string; processingLabel: string; role: "owner" | "editor"; selectedCount: number; selectedSummary: string; selectAllLabel: string };',
+]) {
+  if (!retentionActionsTypesSource.includes(requiredActionsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-actions.types.ts must own action prop typing: ${requiredActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRetentionActionsTypesLines = 2;
+if (retentionActionsTypesLineCount > maxRetentionActionsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-actions.types.ts exceeded ${maxRetentionActionsTypesLines} lines: ${retentionActionsTypesLineCount}`,
   );
 }
 

@@ -1767,6 +1767,10 @@ Last updated: 2026-03-25
   - `record-panel-controller-filter-preset-name.ts` now consumes an extracted result union instead of keeping a local preset-name resolution type, and the record-panel verifier now enforces that delegated result contract
   - the new `record-panel-controller-filter-preset-name.types.ts` file keeps preset-name result typing explicit and reusable
   - this keeps filter helper typing thinner and more maintainable under the enterprise engineering standard
+- Provider, Retention, and Shell Verifier Sync V1:
+  - `verify-provider-settings-structure.mjs`, `verify-workspace-media-retention-structure.mjs`, and `verify-workspace-shell-structure.mjs` now match the already-extracted `*.types.ts` boundaries instead of expecting stale inline `Pick<...>` imports in source modules
+  - the verifier suite now checks exact one-line type-file contracts and 2-line ceilings for provider feature-list, retention report/action inputs, and workspace-shell initial-load/shared-role types
+  - this keeps maintainability enforcement aligned with the current enterprise refactor pattern so future updates remain verifiable and low-risk
 
 ## Next
 - Continue the next product slice

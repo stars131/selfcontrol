@@ -55,6 +55,10 @@ const workspaceShellInitialLoadHelpersPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-initial-load-helpers.ts",
 );
+const workspaceShellInitialLoadHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-load-helpers.types.ts",
+);
 const workspaceShellMediaFilterActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-filter-actions.ts",
@@ -66,6 +70,38 @@ const workspaceShellChatRecordActionsPath = path.resolve(
 const workspaceShellAdminActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-admin-actions.ts",
+);
+const workspaceShellConversationStateLoadPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-conversation-state-load.ts",
+);
+const workspaceShellConversationStateLoadTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-conversation-state-load.types.ts",
+);
+const workspaceShellManagedStateLoadPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-managed-state-load.ts",
+);
+const workspaceShellManagedStateLoadTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-managed-state-load.types.ts",
+);
+const workspaceShellInitialFollowUpPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-follow-up.ts",
+);
+const workspaceShellInitialFollowUpTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-follow-up.types.ts",
+);
+const workspaceShellInitialBootstrapPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-bootstrap.ts",
+);
+const workspaceShellInitialBootstrapTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-initial-bootstrap.types.ts",
 );
 const source = fs.readFileSync(workspaceShellPath, "utf8");
 const clientPropsSource = fs.readFileSync(workspaceShellClientPropsPath, "utf8");
@@ -100,9 +136,36 @@ const initialLoadAuthSource = fs.readFileSync(workspaceShellInitialLoadAuthPath,
 const initialLoadDataInputSource = fs.readFileSync(workspaceShellInitialLoadDataInputPath, "utf8");
 const initialLoadRunnerSource = fs.readFileSync(workspaceShellInitialLoadRunnerPath, "utf8");
 const initialLoadHelpersSource = fs.readFileSync(workspaceShellInitialLoadHelpersPath, "utf8");
+const initialLoadHelpersTypesSource = fs.readFileSync(
+  workspaceShellInitialLoadHelpersTypesPath,
+  "utf8",
+);
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
+const conversationStateLoadSource = fs.readFileSync(
+  workspaceShellConversationStateLoadPath,
+  "utf8",
+);
+const conversationStateLoadTypesSource = fs.readFileSync(
+  workspaceShellConversationStateLoadTypesPath,
+  "utf8",
+);
+const managedStateLoadSource = fs.readFileSync(workspaceShellManagedStateLoadPath, "utf8");
+const managedStateLoadTypesSource = fs.readFileSync(
+  workspaceShellManagedStateLoadTypesPath,
+  "utf8",
+);
+const initialFollowUpSource = fs.readFileSync(workspaceShellInitialFollowUpPath, "utf8");
+const initialFollowUpTypesSource = fs.readFileSync(
+  workspaceShellInitialFollowUpTypesPath,
+  "utf8",
+);
+const initialBootstrapSource = fs.readFileSync(workspaceShellInitialBootstrapPath, "utf8");
+const initialBootstrapTypesSource = fs.readFileSync(
+  workspaceShellInitialBootstrapTypesPath,
+  "utf8",
+);
 const lineCount = source.split(/\r?\n/).length;
 const clientPropsLineCount = clientPropsSource.split(/\r?\n/).length;
 const panelsLineCount = panelsSource.split(/\r?\n/).length;
@@ -126,9 +189,19 @@ const initialLoadAuthLineCount = initialLoadAuthSource.split(/\r?\n/).length;
 const initialLoadDataInputLineCount = initialLoadDataInputSource.split(/\r?\n/).length;
 const initialLoadRunnerLineCount = initialLoadRunnerSource.split(/\r?\n/).length;
 const initialLoadHelpersLineCount = initialLoadHelpersSource.split(/\r?\n/).length;
+const initialLoadHelpersTypesLineCount = initialLoadHelpersTypesSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
+const conversationStateLoadLineCount = conversationStateLoadSource.split(/\r?\n/).length;
+const conversationStateLoadTypesLineCount =
+  conversationStateLoadTypesSource.split(/\r?\n/).length;
+const managedStateLoadLineCount = managedStateLoadSource.split(/\r?\n/).length;
+const managedStateLoadTypesLineCount = managedStateLoadTypesSource.split(/\r?\n/).length;
+const initialFollowUpLineCount = initialFollowUpSource.split(/\r?\n/).length;
+const initialFollowUpTypesLineCount = initialFollowUpTypesSource.split(/\r?\n/).length;
+const initialBootstrapLineCount = initialBootstrapSource.split(/\r?\n/).length;
+const initialBootstrapTypesLineCount = initialBootstrapTypesSource.split(/\r?\n/).length;
 
 for (const requiredRefreshersImport of [
   'from "./workspace-shell-conversation-refreshers";',
@@ -755,11 +828,9 @@ if (initialLoadRunnerLineCount > maxInitialLoadRunnerLines) {
 }
 
 for (const requiredInitialLoadHelpersImport of [
-  'from "./workspace-shell-effects.types";',
-  'from "./workspace-shell-conversation-state-load";',
   'from "./workspace-shell-initial-bootstrap";',
   'from "./workspace-shell-initial-follow-up";',
-  'from "./workspace-shell-managed-state-load";',
+  'import type { LoadWorkspaceShellInitialDataInput } from "./workspace-shell-initial-load-helpers.types";',
 ]) {
   if (!initialLoadHelpersSource.includes(requiredInitialLoadHelpersImport)) {
     throw new Error(`workspace-shell-initial-load-helpers.ts must import delegated bootstrap helpers: ${requiredInitialLoadHelpersImport}`);
@@ -767,6 +838,8 @@ for (const requiredInitialLoadHelpersImport of [
 }
 
 for (const requiredInitialLoadHelpersUsage of [
+  "export async function loadWorkspaceShellInitialData({",
+  "}: LoadWorkspaceShellInitialDataInput) {",
   "loadWorkspaceShellInitialBootstrap({",
   "loadWorkspaceShellInitialFollowUp({",
 ]) {
@@ -776,6 +849,10 @@ for (const requiredInitialLoadHelpersUsage of [
 }
 
 for (const forbiddenInitialLoadHelpersToken of [
+  'from "./workspace-shell-effects.types";',
+  'from "./workspace-shell-conversation-state-load";',
+  'from "./workspace-shell-managed-state-load";',
+  "type LoadWorkspaceShellInitialDataInput = {",
   "createConversation(",
   "listConversations(",
   "loadConversationMessagesForWorkspace(",
@@ -800,6 +877,261 @@ const maxInitialLoadHelpersLines = 135;
 if (initialLoadHelpersLineCount > maxInitialLoadHelpersLines) {
   throw new Error(
     `workspace-shell-initial-load-helpers.ts exceeded ${maxInitialLoadHelpersLines} lines: ${initialLoadHelpersLineCount}`,
+  );
+}
+
+for (const requiredInitialLoadHelpersTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type LoadWorkspaceShellInitialDataInput = { activeToken: string; setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"]; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setConversations: UseWorkspaceShellEffectsProps["setConversations"]; setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"]; setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"]; setMessages: UseWorkspaceShellEffectsProps["setMessages"]; setNotifications: UseWorkspaceShellEffectsProps["setNotifications"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setRecords: UseWorkspaceShellEffectsProps["setRecords"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"]; setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"]; setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"]; workspaceId: string };',
+]) {
+  if (!initialLoadHelpersTypesSource.includes(requiredInitialLoadHelpersTypesUsage)) {
+    throw new Error(
+      `workspace-shell-initial-load-helpers.types.ts must own initial-load input typing: ${requiredInitialLoadHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxInitialLoadHelpersTypesLines = 2;
+if (initialLoadHelpersTypesLineCount > maxInitialLoadHelpersTypesLines) {
+  throw new Error(
+    `workspace-shell-initial-load-helpers.types.ts exceeded ${maxInitialLoadHelpersTypesLines} lines: ${initialLoadHelpersTypesLineCount}`,
+  );
+}
+
+for (const requiredConversationStateLoadImport of [
+  'from "../lib/api";',
+  'from "../lib/workspace-shell-refresh";',
+  'import type {',
+  'from "./workspace-shell-conversation-state-load.types";',
+]) {
+  if (!conversationStateLoadSource.includes(requiredConversationStateLoadImport)) {
+    throw new Error(
+      `workspace-shell-conversation-state-load.ts must import delegated conversation-load dependencies: ${requiredConversationStateLoadImport}`,
+    );
+  }
+}
+
+for (const requiredConversationStateLoadUsage of [
+  "export async function loadWorkspaceShellConversationState({",
+  "}: LoadWorkspaceShellConversationStateInput) {",
+  "function canManageWorkspace(role: WorkspaceShellLoadRole)",
+]) {
+  if (!conversationStateLoadSource.includes(requiredConversationStateLoadUsage)) {
+    throw new Error(
+      `workspace-shell-conversation-state-load.ts must use the extracted conversation-load input and shared role typing: ${requiredConversationStateLoadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenConversationStateLoadToken of [
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
+  "type LoadWorkspaceShellConversationStateInput = {",
+]) {
+  if (conversationStateLoadSource.includes(forbiddenConversationStateLoadToken)) {
+    throw new Error(
+      `workspace-shell-conversation-state-load.ts must keep shared role and input typing delegated: ${forbiddenConversationStateLoadToken}`,
+    );
+  }
+}
+
+const maxConversationStateLoadLines = 40;
+if (conversationStateLoadLineCount > maxConversationStateLoadLines) {
+  throw new Error(
+    `workspace-shell-conversation-state-load.ts exceeded ${maxConversationStateLoadLines} lines: ${conversationStateLoadLineCount}`,
+  );
+}
+
+for (const requiredConversationStateLoadTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type WorkspaceShellLoadRole = "owner" | "editor" | "viewer"; export type LoadWorkspaceShellConversationStateInput = { activeToken: string; role: WorkspaceShellLoadRole; setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"]; setConversations: UseWorkspaceShellEffectsProps["setConversations"]; setMessages: UseWorkspaceShellEffectsProps["setMessages"]; workspaceId: string };',
+]) {
+  if (!conversationStateLoadTypesSource.includes(requiredConversationStateLoadTypesUsage)) {
+    throw new Error(
+      `workspace-shell-conversation-state-load.types.ts must own shared shell role and conversation-load typing: ${requiredConversationStateLoadTypesUsage}`,
+    );
+  }
+}
+
+const maxConversationStateLoadTypesLines = 2;
+if (conversationStateLoadTypesLineCount > maxConversationStateLoadTypesLines) {
+  throw new Error(
+    `workspace-shell-conversation-state-load.types.ts exceeded ${maxConversationStateLoadTypesLines} lines: ${conversationStateLoadTypesLineCount}`,
+  );
+}
+
+for (const requiredManagedStateLoadImport of [
+  'from "../lib/workspace-shell-refresh";',
+  'import type { LoadWorkspaceShellManagedStateInput } from "./workspace-shell-managed-state-load.types";',
+  'import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";',
+]) {
+  if (!managedStateLoadSource.includes(requiredManagedStateLoadImport)) {
+    throw new Error(
+      `workspace-shell-managed-state-load.ts must import delegated managed-load dependencies: ${requiredManagedStateLoadImport}`,
+    );
+  }
+}
+
+for (const requiredManagedStateLoadUsage of [
+  "export async function loadWorkspaceShellManagedState({",
+  "}: LoadWorkspaceShellManagedStateInput) {",
+  "function canManageWorkspace(role: WorkspaceShellLoadRole)",
+]) {
+  if (!managedStateLoadSource.includes(requiredManagedStateLoadUsage)) {
+    throw new Error(
+      `workspace-shell-managed-state-load.ts must use the extracted managed-load input and shared role typing: ${requiredManagedStateLoadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenManagedStateLoadToken of [
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
+  "type LoadWorkspaceShellManagedStateInput = {",
+]) {
+  if (managedStateLoadSource.includes(forbiddenManagedStateLoadToken)) {
+    throw new Error(
+      `workspace-shell-managed-state-load.ts must keep shared role and input typing delegated: ${forbiddenManagedStateLoadToken}`,
+    );
+  }
+}
+
+const maxManagedStateLoadLines = 45;
+if (managedStateLoadLineCount > maxManagedStateLoadLines) {
+  throw new Error(
+    `workspace-shell-managed-state-load.ts exceeded ${maxManagedStateLoadLines} lines: ${managedStateLoadLineCount}`,
+  );
+}
+
+for (const requiredManagedStateLoadTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellManagedStateInput = { activeToken: string; role: WorkspaceShellLoadRole; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
+]) {
+  if (!managedStateLoadTypesSource.includes(requiredManagedStateLoadTypesUsage)) {
+    throw new Error(
+      `workspace-shell-managed-state-load.types.ts must own managed-load typing: ${requiredManagedStateLoadTypesUsage}`,
+    );
+  }
+}
+
+const maxManagedStateLoadTypesLines = 2;
+if (managedStateLoadTypesLineCount > maxManagedStateLoadTypesLines) {
+  throw new Error(
+    `workspace-shell-managed-state-load.types.ts exceeded ${maxManagedStateLoadTypesLines} lines: ${managedStateLoadTypesLineCount}`,
+  );
+}
+
+for (const requiredInitialFollowUpImport of [
+  'from "../lib/workspace-shell-refresh";',
+  'import type { LoadWorkspaceShellInitialFollowUpInput } from "./workspace-shell-initial-follow-up.types";',
+  'from "./workspace-shell-managed-state-load";',
+]) {
+  if (!initialFollowUpSource.includes(requiredInitialFollowUpImport)) {
+    throw new Error(
+      `workspace-shell-initial-follow-up.ts must import delegated follow-up dependencies: ${requiredInitialFollowUpImport}`,
+    );
+  }
+}
+
+for (const requiredInitialFollowUpUsage of [
+  "export async function loadWorkspaceShellInitialFollowUp({",
+  "}: LoadWorkspaceShellInitialFollowUpInput) {",
+  "await loadWorkspaceShellManagedState({",
+]) {
+  if (!initialFollowUpSource.includes(requiredInitialFollowUpUsage)) {
+    throw new Error(
+      `workspace-shell-initial-follow-up.ts must use the extracted follow-up input type: ${requiredInitialFollowUpUsage}`,
+    );
+  }
+}
+
+for (const forbiddenInitialFollowUpToken of [
+  "type LoadWorkspaceShellInitialFollowUpInput = {",
+]) {
+  if (initialFollowUpSource.includes(forbiddenInitialFollowUpToken)) {
+    throw new Error(
+      `workspace-shell-initial-follow-up.ts must keep follow-up input typing delegated: ${forbiddenInitialFollowUpToken}`,
+    );
+  }
+}
+
+const maxInitialFollowUpLines = 35;
+if (initialFollowUpLineCount > maxInitialFollowUpLines) {
+  throw new Error(
+    `workspace-shell-initial-follow-up.ts exceeded ${maxInitialFollowUpLines} lines: ${initialFollowUpLineCount}`,
+  );
+}
+
+for (const requiredInitialFollowUpTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellInitialFollowUpInput = { activeToken: string; role: WorkspaceShellLoadRole; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
+]) {
+  if (!initialFollowUpTypesSource.includes(requiredInitialFollowUpTypesUsage)) {
+    throw new Error(
+      `workspace-shell-initial-follow-up.types.ts must own follow-up input typing: ${requiredInitialFollowUpTypesUsage}`,
+    );
+  }
+}
+
+const maxInitialFollowUpTypesLines = 2;
+if (initialFollowUpTypesLineCount > maxInitialFollowUpTypesLines) {
+  throw new Error(
+    `workspace-shell-initial-follow-up.types.ts exceeded ${maxInitialFollowUpTypesLines} lines: ${initialFollowUpTypesLineCount}`,
+  );
+}
+
+for (const requiredInitialBootstrapImport of [
+  'from "../lib/api";',
+  'from "../lib/workspace-shell-refresh";',
+  'from "./workspace-shell-conversation-state-load";',
+  'import type { LoadWorkspaceShellInitialBootstrapInput } from "./workspace-shell-initial-bootstrap.types";',
+  'import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";',
+]) {
+  if (!initialBootstrapSource.includes(requiredInitialBootstrapImport)) {
+    throw new Error(
+      `workspace-shell-initial-bootstrap.ts must import delegated bootstrap dependencies: ${requiredInitialBootstrapImport}`,
+    );
+  }
+}
+
+for (const requiredInitialBootstrapUsage of [
+  "export async function loadWorkspaceShellInitialBootstrap({",
+  "}: LoadWorkspaceShellInitialBootstrapInput) {",
+  "role: workspaceResult.workspace.role as WorkspaceShellLoadRole",
+]) {
+  if (!initialBootstrapSource.includes(requiredInitialBootstrapUsage)) {
+    throw new Error(
+      `workspace-shell-initial-bootstrap.ts must use the extracted bootstrap input and shared role typing: ${requiredInitialBootstrapUsage}`,
+    );
+  }
+}
+
+for (const forbiddenInitialBootstrapToken of [
+  'type WorkspaceRole = "owner" | "editor" | "viewer";',
+  "type LoadWorkspaceShellInitialBootstrapInput = {",
+]) {
+  if (initialBootstrapSource.includes(forbiddenInitialBootstrapToken)) {
+    throw new Error(
+      `workspace-shell-initial-bootstrap.ts must keep shared role and bootstrap input typing delegated: ${forbiddenInitialBootstrapToken}`,
+    );
+  }
+}
+
+const maxInitialBootstrapLines = 65;
+if (initialBootstrapLineCount > maxInitialBootstrapLines) {
+  throw new Error(
+    `workspace-shell-initial-bootstrap.ts exceeded ${maxInitialBootstrapLines} lines: ${initialBootstrapLineCount}`,
+  );
+}
+
+for (const requiredInitialBootstrapTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type LoadWorkspaceShellInitialBootstrapInput = { activeToken: string; setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"]; setConversations: UseWorkspaceShellEffectsProps["setConversations"]; setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"]; setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"]; setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"]; setMessages: UseWorkspaceShellEffectsProps["setMessages"]; setNotifications: UseWorkspaceShellEffectsProps["setNotifications"]; setRecords: UseWorkspaceShellEffectsProps["setRecords"]; setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"]; setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"]; setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"]; setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"]; workspaceId: string };',
+]) {
+  if (!initialBootstrapTypesSource.includes(requiredInitialBootstrapTypesUsage)) {
+    throw new Error(
+      `workspace-shell-initial-bootstrap.types.ts must own bootstrap input typing: ${requiredInitialBootstrapTypesUsage}`,
+    );
+  }
+}
+
+const maxInitialBootstrapTypesLines = 2;
+if (initialBootstrapTypesLineCount > maxInitialBootstrapTypesLines) {
+  throw new Error(
+    `workspace-shell-initial-bootstrap.types.ts exceeded ${maxInitialBootstrapTypesLines} lines: ${initialBootstrapTypesLineCount}`,
   );
 }
 

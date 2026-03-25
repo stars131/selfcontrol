@@ -10,9 +10,17 @@ const providerSettingsPanelHelpersPath = path.resolve(
   process.cwd(),
   "components/provider-settings-panel-helpers.ts",
 );
+const providerSettingsPanelHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-panel-helpers.types.ts",
+);
 const providerSettingsFeatureListPath = path.resolve(
   process.cwd(),
   "components/provider-settings-feature-list.tsx",
+);
+const providerSettingsFeatureListTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-settings-feature-list.types.ts",
 );
 const providerSettingsPanelTypesPath = path.resolve(
   process.cwd(),
@@ -22,13 +30,17 @@ const providerSettingsCopyPath = path.resolve(process.cwd(), "components/provide
 const source = fs.readFileSync(providerSettingsPath, "utf8");
 const controllerSource = fs.readFileSync(providerSettingsControllerPath, "utf8");
 const panelHelpersSource = fs.readFileSync(providerSettingsPanelHelpersPath, "utf8");
+const panelHelpersTypesSource = fs.readFileSync(providerSettingsPanelHelpersTypesPath, "utf8");
 const featureListSource = fs.readFileSync(providerSettingsFeatureListPath, "utf8");
+const featureListTypesSource = fs.readFileSync(providerSettingsFeatureListTypesPath, "utf8");
 const panelTypesSource = fs.readFileSync(providerSettingsPanelTypesPath, "utf8");
 const copySource = fs.readFileSync(providerSettingsCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const panelHelpersLineCount = panelHelpersSource.split(/\r?\n/).length;
+const panelHelpersTypesLineCount = panelHelpersTypesSource.split(/\r?\n/).length;
 const featureListLineCount = featureListSource.split(/\r?\n/).length;
+const featureListTypesLineCount = featureListTypesSource.split(/\r?\n/).length;
 const panelTypesLineCount = panelTypesSource.split(/\r?\n/).length;
 const copyLineCount = copySource.split(/\r?\n/).length;
 const providerFeatureCardPath = path.resolve(process.cwd(), "components/provider-feature-card.tsx");
@@ -38,9 +50,19 @@ const providerFeatureCardActionsPath = path.resolve(
   process.cwd(),
   "components/provider-feature-card-actions.tsx",
 );
+const providerFeatureCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-card-actions.types.ts",
+);
 const providerFeatureCardActionsSource = fs.readFileSync(providerFeatureCardActionsPath, "utf8");
+const providerFeatureCardActionsTypesSource = fs.readFileSync(
+  providerFeatureCardActionsTypesPath,
+  "utf8",
+);
 const providerFeatureCardActionsLineCount =
   providerFeatureCardActionsSource.split(/\r?\n/).length;
+const providerFeatureCardActionsTypesLineCount =
+  providerFeatureCardActionsTypesSource.split(/\r?\n/).length;
 const providerFeatureCardHelpersPath = path.resolve(
   process.cwd(),
   "components/provider-feature-card-helpers.ts",
@@ -140,8 +162,7 @@ if (lineCount > maxAllowedLines) {
 for (const requiredFeatureListImport of [
   'import { ProviderFeatureCard } from "./provider-feature-card";',
   'from "./provider-settings-panel-helpers";',
-  'import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
-  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  'import type { ProviderSettingsFeatureListProps } from "./provider-settings-feature-list.types";',
 ]) {
   if (!featureListSource.includes(requiredFeatureListImport)) {
     throw new Error(`provider-settings-feature-list.tsx must import shared provider feature-list dependencies: ${requiredFeatureListImport}`);
@@ -154,15 +175,39 @@ for (const requiredFeatureListUsage of [
   "providerConfigs.map((item) => {",
   "<ProviderFeatureCard",
   "isProviderDraftDirty(item)",
+  "}: ProviderSettingsFeatureListProps) {",
 ]) {
   if (!featureListSource.includes(requiredFeatureListUsage)) {
     throw new Error(`provider-settings-feature-list.tsx must own feature-card list rendering: ${requiredFeatureListUsage}`);
   }
 }
 
+for (const forbiddenFeatureListToken of [
+  'import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  "type ProviderSettingsFeatureListProps = Pick<",
+]) {
+  if (featureListSource.includes(forbiddenFeatureListToken)) {
+    throw new Error(`provider-settings-feature-list.tsx must keep feature-list prop typing delegated: ${forbiddenFeatureListToken}`);
+  }
+}
+
 const maxFeatureListLines = 85;
 if (featureListLineCount > maxFeatureListLines) {
   throw new Error(`provider-settings-feature-list.tsx exceeded ${maxFeatureListLines} lines: ${featureListLineCount}`);
+}
+
+for (const requiredFeatureListTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types"; import type { ProviderSettingsPanelProps } from "./provider-settings-panel.types"; export type ProviderSettingsFeatureListProps = Pick<ProviderSettingsPanelProps, "highlightedAnchor" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "providerConfigs" | "refreshingMediaStorageHealth"> & { copy: ProviderSettingsCopy; handleProviderDraftChange: ProviderFeatureCardProps["onProviderDraftChange"]; handleResetProviderConfig: ProviderFeatureCardProps["onReset"]; handleSaveProviderConfig: ProviderFeatureCardProps["onSave"]; isProviderDraftDirty: (item: ProviderSettingsPanelProps["providerConfigs"][number]) => boolean; providerDrafts: Record<string, ProviderDraft>; providerSavingCode: string };',
+]) {
+  if (!featureListTypesSource.includes(requiredFeatureListTypesUsage)) {
+    throw new Error(`provider-settings-feature-list.types.ts must own feature-list prop typing: ${requiredFeatureListTypesUsage}`);
+  }
+}
+
+const maxFeatureListTypesLines = 2;
+if (featureListTypesLineCount > maxFeatureListTypesLines) {
+  throw new Error(`provider-settings-feature-list.types.ts exceeded ${maxFeatureListTypesLines} lines: ${featureListTypesLineCount}`);
 }
 
 for (const requiredPanelTypesUsage of [
@@ -355,9 +400,10 @@ for (const forbiddenToken of [
 }
 
 for (const requiredPanelHelpersImport of [
+  'from "../lib/types";',
   'from "./provider-feature-card.types";',
-  'from "./provider-settings-controller.types";',
   'from "./provider-settings-copy";',
+  'from "./provider-settings-panel-helpers.types";',
 ]) {
   if (!panelHelpersSource.includes(requiredPanelHelpersImport)) {
     throw new Error(
@@ -385,6 +431,7 @@ for (const forbiddenPanelHelpersToken of [
   "useProviderSettingsController(",
   "useState(",
   "useEffect(",
+  'from "./provider-settings-controller.types";',
 ]) {
   if (panelHelpersSource.includes(forbiddenPanelHelpersToken)) {
     throw new Error(
@@ -400,6 +447,23 @@ if (panelHelpersLineCount > maxPanelHelpersLines) {
   );
 }
 
+for (const requiredPanelHelpersTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types"; import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; import type { ProviderSettingsCopy } from "./provider-settings-copy"; import type { ProviderDraft } from "./provider-settings-controller.types"; export type BuildProviderFeatureCardPropsInput = { copy: ProviderSettingsCopy; draftItem: ProviderDraft; formatSecretStatus: ProviderFeatureCardProps["formatSecretStatus"]; highlightedAnchor?: string | null; isDirty: boolean; item: ProviderFeatureConfig; locale: LocaleCode; mediaStorageHealth?: MediaStorageProviderHealth | null; onProviderDraftChange: ProviderFeatureCardProps["onProviderDraftChange"]; onRefreshMediaStorageHealth?: (() => Promise<void>) | null; onReset: ProviderFeatureCardProps["onReset"]; onSave: ProviderFeatureCardProps["onSave"]; providerSavingCode: string; refreshingMediaStorageHealth?: boolean };',
+]) {
+  if (!panelHelpersTypesSource.includes(requiredPanelHelpersTypesUsage)) {
+    throw new Error(
+      `provider-settings-panel-helpers.types.ts must own helper input typing: ${requiredPanelHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxPanelHelpersTypesLines = 2;
+if (panelHelpersTypesLineCount > maxPanelHelpersTypesLines) {
+  throw new Error(
+    `provider-settings-panel-helpers.types.ts exceeded ${maxPanelHelpersTypesLines} lines: ${panelHelpersTypesLineCount}`,
+  );
+}
+
 const maxProviderFeatureCardLines = 120;
 if (providerFeatureCardLineCount > maxProviderFeatureCardLines) {
   throw new Error(
@@ -408,7 +472,7 @@ if (providerFeatureCardLineCount > maxProviderFeatureCardLines) {
 }
 
 for (const requiredProviderFeatureCardActionsImport of [
-  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+  'import type { ProviderFeatureCardActionsProps } from "./provider-feature-card-actions.types";',
 ]) {
   if (!providerFeatureCardActionsSource.includes(requiredProviderFeatureCardActionsImport)) {
     throw new Error(
@@ -419,6 +483,7 @@ for (const requiredProviderFeatureCardActionsImport of [
 
 for (const requiredProviderFeatureCardActionsUsage of [
   "export function ProviderFeatureCardActions({",
+  "}: ProviderFeatureCardActionsProps) {",
   "copy.reset",
   "copy.saveProvider",
   "providerSavingCode === item.feature_code ? copy.saving : copy.saveProvider",
@@ -430,10 +495,38 @@ for (const requiredProviderFeatureCardActionsUsage of [
   }
 }
 
+for (const forbiddenProviderFeatureCardActionsToken of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types";',
+  "type ProviderFeatureCardActionsProps = Pick<",
+]) {
+  if (providerFeatureCardActionsSource.includes(forbiddenProviderFeatureCardActionsToken)) {
+    throw new Error(
+      `provider-feature-card-actions.tsx must keep action-row prop typing delegated: ${forbiddenProviderFeatureCardActionsToken}`,
+    );
+  }
+}
+
 const maxProviderFeatureCardActionsLines = 40;
 if (providerFeatureCardActionsLineCount > maxProviderFeatureCardActionsLines) {
   throw new Error(
     `provider-feature-card-actions.tsx exceeded ${maxProviderFeatureCardActionsLines} lines: ${providerFeatureCardActionsLineCount}`,
+  );
+}
+
+for (const requiredProviderFeatureCardActionsTypesUsage of [
+  'import type { ProviderFeatureCardProps } from "./provider-feature-card.types"; export type ProviderFeatureCardActionsProps = Pick<ProviderFeatureCardProps, "copy" | "isDirty" | "item" | "onReset" | "onSave" | "providerSavingCode">;',
+]) {
+  if (!providerFeatureCardActionsTypesSource.includes(requiredProviderFeatureCardActionsTypesUsage)) {
+    throw new Error(
+      `provider-feature-card-actions.types.ts must own action-row prop typing: ${requiredProviderFeatureCardActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureCardActionsTypesLines = 2;
+if (providerFeatureCardActionsTypesLineCount > maxProviderFeatureCardActionsTypesLines) {
+  throw new Error(
+    `provider-feature-card-actions.types.ts exceeded ${maxProviderFeatureCardActionsTypesLines} lines: ${providerFeatureCardActionsTypesLineCount}`,
   );
 }
 
