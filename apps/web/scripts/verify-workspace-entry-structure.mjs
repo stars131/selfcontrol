@@ -6,6 +6,10 @@ const workspaceEntryClientHelpersPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-client-helpers.ts",
 );
+const workspaceEntryClientHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-client-helpers.types.ts",
+);
 const workspaceEntryClientTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-client.types.ts",
@@ -31,9 +35,17 @@ const workspaceTransferJobsListPath = path.resolve(
   process.cwd(),
   "components/workspace-transfer-jobs-list.tsx",
 );
+const workspaceTransferJobsListTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-list.types.ts",
+);
 const workspaceTransferJobCardPath = path.resolve(
   process.cwd(),
   "components/workspace-transfer-job-card.tsx",
+);
+const workspaceTransferJobCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-job-card.types.ts",
 );
 const workspaceEntryControllerPath = path.resolve(
   process.cwd(),
@@ -58,6 +70,7 @@ const workspaceEntryWorkspaceActionsPath = path.resolve(
 const workspaceEntryCopyPath = path.resolve(process.cwd(), "components/workspace-entry-copy.ts");
 const source = fs.readFileSync(workspaceEntryPath, "utf8");
 const clientHelpersSource = fs.readFileSync(workspaceEntryClientHelpersPath, "utf8");
+const clientHelpersTypesSource = fs.readFileSync(workspaceEntryClientHelpersTypesPath, "utf8");
 const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8");
 const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const loadingShellTypesSource = fs.readFileSync(workspaceEntryLoadingShellTypesPath, "utf8");
@@ -65,7 +78,9 @@ const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
 const transferJobsSectionSource = fs.readFileSync(workspaceTransferJobsSectionPath, "utf8");
 const transferJobsSectionTypesSource = fs.readFileSync(workspaceTransferJobsSectionTypesPath, "utf8");
 const transferJobsListSource = fs.readFileSync(workspaceTransferJobsListPath, "utf8");
+const transferJobsListTypesSource = fs.readFileSync(workspaceTransferJobsListTypesPath, "utf8");
 const transferJobCardSource = fs.readFileSync(workspaceTransferJobCardPath, "utf8");
+const transferJobCardTypesSource = fs.readFileSync(workspaceTransferJobCardTypesPath, "utf8");
 const controllerSource = fs.readFileSync(workspaceEntryControllerPath, "utf8");
 const controllerStateSource = fs.readFileSync(workspaceEntryControllerStatePath, "utf8");
 const controllerDerivedDataSource = fs.readFileSync(
@@ -77,6 +92,7 @@ const workspaceActionsSource = fs.readFileSync(workspaceEntryWorkspaceActionsPat
 const copySource = fs.readFileSync(workspaceEntryCopyPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
+const clientHelpersTypesLineCount = clientHelpersTypesSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
@@ -84,7 +100,9 @@ const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
 const transferJobsSectionLineCount = transferJobsSectionSource.split(/\r?\n/).length;
 const transferJobsSectionTypesLineCount = transferJobsSectionTypesSource.split(/\r?\n/).length;
 const transferJobsListLineCount = transferJobsListSource.split(/\r?\n/).length;
+const transferJobsListTypesLineCount = transferJobsListTypesSource.split(/\r?\n/).length;
 const transferJobCardLineCount = transferJobCardSource.split(/\r?\n/).length;
+const transferJobCardTypesLineCount = transferJobCardTypesSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const controllerStateLineCount = controllerStateSource.split(/\r?\n/).length;
 const controllerDerivedDataLineCount = controllerDerivedDataSource.split(/\r?\n/).length;
@@ -200,8 +218,8 @@ if (lineCount > maxAllowedLines) {
 }
 
 for (const requiredClientHelpersImport of [
-  'from "../lib/locale";',
   'from "./workspace-entry-main-panel.types";',
+  'from "./workspace-entry-client-helpers.types";',
 ]) {
   if (!clientHelpersSource.includes(requiredClientHelpersImport)) {
     throw new Error(`workspace-entry-client-helpers.ts must import shared entry client types: ${requiredClientHelpersImport}`);
@@ -213,15 +231,39 @@ for (const requiredClientHelpersUsage of [
   "return props;",
   "export function buildWorkspaceEntryRefreshJobs(",
   "return () => (token ? loadTransferJobs(token) : Promise.resolve())",
-  "export type WorkspaceEntryClientHelperInput =",
+  "): WorkspaceEntryMainPanelProps {",
 ]) {
   if (!clientHelpersSource.includes(requiredClientHelpersUsage)) {
     throw new Error(`workspace-entry-client-helpers.ts must own client prop mapping helpers: ${requiredClientHelpersUsage}`);
   }
 }
 
+for (const forbiddenClientHelpersToken of [
+  'from "../lib/locale";',
+  "export type WorkspaceEntryClientHelperInput =",
+  "Pick<WorkspaceEntryMainPanelProps",
+]) {
+  if (clientHelpersSource.includes(forbiddenClientHelpersToken)) {
+    throw new Error(`workspace-entry-client-helpers.ts must keep helper input typing delegated: ${forbiddenClientHelpersToken}`);
+  }
+}
+
 if (clientHelpersLineCount > 25) {
   throw new Error(`workspace-entry-client-helpers.ts exceeded 25 lines: ${clientHelpersLineCount}`);
+}
+
+for (const requiredClientHelpersTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types"; export type WorkspaceEntryClientHelperInput = Pick<WorkspaceEntryMainPanelProps, "copy" | "creating" | "error" | "fileInputRef" | "importFile" | "importName" | "importSlug" | "importing" | "jobsLoading" | "joining" | "name" | "onAcceptShare" | "onCreate" | "onDownloadTransferJob" | "onImportFileChange" | "onImportNameChange" | "onImportSlugChange" | "onImportWorkspace" | "onLogout" | "onNameChange" | "onPreviewShare" | "onQueueImportJob" | "onShareTokenInputChange" | "previewing" | "queueingImportJob" | "sharePreview" | "shareTokenInput" | "suggestedSlug" | "token" | "transferJobs" | "username" | "workspaces"> & { locale: LocaleCode; onLocaleChange: WorkspaceEntryMainPanelProps["onLocaleChange"]; onRefreshJobs: WorkspaceEntryMainPanelProps["onRefreshJobs"] };',
+]) {
+  if (!clientHelpersTypesSource.includes(requiredClientHelpersTypesUsage)) {
+    throw new Error(`workspace-entry-client-helpers.types.ts must own helper input typing: ${requiredClientHelpersTypesUsage}`);
+  }
+}
+
+if (clientHelpersTypesLineCount > 2) {
+  throw new Error(
+    `workspace-entry-client-helpers.types.ts exceeded 2 lines: ${clientHelpersTypesLineCount}`,
+  );
 }
 
 for (const requiredClientTypesUsage of [
@@ -323,7 +365,7 @@ if (transferJobsSectionTypesLineCount > 25) {
 
 for (const requiredTransferJobsListUsage of [
   'import { WorkspaceTransferJobCard } from "./workspace-transfer-job-card";',
-  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";',
+  'import type { WorkspaceTransferJobsListProps } from "./workspace-transfer-jobs-list.types";',
   "transferJobs.map((job) => (",
   "<WorkspaceTransferJobCard",
   "{copy.noJobs}",
@@ -333,13 +375,34 @@ for (const requiredTransferJobsListUsage of [
   }
 }
 
+for (const forbiddenTransferJobsListToken of [
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";',
+  "}: Pick<WorkspaceTransferJobsSectionProps",
+]) {
+  if (transferJobsListSource.includes(forbiddenTransferJobsListToken)) {
+    throw new Error(`workspace-transfer-jobs-list.tsx must keep list prop typing delegated: ${forbiddenTransferJobsListToken}`);
+  }
+}
+
 if (transferJobsListLineCount > 35) {
   throw new Error(`workspace-transfer-jobs-list.tsx exceeded 35 lines: ${transferJobsListLineCount}`);
 }
 
+for (const requiredTransferJobsListTypesUsage of [
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobsListProps = Pick<WorkspaceTransferJobsSectionProps, "copy" | "locale" | "transferJobs" | "onDownloadTransferJob">;',
+]) {
+  if (!transferJobsListTypesSource.includes(requiredTransferJobsListTypesUsage)) {
+    throw new Error(`workspace-transfer-jobs-list.types.ts must own transfer-jobs list typing: ${requiredTransferJobsListTypesUsage}`);
+  }
+}
+
+if (transferJobsListTypesLineCount > 2) {
+  throw new Error(`workspace-transfer-jobs-list.types.ts exceeded 2 lines: ${transferJobsListTypesLineCount}`);
+}
+
 for (const requiredTransferJobCardUsage of [
   'import Link from "next/link";',
-  'import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types";',
+  'import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";',
   "const importedWorkspaceId =",
   'href={`/app/workspaces/${importedWorkspaceId}`}',
   "onClick={() => void onDownloadTransferJob(job.id)}",
@@ -350,8 +413,29 @@ for (const requiredTransferJobCardUsage of [
   }
 }
 
+for (const forbiddenTransferJobCardToken of [
+  'import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types";',
+  "type WorkspaceTransferJobCardProps = {",
+]) {
+  if (transferJobCardSource.includes(forbiddenTransferJobCardToken)) {
+    throw new Error(`workspace-transfer-job-card.tsx must keep card prop typing delegated: ${forbiddenTransferJobCardToken}`);
+  }
+}
+
 if (transferJobCardLineCount > 55) {
   throw new Error(`workspace-transfer-job-card.tsx exceeded 55 lines: ${transferJobCardLineCount}`);
+}
+
+for (const requiredTransferJobCardTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { WorkspaceTransferJob } from "../lib/types"; import type { WorkspaceTransferJobsCopy } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobCardProps = { copy: WorkspaceTransferJobsCopy; job: WorkspaceTransferJob; locale: LocaleCode; onDownloadTransferJob: (jobId: string) => Promise<void> };',
+]) {
+  if (!transferJobCardTypesSource.includes(requiredTransferJobCardTypesUsage)) {
+    throw new Error(`workspace-transfer-job-card.types.ts must own transfer-job card typing: ${requiredTransferJobCardTypesUsage}`);
+  }
+}
+
+if (transferJobCardTypesLineCount > 2) {
+  throw new Error(`workspace-transfer-job-card.types.ts exceeded 2 lines: ${transferJobCardTypesLineCount}`);
 }
 
 const maxMainPanelLines = 110;
@@ -501,7 +585,7 @@ if (controllerDerivedDataLineCount > maxControllerDerivedDataLines) {
 for (const requiredActionsImport of [
   'from "./workspace-entry-job-actions";',
   'from "./workspace-entry-share-actions";',
-  'from "./workspace-entry-controller.types";',
+  'from "./workspace-entry-controller-actions.types";',
   'from "./workspace-entry-workspace-actions";',
 ]) {
   if (!actionsSource.includes(requiredActionsImport)) {
@@ -525,6 +609,8 @@ for (const requiredActionsUsage of [
 for (const forbiddenActionsToken of [
   'from "../lib/api";',
   'from "../lib/auth";',
+  'from "./workspace-entry-controller.types";',
+  "}: {",
   "const loadTransferJobs =",
   "const handleCreate =",
   "const handleImportWorkspace =",
@@ -547,9 +633,9 @@ if (actionsLineCount > maxActionsLines) {
 }
 
 for (const requiredWorkspaceActionsImport of [
-  'from "./workspace-entry-controller.types";',
   'from "./workspace-entry-create-actions";',
   'from "./workspace-entry-import-actions";',
+  'from "./workspace-entry-workspace-actions.types";',
 ]) {
   if (!workspaceActionsSource.includes(requiredWorkspaceActionsImport)) {
     throw new Error(`workspace-entry-workspace-actions.ts must import delegated action groups: ${requiredWorkspaceActionsImport}`);
@@ -570,6 +656,8 @@ for (const requiredWorkspaceActionsUsage of [
 for (const forbiddenWorkspaceActionsToken of [
   'from "../lib/api";',
   'from "./workspace-entry-controller-helpers";',
+  'from "./workspace-entry-controller.types";',
+  "}: {",
   "const resetImportForm",
   "const handleCreate",
   "const handleImportWorkspace",
