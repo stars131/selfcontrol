@@ -1,15 +1,15 @@
-import type { ComponentProps, Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import type { RecordFormState } from "../lib/record-panel-forms";
 import type { PanelCopy } from "../lib/record-panel-ui";
-import type { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import type { RecordFilterState } from "../lib/types";
-import { RecordBrowseWorkspace } from "./record-browse-workspace";
-import { RecordEditorWorkspace } from "./record-editor-workspace";
+import type { RecordPanelDetailCopy as RecordPanelDetailCopyValue } from "./record-panel-detail-copy.types";
+import type { RecordBrowseWorkspaceProps as RecordBrowseWorkspacePropsValue } from "./record-browse-workspace.types";
+import type { RecordEditorWorkspaceProps as RecordEditorWorkspacePropsValue } from "./record-editor-workspace.types";
 
-export type RecordBrowseWorkspaceProps = ComponentProps<typeof RecordBrowseWorkspace>;
-export type RecordEditorWorkspaceProps = ComponentProps<typeof RecordEditorWorkspace>;
-export type RecordPanelDetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];
+export type RecordBrowseWorkspaceProps = RecordBrowseWorkspacePropsValue;
+export type RecordEditorWorkspaceProps = RecordEditorWorkspacePropsValue;
+export type RecordPanelDetailCopy = RecordPanelDetailCopyValue;
 
 export type RecordBrowseWorkspaceTypeSupport = {
   filterDraft: RecordFilterState;

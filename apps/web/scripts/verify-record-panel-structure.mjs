@@ -46,6 +46,10 @@ const recordPanelWorkspacePropsCoreTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-workspace-props-core.types.ts",
 );
+const recordPanelDetailCopyTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-detail-copy.types.ts",
+);
 const recordPanelBrowseWorkspacePropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-browse-workspace-props.types.ts",
@@ -258,6 +262,10 @@ const recordPanelShellPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-props.ts",
 );
+const recordPanelShellPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-v2-shell-props.types.ts",
+);
 const recordPanelShellViewPropsPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-shell-view-props.ts",
@@ -269,6 +277,10 @@ const recordPanelHeaderPropsPath = path.resolve(
 const recordPanelHeaderPropsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-v2-header-props.types.ts",
+);
+const recordPanelControllerOutputTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-output.types.ts",
 );
 const recordPanelControllerPath = path.resolve(process.cwd(), "components/use-record-panel-controller.ts");
 const recordPanelControllerSyncPath = path.resolve(
@@ -1032,6 +1044,7 @@ const recordPanelV2PropsActionTypesSource = fs.readFileSync(
 const workspacePropsSource = fs.readFileSync(recordPanelWorkspacePropsPath, "utf8");
 const workspacePropsTypesSource = fs.readFileSync(recordPanelWorkspacePropsTypesPath, "utf8");
 const workspacePropsCoreTypesSource = fs.readFileSync(recordPanelWorkspacePropsCoreTypesPath, "utf8");
+const recordPanelDetailCopyTypesSource = fs.readFileSync(recordPanelDetailCopyTypesPath, "utf8");
 const browseWorkspacePropsTypesSource = fs.readFileSync(
   recordPanelBrowseWorkspacePropsTypesPath,
   "utf8",
@@ -1229,9 +1242,11 @@ const editorWorkspaceControllerFormatterInputSource = fs.readFileSync(
   "utf8",
 );
 const shellPropsSource = fs.readFileSync(recordPanelShellPropsPath, "utf8");
+const shellPropsTypesSource = fs.readFileSync(recordPanelShellPropsTypesPath, "utf8");
 const shellViewPropsSource = fs.readFileSync(recordPanelShellViewPropsPath, "utf8");
 const headerPropsSource = fs.readFileSync(recordPanelHeaderPropsPath, "utf8");
 const headerPropsTypesSource = fs.readFileSync(recordPanelHeaderPropsTypesPath, "utf8");
+const controllerOutputTypesSource = fs.readFileSync(recordPanelControllerOutputTypesPath, "utf8");
 const controllerSource = fs.readFileSync(recordPanelControllerPath, "utf8");
 const controllerSyncSource = fs.readFileSync(recordPanelControllerSyncPath, "utf8");
 const controllerSyncTypesSource = fs.readFileSync(recordPanelControllerSyncTypesPath, "utf8");
@@ -1625,6 +1640,7 @@ const recordPanelV2PropsActionTypesLines =
 const workspacePropsLines = workspacePropsSource.split(/\r?\n/).length;
 const workspacePropsTypesLines = workspacePropsTypesSource.split(/\r?\n/).length;
 const workspacePropsCoreTypesLines = workspacePropsCoreTypesSource.split(/\r?\n/).length;
+const recordPanelDetailCopyTypesLines = recordPanelDetailCopyTypesSource.split(/\r?\n/).length;
 const browseWorkspacePropsTypesLines = browseWorkspacePropsTypesSource.split(/\r?\n/).length;
 const browseWorkspacePropInputTypesLines =
   browseWorkspacePropInputTypesSource.split(/\r?\n/).length;
@@ -1714,9 +1730,11 @@ const editorWorkspaceControllerDisplayInputLines =
 const editorWorkspaceControllerFormatterInputLines =
   editorWorkspaceControllerFormatterInputSource.split(/\r?\n/).length;
 const shellPropsLines = shellPropsSource.split(/\r?\n/).length;
+const shellPropsTypesLines = shellPropsTypesSource.split(/\r?\n/).length;
 const shellViewPropsLines = shellViewPropsSource.split(/\r?\n/).length;
 const headerPropsLines = headerPropsSource.split(/\r?\n/).length;
 const headerPropsTypesLines = headerPropsTypesSource.split(/\r?\n/).length;
+const controllerOutputTypesLines = controllerOutputTypesSource.split(/\r?\n/).length;
 const controllerLines = controllerSource.split(/\r?\n/).length;
 const controllerSyncLines = controllerSyncSource.split(/\r?\n/).length;
 const controllerSyncTypesLines = controllerSyncTypesSource.split(/\r?\n/).length;
@@ -2033,9 +2051,10 @@ if (workspacePropsTypesLines > maxWorkspacePropsTypesLines) {
 }
 
 for (const requiredWorkspacePropsCoreTypesImport of [
-  'import type { ComponentProps, Dispatch, SetStateAction } from "react";',
-  'import { RecordBrowseWorkspace } from "./record-browse-workspace";',
-  'import { RecordEditorWorkspace } from "./record-editor-workspace";',
+  'import type { Dispatch, SetStateAction } from "react";',
+  'import type { RecordPanelDetailCopy as RecordPanelDetailCopyValue } from "./record-panel-detail-copy.types";',
+  'import type { RecordBrowseWorkspaceProps as RecordBrowseWorkspacePropsValue } from "./record-browse-workspace.types";',
+  'import type { RecordEditorWorkspaceProps as RecordEditorWorkspacePropsValue } from "./record-editor-workspace.types";',
 ]) {
   if (!workspacePropsCoreTypesSource.includes(requiredWorkspacePropsCoreTypesImport)) {
     throw new Error(
@@ -2045,9 +2064,9 @@ for (const requiredWorkspacePropsCoreTypesImport of [
 }
 
 for (const requiredWorkspacePropsCoreTypesUsage of [
-  "export type RecordBrowseWorkspaceProps = ComponentProps<typeof RecordBrowseWorkspace>;",
-  "export type RecordEditorWorkspaceProps = ComponentProps<typeof RecordEditorWorkspace>;",
-  'export type RecordPanelDetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+  "export type RecordBrowseWorkspaceProps = RecordBrowseWorkspacePropsValue;",
+  "export type RecordEditorWorkspaceProps = RecordEditorWorkspacePropsValue;",
+  "export type RecordPanelDetailCopy = RecordPanelDetailCopyValue;",
   "export type RecordBrowseWorkspaceTypeSupport = {",
   'setViewMode: Dispatch<SetStateAction<"timeline" | "list">>;',
 ]) {
@@ -2058,10 +2077,60 @@ for (const requiredWorkspacePropsCoreTypesUsage of [
   }
 }
 
+for (const forbiddenWorkspacePropsCoreTypesToken of [
+  "ComponentProps",
+  "getRecordPanelDetailBundle",
+  'from "./record-browse-workspace";',
+  'from "./record-editor-workspace";',
+  "ReturnType<",
+]) {
+  if (workspacePropsCoreTypesSource.includes(forbiddenWorkspacePropsCoreTypesToken)) {
+    throw new Error(
+      `record-panel-v2-workspace-props-core.types.ts must keep workspace signature inference delegated: ${forbiddenWorkspacePropsCoreTypesToken}`,
+    );
+  }
+}
+
 const maxWorkspacePropsCoreTypesLines = 25;
 if (workspacePropsCoreTypesLines > maxWorkspacePropsCoreTypesLines) {
   throw new Error(
     `record-panel-v2-workspace-props-core.types.ts exceeded ${maxWorkspacePropsCoreTypesLines} lines: ${workspacePropsCoreTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelDetailCopyTypesUsage of [
+  'import type { getRecordPanelDetailBundle } from "../lib/record-panel-detail";',
+  'export type RecordPanelDetailCopy = ReturnType<typeof getRecordPanelDetailBundle>["copy"];',
+]) {
+  if (!recordPanelDetailCopyTypesSource.includes(requiredRecordPanelDetailCopyTypesUsage)) {
+    throw new Error(
+      `record-panel-detail-copy.types.ts must own the shared detail-copy boundary: ${requiredRecordPanelDetailCopyTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelDetailCopyTypesLines = 3;
+if (recordPanelDetailCopyTypesLines > maxRecordPanelDetailCopyTypesLines) {
+  throw new Error(
+    `record-panel-detail-copy.types.ts exceeded ${maxRecordPanelDetailCopyTypesLines} lines: ${recordPanelDetailCopyTypesLines}`,
+  );
+}
+
+for (const requiredControllerOutputTypesUsage of [
+  'import type { useRecordPanelController } from "./use-record-panel-controller";',
+  "export type RecordPanelController = ReturnType<typeof useRecordPanelController>;",
+]) {
+  if (!controllerOutputTypesSource.includes(requiredControllerOutputTypesUsage)) {
+    throw new Error(
+      `record-panel-controller-output.types.ts must own the controller output boundary: ${requiredControllerOutputTypesUsage}`,
+    );
+  }
+}
+
+const maxControllerOutputTypesLines = 3;
+if (controllerOutputTypesLines > maxControllerOutputTypesLines) {
+  throw new Error(
+    `record-panel-controller-output.types.ts exceeded ${maxControllerOutputTypesLines} lines: ${controllerOutputTypesLines}`,
   );
 }
 
@@ -4141,6 +4210,51 @@ const maxShellPropsLines = 10;
 if (shellPropsLines > maxShellPropsLines) {
   throw new Error(
     `record-panel-v2-shell-props.ts exceeded ${maxShellPropsLines} lines: ${shellPropsLines}`,
+  );
+}
+
+for (const requiredShellPropsTypesImport of [
+  'from "./record-panel-controller-output.types";',
+  'from "./record-panel-header.types";',
+  'from "./record-panel-v2.types";',
+]) {
+  if (!shellPropsTypesSource.includes(requiredShellPropsTypesImport)) {
+    throw new Error(
+      `record-panel-v2-shell-props.types.ts must import explicit shell boundaries: ${requiredShellPropsTypesImport}`,
+    );
+  }
+}
+
+for (const requiredShellPropsTypesUsage of [
+  "export type RecordPanelHeaderProps = RecordPanelHeaderComponentProps;",
+  "export type RecordPanelController = RecordPanelControllerValue;",
+  "export type RecordPanelShellInput = { controller: RecordPanelController; props: RecordPanelV2Props };",
+]) {
+  if (!shellPropsTypesSource.includes(requiredShellPropsTypesUsage)) {
+    throw new Error(
+      `record-panel-v2-shell-props.types.ts must own shell input typing through explicit boundaries: ${requiredShellPropsTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenShellPropsTypesToken of [
+  "ComponentProps<",
+  "RecordPanelHeader }",
+  "ReturnType<",
+  'from "./record-panel-header";',
+  'from "./use-record-panel-controller"',
+]) {
+  if (shellPropsTypesSource.includes(forbiddenShellPropsTypesToken)) {
+    throw new Error(
+      `record-panel-v2-shell-props.types.ts must keep component and hook inference delegated: ${forbiddenShellPropsTypesToken}`,
+    );
+  }
+}
+
+const maxShellPropsTypesLines = 8;
+if (shellPropsTypesLines > maxShellPropsTypesLines) {
+  throw new Error(
+    `record-panel-v2-shell-props.types.ts exceeded ${maxShellPropsTypesLines} lines: ${shellPropsTypesLines}`,
   );
 }
 

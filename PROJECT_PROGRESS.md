@@ -1584,6 +1584,10 @@ Last updated: 2026-03-25
   - chat-panel content and handler-input builders now reuse dedicated action/state/derived-data result boundary files instead of local hook `ReturnType` aliases
   - `chat-panel-content.types.ts`, `chat-panel-content-props.ts`, and `chat-panel-action-handler-inputs.ts` now depend on `chat-panel-*-result.types.ts` contracts
   - this keeps chat composition layers stable against unrelated hook implementation signature changes
+- Record Panel V2 Explicit Boundary Reuse Split V1:
+  - `record-panel-v2` shell and workspace core type modules now reuse explicit header, workspace, detail-copy, and controller-output boundaries instead of inferring them from component or hook signatures
+  - `record-panel-v2-shell-props.types.ts` now depends on `record-panel-header.types.ts` and `record-panel-controller-output.types.ts`, while `record-panel-v2-workspace-props-core.types.ts` now depends on `record-browse-workspace.types.ts`, `record-editor-workspace.types.ts`, and `record-panel-detail-copy.types.ts`
+  - this keeps the v2 shell/workspace composition layer more stable against unrelated UI and controller implementation changes
 
 ## Next
 - Continue the next product slice

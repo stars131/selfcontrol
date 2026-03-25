@@ -1,15 +1,5 @@
-"use client";
-
-import type { ComponentProps } from "react";
-
-import { RecordPanelHeader } from "./record-panel-header";
-import type { RecordPanelV2Props } from "./record-panel-v2.types";
-
-export type RecordPanelHeaderProps = ComponentProps<typeof RecordPanelHeader>;
-export type RecordPanelController = ReturnType<
-  typeof import("./use-record-panel-controller").useRecordPanelController
->;
-export type RecordPanelShellInput = {
-  controller: RecordPanelController;
-  props: RecordPanelV2Props;
-};
+import type { RecordPanelController as RecordPanelControllerValue } from "./record-panel-controller-output.types";
+import type { RecordPanelHeaderComponentProps } from "./record-panel-header.types"; import type { RecordPanelV2Props } from "./record-panel-v2.types";
+export type RecordPanelHeaderProps = RecordPanelHeaderComponentProps;
+export type RecordPanelController = RecordPanelControllerValue;
+export type RecordPanelShellInput = { controller: RecordPanelController; props: RecordPanelV2Props };
