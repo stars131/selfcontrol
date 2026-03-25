@@ -2,7 +2,7 @@
 
 import { createConversation, listConversations } from "../lib/api";
 import { loadConversationMessagesForWorkspace } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
+import type { LoadWorkspaceShellConversationStateInput } from "./workspace-shell-conversation-state-load.types";
 
 type WorkspaceRole = "owner" | "editor" | "viewer";
 
@@ -17,14 +17,7 @@ export async function loadWorkspaceShellConversationState({
   setConversations,
   setMessages,
   workspaceId,
-}: {
-  activeToken: string;
-  role: WorkspaceRole;
-  setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"];
-  setConversations: UseWorkspaceShellEffectsProps["setConversations"];
-  setMessages: UseWorkspaceShellEffectsProps["setMessages"];
-  workspaceId: string;
-}) {
+}: LoadWorkspaceShellConversationStateInput) {
   const conversationResult = await listConversations(activeToken, workspaceId);
   let items = conversationResult.items;
   if (!items.length && canManageWorkspace(role)) {

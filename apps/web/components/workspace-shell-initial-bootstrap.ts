@@ -9,8 +9,8 @@ import {
   refreshNotificationItems,
   refreshRecordCollection,
 } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
 import { loadWorkspaceShellConversationState } from "./workspace-shell-conversation-state-load";
+import type { LoadWorkspaceShellInitialBootstrapInput } from "./workspace-shell-initial-bootstrap.types";
 
 type WorkspaceRole = "owner" | "editor" | "viewer";
 
@@ -29,22 +29,7 @@ export async function loadWorkspaceShellInitialBootstrap({
   setVisibleRecords,
   setWorkspace,
   workspaceId,
-}: {
-  activeToken: string;
-  setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"];
-  setConversations: UseWorkspaceShellEffectsProps["setConversations"];
-  setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"];
-  setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"];
-  setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"];
-  setMessages: UseWorkspaceShellEffectsProps["setMessages"];
-  setNotifications: UseWorkspaceShellEffectsProps["setNotifications"];
-  setRecords: UseWorkspaceShellEffectsProps["setRecords"];
-  setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"];
-  setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"];
-  setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"];
-  setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"];
-  workspaceId: string;
-}) {
+}: LoadWorkspaceShellInitialBootstrapInput) {
   const workspaceResult = await getWorkspace(activeToken, workspaceId);
   setWorkspace(workspaceResult.workspace);
 

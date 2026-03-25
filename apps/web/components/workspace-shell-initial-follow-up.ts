@@ -4,7 +4,7 @@ import {
   refreshAuditLogItems,
   refreshSearchPresetItems,
 } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
+import type { LoadWorkspaceShellInitialFollowUpInput } from "./workspace-shell-initial-follow-up.types";
 import { loadWorkspaceShellManagedState } from "./workspace-shell-managed-state-load";
 
 type WorkspaceRole = "owner" | "editor" | "viewer";
@@ -19,17 +19,7 @@ export async function loadWorkspaceShellInitialFollowUp({
   setSearchPresets,
   setShareLinks,
   workspaceId,
-}: {
-  activeToken: string;
-  role: WorkspaceRole;
-  setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"];
-  setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"];
-  setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"];
-  setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"];
-  setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"];
-  setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"];
-  workspaceId: string;
-}) {
+}: LoadWorkspaceShellInitialFollowUpInput) {
   await loadWorkspaceShellManagedState({
     activeToken,
     role,

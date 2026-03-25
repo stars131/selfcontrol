@@ -1716,6 +1716,10 @@ Last updated: 2026-03-25
   - `workspace-shell-client-actions-input.ts`, `workspace-shell-client-refreshers-input.ts`, `workspace-shell-client-effects-input.ts`, and `workspace-shell-client-panels-props.ts` now consume extracted input contracts instead of keeping inline builder input object shapes in those modules
   - the new workspace-shell client `*.types.ts` files keep actions, refreshers, effects, and panels builder boundaries explicit and reusable
   - this keeps workspace shell client orchestration typing thinner and more maintainable under the enterprise engineering standard
+- Workspace Shell Initial Load Input Types Split V1:
+  - `workspace-shell-conversation-state-load.ts`, `workspace-shell-managed-state-load.ts`, `workspace-shell-initial-follow-up.ts`, `workspace-shell-initial-load-helpers.ts`, and `workspace-shell-initial-bootstrap.ts` now consume extracted input contracts instead of keeping inline load input object shapes in those modules
+  - the new workspace-shell initial-load `*.types.ts` files keep conversation-state, managed-state, follow-up, initial-load, and bootstrap boundaries explicit and reusable
+  - this keeps workspace shell load orchestration typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

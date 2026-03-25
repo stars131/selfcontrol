@@ -1,10 +1,8 @@
 "use client";
 
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
-import { loadWorkspaceShellConversationState } from "./workspace-shell-conversation-state-load";
 import { loadWorkspaceShellInitialBootstrap } from "./workspace-shell-initial-bootstrap";
 import { loadWorkspaceShellInitialFollowUp } from "./workspace-shell-initial-follow-up";
-import { loadWorkspaceShellManagedState } from "./workspace-shell-managed-state-load";
+import type { LoadWorkspaceShellInitialDataInput } from "./workspace-shell-initial-load-helpers.types";
 
 export async function loadWorkspaceShellInitialData({
   activeToken,
@@ -27,28 +25,7 @@ export async function loadWorkspaceShellInitialData({
   setVisibleRecords,
   setWorkspace,
   workspaceId,
-}: {
-  activeToken: string;
-  setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"];
-  setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"];
-  setConversations: UseWorkspaceShellEffectsProps["setConversations"];
-  setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"];
-  setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"];
-  setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"];
-  setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"];
-  setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"];
-  setMessages: UseWorkspaceShellEffectsProps["setMessages"];
-  setNotifications: UseWorkspaceShellEffectsProps["setNotifications"];
-  setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"];
-  setRecords: UseWorkspaceShellEffectsProps["setRecords"];
-  setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"];
-  setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"];
-  setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"];
-  setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"];
-  setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"];
-  setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"];
-  workspaceId: string;
-}) {
+}: LoadWorkspaceShellInitialDataInput) {
   const { role } = await loadWorkspaceShellInitialBootstrap({
     activeToken,
     setActiveConversationId,

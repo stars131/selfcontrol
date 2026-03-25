@@ -5,7 +5,7 @@ import {
   refreshProviderConfigItems,
   refreshShareLinkItems,
 } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
+import type { LoadWorkspaceShellManagedStateInput } from "./workspace-shell-managed-state-load.types";
 
 type WorkspaceRole = "owner" | "editor" | "viewer";
 
@@ -21,15 +21,7 @@ export async function loadWorkspaceShellManagedState({
   setProviderConfigs,
   setShareLinks,
   workspaceId,
-}: {
-  activeToken: string;
-  role: WorkspaceRole;
-  setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"];
-  setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"];
-  setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"];
-  setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"];
-  workspaceId: string;
-}) {
+}: LoadWorkspaceShellManagedStateInput) {
   if (canManageWorkspace(role)) {
     await refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
     await refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
