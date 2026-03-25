@@ -1,0 +1,1 @@
+import type { LocationDraft } from "../lib/map-panel"; import type { LocationFilterState } from "../lib/types"; export type UseMapPanelSyncInput = { draftLocation?: LocationDraft | null; locationFilter: LocationFilterState; selectedRecordId: string | null; setFilterDraft: (value: LocationFilterState) => void; setSearchQuery: (value: string) => void };

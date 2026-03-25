@@ -1,0 +1,1 @@
+import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; export type SearchMapPanelLocationInput = { draftLocation?: LocationDraft | null; geocoder: AMapGeocoderInstance; keyword: string; map?: AMapMapInstance | null; onDraftLocationChange: (next: LocationDraft) => void };

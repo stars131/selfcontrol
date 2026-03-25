@@ -1,22 +1,8 @@
 import type { FormEvent } from "react";
 
-import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel";
-import type { LocationFilterState } from "../lib/types";
 import { buildClearedLocationFilter, buildMappedOnlyLocationFilter } from "./map-panel-controller-filter";
 import { getMapPanelActionErrorMessage, searchMapPanelLocation } from "./map-panel-controller-search";
-
-type CreateMapPanelControllerActionsInput = {
-  draftLocation?: LocationDraft | null;
-  filterDraft: LocationFilterState;
-  geocoderRef: { current: AMapGeocoderInstance | null };
-  mapRef: { current: AMapMapInstance | null };
-  onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>;
-  onDraftLocationChange?: (next: LocationDraft) => void;
-  searchQuery: string;
-  setFilterDraft: (nextFilter: LocationFilterState) => void;
-  setSearchError: (value: string) => void;
-  setSearching: (value: boolean) => void;
-};
+import type { CreateMapPanelControllerActionsInput } from "./map-panel-controller-actions.types";
 
 export function createMapPanelControllerActions({
   draftLocation,

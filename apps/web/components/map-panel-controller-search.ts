@@ -4,10 +4,8 @@ import {
   formatCoordinate,
   readLatitudeValue,
   readLongitudeValue,
-  type AMapGeocoderInstance,
-  type AMapMapInstance,
-  type LocationDraft,
 } from "../lib/map-panel";
+import type { SearchMapPanelLocationInput } from "./map-panel-controller-search.types";
 
 function readFirstGeocode(result: Record<string, unknown>) {
   const geocodes = Array.isArray(result.geocodes) ? result.geocodes : [];
@@ -38,13 +36,7 @@ export async function searchMapPanelLocation({
   keyword,
   map,
   onDraftLocationChange,
-}: {
-  draftLocation?: LocationDraft | null;
-  geocoder: AMapGeocoderInstance;
-  keyword: string;
-  map?: AMapMapInstance | null;
-  onDraftLocationChange: (next: LocationDraft) => void;
-}) {
+}: SearchMapPanelLocationInput) {
   const result = await new Promise<Record<string, unknown>>((resolve, reject) => {
     geocoder.getLocation?.(keyword, (status, geocodeResult) => {
       if (status !== "complete") {

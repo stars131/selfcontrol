@@ -1,0 +1,1 @@
+import type { LocationDraft } from "../lib/map-panel"; import type { RecordItem } from "../lib/types"; export type UseMapPanelDerivedDataInput = { draftLocation?: LocationDraft | null; records: RecordItem[] };

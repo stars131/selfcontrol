@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 
-import type { LocationDraft } from "../lib/map-panel";
-import type { LocationFilterState } from "../lib/types";
+import type { UseMapPanelSyncInput } from "./use-map-panel-sync.types";
 
 export function useMapPanelSync({
   draftLocation,
@@ -11,13 +10,7 @@ export function useMapPanelSync({
   selectedRecordId,
   setFilterDraft,
   setSearchQuery,
-}: {
-  draftLocation?: LocationDraft | null;
-  locationFilter: LocationFilterState;
-  selectedRecordId: string | null;
-  setFilterDraft: (value: LocationFilterState) => void;
-  setSearchQuery: (value: string) => void;
-}) {
+}: UseMapPanelSyncInput) {
   useEffect(() => {
     setFilterDraft(locationFilter);
   }, [locationFilter, setFilterDraft]);

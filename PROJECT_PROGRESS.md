@@ -1680,6 +1680,10 @@ Last updated: 2026-03-25
   - `use-chat-panel-action-derived-data.ts` and `chat-panel-content-props.ts` now consume extracted input contracts instead of keeping inline input object shapes in the hook and prop-builder modules
   - the new `use-chat-panel-action-derived-data.types.ts` and `chat-panel-content-props.types.ts` files keep chat derived-data and content-prop builder inputs explicit and reusable
   - this keeps chat composition typing thinner and more maintainable under the enterprise engineering standard
+- Map Panel Helper Input Types Split V1:
+  - `map-panel-controller-actions.ts`, `map-panel-controller-search.ts`, `use-map-panel-derived-data.ts`, and `use-map-panel-sync.ts` now consume extracted input contracts instead of keeping inline input object shapes in those map helper modules
+  - the new map helper `*.types.ts` files keep controller-action, search, derived-data, and sync inputs explicit and reusable
+  - this keeps map helper typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

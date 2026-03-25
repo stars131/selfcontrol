@@ -938,6 +938,35 @@ const mapPanelControllerTypesPath = path.resolve(
   process.cwd(),
   "components/use-map-panel-controller.types.ts",
 );
+const mapPanelControllerActionsPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-actions.ts",
+);
+const mapPanelControllerActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-actions.types.ts",
+);
+const mapPanelControllerSearchPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-search.ts",
+);
+const mapPanelControllerSearchTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-panel-controller-search.types.ts",
+);
+const useMapPanelDerivedDataPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-derived-data.ts",
+);
+const useMapPanelDerivedDataTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-derived-data.types.ts",
+);
+const useMapPanelSyncPath = path.resolve(process.cwd(), "components/use-map-panel-sync.ts");
+const useMapPanelSyncTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-sync.types.ts",
+);
 const workspaceExportControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-controller.ts",
@@ -1399,6 +1428,23 @@ const mapPanelControllerResultTypesSource = fs.readFileSync(
 );
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelControllerTypesSource = fs.readFileSync(mapPanelControllerTypesPath, "utf8");
+const mapPanelControllerActionsSource = fs.readFileSync(mapPanelControllerActionsPath, "utf8");
+const mapPanelControllerActionsTypesSource = fs.readFileSync(
+  mapPanelControllerActionsTypesPath,
+  "utf8",
+);
+const mapPanelControllerSearchSource = fs.readFileSync(mapPanelControllerSearchPath, "utf8");
+const mapPanelControllerSearchTypesSource = fs.readFileSync(
+  mapPanelControllerSearchTypesPath,
+  "utf8",
+);
+const useMapPanelDerivedDataSource = fs.readFileSync(useMapPanelDerivedDataPath, "utf8");
+const useMapPanelDerivedDataTypesSource = fs.readFileSync(
+  useMapPanelDerivedDataTypesPath,
+  "utf8",
+);
+const useMapPanelSyncSource = fs.readFileSync(useMapPanelSyncPath, "utf8");
+const useMapPanelSyncTypesSource = fs.readFileSync(useMapPanelSyncTypesPath, "utf8");
 const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
 const workspaceExportCardTypesSource = fs.readFileSync(workspaceExportCardTypesPath, "utf8");
 const workspaceExportControlsSource = fs.readFileSync(workspaceExportControlsPath, "utf8");
@@ -2240,6 +2286,13 @@ const mapPanelContentTypesLines = mapPanelContentTypesSource.split(/\r?\n/).leng
 const mapPanelControllerResultTypesLines =
   mapPanelControllerResultTypesSource.split(/\r?\n/).length;
 const mapPanelControllerTypesLines = mapPanelControllerTypesSource.split(/\r?\n/).length;
+const mapPanelControllerActionsTypesLines =
+  mapPanelControllerActionsTypesSource.split(/\r?\n/).length;
+const mapPanelControllerSearchTypesLines =
+  mapPanelControllerSearchTypesSource.split(/\r?\n/).length;
+const useMapPanelDerivedDataTypesLines =
+  useMapPanelDerivedDataTypesSource.split(/\r?\n/).length;
+const useMapPanelSyncTypesLines = useMapPanelSyncTypesSource.split(/\r?\n/).length;
 const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControlsTypesLines =
   workspaceExportControlsTypesSource.split(/\r?\n/).length;
@@ -11211,6 +11264,167 @@ const maxMapPanelControllerTypesLines = 3;
 if (mapPanelControllerTypesLines > maxMapPanelControllerTypesLines) {
   throw new Error(
     `use-map-panel-controller.types.ts exceeded ${maxMapPanelControllerTypesLines} lines: ${mapPanelControllerTypesLines}`,
+  );
+}
+
+for (const requiredMapPanelControllerActionsUsage of [
+  'import type { CreateMapPanelControllerActionsInput } from "./map-panel-controller-actions.types";',
+  "}: CreateMapPanelControllerActionsInput) {",
+]) {
+  if (!mapPanelControllerActionsSource.includes(requiredMapPanelControllerActionsUsage)) {
+    throw new Error(
+      `map-panel-controller-actions.ts must reuse the extracted controller-actions input type: ${requiredMapPanelControllerActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapPanelControllerActionsToken of [
+  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel";',
+  'import type { LocationFilterState } from "../lib/types";',
+  "type CreateMapPanelControllerActionsInput = {",
+]) {
+  if (mapPanelControllerActionsSource.includes(forbiddenMapPanelControllerActionsToken)) {
+    throw new Error(
+      `map-panel-controller-actions.ts must keep controller-actions input typing delegated: ${forbiddenMapPanelControllerActionsToken}`,
+    );
+  }
+}
+
+for (const requiredMapPanelControllerActionsTypesUsage of [
+  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; import type { LocationFilterState } from "../lib/types"; export type CreateMapPanelControllerActionsInput = { draftLocation?: LocationDraft | null; filterDraft: LocationFilterState; geocoderRef: { current: AMapGeocoderInstance | null }; mapRef: { current: AMapMapInstance | null }; onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>; onDraftLocationChange?: (next: LocationDraft) => void; searchQuery: string; setFilterDraft: (nextFilter: LocationFilterState) => void; setSearchError: (value: string) => void; setSearching: (value: boolean) => void };',
+]) {
+  if (!mapPanelControllerActionsTypesSource.includes(requiredMapPanelControllerActionsTypesUsage)) {
+    throw new Error(
+      `map-panel-controller-actions.types.ts must own controller-actions input typing: ${requiredMapPanelControllerActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelControllerActionsTypesLines = 2;
+if (mapPanelControllerActionsTypesLines > maxMapPanelControllerActionsTypesLines) {
+  throw new Error(
+    `map-panel-controller-actions.types.ts exceeded ${maxMapPanelControllerActionsTypesLines} lines: ${mapPanelControllerActionsTypesLines}`,
+  );
+}
+
+for (const requiredMapPanelControllerSearchUsage of [
+  'import type { SearchMapPanelLocationInput } from "./map-panel-controller-search.types";',
+  "}: SearchMapPanelLocationInput) {",
+]) {
+  if (!mapPanelControllerSearchSource.includes(requiredMapPanelControllerSearchUsage)) {
+    throw new Error(
+      `map-panel-controller-search.ts must reuse the extracted controller-search input type: ${requiredMapPanelControllerSearchUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMapPanelControllerSearchToken of [
+  "type AMapGeocoderInstance",
+  "type AMapMapInstance",
+  "type LocationDraft",
+  "}: {",
+]) {
+  if (mapPanelControllerSearchSource.includes(forbiddenMapPanelControllerSearchToken)) {
+    throw new Error(
+      `map-panel-controller-search.ts must keep controller-search input typing delegated: ${forbiddenMapPanelControllerSearchToken}`,
+    );
+  }
+}
+
+for (const requiredMapPanelControllerSearchTypesUsage of [
+  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; export type SearchMapPanelLocationInput = { draftLocation?: LocationDraft | null; geocoder: AMapGeocoderInstance; keyword: string; map?: AMapMapInstance | null; onDraftLocationChange: (next: LocationDraft) => void };',
+]) {
+  if (!mapPanelControllerSearchTypesSource.includes(requiredMapPanelControllerSearchTypesUsage)) {
+    throw new Error(
+      `map-panel-controller-search.types.ts must own controller-search input typing: ${requiredMapPanelControllerSearchTypesUsage}`,
+    );
+  }
+}
+
+const maxMapPanelControllerSearchTypesLines = 2;
+if (mapPanelControllerSearchTypesLines > maxMapPanelControllerSearchTypesLines) {
+  throw new Error(
+    `map-panel-controller-search.types.ts exceeded ${maxMapPanelControllerSearchTypesLines} lines: ${mapPanelControllerSearchTypesLines}`,
+  );
+}
+
+for (const requiredUseMapPanelDerivedDataUsage of [
+  'import type { UseMapPanelDerivedDataInput } from "./use-map-panel-derived-data.types";',
+  "}: UseMapPanelDerivedDataInput) {",
+]) {
+  if (!useMapPanelDerivedDataSource.includes(requiredUseMapPanelDerivedDataUsage)) {
+    throw new Error(
+      `use-map-panel-derived-data.ts must reuse the extracted derived-data input type: ${requiredUseMapPanelDerivedDataUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseMapPanelDerivedDataToken of [
+  "type LocationDraft",
+  'import type { RecordItem } from "../lib/types";',
+  "}: {",
+]) {
+  if (useMapPanelDerivedDataSource.includes(forbiddenUseMapPanelDerivedDataToken)) {
+    throw new Error(
+      `use-map-panel-derived-data.ts must keep derived-data input typing delegated: ${forbiddenUseMapPanelDerivedDataToken}`,
+    );
+  }
+}
+
+for (const requiredUseMapPanelDerivedDataTypesUsage of [
+  'import type { LocationDraft } from "../lib/map-panel"; import type { RecordItem } from "../lib/types"; export type UseMapPanelDerivedDataInput = { draftLocation?: LocationDraft | null; records: RecordItem[] };',
+]) {
+  if (!useMapPanelDerivedDataTypesSource.includes(requiredUseMapPanelDerivedDataTypesUsage)) {
+    throw new Error(
+      `use-map-panel-derived-data.types.ts must own derived-data input typing: ${requiredUseMapPanelDerivedDataTypesUsage}`,
+    );
+  }
+}
+
+const maxUseMapPanelDerivedDataTypesLines = 2;
+if (useMapPanelDerivedDataTypesLines > maxUseMapPanelDerivedDataTypesLines) {
+  throw new Error(
+    `use-map-panel-derived-data.types.ts exceeded ${maxUseMapPanelDerivedDataTypesLines} lines: ${useMapPanelDerivedDataTypesLines}`,
+  );
+}
+
+for (const requiredUseMapPanelSyncUsage of [
+  'import type { UseMapPanelSyncInput } from "./use-map-panel-sync.types";',
+  "}: UseMapPanelSyncInput) {",
+]) {
+  if (!useMapPanelSyncSource.includes(requiredUseMapPanelSyncUsage)) {
+    throw new Error(
+      `use-map-panel-sync.ts must reuse the extracted map-sync input type: ${requiredUseMapPanelSyncUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseMapPanelSyncToken of [
+  'import type { LocationDraft } from "../lib/map-panel";',
+  'import type { LocationFilterState } from "../lib/types";',
+  "}: {",
+]) {
+  if (useMapPanelSyncSource.includes(forbiddenUseMapPanelSyncToken)) {
+    throw new Error(
+      `use-map-panel-sync.ts must keep map-sync input typing delegated: ${forbiddenUseMapPanelSyncToken}`,
+    );
+  }
+}
+
+for (const requiredUseMapPanelSyncTypesUsage of [
+  'import type { LocationDraft } from "../lib/map-panel"; import type { LocationFilterState } from "../lib/types"; export type UseMapPanelSyncInput = { draftLocation?: LocationDraft | null; locationFilter: LocationFilterState; selectedRecordId: string | null; setFilterDraft: (value: LocationFilterState) => void; setSearchQuery: (value: string) => void };',
+]) {
+  if (!useMapPanelSyncTypesSource.includes(requiredUseMapPanelSyncTypesUsage)) {
+    throw new Error(
+      `use-map-panel-sync.types.ts must own map-sync input typing: ${requiredUseMapPanelSyncTypesUsage}`,
+    );
+  }
+}
+
+const maxUseMapPanelSyncTypesLines = 2;
+if (useMapPanelSyncTypesLines > maxUseMapPanelSyncTypesLines) {
+  throw new Error(
+    `use-map-panel-sync.types.ts exceeded ${maxUseMapPanelSyncTypesLines} lines: ${useMapPanelSyncTypesLines}`,
   );
 }
 
