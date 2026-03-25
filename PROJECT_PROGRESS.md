@@ -1863,6 +1863,10 @@ Last updated: 2026-03-25
   - `workspace-settings-overview-card.tsx` now delegates environment and knowledge-stat detail-grid rendering to `workspace-settings-overview-details.tsx` instead of keeping all overview tiles inline inside the card shell
   - the new `workspace-settings-overview-details.types.ts` file keeps the overview-details contract explicit and reusable while the parent overview card remains focused on summary copy and composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated overview-details boundary, exact one-line type contract, and line-count ceilings so future settings-overview updates stay safer and easier to maintain
+- Workspace Settings Provider Viewer Notice Split V1:
+  - `workspace-settings-provider-section.tsx` now delegates viewer-only provider-access notice rendering to `workspace-settings-provider-viewer-notice.tsx` instead of keeping the viewer branch markup inline beside the managed-provider panel branch
+  - the new `workspace-settings-provider-viewer-notice.types.ts` file keeps the viewer-notice contract explicit and reusable while the parent provider section remains focused on branch selection
+  - `verify-workspace-settings-structure.mjs` now enforces that delegated provider viewer-notice boundary, exact one-line type contract, and line-count ceilings so future provider-section updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

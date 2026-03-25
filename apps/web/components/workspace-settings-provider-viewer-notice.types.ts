@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsProviderSectionProps } from "./workspace-settings-provider-section.types"; export type WorkspaceSettingsProviderViewerNoticeProps = Pick<WorkspaceSettingsProviderSectionProps, "providerTitle" | "viewerNotice">;

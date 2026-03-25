@@ -26,6 +26,14 @@ const workspaceSettingsProviderSectionTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-provider-section.types.ts",
 );
+const workspaceSettingsProviderViewerNoticePath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-viewer-notice.tsx",
+);
+const workspaceSettingsProviderViewerNoticeTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-viewer-notice.types.ts",
+);
 const workspaceSettingsOverviewCardPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.tsx",
@@ -77,6 +85,11 @@ const loadingShellSource = fs.readFileSync(workspaceSettingsLoadingShellPath, "u
 const loadingShellTypesSource = fs.readFileSync(workspaceSettingsLoadingShellTypesPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
 const providerSectionTypesSource = fs.readFileSync(workspaceSettingsProviderSectionTypesPath, "utf8");
+const providerViewerNoticeSource = fs.readFileSync(workspaceSettingsProviderViewerNoticePath, "utf8");
+const providerViewerNoticeTypesSource = fs.readFileSync(
+  workspaceSettingsProviderViewerNoticeTypesPath,
+  "utf8",
+);
 const overviewCardSource = fs.readFileSync(workspaceSettingsOverviewCardPath, "utf8");
 const overviewDetailsSource = fs.readFileSync(workspaceSettingsOverviewDetailsPath, "utf8");
 const overviewDetailsTypesSource = fs.readFileSync(
@@ -96,7 +109,11 @@ const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
+const providerSectionLineCount = providerSectionSource.split(/\r?\n/).length;
 const providerSectionTypesLineCount = providerSectionTypesSource.split(/\r?\n/).length;
+const providerViewerNoticeLineCount = providerViewerNoticeSource.split(/\r?\n/).length;
+const providerViewerNoticeTypesLineCount =
+  providerViewerNoticeTypesSource.split(/\r?\n/).length;
 const overviewCardLineCount = overviewCardSource.split(/\r?\n/).length;
 const overviewDetailsLineCount = overviewDetailsSource.split(/\r?\n/).length;
 const overviewDetailsTypesLineCount = overviewDetailsTypesSource.split(/\r?\n/).length;
@@ -163,9 +180,9 @@ if (!providerSectionSource.includes('import type { WorkspaceSettingsProviderSect
 }
 
 for (const requiredProviderUsage of [
+  'import { WorkspaceSettingsProviderViewerNotice } from "./workspace-settings-provider-viewer-notice";',
   "<ProviderSettingsPanel",
-  "providerTitle",
-  "viewerNotice",
+  "<WorkspaceSettingsProviderViewerNotice",
 ]) {
   if (!providerSectionSource.includes(requiredProviderUsage)) {
     throw new Error(`workspace-settings-provider-section.tsx must own provider/viewer branching: ${requiredProviderUsage}`);
@@ -176,10 +193,59 @@ for (const forbiddenProviderSectionToken of [
   'import type { LocaleCode } from "../lib/locale";',
   'import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";',
   "type WorkspaceSettingsProviderSectionProps = {",
+  '<section className="record-card">',
+  '<div className="eyebrow">{providerTitle}</div>',
+  '<div className="notice" style={{ marginTop: 12 }}>{viewerNotice}</div>',
 ]) {
   if (providerSectionSource.includes(forbiddenProviderSectionToken)) {
     throw new Error(`workspace-settings-provider-section.tsx must keep provider section props delegated: ${forbiddenProviderSectionToken}`);
   }
+}
+
+if (providerSectionLineCount > 25) {
+  throw new Error(`workspace-settings-provider-section.tsx exceeded 25 lines: ${providerSectionLineCount}`);
+}
+
+for (const requiredProviderViewerNoticeUsage of [
+  'import type { WorkspaceSettingsProviderViewerNoticeProps } from "./workspace-settings-provider-viewer-notice.types";',
+  "}: WorkspaceSettingsProviderViewerNoticeProps) {",
+  '<section className="record-card">',
+  '<div className="eyebrow">{providerTitle}</div>',
+  '{viewerNotice}',
+]) {
+  if (!providerViewerNoticeSource.includes(requiredProviderViewerNoticeUsage)) {
+    throw new Error(
+      `workspace-settings-provider-viewer-notice.tsx must own viewer-notice rendering: ${requiredProviderViewerNoticeUsage}`,
+    );
+  }
+}
+
+if (providerViewerNoticeSource.includes("type WorkspaceSettingsProviderViewerNoticeProps = Pick<")) {
+  throw new Error(
+    "workspace-settings-provider-viewer-notice.tsx must keep provider viewer-notice prop typing delegated",
+  );
+}
+
+if (providerViewerNoticeLineCount > 16) {
+  throw new Error(
+    `workspace-settings-provider-viewer-notice.tsx exceeded 16 lines: ${providerViewerNoticeLineCount}`,
+  );
+}
+
+for (const requiredProviderViewerNoticeTypesUsage of [
+  'import type { WorkspaceSettingsProviderSectionProps } from "./workspace-settings-provider-section.types"; export type WorkspaceSettingsProviderViewerNoticeProps = Pick<WorkspaceSettingsProviderSectionProps, "providerTitle" | "viewerNotice">;',
+]) {
+  if (!providerViewerNoticeTypesSource.includes(requiredProviderViewerNoticeTypesUsage)) {
+    throw new Error(
+      `workspace-settings-provider-viewer-notice.types.ts must own viewer-notice prop typing: ${requiredProviderViewerNoticeTypesUsage}`,
+    );
+  }
+}
+
+if (providerViewerNoticeTypesLineCount > 2) {
+  throw new Error(
+    `workspace-settings-provider-viewer-notice.types.ts exceeded 2 lines: ${providerViewerNoticeTypesLineCount}`,
+  );
 }
 
 for (const requiredManagedImport of [
