@@ -1,14 +1,11 @@
 "use client";
 
-import type { WorkspaceShellState } from "./workspace-shell-client-props.types";
+import type { BuildWorkspaceShellRefreshersInput } from "./workspace-shell-client-refreshers-input.types";
 
 export function buildWorkspaceShellRefreshersInput({
   state,
   workspaceId,
-}: {
-  state: WorkspaceShellState;
-  workspaceId: string;
-}) {
+}: BuildWorkspaceShellRefreshersInput) {
   return {
     workspaceId,
     setAuditLogs: state.setAuditLogs,

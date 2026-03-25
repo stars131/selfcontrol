@@ -1,19 +1,12 @@
 "use client";
 
-import type {
-  WorkspaceShellRouter,
-  WorkspaceShellState,
-} from "./workspace-shell-client-props.types";
+import type { BuildWorkspaceShellEffectsInput } from "./workspace-shell-client-effects-input.types";
 
 export function buildWorkspaceShellEffectsInput({
   router,
   state,
   workspaceId,
-}: {
-  router: WorkspaceShellRouter;
-  state: WorkspaceShellState;
-  workspaceId: string;
-}) {
+}: BuildWorkspaceShellEffectsInput) {
   return {
     router,
     workspaceId,

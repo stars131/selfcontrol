@@ -1,20 +1,15 @@
 "use client";
 
 import type {
-  WorkspaceShellActions,
   WorkspaceShellPanelsProps,
-  WorkspaceShellState,
 } from "./workspace-shell-client-props.types";
+import type { BuildWorkspaceShellPanelsPropsInput } from "./workspace-shell-client-panels-props.types";
 
 export function buildWorkspaceShellPanelsProps({
   actions,
   state,
   workspaceId,
-}: {
-  actions: WorkspaceShellActions;
-  state: WorkspaceShellState;
-  workspaceId: string;
-}): WorkspaceShellPanelsProps {
+}: BuildWorkspaceShellPanelsPropsInput): WorkspaceShellPanelsProps {
   return {
     activeConversationId: state.activeConversationId,
     auditLogs: state.auditLogs,

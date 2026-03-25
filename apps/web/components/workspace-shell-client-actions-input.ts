@@ -1,19 +1,12 @@
 "use client";
 
-import type {
-  WorkspaceShellRefreshers,
-  WorkspaceShellState,
-} from "./workspace-shell-client-props.types";
+import type { BuildWorkspaceShellActionsInput } from "./workspace-shell-client-actions-input.types";
 
 export function buildWorkspaceShellActionsInput({
   refreshers,
   state,
   workspaceId,
-}: {
-  refreshers: WorkspaceShellRefreshers;
-  state: WorkspaceShellState;
-  workspaceId: string;
-}) {
+}: BuildWorkspaceShellActionsInput) {
   return {
     token: state.token,
     workspaceId,

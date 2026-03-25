@@ -1,0 +1,1 @@
+import type { WorkspaceShellRouter, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellEffectsInput = { router: WorkspaceShellRouter; state: WorkspaceShellState; workspaceId: string };

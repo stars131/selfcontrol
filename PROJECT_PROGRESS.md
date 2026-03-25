@@ -1712,6 +1712,10 @@ Last updated: 2026-03-25
   - `language-switcher.tsx` and `media-retention-item-card.tsx` now consume extracted prop contracts instead of keeping inline signatures or local copy shapes in those leaf components
   - the new `language-switcher.types.ts` and `media-retention-item-card.types.ts` files keep locale switcher and retention item boundaries explicit and reusable
   - this keeps shared leaf component typing thinner and more maintainable under the enterprise engineering standard
+- Workspace Shell Client Builder Input Types Split V1:
+  - `workspace-shell-client-actions-input.ts`, `workspace-shell-client-refreshers-input.ts`, `workspace-shell-client-effects-input.ts`, and `workspace-shell-client-panels-props.ts` now consume extracted input contracts instead of keeping inline builder input object shapes in those modules
+  - the new workspace-shell client `*.types.ts` files keep actions, refreshers, effects, and panels builder boundaries explicit and reusable
+  - this keeps workspace shell client orchestration typing thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

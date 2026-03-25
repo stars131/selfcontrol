@@ -1,0 +1,1 @@
+import type { WorkspaceShellActions, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellPanelsPropsInput = { actions: WorkspaceShellActions; state: WorkspaceShellState; workspaceId: string };
