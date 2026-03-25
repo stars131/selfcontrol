@@ -1855,6 +1855,10 @@ Last updated: 2026-03-25
   - `workspace-settings-managed-sections.tsx` now delegates managed export/retention tool composition to `workspace-settings-managed-tools.tsx` instead of keeping the three management cards inline beside the members area
   - the new `workspace-settings-managed-tools.types.ts` file keeps the managed-tools contract explicit and reusable while the parent managed-sections component remains focused on high-level workspace settings layout
   - `verify-workspace-settings-structure.mjs` now enforces that delegated managed-tools boundary, exact one-line type contract, and line-count ceilings so future settings-page updates stay safer and easier to maintain
+- Workspace Export Summary Split V1:
+  - `workspace-export-card.tsx` now delegates export title, description, and note rendering to `workspace-export-summary.tsx` instead of keeping the static summary block inline beside the controls leaf
+  - the new `workspace-export-summary.types.ts` file keeps the export-summary contract explicit and reusable while the parent export card remains focused on controller wiring and action control composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-structure.mjs` now enforce that delegated export-summary boundary, exact one-line type contract, and line-count ceilings so future export-card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

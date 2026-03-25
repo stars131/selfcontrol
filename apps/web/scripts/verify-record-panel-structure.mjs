@@ -1260,6 +1260,14 @@ const workspaceExportCardPath = path.resolve(
   process.cwd(),
   "components/workspace-export-card.tsx",
 );
+const workspaceExportSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-summary.tsx",
+);
+const workspaceExportSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-summary.types.ts",
+);
 const workspaceExportCardTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-card.types.ts",
@@ -2453,6 +2461,11 @@ const workspaceEntryJobActionsTypesSource = fs.readFileSync(
   "utf8",
 );
 const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
+const workspaceExportSummarySource = fs.readFileSync(workspaceExportSummaryPath, "utf8");
+const workspaceExportSummaryTypesSource = fs.readFileSync(
+  workspaceExportSummaryTypesPath,
+  "utf8",
+);
 const workspaceExportCardTypesSource = fs.readFileSync(workspaceExportCardTypesPath, "utf8");
 const workspaceExportControlsSource = fs.readFileSync(workspaceExportControlsPath, "utf8");
 const workspaceExportControlsTypesSource = fs.readFileSync(
@@ -3814,6 +3827,9 @@ const workspaceTransferJobsListTypesLines =
   workspaceTransferJobsListTypesSource.split(/\r?\n/).length;
 const workspaceEntryJobActionsTypesLines =
   workspaceEntryJobActionsTypesSource.split(/\r?\n/).length;
+const workspaceExportSummaryLines = workspaceExportSummarySource.split(/\r?\n/).length;
+const workspaceExportSummaryTypesLines =
+  workspaceExportSummaryTypesSource.split(/\r?\n/).length;
 const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControlsTypesLines =
   workspaceExportControlsTypesSource.split(/\r?\n/).length;
@@ -14401,8 +14417,10 @@ if (workspaceExportControllerTypesLines > maxWorkspaceExportControllerTypesLines
 }
 
 for (const requiredWorkspaceExportCardUsage of [
+  'import { WorkspaceExportSummary } from "./workspace-export-summary";',
   'import type { WorkspaceExportCardProps } from "./workspace-export-card.types";',
   "}: WorkspaceExportCardProps) {",
+  "<WorkspaceExportSummary",
 ]) {
   if (!workspaceExportCardSource.includes(requiredWorkspaceExportCardUsage)) {
     throw new Error(
@@ -14415,12 +14433,57 @@ for (const forbiddenWorkspaceExportCardToken of [
   'import type { LocaleCode } from "../lib/locale";',
   "token: string;",
   'role: "owner" | "editor";',
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  "{copy.description}",
+  "{copy.note}",
 ]) {
   if (workspaceExportCardSource.includes(forbiddenWorkspaceExportCardToken)) {
     throw new Error(
       `workspace-export-card.tsx must keep export card prop typing delegated: ${forbiddenWorkspaceExportCardToken}`,
     );
   }
+}
+
+for (const requiredWorkspaceExportSummaryUsage of [
+  'import type { WorkspaceExportSummaryProps } from "./workspace-export-summary.types";',
+  "}: WorkspaceExportSummaryProps) {",
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  "{copy.description}",
+  "{copy.note}",
+]) {
+  if (!workspaceExportSummarySource.includes(requiredWorkspaceExportSummaryUsage)) {
+    throw new Error(
+      `workspace-export-summary.tsx must reuse the extracted export-summary props type: ${requiredWorkspaceExportSummaryUsage}`,
+    );
+  }
+}
+
+if (workspaceExportSummarySource.includes("type WorkspaceExportSummaryProps = {")) {
+  throw new Error("workspace-export-summary.tsx must keep export-summary prop typing delegated");
+}
+
+const maxWorkspaceExportSummaryLines = 18;
+if (workspaceExportSummaryLines > maxWorkspaceExportSummaryLines) {
+  throw new Error(
+    `workspace-export-summary.tsx exceeded ${maxWorkspaceExportSummaryLines} lines: ${workspaceExportSummaryLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportSummaryTypesUsage of [
+  'import { getWorkspaceExportCopy } from "./workspace-export-copy"; export type WorkspaceExportSummaryProps = { copy: ReturnType<typeof getWorkspaceExportCopy> };',
+]) {
+  if (!workspaceExportSummaryTypesSource.includes(requiredWorkspaceExportSummaryTypesUsage)) {
+    throw new Error(
+      `workspace-export-summary.types.ts must own export-summary prop typing: ${requiredWorkspaceExportSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportSummaryTypesLines = 2;
+if (workspaceExportSummaryTypesLines > maxWorkspaceExportSummaryTypesLines) {
+  throw new Error(
+    `workspace-export-summary.types.ts exceeded ${maxWorkspaceExportSummaryTypesLines} lines: ${workspaceExportSummaryTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceExportCardTypesUsage of [
