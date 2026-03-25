@@ -1,17 +1,14 @@
 "use client";
 
 import { WorkspaceTransferJobCard } from "./workspace-transfer-job-card";
-import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";
+import type { WorkspaceTransferJobsListProps } from "./workspace-transfer-jobs-list.types";
 
 export function WorkspaceTransferJobsList({
   copy,
   locale,
   transferJobs,
   onDownloadTransferJob,
-}: Pick<
-  WorkspaceTransferJobsSectionProps,
-  "copy" | "locale" | "transferJobs" | "onDownloadTransferJob"
->) {
+}: WorkspaceTransferJobsListProps) {
   return (
     <div className="record-list compact-list">
       {transferJobs.length ? (

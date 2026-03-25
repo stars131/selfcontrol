@@ -1,0 +1,1 @@
+import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type UseWorkspaceShellSelectionEffectsInput = Pick<UseWorkspaceShellEffectsProps, "token" | "workspaceId" | "selectedRecordId" | "setMediaAssets" | "setReminders">;

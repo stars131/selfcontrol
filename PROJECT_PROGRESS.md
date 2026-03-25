@@ -1724,6 +1724,10 @@ Last updated: 2026-03-25
   - `record-reminder-tools-panel-props.ts`, `record-editor-workspace-main-sections-props.ts`, and `workspace-media-retention-card-copy-helpers.ts` now consume extracted input contracts instead of keeping inline helper input object shapes in those modules
   - the new helper `*.types.ts` files keep reminder-panel, editor-main-sections, and retention-controller input boundaries explicit and reusable
   - this keeps these helper orchestration edges thinner and more maintainable under the enterprise engineering standard
+- Workspace Effect and Filter Input Types Split V1:
+  - `use-workspace-shell-notification-effect.ts`, `use-workspace-shell-selection-effects.ts`, `workspace-shell-record-filter-actions.ts`, `workspace-entry-job-actions.ts`, and `workspace-transfer-jobs-list.tsx` now consume extracted effect/action/list contracts instead of keeping direct `Pick<...>` signatures in those modules
+  - the new `*.types.ts` files keep workspace notification, selection, location-filter, entry-job, and transfer-jobs-list boundaries explicit and reusable
+  - this keeps workspace shell and entry side-effect edges thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

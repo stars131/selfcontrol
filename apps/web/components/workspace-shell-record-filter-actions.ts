@@ -3,6 +3,7 @@
 import { createSearchPreset, deleteSearchPreset } from "../lib/api";
 import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import { requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
+import type { ApplyWorkspaceShellLocationFilterInput } from "./workspace-shell-record-filter-actions.types";
 
 export function createWorkspaceShellRecordFilterActions(props: UseWorkspaceShellActionsProps) {
   const {
@@ -40,7 +41,7 @@ export function createWorkspaceShellRecordFilterActions(props: UseWorkspaceShell
     placeQuery,
     reviewStatus,
     mappedOnly,
-  }: Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">) {
+  }: ApplyWorkspaceShellLocationFilterInput) {
     await handleApplyRecordFilter({
       ...recordFilter,
       placeQuery,

@@ -1,0 +1,1 @@
+import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type UseWorkspaceShellNotificationEffectInput = Pick<UseWorkspaceShellEffectsProps, "token" | "workspaceId" | "setNotifications">;

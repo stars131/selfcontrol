@@ -962,6 +962,30 @@ const workspaceShellInitialBootstrapTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-initial-bootstrap.types.ts",
 );
+const useWorkspaceShellNotificationEffectPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-notification-effect.ts",
+);
+const useWorkspaceShellNotificationEffectTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-notification-effect.types.ts",
+);
+const useWorkspaceShellSelectionEffectsPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-selection-effects.ts",
+);
+const useWorkspaceShellSelectionEffectsTypesPath = path.resolve(
+  process.cwd(),
+  "components/use-workspace-shell-selection-effects.types.ts",
+);
+const workspaceShellRecordFilterActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-filter-actions.ts",
+);
+const workspaceShellRecordFilterActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-filter-actions.types.ts",
+);
 const workspaceShellFramePath = path.resolve(process.cwd(), "components/workspace-shell-frame.tsx");
 const workspaceShellFrameTypesPath = path.resolve(
   process.cwd(),
@@ -1095,6 +1119,22 @@ const workspaceTransferJobCardPath = path.resolve(
 const workspaceTransferJobCardTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-transfer-job-card.types.ts",
+);
+const workspaceTransferJobsListPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-list.tsx",
+);
+const workspaceTransferJobsListTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-transfer-jobs-list.types.ts",
+);
+const workspaceEntryJobActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-job-actions.ts",
+);
+const workspaceEntryJobActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-job-actions.types.ts",
 );
 const workspaceExportControllerPath = path.resolve(
   process.cwd(),
@@ -1746,6 +1786,30 @@ const workspaceShellInitialBootstrapTypesSource = fs.readFileSync(
   workspaceShellInitialBootstrapTypesPath,
   "utf8",
 );
+const useWorkspaceShellNotificationEffectSource = fs.readFileSync(
+  useWorkspaceShellNotificationEffectPath,
+  "utf8",
+);
+const useWorkspaceShellNotificationEffectTypesSource = fs.readFileSync(
+  useWorkspaceShellNotificationEffectTypesPath,
+  "utf8",
+);
+const useWorkspaceShellSelectionEffectsSource = fs.readFileSync(
+  useWorkspaceShellSelectionEffectsPath,
+  "utf8",
+);
+const useWorkspaceShellSelectionEffectsTypesSource = fs.readFileSync(
+  useWorkspaceShellSelectionEffectsTypesPath,
+  "utf8",
+);
+const workspaceShellRecordFilterActionsSource = fs.readFileSync(
+  workspaceShellRecordFilterActionsPath,
+  "utf8",
+);
+const workspaceShellRecordFilterActionsTypesSource = fs.readFileSync(
+  workspaceShellRecordFilterActionsTypesPath,
+  "utf8",
+);
 const workspaceShellFrameSource = fs.readFileSync(workspaceShellFramePath, "utf8");
 const workspaceShellFrameTypesSource = fs.readFileSync(workspaceShellFrameTypesPath, "utf8");
 const workspaceShellRefreshersResultTypesSource = fs.readFileSync(
@@ -1834,6 +1898,16 @@ const providerSettingsPanelHelpersTypesSource = fs.readFileSync(
 const workspaceTransferJobCardSource = fs.readFileSync(workspaceTransferJobCardPath, "utf8");
 const workspaceTransferJobCardTypesSource = fs.readFileSync(
   workspaceTransferJobCardTypesPath,
+  "utf8",
+);
+const workspaceTransferJobsListSource = fs.readFileSync(workspaceTransferJobsListPath, "utf8");
+const workspaceTransferJobsListTypesSource = fs.readFileSync(
+  workspaceTransferJobsListTypesPath,
+  "utf8",
+);
+const workspaceEntryJobActionsSource = fs.readFileSync(workspaceEntryJobActionsPath, "utf8");
+const workspaceEntryJobActionsTypesSource = fs.readFileSync(
+  workspaceEntryJobActionsTypesPath,
   "utf8",
 );
 const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
@@ -2792,6 +2866,12 @@ const workspaceShellInitialLoadHelpersTypesLines =
   workspaceShellInitialLoadHelpersTypesSource.split(/\r?\n/).length;
 const workspaceShellInitialBootstrapTypesLines =
   workspaceShellInitialBootstrapTypesSource.split(/\r?\n/).length;
+const useWorkspaceShellNotificationEffectTypesLines =
+  useWorkspaceShellNotificationEffectTypesSource.split(/\r?\n/).length;
+const useWorkspaceShellSelectionEffectsTypesLines =
+  useWorkspaceShellSelectionEffectsTypesSource.split(/\r?\n/).length;
+const workspaceShellRecordFilterActionsTypesLines =
+  workspaceShellRecordFilterActionsTypesSource.split(/\r?\n/).length;
 const workspaceShellFrameTypesLines = workspaceShellFrameTypesSource.split(/\r?\n/).length;
 const workspaceShellRefreshersResultTypesLines =
   workspaceShellRefreshersResultTypesSource.split(/\r?\n/).length;
@@ -2830,6 +2910,10 @@ const providerSettingsPanelHelpersTypesLines =
   providerSettingsPanelHelpersTypesSource.split(/\r?\n/).length;
 const workspaceTransferJobCardTypesLines =
   workspaceTransferJobCardTypesSource.split(/\r?\n/).length;
+const workspaceTransferJobsListTypesLines =
+  workspaceTransferJobsListTypesSource.split(/\r?\n/).length;
+const workspaceEntryJobActionsTypesLines =
+  workspaceEntryJobActionsTypesSource.split(/\r?\n/).length;
 const workspaceExportCardTypesLines = workspaceExportCardTypesSource.split(/\r?\n/).length;
 const workspaceExportControlsTypesLines =
   workspaceExportControlsTypesSource.split(/\r?\n/).length;
@@ -11789,6 +11873,118 @@ if (workspaceShellInitialBootstrapTypesLines > maxWorkspaceShellInitialBootstrap
   );
 }
 
+for (const requiredUseWorkspaceShellNotificationEffectUsage of [
+  'import type { UseWorkspaceShellNotificationEffectInput } from "./use-workspace-shell-notification-effect.types";',
+  "}: UseWorkspaceShellNotificationEffectInput) {",
+]) {
+  if (!useWorkspaceShellNotificationEffectSource.includes(requiredUseWorkspaceShellNotificationEffectUsage)) {
+    throw new Error(
+      `use-workspace-shell-notification-effect.ts must reuse the extracted shell-notification input type: ${requiredUseWorkspaceShellNotificationEffectUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseWorkspaceShellNotificationEffectToken of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  "}: Pick<",
+]) {
+  if (useWorkspaceShellNotificationEffectSource.includes(forbiddenUseWorkspaceShellNotificationEffectToken)) {
+    throw new Error(
+      `use-workspace-shell-notification-effect.ts must keep shell-notification input typing delegated: ${forbiddenUseWorkspaceShellNotificationEffectToken}`,
+    );
+  }
+}
+
+for (const requiredUseWorkspaceShellNotificationEffectTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type UseWorkspaceShellNotificationEffectInput = Pick<UseWorkspaceShellEffectsProps, "token" | "workspaceId" | "setNotifications">;',
+]) {
+  if (!useWorkspaceShellNotificationEffectTypesSource.includes(requiredUseWorkspaceShellNotificationEffectTypesUsage)) {
+    throw new Error(
+      `use-workspace-shell-notification-effect.types.ts must own shell-notification input typing: ${requiredUseWorkspaceShellNotificationEffectTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceShellNotificationEffectTypesLines = 2;
+if (useWorkspaceShellNotificationEffectTypesLines > maxUseWorkspaceShellNotificationEffectTypesLines) {
+  throw new Error(
+    `use-workspace-shell-notification-effect.types.ts exceeded ${maxUseWorkspaceShellNotificationEffectTypesLines} lines: ${useWorkspaceShellNotificationEffectTypesLines}`,
+  );
+}
+
+for (const requiredUseWorkspaceShellSelectionEffectsUsage of [
+  'import type { UseWorkspaceShellSelectionEffectsInput } from "./use-workspace-shell-selection-effects.types";',
+  "}: UseWorkspaceShellSelectionEffectsInput) {",
+]) {
+  if (!useWorkspaceShellSelectionEffectsSource.includes(requiredUseWorkspaceShellSelectionEffectsUsage)) {
+    throw new Error(
+      `use-workspace-shell-selection-effects.ts must reuse the extracted shell-selection input type: ${requiredUseWorkspaceShellSelectionEffectsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseWorkspaceShellSelectionEffectsToken of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";',
+  "}: Pick<",
+]) {
+  if (useWorkspaceShellSelectionEffectsSource.includes(forbiddenUseWorkspaceShellSelectionEffectsToken)) {
+    throw new Error(
+      `use-workspace-shell-selection-effects.ts must keep shell-selection input typing delegated: ${forbiddenUseWorkspaceShellSelectionEffectsToken}`,
+    );
+  }
+}
+
+for (const requiredUseWorkspaceShellSelectionEffectsTypesUsage of [
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type UseWorkspaceShellSelectionEffectsInput = Pick<UseWorkspaceShellEffectsProps, "token" | "workspaceId" | "selectedRecordId" | "setMediaAssets" | "setReminders">;',
+]) {
+  if (!useWorkspaceShellSelectionEffectsTypesSource.includes(requiredUseWorkspaceShellSelectionEffectsTypesUsage)) {
+    throw new Error(
+      `use-workspace-shell-selection-effects.types.ts must own shell-selection input typing: ${requiredUseWorkspaceShellSelectionEffectsTypesUsage}`,
+    );
+  }
+}
+
+const maxUseWorkspaceShellSelectionEffectsTypesLines = 2;
+if (useWorkspaceShellSelectionEffectsTypesLines > maxUseWorkspaceShellSelectionEffectsTypesLines) {
+  throw new Error(
+    `use-workspace-shell-selection-effects.types.ts exceeded ${maxUseWorkspaceShellSelectionEffectsTypesLines} lines: ${useWorkspaceShellSelectionEffectsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceShellRecordFilterActionsUsage of [
+  'import type { ApplyWorkspaceShellLocationFilterInput } from "./workspace-shell-record-filter-actions.types";',
+  "}: ApplyWorkspaceShellLocationFilterInput) {",
+]) {
+  if (!workspaceShellRecordFilterActionsSource.includes(requiredWorkspaceShellRecordFilterActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-filter-actions.ts must reuse the extracted shell-location-filter input type: ${requiredWorkspaceShellRecordFilterActionsUsage}`,
+    );
+  }
+}
+
+if (workspaceShellRecordFilterActionsSource.includes('}: Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">) {')) {
+  throw new Error(
+    "workspace-shell-record-filter-actions.ts must keep shell-location-filter input typing delegated",
+  );
+}
+
+for (const requiredWorkspaceShellRecordFilterActionsTypesUsage of [
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types"; export type ApplyWorkspaceShellLocationFilterInput = Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">;',
+]) {
+  if (!workspaceShellRecordFilterActionsTypesSource.includes(requiredWorkspaceShellRecordFilterActionsTypesUsage)) {
+    throw new Error(
+      `workspace-shell-record-filter-actions.types.ts must own shell-location-filter input typing: ${requiredWorkspaceShellRecordFilterActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceShellRecordFilterActionsTypesLines = 2;
+if (workspaceShellRecordFilterActionsTypesLines > maxWorkspaceShellRecordFilterActionsTypesLines) {
+  throw new Error(
+    `workspace-shell-record-filter-actions.types.ts exceeded ${maxWorkspaceShellRecordFilterActionsTypesLines} lines: ${workspaceShellRecordFilterActionsTypesLines}`,
+  );
+}
+
 for (const requiredWorkspaceShellFrameUsage of [
   'import type { WorkspaceShellFrameProps } from "./workspace-shell-frame.types";',
   "}: WorkspaceShellFrameProps) {",
@@ -12686,6 +12882,84 @@ const maxWorkspaceTransferJobCardTypesLines = 2;
 if (workspaceTransferJobCardTypesLines > maxWorkspaceTransferJobCardTypesLines) {
   throw new Error(
     `workspace-transfer-job-card.types.ts exceeded ${maxWorkspaceTransferJobCardTypesLines} lines: ${workspaceTransferJobCardTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceTransferJobsListUsage of [
+  'import type { WorkspaceTransferJobsListProps } from "./workspace-transfer-jobs-list.types";',
+  "}: WorkspaceTransferJobsListProps) {",
+]) {
+  if (!workspaceTransferJobsListSource.includes(requiredWorkspaceTransferJobsListUsage)) {
+    throw new Error(
+      `workspace-transfer-jobs-list.tsx must reuse the extracted transfer-jobs-list props type: ${requiredWorkspaceTransferJobsListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceTransferJobsListToken of [
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types";',
+  "}: Pick<",
+]) {
+  if (workspaceTransferJobsListSource.includes(forbiddenWorkspaceTransferJobsListToken)) {
+    throw new Error(
+      `workspace-transfer-jobs-list.tsx must keep transfer-jobs-list prop typing delegated: ${forbiddenWorkspaceTransferJobsListToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceTransferJobsListTypesUsage of [
+  'import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobsListProps = Pick<WorkspaceTransferJobsSectionProps, "copy" | "locale" | "transferJobs" | "onDownloadTransferJob">;',
+]) {
+  if (!workspaceTransferJobsListTypesSource.includes(requiredWorkspaceTransferJobsListTypesUsage)) {
+    throw new Error(
+      `workspace-transfer-jobs-list.types.ts must keep transfer-jobs-list prop typing aligned with its delegated source: ${requiredWorkspaceTransferJobsListTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceTransferJobsListTypesLines = 2;
+if (workspaceTransferJobsListTypesLines > maxWorkspaceTransferJobsListTypesLines) {
+  throw new Error(
+    `workspace-transfer-jobs-list.types.ts exceeded ${maxWorkspaceTransferJobsListTypesLines} lines: ${workspaceTransferJobsListTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceEntryJobActionsUsage of [
+  'import type { CreateWorkspaceEntryJobActionsInput } from "./workspace-entry-job-actions.types";',
+  "}: CreateWorkspaceEntryJobActionsInput) {",
+]) {
+  if (!workspaceEntryJobActionsSource.includes(requiredWorkspaceEntryJobActionsUsage)) {
+    throw new Error(
+      `workspace-entry-job-actions.ts must reuse the extracted entry-job input type: ${requiredWorkspaceEntryJobActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceEntryJobActionsToken of [
+  'import type { WorkspaceEntryControllerState,',
+  "}: Pick<",
+]) {
+  if (workspaceEntryJobActionsSource.includes(forbiddenWorkspaceEntryJobActionsToken)) {
+    throw new Error(
+      `workspace-entry-job-actions.ts must keep entry-job input typing delegated: ${forbiddenWorkspaceEntryJobActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceEntryJobActionsTypesUsage of [
+  'import type { WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryJobActionsInput = Pick<WorkspaceEntryControllerState, "setError" | "setJobsLoading" | "setTransferJobs" | "token">;',
+]) {
+  if (!workspaceEntryJobActionsTypesSource.includes(requiredWorkspaceEntryJobActionsTypesUsage)) {
+    throw new Error(
+      `workspace-entry-job-actions.types.ts must own entry-job input typing: ${requiredWorkspaceEntryJobActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceEntryJobActionsTypesLines = 2;
+if (workspaceEntryJobActionsTypesLines > maxWorkspaceEntryJobActionsTypesLines) {
+  throw new Error(
+    `workspace-entry-job-actions.types.ts exceeded ${maxWorkspaceEntryJobActionsTypesLines} lines: ${workspaceEntryJobActionsTypesLines}`,
   );
 }
 

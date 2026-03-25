@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { refreshMediaAssets, refreshReminderItems } from "../lib/workspace-shell-refresh";
-import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types";
+import type { UseWorkspaceShellSelectionEffectsInput } from "./use-workspace-shell-selection-effects.types";
 
 export function useWorkspaceShellSelectionEffects({
   token,
@@ -11,10 +11,7 @@ export function useWorkspaceShellSelectionEffects({
   selectedRecordId,
   setMediaAssets,
   setReminders,
-}: Pick<
-  UseWorkspaceShellEffectsProps,
-  "token" | "workspaceId" | "selectedRecordId" | "setMediaAssets" | "setReminders"
->) {
+}: UseWorkspaceShellSelectionEffectsInput) {
   useEffect(() => {
     if (!token) {
       return;

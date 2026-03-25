@@ -1,0 +1,1 @@
+import type { WorkspaceTransferJobsSectionProps } from "./workspace-transfer-jobs-section.types"; export type WorkspaceTransferJobsListProps = Pick<WorkspaceTransferJobsSectionProps, "copy" | "locale" | "transferJobs" | "onDownloadTransferJob">;

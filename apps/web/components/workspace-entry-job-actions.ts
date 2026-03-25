@@ -2,19 +2,14 @@
 
 import { downloadWorkspaceTransferJob, listWorkspaceTransferJobs } from "../lib/api";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
-import type {
-  WorkspaceEntryControllerState,
-} from "./workspace-entry-controller.types";
+import type { CreateWorkspaceEntryJobActionsInput } from "./workspace-entry-job-actions.types";
 
 export function createWorkspaceEntryJobActions({
   setError,
   setJobsLoading,
   setTransferJobs,
   token,
-}: Pick<
-  WorkspaceEntryControllerState,
-  "setError" | "setJobsLoading" | "setTransferJobs" | "token"
->) {
+}: CreateWorkspaceEntryJobActionsInput) {
   const loadTransferJobs = async (activeToken: string) => {
     setJobsLoading(true);
     try {

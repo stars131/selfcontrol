@@ -1,0 +1,1 @@
+import type { WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryJobActionsInput = Pick<WorkspaceEntryControllerState, "setError" | "setJobsLoading" | "setTransferJobs" | "token">;

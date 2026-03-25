@@ -1,0 +1,1 @@
+import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types"; export type ApplyWorkspaceShellLocationFilterInput = Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">;
