@@ -1,0 +1,1 @@
+import type { ChatPanelManagementContentProps } from "./chat-panel-content.types"; export type ChatAuditLogsCardProps = Pick<ChatPanelManagementContentProps, "auditLogs" | "refreshingAudit"> & { onRefreshAuditLogs: ChatPanelManagementContentProps["handleRefreshAuditLogs"] };

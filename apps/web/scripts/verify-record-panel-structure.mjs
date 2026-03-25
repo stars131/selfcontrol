@@ -1161,6 +1161,54 @@ const chatPanelComposerTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-composer.types.ts",
 );
+const chatConversationBarPath = path.resolve(
+  process.cwd(),
+  "components/chat-conversation-bar.tsx",
+);
+const chatConversationBarTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-conversation-bar.types.ts",
+);
+const chatMessageSourcesPath = path.resolve(
+  process.cwd(),
+  "components/chat-message-sources.tsx",
+);
+const chatMessageSourcesTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-message-sources.types.ts",
+);
+const chatAuditLogsCardPath = path.resolve(
+  process.cwd(),
+  "components/chat-audit-logs-card.tsx",
+);
+const chatAuditLogsCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-audit-logs-card.types.ts",
+);
+const chatKnowledgeCardPath = path.resolve(
+  process.cwd(),
+  "components/chat-knowledge-card.tsx",
+);
+const chatKnowledgeCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-knowledge-card.types.ts",
+);
+const chatNotificationsCardPath = path.resolve(
+  process.cwd(),
+  "components/chat-notifications-card.tsx",
+);
+const chatNotificationsCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-notifications-card.types.ts",
+);
+const chatShareLinksCardPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-links-card.tsx",
+);
+const chatShareLinksCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-links-card.types.ts",
+);
 const authFormFramePath = path.resolve(process.cwd(), "components/auth-form-frame.tsx");
 const authFormFrameTypesPath = path.resolve(
   process.cwd(),
@@ -1479,6 +1527,21 @@ const chatPanelHeaderSource = fs.readFileSync(chatPanelHeaderPath, "utf8");
 const chatPanelHeaderTypesSource = fs.readFileSync(chatPanelHeaderTypesPath, "utf8");
 const chatPanelComposerSource = fs.readFileSync(chatPanelComposerPath, "utf8");
 const chatPanelComposerTypesSource = fs.readFileSync(chatPanelComposerTypesPath, "utf8");
+const chatConversationBarSource = fs.readFileSync(chatConversationBarPath, "utf8");
+const chatConversationBarTypesSource = fs.readFileSync(chatConversationBarTypesPath, "utf8");
+const chatMessageSourcesSource = fs.readFileSync(chatMessageSourcesPath, "utf8");
+const chatMessageSourcesTypesSource = fs.readFileSync(chatMessageSourcesTypesPath, "utf8");
+const chatAuditLogsCardSource = fs.readFileSync(chatAuditLogsCardPath, "utf8");
+const chatAuditLogsCardTypesSource = fs.readFileSync(chatAuditLogsCardTypesPath, "utf8");
+const chatKnowledgeCardSource = fs.readFileSync(chatKnowledgeCardPath, "utf8");
+const chatKnowledgeCardTypesSource = fs.readFileSync(chatKnowledgeCardTypesPath, "utf8");
+const chatNotificationsCardSource = fs.readFileSync(chatNotificationsCardPath, "utf8");
+const chatNotificationsCardTypesSource = fs.readFileSync(
+  chatNotificationsCardTypesPath,
+  "utf8",
+);
+const chatShareLinksCardSource = fs.readFileSync(chatShareLinksCardPath, "utf8");
+const chatShareLinksCardTypesSource = fs.readFileSync(chatShareLinksCardTypesPath, "utf8");
 const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
 const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
@@ -2161,6 +2224,12 @@ const chatPanelActionsResultTypesLines =
 const chatMessageThreadTypesLines = chatMessageThreadTypesSource.split(/\r?\n/).length;
 const chatPanelHeaderTypesLines = chatPanelHeaderTypesSource.split(/\r?\n/).length;
 const chatPanelComposerTypesLines = chatPanelComposerTypesSource.split(/\r?\n/).length;
+const chatConversationBarTypesLines = chatConversationBarTypesSource.split(/\r?\n/).length;
+const chatMessageSourcesTypesLines = chatMessageSourcesTypesSource.split(/\r?\n/).length;
+const chatAuditLogsCardTypesLines = chatAuditLogsCardTypesSource.split(/\r?\n/).length;
+const chatKnowledgeCardTypesLines = chatKnowledgeCardTypesSource.split(/\r?\n/).length;
+const chatNotificationsCardTypesLines = chatNotificationsCardTypesSource.split(/\r?\n/).length;
+const chatShareLinksCardTypesLines = chatShareLinksCardTypesSource.split(/\r?\n/).length;
 const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
@@ -12182,6 +12251,240 @@ const maxChatPanelComposerTypesLines = 2;
 if (chatPanelComposerTypesLines > maxChatPanelComposerTypesLines) {
   throw new Error(
     `chat-panel-composer.types.ts exceeded ${maxChatPanelComposerTypesLines} lines: ${chatPanelComposerTypesLines}`,
+  );
+}
+
+for (const requiredChatConversationBarUsage of [
+  'import type { ChatConversationBarProps } from "./chat-conversation-bar.types";',
+  "}: ChatConversationBarProps) {",
+]) {
+  if (!chatConversationBarSource.includes(requiredChatConversationBarUsage)) {
+    throw new Error(
+      `chat-conversation-bar.tsx must reuse the extracted conversation-bar props type: ${requiredChatConversationBarUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatConversationBarToken of [
+  'import type { Conversation } from "../lib/types";',
+  "}: {",
+]) {
+  if (chatConversationBarSource.includes(forbiddenChatConversationBarToken)) {
+    throw new Error(
+      `chat-conversation-bar.tsx must keep conversation-bar prop typing delegated: ${forbiddenChatConversationBarToken}`,
+    );
+  }
+}
+
+for (const requiredChatConversationBarTypesUsage of [
+  'import type { ChatPanelConversationContentProps } from "./chat-panel-content.types"; export type ChatConversationBarProps = Pick<ChatPanelConversationContentProps, "activeConversationId" | "canWriteWorkspace" | "conversations" | "onCreateConversation" | "onSelectConversation" | "syncing"> & { onSyncNotifications: ChatPanelConversationContentProps["handleSyncNotifications"] };',
+]) {
+  if (!chatConversationBarTypesSource.includes(requiredChatConversationBarTypesUsage)) {
+    throw new Error(
+      `chat-conversation-bar.types.ts must own conversation-bar prop typing: ${requiredChatConversationBarTypesUsage}`,
+    );
+  }
+}
+
+const maxChatConversationBarTypesLines = 2;
+if (chatConversationBarTypesLines > maxChatConversationBarTypesLines) {
+  throw new Error(
+    `chat-conversation-bar.types.ts exceeded ${maxChatConversationBarTypesLines} lines: ${chatConversationBarTypesLines}`,
+  );
+}
+
+for (const requiredChatMessageSourcesUsage of [
+  'import type { ChatMessageSource, ChatMessageSourcesProps } from "./chat-message-sources.types";',
+  "}: ChatMessageSourcesProps) {",
+]) {
+  if (!chatMessageSourcesSource.includes(requiredChatMessageSourcesUsage)) {
+    throw new Error(
+      `chat-message-sources.tsx must reuse the extracted message-sources types: ${requiredChatMessageSourcesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatMessageSourcesToken of [
+  "type ChatMessageSource = {",
+  "}: {",
+]) {
+  if (chatMessageSourcesSource.includes(forbiddenChatMessageSourcesToken)) {
+    throw new Error(
+      `chat-message-sources.tsx must keep message-sources typing delegated: ${forbiddenChatMessageSourcesToken}`,
+    );
+  }
+}
+
+for (const requiredChatMessageSourcesTypesUsage of [
+  'export type ChatMessageSource = { record_title?: string; source_label?: string; source_type?: string; snippet?: string; score?: number }; export type ChatMessageSourcesProps = { messageId: string; sources: unknown[] };',
+]) {
+  if (!chatMessageSourcesTypesSource.includes(requiredChatMessageSourcesTypesUsage)) {
+    throw new Error(
+      `chat-message-sources.types.ts must own message-sources typing: ${requiredChatMessageSourcesTypesUsage}`,
+    );
+  }
+}
+
+const maxChatMessageSourcesTypesLines = 2;
+if (chatMessageSourcesTypesLines > maxChatMessageSourcesTypesLines) {
+  throw new Error(
+    `chat-message-sources.types.ts exceeded ${maxChatMessageSourcesTypesLines} lines: ${chatMessageSourcesTypesLines}`,
+  );
+}
+
+for (const requiredChatAuditLogsCardUsage of [
+  'import type { ChatAuditLogsCardProps } from "./chat-audit-logs-card.types";',
+  "}: ChatAuditLogsCardProps) {",
+]) {
+  if (!chatAuditLogsCardSource.includes(requiredChatAuditLogsCardUsage)) {
+    throw new Error(
+      `chat-audit-logs-card.tsx must reuse the extracted audit-logs props type: ${requiredChatAuditLogsCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatAuditLogsCardToken of [
+  'import type { AuditLogItem } from "../lib/types";',
+  "}: {",
+]) {
+  if (chatAuditLogsCardSource.includes(forbiddenChatAuditLogsCardToken)) {
+    throw new Error(
+      `chat-audit-logs-card.tsx must keep audit-logs prop typing delegated: ${forbiddenChatAuditLogsCardToken}`,
+    );
+  }
+}
+
+for (const requiredChatAuditLogsCardTypesUsage of [
+  'import type { ChatPanelManagementContentProps } from "./chat-panel-content.types"; export type ChatAuditLogsCardProps = Pick<ChatPanelManagementContentProps, "auditLogs" | "refreshingAudit"> & { onRefreshAuditLogs: ChatPanelManagementContentProps["handleRefreshAuditLogs"] };',
+]) {
+  if (!chatAuditLogsCardTypesSource.includes(requiredChatAuditLogsCardTypesUsage)) {
+    throw new Error(
+      `chat-audit-logs-card.types.ts must own audit-logs prop typing: ${requiredChatAuditLogsCardTypesUsage}`,
+    );
+  }
+}
+
+const maxChatAuditLogsCardTypesLines = 2;
+if (chatAuditLogsCardTypesLines > maxChatAuditLogsCardTypesLines) {
+  throw new Error(
+    `chat-audit-logs-card.types.ts exceeded ${maxChatAuditLogsCardTypesLines} lines: ${chatAuditLogsCardTypesLines}`,
+  );
+}
+
+for (const requiredChatKnowledgeCardUsage of [
+  'import type { ChatKnowledgeCardProps } from "./chat-knowledge-card.types";',
+  "}: ChatKnowledgeCardProps) {",
+]) {
+  if (!chatKnowledgeCardSource.includes(requiredChatKnowledgeCardUsage)) {
+    throw new Error(
+      `chat-knowledge-card.tsx must reuse the extracted knowledge-card props type: ${requiredChatKnowledgeCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatKnowledgeCardToken of [
+  'import type { KnowledgeStats } from "../lib/types";',
+  "}: {",
+]) {
+  if (chatKnowledgeCardSource.includes(forbiddenChatKnowledgeCardToken)) {
+    throw new Error(
+      `chat-knowledge-card.tsx must keep knowledge-card prop typing delegated: ${forbiddenChatKnowledgeCardToken}`,
+    );
+  }
+}
+
+for (const requiredChatKnowledgeCardTypesUsage of [
+  'import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types"; export type ChatKnowledgeCardProps = Pick<ChatPanelManagementSectionProps, "canManageWorkspace" | "knowledgeStats" | "onReindexKnowledge" | "reindexing">;',
+]) {
+  if (!chatKnowledgeCardTypesSource.includes(requiredChatKnowledgeCardTypesUsage)) {
+    throw new Error(
+      `chat-knowledge-card.types.ts must own knowledge-card prop typing: ${requiredChatKnowledgeCardTypesUsage}`,
+    );
+  }
+}
+
+const maxChatKnowledgeCardTypesLines = 2;
+if (chatKnowledgeCardTypesLines > maxChatKnowledgeCardTypesLines) {
+  throw new Error(
+    `chat-knowledge-card.types.ts exceeded ${maxChatKnowledgeCardTypesLines} lines: ${chatKnowledgeCardTypesLines}`,
+  );
+}
+
+for (const requiredChatNotificationsCardUsage of [
+  'import type { ChatNotificationsCardProps } from "./chat-notifications-card.types";',
+  "}: ChatNotificationsCardProps) {",
+]) {
+  if (!chatNotificationsCardSource.includes(requiredChatNotificationsCardUsage)) {
+    throw new Error(
+      `chat-notifications-card.tsx must reuse the extracted notifications-card props type: ${requiredChatNotificationsCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatNotificationsCardToken of [
+  'import type { NotificationItem } from "../lib/types";',
+  "}: {",
+]) {
+  if (chatNotificationsCardSource.includes(forbiddenChatNotificationsCardToken)) {
+    throw new Error(
+      `chat-notifications-card.tsx must keep notifications-card prop typing delegated: ${forbiddenChatNotificationsCardToken}`,
+    );
+  }
+}
+
+for (const requiredChatNotificationsCardTypesUsage of [
+  'import type { ChatPanelManagementContentProps } from "./chat-panel-content.types"; export type ChatNotificationsCardProps = Pick<ChatPanelManagementContentProps, "notifications" | "onMarkNotificationRead" | "unreadCount">;',
+]) {
+  if (!chatNotificationsCardTypesSource.includes(requiredChatNotificationsCardTypesUsage)) {
+    throw new Error(
+      `chat-notifications-card.types.ts must own notifications-card prop typing: ${requiredChatNotificationsCardTypesUsage}`,
+    );
+  }
+}
+
+const maxChatNotificationsCardTypesLines = 2;
+if (chatNotificationsCardTypesLines > maxChatNotificationsCardTypesLines) {
+  throw new Error(
+    `chat-notifications-card.types.ts exceeded ${maxChatNotificationsCardTypesLines} lines: ${chatNotificationsCardTypesLines}`,
+  );
+}
+
+for (const requiredChatShareLinksCardUsage of [
+  'import type { ChatShareLinksCardProps } from "./chat-share-links-card.types";',
+  "}: ChatShareLinksCardProps) {",
+]) {
+  if (!chatShareLinksCardSource.includes(requiredChatShareLinksCardUsage)) {
+    throw new Error(
+      `chat-share-links-card.tsx must reuse the extracted share-links props type: ${requiredChatShareLinksCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatShareLinksCardToken of [
+  'import type { ShareLinkItem } from "../lib/types";',
+  "}: {",
+]) {
+  if (chatShareLinksCardSource.includes(forbiddenChatShareLinksCardToken)) {
+    throw new Error(
+      `chat-share-links-card.tsx must keep share-links prop typing delegated: ${forbiddenChatShareLinksCardToken}`,
+    );
+  }
+}
+
+for (const requiredChatShareLinksCardTypesUsage of [
+  'import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types"; export type ChatShareLinksCardProps = Pick<ChatPanelManagementSectionProps, "creatingShare" | "disablingShareId" | "latestShareUrl" | "onCreateShareLink" | "onDisableShareLink" | "setShareMaxUses" | "setShareName" | "setSharePermission" | "shareLinks" | "shareMaxUses" | "shareName" | "sharePermission">;',
+]) {
+  if (!chatShareLinksCardTypesSource.includes(requiredChatShareLinksCardTypesUsage)) {
+    throw new Error(
+      `chat-share-links-card.types.ts must own share-links prop typing: ${requiredChatShareLinksCardTypesUsage}`,
+    );
+  }
+}
+
+const maxChatShareLinksCardTypesLines = 2;
+if (chatShareLinksCardTypesLines > maxChatShareLinksCardTypesLines) {
+  throw new Error(
+    `chat-share-links-card.types.ts exceeded ${maxChatShareLinksCardTypesLines} lines: ${chatShareLinksCardTypesLines}`,
   );
 }
 

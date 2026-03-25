@@ -1,0 +1,1 @@
+import type { ChatPanelManagementContentProps } from "./chat-panel-content.types"; export type ChatNotificationsCardProps = Pick<ChatPanelManagementContentProps, "notifications" | "onMarkNotificationRead" | "unreadCount">;

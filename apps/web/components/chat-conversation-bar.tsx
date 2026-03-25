@@ -1,6 +1,6 @@
 "use client";
 
-import type { Conversation } from "../lib/types";
+import type { ChatConversationBarProps } from "./chat-conversation-bar.types";
 
 export function ChatConversationBar({
   activeConversationId,
@@ -10,15 +10,7 @@ export function ChatConversationBar({
   onSelectConversation,
   onSyncNotifications,
   syncing,
-}: {
-  activeConversationId: string | null;
-  canWriteWorkspace: boolean;
-  conversations: Conversation[];
-  onCreateConversation: () => Promise<void>;
-  onSelectConversation: (conversationId: string) => void;
-  onSyncNotifications: () => Promise<void>;
-  syncing: boolean;
-}) {
+}: ChatConversationBarProps) {
   return (
     <div className="conversation-bar">
       <div className="action-row">

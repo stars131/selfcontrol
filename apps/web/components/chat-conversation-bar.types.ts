@@ -1,0 +1,1 @@
+import type { ChatPanelConversationContentProps } from "./chat-panel-content.types"; export type ChatConversationBarProps = Pick<ChatPanelConversationContentProps, "activeConversationId" | "canWriteWorkspace" | "conversations" | "onCreateConversation" | "onSelectConversation" | "syncing"> & { onSyncNotifications: ChatPanelConversationContentProps["handleSyncNotifications"] };

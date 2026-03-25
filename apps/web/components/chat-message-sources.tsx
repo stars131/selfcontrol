@@ -1,20 +1,11 @@
 "use client";
 
-type ChatMessageSource = {
-  record_title?: string;
-  source_label?: string;
-  source_type?: string;
-  snippet?: string;
-  score?: number;
-};
+import type { ChatMessageSource, ChatMessageSourcesProps } from "./chat-message-sources.types";
 
 export function ChatMessageSources({
   messageId,
   sources,
-}: {
-  messageId: string;
-  sources: unknown[];
-}) {
+}: ChatMessageSourcesProps) {
   return (
     <div className="record-list compact-list" style={{ marginTop: 12 }}>
       {sources.slice(0, 3).map((source, index) => {

@@ -1,18 +1,13 @@
 "use client";
 
-import type { KnowledgeStats } from "../lib/types";
+import type { ChatKnowledgeCardProps } from "./chat-knowledge-card.types";
 
 export function ChatKnowledgeCard({
   canManageWorkspace,
   knowledgeStats,
   onReindexKnowledge,
   reindexing,
-}: {
-  canManageWorkspace: boolean;
-  knowledgeStats: KnowledgeStats | null;
-  onReindexKnowledge: () => Promise<void>;
-  reindexing: boolean;
-}) {
+}: ChatKnowledgeCardProps) {
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
       <div className="eyebrow">Knowledge Base</div>

@@ -1,16 +1,12 @@
 "use client";
 
-import type { NotificationItem } from "../lib/types";
+import type { ChatNotificationsCardProps } from "./chat-notifications-card.types";
 
 export function ChatNotificationsCard({
   notifications,
   onMarkNotificationRead,
   unreadCount,
-}: {
-  notifications: NotificationItem[];
-  onMarkNotificationRead: (notificationId: string) => Promise<void>;
-  unreadCount: number;
-}) {
+}: ChatNotificationsCardProps) {
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
       <div className="eyebrow">Notifications</div>

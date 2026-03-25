@@ -1,0 +1,1 @@
+import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types"; export type ChatKnowledgeCardProps = Pick<ChatPanelManagementSectionProps, "canManageWorkspace" | "knowledgeStats" | "onReindexKnowledge" | "reindexing">;

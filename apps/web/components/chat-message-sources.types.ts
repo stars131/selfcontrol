@@ -1,0 +1,1 @@
+export type ChatMessageSource = { record_title?: string; source_label?: string; source_type?: string; snippet?: string; score?: number }; export type ChatMessageSourcesProps = { messageId: string; sources: unknown[] };

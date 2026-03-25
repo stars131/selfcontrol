@@ -1,6 +1,6 @@
 "use client";
 
-import type { ShareLinkItem } from "../lib/types";
+import type { ChatShareLinksCardProps } from "./chat-share-links-card.types";
 
 export function ChatShareLinksCard({
   creatingShare,
@@ -15,20 +15,7 @@ export function ChatShareLinksCard({
   shareMaxUses,
   shareName,
   sharePermission,
-}: {
-  creatingShare: boolean;
-  disablingShareId: string;
-  latestShareUrl: string;
-  onCreateShareLink: () => Promise<void>;
-  onDisableShareLink: (shareLinkId: string) => Promise<void>;
-  setShareMaxUses: (value: string) => void;
-  setShareName: (value: string) => void;
-  setSharePermission: (value: string) => void;
-  shareLinks: ShareLinkItem[];
-  shareMaxUses: string;
-  shareName: string;
-  sharePermission: string;
-}) {
+}: ChatShareLinksCardProps) {
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
       <div className="eyebrow">Share Links</div>

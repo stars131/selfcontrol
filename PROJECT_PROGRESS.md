@@ -1664,6 +1664,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-card-action-helpers.ts` now consumes extracted helper-input contracts instead of keeping inline input object shapes in the helper module
   - the new `workspace-media-retention-card-action-helpers.types.ts` file keeps retention action-message and action-props input boundaries explicit and reusable
   - this keeps retention helper typing thinner and more maintainable under the enterprise engineering standard
+- Chat Leaf Props Split V1:
+  - `chat-conversation-bar.tsx`, `chat-message-sources.tsx`, `chat-audit-logs-card.tsx`, `chat-knowledge-card.tsx`, `chat-notifications-card.tsx`, and `chat-share-links-card.tsx` now consume extracted prop contracts instead of keeping inline signatures or local shapes in the component modules
+  - the new chat leaf `*.types.ts` files keep conversation, source, audit, knowledge, notification, and share-link boundaries explicit and reusable
+  - this keeps the chat presentation subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

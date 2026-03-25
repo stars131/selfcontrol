@@ -1,16 +1,12 @@
 "use client";
 
-import type { AuditLogItem } from "../lib/types";
+import type { ChatAuditLogsCardProps } from "./chat-audit-logs-card.types";
 
 export function ChatAuditLogsCard({
   auditLogs,
   onRefreshAuditLogs,
   refreshingAudit,
-}: {
-  auditLogs: AuditLogItem[];
-  onRefreshAuditLogs: () => Promise<void>;
-  refreshingAudit: boolean;
-}) {
+}: ChatAuditLogsCardProps) {
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
       <div className="action-row" style={{ justifyContent: "space-between" }}>
