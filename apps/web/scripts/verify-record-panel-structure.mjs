@@ -1632,6 +1632,22 @@ const chatShareLinksCardTypesPath = path.resolve(
   process.cwd(),
   "components/chat-share-links-card.types.ts",
 );
+const chatShareLinksCreateFormPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-links-create-form.tsx",
+);
+const chatShareLinksCreateFormTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-links-create-form.types.ts",
+);
+const chatShareLinkListItemPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-link-list-item.tsx",
+);
+const chatShareLinkListItemTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-share-link-list-item.types.ts",
+);
 const authFormFramePath = path.resolve(process.cwd(), "components/auth-form-frame.tsx");
 const authFormFrameTypesPath = path.resolve(
   process.cwd(),
@@ -2553,6 +2569,16 @@ const chatNotificationsCardTypesSource = fs.readFileSync(
 );
 const chatShareLinksCardSource = fs.readFileSync(chatShareLinksCardPath, "utf8");
 const chatShareLinksCardTypesSource = fs.readFileSync(chatShareLinksCardTypesPath, "utf8");
+const chatShareLinksCreateFormSource = fs.readFileSync(chatShareLinksCreateFormPath, "utf8");
+const chatShareLinksCreateFormTypesSource = fs.readFileSync(
+  chatShareLinksCreateFormTypesPath,
+  "utf8",
+);
+const chatShareLinkListItemSource = fs.readFileSync(chatShareLinkListItemPath, "utf8");
+const chatShareLinkListItemTypesSource = fs.readFileSync(
+  chatShareLinkListItemTypesPath,
+  "utf8",
+);
 const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
 const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
@@ -3588,6 +3614,13 @@ const chatAuditLogsCardTypesLines = chatAuditLogsCardTypesSource.split(/\r?\n/).
 const chatKnowledgeCardTypesLines = chatKnowledgeCardTypesSource.split(/\r?\n/).length;
 const chatNotificationsCardTypesLines = chatNotificationsCardTypesSource.split(/\r?\n/).length;
 const chatShareLinksCardTypesLines = chatShareLinksCardTypesSource.split(/\r?\n/).length;
+const chatShareLinksCreateFormLines =
+  chatShareLinksCreateFormSource.split(/\r?\n/).length;
+const chatShareLinksCreateFormTypesLines =
+  chatShareLinksCreateFormTypesSource.split(/\r?\n/).length;
+const chatShareLinkListItemLines = chatShareLinkListItemSource.split(/\r?\n/).length;
+const chatShareLinkListItemTypesLines =
+  chatShareLinkListItemTypesSource.split(/\r?\n/).length;
 const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
@@ -15813,8 +15846,12 @@ if (chatNotificationsCardTypesLines > maxChatNotificationsCardTypesLines) {
 }
 
 for (const requiredChatShareLinksCardUsage of [
+  'import { ChatShareLinksCreateForm } from "./chat-share-links-create-form";',
+  'import { ChatShareLinkListItem } from "./chat-share-link-list-item";',
   'import type { ChatShareLinksCardProps } from "./chat-share-links-card.types";',
   "}: ChatShareLinksCardProps) {",
+  "<ChatShareLinksCreateForm",
+  "<ChatShareLinkListItem",
 ]) {
   if (!chatShareLinksCardSource.includes(requiredChatShareLinksCardUsage)) {
     throw new Error(
@@ -15826,6 +15863,10 @@ for (const requiredChatShareLinksCardUsage of [
 for (const forbiddenChatShareLinksCardToken of [
   'import type { ShareLinkItem } from "../lib/types";',
   "}: {",
+  'placeholder="Share name"',
+  'placeholder="Max uses"',
+  'item.permission_code} / {item.is_enabled ? "enabled" : "disabled"',
+  'onClick={() => void onDisableShareLink(item.id)}',
 ]) {
   if (chatShareLinksCardSource.includes(forbiddenChatShareLinksCardToken)) {
     throw new Error(
@@ -15848,6 +15889,81 @@ const maxChatShareLinksCardTypesLines = 2;
 if (chatShareLinksCardTypesLines > maxChatShareLinksCardTypesLines) {
   throw new Error(
     `chat-share-links-card.types.ts exceeded ${maxChatShareLinksCardTypesLines} lines: ${chatShareLinksCardTypesLines}`,
+  );
+}
+
+for (const requiredChatShareLinksCreateFormUsage of [
+  'import type { ChatShareLinksCreateFormProps } from "./chat-share-links-create-form.types";',
+  "}: ChatShareLinksCreateFormProps) {",
+  'placeholder="Share name"',
+  'placeholder="Max uses"',
+  'setShareMaxUses(event.target.value.replace(/[^0-9]/g, ""))',
+]) {
+  if (!chatShareLinksCreateFormSource.includes(requiredChatShareLinksCreateFormUsage)) {
+    throw new Error(
+      `chat-share-links-create-form.tsx must own share-link create form rendering: ${requiredChatShareLinksCreateFormUsage}`,
+    );
+  }
+}
+
+const maxChatShareLinksCreateFormLines = 50;
+if (chatShareLinksCreateFormLines > maxChatShareLinksCreateFormLines) {
+  throw new Error(
+    `chat-share-links-create-form.tsx exceeded ${maxChatShareLinksCreateFormLines} lines: ${chatShareLinksCreateFormLines}`,
+  );
+}
+
+for (const requiredChatShareLinksCreateFormTypesUsage of [
+  'import type { ChatShareLinksCardProps } from "./chat-share-links-card.types"; export type ChatShareLinksCreateFormProps = Pick<ChatShareLinksCardProps, "creatingShare" | "onCreateShareLink" | "setShareMaxUses" | "setShareName" | "setSharePermission" | "shareMaxUses" | "shareName" | "sharePermission">;',
+]) {
+  if (!chatShareLinksCreateFormTypesSource.includes(requiredChatShareLinksCreateFormTypesUsage)) {
+    throw new Error(
+      `chat-share-links-create-form.types.ts must own share-link create-form prop typing: ${requiredChatShareLinksCreateFormTypesUsage}`,
+    );
+  }
+}
+
+const maxChatShareLinksCreateFormTypesLines = 2;
+if (chatShareLinksCreateFormTypesLines > maxChatShareLinksCreateFormTypesLines) {
+  throw new Error(
+    `chat-share-links-create-form.types.ts exceeded ${maxChatShareLinksCreateFormTypesLines} lines: ${chatShareLinksCreateFormTypesLines}`,
+  );
+}
+
+for (const requiredChatShareLinkListItemUsage of [
+  'import type { ChatShareLinkListItemProps } from "./chat-share-link-list-item.types";',
+  "}: ChatShareLinkListItemProps) {",
+  'item.permission_code} / {item.is_enabled ? "enabled" : "disabled"',
+  'onClick={() => void onDisableShareLink(item.id)}',
+]) {
+  if (!chatShareLinkListItemSource.includes(requiredChatShareLinkListItemUsage)) {
+    throw new Error(
+      `chat-share-link-list-item.tsx must own share-link item rendering: ${requiredChatShareLinkListItemUsage}`,
+    );
+  }
+}
+
+const maxChatShareLinkListItemLines = 35;
+if (chatShareLinkListItemLines > maxChatShareLinkListItemLines) {
+  throw new Error(
+    `chat-share-link-list-item.tsx exceeded ${maxChatShareLinkListItemLines} lines: ${chatShareLinkListItemLines}`,
+  );
+}
+
+for (const requiredChatShareLinkListItemTypesUsage of [
+  'import type { ChatShareLinksCardProps } from "./chat-share-links-card.types"; export type ChatShareLinkListItemProps = Pick<ChatShareLinksCardProps, "disablingShareId" | "onDisableShareLink"> & { item: ChatShareLinksCardProps["shareLinks"][number] };',
+]) {
+  if (!chatShareLinkListItemTypesSource.includes(requiredChatShareLinkListItemTypesUsage)) {
+    throw new Error(
+      `chat-share-link-list-item.types.ts must own share-link item prop typing: ${requiredChatShareLinkListItemTypesUsage}`,
+    );
+  }
+}
+
+const maxChatShareLinkListItemTypesLines = 2;
+if (chatShareLinkListItemTypesLines > maxChatShareLinkListItemTypesLines) {
+  throw new Error(
+    `chat-share-link-list-item.types.ts exceeded ${maxChatShareLinkListItemTypesLines} lines: ${chatShareLinkListItemTypesLines}`,
   );
 }
 

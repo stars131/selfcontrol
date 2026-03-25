@@ -1787,6 +1787,10 @@ Last updated: 2026-03-25
   - `workspace-members-section.tsx` now delegates per-member card rendering to an extracted `workspace-members-section-item.tsx` leaf instead of keeping row protection, role controls, and action rendering inline in the list component
   - the new `workspace-members-section-item.types.ts` file keeps the member-item prop contract explicit and reusable while the parent section now stays focused on section framing, list mapping, and empty-state handling
   - `verify-record-panel-structure.mjs` now enforces that delegated member-item boundary so workspace membership management remains thinner and easier to evolve under the enterprise engineering standard
+- Chat Share Link Leaf Split V1:
+  - `chat-share-links-card.tsx` now delegates share-link creation controls and single-item rendering to `chat-share-links-create-form.tsx` and `chat-share-link-list-item.tsx` instead of keeping both flows inline in the card component
+  - the new share-link `*.types.ts` files keep create-form and item-card prop contracts explicit and reusable while the card now stays focused on latest-link presentation and list orchestration
+  - `verify-record-panel-structure.mjs` now enforces those delegated share-link boundaries so the chat management surface remains thinner and easier to evolve under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

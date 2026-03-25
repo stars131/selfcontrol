@@ -1,0 +1,1 @@
+import type { ChatShareLinksCardProps } from "./chat-share-links-card.types"; export type ChatShareLinksCreateFormProps = Pick<ChatShareLinksCardProps, "creatingShare" | "onCreateShareLink" | "setShareMaxUses" | "setShareName" | "setSharePermission" | "shareMaxUses" | "shareName" | "sharePermission">;

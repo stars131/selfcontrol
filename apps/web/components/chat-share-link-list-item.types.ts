@@ -1,0 +1,1 @@
+import type { ChatShareLinksCardProps } from "./chat-share-links-card.types"; export type ChatShareLinkListItemProps = Pick<ChatShareLinksCardProps, "disablingShareId" | "onDisableShareLink"> & { item: ChatShareLinksCardProps["shareLinks"][number] };
