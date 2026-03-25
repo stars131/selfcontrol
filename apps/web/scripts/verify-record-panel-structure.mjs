@@ -1208,6 +1208,30 @@ const useWorkspaceSettingsLoadTypesPath = path.resolve(
   process.cwd(),
   "components/use-workspace-settings-load.types.ts",
 );
+const workspaceSettingsActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-actions.ts",
+);
+const workspaceSettingsActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-actions.types.ts",
+);
+const workspaceSettingsMemberActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-member-actions.ts",
+);
+const workspaceSettingsMemberActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-member-actions.types.ts",
+);
+const workspaceSettingsProviderActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-actions.ts",
+);
+const workspaceSettingsProviderActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-provider-actions.types.ts",
+);
 const useChatPanelActionDerivedDataPath = path.resolve(
   process.cwd(),
   "components/use-chat-panel-action-derived-data.ts",
@@ -1734,6 +1758,27 @@ const useWorkspaceSettingsAnchorTypesSource = fs.readFileSync(
 const useWorkspaceSettingsLoadSource = fs.readFileSync(useWorkspaceSettingsLoadPath, "utf8");
 const useWorkspaceSettingsLoadTypesSource = fs.readFileSync(
   useWorkspaceSettingsLoadTypesPath,
+  "utf8",
+);
+const workspaceSettingsActionsSource = fs.readFileSync(workspaceSettingsActionsPath, "utf8");
+const workspaceSettingsActionsTypesSource = fs.readFileSync(
+  workspaceSettingsActionsTypesPath,
+  "utf8",
+);
+const workspaceSettingsMemberActionsSource = fs.readFileSync(
+  workspaceSettingsMemberActionsPath,
+  "utf8",
+);
+const workspaceSettingsMemberActionsTypesSource = fs.readFileSync(
+  workspaceSettingsMemberActionsTypesPath,
+  "utf8",
+);
+const workspaceSettingsProviderActionsSource = fs.readFileSync(
+  workspaceSettingsProviderActionsPath,
+  "utf8",
+);
+const workspaceSettingsProviderActionsTypesSource = fs.readFileSync(
+  workspaceSettingsProviderActionsTypesPath,
   "utf8",
 );
 const useChatPanelActionDerivedDataSource = fs.readFileSync(
@@ -2538,6 +2583,12 @@ const useWorkspaceSettingsAnchorTypesLines =
   useWorkspaceSettingsAnchorTypesSource.split(/\r?\n/).length;
 const useWorkspaceSettingsLoadTypesLines =
   useWorkspaceSettingsLoadTypesSource.split(/\r?\n/).length;
+const workspaceSettingsActionsTypesLines =
+  workspaceSettingsActionsTypesSource.split(/\r?\n/).length;
+const workspaceSettingsMemberActionsTypesLines =
+  workspaceSettingsMemberActionsTypesSource.split(/\r?\n/).length;
+const workspaceSettingsProviderActionsTypesLines =
+  workspaceSettingsProviderActionsTypesSource.split(/\r?\n/).length;
 const chatPanelActionDerivedDataResultTypesLines =
   chatPanelActionDerivedDataResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionHandlerInputsTypesLines =
@@ -12829,6 +12880,123 @@ const maxUseWorkspaceSettingsLoadTypesLines = 2;
 if (useWorkspaceSettingsLoadTypesLines > maxUseWorkspaceSettingsLoadTypesLines) {
   throw new Error(
     `use-workspace-settings-load.types.ts exceeded ${maxUseWorkspaceSettingsLoadTypesLines} lines: ${useWorkspaceSettingsLoadTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsActionsUsage of [
+  'import type { CreateWorkspaceSettingsActionsInput } from "./workspace-settings-actions.types";',
+  "}: CreateWorkspaceSettingsActionsInput) {",
+]) {
+  if (!workspaceSettingsActionsSource.includes(requiredWorkspaceSettingsActionsUsage)) {
+    throw new Error(
+      `workspace-settings-actions.ts must reuse the extracted settings-actions input type: ${requiredWorkspaceSettingsActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceSettingsActionsToken of [
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types";',
+  "}: {",
+]) {
+  if (workspaceSettingsActionsSource.includes(forbiddenWorkspaceSettingsActionsToken)) {
+    throw new Error(
+      `workspace-settings-actions.ts must keep settings-actions input typing delegated: ${forbiddenWorkspaceSettingsActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceSettingsActionsTypesUsage of [
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+]) {
+  if (!workspaceSettingsActionsTypesSource.includes(requiredWorkspaceSettingsActionsTypesUsage)) {
+    throw new Error(
+      `workspace-settings-actions.types.ts must own settings-actions input typing: ${requiredWorkspaceSettingsActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsActionsTypesLines = 2;
+if (workspaceSettingsActionsTypesLines > maxWorkspaceSettingsActionsTypesLines) {
+  throw new Error(
+    `workspace-settings-actions.types.ts exceeded ${maxWorkspaceSettingsActionsTypesLines} lines: ${workspaceSettingsActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsMemberActionsUsage of [
+  'import type { CreateWorkspaceSettingsMemberActionsInput } from "./workspace-settings-member-actions.types";',
+  "}: CreateWorkspaceSettingsMemberActionsInput) {",
+]) {
+  if (!workspaceSettingsMemberActionsSource.includes(requiredWorkspaceSettingsMemberActionsUsage)) {
+    throw new Error(
+      `workspace-settings-member-actions.ts must reuse the extracted settings-member action input type: ${requiredWorkspaceSettingsMemberActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceSettingsMemberActionsToken of [
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types";',
+  "}: {",
+]) {
+  if (workspaceSettingsMemberActionsSource.includes(forbiddenWorkspaceSettingsMemberActionsToken)) {
+    throw new Error(
+      `workspace-settings-member-actions.ts must keep settings-member action typing delegated: ${forbiddenWorkspaceSettingsMemberActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceSettingsMemberActionsTypesUsage of [
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsMemberActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+]) {
+  if (!workspaceSettingsMemberActionsTypesSource.includes(requiredWorkspaceSettingsMemberActionsTypesUsage)) {
+    throw new Error(
+      `workspace-settings-member-actions.types.ts must own settings-member action typing: ${requiredWorkspaceSettingsMemberActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsMemberActionsTypesLines = 2;
+if (workspaceSettingsMemberActionsTypesLines > maxWorkspaceSettingsMemberActionsTypesLines) {
+  throw new Error(
+    `workspace-settings-member-actions.types.ts exceeded ${maxWorkspaceSettingsMemberActionsTypesLines} lines: ${workspaceSettingsMemberActionsTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsProviderActionsUsage of [
+  'import type { CreateWorkspaceSettingsProviderActionsInput } from "./workspace-settings-provider-actions.types";',
+  "}: CreateWorkspaceSettingsProviderActionsInput) {",
+]) {
+  if (!workspaceSettingsProviderActionsSource.includes(requiredWorkspaceSettingsProviderActionsUsage)) {
+    throw new Error(
+      `workspace-settings-provider-actions.ts must reuse the extracted settings-provider action input type: ${requiredWorkspaceSettingsProviderActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenWorkspaceSettingsProviderActionsToken of [
+  '  UseWorkspaceSettingsControllerState,',
+  "}: {",
+]) {
+  if (workspaceSettingsProviderActionsSource.includes(forbiddenWorkspaceSettingsProviderActionsToken)) {
+    throw new Error(
+      `workspace-settings-provider-actions.ts must keep settings-provider action typing delegated: ${forbiddenWorkspaceSettingsProviderActionsToken}`,
+    );
+  }
+}
+
+for (const requiredWorkspaceSettingsProviderActionsTypesUsage of [
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsProviderActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+]) {
+  if (!workspaceSettingsProviderActionsTypesSource.includes(requiredWorkspaceSettingsProviderActionsTypesUsage)) {
+    throw new Error(
+      `workspace-settings-provider-actions.types.ts must own settings-provider action typing: ${requiredWorkspaceSettingsProviderActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsProviderActionsTypesLines = 2;
+if (workspaceSettingsProviderActionsTypesLines > maxWorkspaceSettingsProviderActionsTypesLines) {
+  throw new Error(
+    `workspace-settings-provider-actions.types.ts exceeded ${maxWorkspaceSettingsProviderActionsTypesLines} lines: ${workspaceSettingsProviderActionsTypesLines}`,
   );
 }
 

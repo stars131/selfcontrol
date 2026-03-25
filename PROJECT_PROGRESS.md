@@ -1700,6 +1700,10 @@ Last updated: 2026-03-25
   - `workspace-entry-controller-actions.ts`, `workspace-entry-create-actions.ts`, `workspace-entry-import-actions.ts`, `workspace-entry-workspace-actions.ts`, and `workspace-entry-share-actions.ts` now consume extracted input contracts instead of keeping inline action-builder input object shapes in those modules
   - the new workspace-entry action `*.types.ts` files keep controller, create, import, workspace, and share action boundaries explicit and reusable
   - this keeps workspace entry action orchestration thinner and more maintainable under the enterprise engineering standard
+- Workspace Settings Action Input Types Split V1:
+  - `workspace-settings-actions.ts`, `workspace-settings-member-actions.ts`, and `workspace-settings-provider-actions.ts` now consume extracted input contracts instead of keeping inline action-builder input object shapes in those modules
+  - the new workspace-settings action `*.types.ts` files keep settings controller, member, and provider action boundaries explicit and reusable
+  - this keeps workspace settings action orchestration thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

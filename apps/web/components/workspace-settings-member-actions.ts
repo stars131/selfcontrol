@@ -1,16 +1,13 @@
 "use client";
 
 import { deleteWorkspaceMember, updateWorkspaceMember } from "../lib/api";
-import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types";
 import { getWorkspaceSettingsActionErrorMessage } from "./workspace-settings-action-error";
+import type { CreateWorkspaceSettingsMemberActionsInput } from "./workspace-settings-member-actions.types";
 
 export function createWorkspaceSettingsMemberActions({
   state,
   workspaceId,
-}: {
-  state: UseWorkspaceSettingsControllerState;
-  workspaceId: string;
-}) {
+}: CreateWorkspaceSettingsMemberActionsInput) {
   const { token, setError, setMembers, setRemovingMemberId, setSavingMemberId } = state;
 
   async function handleUpdateMemberRole(memberId: string, role: "viewer" | "editor") {

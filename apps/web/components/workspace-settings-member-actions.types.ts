@@ -1,0 +1,1 @@
+import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsMemberActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };

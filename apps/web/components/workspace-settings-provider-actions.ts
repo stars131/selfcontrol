@@ -2,18 +2,15 @@
 
 import { getMediaStorageProviderHealth, updateProviderConfig } from "../lib/api";
 import type {
-  UseWorkspaceSettingsControllerState,
   WorkspaceSettingsProviderConfigInput,
 } from "./workspace-settings-controller.types";
 import { getWorkspaceSettingsActionErrorMessage } from "./workspace-settings-action-error";
+import type { CreateWorkspaceSettingsProviderActionsInput } from "./workspace-settings-provider-actions.types";
 
 export function createWorkspaceSettingsProviderActions({
   state,
   workspaceId,
-}: {
-  state: UseWorkspaceSettingsControllerState;
-  workspaceId: string;
-}) {
+}: CreateWorkspaceSettingsProviderActionsInput) {
   const {
     token,
     setError,
