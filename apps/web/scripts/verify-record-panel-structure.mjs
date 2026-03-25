@@ -1324,6 +1324,14 @@ const workspaceExportJobsHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-header.types.ts",
 );
+const workspaceExportJobsNoticesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-notices.tsx",
+);
+const workspaceExportJobsNoticesTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-notices.types.ts",
+);
 const workspaceExportJobsListItemPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.tsx",
@@ -2542,6 +2550,14 @@ const workspaceExportJobsHeaderSource = fs.readFileSync(
 );
 const workspaceExportJobsHeaderTypesSource = fs.readFileSync(
   workspaceExportJobsHeaderTypesPath,
+  "utf8",
+);
+const workspaceExportJobsNoticesSource = fs.readFileSync(
+  workspaceExportJobsNoticesPath,
+  "utf8",
+);
+const workspaceExportJobsNoticesTypesSource = fs.readFileSync(
+  workspaceExportJobsNoticesTypesPath,
   "utf8",
 );
 const workspaceExportJobsListItemSource = fs.readFileSync(
@@ -3917,6 +3933,10 @@ const workspaceExportJobsHeaderLines =
   workspaceExportJobsHeaderSource.split(/\r?\n/).length;
 const workspaceExportJobsHeaderTypesLines =
   workspaceExportJobsHeaderTypesSource.split(/\r?\n/).length;
+const workspaceExportJobsNoticesLines =
+  workspaceExportJobsNoticesSource.split(/\r?\n/).length;
+const workspaceExportJobsNoticesTypesLines =
+  workspaceExportJobsNoticesTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsListItemLines =
   workspaceExportJobsListItemSource.split(/\r?\n/).length;
 const workspaceExportJobsListItemTypesLines =
@@ -14758,9 +14778,11 @@ if (workspaceExportJobsControllerTypesLines > maxWorkspaceExportJobsControllerTy
 
 for (const requiredWorkspaceExportJobsCardUsage of [
   'import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";',
+  'import { WorkspaceExportJobsNotices } from "./workspace-export-jobs-notices";',
   'import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types";',
   "}: WorkspaceExportJobsCardProps) {",
   "<WorkspaceExportJobsHeader",
+  "<WorkspaceExportJobsNotices",
 ]) {
   if (!workspaceExportJobsCardSource.includes(requiredWorkspaceExportJobsCardUsage)) {
     throw new Error(
@@ -14776,6 +14798,9 @@ for (const forbiddenWorkspaceExportJobsCardToken of [
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>',
   "onClick={() => void loadJobs()}",
   "onClick={() => void handleCreateJob()}",
+  'role !== "owner" ? <div className="notice" style={{ marginTop: 16 }}>{copy.ownerOnly}</div> : null',
+  'error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null',
+  'message ? <div className="notice" style={{ marginTop: 16 }}>{message}</div> : null',
 ]) {
   if (workspaceExportJobsCardSource.includes(forbiddenWorkspaceExportJobsCardToken)) {
     throw new Error(
@@ -14877,6 +14902,48 @@ const maxWorkspaceExportJobsHeaderTypesLines = 2;
 if (workspaceExportJobsHeaderTypesLines > maxWorkspaceExportJobsHeaderTypesLines) {
   throw new Error(
     `workspace-export-jobs-header.types.ts exceeded ${maxWorkspaceExportJobsHeaderTypesLines} lines: ${workspaceExportJobsHeaderTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsNoticesUsage of [
+  'import type { WorkspaceExportJobsNoticesProps } from "./workspace-export-jobs-notices.types";',
+  "}: WorkspaceExportJobsNoticesProps) {",
+  'role !== "owner" ? <div className="notice" style={{ marginTop: 16 }}>{ownerOnlyLabel}</div> : null',
+  'error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null',
+  'message ? <div className="notice" style={{ marginTop: 16 }}>{message}</div> : null',
+]) {
+  if (!workspaceExportJobsNoticesSource.includes(requiredWorkspaceExportJobsNoticesUsage)) {
+    throw new Error(
+      `workspace-export-jobs-notices.tsx must reuse the extracted export-jobs notices props type: ${requiredWorkspaceExportJobsNoticesUsage}`,
+    );
+  }
+}
+
+if (workspaceExportJobsNoticesSource.includes("type WorkspaceExportJobsNoticesProps = Pick<")) {
+  throw new Error("workspace-export-jobs-notices.tsx must keep export-jobs notices prop typing delegated");
+}
+
+const maxWorkspaceExportJobsNoticesLines = 18;
+if (workspaceExportJobsNoticesLines > maxWorkspaceExportJobsNoticesLines) {
+  throw new Error(
+    `workspace-export-jobs-notices.tsx exceeded ${maxWorkspaceExportJobsNoticesLines} lines: ${workspaceExportJobsNoticesLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportJobsNoticesTypesUsage of [
+  'import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types"; export type WorkspaceExportJobsNoticesProps = Pick<WorkspaceExportJobsCardProps, "role"> & { error: string; message: string; ownerOnlyLabel: string };',
+]) {
+  if (!workspaceExportJobsNoticesTypesSource.includes(requiredWorkspaceExportJobsNoticesTypesUsage)) {
+    throw new Error(
+      `workspace-export-jobs-notices.types.ts must own export-jobs notices prop typing: ${requiredWorkspaceExportJobsNoticesTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportJobsNoticesTypesLines = 2;
+if (workspaceExportJobsNoticesTypesLines > maxWorkspaceExportJobsNoticesTypesLines) {
+  throw new Error(
+    `workspace-export-jobs-notices.types.ts exceeded ${maxWorkspaceExportJobsNoticesTypesLines} lines: ${workspaceExportJobsNoticesTypesLines}`,
   );
 }
 

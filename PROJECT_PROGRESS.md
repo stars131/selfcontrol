@@ -1875,6 +1875,10 @@ Last updated: 2026-03-25
   - `workspace-settings-header.tsx` now delegates language-switcher and back-link rendering to `workspace-settings-header-actions.tsx` instead of keeping the header action group inline beside the title block
   - the new `workspace-settings-header-actions.types.ts` file keeps the header-actions contract explicit and reusable while the parent header remains focused on identity copy and layout composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated header-actions boundary, exact one-line type contract, and line-count ceilings so future settings-header updates stay safer and easier to maintain
+- Workspace Export Jobs Notices Split V1:
+  - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
+  - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs notices boundary, exact one-line type contract, and line-count ceilings so future export-jobs updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

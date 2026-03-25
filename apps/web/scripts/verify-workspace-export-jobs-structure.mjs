@@ -26,6 +26,14 @@ const exportJobsHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-header.types.ts",
 );
+const exportJobsNoticesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-notices.tsx",
+);
+const exportJobsNoticesTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-notices.types.ts",
+);
 const exportJobsListItemPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.tsx",
@@ -41,6 +49,8 @@ const actionsSource = fs.readFileSync(exportJobsActionsPath, "utf8");
 const listSource = fs.readFileSync(exportJobsListPath, "utf8");
 const headerSource = fs.readFileSync(exportJobsHeaderPath, "utf8");
 const headerTypesSource = fs.readFileSync(exportJobsHeaderTypesPath, "utf8");
+const noticesSource = fs.readFileSync(exportJobsNoticesPath, "utf8");
+const noticesTypesSource = fs.readFileSync(exportJobsNoticesTypesPath, "utf8");
 const listItemSource = fs.readFileSync(exportJobsListItemPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
@@ -50,6 +60,8 @@ const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const listLineCount = listSource.split(/\r?\n/).length;
 const headerLineCount = headerSource.split(/\r?\n/).length;
 const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
+const noticesLineCount = noticesSource.split(/\r?\n/).length;
+const noticesTypesLineCount = noticesTypesSource.split(/\r?\n/).length;
 const listItemLineCount = listItemSource.split(/\r?\n/).length;
 const listItemTypesLineCount = listItemTypesSource.split(/\r?\n/).length;
 
@@ -69,6 +81,10 @@ if (!source.includes('import { WorkspaceExportJobsHeader } from "./workspace-exp
   throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsHeader");
 }
 
+if (!source.includes('import { WorkspaceExportJobsNotices } from "./workspace-export-jobs-notices";')) {
+  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsNotices");
+}
+
 if (!source.includes('import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";')) {
   throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsList");
 }
@@ -83,6 +99,10 @@ if (!source.includes("<WorkspaceExportJobsList")) {
 
 if (!source.includes("<WorkspaceExportJobsHeader")) {
   throw new Error("workspace-export-jobs-card.tsx must delegate export-job header rendering");
+}
+
+if (!source.includes("<WorkspaceExportJobsNotices")) {
+  throw new Error("workspace-export-jobs-card.tsx must delegate export-job notices rendering");
 }
 
 for (const requiredListUsage of [
@@ -142,6 +162,38 @@ if (headerTypesLineCount > 2) {
   throw new Error(`workspace-export-jobs-header.types.ts exceeded 2 lines: ${headerTypesLineCount}`);
 }
 
+for (const requiredNoticesUsage of [
+  'import type { WorkspaceExportJobsNoticesProps } from "./workspace-export-jobs-notices.types";',
+  "}: WorkspaceExportJobsNoticesProps) {",
+  'role !== "owner" ? <div className="notice" style={{ marginTop: 16 }}>{ownerOnlyLabel}</div> : null',
+  'error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null',
+  'message ? <div className="notice" style={{ marginTop: 16 }}>{message}</div> : null',
+]) {
+  if (!noticesSource.includes(requiredNoticesUsage)) {
+    throw new Error(`workspace-export-jobs-notices.tsx must own card notices rendering: ${requiredNoticesUsage}`);
+  }
+}
+
+if (noticesSource.includes("type WorkspaceExportJobsNoticesProps = Pick<")) {
+  throw new Error("workspace-export-jobs-notices.tsx must keep notices prop typing delegated");
+}
+
+if (noticesLineCount > 18) {
+  throw new Error(`workspace-export-jobs-notices.tsx exceeded 18 lines: ${noticesLineCount}`);
+}
+
+for (const requiredNoticesTypesUsage of [
+  'import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types"; export type WorkspaceExportJobsNoticesProps = Pick<WorkspaceExportJobsCardProps, "role"> & { error: string; message: string; ownerOnlyLabel: string };',
+]) {
+  if (!noticesTypesSource.includes(requiredNoticesTypesUsage)) {
+    throw new Error(`workspace-export-jobs-notices.types.ts must own notices prop typing: ${requiredNoticesTypesUsage}`);
+  }
+}
+
+if (noticesTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-notices.types.ts exceeded 2 lines: ${noticesTypesLineCount}`);
+}
+
 for (const requiredListItemUsage of [
   'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";',
   "}: WorkspaceExportJobsListItemProps) {",
@@ -185,6 +237,9 @@ for (const forbiddenToken of [
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>',
   "onClick={() => void loadJobs()}",
   "onClick={() => void handleCreateJob()}",
+  'role !== "owner" ? <div className="notice" style={{ marginTop: 16 }}>{copy.ownerOnly}</div> : null',
+  'error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null',
+  'message ? <div className="notice" style={{ marginTop: 16 }}>{message}</div> : null',
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-export-jobs-card.tsx must keep controller logic delegated: ${forbiddenToken}`);

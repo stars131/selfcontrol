@@ -3,6 +3,7 @@
 import { getWorkspaceExportJobsCopy } from "./workspace-export-jobs-copy";
 import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";
 import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";
+import { WorkspaceExportJobsNotices } from "./workspace-export-jobs-notices";
 import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types";
 import { useWorkspaceExportJobsController } from "./use-workspace-export-jobs-controller";
 
@@ -41,9 +42,7 @@ export function WorkspaceExportJobsCard({
         onLoadJobs={() => void loadJobs()}
         role={role}
       />
-      {role !== "owner" ? <div className="notice" style={{ marginTop: 16 }}>{copy.ownerOnly}</div> : null}
-      {error ? <div className="notice error" style={{ marginTop: 16 }}>{error}</div> : null}
-      {message ? <div className="notice" style={{ marginTop: 16 }}>{message}</div> : null}
+      <WorkspaceExportJobsNotices error={error} message={message} ownerOnlyLabel={copy.ownerOnly} role={role} />
       <WorkspaceExportJobsList
         actionLoading={actionLoading}
         downloadLabel={copy.download}
