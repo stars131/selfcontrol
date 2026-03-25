@@ -1,9 +1,9 @@
 "use client";
 
-import type { ChatMessage } from "../lib/types";
 import { ChatMessageSources } from "./chat-message-sources";
+import type { ChatMessageThreadProps } from "./chat-message-thread.types";
 
-export function ChatMessageThread({ messages }: { messages: ChatMessage[] }) {
+export function ChatMessageThread({ messages }: ChatMessageThreadProps) {
   return (
     <div className="message-list">
       {messages.length ? (

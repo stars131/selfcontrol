@@ -1118,6 +1118,21 @@ const chatPanelContentTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-content.types.ts",
 );
+const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
+const chatMessageThreadTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-message-thread.types.ts",
+);
+const chatPanelHeaderPath = path.resolve(process.cwd(), "components/chat-panel-header.tsx");
+const chatPanelHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-header.types.ts",
+);
+const chatPanelComposerPath = path.resolve(process.cwd(), "components/chat-panel-composer.tsx");
+const chatPanelComposerTypesPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-composer.types.ts",
+);
 const legacyRecordPanelSource = fs.readFileSync(legacyRecordPanelPath, "utf8");
 const legacyRecordPanelViewDataSource = fs.readFileSync(legacyRecordPanelViewDataPath, "utf8");
 const legacyRecordPanelSyncSource = fs.readFileSync(legacyRecordPanelSyncPath, "utf8");
@@ -1359,6 +1374,12 @@ const chatPanelActionStateResultTypesSource = fs.readFileSync(
 const chatPanelActionsResultTypesSource = fs.readFileSync(chatPanelActionsResultTypesPath, "utf8");
 const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
 const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
+const chatMessageThreadSource = fs.readFileSync(chatMessageThreadPath, "utf8");
+const chatMessageThreadTypesSource = fs.readFileSync(chatMessageThreadTypesPath, "utf8");
+const chatPanelHeaderSource = fs.readFileSync(chatPanelHeaderPath, "utf8");
+const chatPanelHeaderTypesSource = fs.readFileSync(chatPanelHeaderTypesPath, "utf8");
+const chatPanelComposerSource = fs.readFileSync(chatPanelComposerPath, "utf8");
+const chatPanelComposerTypesSource = fs.readFileSync(chatPanelComposerTypesPath, "utf8");
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
@@ -2009,6 +2030,9 @@ const chatPanelActionStateResultTypesLines =
   chatPanelActionStateResultTypesSource.split(/\r?\n/).length;
 const chatPanelActionsResultTypesLines =
   chatPanelActionsResultTypesSource.split(/\r?\n/).length;
+const chatMessageThreadTypesLines = chatMessageThreadTypesSource.split(/\r?\n/).length;
+const chatPanelHeaderTypesLines = chatPanelHeaderTypesSource.split(/\r?\n/).length;
+const chatPanelComposerTypesLines = chatPanelComposerTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -11789,6 +11813,102 @@ const maxChatPanelActionsResultTypesLines = 3;
 if (chatPanelActionsResultTypesLines > maxChatPanelActionsResultTypesLines) {
   throw new Error(
     `chat-panel-actions-result.types.ts exceeded ${maxChatPanelActionsResultTypesLines} lines: ${chatPanelActionsResultTypesLines}`,
+  );
+}
+
+for (const requiredChatMessageThreadUsage of [
+  'import type { ChatMessageThreadProps } from "./chat-message-thread.types";',
+  "}: ChatMessageThreadProps) {",
+]) {
+  if (!chatMessageThreadSource.includes(requiredChatMessageThreadUsage)) {
+    throw new Error(
+      `chat-message-thread.tsx must reuse the extracted message-thread props type: ${requiredChatMessageThreadUsage}`,
+    );
+  }
+}
+
+if (chatMessageThreadSource.includes("messages }: { messages: ChatMessage[] }")) {
+  throw new Error("chat-message-thread.tsx must keep message-thread prop typing delegated");
+}
+
+for (const requiredChatMessageThreadTypesUsage of [
+  'import type { ChatMessage } from "../lib/types"; export type ChatMessageThreadProps = { messages: ChatMessage[] };',
+]) {
+  if (!chatMessageThreadTypesSource.includes(requiredChatMessageThreadTypesUsage)) {
+    throw new Error(
+      `chat-message-thread.types.ts must own message-thread prop typing: ${requiredChatMessageThreadTypesUsage}`,
+    );
+  }
+}
+
+const maxChatMessageThreadTypesLines = 2;
+if (chatMessageThreadTypesLines > maxChatMessageThreadTypesLines) {
+  throw new Error(
+    `chat-message-thread.types.ts exceeded ${maxChatMessageThreadTypesLines} lines: ${chatMessageThreadTypesLines}`,
+  );
+}
+
+for (const requiredChatPanelHeaderUsage of [
+  'import type { ChatPanelHeaderProps } from "./chat-panel-header.types";',
+  "}: ChatPanelHeaderProps) {",
+]) {
+  if (!chatPanelHeaderSource.includes(requiredChatPanelHeaderUsage)) {
+    throw new Error(
+      `chat-panel-header.tsx must reuse the extracted panel-header props type: ${requiredChatPanelHeaderUsage}`,
+    );
+  }
+}
+
+if (chatPanelHeaderSource.includes("type ChatPanelHeaderProps = {")) {
+  throw new Error("chat-panel-header.tsx must keep panel-header prop typing delegated");
+}
+
+for (const requiredChatPanelHeaderTypesUsage of [
+  'import type { ChatPanelProps } from "./chat-panel.types"; export type ChatPanelHeaderProps = Pick<ChatPanelProps, "canManageWorkspace" | "workspaceId" | "workspaceRole">;',
+]) {
+  if (!chatPanelHeaderTypesSource.includes(requiredChatPanelHeaderTypesUsage)) {
+    throw new Error(
+      `chat-panel-header.types.ts must own panel-header prop typing: ${requiredChatPanelHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelHeaderTypesLines = 2;
+if (chatPanelHeaderTypesLines > maxChatPanelHeaderTypesLines) {
+  throw new Error(
+    `chat-panel-header.types.ts exceeded ${maxChatPanelHeaderTypesLines} lines: ${chatPanelHeaderTypesLines}`,
+  );
+}
+
+for (const requiredChatPanelComposerUsage of [
+  'import type { ChatPanelComposerProps } from "./chat-panel-composer.types";',
+  "}: ChatPanelComposerProps) {",
+]) {
+  if (!chatPanelComposerSource.includes(requiredChatPanelComposerUsage)) {
+    throw new Error(
+      `chat-panel-composer.tsx must reuse the extracted panel-composer props type: ${requiredChatPanelComposerUsage}`,
+    );
+  }
+}
+
+if (chatPanelComposerSource.includes("type ChatPanelComposerProps = {")) {
+  throw new Error("chat-panel-composer.tsx must keep panel-composer prop typing delegated");
+}
+
+for (const requiredChatPanelComposerTypesUsage of [
+  'export type ChatPanelComposerProps = { canWriteWorkspace: boolean; draft: string; error: string; loading: boolean; setDraft: (value: string) => void; onSend: () => void };',
+]) {
+  if (!chatPanelComposerTypesSource.includes(requiredChatPanelComposerTypesUsage)) {
+    throw new Error(
+      `chat-panel-composer.types.ts must own panel-composer prop typing: ${requiredChatPanelComposerTypesUsage}`,
+    );
+  }
+}
+
+const maxChatPanelComposerTypesLines = 2;
+if (chatPanelComposerTypesLines > maxChatPanelComposerTypesLines) {
+  throw new Error(
+    `chat-panel-composer.types.ts exceeded ${maxChatPanelComposerTypesLines} lines: ${chatPanelComposerTypesLines}`,
   );
 }
 

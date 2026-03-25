@@ -1636,6 +1636,10 @@ Last updated: 2026-03-25
   - `workspace-shell-client.tsx` and `workspace-shell-frame.tsx` now consume extracted prop contracts instead of keeping inline or local prop shapes inside shell components
   - the new `workspace-shell-client.types.ts` and `workspace-shell-frame.types.ts` files keep the workspace shell entry boundary explicit and easier to evolve safely
   - this keeps top-level workspace composition modules thinner and more maintainable under the enterprise engineering standard
+- Chat Panel Child Props Split V1:
+  - `chat-panel-header.tsx`, `chat-panel-composer.tsx`, and `chat-message-thread.tsx` now consume extracted prop contracts instead of keeping local or inline prop shapes inside the component modules
+  - the new `chat-panel-header.types.ts`, `chat-panel-composer.types.ts`, and `chat-message-thread.types.ts` files keep the chat presentation boundary explicit and easier to evolve independently
+  - this keeps the chat subtree thinner and more maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

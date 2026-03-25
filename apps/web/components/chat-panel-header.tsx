@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 
-type ChatPanelHeaderProps = {
-  canManageWorkspace: boolean;
-  workspaceId: string;
-  workspaceRole: "owner" | "editor" | "viewer";
-};
+import type { ChatPanelHeaderProps } from "./chat-panel-header.types";
 
 export function ChatPanelHeader({
   canManageWorkspace,

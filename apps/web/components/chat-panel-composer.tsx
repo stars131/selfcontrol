@@ -1,13 +1,6 @@
 "use client";
 
-type ChatPanelComposerProps = {
-  canWriteWorkspace: boolean;
-  draft: string;
-  error: string;
-  loading: boolean;
-  setDraft: (value: string) => void;
-  onSend: () => void;
-};
+import type { ChatPanelComposerProps } from "./chat-panel-composer.types";
 
 export function ChatPanelComposer({
   canWriteWorkspace,
