@@ -2079,6 +2079,10 @@ Last updated: 2026-03-26
   - `record-quick-add-preview.tsx` now renders a real-time preview of the detected quick-add type, occurred-at value, rating, place, address, and coordinates before save
   - the preview only appears when the input begins with recognized quick-add control syntax, so plain free-text notes stay visually minimal
   - `verify-record-panel-structure.mjs` now enforces the extracted preview boundary and preview prop contract so future quick-add UX enhancements remain maintainable
+- Record Quick Add Time Of Day Parsing V1:
+  - quick add now supports leading time tokens such as `18:30` and `18:30:15`, so one-line capture can store a precise occurrence time instead of only a date-level timestamp
+  - time-of-day parsing composes with existing relative or absolute date tokens, and the explicit current rule is that the last recognized leading time token wins
+  - invalid time values now fall through safely instead of writing malformed occurred-at data, and behavior plus structure verification both cover the new rule
 
 ## Next
 - Continue the next product slice

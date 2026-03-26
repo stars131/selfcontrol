@@ -2,7 +2,7 @@ import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";
 import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";
 
 function shouldShowQuickAddPreview(draft: string) {
-  return /^\s*(#|@|\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|today\b|yesterday\b|\u4eca\u5929|\u6628\u5929|\d(?:\/5|star|\u661f|\u5206))/i.test(draft);
+  return /^\s*(#|@|\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}:\d{2}(?::\d{2})?|today\b|yesterday\b|\u4eca\u5929|\u6628\u5929|\d(?:\/5|star|\u661f|\u5206))/i.test(draft);
 }
 
 function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps["panelCopy"]) {

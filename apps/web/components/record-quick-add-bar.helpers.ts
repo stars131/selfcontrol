@@ -37,7 +37,6 @@ function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Da
   if (timeRule === "yesterday") occurredAt.setDate(occurredAt.getDate() - 1);
   return occurredAt.toISOString();
 }
-
 function parseQuickAddAbsoluteDateToken(token: string, now: Date) {
   const match = token.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
   if (!match) return null;
@@ -49,7 +48,15 @@ function parseQuickAddAbsoluteDateToken(token: string, now: Date) {
     ? occurredAt.toISOString()
     : null;
 }
-
+function parseQuickAddTimeOfDayToken(token: string, baseOccurredAt: string) {
+  const match = token.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+  if (!match) return null;
+  const [hours, minutes, seconds] = [Number(match[1]), Number(match[2]), Number(match[3] ?? "0")];
+  if (hours > 23 || minutes > 59 || seconds > 59) return null;
+  const occurredAt = new Date(baseOccurredAt);
+  occurredAt.setUTCHours(hours, minutes, seconds, 0);
+  return occurredAt.toISOString();
+}
 function parseQuickAddRatingToken(token: string) {
   const match = token.match(/^([1-5])(?:\/5|star|\u661f|\u5206)$/i);
   return match ? Number(match[1]) : null;
@@ -94,11 +101,13 @@ function parseQuickAddControlTokens(rawContent: string, now: Date) {
     const rule = QUICK_ADD_TAG_RULES[token];
     const timeRule = QUICK_ADD_TIME_TOKENS[token];
     const absoluteDate = parseQuickAddAbsoluteDateToken(tokens[startIndex], now);
+    const timeOfDay = parseQuickAddTimeOfDayToken(tokens[startIndex], nextOccurredAt);
     const rating = parseQuickAddRatingToken(token);
-    if (!rule && !timeRule && !absoluteDate && rating === null) break;
+    if (!rule && !timeRule && !absoluteDate && !timeOfDay && rating === null) break;
     if (rule) nextRule = rule;
     if (timeRule) nextOccurredAt = buildQuickAddOccurredAt(timeRule, now);
     if (absoluteDate) nextOccurredAt = absoluteDate;
+    if (timeOfDay) nextOccurredAt = timeOfDay;
     if (rating !== null) nextRating = rating;
     startIndex += 1;
   }

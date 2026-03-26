@@ -5408,7 +5408,7 @@ for (const requiredRecordQuickAddPreviewUsage of [
   'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
   'import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";',
   "function shouldShowQuickAddPreview(draft: string)",
-  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206))/i.test(draft);',
+  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|\\d{1,2}:\\d{2}(?::\\d{2})?|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206))/i.test(draft);',
   "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
   "const parsed = buildQuickAddRecordDraft(draft.trim());",
   "panelCopy.quickAddPreview",
@@ -5470,6 +5470,8 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
   "function parseQuickAddAbsoluteDateToken(token: string, now: Date)",
   'const match = token.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})$/);',
+  "function parseQuickAddTimeOfDayToken(token: string, baseOccurredAt: string)",
+  'const match = token.match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);',
   "function parseQuickAddRatingToken(token: string)",
   'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
   "function readQuickAddCoordinate(value: string, min: number, max: number)",
@@ -5481,8 +5483,10 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
   "const absoluteDate = parseQuickAddAbsoluteDateToken(tokens[startIndex], now);",
+  "const timeOfDay = parseQuickAddTimeOfDayToken(tokens[startIndex], nextOccurredAt);",
   "const rating = parseQuickAddRatingToken(token);",
   "if (absoluteDate) nextOccurredAt = absoluteDate;",
+  "if (timeOfDay) nextOccurredAt = timeOfDay;",
   'const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());',
   "extra_data: parsedLocation.extra_data,",
   "rating: nextRating,",
@@ -5508,7 +5512,7 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 120;
+const maxRecordQuickAddBarHelpersLines = 130;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,

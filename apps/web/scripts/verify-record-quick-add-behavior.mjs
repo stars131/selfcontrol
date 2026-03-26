@@ -64,6 +64,26 @@ for (const [label, input, expected] of [
     { title: "\u665a\u996d\u4e0d\u9519", content: "\u665a\u996d\u4e0d\u9519", type_code: "memo", is_avoid: false, occurred_at: "2026-03-25T12:00:00.000Z", rating: null, extra_data: undefined },
   ],
   [
+    "time of day token alias",
+    "18:30 #memo dinner note",
+    { title: "dinner note", content: "dinner note", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T18:30:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "time of day token with explicit date",
+    "2026-03-20 08:15 #snack breakfast bar",
+    { title: "breakfast bar", content: "breakfast bar", type_code: "snack", is_avoid: false, occurred_at: "2026-03-20T08:15:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "last leading time of day wins",
+    "08:15 09:30 #memo shift note",
+    { title: "shift note", content: "shift note", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T09:30:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "invalid time of day falls through",
+    "25:61 #memo impossible time note",
+    { title: "25:61 #memo impossible time note", content: "25:61 #memo impossible time note", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
     "absolute date token alias",
     "2026-03-20 #memo trip noodles",
     { title: "trip noodles", content: "trip noodles", type_code: "memo", is_avoid: false, occurred_at: "2026-03-20T12:00:00.000Z", rating: null, extra_data: undefined },
