@@ -1167,6 +1167,14 @@ const mapDrilldownCardActionsTypesPath = path.resolve(
   process.cwd(),
   "components/map-drilldown-card-actions.types.ts",
 );
+const mapDrilldownCardIntroPath = path.resolve(
+  process.cwd(),
+  "components/map-drilldown-card-intro.tsx",
+);
+const mapDrilldownCardIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-drilldown-card-intro.types.ts",
+);
 const mapDrilldownCardFieldsPath = path.resolve(
   process.cwd(),
   "components/map-drilldown-card-fields.tsx",
@@ -2774,6 +2782,11 @@ const mapDrilldownCardTypesSource = fs.readFileSync(mapDrilldownCardTypesPath, "
 const mapDrilldownCardActionsSource = fs.readFileSync(mapDrilldownCardActionsPath, "utf8");
 const mapDrilldownCardActionsTypesSource = fs.readFileSync(
   mapDrilldownCardActionsTypesPath,
+  "utf8",
+);
+const mapDrilldownCardIntroSource = fs.readFileSync(mapDrilldownCardIntroPath, "utf8");
+const mapDrilldownCardIntroTypesSource = fs.readFileSync(
+  mapDrilldownCardIntroTypesPath,
   "utf8",
 );
 const mapDrilldownCardFieldsSource = fs.readFileSync(mapDrilldownCardFieldsPath, "utf8");
@@ -4472,6 +4485,9 @@ const mapDrilldownCardTypesLines = mapDrilldownCardTypesSource.split(/\r?\n/).le
 const mapDrilldownCardActionsLines = mapDrilldownCardActionsSource.split(/\r?\n/).length;
 const mapDrilldownCardActionsTypesLines =
   mapDrilldownCardActionsTypesSource.split(/\r?\n/).length;
+const mapDrilldownCardIntroLines = mapDrilldownCardIntroSource.split(/\r?\n/).length;
+const mapDrilldownCardIntroTypesLines =
+  mapDrilldownCardIntroTypesSource.split(/\r?\n/).length;
 const mapDrilldownCardFieldsLines = mapDrilldownCardFieldsSource.split(/\r?\n/).length;
 const mapDrilldownCardFieldsTypesLines =
   mapDrilldownCardFieldsTypesSource.split(/\r?\n/).length;
@@ -14865,8 +14881,10 @@ if (mapPanelContentTypesLines > maxMapPanelContentTypesLines) {
 for (const requiredMapDrilldownCardUsage of [
   'import { MapDrilldownCardActions } from "./map-drilldown-card-actions";',
   'import { MapDrilldownCardFields } from "./map-drilldown-card-fields";',
+  'import { MapDrilldownCardIntro } from "./map-drilldown-card-intro";',
   'import type { MapDrilldownCardProps } from "./map-drilldown-card.types";',
   "}: MapDrilldownCardProps) {",
+  "<MapDrilldownCardIntro",
   "<MapDrilldownCardFields",
   "<MapDrilldownCardActions",
 ]) {
@@ -14888,6 +14906,7 @@ for (const forbiddenMapDrilldownCardToken of [
   "Place query",
   "Map status",
   "needs_review",
+  '<div className="eyebrow">Map drill-down</div>',
 ]) {
   if (mapDrilldownCardSource.includes(forbiddenMapDrilldownCardToken)) {
     throw new Error(
@@ -14917,6 +14936,46 @@ const maxMapDrilldownCardTypesLines = 2;
 if (mapDrilldownCardTypesLines > maxMapDrilldownCardTypesLines) {
   throw new Error(
     `map-drilldown-card.types.ts exceeded ${maxMapDrilldownCardTypesLines} lines: ${mapDrilldownCardTypesLines}`,
+  );
+}
+
+for (const requiredMapDrilldownCardIntroUsage of [
+  'import type { MapDrilldownCardIntroProps } from "./map-drilldown-card-intro.types";',
+  "}: MapDrilldownCardIntroProps) {",
+  '<div className="eyebrow">Map drill-down</div>',
+]) {
+  if (!mapDrilldownCardIntroSource.includes(requiredMapDrilldownCardIntroUsage)) {
+    throw new Error(
+      `map-drilldown-card-intro.tsx must reuse the extracted map drill-down intro props type: ${requiredMapDrilldownCardIntroUsage}`,
+    );
+  }
+}
+
+if (mapDrilldownCardIntroSource.includes("type MapDrilldownCardIntroProps =")) {
+  throw new Error("map-drilldown-card-intro.tsx must keep map drill-down intro prop typing delegated");
+}
+
+const maxMapDrilldownCardIntroLines = 8;
+if (mapDrilldownCardIntroLines > maxMapDrilldownCardIntroLines) {
+  throw new Error(
+    `map-drilldown-card-intro.tsx exceeded ${maxMapDrilldownCardIntroLines} lines: ${mapDrilldownCardIntroLines}`,
+  );
+}
+
+for (const requiredMapDrilldownCardIntroTypesUsage of [
+  'export type MapDrilldownCardIntroProps = Record<string, never>;',
+]) {
+  if (!mapDrilldownCardIntroTypesSource.includes(requiredMapDrilldownCardIntroTypesUsage)) {
+    throw new Error(
+      `map-drilldown-card-intro.types.ts must own map drill-down intro prop typing: ${requiredMapDrilldownCardIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxMapDrilldownCardIntroTypesLines = 2;
+if (mapDrilldownCardIntroTypesLines > maxMapDrilldownCardIntroTypesLines) {
+  throw new Error(
+    `map-drilldown-card-intro.types.ts exceeded ${maxMapDrilldownCardIntroTypesLines} lines: ${mapDrilldownCardIntroTypesLines}`,
   );
 }
 
