@@ -2014,6 +2014,14 @@ const mediaAssetCardMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata.types.ts",
 );
+const mediaAssetCardMetadataDetailsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details.tsx",
+);
+const mediaAssetCardMetadataDetailsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details.types.ts",
+);
 const mediaAssetCardMetadataTagsPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tags.tsx",
@@ -3388,6 +3396,14 @@ const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
 const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
 const mediaAssetCardMetadataTypesSource = fs.readFileSync(mediaAssetCardMetadataTypesPath, "utf8");
+const mediaAssetCardMetadataDetailsSource = fs.readFileSync(
+  mediaAssetCardMetadataDetailsPath,
+  "utf8",
+);
+const mediaAssetCardMetadataDetailsTypesSource = fs.readFileSync(
+  mediaAssetCardMetadataDetailsTypesPath,
+  "utf8",
+);
 const mediaAssetCardMetadataTagsSource = fs.readFileSync(mediaAssetCardMetadataTagsPath, "utf8");
 const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataTagsTypesPath,
@@ -4691,6 +4707,10 @@ const chatShareLinkListItemTypesLines =
   chatShareLinkListItemTypesSource.split(/\r?\n/).length;
 const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataDetailsLines =
+  mediaAssetCardMetadataDetailsSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataDetailsTypesLines =
+  mediaAssetCardMetadataDetailsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsTypesLines =
   mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
@@ -19339,9 +19359,11 @@ if (authFormFrameTypesLines > maxAuthFormFrameTypesLines) {
 }
 
 for (const requiredMediaAssetCardMetadataUsage of [
+  'import { MediaAssetCardMetadataDetails } from "./media-asset-card-metadata-details";',
   'import { MediaAssetCardMetadataTags } from "./media-asset-card-metadata-tags";',
   'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
   "}: MediaAssetCardMetadataProps) {",
+  "<MediaAssetCardMetadataDetails",
   "<MediaAssetCardMetadataTags",
 ]) {
   if (!mediaAssetCardMetadataSource.includes(requiredMediaAssetCardMetadataUsage)) {
@@ -19360,6 +19382,10 @@ for (const forbiddenMediaAssetCardMetadataToken of [
   "{asset.processing_status}",
   "{asset.storage_provider}",
   "{formatMediaSize(asset)}",
+  '<div className="detail-grid" style={{ marginTop: 12 }}>',
+  "{mediaIssueCopy.dimensions}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.textLines}",
 ]) {
   if (mediaAssetCardMetadataSource.includes(forbiddenMediaAssetCardMetadataToken)) {
     throw new Error(
@@ -19389,6 +19415,49 @@ const maxMediaAssetCardMetadataTypesLines = 2;
 if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
   throw new Error(
     `media-asset-card-metadata.types.ts exceeded ${maxMediaAssetCardMetadataTypesLines} lines: ${mediaAssetCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataDetailsUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
+  "}: MediaAssetCardMetadataDetailsProps) {",
+  '<div className="detail-grid" style={{ marginTop: 12 }}>',
+  "{mediaIssueCopy.dimensions}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.textLines}",
+]) {
+  if (!mediaAssetCardMetadataDetailsSource.includes(requiredMediaAssetCardMetadataDetailsUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-details.tsx must reuse the extracted metadata-details props type: ${requiredMediaAssetCardMetadataDetailsUsage}`,
+    );
+  }
+}
+
+if (mediaAssetCardMetadataDetailsSource.includes("type MediaAssetCardMetadataDetailsProps =")) {
+  throw new Error("media-asset-card-metadata-details.tsx must keep metadata-details prop typing delegated");
+}
+
+const maxMediaAssetCardMetadataDetailsLines = 8;
+if (mediaAssetCardMetadataDetailsLines > maxMediaAssetCardMetadataDetailsLines) {
+  throw new Error(
+    `media-asset-card-metadata-details.tsx exceeded ${maxMediaAssetCardMetadataDetailsLines} lines: ${mediaAssetCardMetadataDetailsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataDetailsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type MediaAssetCardMetadataDetailsProps = Pick<MediaAssetCardMetadataProps, "asset" | "formatHistoryTimestampLabel" | "mediaIssueCopy"> & { lastAttemptAt: string | null; nextRetryAt: string | null };',
+]) {
+  if (!mediaAssetCardMetadataDetailsTypesSource.includes(requiredMediaAssetCardMetadataDetailsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-details.types.ts must own metadata-details prop typing: ${requiredMediaAssetCardMetadataDetailsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataDetailsTypesLines = 2;
+if (mediaAssetCardMetadataDetailsTypesLines > maxMediaAssetCardMetadataDetailsTypesLines) {
+  throw new Error(
+    `media-asset-card-metadata-details.types.ts exceeded ${maxMediaAssetCardMetadataDetailsTypesLines} lines: ${mediaAssetCardMetadataDetailsTypesLines}`,
   );
 }
 
