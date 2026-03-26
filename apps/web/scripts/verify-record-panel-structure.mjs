@@ -1424,6 +1424,14 @@ const workspaceSettingsHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-header.types.ts",
 );
+const workspaceSettingsHeaderIntroPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header-intro.tsx",
+);
+const workspaceSettingsHeaderIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-header-intro.types.ts",
+);
 const workspaceSettingsHeaderActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-header-actions.tsx",
@@ -2828,6 +2836,14 @@ const workspaceExportJobsControllerTypesSource = fs.readFileSync(
 const workspaceSettingsHeaderSource = fs.readFileSync(workspaceSettingsHeaderPath, "utf8");
 const workspaceSettingsHeaderTypesSource = fs.readFileSync(
   workspaceSettingsHeaderTypesPath,
+  "utf8",
+);
+const workspaceSettingsHeaderIntroSource = fs.readFileSync(
+  workspaceSettingsHeaderIntroPath,
+  "utf8",
+);
+const workspaceSettingsHeaderIntroTypesSource = fs.readFileSync(
+  workspaceSettingsHeaderIntroTypesPath,
   "utf8",
 );
 const workspaceSettingsHeaderActionsSource = fs.readFileSync(
@@ -4356,6 +4372,10 @@ const workspaceSettingsOverviewDetailsTypesLines =
 const workspaceSettingsHeaderLines = workspaceSettingsHeaderSource.split(/\r?\n/).length;
 const workspaceSettingsHeaderTypesLines =
   workspaceSettingsHeaderTypesSource.split(/\r?\n/).length;
+const workspaceSettingsHeaderIntroLines =
+  workspaceSettingsHeaderIntroSource.split(/\r?\n/).length;
+const workspaceSettingsHeaderIntroTypesLines =
+  workspaceSettingsHeaderIntroTypesSource.split(/\r?\n/).length;
 const workspaceSettingsHeaderActionsLines =
   workspaceSettingsHeaderActionsSource.split(/\r?\n/).length;
 const workspaceSettingsHeaderActionsTypesLines =
@@ -15873,8 +15893,10 @@ if (workspaceExportJobsListTypesLines > maxWorkspaceExportJobsListTypesLines) {
 
 for (const requiredWorkspaceSettingsHeaderUsage of [
   'import { WorkspaceSettingsHeaderActions } from "./workspace-settings-header-actions";',
+  'import { WorkspaceSettingsHeaderIntro } from "./workspace-settings-header-intro";',
   'import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types";',
   "}: WorkspaceSettingsHeaderProps) {",
+  "<WorkspaceSettingsHeaderIntro",
   "<WorkspaceSettingsHeaderActions",
 ]) {
   if (!workspaceSettingsHeaderSource.includes(requiredWorkspaceSettingsHeaderUsage)) {
@@ -15893,6 +15915,10 @@ for (const forbiddenWorkspaceSettingsHeaderToken of [
   '<div className="hero-actions">',
   "<LanguageSwitcher",
   '<Link className="button secondary"',
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  '<h1 className="title">{copy.title}</h1>',
+  "{copy.subtitle}",
+  '<div className="muted" style={{ marginTop: 8 }}>{username}{workspace ? ` / ${workspace.role}` : ""}</div>',
 ]) {
   if (workspaceSettingsHeaderSource.includes(forbiddenWorkspaceSettingsHeaderToken)) {
     throw new Error(
@@ -15923,6 +15949,51 @@ const maxWorkspaceSettingsHeaderTypesLines = 2;
 if (workspaceSettingsHeaderTypesLines > maxWorkspaceSettingsHeaderTypesLines) {
   throw new Error(
     `workspace-settings-header.types.ts exceeded ${maxWorkspaceSettingsHeaderTypesLines} lines: ${workspaceSettingsHeaderTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsHeaderIntroUsage of [
+  'import type { WorkspaceSettingsHeaderIntroProps } from "./workspace-settings-header-intro.types";',
+  "}: WorkspaceSettingsHeaderIntroProps) {",
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  '<h1 className="title">{copy.title}</h1>',
+  "{copy.subtitle}",
+  "{username}",
+]) {
+  if (!workspaceSettingsHeaderIntroSource.includes(requiredWorkspaceSettingsHeaderIntroUsage)) {
+    throw new Error(
+      `workspace-settings-header-intro.tsx must reuse the extracted settings header-intro props type: ${requiredWorkspaceSettingsHeaderIntroUsage}`,
+    );
+  }
+}
+
+if (workspaceSettingsHeaderIntroSource.includes("type WorkspaceSettingsHeaderIntroProps = Pick<")) {
+  throw new Error(
+    "workspace-settings-header-intro.tsx must keep settings header-intro prop typing delegated",
+  );
+}
+
+const maxWorkspaceSettingsHeaderIntroLines = 8;
+if (workspaceSettingsHeaderIntroLines > maxWorkspaceSettingsHeaderIntroLines) {
+  throw new Error(
+    `workspace-settings-header-intro.tsx exceeded ${maxWorkspaceSettingsHeaderIntroLines} lines: ${workspaceSettingsHeaderIntroLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsHeaderIntroTypesUsage of [
+  'import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types"; export type WorkspaceSettingsHeaderIntroProps = Pick<WorkspaceSettingsHeaderProps, "copy" | "username" | "workspace">;',
+]) {
+  if (!workspaceSettingsHeaderIntroTypesSource.includes(requiredWorkspaceSettingsHeaderIntroTypesUsage)) {
+    throw new Error(
+      `workspace-settings-header-intro.types.ts must own settings header-intro prop typing: ${requiredWorkspaceSettingsHeaderIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsHeaderIntroTypesLines = 2;
+if (workspaceSettingsHeaderIntroTypesLines > maxWorkspaceSettingsHeaderIntroTypesLines) {
+  throw new Error(
+    `workspace-settings-header-intro.types.ts exceeded ${maxWorkspaceSettingsHeaderIntroTypesLines} lines: ${workspaceSettingsHeaderIntroTypesLines}`,
   );
 }
 

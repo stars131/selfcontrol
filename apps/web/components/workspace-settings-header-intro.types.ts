@@ -1,0 +1,1 @@
+import type { WorkspaceSettingsHeaderProps } from "./workspace-settings-header.types"; export type WorkspaceSettingsHeaderIntroProps = Pick<WorkspaceSettingsHeaderProps, "copy" | "username" | "workspace">;
