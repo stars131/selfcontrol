@@ -1048,6 +1048,14 @@ const mediaAssetSectionSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-section-summary.types.ts",
 );
+const mediaAssetSectionEmptyPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-section-empty.tsx",
+);
+const mediaAssetSectionEmptyTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-section-empty.types.ts",
+);
 const mediaAssetCardPath = path.resolve(process.cwd(), "components/media-asset-card.tsx");
 const mediaAssetCardIntroPath = path.resolve(
   process.cwd(),
@@ -2654,6 +2662,11 @@ const mediaAssetSectionTypesSource = fs.readFileSync(mediaAssetSectionTypesPath,
 const mediaAssetSectionSummarySource = fs.readFileSync(mediaAssetSectionSummaryPath, "utf8");
 const mediaAssetSectionSummaryTypesSource = fs.readFileSync(
   mediaAssetSectionSummaryTypesPath,
+  "utf8",
+);
+const mediaAssetSectionEmptySource = fs.readFileSync(mediaAssetSectionEmptyPath, "utf8");
+const mediaAssetSectionEmptyTypesSource = fs.readFileSync(
+  mediaAssetSectionEmptyTypesPath,
   "utf8",
 );
 const mediaAssetCardSource = fs.readFileSync(mediaAssetCardPath, "utf8");
@@ -4385,6 +4398,9 @@ const mediaAssetSectionTypesLines = mediaAssetSectionTypesSource.split(/\r?\n/).
 const mediaAssetSectionSummaryLines = mediaAssetSectionSummarySource.split(/\r?\n/).length;
 const mediaAssetSectionSummaryTypesLines =
   mediaAssetSectionSummaryTypesSource.split(/\r?\n/).length;
+const mediaAssetSectionEmptyLines = mediaAssetSectionEmptySource.split(/\r?\n/).length;
+const mediaAssetSectionEmptyTypesLines =
+  mediaAssetSectionEmptyTypesSource.split(/\r?\n/).length;
 const mediaAssetCardLines = mediaAssetCardSource.split(/\r?\n/).length;
 const mediaAssetCardIntroLines = mediaAssetCardIntroSource.split(/\r?\n/).length;
 const mediaAssetCardIntroTypesLines = mediaAssetCardIntroTypesSource.split(/\r?\n/).length;
@@ -14394,9 +14410,11 @@ if (recordMediaProcessingPanelsTypesLines > maxRecordMediaProcessingPanelsTypesL
 }
 
 for (const requiredMediaAssetSectionUsage of [
+  'import { MediaAssetSectionEmpty } from "./media-asset-section-empty";',
   'import { MediaAssetSectionSummary } from "./media-asset-section-summary";',
   'import type { MediaAssetSectionProps } from "./media-asset-section.types";',
   "export function MediaAssetSection({",
+  "<MediaAssetSectionEmpty",
   "<MediaAssetSectionSummary",
 ]) {
   if (!mediaAssetSectionSource.includes(requiredMediaAssetSectionUsage)) {
@@ -14410,6 +14428,7 @@ for (const forbiddenMediaAssetSectionToken of [
   "type MediaAssetSectionProps = {",
   "{largestFilePrefixLabel}: {largestItemName}",
   '{largestItemSizeLabel ? ` (${largestItemSizeLabel})` : ""}',
+  '<div className="notice">{noMediaLabel}</div>',
 ]) {
   if (mediaAssetSectionSource.includes(forbiddenMediaAssetSectionToken)) {
     throw new Error(
@@ -14475,6 +14494,46 @@ const maxMediaAssetSectionSummaryTypesLines = 2;
 if (mediaAssetSectionSummaryTypesLines > maxMediaAssetSectionSummaryTypesLines) {
   throw new Error(
     `media-asset-section-summary.types.ts exceeded ${maxMediaAssetSectionSummaryTypesLines} lines: ${mediaAssetSectionSummaryTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetSectionEmptyUsage of [
+  'import type { MediaAssetSectionEmptyProps } from "./media-asset-section-empty.types";',
+  "}: MediaAssetSectionEmptyProps) {",
+  '<div className="notice">{noMediaLabel}</div>',
+]) {
+  if (!mediaAssetSectionEmptySource.includes(requiredMediaAssetSectionEmptyUsage)) {
+    throw new Error(
+      `media-asset-section-empty.tsx must reuse the extracted media asset empty props type: ${requiredMediaAssetSectionEmptyUsage}`,
+    );
+  }
+}
+
+if (mediaAssetSectionEmptySource.includes("type MediaAssetSectionEmptyProps = Pick<")) {
+  throw new Error("media-asset-section-empty.tsx must keep media asset empty prop typing delegated");
+}
+
+const maxMediaAssetSectionEmptyLines = 8;
+if (mediaAssetSectionEmptyLines > maxMediaAssetSectionEmptyLines) {
+  throw new Error(
+    `media-asset-section-empty.tsx exceeded ${maxMediaAssetSectionEmptyLines} lines: ${mediaAssetSectionEmptyLines}`,
+  );
+}
+
+for (const requiredMediaAssetSectionEmptyTypesUsage of [
+  'import type { MediaAssetSectionProps } from "./media-asset-section.types"; export type MediaAssetSectionEmptyProps = Pick<MediaAssetSectionProps, "noMediaLabel">;',
+]) {
+  if (!mediaAssetSectionEmptyTypesSource.includes(requiredMediaAssetSectionEmptyTypesUsage)) {
+    throw new Error(
+      `media-asset-section-empty.types.ts must own media asset empty prop typing: ${requiredMediaAssetSectionEmptyTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetSectionEmptyTypesLines = 2;
+if (mediaAssetSectionEmptyTypesLines > maxMediaAssetSectionEmptyTypesLines) {
+  throw new Error(
+    `media-asset-section-empty.types.ts exceeded ${maxMediaAssetSectionEmptyTypesLines} lines: ${mediaAssetSectionEmptyTypesLines}`,
   );
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCard } from "./media-asset-card";
+import { MediaAssetSectionEmpty } from "./media-asset-section-empty";
 import { MediaAssetSectionSummary } from "./media-asset-section-summary";
 import type { MediaAssetSectionProps } from "./media-asset-section.types";
 
@@ -49,7 +50,7 @@ export function MediaAssetSection({
             />
           ))
         ) : (
-          <div className="notice">{noMediaLabel}</div>
+          <MediaAssetSectionEmpty noMediaLabel={noMediaLabel} />
         )}
       </div>
     </>

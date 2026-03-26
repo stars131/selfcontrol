@@ -1923,6 +1923,10 @@ Last updated: 2026-03-25
   - `media-asset-section.tsx` now delegates largest-file summary rendering to `media-asset-section-summary.tsx` instead of keeping the summary line inline above the asset list
   - the new `media-asset-section-summary.types.ts` file keeps the section-summary contract explicit and reusable while the parent section remains focused on list composition and empty-state branching
   - `verify-record-panel-structure.mjs` now enforces that delegated media-asset section-summary boundary, exact one-line type contract, and line-count ceilings so future media list summary updates stay safer and easier to maintain
+- Media Asset Section Empty Split V1:
+  - `media-asset-section.tsx` now delegates empty-list notice rendering to `media-asset-section-empty.tsx` instead of keeping the empty-state branch inline inside the asset list wrapper
+  - the new `media-asset-section-empty.types.ts` file keeps the section-empty contract explicit and reusable while the parent section remains focused on summary and asset-card list composition
+  - `verify-record-panel-structure.mjs` now enforces that delegated media-asset section-empty boundary, exact one-line type contract, and line-count ceilings so future media list empty-state updates stay safer and easier to maintain
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
