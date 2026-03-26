@@ -1883,6 +1883,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-header.tsx` now delegates refresh/queue button rendering to `workspace-export-jobs-header-actions.tsx` instead of keeping the action group inline beside the export-job title block
   - the new `workspace-export-jobs-header-actions.types.ts` file keeps the header-actions contract explicit and reusable while the parent header remains focused on heading copy and shell layout
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs header-actions boundary, exact one-line type contract, and line-count ceilings so future export-jobs header updates stay safer and easier to maintain
+- Workspace Export Jobs Header Intro Split V1:
+  - `workspace-export-jobs-header.tsx` now delegates eyebrow/title/description rendering to `workspace-export-jobs-header-intro.tsx` instead of keeping the intro copy block inline beside the header action group
+  - the new `workspace-export-jobs-header-intro.types.ts` file keeps the header-intro contract explicit and reusable while the parent header remains focused on top-level export-job header composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs header-intro boundary, exact one-line type contract, and line-count ceilings so future export-jobs header updates stay safer and easier to maintain
 - Workspace Export Jobs Item Summary Split V1:
   - `workspace-export-jobs-list-item.tsx` now delegates job metadata summary rendering to `workspace-export-jobs-list-item-summary.tsx` instead of keeping the id/status/timestamp block inline beside the download action
   - the new `workspace-export-jobs-list-item-summary.types.ts` file keeps the summary contract explicit and reusable while the parent list-item remains focused on shell composition, download action, and error notice rendering

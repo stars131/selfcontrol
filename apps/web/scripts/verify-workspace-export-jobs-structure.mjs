@@ -38,6 +38,14 @@ const exportJobsHeaderPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-header.tsx",
 );
+const exportJobsHeaderIntroPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-header-intro.tsx",
+);
+const exportJobsHeaderIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-header-intro.types.ts",
+);
 const exportJobsHeaderActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-header-actions.tsx",
@@ -84,6 +92,8 @@ const listSource = fs.readFileSync(exportJobsListPath, "utf8");
 const emptyStateSource = fs.readFileSync(exportJobsEmptyStatePath, "utf8");
 const emptyStateTypesSource = fs.readFileSync(exportJobsEmptyStateTypesPath, "utf8");
 const headerSource = fs.readFileSync(exportJobsHeaderPath, "utf8");
+const headerIntroSource = fs.readFileSync(exportJobsHeaderIntroPath, "utf8");
+const headerIntroTypesSource = fs.readFileSync(exportJobsHeaderIntroTypesPath, "utf8");
 const headerActionsSource = fs.readFileSync(exportJobsHeaderActionsPath, "utf8");
 const headerActionsTypesSource = fs.readFileSync(exportJobsHeaderActionsTypesPath, "utf8");
 const headerTypesSource = fs.readFileSync(exportJobsHeaderTypesPath, "utf8");
@@ -103,6 +113,8 @@ const listLineCount = listSource.split(/\r?\n/).length;
 const emptyStateLineCount = emptyStateSource.split(/\r?\n/).length;
 const emptyStateTypesLineCount = emptyStateTypesSource.split(/\r?\n/).length;
 const headerLineCount = headerSource.split(/\r?\n/).length;
+const headerIntroLineCount = headerIntroSource.split(/\r?\n/).length;
+const headerIntroTypesLineCount = headerIntroTypesSource.split(/\r?\n/).length;
 const headerActionsLineCount = headerActionsSource.split(/\r?\n/).length;
 const headerActionsTypesLineCount = headerActionsTypesSource.split(/\r?\n/).length;
 const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
@@ -231,9 +243,11 @@ if (emptyStateTypesLineCount > 2) {
 
 for (const requiredHeaderUsage of [
   'import { WorkspaceExportJobsHeaderActions } from "./workspace-export-jobs-header-actions";',
+  'import { WorkspaceExportJobsHeaderIntro } from "./workspace-export-jobs-header-intro";',
   'import type { WorkspaceExportJobsHeaderProps } from "./workspace-export-jobs-header.types";',
   "}: WorkspaceExportJobsHeaderProps) {",
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>',
+  "<WorkspaceExportJobsHeaderIntro",
   "<WorkspaceExportJobsHeaderActions",
 ]) {
   if (!headerSource.includes(requiredHeaderUsage)) {
@@ -247,6 +261,9 @@ for (const forbiddenHeaderToken of [
   "onClick={onLoadJobs}",
   "onClick={onCreateJob}",
   'role === "owner" ? (',
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  "{copy.title}",
+  "{copy.description}",
 ]) {
   if (headerSource.includes(forbiddenHeaderToken)) {
     throw new Error(`workspace-export-jobs-header.tsx must keep header internals delegated: ${forbiddenHeaderToken}`);
@@ -255,6 +272,38 @@ for (const forbiddenHeaderToken of [
 
 if (headerLineCount > 20) {
   throw new Error(`workspace-export-jobs-header.tsx exceeded 20 lines: ${headerLineCount}`);
+}
+
+for (const requiredHeaderIntroUsage of [
+  'import type { WorkspaceExportJobsHeaderIntroProps } from "./workspace-export-jobs-header-intro.types";',
+  "}: WorkspaceExportJobsHeaderIntroProps) {",
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  "{copy.title}",
+  "{copy.description}",
+]) {
+  if (!headerIntroSource.includes(requiredHeaderIntroUsage)) {
+    throw new Error(`workspace-export-jobs-header-intro.tsx must own header intro rendering: ${requiredHeaderIntroUsage}`);
+  }
+}
+
+if (headerIntroSource.includes("type WorkspaceExportJobsHeaderIntroProps = Pick<")) {
+  throw new Error("workspace-export-jobs-header-intro.tsx must keep header-intro prop typing delegated");
+}
+
+if (headerIntroLineCount > 8) {
+  throw new Error(`workspace-export-jobs-header-intro.tsx exceeded 8 lines: ${headerIntroLineCount}`);
+}
+
+for (const requiredHeaderIntroTypesUsage of [
+  'import type { WorkspaceExportJobsHeaderProps } from "./workspace-export-jobs-header.types"; export type WorkspaceExportJobsHeaderIntroProps = Pick<WorkspaceExportJobsHeaderProps, "copy">;',
+]) {
+  if (!headerIntroTypesSource.includes(requiredHeaderIntroTypesUsage)) {
+    throw new Error(`workspace-export-jobs-header-intro.types.ts must own header-intro prop typing: ${requiredHeaderIntroTypesUsage}`);
+  }
+}
+
+if (headerIntroTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-header-intro.types.ts exceeded 2 lines: ${headerIntroTypesLineCount}`);
 }
 
 for (const requiredHeaderActionsUsage of [
