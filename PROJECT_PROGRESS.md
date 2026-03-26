@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-25
+Last updated: 2026-03-26
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -2039,6 +2039,10 @@ Last updated: 2026-03-25
   - `record-panel-v2.tsx` now renders a dedicated `record-quick-add-bar.tsx` above the structured results workspace so one-line memories can be saved immediately without opening the full editor flow
   - the quick-add bar reuses `onSaveRecord`, stores entries as `memo`, stamps the current time, and tags the payload with `capture_mode: "quick_add"` so the simplified input path stays compatible with the long-term record model
   - `verify-record-panel-structure.mjs` now enforces that extracted quick-add boundary and its one-line prop contract so the single-input capture entry remains maintainable under the enterprise engineering standard
+- Record Quick Add Tag Parsing V1:
+  - `record-quick-add-bar.helpers.ts` now owns quick-add tag parsing and title generation so the input bar can stay focused on UI interaction instead of accumulating record classification logic
+  - quick add now supports leading tags such as `#snack`, `#avoid`, `#bad`, and `#memo`, automatically mapping lightweight entries into the correct `type_code` and avoid flag before saving
+  - `verify-record-panel-structure.mjs` now enforces the extracted quick-add helper boundary and typed helper contract so future quick-capture expansion stays maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

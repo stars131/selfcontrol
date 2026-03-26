@@ -5,6 +5,14 @@ const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.
 const recordPanelHeaderPath = path.resolve(process.cwd(), "components/record-panel-header.tsx");
 const recordPanelHeaderTypesPath = path.resolve(process.cwd(), "components/record-panel-header.types.ts");
 const recordQuickAddBarPath = path.resolve(process.cwd(), "components/record-quick-add-bar.tsx");
+const recordQuickAddBarHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-bar.helpers.ts",
+);
+const recordQuickAddBarHelpersTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-bar.helpers.types.ts",
+);
 const recordQuickAddBarTypesPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-bar.types.ts",
@@ -3834,6 +3842,11 @@ const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
 const recordQuickAddBarSource = fs.readFileSync(recordQuickAddBarPath, "utf8");
+const recordQuickAddBarHelpersSource = fs.readFileSync(recordQuickAddBarHelpersPath, "utf8");
+const recordQuickAddBarHelpersTypesSource = fs.readFileSync(
+  recordQuickAddBarHelpersTypesPath,
+  "utf8",
+);
 const recordQuickAddBarTypesSource = fs.readFileSync(recordQuickAddBarTypesPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
 const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
@@ -4393,6 +4406,8 @@ const normalizedLines = source.split(/\r?\n/);
 const recordPanelHeaderLines = recordPanelHeaderSource.split(/\r?\n/).length;
 const recordPanelHeaderTypesLines = recordPanelHeaderTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarLines = recordQuickAddBarSource.split(/\r?\n/).length;
+const recordQuickAddBarHelpersLines = recordQuickAddBarHelpersSource.split(/\r?\n/).length;
+const recordQuickAddBarHelpersTypesLines = recordQuickAddBarHelpersTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarTypesLines = recordQuickAddBarTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
@@ -5328,11 +5343,12 @@ if (recordPanelHeaderTypesLines > maxRecordPanelHeaderTypesLines) {
 for (const requiredRecordQuickAddBarUsage of [
   'from "../lib/locale";',
   'from "../lib/record-panel-ui";',
+  'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
   'import type { RecordQuickAddBarProps } from "./record-quick-add-bar.types";',
-  "function buildQuickAddTitle(content: string)",
   "const { locale } = useStoredLocale()",
   "const { panelCopy } = getRecordPanelUiBundle(locale)",
-  'type_code: "memo",',
+  "const quickAddDraft = buildQuickAddRecordDraft(content);",
+  "...quickAddDraft,",
   'extra_data: { capture_mode: "quick_add" },',
   "panelCopy.quickAddPlaceholder",
   "panelCopy.quickAddDisabled",
@@ -5351,6 +5367,8 @@ for (const forbiddenRecordQuickAddBarToken of [
   'import type { RecordPanelV2Props } from "./record-panel-v2.types";',
   'canWriteWorkspace: boolean;',
   'onSaveRecord: RecordPanelV2Props["onSaveRecord"];',
+  "function buildQuickAddTitle(content: string)",
+  'type_code: "memo",',
 ]) {
   if (recordQuickAddBarSource.includes(forbiddenRecordQuickAddBarToken)) {
     throw new Error(
@@ -5363,6 +5381,63 @@ const maxRecordQuickAddBarLines = 65;
 if (recordQuickAddBarLines > maxRecordQuickAddBarLines) {
   throw new Error(
     `record-quick-add-bar.tsx exceeded ${maxRecordQuickAddBarLines} lines: ${recordQuickAddBarLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddBarHelpersUsage of [
+  'import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";',
+  'const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {',
+  '"#memo": DEFAULT_QUICK_ADD_RULE,',
+  '"#snack": {',
+  'type_code: "snack",',
+  '"#avoid": {',
+  '"#bad": {',
+  'type_code: "bad_experience",',
+  "function buildQuickAddTitle(content: string)",
+  "function parseQuickAddTags(rawContent: string)",
+  "tokens[startIndex].toLowerCase()",
+  "title: buildQuickAddTitle(parsed.content),",
+]) {
+  if (!recordQuickAddBarHelpersSource.includes(requiredRecordQuickAddBarHelpersUsage)) {
+    throw new Error(
+      `record-quick-add-bar.helpers.ts must own quick-add parsing and title helpers: ${requiredRecordQuickAddBarHelpersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordQuickAddBarHelpersToken of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-ui";',
+  'from "./record-quick-add-bar.types";',
+]) {
+  if (recordQuickAddBarHelpersSource.includes(forbiddenRecordQuickAddBarHelpersToken)) {
+    throw new Error(
+      `record-quick-add-bar.helpers.ts must stay independent from UI-only concerns: ${forbiddenRecordQuickAddBarHelpersToken}`,
+    );
+  }
+}
+
+const maxRecordQuickAddBarHelpersLines = 55;
+if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
+  throw new Error(
+    `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddBarHelpersTypesUsage of [
+  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "type_code"> & { title: string };',
+]) {
+  if (!recordQuickAddBarHelpersTypesSource.includes(requiredRecordQuickAddBarHelpersTypesUsage)) {
+    throw new Error(
+      `record-quick-add-bar.helpers.types.ts must own quick-add parsing output typing: ${requiredRecordQuickAddBarHelpersTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordQuickAddBarHelpersTypesLines = 2;
+if (recordQuickAddBarHelpersTypesLines > maxRecordQuickAddBarHelpersTypesLines) {
+  throw new Error(
+    `record-quick-add-bar.helpers.types.ts exceeded ${maxRecordQuickAddBarHelpersTypesLines} lines: ${recordQuickAddBarHelpersTypesLines}`,
   );
 }
 

@@ -4,11 +4,8 @@ import { FormEvent, useState } from "react";
 
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
+import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";
 import type { RecordQuickAddBarProps } from "./record-quick-add-bar.types";
-
-function buildQuickAddTitle(content: string) {
-  return content.length > 48 ? `${content.slice(0, 45)}...` : content;
-}
 
 export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQuickAddBarProps) {
   const { locale } = useStoredLocale();
@@ -21,15 +18,13 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
     event.preventDefault();
     const content = draft.trim();
     if (!canWriteWorkspace || !content || saving) return;
+    const quickAddDraft = buildQuickAddRecordDraft(content);
     setSaving(true);
     setError("");
     try {
       await onSaveRecord({
-        title: buildQuickAddTitle(content),
-        content,
-        type_code: "memo",
+        ...quickAddDraft,
         occurred_at: new Date().toISOString(),
-        is_avoid: false,
         extra_data: { capture_mode: "quick_add" },
       });
       setDraft("");
