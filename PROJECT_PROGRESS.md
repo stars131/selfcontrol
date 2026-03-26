@@ -2043,6 +2043,10 @@ Last updated: 2026-03-26
   - `record-quick-add-bar.helpers.ts` now owns quick-add tag parsing and title generation so the input bar can stay focused on UI interaction instead of accumulating record classification logic
   - quick add now supports leading tags such as `#snack`, `#avoid`, `#bad`, and `#memo`, automatically mapping lightweight entries into the correct `type_code` and avoid flag before saving
   - `verify-record-panel-structure.mjs` now enforces the extracted quick-add helper boundary and typed helper contract so future quick-capture expansion stays maintainable under the enterprise engineering standard
+- Record Quick Add Localized Tag Hints V1:
+  - quick add now accepts Chinese tag aliases such as `#零食`, `#避雷`, `#踩雷`, and `#备忘` alongside English aliases so the single-input capture flow works naturally in the primary mainland-China usage context
+  - `record-quick-add-bar.tsx` now renders a localized quick-add hint line under the single input so supported tags are discoverable without opening extra UI or documentation
+  - `verify-record-panel-structure.mjs` now also enforces the quick-add hint binding and alias-aware helper boundary so future shortcut-tag updates stay maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

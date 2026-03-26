@@ -51,6 +51,11 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
           {saving ? panelCopy.quickAddSaving : panelCopy.quickAddSave}
         </button>
       </div>
+      {canWriteWorkspace ? (
+        <div className="meta-text" style={{ marginTop: 8 }}>
+          {panelCopy.quickAddHint}
+        </div>
+      ) : null}
       {error ? <div className="notice error">{error}</div> : null}
     </form>
   );

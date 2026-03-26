@@ -5352,6 +5352,7 @@ for (const requiredRecordQuickAddBarUsage of [
   'extra_data: { capture_mode: "quick_add" },',
   "panelCopy.quickAddPlaceholder",
   "panelCopy.quickAddDisabled",
+  "panelCopy.quickAddHint",
   "panelCopy.quickAddSave",
   "panelCopy.quickAddSaving",
   "panelCopy.quickAddError",
@@ -5388,11 +5389,15 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   'import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";',
   'const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {',
   '"#memo": DEFAULT_QUICK_ADD_RULE,',
-  '"#snack": {',
+  '"#备忘": DEFAULT_QUICK_ADD_RULE,',
+  "const SNACK_QUICK_ADD_RULE: QuickAddTagRule = {",
   'type_code: "snack",',
-  '"#avoid": {',
-  '"#bad": {',
+  '"#零食": SNACK_QUICK_ADD_RULE,',
+  "const AVOID_QUICK_ADD_RULE: QuickAddTagRule = {",
   'type_code: "bad_experience",',
+  '"#warning": AVOID_QUICK_ADD_RULE,',
+  '"#避雷": AVOID_QUICK_ADD_RULE,',
+  '"#踩雷": AVOID_QUICK_ADD_RULE,',
   "function buildQuickAddTitle(content: string)",
   "function parseQuickAddTags(rawContent: string)",
   "tokens[startIndex].toLowerCase()",
@@ -5417,7 +5422,7 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 55;
+const maxRecordQuickAddBarHelpersLines = 60;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,

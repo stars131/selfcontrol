@@ -1,25 +1,30 @@
 import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";
 type QuickAddTagRule = Pick<QuickAddRecordDraft, "is_avoid" | "type_code">;
-
 const DEFAULT_QUICK_ADD_RULE: QuickAddTagRule = {
   type_code: "memo",
   is_avoid: false,
 };
 
+const SNACK_QUICK_ADD_RULE: QuickAddTagRule = {
+  type_code: "snack",
+  is_avoid: false,
+};
+const AVOID_QUICK_ADD_RULE: QuickAddTagRule = {
+  type_code: "bad_experience",
+  is_avoid: true,
+};
+
 const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {
   "#memo": DEFAULT_QUICK_ADD_RULE,
-  "#snack": {
-    type_code: "snack",
-    is_avoid: false,
-  },
-  "#avoid": {
-    type_code: "bad_experience",
-    is_avoid: true,
-  },
-  "#bad": {
-    type_code: "bad_experience",
-    is_avoid: true,
-  },
+  "#note": DEFAULT_QUICK_ADD_RULE,
+  "#备忘": DEFAULT_QUICK_ADD_RULE,
+  "#snack": SNACK_QUICK_ADD_RULE,
+  "#零食": SNACK_QUICK_ADD_RULE,
+  "#avoid": AVOID_QUICK_ADD_RULE,
+  "#bad": AVOID_QUICK_ADD_RULE,
+  "#warning": AVOID_QUICK_ADD_RULE,
+  "#避雷": AVOID_QUICK_ADD_RULE,
+  "#踩雷": AVOID_QUICK_ADD_RULE,
 };
 
 function buildQuickAddTitle(content: string) {
