@@ -2123,6 +2123,10 @@ Last updated: 2026-03-26
   - `record-panel-detail.ts` now also formats record type, source, and status labels through localized detail-bundle helpers instead of leaving summary cards to render raw backend codes
   - the browse results summary cards now show localized metadata for `type_code`, `source_type`, and `status`, while unknown future values degrade to explicit localized unknown labels instead of leaking raw internals
   - the browse-workspace formatter chain and `verify-record-panel-structure.mjs` now enforce those new formatter props end to end so future summary-card changes stay maintainable under the enterprise standard
+- Audit Log Card Localization V1:
+  - `audit-log-display.ts` now owns localized audit-log card copy plus display labels for common `action_code`, `resource_type`, and `status` values, with unknown codes falling back safely to the stored backend value
+  - `chat-audit-logs-card.tsx` now follows the active locale for its title, refresh states, empty state, action/status labels, resource fallback label, and timestamp formatting instead of showing raw internal audit codes everywhere
+  - `verify-record-panel-structure.mjs` now locks the audit-log localization helper usage so future chat management updates do not regress back to hardcoded or raw audit-code rendering
 
 ## Next
 - Continue the next product slice

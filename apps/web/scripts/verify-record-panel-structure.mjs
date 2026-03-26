@@ -19908,7 +19908,14 @@ if (chatMessageSourcesTypesLines > maxChatMessageSourcesTypesLines) {
 }
 
 for (const requiredChatAuditLogsCardUsage of [
+  "getAuditLogActionLabel,",
+  'import { useStoredLocale } from "../lib/locale";',
   'import type { ChatAuditLogsCardProps } from "./chat-audit-logs-card.types";',
+  "const { locale } = useStoredLocale();",
+  "getAuditLogCardCopy(locale)",
+  "getAuditLogActionLabel(locale, item.action_code)",
+  "getAuditLogStatusLabel(locale, item.status)",
+  "getAuditLogResourceLabel(locale, item.resource_type)",
   "}: ChatAuditLogsCardProps) {",
 ]) {
   if (!chatAuditLogsCardSource.includes(requiredChatAuditLogsCardUsage)) {
