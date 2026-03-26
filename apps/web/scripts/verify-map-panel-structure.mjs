@@ -12,6 +12,10 @@ const mapPanelControllerStatePath = path.resolve(
   process.cwd(),
   "components/use-map-panel-controller-state.ts",
 );
+const mapPanelAmapInitPath = path.resolve(
+  process.cwd(),
+  "components/use-map-panel-amap-init.ts",
+);
 const mapPanelUnavailableNoticePath = path.resolve(
   process.cwd(),
   "components/map-panel-unavailable-notice.tsx",
@@ -21,12 +25,14 @@ const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8")
 const mapPanelAmapSource = fs.readFileSync(mapPanelAmapPath, "utf8");
 const mapPanelControllerActionsSource = fs.readFileSync(mapPanelControllerActionsPath, "utf8");
 const mapPanelControllerStateSource = fs.readFileSync(mapPanelControllerStatePath, "utf8");
+const mapPanelAmapInitSource = fs.readFileSync(mapPanelAmapInitPath, "utf8");
 const mapPanelUnavailableNoticeSource = fs.readFileSync(mapPanelUnavailableNoticePath, "utf8");
 const mapPanelLineCount = mapPanelSource.split(/\r?\n/).length;
 const mapPanelControllerLineCount = mapPanelControllerSource.split(/\r?\n/).length;
 const mapPanelAmapLineCount = mapPanelAmapSource.split(/\r?\n/).length;
 const mapPanelControllerActionsLineCount = mapPanelControllerActionsSource.split(/\r?\n/).length;
 const mapPanelControllerStateLineCount = mapPanelControllerStateSource.split(/\r?\n/).length;
+const mapPanelAmapInitLineCount = mapPanelAmapInitSource.split(/\r?\n/).length;
 const mapPanelUnavailableNoticeLineCount = mapPanelUnavailableNoticeSource.split(/\r?\n/).length;
 
 if (!mapPanelSource.includes('from "../lib/map-panel";')) {
@@ -227,6 +233,26 @@ if (mapPanelControllerStateLineCount > maxControllerStateLines) {
   throw new Error(
     `use-map-panel-controller-state.ts exceeded ${maxControllerStateLines} lines: ${mapPanelControllerStateLineCount}`,
   );
+}
+
+for (const requiredAmapInitUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapBrowserOnly",
+  "panelCopy.mapScriptLoadFailed",
+  "panelCopy.mapLoadFailed",
+  "loadAmapScript(amapKey, {",
+]) {
+  if (!mapPanelAmapInitSource.includes(requiredAmapInitUsage)) {
+    throw new Error(`use-map-panel-amap-init.ts must localize map load errors: ${requiredAmapInitUsage}`);
+  }
+}
+
+const maxAmapInitLines = 95;
+if (mapPanelAmapInitLineCount > maxAmapInitLines) {
+  throw new Error(`use-map-panel-amap-init.ts exceeded ${maxAmapInitLines} lines: ${mapPanelAmapInitLineCount}`);
 }
 
 for (const requiredAmapImport of [

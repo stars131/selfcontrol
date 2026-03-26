@@ -1,14 +1,8 @@
 "use client";
-
 import { useEffect, useRef } from "react";
-
-import {
-  extractAddress,
-  formatCoordinate,
-  loadAmapScript,
-  readLatitudeValue,
-  readLongitudeValue,
-} from "../lib/map-panel";
+import { useStoredLocale } from "../lib/locale";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
+import { extractAddress, formatCoordinate, loadAmapScript, readLatitudeValue, readLongitudeValue } from "../lib/map-panel";
 import type { UseMapPanelAmapInitInput } from "./use-map-panel-amap-init.types";
 
 export function useMapPanelAmapInit({
@@ -19,20 +13,18 @@ export function useMapPanelAmapInit({
   onDraftLocationChange,
   setLoadError,
 }: UseMapPanelAmapInitInput) {
+  const { locale } = useStoredLocale();
+  const { panelCopy } = getRecordPanelUiBundle(locale);
   const onDraftLocationChangeRef = useRef(onDraftLocationChange);
-
   useEffect(() => {
     onDraftLocationChangeRef.current = onDraftLocationChange;
   }, [onDraftLocationChange]);
-
   useEffect(() => {
     if (!amapKey || !containerRef.current) {
       return;
     }
-
     let isCancelled = false;
-
-    void loadAmapScript(amapKey)
+    void loadAmapScript(amapKey, { browserOnlyLabel: panelCopy.mapBrowserOnly, scriptLoadFailedLabel: panelCopy.mapScriptLoadFailed })
       .then(() => {
         if (isCancelled || !window.AMap || !containerRef.current) {
           return;
@@ -81,11 +73,11 @@ export function useMapPanelAmapInit({
         setLoadError("");
       })
       .catch((error: unknown) => {
-        setLoadError(error instanceof Error ? error.message : "Failed to load AMap");
+        setLoadError(error instanceof Error ? error.message : panelCopy.mapLoadFailed);
       });
 
     return () => {
       isCancelled = true;
     };
-  }, [amapKey, setLoadError]);
+  }, [amapKey, panelCopy.mapBrowserOnly, panelCopy.mapLoadFailed, panelCopy.mapScriptLoadFailed, setLoadError]);
 }

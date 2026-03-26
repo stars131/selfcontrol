@@ -15823,6 +15823,21 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
   }
 }
 
+for (const requiredUseMapPanelAmapInitUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapBrowserOnly",
+  "panelCopy.mapScriptLoadFailed",
+  "panelCopy.mapLoadFailed",
+  "loadAmapScript(amapKey, {",
+]) {
+  if (!useMapPanelAmapInitSource.includes(requiredUseMapPanelAmapInitUsage)) {
+    throw new Error(`use-map-panel-amap-init.ts must localize map load errors: ${requiredUseMapPanelAmapInitUsage}`);
+  }
+}
+
 for (const requiredProviderSettingsPanelHelpersUsage of [
   'import type { BuildProviderFeatureCardPropsInput } from "./provider-settings-panel-helpers.types";',
   "}: BuildProviderFeatureCardPropsInput): ProviderFeatureCardProps {",

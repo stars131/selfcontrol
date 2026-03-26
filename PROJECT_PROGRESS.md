@@ -2107,6 +2107,10 @@ Last updated: 2026-03-26
   - `use-map-panel-controller.ts` now resolves localized map-search error copy once and passes explicit fallback/error labels into the controller action and search helpers instead of leaving error strings hardcoded in English
   - geocoder failure, no-match results, and unreadable-coordinate results now surface localized error messages in English, Chinese, and Japanese through the existing map status notice area
   - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now lock those localized map-search error contracts and copy keys so future controller changes stay maintainable
+- Map Load Error Localization V1:
+  - `use-map-panel-amap-init.ts` now resolves localized map-load error copy once and passes explicit browser/script-load labels into `loadAmapScript(...)`, so loader failures no longer fall back to hardcoded English messages
+  - the missing-browser, script-load, and generic map-load failure paths now surface localized messages in English, Chinese, and Japanese through the existing map notice area
+  - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now cover the localized AMap init error chain so future map-loader updates stay maintainable
 
 ## Next
 - Continue the next product slice
