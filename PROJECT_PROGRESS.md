@@ -2035,6 +2035,10 @@ Last updated: 2026-03-25
   - the workspace chat management area no longer renders `ProviderSettingsPanel`, so model/provider configuration now stays exclusively on the settings page instead of appearing in the main workspace surface
   - the workspace shell no longer carries provider-config state, bootstrap loading, or provider-save actions through its chat/panel wiring, which removes unnecessary refresh work and keeps the runtime boundary aligned with the product requirement
   - `verify-chat-panel-structure.mjs` and `verify-workspace-shell-structure.mjs` now enforce that workspace-side boundary so future changes do not accidentally reintroduce provider configuration into the main workspace page
+- Record Quick Add Entry V1:
+  - `record-panel-v2.tsx` now renders a dedicated `record-quick-add-bar.tsx` above the structured results workspace so one-line memories can be saved immediately without opening the full editor flow
+  - the quick-add bar reuses `onSaveRecord`, stores entries as `memo`, stamps the current time, and tags the payload with `capture_mode: "quick_add"` so the simplified input path stays compatible with the long-term record model
+  - `verify-record-panel-structure.mjs` now enforces that extracted quick-add boundary and its one-line prop contract so the single-input capture entry remains maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

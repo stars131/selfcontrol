@@ -3,6 +3,7 @@
 import { RecordBrowseWorkspace } from "./record-browse-workspace";
 import { RecordEditorWorkspace } from "./record-editor-workspace";
 import { RecordPanelHeader } from "./record-panel-header";
+import { RecordQuickAddBar } from "./record-quick-add-bar";
 import type { RecordPanelV2Props } from "./record-panel-v2.types";
 import {
   buildRecordPanelControllerInput,
@@ -21,6 +22,7 @@ export function RecordPanelV2({
     <section className="panel">
       <RecordPanelHeader {...headerProps} />
       <div className="panel-body">
+        <RecordQuickAddBar canWriteWorkspace={props.canWriteWorkspace} onSaveRecord={props.onSaveRecord} />
         <RecordBrowseWorkspace {...browseWorkspaceProps} />
         <RecordEditorWorkspace {...editorWorkspaceProps} />
       </div>

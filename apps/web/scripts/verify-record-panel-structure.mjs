@@ -4,6 +4,11 @@ import path from "node:path";
 const recordPanelPath = path.resolve(process.cwd(), "components/record-panel-v2.tsx");
 const recordPanelHeaderPath = path.resolve(process.cwd(), "components/record-panel-header.tsx");
 const recordPanelHeaderTypesPath = path.resolve(process.cwd(), "components/record-panel-header.types.ts");
+const recordQuickAddBarPath = path.resolve(process.cwd(), "components/record-quick-add-bar.tsx");
+const recordQuickAddBarTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-bar.types.ts",
+);
 const recordPanelV2TypesPath = path.resolve(process.cwd(), "components/record-panel-v2.types.ts");
 const recordPanelV2InputTypesPath = path.resolve(
   process.cwd(),
@@ -3828,6 +3833,8 @@ const recordResultsTimelineViewTypesSource = fs.readFileSync(
 const source = fs.readFileSync(recordPanelPath, "utf8");
 const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
+const recordQuickAddBarSource = fs.readFileSync(recordQuickAddBarPath, "utf8");
+const recordQuickAddBarTypesSource = fs.readFileSync(recordQuickAddBarTypesPath, "utf8");
 const recordPanelV2TypesSource = fs.readFileSync(recordPanelV2TypesPath, "utf8");
 const recordPanelV2InputTypesSource = fs.readFileSync(recordPanelV2InputTypesPath, "utf8");
 const recordPanelV2PropsDataTypesSource = fs.readFileSync(
@@ -4385,6 +4392,8 @@ const mediaHandlersSource = fs.readFileSync(recordPanelMediaHandlersPath, "utf8"
 const normalizedLines = source.split(/\r?\n/);
 const recordPanelHeaderLines = recordPanelHeaderSource.split(/\r?\n/).length;
 const recordPanelHeaderTypesLines = recordPanelHeaderTypesSource.split(/\r?\n/).length;
+const recordQuickAddBarLines = recordQuickAddBarSource.split(/\r?\n/).length;
+const recordQuickAddBarTypesLines = recordQuickAddBarTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
 const legacyRecordPanelViewDataLines = legacyRecordPanelViewDataSource.split(/\r?\n/).length;
 const legacyRecordPanelSyncLines = legacyRecordPanelSyncSource.split(/\r?\n/).length;
@@ -5251,6 +5260,19 @@ if (!source.includes("<RecordPanelHeader")) {
   throw new Error("record-panel-v2.tsx must delegate top header rendering to RecordPanelHeader");
 }
 
+for (const requiredRecordPanelQuickAddUsage of [
+  'import { RecordQuickAddBar } from "./record-quick-add-bar";',
+  "<RecordQuickAddBar",
+  "canWriteWorkspace={props.canWriteWorkspace}",
+  "onSaveRecord={props.onSaveRecord}",
+]) {
+  if (!source.includes(requiredRecordPanelQuickAddUsage)) {
+    throw new Error(
+      `record-panel-v2.tsx must compose the extracted quick-add entry bar: ${requiredRecordPanelQuickAddUsage}`,
+    );
+  }
+}
+
 for (const requiredRecordPanelHeaderUsage of [
   'from "./record-panel-header.types";',
   "export function RecordPanelHeader({ canWriteWorkspace, onCreateRecord, panelCopy, workspaceId }: RecordPanelHeaderComponentProps)",
@@ -5300,6 +5322,64 @@ const maxRecordPanelHeaderTypesLines = 5;
 if (recordPanelHeaderTypesLines > maxRecordPanelHeaderTypesLines) {
   throw new Error(
     `record-panel-header.types.ts exceeded ${maxRecordPanelHeaderTypesLines} lines: ${recordPanelHeaderTypesLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddBarUsage of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-ui";',
+  'import type { RecordQuickAddBarProps } from "./record-quick-add-bar.types";',
+  "function buildQuickAddTitle(content: string)",
+  "const { locale } = useStoredLocale()",
+  "const { panelCopy } = getRecordPanelUiBundle(locale)",
+  'type_code: "memo",',
+  'extra_data: { capture_mode: "quick_add" },',
+  "panelCopy.quickAddPlaceholder",
+  "panelCopy.quickAddDisabled",
+  "panelCopy.quickAddSave",
+  "panelCopy.quickAddSaving",
+  "panelCopy.quickAddError",
+]) {
+  if (!recordQuickAddBarSource.includes(requiredRecordQuickAddBarUsage)) {
+    throw new Error(
+      `record-quick-add-bar.tsx must own the quick-add single-input workflow: ${requiredRecordQuickAddBarUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordQuickAddBarToken of [
+  'import type { RecordPanelV2Props } from "./record-panel-v2.types";',
+  'canWriteWorkspace: boolean;',
+  'onSaveRecord: RecordPanelV2Props["onSaveRecord"];',
+]) {
+  if (recordQuickAddBarSource.includes(forbiddenRecordQuickAddBarToken)) {
+    throw new Error(
+      `record-quick-add-bar.tsx must keep quick-add prop typing delegated: ${forbiddenRecordQuickAddBarToken}`,
+    );
+  }
+}
+
+const maxRecordQuickAddBarLines = 65;
+if (recordQuickAddBarLines > maxRecordQuickAddBarLines) {
+  throw new Error(
+    `record-quick-add-bar.tsx exceeded ${maxRecordQuickAddBarLines} lines: ${recordQuickAddBarLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddBarTypesUsage of [
+  'import type { RecordPanelV2Props } from "./record-panel-v2.types"; export type RecordQuickAddBarProps = Pick<RecordPanelV2Props, "canWriteWorkspace" | "onSaveRecord">;',
+]) {
+  if (!recordQuickAddBarTypesSource.includes(requiredRecordQuickAddBarTypesUsage)) {
+    throw new Error(
+      `record-quick-add-bar.types.ts must own quick-add prop typing: ${requiredRecordQuickAddBarTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordQuickAddBarTypesLines = 2;
+if (recordQuickAddBarTypesLines > maxRecordQuickAddBarTypesLines) {
+  throw new Error(
+    `record-quick-add-bar.types.ts exceeded ${maxRecordQuickAddBarTypesLines} lines: ${recordQuickAddBarTypesLines}`,
   );
 }
 
@@ -13771,7 +13851,7 @@ for (const forbiddenWorkspaceShellManagedStateLoadToken of [
 }
 
 for (const requiredWorkspaceShellManagedStateLoadTypesUsage of [
-  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellManagedStateInput = { activeToken: string; role: WorkspaceShellLoadRole; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellManagedStateInput = { activeToken: string; role: WorkspaceShellLoadRole; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
 ]) {
   if (!workspaceShellManagedStateLoadTypesSource.includes(requiredWorkspaceShellManagedStateLoadTypesUsage)) {
     throw new Error(
@@ -13811,7 +13891,7 @@ for (const forbiddenWorkspaceShellInitialFollowUpToken of [
 }
 
 for (const requiredWorkspaceShellInitialFollowUpTypesUsage of [
-  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellInitialFollowUpInput = { activeToken: string; role: WorkspaceShellLoadRole; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; import type { WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types"; export type LoadWorkspaceShellInitialFollowUpInput = { activeToken: string; role: WorkspaceShellLoadRole; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; workspaceId: string };',
 ]) {
   if (!workspaceShellInitialFollowUpTypesSource.includes(requiredWorkspaceShellInitialFollowUpTypesUsage)) {
     throw new Error(
@@ -13852,7 +13932,7 @@ for (const forbiddenWorkspaceShellInitialLoadHelpersToken of [
 }
 
 for (const requiredWorkspaceShellInitialLoadHelpersTypesUsage of [
-  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type LoadWorkspaceShellInitialDataInput = { activeToken: string; setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"]; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setConversations: UseWorkspaceShellEffectsProps["setConversations"]; setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"]; setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"]; setMessages: UseWorkspaceShellEffectsProps["setMessages"]; setNotifications: UseWorkspaceShellEffectsProps["setNotifications"]; setProviderConfigs: UseWorkspaceShellEffectsProps["setProviderConfigs"]; setRecords: UseWorkspaceShellEffectsProps["setRecords"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"]; setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"]; setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"]; workspaceId: string };',
+  'import type { UseWorkspaceShellEffectsProps } from "./workspace-shell-effects.types"; export type LoadWorkspaceShellInitialDataInput = { activeToken: string; setActiveConversationId: UseWorkspaceShellEffectsProps["setActiveConversationId"]; setAuditLogs: UseWorkspaceShellEffectsProps["setAuditLogs"]; setConversations: UseWorkspaceShellEffectsProps["setConversations"]; setKnowledgeStats: UseWorkspaceShellEffectsProps["setKnowledgeStats"]; setLatestSharePath: UseWorkspaceShellEffectsProps["setLatestSharePath"]; setMediaDeadLetterOverview: UseWorkspaceShellEffectsProps["setMediaDeadLetterOverview"]; setMediaProcessingOverview: UseWorkspaceShellEffectsProps["setMediaProcessingOverview"]; setMediaStorageSummary: UseWorkspaceShellEffectsProps["setMediaStorageSummary"]; setMessages: UseWorkspaceShellEffectsProps["setMessages"]; setNotifications: UseWorkspaceShellEffectsProps["setNotifications"]; setRecords: UseWorkspaceShellEffectsProps["setRecords"]; setSearchPresets: UseWorkspaceShellEffectsProps["setSearchPresets"]; setSelectedRecordId: UseWorkspaceShellEffectsProps["setSelectedRecordId"]; setShareLinks: UseWorkspaceShellEffectsProps["setShareLinks"]; setTimelineDays: UseWorkspaceShellEffectsProps["setTimelineDays"]; setVisibleRecords: UseWorkspaceShellEffectsProps["setVisibleRecords"]; setWorkspace: UseWorkspaceShellEffectsProps["setWorkspace"]; workspaceId: string };',
 ]) {
   if (!workspaceShellInitialLoadHelpersTypesSource.includes(requiredWorkspaceShellInitialLoadHelpersTypesUsage)) {
     throw new Error(
