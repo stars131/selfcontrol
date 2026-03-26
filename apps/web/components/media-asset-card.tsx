@@ -5,7 +5,7 @@ import { MediaAssetCardError } from "./media-asset-card-error";
 import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";
 import { MediaAssetCardIntro } from "./media-asset-card-intro";
 import { MediaAssetCardMetadata } from "./media-asset-card-metadata";
-import { MediaPreview } from "./media-preview";
+import { MediaAssetCardPreview } from "./media-asset-card-preview";
 import type { MediaAssetCardProps } from "./media-asset-card.types";
 
 export function MediaAssetCard({
@@ -32,11 +32,7 @@ export function MediaAssetCard({
         formatHistoryTimestampLabel={formatHistoryTimestampLabel}
         mediaIssueCopy={mediaIssueCopy}
       />
-      {authToken ? (
-        <div style={{ marginTop: 12 }}>
-          <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
-        </div>
-      ) : null}
+      <MediaAssetCardPreview asset={asset} authToken={authToken} workspaceId={workspaceId} />
       <MediaAssetCardExtractedText asset={asset} />
       <MediaAssetCardError asset={asset} />
       <MediaAssetCardActions
