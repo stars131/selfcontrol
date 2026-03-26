@@ -2014,6 +2014,14 @@ const mediaAssetCardMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata.types.ts",
 );
+const mediaAssetCardMetadataTagsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tags.tsx",
+);
+const mediaAssetCardMetadataTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tags.types.ts",
+);
 const sharePreviewClientPath = path.resolve(process.cwd(), "components/share-preview-client.tsx");
 const sharePreviewClientTypesPath = path.resolve(
   process.cwd(),
@@ -3380,6 +3388,11 @@ const authFormFrameSource = fs.readFileSync(authFormFramePath, "utf8");
 const authFormFrameTypesSource = fs.readFileSync(authFormFrameTypesPath, "utf8");
 const mediaAssetCardMetadataSource = fs.readFileSync(mediaAssetCardMetadataPath, "utf8");
 const mediaAssetCardMetadataTypesSource = fs.readFileSync(mediaAssetCardMetadataTypesPath, "utf8");
+const mediaAssetCardMetadataTagsSource = fs.readFileSync(mediaAssetCardMetadataTagsPath, "utf8");
+const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
+  mediaAssetCardMetadataTagsTypesPath,
+  "utf8",
+);
 const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
 const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
@@ -4678,6 +4691,9 @@ const chatShareLinkListItemTypesLines =
   chatShareLinkListItemTypesSource.split(/\r?\n/).length;
 const authFormFrameTypesLines = authFormFrameTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTypesLines = mediaAssetCardMetadataTypesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataTagsTypesLines =
+  mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
@@ -19323,8 +19339,10 @@ if (authFormFrameTypesLines > maxAuthFormFrameTypesLines) {
 }
 
 for (const requiredMediaAssetCardMetadataUsage of [
+  'import { MediaAssetCardMetadataTags } from "./media-asset-card-metadata-tags";',
   'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
   "}: MediaAssetCardMetadataProps) {",
+  "<MediaAssetCardMetadataTags",
 ]) {
   if (!mediaAssetCardMetadataSource.includes(requiredMediaAssetCardMetadataUsage)) {
     throw new Error(
@@ -19334,15 +19352,27 @@ for (const requiredMediaAssetCardMetadataUsage of [
 }
 
 for (const forbiddenMediaAssetCardMetadataToken of [
+  'import { formatMediaSize } from "../lib/record-panel-format";',
   'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
   'import type { MediaAsset } from "../lib/types";',
   "type MediaAssetCardMetadataProps = {",
+  '<div className="tag-row">',
+  "{asset.processing_status}",
+  "{asset.storage_provider}",
+  "{formatMediaSize(asset)}",
 ]) {
   if (mediaAssetCardMetadataSource.includes(forbiddenMediaAssetCardMetadataToken)) {
     throw new Error(
       `media-asset-card-metadata.tsx must keep metadata prop typing delegated: ${forbiddenMediaAssetCardMetadataToken}`,
     );
   }
+}
+
+const maxMediaAssetCardMetadataLines = 70;
+if (mediaAssetCardMetadataSource.split(/\r?\n/).length > maxMediaAssetCardMetadataLines) {
+  throw new Error(
+    `media-asset-card-metadata.tsx exceeded ${maxMediaAssetCardMetadataLines} lines: ${mediaAssetCardMetadataSource.split(/\r?\n/).length}`,
+  );
 }
 
 for (const requiredMediaAssetCardMetadataTypesUsage of [
@@ -19359,6 +19389,51 @@ const maxMediaAssetCardMetadataTypesLines = 2;
 if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
   throw new Error(
     `media-asset-card-metadata.types.ts exceeded ${maxMediaAssetCardMetadataTypesLines} lines: ${mediaAssetCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataTagsUsage of [
+  'import { formatMediaSize } from "../lib/record-panel-format";',
+  'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
+  "}: MediaAssetCardMetadataTagsProps) {",
+  '<div className="tag-row">',
+  "{asset.processing_status}",
+  "{asset.storage_provider}",
+  "{formatMediaSize(asset)}",
+]) {
+  if (!mediaAssetCardMetadataTagsSource.includes(requiredMediaAssetCardMetadataTagsUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-tags.tsx must reuse the extracted metadata-tags props type: ${requiredMediaAssetCardMetadataTagsUsage}`,
+    );
+  }
+}
+
+if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsProps = Pick<")) {
+  throw new Error("media-asset-card-metadata-tags.tsx must keep metadata-tags prop typing delegated");
+}
+
+const maxMediaAssetCardMetadataTagsLines = 17;
+if (mediaAssetCardMetadataTagsLines > maxMediaAssetCardMetadataTagsLines) {
+  throw new Error(
+    `media-asset-card-metadata-tags.tsx exceeded ${maxMediaAssetCardMetadataTagsLines} lines: ${mediaAssetCardMetadataTagsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataTagsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type MediaAssetCardMetadataTagsProps = Pick<MediaAssetCardMetadataProps, "asset" | "mediaIssueCopy">;',
+]) {
+  if (!mediaAssetCardMetadataTagsTypesSource.includes(requiredMediaAssetCardMetadataTagsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-tags.types.ts must own metadata-tags prop typing: ${requiredMediaAssetCardMetadataTagsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataTagsTypesLines = 2;
+if (mediaAssetCardMetadataTagsTypesLines > maxMediaAssetCardMetadataTagsTypesLines) {
+  throw new Error(
+    `media-asset-card-metadata-tags.types.ts exceeded ${maxMediaAssetCardMetadataTagsTypesLines} lines: ${mediaAssetCardMetadataTagsTypesLines}`,
   );
 }
 

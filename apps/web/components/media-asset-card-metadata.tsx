@@ -1,7 +1,7 @@
 "use client";
 
-import { formatMediaSize } from "../lib/record-panel-format";
 import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";
+import { MediaAssetCardMetadataTags } from "./media-asset-card-metadata-tags";
 import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";
 
 export function MediaAssetCardMetadata({
@@ -20,24 +20,7 @@ export function MediaAssetCardMetadata({
 
   return (
     <>
-      <div className="tag-row">
-        <span className="tag">{asset.processing_status}</span>
-        <span className="tag">{asset.storage_provider}</span>
-        <span className="tag">{formatMediaSize(asset)}</span>
-        {processingSource ? <span className="tag">{processingSource}</span> : null}
-        {extractionMode ? <span className="tag">{extractionMode}</span> : null}
-        {remoteFetchStatus ? <span className="tag">fetch {remoteFetchStatus}</span> : null}
-        {retryState && retryState !== "idle" ? <span className="tag">retry {retryState}</span> : null}
-        {retryCount !== null ? (
-          <span className="tag">
-            retries {retryCount}
-            {retryMaxAttempts !== null ? `/${retryMaxAttempts}` : ""}
-          </span>
-        ) : null}
-        {typeof asset.metadata_json.file_extension === "string" && asset.metadata_json.file_extension ? (
-          <span className="tag">{String(asset.metadata_json.file_extension)}</span>
-        ) : null}
-      </div>
+      <MediaAssetCardMetadataTags asset={asset} mediaIssueCopy={mediaIssueCopy} />
       <div className="detail-grid" style={{ marginTop: 12 }}>
         {typeof asset.metadata_json.width === "number" && typeof asset.metadata_json.height === "number" ? (
           <div className="subtle-card">
