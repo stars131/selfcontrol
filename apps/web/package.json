@@ -21,6 +21,7 @@
     "verify:record-results-view-structure": "node ./scripts/verify-record-results-view-structure.mjs",
     "verify:record-reminder-panel-structure": "node ./scripts/verify-record-reminder-panel-structure.mjs",
     "verify:record-panel-structure": "node ./scripts/verify-record-panel-structure.mjs",
+    "verify:record-quick-add-behavior": "node ./scripts/verify-record-quick-add-behavior.mjs",
     "verify:record-workspaces": "node ./scripts/verify-record-workspaces.mjs",
     "verify:workspace-export-structure": "node ./scripts/verify-workspace-export-structure.mjs",
     "verify:workspace-export-jobs-structure": "node ./scripts/verify-workspace-export-jobs-structure.mjs",

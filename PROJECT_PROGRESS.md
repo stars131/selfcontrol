@@ -2047,6 +2047,10 @@ Last updated: 2026-03-26
   - quick add now accepts Chinese tag aliases such as `#零食`, `#避雷`, `#踩雷`, and `#备忘` alongside English aliases so the single-input capture flow works naturally in the primary mainland-China usage context
   - `record-quick-add-bar.tsx` now renders a localized quick-add hint line under the single input so supported tags are discoverable without opening extra UI or documentation
   - `verify-record-panel-structure.mjs` now also enforces the quick-add hint binding and alias-aware helper boundary so future shortcut-tag updates stay maintainable under the enterprise engineering standard
+- Record Quick Add Behavior Verification V1:
+  - `verify-record-quick-add-behavior.mjs` now transpiles the quick-add helper in-memory with the existing TypeScript toolchain and runs behavior-level assertions without introducing a new test dependency
+  - the verification covers English and Chinese tag aliases, default memo fallback, and the explicit current rule that the last leading tag wins when multiple quick-add tags are stacked
+  - `package.json` now exposes `npm run verify:record-quick-add-behavior` so quick-add parsing regressions can be caught independently of the broader structure checks
 
 ## Next
 - Continue the next product slice
