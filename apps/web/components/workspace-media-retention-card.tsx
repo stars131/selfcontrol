@@ -1,7 +1,4 @@
 "use client";
-
-import { MediaRetentionItemCard } from "./media-retention-item-card";
-import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";
 import {
   buildWorkspaceMediaRetentionActionMessage,
   buildWorkspaceMediaRetentionActionsProps,
@@ -9,21 +6,11 @@ import {
   buildWorkspaceMediaRetentionCopyBundle,
 } from "./workspace-media-retention-card-helpers";
 import type { WorkspaceMediaRetentionCardProps } from "./workspace-media-retention-card.types";
-import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";
-import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";
-import { WorkspaceMediaRetentionNotices } from "./workspace-media-retention-notices";
-import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";
-import {
-  useWorkspaceMediaRetentionController,
-} from "./use-workspace-media-retention-controller";
+import { WorkspaceMediaRetentionContent } from "./workspace-media-retention-content";
+import { useWorkspaceMediaRetentionController } from "./use-workspace-media-retention-controller";
 
-export function WorkspaceMediaRetentionCard({
-  token,
-  workspaceId,
-  locale,
-  role,
-}: WorkspaceMediaRetentionCardProps) {
-  const { copy, remoteMediaLabel, remoteReferenceLabel } = buildWorkspaceMediaRetentionCopyBundle(locale);
+export function WorkspaceMediaRetentionCard({ token, workspaceId, locale, role }: WorkspaceMediaRetentionCardProps) {
+  const { copy, remoteMediaLabel } = buildWorkspaceMediaRetentionCopyBundle(locale);
   const {
     olderThanDays,
     report,
@@ -70,37 +57,12 @@ export function WorkspaceMediaRetentionCard({
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
-      <WorkspaceMediaRetentionHeader
-        copy={copy}
-        loading={loading}
-        olderThanDays={olderThanDays}
-        onOlderThanDaysChange={setOlderThanDays}
-        onRefresh={() => loadReport(olderThanDays)}
-      />
-
-      <WorkspaceMediaRetentionNotices
-        actionError={actionError}
-        actionMessage={actionMessage}
-        error={error}
-      />
-
-      <WorkspaceMediaRetentionSummary
-        copy={copy}
-        remoteMediaLabel={remoteMediaLabel}
-        report={report}
-        storageRiskLabel={storageRiskLabel}
-      />
-
-      <WorkspaceMediaRetentionActions {...actionProps} />
-
-      <WorkspaceMediaRetentionLists
-        actionLoading={actionLoading}
-        copy={copy}
-        locale={locale}
-        onToggleSelected={toggleSelectedMedia}
-        report={report}
-        role={role}
-        selectedMediaIds={selectedMediaIds}
+      <WorkspaceMediaRetentionContent
+        actionProps={actionProps}
+        headerProps={{ copy, loading, olderThanDays, onOlderThanDaysChange: setOlderThanDays, onRefresh: async () => loadReport(olderThanDays) }}
+        listsProps={{ actionLoading, copy, locale, onToggleSelected: toggleSelectedMedia, report, role, selectedMediaIds }}
+        noticesProps={{ actionError, actionMessage, error }}
+        summaryProps={{ copy, remoteMediaLabel, report, storageRiskLabel }}
       />
     </section>
   );

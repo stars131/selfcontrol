@@ -1468,6 +1468,14 @@ const workspaceMediaRetentionCardPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-card.tsx",
 );
+const workspaceMediaRetentionContentPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-content.tsx",
+);
+const workspaceMediaRetentionContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-content.types.ts",
+);
 const workspaceMediaRetentionCardTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-card.types.ts",
@@ -2816,6 +2824,14 @@ const workspaceMembersSectionItemTypesSource = fs.readFileSync(
 );
 const workspaceMediaRetentionCardSource = fs.readFileSync(
   workspaceMediaRetentionCardPath,
+  "utf8",
+);
+const workspaceMediaRetentionContentSource = fs.readFileSync(
+  workspaceMediaRetentionContentPath,
+  "utf8",
+);
+const workspaceMediaRetentionContentTypesSource = fs.readFileSync(
+  workspaceMediaRetentionContentTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionCardTypesSource = fs.readFileSync(
@@ -4254,6 +4270,12 @@ const workspaceMembersSectionItemControlsTypesLines =
   workspaceMembersSectionItemControlsTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionItemTypesLines =
   workspaceMembersSectionItemTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionCardLines =
+  workspaceMediaRetentionCardSource.split(/\r?\n/).length;
+const workspaceMediaRetentionContentLines =
+  workspaceMediaRetentionContentSource.split(/\r?\n/).length;
+const workspaceMediaRetentionContentTypesLines =
+  workspaceMediaRetentionContentTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardTypesLines =
   workspaceMediaRetentionCardTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionActionsLines =
@@ -16012,8 +16034,10 @@ if (workspaceMembersSectionItemTypesLines > maxWorkspaceMembersSectionItemTypesL
 }
 
 for (const requiredWorkspaceMediaRetentionCardUsage of [
+  'import { WorkspaceMediaRetentionContent } from "./workspace-media-retention-content";',
   'import type { WorkspaceMediaRetentionCardProps } from "./workspace-media-retention-card.types";',
   "}: WorkspaceMediaRetentionCardProps) {",
+  "<WorkspaceMediaRetentionContent",
 ]) {
   if (!workspaceMediaRetentionCardSource.includes(requiredWorkspaceMediaRetentionCardUsage)) {
     throw new Error(
@@ -16026,12 +16050,75 @@ for (const forbiddenWorkspaceMediaRetentionCardToken of [
   'import type { LocaleCode } from "../lib/locale";',
   "token: string;",
   'role: "owner" | "editor";',
+  'import { MediaRetentionItemCard } from "./media-retention-item-card";',
+  "<WorkspaceMediaRetentionHeader",
+  "<WorkspaceMediaRetentionNotices",
+  "<WorkspaceMediaRetentionSummary",
+  "<WorkspaceMediaRetentionActions",
+  "<WorkspaceMediaRetentionLists",
+  "remoteReferenceLabel",
 ]) {
   if (workspaceMediaRetentionCardSource.includes(forbiddenWorkspaceMediaRetentionCardToken)) {
     throw new Error(
       `workspace-media-retention-card.tsx must keep retention-card prop typing delegated: ${forbiddenWorkspaceMediaRetentionCardToken}`,
     );
   }
+}
+
+const maxWorkspaceMediaRetentionCardLines = 75;
+if (workspaceMediaRetentionCardLines > maxWorkspaceMediaRetentionCardLines) {
+  throw new Error(
+    `workspace-media-retention-card.tsx exceeded ${maxWorkspaceMediaRetentionCardLines} lines: ${workspaceMediaRetentionCardLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionContentUsage of [
+  'import { WorkspaceMediaRetentionActions } from "./workspace-media-retention-actions";',
+  'import { WorkspaceMediaRetentionHeader } from "./workspace-media-retention-header";',
+  'import { WorkspaceMediaRetentionLists } from "./workspace-media-retention-lists";',
+  'import { WorkspaceMediaRetentionNotices } from "./workspace-media-retention-notices";',
+  'import { WorkspaceMediaRetentionSummary } from "./workspace-media-retention-summary";',
+  'import type { WorkspaceMediaRetentionContentProps } from "./workspace-media-retention-content.types";',
+  "}: WorkspaceMediaRetentionContentProps) {",
+  "<WorkspaceMediaRetentionHeader",
+  "<WorkspaceMediaRetentionNotices",
+  "<WorkspaceMediaRetentionSummary",
+  "<WorkspaceMediaRetentionActions",
+  "<WorkspaceMediaRetentionLists",
+]) {
+  if (!workspaceMediaRetentionContentSource.includes(requiredWorkspaceMediaRetentionContentUsage)) {
+    throw new Error(
+      `workspace-media-retention-content.tsx must own retention-content composition: ${requiredWorkspaceMediaRetentionContentUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionContentSource.includes("type WorkspaceMediaRetentionContentProps =")) {
+  throw new Error("workspace-media-retention-content.tsx must keep retention-content prop typing delegated");
+}
+
+const maxWorkspaceMediaRetentionContentLines = 18;
+if (workspaceMediaRetentionContentLines > maxWorkspaceMediaRetentionContentLines) {
+  throw new Error(
+    `workspace-media-retention-content.tsx exceeded ${maxWorkspaceMediaRetentionContentLines} lines: ${workspaceMediaRetentionContentLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionContentTypesUsage of [
+  'import type { WorkspaceMediaRetentionActionsProps } from "./workspace-media-retention-actions.types"; import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types"; import type { WorkspaceMediaRetentionListsProps } from "./workspace-media-retention-lists.types"; import type { WorkspaceMediaRetentionNoticesProps } from "./workspace-media-retention-notices.types"; import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types"; export type WorkspaceMediaRetentionContentProps = { actionProps: WorkspaceMediaRetentionActionsProps; headerProps: WorkspaceMediaRetentionHeaderProps; listsProps: WorkspaceMediaRetentionListsProps; noticesProps: WorkspaceMediaRetentionNoticesProps; summaryProps: WorkspaceMediaRetentionSummaryProps };',
+]) {
+  if (!workspaceMediaRetentionContentTypesSource.includes(requiredWorkspaceMediaRetentionContentTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-content.types.ts must own retention-content prop typing: ${requiredWorkspaceMediaRetentionContentTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionContentTypesLines = 2;
+if (workspaceMediaRetentionContentTypesLines > maxWorkspaceMediaRetentionContentTypesLines) {
+  throw new Error(
+    `workspace-media-retention-content.types.ts exceeded ${maxWorkspaceMediaRetentionContentTypesLines} lines: ${workspaceMediaRetentionContentTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceMediaRetentionCardTypesUsage of [

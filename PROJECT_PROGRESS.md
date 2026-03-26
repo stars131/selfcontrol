@@ -1927,6 +1927,10 @@ Last updated: 2026-03-25
   - `workspace-entry-main-panel.tsx` now delegates panel-body composition and error notice rendering to `workspace-entry-panel-body.tsx` and `workspace-entry-error-notice.tsx` instead of keeping those layout blocks inline beside the entry header
   - the new entry-panel `*.types.ts` files keep body and error-notice prop contracts explicit and reusable while the main panel remains focused on page-shell and header composition
   - `verify-workspace-entry-structure.mjs` now enforces those delegated entry-panel boundaries, exact one-line type contracts, and line-count ceilings so future workspace-entry updates stay safer and easier to maintain
+- Workspace Retention Card Content Split V1:
+  - `workspace-media-retention-card.tsx` now delegates header/notices/summary/actions/lists composition to `workspace-media-retention-content.tsx` instead of keeping all card sections inline beside controller wiring
+  - the new retention-content `*.types.ts` file keeps the composed content contract explicit and reusable while the card remains focused on copy-building, controller state, and action prop derivation
+  - `verify-record-panel-structure.mjs` now enforces that delegated retention-content boundary, exact one-line type contract, and line-count ceilings so future retention-card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
