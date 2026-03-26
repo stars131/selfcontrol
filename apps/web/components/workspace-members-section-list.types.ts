@@ -1,0 +1,1 @@
+import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types"; export type WorkspaceMembersSectionListProps = Pick<WorkspaceMembersSectionProps, "copy" | "locale" | "members" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "userId" | "workspaceRole">;

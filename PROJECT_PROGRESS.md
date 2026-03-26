@@ -1899,6 +1899,10 @@ Last updated: 2026-03-25
   - `workspace-members-section-item.tsx` now delegates member identity summary and role-management controls to `workspace-members-section-item-summary.tsx` and `workspace-members-section-item-controls.tsx` instead of keeping both blocks inline inside one member card
   - the new member-item `*.types.ts` files keep summary and controls prop contracts explicit and reusable while the parent member item remains focused on shell composition and protection-state wiring
   - `verify-record-panel-structure.mjs` now enforces those delegated member-item boundaries, exact one-line type contracts, and line-count ceilings so future workspace member management updates stay safer and easier to maintain
+- Workspace Members Section Intro And List Split V1:
+  - `workspace-members-section.tsx` now delegates member-management copy and list rendering to `workspace-members-section-intro.tsx` and `workspace-members-section-list.tsx` instead of keeping both blocks inline above the member cards
+  - the new members-section `*.types.ts` files keep intro and list prop contracts explicit and reusable while the parent section remains focused on shell composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated members-section boundaries, exact one-line type contracts, and line-count ceilings so future workspace member management updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

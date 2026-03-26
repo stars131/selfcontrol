@@ -1420,6 +1420,22 @@ const workspaceMembersSectionPath = path.resolve(
   process.cwd(),
   "components/workspace-members-section.tsx",
 );
+const workspaceMembersSectionIntroPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-intro.tsx",
+);
+const workspaceMembersSectionIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-intro.types.ts",
+);
+const workspaceMembersSectionListPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-list.tsx",
+);
+const workspaceMembersSectionListTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-list.types.ts",
+);
 const workspaceMembersSectionTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-members-section.types.ts",
@@ -2690,6 +2706,22 @@ const workspaceSettingsOverviewCardTypesSource = fs.readFileSync(
   "utf8",
 );
 const workspaceMembersSectionSource = fs.readFileSync(workspaceMembersSectionPath, "utf8");
+const workspaceMembersSectionIntroSource = fs.readFileSync(
+  workspaceMembersSectionIntroPath,
+  "utf8",
+);
+const workspaceMembersSectionIntroTypesSource = fs.readFileSync(
+  workspaceMembersSectionIntroTypesPath,
+  "utf8",
+);
+const workspaceMembersSectionListSource = fs.readFileSync(
+  workspaceMembersSectionListPath,
+  "utf8",
+);
+const workspaceMembersSectionListTypesSource = fs.readFileSync(
+  workspaceMembersSectionListTypesPath,
+  "utf8",
+);
 const workspaceMembersSectionTypesSource = fs.readFileSync(
   workspaceMembersSectionTypesPath,
   "utf8",
@@ -4073,6 +4105,13 @@ const workspaceSettingsHeaderActionsTypesLines =
 const workspaceSettingsOverviewCardTypesLines =
   workspaceSettingsOverviewCardTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionLines = workspaceMembersSectionSource.split(/\r?\n/).length;
+const workspaceMembersSectionIntroLines =
+  workspaceMembersSectionIntroSource.split(/\r?\n/).length;
+const workspaceMembersSectionIntroTypesLines =
+  workspaceMembersSectionIntroTypesSource.split(/\r?\n/).length;
+const workspaceMembersSectionListLines = workspaceMembersSectionListSource.split(/\r?\n/).length;
+const workspaceMembersSectionListTypesLines =
+  workspaceMembersSectionListTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionTypesLines =
   workspaceMembersSectionTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionItemLines =
@@ -15516,10 +15555,12 @@ if (workspaceSettingsOverviewCardTypesLines > maxWorkspaceSettingsOverviewCardTy
 }
 
 for (const requiredWorkspaceMembersSectionUsage of [
-  'import { WorkspaceMembersSectionItem } from "./workspace-members-section-item";',
+  'import { WorkspaceMembersSectionIntro } from "./workspace-members-section-intro";',
+  'import { WorkspaceMembersSectionList } from "./workspace-members-section-list";',
   'import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types";',
   "}: WorkspaceMembersSectionProps) {",
-  "<WorkspaceMembersSectionItem",
+  "<WorkspaceMembersSectionIntro",
+  "<WorkspaceMembersSectionList",
 ]) {
   if (!workspaceMembersSectionSource.includes(requiredWorkspaceMembersSectionUsage)) {
     throw new Error(
@@ -15532,7 +15573,11 @@ for (const forbiddenWorkspaceMembersSectionToken of [
   'import type { LocaleCode } from "../lib/locale";',
   'import type { WorkspaceMemberItem } from "../lib/types";',
   'import type { WorkspaceSettingsCopy } from "./workspace-settings-copy";',
+  'import { WorkspaceMembersSectionItem } from "./workspace-members-section-item";',
   '<article className="message"',
+  '<div className="eyebrow">{copy.membersTitle}</div>',
+  '{workspaceRole === "owner" ? copy.membersDescription : copy.membersReadOnly}',
+  '<div className="record-list compact-list" style={{ marginTop: 16 }}>',
   'new Date(member.created_at).toLocaleString(locale)',
   "const isProtected = member.role === \"owner\" || member.user_id === userId;",
   "copy: WorkspaceSettingsCopy;",
@@ -15546,10 +15591,94 @@ for (const forbiddenWorkspaceMembersSectionToken of [
   }
 }
 
-const maxWorkspaceMembersSectionLines = 50;
+const maxWorkspaceMembersSectionLines = 20;
 if (workspaceMembersSectionLines > maxWorkspaceMembersSectionLines) {
   throw new Error(
     `workspace-members-section.tsx exceeded ${maxWorkspaceMembersSectionLines} lines: ${workspaceMembersSectionLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionIntroUsage of [
+  'import type { WorkspaceMembersSectionIntroProps } from "./workspace-members-section-intro.types";',
+  "}: WorkspaceMembersSectionIntroProps) {",
+  '<div className="eyebrow">{copy.membersTitle}</div>',
+  '{workspaceRole === "owner" ? copy.membersDescription : copy.membersReadOnly}',
+]) {
+  if (!workspaceMembersSectionIntroSource.includes(requiredWorkspaceMembersSectionIntroUsage)) {
+    throw new Error(
+      `workspace-members-section-intro.tsx must own members intro rendering: ${requiredWorkspaceMembersSectionIntroUsage}`,
+    );
+  }
+}
+
+if (workspaceMembersSectionIntroSource.includes("type WorkspaceMembersSectionIntroProps = Pick<")) {
+  throw new Error("workspace-members-section-intro.tsx must keep members-intro prop typing delegated");
+}
+
+const maxWorkspaceMembersSectionIntroLines = 14;
+if (workspaceMembersSectionIntroLines > maxWorkspaceMembersSectionIntroLines) {
+  throw new Error(
+    `workspace-members-section-intro.tsx exceeded ${maxWorkspaceMembersSectionIntroLines} lines: ${workspaceMembersSectionIntroLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionIntroTypesUsage of [
+  'import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types"; export type WorkspaceMembersSectionIntroProps = Pick<WorkspaceMembersSectionProps, "copy" | "workspaceRole">;',
+]) {
+  if (!workspaceMembersSectionIntroTypesSource.includes(requiredWorkspaceMembersSectionIntroTypesUsage)) {
+    throw new Error(
+      `workspace-members-section-intro.types.ts must own members-intro prop typing: ${requiredWorkspaceMembersSectionIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMembersSectionIntroTypesLines = 2;
+if (workspaceMembersSectionIntroTypesLines > maxWorkspaceMembersSectionIntroTypesLines) {
+  throw new Error(
+    `workspace-members-section-intro.types.ts exceeded ${maxWorkspaceMembersSectionIntroTypesLines} lines: ${workspaceMembersSectionIntroTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionListUsage of [
+  'import { WorkspaceMembersSectionItem } from "./workspace-members-section-item";',
+  'import type { WorkspaceMembersSectionListProps } from "./workspace-members-section-list.types";',
+  "}: WorkspaceMembersSectionListProps) {",
+  '<div className="record-list compact-list" style={{ marginTop: 16 }}>',
+  "<WorkspaceMembersSectionItem",
+  '<div className="notice">{copy.membersEmpty}</div>',
+]) {
+  if (!workspaceMembersSectionListSource.includes(requiredWorkspaceMembersSectionListUsage)) {
+    throw new Error(
+      `workspace-members-section-list.tsx must own members list rendering: ${requiredWorkspaceMembersSectionListUsage}`,
+    );
+  }
+}
+
+if (workspaceMembersSectionListSource.includes("type WorkspaceMembersSectionListProps = Pick<")) {
+  throw new Error("workspace-members-section-list.tsx must keep members-list prop typing delegated");
+}
+
+const maxWorkspaceMembersSectionListLines = 24;
+if (workspaceMembersSectionListLines > maxWorkspaceMembersSectionListLines) {
+  throw new Error(
+    `workspace-members-section-list.tsx exceeded ${maxWorkspaceMembersSectionListLines} lines: ${workspaceMembersSectionListLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionListTypesUsage of [
+  'import type { WorkspaceMembersSectionProps } from "./workspace-members-section.types"; export type WorkspaceMembersSectionListProps = Pick<WorkspaceMembersSectionProps, "copy" | "locale" | "members" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "userId" | "workspaceRole">;',
+]) {
+  if (!workspaceMembersSectionListTypesSource.includes(requiredWorkspaceMembersSectionListTypesUsage)) {
+    throw new Error(
+      `workspace-members-section-list.types.ts must own members-list prop typing: ${requiredWorkspaceMembersSectionListTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMembersSectionListTypesLines = 2;
+if (workspaceMembersSectionListTypesLines > maxWorkspaceMembersSectionListTypesLines) {
+  throw new Error(
+    `workspace-members-section-list.types.ts exceeded ${maxWorkspaceMembersSectionListTypesLines} lines: ${workspaceMembersSectionListTypesLines}`,
   );
 }
 
