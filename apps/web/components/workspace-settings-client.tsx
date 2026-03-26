@@ -12,9 +12,7 @@ import { useWorkspaceSettingsController } from "./use-workspace-settings-control
 import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
 import { WorkspaceSettingsHeader } from "./workspace-settings-header";
 import { WorkspaceSettingsLoadingShell } from "./workspace-settings-loading-shell";
-import { WorkspaceSettingsManagedSections } from "./workspace-settings-managed-sections";
-import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";
-import { WorkspaceSettingsProviderSection } from "./workspace-settings-provider-section";
+import { WorkspaceSettingsMainContent } from "./workspace-settings-main-content";
 
 export function WorkspaceSettingsClient({ workspaceId }: WorkspaceSettingsClientProps) {
   const router = useRouter();
@@ -48,54 +46,38 @@ export function WorkspaceSettingsClient({ workspaceId }: WorkspaceSettingsClient
   return (
     <main className="page-shell">
       <section className="panel" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        <WorkspaceSettingsHeader
+        <WorkspaceSettingsHeader copy={copy} locale={locale} onLocaleChange={setLocale} username={user?.username} workspace={workspace} workspaceId={workspaceId} />
+        <WorkspaceSettingsMainContent
           copy={copy}
-          locale={locale}
-          onLocaleChange={setLocale}
-          username={user?.username}
-          workspace={workspace}
-          workspaceId={workspaceId}
+          error={error}
+          knowledgeStats={knowledgeStats}
+          managedSectionsProps={buildWorkspaceSettingsManagedSectionsProps({
+            copy,
+            locale,
+            managedRole,
+            members,
+            onRemoveMember: handleRemoveMember,
+            onUpdateMemberRole: handleUpdateMemberRole,
+            removingMemberId,
+            savingMemberId,
+            token,
+            userId: user?.id,
+            workspaceId,
+            workspaceSlug: workspace?.slug,
+          })}
+          providerSectionProps={buildWorkspaceSettingsProviderSectionProps({
+            copy,
+            highlightedAnchor,
+            locale,
+            managedRole,
+            mediaStorageHealth,
+            onSaveProviderConfig: handleSaveProviderConfig,
+            providerConfigs,
+            refreshingMediaStorageHealth,
+            refreshMediaStorageHealthState,
+            token,
+          })}
         />
-        <div className="panel-body">
-          {error ? (
-            <div className="notice error" style={{ marginBottom: 16 }}>
-              {error}
-            </div>
-          ) : null}
-          <div className="two-column-grid">
-            <WorkspaceSettingsOverviewCard copy={copy} knowledgeStats={knowledgeStats} />
-            <WorkspaceSettingsProviderSection
-              {...buildWorkspaceSettingsProviderSectionProps({
-                copy,
-                highlightedAnchor,
-                locale,
-                managedRole,
-                mediaStorageHealth,
-                onSaveProviderConfig: handleSaveProviderConfig,
-                providerConfigs,
-                refreshingMediaStorageHealth,
-                refreshMediaStorageHealthState,
-                token,
-              })}
-            />
-          </div>
-          <WorkspaceSettingsManagedSections
-            {...buildWorkspaceSettingsManagedSectionsProps({
-              copy,
-              locale,
-              managedRole,
-              members,
-              onRemoveMember: handleRemoveMember,
-              onUpdateMemberRole: handleUpdateMemberRole,
-              removingMemberId,
-              savingMemberId,
-              token,
-              userId: user?.id,
-              workspaceId,
-              workspaceSlug: workspace?.slug,
-            })}
-          />
-        </div>
       </section>
     </main>
   );

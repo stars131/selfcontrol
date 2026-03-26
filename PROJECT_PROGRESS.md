@@ -1919,6 +1919,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-header.tsx` now delegates title/description copy and threshold/refresh controls to `workspace-media-retention-header-intro.tsx` and `workspace-media-retention-header-controls.tsx` instead of keeping both blocks inline in one header leaf
   - the new retention-header `*.types.ts` files keep intro and controls prop contracts explicit and reusable while the parent header remains focused on top-level layout composition
   - `verify-record-panel-structure.mjs` now enforces those delegated retention-header boundaries, exact one-line type contracts, and line-count ceilings so future retention-header updates stay safer and easier to maintain
+- Workspace Settings Main Content And Error Notice Split V1:
+  - `workspace-settings-client.tsx` now delegates panel-body composition and error notice rendering to `workspace-settings-main-content.tsx` and `workspace-settings-error-notice.tsx` instead of keeping those layout blocks inline beside top-level data assembly
+  - the new settings-content `*.types.ts` files keep main-content and error-notice prop contracts explicit and reusable while the client component remains focused on controller wiring, locale state, and helper-based prop construction
+  - `verify-workspace-settings-structure.mjs` now enforces those delegated settings-content boundaries, exact one-line type contracts, and line-count ceilings so future settings-page updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

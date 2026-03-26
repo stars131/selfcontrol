@@ -10,6 +10,22 @@ const workspaceSettingsClientTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-client.types.ts",
 );
+const workspaceSettingsMainContentPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-main-content.tsx",
+);
+const workspaceSettingsMainContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-main-content.types.ts",
+);
+const workspaceSettingsErrorNoticePath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-error-notice.tsx",
+);
+const workspaceSettingsErrorNoticeTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-error-notice.types.ts",
+);
 const workspaceSettingsLoadingShellPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-loading-shell.tsx",
@@ -105,6 +121,10 @@ const workspaceSettingsMemberActionsPath = path.resolve(
 const source = fs.readFileSync(workspaceSettingsPath, "utf8");
 const clientHelpersSource = fs.readFileSync(workspaceSettingsClientHelpersPath, "utf8");
 const clientTypesSource = fs.readFileSync(workspaceSettingsClientTypesPath, "utf8");
+const mainContentSource = fs.readFileSync(workspaceSettingsMainContentPath, "utf8");
+const mainContentTypesSource = fs.readFileSync(workspaceSettingsMainContentTypesPath, "utf8");
+const errorNoticeSource = fs.readFileSync(workspaceSettingsErrorNoticePath, "utf8");
+const errorNoticeTypesSource = fs.readFileSync(workspaceSettingsErrorNoticeTypesPath, "utf8");
 const loadingShellSource = fs.readFileSync(workspaceSettingsLoadingShellPath, "utf8");
 const loadingShellTypesSource = fs.readFileSync(workspaceSettingsLoadingShellTypesPath, "utf8");
 const providerSectionSource = fs.readFileSync(workspaceSettingsProviderSectionPath, "utf8");
@@ -143,6 +163,10 @@ const memberActionsSource = fs.readFileSync(workspaceSettingsMemberActionsPath, 
 const lineCount = source.split(/\r?\n/).length;
 const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
+const mainContentLineCount = mainContentSource.split(/\r?\n/).length;
+const mainContentTypesLineCount = mainContentTypesSource.split(/\r?\n/).length;
+const errorNoticeLineCount = errorNoticeSource.split(/\r?\n/).length;
+const errorNoticeTypesLineCount = errorNoticeTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const providerSectionLineCount = providerSectionSource.split(/\r?\n/).length;
@@ -189,9 +213,7 @@ for (const requiredImport of [
   'import type { WorkspaceSettingsClientProps } from "./workspace-settings-client.types";',
   'import { WorkspaceSettingsLoadingShell } from "./workspace-settings-loading-shell";',
   'import { WorkspaceSettingsHeader } from "./workspace-settings-header";',
-  'import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";',
-  'import { WorkspaceSettingsProviderSection } from "./workspace-settings-provider-section";',
-  'import { WorkspaceSettingsManagedSections } from "./workspace-settings-managed-sections";',
+  'import { WorkspaceSettingsMainContent } from "./workspace-settings-main-content";',
 ]) {
   if (!source.includes(requiredImport)) {
     throw new Error(`workspace-settings-client.tsx must import delegated settings sections: ${requiredImport}`);
@@ -204,9 +226,7 @@ for (const requiredUsage of [
   "buildWorkspaceSettingsProviderSectionProps({",
   "buildWorkspaceSettingsManagedSectionsProps({",
   "<WorkspaceSettingsHeader",
-  "<WorkspaceSettingsOverviewCard",
-  "<WorkspaceSettingsProviderSection",
-  "<WorkspaceSettingsManagedSections",
+  "<WorkspaceSettingsMainContent",
 ]) {
   if (!source.includes(requiredUsage)) {
     throw new Error(`workspace-settings-client.tsx must compose delegated settings sections: ${requiredUsage}`);
@@ -391,13 +411,19 @@ for (const forbiddenToken of [
   "<WorkspaceExportCard",
   "<WorkspaceExportJobsCard",
   "<WorkspaceMediaRetentionCard",
+  '<div className="panel-body">',
+  '<div className="notice error" style={{ marginBottom: 16 }}>',
+  '<div className="two-column-grid">',
+  "<WorkspaceSettingsOverviewCard",
+  "<WorkspaceSettingsProviderSection",
+  "<WorkspaceSettingsManagedSections",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-settings-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
   }
 }
 
-const maxAllowedLines = 110;
+const maxAllowedLines = 90;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-settings-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
@@ -439,6 +465,76 @@ for (const requiredClientTypesUsage of [
 
 if (clientTypesLineCount > 5) {
   throw new Error(`workspace-settings-client.types.ts exceeded 5 lines: ${clientTypesLineCount}`);
+}
+
+for (const requiredMainContentUsage of [
+  'import { WorkspaceSettingsErrorNotice } from "./workspace-settings-error-notice";',
+  'import { WorkspaceSettingsManagedSections } from "./workspace-settings-managed-sections";',
+  'import { WorkspaceSettingsOverviewCard } from "./workspace-settings-overview-card";',
+  'import { WorkspaceSettingsProviderSection } from "./workspace-settings-provider-section";',
+  'import type { WorkspaceSettingsMainContentProps } from "./workspace-settings-main-content.types";',
+  "}: WorkspaceSettingsMainContentProps) {",
+  '<div className="panel-body">',
+  "<WorkspaceSettingsErrorNotice",
+  "<WorkspaceSettingsOverviewCard",
+  "<WorkspaceSettingsProviderSection",
+  "<WorkspaceSettingsManagedSections",
+]) {
+  if (!mainContentSource.includes(requiredMainContentUsage)) {
+    throw new Error(`workspace-settings-main-content.tsx must own settings-body composition: ${requiredMainContentUsage}`);
+  }
+}
+
+if (mainContentSource.includes("type WorkspaceSettingsMainContentProps =")) {
+  throw new Error("workspace-settings-main-content.tsx must keep settings-body prop typing delegated");
+}
+
+if (mainContentLineCount > 24) {
+  throw new Error(`workspace-settings-main-content.tsx exceeded 24 lines: ${mainContentLineCount}`);
+}
+
+for (const requiredMainContentTypesUsage of [
+  'import type { KnowledgeStats } from "../lib/types"; import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types"; import type { WorkspaceSettingsCopy } from "./workspace-settings-copy"; import type { WorkspaceSettingsProviderSectionProps } from "./workspace-settings-provider-section.types";',
+  'export type WorkspaceSettingsMainContentProps = { copy: WorkspaceSettingsCopy; error: string; knowledgeStats: KnowledgeStats | null; managedSectionsProps: WorkspaceSettingsManagedSectionsProps; providerSectionProps: WorkspaceSettingsProviderSectionProps };',
+]) {
+  if (!mainContentTypesSource.includes(requiredMainContentTypesUsage)) {
+    throw new Error(`workspace-settings-main-content.types.ts must own settings-body prop typing: ${requiredMainContentTypesUsage}`);
+  }
+}
+
+if (mainContentTypesLineCount > 2) {
+  throw new Error(`workspace-settings-main-content.types.ts exceeded 2 lines: ${mainContentTypesLineCount}`);
+}
+
+for (const requiredErrorNoticeUsage of [
+  'import type { WorkspaceSettingsErrorNoticeProps } from "./workspace-settings-error-notice.types";',
+  "}: WorkspaceSettingsErrorNoticeProps) {",
+  "if (!error) {",
+  'className="notice error"',
+]) {
+  if (!errorNoticeSource.includes(requiredErrorNoticeUsage)) {
+    throw new Error(`workspace-settings-error-notice.tsx must own error-notice rendering: ${requiredErrorNoticeUsage}`);
+  }
+}
+
+if (errorNoticeSource.includes("type WorkspaceSettingsErrorNoticeProps =")) {
+  throw new Error("workspace-settings-error-notice.tsx must keep error-notice prop typing delegated");
+}
+
+if (errorNoticeLineCount > 10) {
+  throw new Error(`workspace-settings-error-notice.tsx exceeded 10 lines: ${errorNoticeLineCount}`);
+}
+
+for (const requiredErrorNoticeTypesUsage of [
+  'import type { WorkspaceSettingsMainContentProps } from "./workspace-settings-main-content.types"; export type WorkspaceSettingsErrorNoticeProps = Pick<WorkspaceSettingsMainContentProps, "error">;',
+]) {
+  if (!errorNoticeTypesSource.includes(requiredErrorNoticeTypesUsage)) {
+    throw new Error(`workspace-settings-error-notice.types.ts must own error-notice prop typing: ${requiredErrorNoticeTypesUsage}`);
+  }
+}
+
+if (errorNoticeTypesLineCount > 2) {
+  throw new Error(`workspace-settings-error-notice.types.ts exceeded 2 lines: ${errorNoticeTypesLineCount}`);
 }
 
 for (const requiredLoadingShellUsage of [
