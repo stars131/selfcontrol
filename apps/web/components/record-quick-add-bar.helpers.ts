@@ -49,12 +49,28 @@ function parseQuickAddRatingToken(token: string) {
   return match ? Number(match[1]) : null;
 }
 
+function readQuickAddCoordinate(value: string, min: number, max: number) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= min && parsed <= max ? parsed : null;
+}
+
 function parseQuickAddLocationSegment(content: string) {
-  const match = content.match(/^@([^:\uFF1A]+)[:\uFF1A]\s*(.*)$/);
+  const match = content.match(/^@(.+?)(?:\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\))?[:\uFF1A]\s*(.*)$/);
   if (!match) return { content, extra_data: undefined };
   const placeName = match[1].trim();
+  const latitude = match[2] ? readQuickAddCoordinate(match[2], -90, 90) : null;
+  const longitude = match[3] ? readQuickAddCoordinate(match[3], -180, 180) : null;
   return placeName
-    ? { content: match[2].trim() || content, extra_data: { location: { place_name: placeName, source: "quick_add" } } }
+    ? {
+        content: match[4].trim() || content,
+        extra_data: {
+          location: {
+            place_name: placeName,
+            ...(latitude !== null && longitude !== null ? { latitude, longitude } : {}),
+            source: "quick_add",
+          },
+        },
+      }
     : { content, extra_data: undefined };
 }
 

@@ -5407,8 +5407,11 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
   "function parseQuickAddRatingToken(token: string)",
   'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
+  "function readQuickAddCoordinate(value: string, min: number, max: number)",
   "function parseQuickAddLocationSegment(content: string)",
-  'const match = content.match(/^@([^:\\uFF1A]+)[:\\uFF1A]\\s*(.*)$/);',
+  'const match = content.match(/^@(.+?)(?:\\(\\s*(-?\\d+(?:\\.\\d+)?)\\s*,\\s*(-?\\d+(?:\\.\\d+)?)\\s*\\))?[:\\uFF1A]\\s*(.*)$/);',
+  "const latitude = match[2] ? readQuickAddCoordinate(match[2], -90, 90) : null;",
+  "const longitude = match[3] ? readQuickAddCoordinate(match[3], -180, 180) : null;",
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
   "const rating = parseQuickAddRatingToken(token);",
@@ -5437,7 +5440,7 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 105;
+const maxRecordQuickAddBarHelpersLines = 120;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,

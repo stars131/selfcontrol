@@ -2063,6 +2063,10 @@ Last updated: 2026-03-26
   - quick add now supports a lightweight place prefix in the form `@Place: content`, which writes the parsed place name into `extra_data.location.place_name` while keeping location capture compatible with the existing map and review pipeline
   - the place prefix is parsed after leading tags, time shortcuts, and rating shortcuts so a single input can describe classification, time, rating, and place together without opening the full editor
   - behavior and structure verification now cover quick-add location payload generation so future single-input location work stays aligned with the enterprise engineering standard
+- Record Quick Add Place Coordinates V1:
+  - quick add now supports optional coordinates in the place prefix via `@Place(lat,lng): content`, which writes validated latitude and longitude into `extra_data.location` for immediate map-aware records
+  - invalid coordinate pairs now degrade safely back to place-only parsing instead of storing broken numeric location data
+  - behavior and structure verification now cover coordinate extraction and invalid-coordinate fallback so future quick-add map work stays stable under refactors
 
 ## Next
 - Continue the next product slice

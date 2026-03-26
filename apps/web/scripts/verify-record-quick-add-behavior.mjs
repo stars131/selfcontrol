@@ -92,6 +92,19 @@ for (const [label, input, expected] of [
     },
   ],
   [
+    "place segment with coordinates",
+    "@West Lake Sushi(30.2741,120.1551): fresh uni tonight",
+    {
+      title: "fresh uni tonight",
+      content: "fresh uni tonight",
+      type_code: "memo",
+      is_avoid: false,
+      occurred_at: "2026-03-26T12:00:00.000Z",
+      rating: null,
+      extra_data: { location: { place_name: "West Lake Sushi", latitude: 30.2741, longitude: 120.1551, source: "quick_add" } },
+    },
+  ],
+  [
     "place segment with control tokens",
     "yesterday 5star @\u897f\u6e56\u8fb9\u5bff\u53f8\uff1a \u9cd7\u9c7c\u996d\u5f88\u597d\u5403",
     {
@@ -102,6 +115,19 @@ for (const [label, input, expected] of [
       occurred_at: "2026-03-25T12:00:00.000Z",
       rating: 5,
       extra_data: { location: { place_name: "\u897f\u6e56\u8fb9\u5bff\u53f8", source: "quick_add" } },
+    },
+  ],
+  [
+    "invalid coordinates fall back to place only",
+    "@West Lake Sushi(130,220): fresh uni tonight",
+    {
+      title: "fresh uni tonight",
+      content: "fresh uni tonight",
+      type_code: "memo",
+      is_avoid: false,
+      occurred_at: "2026-03-26T12:00:00.000Z",
+      rating: null,
+      extra_data: { location: { place_name: "West Lake Sushi", source: "quick_add" } },
     },
   ],
 ]) {
