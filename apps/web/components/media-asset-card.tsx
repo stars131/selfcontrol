@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCardActions } from "./media-asset-card-actions";
+import { MediaAssetCardIntro } from "./media-asset-card-intro";
 import { MediaAssetCardMetadata } from "./media-asset-card-metadata";
 import { MediaPreview } from "./media-preview";
 import type { MediaAssetCardProps } from "./media-asset-card.types";
@@ -23,9 +24,7 @@ export function MediaAssetCard({
 }: MediaAssetCardProps) {
   return (
     <article className="record-card">
-      <div className="eyebrow">{asset.media_type}</div>
-      <div>{asset.original_filename}</div>
-      <div className="muted">{asset.mime_type}</div>
+      <MediaAssetCardIntro asset={asset} />
       <MediaAssetCardMetadata
         asset={asset}
         formatHistoryTimestampLabel={formatHistoryTimestampLabel}

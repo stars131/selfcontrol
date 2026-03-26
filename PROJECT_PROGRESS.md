@@ -1895,6 +1895,10 @@ Last updated: 2026-03-25
   - `recent-media-issue-card.tsx` now delegates attempt timestamps and action recommendation notice rendering to `recent-media-issue-card-metadata.tsx` instead of keeping the state-details block inline between tags and actions
   - the new `recent-media-issue-card-metadata.types.ts` file keeps the card-metadata contract explicit and reusable while the parent issue card remains focused on high-level composition and action wiring
   - `verify-record-panel-structure.mjs` now enforces that delegated recent-media card-metadata boundary, exact one-line type contract, and line-count ceilings so future issue-card state rendering stays safer and easier to maintain
+- Media Asset Card Intro Split V1:
+  - `media-asset-card.tsx` now delegates media-type, filename, and MIME summary rendering to `media-asset-card-intro.tsx` instead of keeping the identity block inline above metadata, preview, and actions
+  - the new `media-asset-card-intro.types.ts` file keeps the asset-card intro contract explicit and reusable while the parent media card remains focused on metadata, preview, error, and action composition
+  - `verify-record-panel-structure.mjs` now enforces both the media-asset card boundary and the delegated asset-card intro boundary, with exact one-line type contracts and line-count ceilings for safer future media-card updates
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
