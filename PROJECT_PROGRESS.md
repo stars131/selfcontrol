@@ -2099,6 +2099,10 @@ Last updated: 2026-03-26
   - `map-drilldown-card.tsx` now resolves localized panel copy once and passes explicit labels down to the intro, fields, and action subcomponents instead of leaving the drilldown UI hardcoded in English
   - the map drilldown filter fields and action buttons now follow the active interface language for place-query labels, map-status options, review-status options, and filter actions
   - `verify-record-panel-structure.mjs` now enforces the localized prop contracts for the drilldown leaf components so future map-filter work does not regress back to hardcoded strings
+- Map Panel Surface Localization V1:
+  - `map-panel-content.tsx` now resolves localized panel copy once and passes explicit copy props into the header, search form, status notices, and mapped-record list so the main map surface follows the selected interface language
+  - the map header summary, place-search form, current-point notice, empty-state notice, mapped-record review labels, and missing-key notice are now localized in English, Chinese, and Japanese
+  - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now cover the new localized map-panel boundaries and copy keys so future map updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

@@ -3,11 +3,14 @@
 import type { MapStatusNoticesProps } from "./map-status-notices.types";
 
 export function MapStatusNotices({
+  currentPointLabel,
   draftCoordinates,
   draftLocation,
   isEditable,
   loadError,
   mappedRecordCount,
+  noLocationSelectedLabel,
+  noMappedRecordsLabel,
   searchError,
 }: MapStatusNoticesProps) {
   return (
@@ -24,15 +27,13 @@ export function MapStatusNotices({
       ) : null}
       {draftLocation?.latitude && draftLocation?.longitude ? (
         <div className="muted" style={{ marginTop: 12 }}>
-          Current point: {draftLocation.latitude}, {draftLocation.longitude}
+          {currentPointLabel}: {draftLocation.latitude}, {draftLocation.longitude}
           {draftLocation.source ? ` | ${draftLocation.source}` : ""}
         </div>
       ) : null}
       {!mappedRecordCount && !draftCoordinates ? (
         <div className="notice" style={{ marginTop: 12 }}>
-          {isEditable
-            ? "No location selected yet. Search a place or click on the map to set one."
-            : "No mapped records yet. Add latitude and longitude in the record editor."}
+          {isEditable ? noLocationSelectedLabel : noMappedRecordsLabel}
         </div>
       ) : null}
     </>

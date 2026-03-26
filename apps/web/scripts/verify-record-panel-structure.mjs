@@ -15140,7 +15140,14 @@ if (mediaAssetCardActionsTypesLines > maxMediaAssetCardActionsTypesLines) {
 }
 
 for (const requiredMapPanelContentUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import type { MapPanelContentProps } from "./map-panel-content.types";',
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapTitle",
+  "panelCopy.locationSearch",
+  "panelCopy.currentPoint",
   "}: MapPanelContentProps) {",
 ]) {
   if (!mapPanelContentSource.includes(requiredMapPanelContentUsage)) {
@@ -15377,6 +15384,9 @@ if (mapDrilldownCardActionsTypesLines > maxMapDrilldownCardActionsTypesLines) {
 for (const requiredMapStatusNoticesUsage of [
   'import type { MapStatusNoticesProps } from "./map-status-notices.types";',
   "}: MapStatusNoticesProps) {",
+  "currentPointLabel",
+  "noLocationSelectedLabel",
+  "noMappedRecordsLabel",
 ]) {
   if (!mapStatusNoticesSource.includes(requiredMapStatusNoticesUsage)) {
     throw new Error(
@@ -15387,7 +15397,7 @@ for (const requiredMapStatusNoticesUsage of [
 
 for (const forbiddenMapStatusNoticesToken of [
   'import type { LocationDraft } from "../lib/map-panel";',
-  "}: {",
+  "type MapStatusNoticesProps = {",
 ]) {
   if (mapStatusNoticesSource.includes(forbiddenMapStatusNoticesToken)) {
     throw new Error(
@@ -15397,7 +15407,7 @@ for (const forbiddenMapStatusNoticesToken of [
 }
 
 for (const requiredMapStatusNoticesTypesUsage of [
-  'import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; isEditable: boolean; loadError: string; mappedRecordCount: number; searchError: string };',
+  'import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { currentPointLabel: string; draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; isEditable: boolean; loadError: string; mappedRecordCount: number; noLocationSelectedLabel: string; noMappedRecordsLabel: string; searchError: string };',
 ]) {
   if (!mapStatusNoticesTypesSource.includes(requiredMapStatusNoticesTypesUsage)) {
     throw new Error(
@@ -15416,6 +15426,12 @@ if (mapStatusNoticesTypesLines > maxMapStatusNoticesTypesLines) {
 for (const requiredMapPanelHeaderUsage of [
   'import type { MapPanelHeaderProps } from "./map-panel-header.types";',
   "}: MapPanelHeaderProps) {",
+  "{title}",
+  "editableDescription",
+  "readonlyDescription",
+  "mappedCountLabel",
+  "confirmedCountLabel",
+  "needsReviewCountLabel",
 ]) {
   if (!mapPanelHeaderSource.includes(requiredMapPanelHeaderUsage)) {
     throw new Error(
@@ -15429,7 +15445,7 @@ if (mapPanelHeaderSource.includes("}: {")) {
 }
 
 for (const requiredMapPanelHeaderTypesUsage of [
-  'export type MapPanelHeaderProps = { confirmedCount: number; isEditable: boolean; mappedCount: number; needsReviewCount: number };',
+  'export type MapPanelHeaderProps = { confirmedCount: number; confirmedCountLabel: string; editableDescription: string; isEditable: boolean; mappedCount: number; mappedCountLabel: string; needsReviewCount: number; needsReviewCountLabel: string; readonlyDescription: string; title: string };',
 ]) {
   if (!mapPanelHeaderTypesSource.includes(requiredMapPanelHeaderTypesUsage)) {
     throw new Error(
@@ -15448,6 +15464,11 @@ if (mapPanelHeaderTypesLines > maxMapPanelHeaderTypesLines) {
 for (const requiredMappedRecordsListUsage of [
   'import type { MappedRecordsListProps } from "./mapped-records-list.types";',
   "}: MappedRecordsListProps) {",
+  "confirmedLabel",
+  "needsReviewLabel",
+  "pendingLabel",
+  'record.reviewStatus === "confirmed"',
+  'record.reviewStatus === "needs_review"',
 ]) {
   if (!mappedRecordsListSource.includes(requiredMappedRecordsListUsage)) {
     throw new Error(
@@ -15461,7 +15482,7 @@ if (mappedRecordsListSource.includes("}: {")) {
 }
 
 for (const requiredMappedRecordsListTypesUsage of [
-  'import type { MappedRecord } from "../lib/map-panel"; import type { MapPanelProps } from "./map-panel.types"; export type MappedRecordsListProps = { mappedRecords: MappedRecord[]; onSelectRecord: MapPanelProps["onSelectRecord"]; selectedRecordId: string | null };',
+  'import type { MappedRecord } from "../lib/map-panel"; import type { MapPanelProps } from "./map-panel.types"; export type MappedRecordsListProps = { confirmedLabel: string; mappedRecords: MappedRecord[]; needsReviewLabel: string; onSelectRecord: MapPanelProps["onSelectRecord"]; pendingLabel: string; selectedRecordId: string | null };',
 ]) {
   if (!mappedRecordsListTypesSource.includes(requiredMappedRecordsListTypesUsage)) {
     throw new Error(
@@ -15480,6 +15501,10 @@ if (mappedRecordsListTypesLines > maxMappedRecordsListTypesLines) {
 for (const requiredMapSearchFormUsage of [
   'import type { MapSearchFormProps } from "./map-search-form.types";',
   "}: MapSearchFormProps) {",
+  "searchActionLabel",
+  "searchLabel",
+  "searchPlaceholder",
+  "searchingLabel",
 ]) {
   if (!mapSearchFormSource.includes(requiredMapSearchFormUsage)) {
     throw new Error(
@@ -15500,7 +15525,7 @@ for (const forbiddenMapSearchFormToken of [
 }
 
 for (const requiredMapSearchFormTypesUsage of [
-  'import type { FormEventHandler } from "react"; export type MapSearchFormProps = { onSearchQueryChange: (value: string) => void; onSubmit: FormEventHandler<HTMLFormElement>; searchQuery: string; searching: boolean };',
+  'import type { FormEventHandler } from "react"; export type MapSearchFormProps = { onSearchQueryChange: (value: string) => void; onSubmit: FormEventHandler<HTMLFormElement>; searchActionLabel: string; searchLabel: string; searchPlaceholder: string; searchQuery: string; searching: boolean; searchingLabel: string };',
 ]) {
   if (!mapSearchFormTypesSource.includes(requiredMapSearchFormTypesUsage)) {
     throw new Error(

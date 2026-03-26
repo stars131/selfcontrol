@@ -3,8 +3,11 @@
 import type { MappedRecordsListProps } from "./mapped-records-list.types";
 
 export function MappedRecordsList({
+  confirmedLabel,
   mappedRecords,
+  needsReviewLabel,
   onSelectRecord,
+  pendingLabel,
   selectedRecordId,
 }: MappedRecordsListProps) {
   if (!mappedRecords.length) {
@@ -20,7 +23,7 @@ export function MappedRecordsList({
           type="button"
           onClick={() => onSelectRecord(record.id)}
         >
-          <div className="eyebrow">{record.reviewStatus}</div>
+          <div className="eyebrow">{record.reviewStatus === "confirmed" ? confirmedLabel : record.reviewStatus === "needs_review" ? needsReviewLabel : pendingLabel}</div>
           <div style={{ marginTop: 8, fontWeight: 600 }}>{record.placeName}</div>
           {record.address ? (
             <div className="muted" style={{ marginTop: 8 }}>

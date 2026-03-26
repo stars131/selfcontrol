@@ -1,1 +1,1 @@
-export type MapPanelHeaderProps = { confirmedCount: number; isEditable: boolean; mappedCount: number; needsReviewCount: number };
+export type MapPanelHeaderProps = { confirmedCount: number; confirmedCountLabel: string; editableDescription: string; isEditable: boolean; mappedCount: number; mappedCountLabel: string; needsReviewCount: number; needsReviewCountLabel: string; readonlyDescription: string; title: string };

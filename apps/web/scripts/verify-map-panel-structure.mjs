@@ -12,16 +12,22 @@ const mapPanelControllerStatePath = path.resolve(
   process.cwd(),
   "components/use-map-panel-controller-state.ts",
 );
+const mapPanelUnavailableNoticePath = path.resolve(
+  process.cwd(),
+  "components/map-panel-unavailable-notice.tsx",
+);
 const mapPanelSource = fs.readFileSync(mapPanelPath, "utf8");
 const mapPanelControllerSource = fs.readFileSync(mapPanelControllerPath, "utf8");
 const mapPanelAmapSource = fs.readFileSync(mapPanelAmapPath, "utf8");
 const mapPanelControllerActionsSource = fs.readFileSync(mapPanelControllerActionsPath, "utf8");
 const mapPanelControllerStateSource = fs.readFileSync(mapPanelControllerStatePath, "utf8");
+const mapPanelUnavailableNoticeSource = fs.readFileSync(mapPanelUnavailableNoticePath, "utf8");
 const mapPanelLineCount = mapPanelSource.split(/\r?\n/).length;
 const mapPanelControllerLineCount = mapPanelControllerSource.split(/\r?\n/).length;
 const mapPanelAmapLineCount = mapPanelAmapSource.split(/\r?\n/).length;
 const mapPanelControllerActionsLineCount = mapPanelControllerActionsSource.split(/\r?\n/).length;
 const mapPanelControllerStateLineCount = mapPanelControllerStateSource.split(/\r?\n/).length;
+const mapPanelUnavailableNoticeLineCount = mapPanelUnavailableNoticeSource.split(/\r?\n/).length;
 
 if (!mapPanelSource.includes('from "../lib/map-panel";')) {
   throw new Error("map-panel.tsx must import shared helpers from ../lib/map-panel");
@@ -61,6 +67,26 @@ if (!mapPanelSource.includes("useMapPanelController({")) {
 
 if (!mapPanelSource.includes("useMapPanelAmap({")) {
   throw new Error("map-panel.tsx must delegate AMap lifecycle wiring to useMapPanelAmap");
+}
+
+for (const requiredUnavailableNoticeUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapTitle",
+  "panelCopy.mapUnavailable",
+]) {
+  if (!mapPanelUnavailableNoticeSource.includes(requiredUnavailableNoticeUsage)) {
+    throw new Error(`map-panel-unavailable-notice.tsx must localize missing-key messaging: ${requiredUnavailableNoticeUsage}`);
+  }
+}
+
+const maxUnavailableNoticeLines = 16;
+if (mapPanelUnavailableNoticeLineCount > maxUnavailableNoticeLines) {
+  throw new Error(
+    `map-panel-unavailable-notice.tsx exceeded ${maxUnavailableNoticeLines} lines: ${mapPanelUnavailableNoticeLineCount}`,
+  );
 }
 
 for (const requiredControllerImport of [
