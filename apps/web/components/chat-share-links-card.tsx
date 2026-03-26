@@ -1,5 +1,7 @@
 "use client";
 
+import { getChatShareLinksCopy } from "../lib/share-link-display";
+import { useStoredLocale } from "../lib/locale";
 import { ChatShareLinksCreateForm } from "./chat-share-links-create-form";
 import { ChatShareLinkListItem } from "./chat-share-link-list-item";
 import type { ChatShareLinksCardProps } from "./chat-share-links-card.types";
@@ -18,9 +20,12 @@ export function ChatShareLinksCard({
   shareName,
   sharePermission,
 }: ChatShareLinksCardProps) {
+  const { locale } = useStoredLocale();
+  const copy = getChatShareLinksCopy(locale);
+
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
-      <div className="eyebrow">Share Links</div>
+      <div className="eyebrow">{copy.shareLinks}</div>
       <div className="form-stack" style={{ marginTop: 12 }}>
         <ChatShareLinksCreateForm
           creatingShare={creatingShare}
@@ -34,7 +39,7 @@ export function ChatShareLinksCard({
         />
         {latestShareUrl ? (
           <article className="message assistant">
-            <div className="eyebrow">Latest link</div>
+            <div className="eyebrow">{copy.latestLink}</div>
             <div style={{ marginTop: 8, wordBreak: "break-all" }}>{latestShareUrl}</div>
           </article>
         ) : null}
@@ -49,7 +54,7 @@ export function ChatShareLinksCard({
               />
             ))
           ) : (
-            <div className="notice">No share links yet.</div>
+            <div className="notice">{copy.empty}</div>
           )}
         </div>
       </div>

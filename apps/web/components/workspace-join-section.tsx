@@ -1,5 +1,7 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getSharePermissionLabel } from "../lib/share-link-display";
 import type { WorkspaceJoinSectionProps } from "./workspace-join-section.types";
 
 export function WorkspaceJoinSection({
@@ -12,6 +14,8 @@ export function WorkspaceJoinSection({
   onPreviewShare,
   onAcceptShare,
 }: WorkspaceJoinSectionProps) {
+  const { locale } = useStoredLocale();
+
   return (
     <section className="record-card">
       <div className="eyebrow">{copy.joinEyebrow}</div>
@@ -43,7 +47,7 @@ export function WorkspaceJoinSection({
         </div>
         {sharePreview ? (
           <article className="message assistant">
-            <div className="eyebrow">{sharePreview.permission_code}</div>
+            <div className="eyebrow">{getSharePermissionLabel(locale, sharePreview.permission_code)}</div>
             <div style={{ marginTop: 8, fontWeight: 600 }}>{sharePreview.workspace_name}</div>
             <div style={{ marginTop: 8 }}>{sharePreview.name}</div>
             <div className="muted" style={{ marginTop: 8 }}>

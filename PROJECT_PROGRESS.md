@@ -2127,6 +2127,10 @@ Last updated: 2026-03-26
   - `audit-log-display.ts` now owns localized audit-log card copy plus display labels for common `action_code`, `resource_type`, and `status` values, with unknown codes falling back safely to the stored backend value
   - `chat-audit-logs-card.tsx` now follows the active locale for its title, refresh states, empty state, action/status labels, resource fallback label, and timestamp formatting instead of showing raw internal audit codes everywhere
   - `verify-record-panel-structure.mjs` now locks the audit-log localization helper usage so future chat management updates do not regress back to hardcoded or raw audit-code rendering
+- Share Link Permission And Status Localization V1:
+  - `share-link-display.ts` now owns localized share-link labels for permission codes, enabled state, chat share-management copy, and public share-preview copy so share access semantics stay consistent across entry points
+  - the chat share-link card, create form, list items, public share-preview page, and workspace-join preview now render localized permission and status labels instead of raw values like `viewer`, `editor`, `enabled`, or `disabled`
+  - `verify-record-panel-structure.mjs` now enforces those localized share-link helper hooks on the affected components so future sharing updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

@@ -20079,10 +20079,12 @@ if (chatShareLinksCardTypesLines > maxChatShareLinksCardTypesLines) {
 }
 
 for (const requiredChatShareLinksCreateFormUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
   'import type { ChatShareLinksCreateFormProps } from "./chat-share-links-create-form.types";',
   "}: ChatShareLinksCreateFormProps) {",
-  'placeholder="Share name"',
-  'placeholder="Max uses"',
+  "getChatShareLinksCopy(locale)",
+  "placeholder={copy.shareNamePlaceholder}",
+  "placeholder={copy.maxUsesPlaceholder}",
   'setShareMaxUses(event.target.value.replace(/[^0-9]/g, ""))',
 ]) {
   if (!chatShareLinksCreateFormSource.includes(requiredChatShareLinksCreateFormUsage)) {
@@ -20117,9 +20119,11 @@ if (chatShareLinksCreateFormTypesLines > maxChatShareLinksCreateFormTypesLines) 
 }
 
 for (const requiredChatShareLinkListItemUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
   'import type { ChatShareLinkListItemProps } from "./chat-share-link-list-item.types";',
   "}: ChatShareLinkListItemProps) {",
-  'item.permission_code} / {item.is_enabled ? "enabled" : "disabled"',
+  "getSharePermissionLabel(locale, item.permission_code)",
+  "getShareEnabledLabel(locale, item.is_enabled)",
   'onClick={() => void onDisableShareLink(item.id)}',
 ]) {
   if (!chatShareLinkListItemSource.includes(requiredChatShareLinkListItemUsage)) {
@@ -20342,7 +20346,10 @@ if (mediaAssetCardMetadataTagsTypesLines > maxMediaAssetCardMetadataTagsTypesLin
 }
 
 for (const requiredSharePreviewClientUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
   'import type { SharePreviewClientProps } from "./share-preview-client.types";',
+  "getSharePreviewPageCopy(locale)",
+  "getSharePermissionLabel(locale, preview.permission_code)",
   "}: SharePreviewClientProps) {",
 ]) {
   if (!sharePreviewClientSource.includes(requiredSharePreviewClientUsage)) {
@@ -20520,7 +20527,9 @@ if (workspaceCreateSectionTypesLines > maxWorkspaceCreateSectionTypesLines) {
 }
 
 for (const requiredWorkspaceJoinSectionUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
   'import type { WorkspaceJoinSectionProps } from "./workspace-join-section.types";',
+  "getSharePermissionLabel(locale, sharePreview.permission_code)",
   "}: WorkspaceJoinSectionProps) {",
 ]) {
   if (!workspaceJoinSectionSource.includes(requiredWorkspaceJoinSectionUsage)) {
