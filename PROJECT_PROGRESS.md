@@ -1911,6 +1911,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-summary.tsx` now delegates storage-stat card grid and cleanup-note rendering to `workspace-media-retention-summary-grid.tsx` and `workspace-media-retention-summary-note.tsx` instead of keeping both blocks inline in one summary leaf
   - the new retention-summary `*.types.ts` files keep grid and note prop contracts explicit and reusable while the parent summary component remains focused on shell composition
   - `verify-record-panel-structure.mjs` now enforces those delegated retention-summary boundaries, exact one-line type contracts, and line-count ceilings so future retention-report updates stay safer and easier to maintain
+- Workspace Retention Largest And Candidates Lists Split V1:
+  - `workspace-media-retention-lists.tsx` now delegates largest-media rendering and retention-candidate rendering to `workspace-media-retention-largest-list.tsx` and `workspace-media-retention-candidates-list.tsx` instead of keeping both sections inline in one list component
+  - the new retention-lists `*.types.ts` files keep largest-list and candidates-list prop contracts explicit and reusable while the parent list component remains focused on two-column composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated retention-list boundaries, exact one-line type contracts, and line-count ceilings so future retention-list updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

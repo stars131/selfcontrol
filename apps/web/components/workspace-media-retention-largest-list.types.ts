@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionListsProps } from "./workspace-media-retention-lists.types"; export type WorkspaceMediaRetentionLargestListProps = Pick<WorkspaceMediaRetentionListsProps, "copy" | "locale" | "report">;
