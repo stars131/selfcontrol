@@ -2203,6 +2203,14 @@ const recentMediaIssueCardErrorTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-error.types.ts",
 );
+const recentMediaIssueCardMetadataPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata.tsx",
+);
+const recentMediaIssueCardMetadataTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata.types.ts",
+);
 const recentMediaIssueCardActionsPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-actions.tsx",
@@ -3468,6 +3476,14 @@ const recentMediaIssueCardErrorTypesSource = fs.readFileSync(
   recentMediaIssueCardErrorTypesPath,
   "utf8",
 );
+const recentMediaIssueCardMetadataSource = fs.readFileSync(
+  recentMediaIssueCardMetadataPath,
+  "utf8",
+);
+const recentMediaIssueCardMetadataTypesSource = fs.readFileSync(
+  recentMediaIssueCardMetadataTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardActionsSource = fs.readFileSync(recentMediaIssueCardActionsPath, "utf8");
 const recentMediaIssueCardActionsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionsTypesPath,
@@ -4657,6 +4673,10 @@ const recentMediaIssueCardIntroTypesLines =
 const recentMediaIssueCardErrorLines = recentMediaIssueCardErrorSource.split(/\r?\n/).length;
 const recentMediaIssueCardErrorTypesLines =
   recentMediaIssueCardErrorTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataLines =
+  recentMediaIssueCardMetadataSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataTypesLines =
+  recentMediaIssueCardMetadataTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionsTypesLines =
   recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLines =
@@ -20201,11 +20221,13 @@ for (const requiredRecentMediaIssueCardUsage of [
   'import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";',
   'import { RecentMediaIssueCardError } from "./recent-media-issue-card-error";',
   'import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";',
+  'import { RecentMediaIssueCardMetadata } from "./recent-media-issue-card-metadata";',
   'import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";',
   'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
   "}: RecentMediaIssueCardProps) {",
   "<RecentMediaIssueCardIntro",
   "<RecentMediaIssueCardTags",
+  "<RecentMediaIssueCardMetadata",
   "<RecentMediaIssueCardActions",
   "<RecentMediaIssueCardError",
 ]) {
@@ -20220,6 +20242,10 @@ for (const forbiddenRecentMediaIssueCardToken of [
   '<div className="eyebrow">{issue.media_type}</div>',
   "{issue.original_filename}",
   'issue.processing_error ? <div className="notice error" style={{ marginTop: 10 }}>{issue.processing_error}</div> : null',
+  '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
+  '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
+  '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
+  '{action.label}{action.detail ? `: ${action.detail}` : ""}',
 ]) {
   if (recentMediaIssueCardSource.includes(forbiddenRecentMediaIssueCardToken)) {
     throw new Error(
@@ -20313,6 +20339,49 @@ const maxRecentMediaIssueCardErrorTypesLines = 2;
 if (recentMediaIssueCardErrorTypesLines > maxRecentMediaIssueCardErrorTypesLines) {
   throw new Error(
     `recent-media-issue-card-error.types.ts exceeded ${maxRecentMediaIssueCardErrorTypesLines} lines: ${recentMediaIssueCardErrorTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataUsage of [
+  'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";',
+  "}: RecentMediaIssueCardMetadataProps) {",
+  '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
+  '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
+  '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
+  '{action.label}{action.detail ? `: ${action.detail}` : ""}',
+]) {
+  if (!recentMediaIssueCardMetadataSource.includes(requiredRecentMediaIssueCardMetadataUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata.tsx must reuse the extracted recent-media card-metadata props type: ${requiredRecentMediaIssueCardMetadataUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardMetadataSource.includes("type RecentMediaIssueCardMetadataProps =")) {
+  throw new Error("recent-media-issue-card-metadata.tsx must keep recent-media card-metadata prop typing delegated");
+}
+
+const maxRecentMediaIssueCardMetadataLines = 8;
+if (recentMediaIssueCardMetadataLines > maxRecentMediaIssueCardMetadataLines) {
+  throw new Error(
+    `recent-media-issue-card-metadata.tsx exceeded ${maxRecentMediaIssueCardMetadataLines} lines: ${recentMediaIssueCardMetadataLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataTypesUsage of [
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; import type { getMediaIssueAction } from "../lib/media-issue-display"; export type RecentMediaIssueCardMetadataProps = Pick<RecentMediaIssueCardProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy"> & { action: ReturnType<typeof getMediaIssueAction> };',
+]) {
+  if (!recentMediaIssueCardMetadataTypesSource.includes(requiredRecentMediaIssueCardMetadataTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata.types.ts must own recent-media card-metadata prop typing: ${requiredRecentMediaIssueCardMetadataTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataTypesLines = 2;
+if (recentMediaIssueCardMetadataTypesLines > maxRecentMediaIssueCardMetadataTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-metadata.types.ts exceeded ${maxRecentMediaIssueCardMetadataTypesLines} lines: ${recentMediaIssueCardMetadataTypesLines}`,
   );
 }
 

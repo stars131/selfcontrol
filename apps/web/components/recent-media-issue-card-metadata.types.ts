@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; import type { getMediaIssueAction } from "../lib/media-issue-display"; export type RecentMediaIssueCardMetadataProps = Pick<RecentMediaIssueCardProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy"> & { action: ReturnType<typeof getMediaIssueAction> };
