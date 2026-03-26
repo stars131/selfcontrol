@@ -1887,6 +1887,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-list-item.tsx` now delegates job metadata summary rendering to `workspace-export-jobs-list-item-summary.tsx` instead of keeping the id/status/timestamp block inline beside the download action
   - the new `workspace-export-jobs-list-item-summary.types.ts` file keeps the summary contract explicit and reusable while the parent list-item remains focused on shell composition, download action, and error notice rendering
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs item-summary boundary, exact one-line type contract, and line-count ceilings so future export-jobs item updates stay safer and easier to maintain
+- Workspace Export Jobs Empty State Split V1:
+  - `workspace-export-jobs-list.tsx` now delegates empty-list notice rendering to `workspace-export-jobs-empty-state.tsx` instead of keeping the empty-state markup inline beside the job iteration branch
+  - the new `workspace-export-jobs-empty-state.types.ts` file keeps the empty-state contract explicit and reusable while the parent list remains focused on iteration and list shell composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs empty-state boundary, exact one-line type contract, and line-count ceilings so future export-jobs list updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

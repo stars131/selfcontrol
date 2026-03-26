@@ -1,5 +1,6 @@
 "use client";
 
+import { WorkspaceExportJobsEmptyState } from "./workspace-export-jobs-empty-state";
 import { WorkspaceExportJobsListItem } from "./workspace-export-jobs-list-item";
 import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types";
 
@@ -11,7 +12,7 @@ export function WorkspaceExportJobsList({ actionLoading, downloadLabel, emptyLab
           <WorkspaceExportJobsListItem actionLoading={actionLoading} downloadLabel={downloadLabel} job={job} key={job.id} locale={locale} onDownload={onDownload} />
         ))
       ) : (
-        <div className="notice">{emptyLabel}</div>
+        <WorkspaceExportJobsEmptyState emptyLabel={emptyLabel} />
       )}
     </div>
   );

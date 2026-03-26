@@ -18,6 +18,14 @@ const exportJobsListPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list.tsx",
 );
+const exportJobsEmptyStatePath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-empty-state.tsx",
+);
+const exportJobsEmptyStateTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-empty-state.types.ts",
+);
 const exportJobsHeaderPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-header.tsx",
@@ -63,6 +71,8 @@ const controllerSource = fs.readFileSync(exportJobsControllerPath, "utf8");
 const stateSource = fs.readFileSync(exportJobsStatePath, "utf8");
 const actionsSource = fs.readFileSync(exportJobsActionsPath, "utf8");
 const listSource = fs.readFileSync(exportJobsListPath, "utf8");
+const emptyStateSource = fs.readFileSync(exportJobsEmptyStatePath, "utf8");
+const emptyStateTypesSource = fs.readFileSync(exportJobsEmptyStateTypesPath, "utf8");
 const headerSource = fs.readFileSync(exportJobsHeaderPath, "utf8");
 const headerActionsSource = fs.readFileSync(exportJobsHeaderActionsPath, "utf8");
 const headerActionsTypesSource = fs.readFileSync(exportJobsHeaderActionsTypesPath, "utf8");
@@ -78,6 +88,8 @@ const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const stateLineCount = stateSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
 const listLineCount = listSource.split(/\r?\n/).length;
+const emptyStateLineCount = emptyStateSource.split(/\r?\n/).length;
+const emptyStateTypesLineCount = emptyStateTypesSource.split(/\r?\n/).length;
 const headerLineCount = headerSource.split(/\r?\n/).length;
 const headerActionsLineCount = headerActionsSource.split(/\r?\n/).length;
 const headerActionsTypesLineCount = headerActionsTypesSource.split(/\r?\n/).length;
@@ -130,9 +142,11 @@ if (!source.includes("<WorkspaceExportJobsNotices")) {
 }
 
 for (const requiredListUsage of [
+  'import { WorkspaceExportJobsEmptyState } from "./workspace-export-jobs-empty-state";',
   'import { WorkspaceExportJobsListItem } from "./workspace-export-jobs-list-item";',
   'import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types";',
   "<WorkspaceExportJobsListItem",
+  "<WorkspaceExportJobsEmptyState",
 ]) {
   if (!listSource.includes(requiredListUsage)) {
     throw new Error(`workspace-export-jobs-list.tsx must delegate per-job rendering: ${requiredListUsage}`);
@@ -143,6 +157,7 @@ for (const forbiddenListToken of [
   'new Date(job.created_at).toLocaleString(locale)',
   'job.status === "completed"',
   'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
+  '<div className="notice">{emptyLabel}</div>',
 ]) {
   if (listSource.includes(forbiddenListToken)) {
     throw new Error(`workspace-export-jobs-list.tsx must keep single-job details delegated: ${forbiddenListToken}`);
@@ -151,6 +166,36 @@ for (const forbiddenListToken of [
 
 if (listLineCount > 30) {
   throw new Error(`workspace-export-jobs-list.tsx exceeded 30 lines: ${listLineCount}`);
+}
+
+for (const requiredEmptyStateUsage of [
+  'import type { WorkspaceExportJobsEmptyStateProps } from "./workspace-export-jobs-empty-state.types";',
+  "}: WorkspaceExportJobsEmptyStateProps) {",
+  '<div className="notice">{emptyLabel}</div>',
+]) {
+  if (!emptyStateSource.includes(requiredEmptyStateUsage)) {
+    throw new Error(`workspace-export-jobs-empty-state.tsx must own empty-state rendering: ${requiredEmptyStateUsage}`);
+  }
+}
+
+if (emptyStateSource.includes("type WorkspaceExportJobsEmptyStateProps = Pick<")) {
+  throw new Error("workspace-export-jobs-empty-state.tsx must keep empty-state prop typing delegated");
+}
+
+if (emptyStateLineCount > 8) {
+  throw new Error(`workspace-export-jobs-empty-state.tsx exceeded 8 lines: ${emptyStateLineCount}`);
+}
+
+for (const requiredEmptyStateTypesUsage of [
+  'import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types"; export type WorkspaceExportJobsEmptyStateProps = Pick<WorkspaceExportJobsListProps, "emptyLabel">;',
+]) {
+  if (!emptyStateTypesSource.includes(requiredEmptyStateTypesUsage)) {
+    throw new Error(`workspace-export-jobs-empty-state.types.ts must own empty-state prop typing: ${requiredEmptyStateTypesUsage}`);
+  }
+}
+
+if (emptyStateTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-empty-state.types.ts exceeded 2 lines: ${emptyStateTypesLineCount}`);
 }
 
 for (const requiredHeaderUsage of [
