@@ -15181,11 +15181,15 @@ if (mapPanelContentTypesLines > maxMapPanelContentTypesLines) {
 }
 
 for (const requiredMapDrilldownCardUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import { MapDrilldownCardActions } from "./map-drilldown-card-actions";',
   'import { MapDrilldownCardFields } from "./map-drilldown-card-fields";',
   'import { MapDrilldownCardIntro } from "./map-drilldown-card-intro";',
   'import type { MapDrilldownCardProps } from "./map-drilldown-card.types";',
   "}: MapDrilldownCardProps) {",
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
   "<MapDrilldownCardIntro",
   "<MapDrilldownCardFields",
   "<MapDrilldownCardActions",
@@ -15201,14 +15205,7 @@ for (const forbiddenMapDrilldownCardToken of [
   'import type { LocationFilterState } from "../lib/types";',
   "}: {",
   '<div className="action-row">',
-  '{filteringRecords ? "Filtering..." : "Apply location filter"}',
-  "Mapped only",
-  "Clear location filter",
   '<div className="inline-fields">',
-  "Place query",
-  "Map status",
-  "needs_review",
-  '<div className="eyebrow">Map drill-down</div>',
 ]) {
   if (mapDrilldownCardSource.includes(forbiddenMapDrilldownCardToken)) {
     throw new Error(
@@ -15244,7 +15241,7 @@ if (mapDrilldownCardTypesLines > maxMapDrilldownCardTypesLines) {
 for (const requiredMapDrilldownCardIntroUsage of [
   'import type { MapDrilldownCardIntroProps } from "./map-drilldown-card-intro.types";',
   "}: MapDrilldownCardIntroProps) {",
-  '<div className="eyebrow">Map drill-down</div>',
+  'return <div className="eyebrow">{title}</div>;',
 ]) {
   if (!mapDrilldownCardIntroSource.includes(requiredMapDrilldownCardIntroUsage)) {
     throw new Error(
@@ -15265,7 +15262,7 @@ if (mapDrilldownCardIntroLines > maxMapDrilldownCardIntroLines) {
 }
 
 for (const requiredMapDrilldownCardIntroTypesUsage of [
-  'export type MapDrilldownCardIntroProps = Record<string, never>;',
+  'export type MapDrilldownCardIntroProps = { title: string };',
 ]) {
   if (!mapDrilldownCardIntroTypesSource.includes(requiredMapDrilldownCardIntroTypesUsage)) {
     throw new Error(
@@ -15283,11 +15280,19 @@ if (mapDrilldownCardIntroTypesLines > maxMapDrilldownCardIntroTypesLines) {
 
 for (const requiredMapDrilldownCardFieldsUsage of [
   'import type { MapDrilldownCardFieldsProps } from "./map-drilldown-card-fields.types";',
-  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types";',
   "}: MapDrilldownCardFieldsProps) {",
   '<div className="inline-fields">',
-  "Place query",
-  "Map status",
+  "placeQueryLabel",
+  "placeQueryPlaceholder",
+  "mapStatusLabel",
+  "reviewStatusLabel",
+  "allRecordsLabel",
+  "mappedOnlyLabel",
+  "unmappedOnlyLabel",
+  "pendingLabel",
+  "confirmedLabel",
+  "needsReviewLabel",
+  'value as MapDrilldownCardFieldsProps["filterDraft"]["mappedOnly"]',
   "needs_review",
 ]) {
   if (!mapDrilldownCardFieldsSource.includes(requiredMapDrilldownCardFieldsUsage)) {
@@ -15309,7 +15314,7 @@ if (mapDrilldownCardFieldsLines > maxMapDrilldownCardFieldsLines) {
 }
 
 for (const requiredMapDrilldownCardFieldsTypesUsage of [
-  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardFieldsProps = Pick<MapDrilldownCardProps, "filterDraft" | "onFilterDraftChange">;',
+  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardFieldsProps = Pick<MapDrilldownCardProps, "filterDraft" | "onFilterDraftChange"> & { allLabel: string; allRecordsLabel: string; confirmedLabel: string; mapStatusLabel: string; mappedOnlyLabel: string; needsReviewLabel: string; pendingLabel: string; placeQueryLabel: string; placeQueryPlaceholder: string; reviewStatusLabel: string; unmappedOnlyLabel: string };',
 ]) {
   if (!mapDrilldownCardFieldsTypesSource.includes(requiredMapDrilldownCardFieldsTypesUsage)) {
     throw new Error(
@@ -15329,9 +15334,10 @@ for (const requiredMapDrilldownCardActionsUsage of [
   'import type { MapDrilldownCardActionsProps } from "./map-drilldown-card-actions.types";',
   "}: MapDrilldownCardActionsProps) {",
   '<div className="action-row">',
-  '{filteringRecords ? "Filtering..." : "Apply location filter"}',
-  "Mapped only",
-  "Clear location filter",
+  "applyLocationFilterLabel",
+  "clearLocationFilterLabel",
+  "filteringLabel",
+  "mappedOnlyLabel",
 ]) {
   if (!mapDrilldownCardActionsSource.includes(requiredMapDrilldownCardActionsUsage)) {
     throw new Error(
@@ -15352,7 +15358,7 @@ if (mapDrilldownCardActionsLines > maxMapDrilldownCardActionsLines) {
 }
 
 for (const requiredMapDrilldownCardActionsTypesUsage of [
-  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardActionsProps = Pick<MapDrilldownCardProps, "filteringRecords" | "onApplyFilter" | "onClearFilter" | "onUseMappedOnly">;',
+  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardActionsProps = Pick<MapDrilldownCardProps, "filteringRecords" | "onApplyFilter" | "onClearFilter" | "onUseMappedOnly"> & { applyLocationFilterLabel: string; clearLocationFilterLabel: string; filteringLabel: string; mappedOnlyLabel: string };',
 ]) {
   if (!mapDrilldownCardActionsTypesSource.includes(requiredMapDrilldownCardActionsTypesUsage)) {
     throw new Error(

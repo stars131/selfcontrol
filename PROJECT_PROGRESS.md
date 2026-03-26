@@ -2095,6 +2095,10 @@ Last updated: 2026-03-26
   - quick add preview now shows parsed body content whenever it differs from the final title, so explicit-title entries can be confirmed before save without duplicating plain one-line notes
   - the preview typing and structure verification now treat `content` as part of the quick-add preview contract, keeping the new summary detail explicit and maintainable
   - localized quick-add hints now mention the `[Title] body` syntax so the one-input workflow remains discoverable in English, Chinese, and Japanese
+- Map Drilldown Localization V1:
+  - `map-drilldown-card.tsx` now resolves localized panel copy once and passes explicit labels down to the intro, fields, and action subcomponents instead of leaving the drilldown UI hardcoded in English
+  - the map drilldown filter fields and action buttons now follow the active interface language for place-query labels, map-status options, review-status options, and filter actions
+  - `verify-record-panel-structure.mjs` now enforces the localized prop contracts for the drilldown leaf components so future map-filter work does not regress back to hardcoded strings
 
 ## Next
 - Continue the next product slice

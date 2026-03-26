@@ -1,1 +1,1 @@
-export type MapDrilldownCardIntroProps = Record<string, never>;
+export type MapDrilldownCardIntroProps = { title: string };
