@@ -2075,6 +2075,10 @@ Last updated: 2026-03-26
   - quick add now supports absolute leading date tokens such as `2026-03-25` and `2026/03/25`, so one-line capture can store exact occurrence dates instead of only relative shortcuts like today or yesterday
   - invalid absolute dates now fall through safely instead of writing a malformed occurred-at timestamp, which keeps record time data stable under rushed input
   - behavior and structure verification now cover absolute date extraction, fallback behavior, and interaction with other quick-add control tokens
+- Record Quick Add Live Preview V1:
+  - `record-quick-add-preview.tsx` now renders a real-time preview of the detected quick-add type, occurred-at value, rating, place, address, and coordinates before save
+  - the preview only appears when the input begins with recognized quick-add control syntax, so plain free-text notes stay visually minimal
+  - `verify-record-panel-structure.mjs` now enforces the extracted preview boundary and preview prop contract so future quick-add UX enhancements remain maintainable
 
 ## Next
 - Continue the next product slice

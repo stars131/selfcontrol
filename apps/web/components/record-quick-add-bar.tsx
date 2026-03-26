@@ -5,8 +5,8 @@ import { FormEvent, useState } from "react";
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";
+import { RecordQuickAddPreview } from "./record-quick-add-preview";
 import type { RecordQuickAddBarProps } from "./record-quick-add-bar.types";
-
 export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQuickAddBarProps) {
   const { locale } = useStoredLocale();
   const { panelCopy } = getRecordPanelUiBundle(locale);
@@ -43,9 +43,7 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
         <input
           className="input"
           disabled={!canWriteWorkspace || saving}
-          placeholder={
-            canWriteWorkspace ? panelCopy.quickAddPlaceholder : panelCopy.quickAddDisabled
-          }
+          placeholder={canWriteWorkspace ? panelCopy.quickAddPlaceholder : panelCopy.quickAddDisabled}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
         />
@@ -53,11 +51,8 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
           {saving ? panelCopy.quickAddSaving : panelCopy.quickAddSave}
         </button>
       </div>
-      {canWriteWorkspace ? (
-        <div className="meta-text" style={{ marginTop: 8 }}>
-          {panelCopy.quickAddHint}
-        </div>
-      ) : null}
+      {canWriteWorkspace ? <div className="meta-text" style={{ marginTop: 8 }}>{panelCopy.quickAddHint}</div> : null}
+      {canWriteWorkspace ? <RecordQuickAddPreview draft={draft} locale={locale} panelCopy={panelCopy} /> : null}
       {error ? <div className="notice error">{error}</div> : null}
     </form>
   );

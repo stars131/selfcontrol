@@ -9,6 +9,14 @@ const recordQuickAddBarHelpersPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-bar.helpers.ts",
 );
+const recordQuickAddPreviewPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-preview.tsx",
+);
+const recordQuickAddPreviewTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-preview.types.ts",
+);
 const recordQuickAddBarHelpersTypesPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-bar.helpers.types.ts",
@@ -3843,6 +3851,11 @@ const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
 const recordQuickAddBarSource = fs.readFileSync(recordQuickAddBarPath, "utf8");
 const recordQuickAddBarHelpersSource = fs.readFileSync(recordQuickAddBarHelpersPath, "utf8");
+const recordQuickAddPreviewSource = fs.readFileSync(recordQuickAddPreviewPath, "utf8");
+const recordQuickAddPreviewTypesSource = fs.readFileSync(
+  recordQuickAddPreviewTypesPath,
+  "utf8",
+);
 const recordQuickAddBarHelpersTypesSource = fs.readFileSync(
   recordQuickAddBarHelpersTypesPath,
   "utf8",
@@ -4407,6 +4420,8 @@ const recordPanelHeaderLines = recordPanelHeaderSource.split(/\r?\n/).length;
 const recordPanelHeaderTypesLines = recordPanelHeaderTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarLines = recordQuickAddBarSource.split(/\r?\n/).length;
 const recordQuickAddBarHelpersLines = recordQuickAddBarHelpersSource.split(/\r?\n/).length;
+const recordQuickAddPreviewLines = recordQuickAddPreviewSource.split(/\r?\n/).length;
+const recordQuickAddPreviewTypesLines = recordQuickAddPreviewTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarHelpersTypesLines = recordQuickAddBarHelpersTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarTypesLines = recordQuickAddBarTypesSource.split(/\r?\n/).length;
 const legacyRecordPanelLines = legacyRecordPanelSource.split(/\r?\n/).length;
@@ -5344,6 +5359,7 @@ for (const requiredRecordQuickAddBarUsage of [
   'from "../lib/locale";',
   'from "../lib/record-panel-ui";',
   'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
+  'import { RecordQuickAddPreview } from "./record-quick-add-preview";',
   'import type { RecordQuickAddBarProps } from "./record-quick-add-bar.types";',
   "const { locale } = useStoredLocale()",
   "const { panelCopy } = getRecordPanelUiBundle(locale)",
@@ -5358,6 +5374,7 @@ for (const requiredRecordQuickAddBarUsage of [
   "panelCopy.quickAddSave",
   "panelCopy.quickAddSaving",
   "panelCopy.quickAddError",
+  "<RecordQuickAddPreview",
 ]) {
   if (!recordQuickAddBarSource.includes(requiredRecordQuickAddBarUsage)) {
     throw new Error(
@@ -5384,6 +5401,52 @@ const maxRecordQuickAddBarLines = 65;
 if (recordQuickAddBarLines > maxRecordQuickAddBarLines) {
   throw new Error(
     `record-quick-add-bar.tsx exceeded ${maxRecordQuickAddBarLines} lines: ${recordQuickAddBarLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddPreviewUsage of [
+  'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
+  'import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";',
+  "function shouldShowQuickAddPreview(draft: string)",
+  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206))/i.test(draft);',
+  "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
+  "const parsed = buildQuickAddRecordDraft(draft.trim());",
+  "panelCopy.quickAddPreview",
+  "panelCopy.occurredAt",
+  "panelCopy.rating",
+  "panelCopy.placeName",
+  "panelCopy.address",
+  "panelCopy.latitude",
+  "panelCopy.longitude",
+]) {
+  if (!recordQuickAddPreviewSource.includes(requiredRecordQuickAddPreviewUsage)) {
+    throw new Error(
+      `record-quick-add-preview.tsx must own quick-add preview rendering: ${requiredRecordQuickAddPreviewUsage}`,
+    );
+  }
+}
+
+const maxRecordQuickAddPreviewLines = 45;
+if (recordQuickAddPreviewLines > maxRecordQuickAddPreviewLines) {
+  throw new Error(
+    `record-quick-add-preview.tsx exceeded ${maxRecordQuickAddPreviewLines} lines: ${recordQuickAddPreviewLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddPreviewTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack"> };',
+]) {
+  if (!recordQuickAddPreviewTypesSource.includes(requiredRecordQuickAddPreviewTypesUsage)) {
+    throw new Error(
+      `record-quick-add-preview.types.ts must own quick-add preview typing: ${requiredRecordQuickAddPreviewTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordQuickAddPreviewTypesLines = 2;
+if (recordQuickAddPreviewTypesLines > maxRecordQuickAddPreviewTypesLines) {
+  throw new Error(
+    `record-quick-add-preview.types.ts exceeded ${maxRecordQuickAddPreviewTypesLines} lines: ${recordQuickAddPreviewTypesLines}`,
   );
 }
 

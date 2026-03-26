@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack"> };
