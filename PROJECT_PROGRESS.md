@@ -2071,6 +2071,10 @@ Last updated: 2026-03-26
   - quick add now supports an optional address segment via `@Place(lat,lng) | Address: content`, which writes `address` into `extra_data.location` alongside the place name and any validated coordinates
   - the address segment is optional and backward compatible with existing place-prefix entries, so older quick-add input formats continue to work unchanged
   - behavior and structure verification now cover address extraction so future quick-add location enhancements remain safe under the enterprise engineering standard
+- Record Quick Add Absolute Date Parsing V1:
+  - quick add now supports absolute leading date tokens such as `2026-03-25` and `2026/03/25`, so one-line capture can store exact occurrence dates instead of only relative shortcuts like today or yesterday
+  - invalid absolute dates now fall through safely instead of writing a malformed occurred-at timestamp, which keeps record time data stable under rushed input
+  - behavior and structure verification now cover absolute date extraction, fallback behavior, and interaction with other quick-add control tokens
 
 ## Next
 - Continue the next product slice

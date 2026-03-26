@@ -5405,6 +5405,8 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   '"#\\u8e29\\u96f7": AVOID_QUICK_ADD_RULE,',
   "function buildQuickAddTitle(content: string)",
   "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
+  "function parseQuickAddAbsoluteDateToken(token: string, now: Date)",
+  'const match = token.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})$/);',
   "function parseQuickAddRatingToken(token: string)",
   'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
   "function readQuickAddCoordinate(value: string, min: number, max: number)",
@@ -5415,11 +5417,13 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "const address = match[4]?.trim();",
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
+  "const absoluteDate = parseQuickAddAbsoluteDateToken(tokens[startIndex], now);",
   "const rating = parseQuickAddRatingToken(token);",
+  "if (absoluteDate) nextOccurredAt = absoluteDate;",
   'const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());',
   "extra_data: parsedLocation.extra_data,",
   "rating: nextRating,",
-  "occurred_at: buildQuickAddOccurredAt(nextTimeRule, now),",
+  "occurred_at: nextOccurredAt,",
   "return { ...parsed, title: buildQuickAddTitle(parsed.content) };",
 ]) {
   if (!recordQuickAddBarHelpersSource.includes(requiredRecordQuickAddBarHelpersUsage)) {

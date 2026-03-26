@@ -64,6 +64,26 @@ for (const [label, input, expected] of [
     { title: "\u665a\u996d\u4e0d\u9519", content: "\u665a\u996d\u4e0d\u9519", type_code: "memo", is_avoid: false, occurred_at: "2026-03-25T12:00:00.000Z", rating: null, extra_data: undefined },
   ],
   [
+    "absolute date token alias",
+    "2026-03-20 #memo trip noodles",
+    { title: "trip noodles", content: "trip noodles", type_code: "memo", is_avoid: false, occurred_at: "2026-03-20T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "absolute slash date token alias",
+    "2026/03/21 #snack travel cookies",
+    { title: "travel cookies", content: "travel cookies", type_code: "snack", is_avoid: false, occurred_at: "2026-03-21T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "last leading absolute date wins",
+    "2026-03-20 2026-03-22 #memo ramen list",
+    { title: "ramen list", content: "ramen list", type_code: "memo", is_avoid: false, occurred_at: "2026-03-22T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "invalid absolute date falls through",
+    "2026-02-31 #memo impossible date note",
+    { title: "2026-02-31 #memo impossible date note", content: "2026-02-31 #memo impossible date note", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
     "rating token alias",
     "5\u661f #\u96f6\u98df \u9ed1\u5de7\u514b\u529b",
     { title: "\u9ed1\u5de7\u514b\u529b", content: "\u9ed1\u5de7\u514b\u529b", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: 5, extra_data: undefined },
@@ -132,7 +152,7 @@ for (const [label, input, expected] of [
   ],
   [
     "place segment with control tokens",
-    "yesterday 5star @\u897f\u6e56\u8fb9\u5bff\u53f8\uff1a \u9cd7\u9c7c\u996d\u5f88\u597d\u5403",
+    "2026-03-25 5star @\u897f\u6e56\u8fb9\u5bff\u53f8\uff1a \u9cd7\u9c7c\u996d\u5f88\u597d\u5403",
     {
       title: "\u9cd7\u9c7c\u996d\u5f88\u597d\u5403",
       content: "\u9cd7\u9c7c\u996d\u5f88\u597d\u5403",
