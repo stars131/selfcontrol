@@ -15932,7 +15932,10 @@ if (useProviderSettingsDraftSyncTypesLines > maxUseProviderSettingsDraftSyncType
 }
 
 for (const requiredWorkspaceTransferJobCardUsage of [
+  'import { getWorkspaceTransferJobStatusLabel, getWorkspaceTransferJobTypeLabel } from "../lib/workspace-transfer-job-display";',
   'import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";',
+  "getWorkspaceTransferJobTypeLabel(locale, job.job_type)",
+  "getWorkspaceTransferJobStatusLabel(locale, job.status)",
   "}: WorkspaceTransferJobCardProps) {",
 ]) {
   if (!workspaceTransferJobCardSource.includes(requiredWorkspaceTransferJobCardUsage)) {
@@ -16893,9 +16896,11 @@ if (workspaceExportJobsListItemErrorTypesLines > maxWorkspaceExportJobsListItemE
 }
 
 for (const requiredWorkspaceExportJobsListItemSummaryUsage of [
+  'import { getWorkspaceTransferJobStatusLabel, getWorkspaceTransferJobTypeLabel } from "../lib/workspace-transfer-job-display";',
   'import type { WorkspaceExportJobsListItemSummaryProps } from "./workspace-export-jobs-list-item-summary.types";',
   "}: WorkspaceExportJobsListItemSummaryProps) {",
-  '<div className="eyebrow">{job.job_type} / {job.status}</div>',
+  "getWorkspaceTransferJobTypeLabel(locale, job.job_type)",
+  "getWorkspaceTransferJobStatusLabel(locale, job.status)",
   '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
   'new Date(job.created_at).toLocaleString(locale)',
 ]) {

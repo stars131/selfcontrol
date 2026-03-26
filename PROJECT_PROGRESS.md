@@ -2131,6 +2131,10 @@ Last updated: 2026-03-26
   - `share-link-display.ts` now owns localized share-link labels for permission codes, enabled state, chat share-management copy, and public share-preview copy so share access semantics stay consistent across entry points
   - the chat share-link card, create form, list items, public share-preview page, and workspace-join preview now render localized permission and status labels instead of raw values like `viewer`, `editor`, `enabled`, or `disabled`
   - `verify-record-panel-structure.mjs` now enforces those localized share-link helper hooks on the affected components so future sharing updates stay maintainable under the enterprise standard
+- Workspace Transfer Job Label Localization V1:
+  - `workspace-transfer-job-display.ts` now owns localized labels for transfer `job_type` and `status` codes, so import/export task cards do not leak raw backend values
+  - the workspace transfer-job card and export-job summary now show localized import/export and pending/running/completed/failed labels while keeping the existing action-button rules unchanged
+  - `verify-record-panel-structure.mjs`, `verify-workspace-entry-structure.mjs`, and `verify-workspace-export-jobs-structure.mjs` now lock the new helper usage so future transfer-job UI updates remain maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

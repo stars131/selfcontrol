@@ -565,8 +565,11 @@ if (transferJobsListTypesLineCount > 2) {
 
 for (const requiredTransferJobCardUsage of [
   'import Link from "next/link";',
+  'import { getWorkspaceTransferJobStatusLabel, getWorkspaceTransferJobTypeLabel } from "../lib/workspace-transfer-job-display";',
   'import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";',
   "const importedWorkspaceId =",
+  "getWorkspaceTransferJobTypeLabel(locale, job.job_type)",
+  "getWorkspaceTransferJobStatusLabel(locale, job.status)",
   'href={`/app/workspaces/${importedWorkspaceId}`}',
   "onClick={() => void onDownloadTransferJob(job.id)}",
   "new Date(job.created_at).toLocaleString(locale)",

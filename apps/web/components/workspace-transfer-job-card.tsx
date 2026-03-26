@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { getWorkspaceTransferJobStatusLabel, getWorkspaceTransferJobTypeLabel } from "../lib/workspace-transfer-job-display";
 import type { WorkspaceTransferJobCardProps } from "./workspace-transfer-job-card.types";
 
 export function WorkspaceTransferJobCard({
@@ -19,7 +20,7 @@ export function WorkspaceTransferJobCard({
     <article className="message">
       <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
         <div>
-          <div className="eyebrow">{job.job_type} / {job.status}</div>
+          <div className="eyebrow">{getWorkspaceTransferJobTypeLabel(locale, job.job_type)} / {getWorkspaceTransferJobStatusLabel(locale, job.status)}</div>
           <div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>
           <div className="muted" style={{ marginTop: 8 }}>
             {new Date(job.created_at).toLocaleString(locale)}

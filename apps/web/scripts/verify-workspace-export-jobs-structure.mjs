@@ -503,9 +503,11 @@ if (listItemErrorTypesLineCount > 2) {
 }
 
 for (const requiredListItemSummaryUsage of [
+  'import { getWorkspaceTransferJobStatusLabel, getWorkspaceTransferJobTypeLabel } from "../lib/workspace-transfer-job-display";',
   'import type { WorkspaceExportJobsListItemSummaryProps } from "./workspace-export-jobs-list-item-summary.types";',
   "}: WorkspaceExportJobsListItemSummaryProps) {",
-  '<div className="eyebrow">{job.job_type} / {job.status}</div>',
+  "getWorkspaceTransferJobTypeLabel(locale, job.job_type)",
+  "getWorkspaceTransferJobStatusLabel(locale, job.status)",
   '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
   'new Date(job.created_at).toLocaleString(locale)',
 ]) {
