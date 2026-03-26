@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { getCurrentUser, listWorkspaces } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
@@ -16,12 +16,19 @@ export function useWorkspaceEntryLoad({
   setUser,
   setWorkspaces,
 }: UseWorkspaceEntryLoadInput) {
+  const lastLoadKeyRef = useRef<string | null>(null);
+
   useEffect(() => {
     const nextToken = getStoredToken();
     if (!nextToken) {
+      lastLoadKeyRef.current = null;
       router.replace("/login");
       return;
     }
+    if (lastLoadKeyRef.current === nextToken) {
+      return;
+    }
+    lastLoadKeyRef.current = nextToken;
 
     const load = async () => {
       try {
@@ -34,6 +41,7 @@ export function useWorkspaceEntryLoad({
         setWorkspaces(workspaceResult.items);
         await loadTransferJobs(nextToken);
       } catch (caught) {
+        lastLoadKeyRef.current = null;
         clearStoredSession();
         setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to load workspace list"));
         router.replace("/login");

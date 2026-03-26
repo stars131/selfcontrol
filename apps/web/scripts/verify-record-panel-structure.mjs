@@ -1797,6 +1797,14 @@ const providerFeatureMediaStorageOptionTogglesTypesPath = path.resolve(
   process.cwd(),
   "components/provider-feature-media-storage-option-toggles.types.ts",
 );
+const providerFeatureMediaStorageRetryFieldsPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-retry-fields.tsx",
+);
+const providerFeatureMediaStorageRetryFieldsTypesPath = path.resolve(
+  process.cwd(),
+  "components/provider-feature-media-storage-retry-fields.types.ts",
+);
 const providerFeatureCardActionsPath = path.resolve(
   process.cwd(),
   "components/provider-feature-card-actions.tsx",
@@ -3334,6 +3342,14 @@ const providerFeatureMediaStorageOptionTogglesTypesSource = fs.readFileSync(
   providerFeatureMediaStorageOptionTogglesTypesPath,
   "utf8",
 );
+const providerFeatureMediaStorageRetryFieldsSource = fs.readFileSync(
+  providerFeatureMediaStorageRetryFieldsPath,
+  "utf8",
+);
+const providerFeatureMediaStorageRetryFieldsTypesSource = fs.readFileSync(
+  providerFeatureMediaStorageRetryFieldsTypesPath,
+  "utf8",
+);
 const providerFeatureMediaStorageOptionsTypesSource = fs.readFileSync(
   providerFeatureMediaStorageOptionsTypesPath,
   "utf8",
@@ -4753,6 +4769,10 @@ const providerFeatureMediaStorageOptionTogglesLines =
   providerFeatureMediaStorageOptionTogglesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionTogglesTypesLines =
   providerFeatureMediaStorageOptionTogglesTypesSource.split(/\r?\n/).length;
+const providerFeatureMediaStorageRetryFieldsLines =
+  providerFeatureMediaStorageRetryFieldsSource.split(/\r?\n/).length;
+const providerFeatureMediaStorageRetryFieldsTypesLines =
+  providerFeatureMediaStorageRetryFieldsTypesSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsHelpersLines =
   providerFeatureMediaStorageOptionsHelpersSource.split(/\r?\n/).length;
 const providerFeatureMediaStorageOptionsHelpersTypesLines =
@@ -18529,13 +18549,12 @@ if (providerSettingsFeatureListTypesLines > maxProviderSettingsFeatureListTypesL
 }
 
 for (const requiredProviderFeatureMediaStorageOptionsUsage of [
-  'from "./provider-feature-media-storage-options.helpers";',
   'import { ProviderFeatureMediaStorageOptionToggles } from "./provider-feature-media-storage-option-toggles";',
+  'import { ProviderFeatureMediaStorageRetryFields } from "./provider-feature-media-storage-retry-fields";',
   'import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types";',
   "}: ProviderFeatureMediaStorageOptionsProps) {",
-  "readProviderFeatureMediaStorageTextOption(",
-  "buildProviderFeatureMediaStorageOptionsPatch(",
   "<ProviderFeatureMediaStorageOptionToggles",
+  "<ProviderFeatureMediaStorageRetryFields",
 ]) {
   if (!providerFeatureMediaStorageOptionsSource.includes(requiredProviderFeatureMediaStorageOptionsUsage)) {
     throw new Error(
@@ -18552,12 +18571,18 @@ for (const forbiddenProviderFeatureMediaStorageOptionsToken of [
   'const MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION = "remote_retry_max_attempts";',
   'const MEDIA_STORAGE_RETRY_BACKOFF_OPTION = "remote_retry_backoff_seconds";',
   "readProviderFeatureMediaStorageBooleanOption(",
+  "readProviderFeatureMediaStorageTextOption(",
+  "buildProviderFeatureMediaStorageOptionsPatch(",
   "copy: ProviderSettingsCopy;",
   "draftItem: ProviderDraft;",
   "copy.fallbackToLocal",
   "copy.autoRetry",
+  "copy.retryAttempts",
+  "copy.retryBackoff",
   "MEDIA_STORAGE_FALLBACK_OPTION",
   "MEDIA_STORAGE_AUTO_RETRY_OPTION",
+  "MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION",
+  "MEDIA_STORAGE_RETRY_BACKOFF_OPTION",
 ]) {
   if (providerFeatureMediaStorageOptionsSource.includes(forbiddenProviderFeatureMediaStorageOptionsToken)) {
     throw new Error(
@@ -18623,6 +18648,68 @@ if (
 ) {
   throw new Error(
     `provider-feature-media-storage-option-toggles.types.ts exceeded ${maxProviderFeatureMediaStorageOptionTogglesTypesLines} lines: ${providerFeatureMediaStorageOptionTogglesTypesLines}`,
+  );
+}
+
+for (const requiredProviderFeatureMediaStorageRetryFieldsUsage of [
+  'from "./provider-feature-media-storage-options.helpers";',
+  'import type { ProviderFeatureMediaStorageRetryFieldsProps } from "./provider-feature-media-storage-retry-fields.types";',
+  "}: ProviderFeatureMediaStorageRetryFieldsProps) {",
+  "readProviderFeatureMediaStorageTextOption(",
+  "buildProviderFeatureMediaStorageOptionsPatch(",
+  "copy.retryAttempts",
+  "copy.retryBackoff",
+  "MEDIA_STORAGE_RETRY_MAX_ATTEMPTS_OPTION",
+  "MEDIA_STORAGE_RETRY_BACKOFF_OPTION",
+]) {
+  if (!providerFeatureMediaStorageRetryFieldsSource.includes(requiredProviderFeatureMediaStorageRetryFieldsUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-retry-fields.tsx must own media-storage retry input rendering: ${requiredProviderFeatureMediaStorageRetryFieldsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenProviderFeatureMediaStorageRetryFieldsToken of [
+  'import type { ProviderSettingsCopy } from "./provider-settings-copy";',
+  'import type { ProviderDraft } from "./provider-settings-controller.types";',
+  "readProviderFeatureMediaStorageBooleanOption(",
+  "copy.fallbackToLocal",
+  "copy.autoRetry",
+  "copy.retryHint",
+  "MEDIA_STORAGE_FALLBACK_OPTION",
+  "MEDIA_STORAGE_AUTO_RETRY_OPTION",
+]) {
+  if (providerFeatureMediaStorageRetryFieldsSource.includes(forbiddenProviderFeatureMediaStorageRetryFieldsToken)) {
+    throw new Error(
+      `provider-feature-media-storage-retry-fields.tsx must stay focused on retry inputs only: ${forbiddenProviderFeatureMediaStorageRetryFieldsToken}`,
+    );
+  }
+}
+
+const maxProviderFeatureMediaStorageRetryFieldsLines = 25;
+if (providerFeatureMediaStorageRetryFieldsLines > maxProviderFeatureMediaStorageRetryFieldsLines) {
+  throw new Error(
+    `provider-feature-media-storage-retry-fields.tsx exceeded ${maxProviderFeatureMediaStorageRetryFieldsLines} lines: ${providerFeatureMediaStorageRetryFieldsLines}`,
+  );
+}
+
+for (const requiredProviderFeatureMediaStorageRetryFieldsTypesUsage of [
+  'import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types"; export type ProviderFeatureMediaStorageRetryFieldsProps = Pick<ProviderFeatureMediaStorageOptionsProps, "copy" | "draftItem" | "featureCode" | "onProviderDraftChange">;',
+]) {
+  if (!providerFeatureMediaStorageRetryFieldsTypesSource.includes(requiredProviderFeatureMediaStorageRetryFieldsTypesUsage)) {
+    throw new Error(
+      `provider-feature-media-storage-retry-fields.types.ts must own media-storage retry-field typing: ${requiredProviderFeatureMediaStorageRetryFieldsTypesUsage}`,
+    );
+  }
+}
+
+const maxProviderFeatureMediaStorageRetryFieldsTypesLines = 2;
+if (
+  providerFeatureMediaStorageRetryFieldsTypesLines >
+  maxProviderFeatureMediaStorageRetryFieldsTypesLines
+) {
+  throw new Error(
+    `provider-feature-media-storage-retry-fields.types.ts exceeded ${maxProviderFeatureMediaStorageRetryFieldsTypesLines} lines: ${providerFeatureMediaStorageRetryFieldsTypesLines}`,
   );
 }
 

@@ -2023,6 +2023,14 @@ Last updated: 2026-03-25
   - `provider-feature-media-storage-options.tsx` now delegates the fallback and auto-retry checkbox group to `provider-feature-media-storage-option-toggles.tsx` instead of keeping those boolean controls inline beside the retry text inputs
   - the new `provider-feature-media-storage-option-toggles.types.ts` file keeps the toggle-group contract explicit and reusable while the parent options component remains focused on retry field composition
   - `verify-record-panel-structure.mjs` now enforces that delegated media-storage toggle boundary, exact one-line type contract, and line-count ceilings so future provider media-storage updates stay easier to maintain under the enterprise engineering standard
+- Provider Media Storage Retry Fields Split V1:
+  - `provider-feature-media-storage-options.tsx` now delegates the retry-attempt and retry-backoff inputs to `provider-feature-media-storage-retry-fields.tsx` instead of keeping those text controls inline beside the hint copy
+  - the new `provider-feature-media-storage-retry-fields.types.ts` file keeps the retry-field contract explicit and reusable while the parent options component remains focused on composing stable media-storage sections
+  - `verify-record-panel-structure.mjs` now enforces that delegated media-storage retry-field boundary, exact one-line type contract, and line-count ceilings so future provider media-storage updates stay easier to maintain under the enterprise engineering standard
+- Login Refresh Loop Guard V1:
+  - `use-workspace-entry-load.ts` now keeps a per-token initialization guard so the workspace entry page no longer re-runs transfer-job loading on every render after login
+  - `use-workspace-shell-initial-load.ts` now keeps a per-workspace/token initialization guard so the main workspace shell no longer replays its bootstrap refresh chain when render-time dependencies are recreated
+  - this keeps login-time refresh behavior stable and predictable without changing the underlying refresh helpers or polling responsibilities
 
 ## Next
 - Continue the next product slice

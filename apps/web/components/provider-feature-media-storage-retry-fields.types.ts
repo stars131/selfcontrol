@@ -1,0 +1,1 @@
+import type { ProviderFeatureMediaStorageOptionsProps } from "./provider-feature-media-storage-options.types"; export type ProviderFeatureMediaStorageRetryFieldsProps = Pick<ProviderFeatureMediaStorageOptionsProps, "copy" | "draftItem" | "featureCode" | "onProviderDraftChange">;
