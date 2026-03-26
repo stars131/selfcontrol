@@ -1396,6 +1396,14 @@ const workspaceSettingsOverviewCardPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.tsx",
 );
+const workspaceSettingsOverviewSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-summary.tsx",
+);
+const workspaceSettingsOverviewSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-summary.types.ts",
+);
 const workspaceSettingsOverviewDetailsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-details.tsx",
@@ -2643,6 +2651,14 @@ const workspaceSettingsHeaderActionsTypesSource = fs.readFileSync(
 );
 const workspaceSettingsOverviewCardSource = fs.readFileSync(
   workspaceSettingsOverviewCardPath,
+  "utf8",
+);
+const workspaceSettingsOverviewSummarySource = fs.readFileSync(
+  workspaceSettingsOverviewSummaryPath,
+  "utf8",
+);
+const workspaceSettingsOverviewSummaryTypesSource = fs.readFileSync(
+  workspaceSettingsOverviewSummaryTypesPath,
   "utf8",
 );
 const workspaceSettingsOverviewDetailsSource = fs.readFileSync(
@@ -4005,6 +4021,12 @@ const workspaceExportJobsListTypesLines =
   workspaceExportJobsListTypesSource.split(/\r?\n/).length;
 const workspaceExportJobsControllerTypesLines =
   workspaceExportJobsControllerTypesSource.split(/\r?\n/).length;
+const workspaceSettingsOverviewCardLines =
+  workspaceSettingsOverviewCardSource.split(/\r?\n/).length;
+const workspaceSettingsOverviewSummaryLines =
+  workspaceSettingsOverviewSummarySource.split(/\r?\n/).length;
+const workspaceSettingsOverviewSummaryTypesLines =
+  workspaceSettingsOverviewSummaryTypesSource.split(/\r?\n/).length;
 const workspaceSettingsOverviewDetailsLines =
   workspaceSettingsOverviewDetailsSource.split(/\r?\n/).length;
 const workspaceSettingsOverviewDetailsTypesLines =
@@ -15313,9 +15335,11 @@ if (workspaceSettingsHeaderActionsTypesLines > maxWorkspaceSettingsHeaderActions
 }
 
 for (const requiredWorkspaceSettingsOverviewCardUsage of [
+  'import { WorkspaceSettingsOverviewSummary } from "./workspace-settings-overview-summary";',
   'import { WorkspaceSettingsOverviewDetails } from "./workspace-settings-overview-details";',
   'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";',
   "}: WorkspaceSettingsOverviewCardProps) {",
+  "<WorkspaceSettingsOverviewSummary",
   "<WorkspaceSettingsOverviewDetails",
 ]) {
   if (!workspaceSettingsOverviewCardSource.includes(requiredWorkspaceSettingsOverviewCardUsage)) {
@@ -15328,6 +15352,8 @@ for (const requiredWorkspaceSettingsOverviewCardUsage of [
 for (const forbiddenWorkspaceSettingsOverviewCardToken of [
   'import type { KnowledgeStats } from "../lib/types";',
   "type WorkspaceSettingsOverviewCardProps = {",
+  '<div className="eyebrow">{copy.apiTitle}</div>',
+  "{copy.apiDescription}",
   'process.env.NEXT_PUBLIC_API_BASE_URL',
   'process.env.NEXT_PUBLIC_AMAP_KEY',
   'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
@@ -15338,6 +15364,54 @@ for (const forbiddenWorkspaceSettingsOverviewCardToken of [
       `workspace-settings-overview-card.tsx must keep settings overview prop typing delegated: ${forbiddenWorkspaceSettingsOverviewCardToken}`,
     );
   }
+}
+
+const maxWorkspaceSettingsOverviewCardLines = 20;
+if (workspaceSettingsOverviewCardLines > maxWorkspaceSettingsOverviewCardLines) {
+  throw new Error(
+    `workspace-settings-overview-card.tsx exceeded ${maxWorkspaceSettingsOverviewCardLines} lines: ${workspaceSettingsOverviewCardLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsOverviewSummaryUsage of [
+  'import type { WorkspaceSettingsOverviewSummaryProps } from "./workspace-settings-overview-summary.types";',
+  "}: WorkspaceSettingsOverviewSummaryProps) {",
+  '<div className="eyebrow">{copy.apiTitle}</div>',
+  "{copy.apiDescription}",
+]) {
+  if (!workspaceSettingsOverviewSummarySource.includes(requiredWorkspaceSettingsOverviewSummaryUsage)) {
+    throw new Error(
+      `workspace-settings-overview-summary.tsx must reuse the extracted overview-summary props type: ${requiredWorkspaceSettingsOverviewSummaryUsage}`,
+    );
+  }
+}
+
+if (workspaceSettingsOverviewSummarySource.includes("type WorkspaceSettingsOverviewSummaryProps = Pick<")) {
+  throw new Error("workspace-settings-overview-summary.tsx must keep overview-summary prop typing delegated");
+}
+
+const maxWorkspaceSettingsOverviewSummaryLines = 12;
+if (workspaceSettingsOverviewSummaryLines > maxWorkspaceSettingsOverviewSummaryLines) {
+  throw new Error(
+    `workspace-settings-overview-summary.tsx exceeded ${maxWorkspaceSettingsOverviewSummaryLines} lines: ${workspaceSettingsOverviewSummaryLines}`,
+  );
+}
+
+for (const requiredWorkspaceSettingsOverviewSummaryTypesUsage of [
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types"; export type WorkspaceSettingsOverviewSummaryProps = Pick<WorkspaceSettingsOverviewCardProps, "copy">;',
+]) {
+  if (!workspaceSettingsOverviewSummaryTypesSource.includes(requiredWorkspaceSettingsOverviewSummaryTypesUsage)) {
+    throw new Error(
+      `workspace-settings-overview-summary.types.ts must own overview-summary prop typing: ${requiredWorkspaceSettingsOverviewSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceSettingsOverviewSummaryTypesLines = 2;
+if (workspaceSettingsOverviewSummaryTypesLines > maxWorkspaceSettingsOverviewSummaryTypesLines) {
+  throw new Error(
+    `workspace-settings-overview-summary.types.ts exceeded ${maxWorkspaceSettingsOverviewSummaryTypesLines} lines: ${workspaceSettingsOverviewSummaryTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceSettingsOverviewDetailsUsage of [

@@ -38,6 +38,14 @@ const workspaceSettingsOverviewCardPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-card.tsx",
 );
+const workspaceSettingsOverviewSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-summary.tsx",
+);
+const workspaceSettingsOverviewSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-overview-summary.types.ts",
+);
 const workspaceSettingsOverviewDetailsPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-overview-details.tsx",
@@ -107,6 +115,11 @@ const providerViewerNoticeTypesSource = fs.readFileSync(
   "utf8",
 );
 const overviewCardSource = fs.readFileSync(workspaceSettingsOverviewCardPath, "utf8");
+const overviewSummarySource = fs.readFileSync(workspaceSettingsOverviewSummaryPath, "utf8");
+const overviewSummaryTypesSource = fs.readFileSync(
+  workspaceSettingsOverviewSummaryTypesPath,
+  "utf8",
+);
 const overviewDetailsSource = fs.readFileSync(workspaceSettingsOverviewDetailsPath, "utf8");
 const overviewDetailsTypesSource = fs.readFileSync(
   workspaceSettingsOverviewDetailsTypesPath,
@@ -138,6 +151,8 @@ const providerViewerNoticeLineCount = providerViewerNoticeSource.split(/\r?\n/).
 const providerViewerNoticeTypesLineCount =
   providerViewerNoticeTypesSource.split(/\r?\n/).length;
 const overviewCardLineCount = overviewCardSource.split(/\r?\n/).length;
+const overviewSummaryLineCount = overviewSummarySource.split(/\r?\n/).length;
+const overviewSummaryTypesLineCount = overviewSummaryTypesSource.split(/\r?\n/).length;
 const overviewDetailsLineCount = overviewDetailsSource.split(/\r?\n/).length;
 const overviewDetailsTypesLineCount = overviewDetailsTypesSource.split(/\r?\n/).length;
 const managedSectionsLineCount = managedSectionsSource.split(/\r?\n/).length;
@@ -547,9 +562,11 @@ if (providerSectionTypesLineCount > 35) {
 }
 
 for (const requiredOverviewCardUsage of [
+  'import { WorkspaceSettingsOverviewSummary } from "./workspace-settings-overview-summary";',
   'import { WorkspaceSettingsOverviewDetails } from "./workspace-settings-overview-details";',
   'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types";',
   "}: WorkspaceSettingsOverviewCardProps) {",
+  "<WorkspaceSettingsOverviewSummary",
   "<WorkspaceSettingsOverviewDetails",
 ]) {
   if (!overviewCardSource.includes(requiredOverviewCardUsage)) {
@@ -558,6 +575,8 @@ for (const requiredOverviewCardUsage of [
 }
 
 for (const forbiddenOverviewCardToken of [
+  '<div className="eyebrow">{copy.apiTitle}</div>',
+  "{copy.apiDescription}",
   'process.env.NEXT_PUBLIC_API_BASE_URL',
   'process.env.NEXT_PUBLIC_AMAP_KEY',
   'knowledgeStats ? `${knowledgeStats.chunk_count} chunks / ${knowledgeStats.record_count} records` : "-"',
@@ -570,6 +589,37 @@ for (const forbiddenOverviewCardToken of [
 
 if (overviewCardLineCount > 20) {
   throw new Error(`workspace-settings-overview-card.tsx exceeded 20 lines: ${overviewCardLineCount}`);
+}
+
+for (const requiredOverviewSummaryUsage of [
+  'import type { WorkspaceSettingsOverviewSummaryProps } from "./workspace-settings-overview-summary.types";',
+  "}: WorkspaceSettingsOverviewSummaryProps) {",
+  '<div className="eyebrow">{copy.apiTitle}</div>',
+  "{copy.apiDescription}",
+]) {
+  if (!overviewSummarySource.includes(requiredOverviewSummaryUsage)) {
+    throw new Error(`workspace-settings-overview-summary.tsx must own overview summary rendering: ${requiredOverviewSummaryUsage}`);
+  }
+}
+
+if (overviewSummarySource.includes("type WorkspaceSettingsOverviewSummaryProps = Pick<")) {
+  throw new Error("workspace-settings-overview-summary.tsx must keep overview-summary prop typing delegated");
+}
+
+if (overviewSummaryLineCount > 12) {
+  throw new Error(`workspace-settings-overview-summary.tsx exceeded 12 lines: ${overviewSummaryLineCount}`);
+}
+
+for (const requiredOverviewSummaryTypesUsage of [
+  'import type { WorkspaceSettingsOverviewCardProps } from "./workspace-settings-overview-card.types"; export type WorkspaceSettingsOverviewSummaryProps = Pick<WorkspaceSettingsOverviewCardProps, "copy">;',
+]) {
+  if (!overviewSummaryTypesSource.includes(requiredOverviewSummaryTypesUsage)) {
+    throw new Error(`workspace-settings-overview-summary.types.ts must own overview-summary prop typing: ${requiredOverviewSummaryTypesUsage}`);
+  }
+}
+
+if (overviewSummaryTypesLineCount > 2) {
+  throw new Error(`workspace-settings-overview-summary.types.ts exceeded 2 lines: ${overviewSummaryTypesLineCount}`);
 }
 
 for (const requiredOverviewDetailsUsage of [

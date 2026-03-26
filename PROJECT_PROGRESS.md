@@ -1891,6 +1891,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-list.tsx` now delegates empty-list notice rendering to `workspace-export-jobs-empty-state.tsx` instead of keeping the empty-state markup inline beside the job iteration branch
   - the new `workspace-export-jobs-empty-state.types.ts` file keeps the empty-state contract explicit and reusable while the parent list remains focused on iteration and list shell composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs empty-state boundary, exact one-line type contract, and line-count ceilings so future export-jobs list updates stay safer and easier to maintain
+- Workspace Settings Overview Summary Split V1:
+  - `workspace-settings-overview-card.tsx` now delegates overview eyebrow/title/description rendering to `workspace-settings-overview-summary.tsx` instead of keeping the summary copy inline above the details grid leaf
+  - the new `workspace-settings-overview-summary.types.ts` file keeps the overview-summary contract explicit and reusable while the parent overview card remains focused on shell composition
+  - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated overview-summary boundary, exact one-line type contract, and line-count ceilings so future settings-overview updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
