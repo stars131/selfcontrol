@@ -6,6 +6,7 @@ function shouldShowQuickAddPreview(draft: string) {
 }
 
 function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps["panelCopy"]) {
+  if (typeCode === "food") return panelCopy.food;
   if (typeCode === "snack") return panelCopy.snack;
   if (typeCode === "bad_experience") return panelCopy.badExperience;
   return panelCopy.memo;

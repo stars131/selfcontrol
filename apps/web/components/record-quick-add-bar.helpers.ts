@@ -2,33 +2,18 @@ import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";
 type QuickAddTagRule = Pick<QuickAddRecordDraft, "is_avoid" | "type_code">;
 type QuickAddTimeTokenRule = "today" | "yesterday";
 const DEFAULT_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "memo", is_avoid: false };
+const FOOD_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "food", is_avoid: false };
 const SNACK_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "snack", is_avoid: false };
 const AVOID_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "bad_experience", is_avoid: true };
 const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {
-  "#memo": DEFAULT_QUICK_ADD_RULE,
-  "#note": DEFAULT_QUICK_ADD_RULE,
-  "#\u5907\u5fd8": DEFAULT_QUICK_ADD_RULE,
-  "#snack": SNACK_QUICK_ADD_RULE,
-  "#\u96f6\u98df": SNACK_QUICK_ADD_RULE,
-  "#avoid": AVOID_QUICK_ADD_RULE,
-  "#bad": AVOID_QUICK_ADD_RULE,
-  "#warning": AVOID_QUICK_ADD_RULE,
-  "#\u907f\u96f7": AVOID_QUICK_ADD_RULE,
-  "#\u8e29\u96f7": AVOID_QUICK_ADD_RULE,
+  "#memo": DEFAULT_QUICK_ADD_RULE, "#note": DEFAULT_QUICK_ADD_RULE, "#\u5907\u5fd8": DEFAULT_QUICK_ADD_RULE,
+  "#food": FOOD_QUICK_ADD_RULE, "#meal": FOOD_QUICK_ADD_RULE, "#\u6b63\u9910": FOOD_QUICK_ADD_RULE,
+  "#snack": SNACK_QUICK_ADD_RULE, "#\u96f6\u98df": SNACK_QUICK_ADD_RULE,
+  "#avoid": AVOID_QUICK_ADD_RULE, "#bad": AVOID_QUICK_ADD_RULE, "#warning": AVOID_QUICK_ADD_RULE, "#\u907f\u96f7": AVOID_QUICK_ADD_RULE, "#\u8e29\u96f7": AVOID_QUICK_ADD_RULE,
 };
 const QUICK_ADD_TIME_TOKENS: Record<string, QuickAddTimeTokenRule> = {
-  today: "today",
-  "#today": "today",
-  "\u4eca\u5929": "today",
-  "#\u4eca\u5929": "today",
-  "\u4eca\u65e5": "today",
-  "#\u4eca\u65e5": "today",
-  yesterday: "yesterday",
-  "#yesterday": "yesterday",
-  "\u6628\u5929": "yesterday",
-  "#\u6628\u5929": "yesterday",
-  "\u6628\u65e5": "yesterday",
-  "#\u6628\u65e5": "yesterday",
+  today: "today", "#today": "today", "\u4eca\u5929": "today", "#\u4eca\u5929": "today", "\u4eca\u65e5": "today", "#\u4eca\u65e5": "today",
+  yesterday: "yesterday", "#yesterday": "yesterday", "\u6628\u5929": "yesterday", "#\u6628\u5929": "yesterday", "\u6628\u65e5": "yesterday", "#\u6628\u65e5": "yesterday",
 };
 function buildQuickAddTitle(content: string) { return content.length > 48 ? `${content.slice(0, 45)}...` : content; }
 function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date) {

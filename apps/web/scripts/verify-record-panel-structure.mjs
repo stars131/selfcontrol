@@ -5412,6 +5412,7 @@ for (const requiredRecordQuickAddPreviewUsage of [
   "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
   "const parsed = buildQuickAddRecordDraft(draft.trim());",
   "panelCopy.quickAddPreview",
+  "panelCopy.food",
   "panelCopy.title",
   "panelCopy.occurredAt",
   "panelCopy.rating",
@@ -5435,7 +5436,7 @@ if (recordQuickAddPreviewLines > maxRecordQuickAddPreviewLines) {
 }
 
 for (const requiredRecordQuickAddPreviewTypesUsage of [
-  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack" | "title"> };',
+  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "food" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack" | "title"> };',
 ]) {
   if (!recordQuickAddPreviewTypesSource.includes(requiredRecordQuickAddPreviewTypesUsage)) {
     throw new Error(
@@ -5456,6 +5457,11 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   'const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {',
   '"#memo": DEFAULT_QUICK_ADD_RULE,',
   '"#\\u5907\\u5fd8": DEFAULT_QUICK_ADD_RULE,',
+  "const FOOD_QUICK_ADD_RULE: QuickAddTagRule = {",
+  'type_code: "food",',
+  '"#food": FOOD_QUICK_ADD_RULE,',
+  '"#meal": FOOD_QUICK_ADD_RULE,',
+  '"#\\u6b63\\u9910": FOOD_QUICK_ADD_RULE,',
   'const QUICK_ADD_TIME_TOKENS: Record<string, QuickAddTimeTokenRule> = {',
   '"\\u4eca\\u5929": "today",',
   '"\\u6628\\u5929": "yesterday",',

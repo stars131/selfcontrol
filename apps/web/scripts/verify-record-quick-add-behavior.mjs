@@ -39,6 +39,16 @@ for (const [label, input, expected] of [
     { title: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", content: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
   ],
   [
+    "english food tag",
+    "#food west lake fish dinner",
+    { title: "west lake fish dinner", content: "west lake fish dinner", type_code: "food", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "chinese food tag",
+    "#\u6b63\u9910 \u4eca\u665a\u7684\u70e7\u9e45\u996d\u5f88\u9999",
+    { title: "\u4eca\u665a\u7684\u70e7\u9e45\u996d\u5f88\u9999", content: "\u4eca\u665a\u7684\u70e7\u9e45\u996d\u5f88\u9999", type_code: "food", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
     "last leading tag wins",
     "#\u96f6\u98df #\u907f\u96f7 \u592a\u54b8\u4e86",
     { title: "\u592a\u54b8\u4e86", content: "\u592a\u54b8\u4e86", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },

@@ -2087,6 +2087,10 @@ Last updated: 2026-03-26
   - quick add now supports explicit titles via `[Title] body` and `【标题】 正文`, so one-line capture can stay lightweight without giving up structured titles
   - explicit title parsing happens after other recognized quick-add control tokens, so type, time, rating, and place prefixes still work together with a custom title
   - the live preview now shows the final title explicitly, and verification covers the new title syntax in both English and Chinese bracket forms
+- Record Quick Add Food Tags V1:
+  - quick add now supports meal-oriented tags such as `#food`, `#meal`, and `#正餐`, so one-line capture can classify full meals directly instead of falling back to generic memo records
+  - the quick-add preview now maps `food` records to the existing localized food label instead of showing them as generic memos
+  - behavior and structure verification now cover the new food-tag aliases, and the quick-add hint copy documents them in all supported interface languages
 
 ## Next
 - Continue the next product slice
