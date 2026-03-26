@@ -193,6 +193,21 @@ const PROCESSING_STATUS_LABELS: Record<LocaleCode, Record<string, string>> = {
   },
 };
 
+const REMOTE_FETCH_STATUS_LABELS: Record<LocaleCode, Record<string, string>> = {
+  "zh-CN": {
+    downloaded: "已拉取",
+    failed: "拉取失败",
+  },
+  en: {
+    downloaded: "downloaded",
+    failed: "fetch failed",
+  },
+  ja: {
+    downloaded: "取得済み",
+    failed: "取得失敗",
+  },
+};
+
 export function getMediaIssueLabel(locale: LocaleCode, issue: Pick<MediaProcessingIssue, "issue_category" | "issue_label">): string | null {
   const issueCategory = issue.issue_category ?? "";
   return ISSUE_CATEGORY_LABELS[locale][issueCategory] ?? issue.issue_label ?? null;
@@ -218,4 +233,11 @@ export function getRetryStateLabel(locale: LocaleCode, retryState?: string | nul
 
 export function getProcessingStatusLabel(locale: LocaleCode, processingStatus: string): string {
   return PROCESSING_STATUS_LABELS[locale][processingStatus] ?? processingStatus;
+}
+
+export function getRemoteFetchStatusLabel(locale: LocaleCode, remoteFetchStatus?: string | null): string | null {
+  if (!remoteFetchStatus) {
+    return null;
+  }
+  return REMOTE_FETCH_STATUS_LABELS[locale][remoteFetchStatus] ?? remoteFetchStatus;
 }

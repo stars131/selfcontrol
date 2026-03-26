@@ -261,6 +261,7 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   "}: RecentMediaIssueCardTagsProps) {",
   "const issueLabel = getMediaIssueLabel(locale, issue);",
   "getProcessingStatusLabel(locale, issue.processing_status)",
+  "getRemoteFetchStatusLabel(locale, issue.remote_fetch_status)",
   "getRetryStateLabel(locale, issue.processing_retry_state)",
   'className="tag-row"',
 ]) {

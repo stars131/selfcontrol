@@ -2135,6 +2135,10 @@ Last updated: 2026-03-26
   - `workspace-transfer-job-display.ts` now owns localized labels for transfer `job_type` and `status` codes, so import/export task cards do not leak raw backend values
   - the workspace transfer-job card and export-job summary now show localized import/export and pending/running/completed/failed labels while keeping the existing action-button rules unchanged
   - `verify-record-panel-structure.mjs`, `verify-workspace-entry-structure.mjs`, and `verify-workspace-export-jobs-structure.mjs` now lock the new helper usage so future transfer-job UI updates remain maintainable under the enterprise standard
+- Media Status Tag Localization V1:
+  - `media-issue-display.ts` now also formats remote-fetch statuses so the media status helper covers processing state, retry state, issue label, and fetch-state display consistently
+  - the record media metadata tags and recent media issue tags now show localized processing, fetch, and retry labels instead of raw values like `completed`, `failed`, `downloaded`, or `scheduled`
+  - `verify-record-panel-structure.mjs` and `verify-record-media-tools-structure.mjs` now enforce the helper-based status rendering so future media-observability updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

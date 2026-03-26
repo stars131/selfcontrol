@@ -1,6 +1,6 @@
 "use client";
 
-import { getMediaIssueLabel, getProcessingStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
+import { getMediaIssueLabel, getProcessingStatusLabel, getRemoteFetchStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
 import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";
 
 export function RecentMediaIssueCardTags({
@@ -17,7 +17,7 @@ export function RecentMediaIssueCardTags({
       {issue.processing_source ? <span className="tag">{issue.processing_source}</span> : null}
       {issue.remote_fetch_status ? (
         <span className="tag">
-          {mediaIssueCopy.fetchPrefix} {issue.remote_fetch_status}
+          {mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, issue.remote_fetch_status)}
         </span>
       ) : null}
       {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}

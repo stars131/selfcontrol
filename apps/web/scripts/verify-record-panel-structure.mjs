@@ -20306,12 +20306,16 @@ if (mediaAssetCardMetadataDetailsTypesLines > maxMediaAssetCardMetadataDetailsTy
 }
 
 for (const requiredMediaAssetCardMetadataTagsUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/media-issue-display";',
   'import { formatMediaSize } from "../lib/record-panel-format";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
-  "{asset.processing_status}",
+  "getProcessingStatusLabel(locale, asset.processing_status)",
+  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+  "getRetryStateLabel(locale, retryState)",
   "{asset.storage_provider}",
   "{formatMediaSize(asset)}",
 ]) {
