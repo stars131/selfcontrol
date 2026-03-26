@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionOwnerActionsProps } from "./workspace-media-retention-owner-actions.types"; export type WorkspaceMediaRetentionOwnerActionsSummaryProps = Pick<WorkspaceMediaRetentionOwnerActionsProps, "selectedCount" | "selectedSummary">;

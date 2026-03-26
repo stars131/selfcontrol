@@ -1903,6 +1903,10 @@ Last updated: 2026-03-25
   - `workspace-members-section.tsx` now delegates member-management copy and list rendering to `workspace-members-section-intro.tsx` and `workspace-members-section-list.tsx` instead of keeping both blocks inline above the member cards
   - the new members-section `*.types.ts` files keep intro and list prop contracts explicit and reusable while the parent section remains focused on shell composition
   - `verify-record-panel-structure.mjs` now enforces those delegated members-section boundaries, exact one-line type contracts, and line-count ceilings so future workspace member management updates stay safer and easier to maintain
+- Workspace Retention Owner Actions Summary And Buttons Split V1:
+  - `workspace-media-retention-owner-actions.tsx` now delegates selected-item summary and owner action-button row rendering to `workspace-media-retention-owner-actions-summary.tsx` and `workspace-media-retention-owner-actions-buttons.tsx` instead of keeping both blocks inline in one owner-only panel
+  - the new retention-owner-action `*.types.ts` files keep summary and buttons prop contracts explicit and reusable while the parent action panel remains focused on shell composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated owner-action boundaries, exact one-line type contracts, and line-count ceilings so future retention-operation updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

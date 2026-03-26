@@ -1492,6 +1492,22 @@ const workspaceMediaRetentionOwnerActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-owner-actions.tsx",
 );
+const workspaceMediaRetentionOwnerActionsSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-owner-actions-summary.tsx",
+);
+const workspaceMediaRetentionOwnerActionsSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-owner-actions-summary.types.ts",
+);
+const workspaceMediaRetentionOwnerActionsButtonsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-owner-actions-buttons.tsx",
+);
+const workspaceMediaRetentionOwnerActionsButtonsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-owner-actions-buttons.types.ts",
+);
 const workspaceMediaRetentionOwnerActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-owner-actions.types.ts",
@@ -2768,6 +2784,22 @@ const workspaceMediaRetentionActionsTypesSource = fs.readFileSync(
 );
 const workspaceMediaRetentionOwnerActionsSource = fs.readFileSync(
   workspaceMediaRetentionOwnerActionsPath,
+  "utf8",
+);
+const workspaceMediaRetentionOwnerActionsSummarySource = fs.readFileSync(
+  workspaceMediaRetentionOwnerActionsSummaryPath,
+  "utf8",
+);
+const workspaceMediaRetentionOwnerActionsSummaryTypesSource = fs.readFileSync(
+  workspaceMediaRetentionOwnerActionsSummaryTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionOwnerActionsButtonsSource = fs.readFileSync(
+  workspaceMediaRetentionOwnerActionsButtonsPath,
+  "utf8",
+);
+const workspaceMediaRetentionOwnerActionsButtonsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionOwnerActionsButtonsTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionOwnerActionsTypesSource = fs.readFileSync(
@@ -4134,6 +4166,14 @@ const workspaceMediaRetentionActionsTypesLines =
   workspaceMediaRetentionActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionOwnerActionsLines =
   workspaceMediaRetentionOwnerActionsSource.split(/\r?\n/).length;
+const workspaceMediaRetentionOwnerActionsSummaryLines =
+  workspaceMediaRetentionOwnerActionsSummarySource.split(/\r?\n/).length;
+const workspaceMediaRetentionOwnerActionsSummaryTypesLines =
+  workspaceMediaRetentionOwnerActionsSummaryTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionOwnerActionsButtonsLines =
+  workspaceMediaRetentionOwnerActionsButtonsSource.split(/\r?\n/).length;
+const workspaceMediaRetentionOwnerActionsButtonsTypesLines =
+  workspaceMediaRetentionOwnerActionsButtonsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionOwnerActionsTypesLines =
   workspaceMediaRetentionOwnerActionsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionEditorNoticeLines =
@@ -15941,13 +15981,12 @@ if (workspaceMediaRetentionActionsTypesLines > maxWorkspaceMediaRetentionActions
 }
 
 for (const requiredWorkspaceMediaRetentionOwnerActionsUsage of [
+  'import { WorkspaceMediaRetentionOwnerActionsButtons } from "./workspace-media-retention-owner-actions-buttons";',
+  'import { WorkspaceMediaRetentionOwnerActionsSummary } from "./workspace-media-retention-owner-actions-summary";',
   'import type { WorkspaceMediaRetentionOwnerActionsProps } from "./workspace-media-retention-owner-actions.types";',
   "}: WorkspaceMediaRetentionOwnerActionsProps) {",
-  'className="action-row"',
-  "{selectedSummary}: {selectedCount}",
-  "onClick={() => void onArchive(archiveConfirmSelected)}",
-  "onClick={() => void onCleanupSelected()}",
-  "onClick={() => void onCleanupOrphans()}",
+  "<WorkspaceMediaRetentionOwnerActionsSummary",
+  "<WorkspaceMediaRetentionOwnerActionsButtons",
 ]) {
   if (!workspaceMediaRetentionOwnerActionsSource.includes(requiredWorkspaceMediaRetentionOwnerActionsUsage)) {
     throw new Error(
@@ -15962,10 +16001,111 @@ if (workspaceMediaRetentionOwnerActionsSource.includes("type WorkspaceMediaReten
   );
 }
 
-const maxWorkspaceMediaRetentionOwnerActionsLines = 75;
+for (const forbiddenWorkspaceMediaRetentionOwnerActionsToken of [
+  'className="action-row"',
+  "{selectedSummary}: {selectedCount}",
+  "onClick={() => void onArchive(archiveConfirmSelected)}",
+  "onClick={() => void onCleanupSelected()}",
+  "onClick={() => void onCleanupOrphans()}",
+]) {
+  if (workspaceMediaRetentionOwnerActionsSource.includes(forbiddenWorkspaceMediaRetentionOwnerActionsToken)) {
+    throw new Error(
+      `workspace-media-retention-owner-actions.tsx must keep owner-action internals delegated: ${forbiddenWorkspaceMediaRetentionOwnerActionsToken}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionOwnerActionsLines = 20;
 if (workspaceMediaRetentionOwnerActionsLines > maxWorkspaceMediaRetentionOwnerActionsLines) {
   throw new Error(
     `workspace-media-retention-owner-actions.tsx exceeded ${maxWorkspaceMediaRetentionOwnerActionsLines} lines: ${workspaceMediaRetentionOwnerActionsLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionOwnerActionsSummaryUsage of [
+  'import type { WorkspaceMediaRetentionOwnerActionsSummaryProps } from "./workspace-media-retention-owner-actions-summary.types";',
+  "}: WorkspaceMediaRetentionOwnerActionsSummaryProps) {",
+  "{selectedSummary}: {selectedCount}",
+]) {
+  if (!workspaceMediaRetentionOwnerActionsSummarySource.includes(requiredWorkspaceMediaRetentionOwnerActionsSummaryUsage)) {
+    throw new Error(
+      `workspace-media-retention-owner-actions-summary.tsx must own owner-action summary rendering: ${requiredWorkspaceMediaRetentionOwnerActionsSummaryUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionOwnerActionsSummarySource.includes("type WorkspaceMediaRetentionOwnerActionsSummaryProps =")) {
+  throw new Error(
+    "workspace-media-retention-owner-actions-summary.tsx must keep owner-action summary prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionOwnerActionsSummaryLines = 10;
+if (workspaceMediaRetentionOwnerActionsSummaryLines > maxWorkspaceMediaRetentionOwnerActionsSummaryLines) {
+  throw new Error(
+    `workspace-media-retention-owner-actions-summary.tsx exceeded ${maxWorkspaceMediaRetentionOwnerActionsSummaryLines} lines: ${workspaceMediaRetentionOwnerActionsSummaryLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionOwnerActionsSummaryTypesUsage of [
+  'import type { WorkspaceMediaRetentionOwnerActionsProps } from "./workspace-media-retention-owner-actions.types"; export type WorkspaceMediaRetentionOwnerActionsSummaryProps = Pick<WorkspaceMediaRetentionOwnerActionsProps, "selectedCount" | "selectedSummary">;',
+]) {
+  if (!workspaceMediaRetentionOwnerActionsSummaryTypesSource.includes(requiredWorkspaceMediaRetentionOwnerActionsSummaryTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-owner-actions-summary.types.ts must own owner-action summary prop typing: ${requiredWorkspaceMediaRetentionOwnerActionsSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionOwnerActionsSummaryTypesLines = 2;
+if (workspaceMediaRetentionOwnerActionsSummaryTypesLines > maxWorkspaceMediaRetentionOwnerActionsSummaryTypesLines) {
+  throw new Error(
+    `workspace-media-retention-owner-actions-summary.types.ts exceeded ${maxWorkspaceMediaRetentionOwnerActionsSummaryTypesLines} lines: ${workspaceMediaRetentionOwnerActionsSummaryTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionOwnerActionsButtonsUsage of [
+  'import type { WorkspaceMediaRetentionOwnerActionsButtonsProps } from "./workspace-media-retention-owner-actions-buttons.types";',
+  "}: WorkspaceMediaRetentionOwnerActionsButtonsProps) {",
+  'className="action-row"',
+  "onClick={() => void onArchive(archiveConfirmSelected)}",
+  "onClick={() => void onCleanupSelected()}",
+  "onClick={() => void onCleanupOrphans()}",
+]) {
+  if (!workspaceMediaRetentionOwnerActionsButtonsSource.includes(requiredWorkspaceMediaRetentionOwnerActionsButtonsUsage)) {
+    throw new Error(
+      `workspace-media-retention-owner-actions-buttons.tsx must own owner-action button rendering: ${requiredWorkspaceMediaRetentionOwnerActionsButtonsUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionOwnerActionsButtonsSource.includes("type WorkspaceMediaRetentionOwnerActionsButtonsProps =")) {
+  throw new Error(
+    "workspace-media-retention-owner-actions-buttons.tsx must keep owner-action buttons prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionOwnerActionsButtonsLines = 30;
+if (workspaceMediaRetentionOwnerActionsButtonsLines > maxWorkspaceMediaRetentionOwnerActionsButtonsLines) {
+  throw new Error(
+    `workspace-media-retention-owner-actions-buttons.tsx exceeded ${maxWorkspaceMediaRetentionOwnerActionsButtonsLines} lines: ${workspaceMediaRetentionOwnerActionsButtonsLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionOwnerActionsButtonsTypesUsage of [
+  'import type { WorkspaceMediaRetentionOwnerActionsProps } from "./workspace-media-retention-owner-actions.types"; export type WorkspaceMediaRetentionOwnerActionsButtonsProps = Pick<WorkspaceMediaRetentionOwnerActionsProps, "actionLoading" | "archiveConfirmSelected" | "archiveSelectedLabel" | "canDeleteOrphans" | "canSelectAll" | "clearSelectionLabel" | "deleteOrphansLabel" | "deleteSelectedLabel" | "onArchive" | "onCleanupOrphans" | "onCleanupSelected" | "onClearSelection" | "onSelectAllCandidates" | "processingLabel" | "selectedCount" | "selectAllLabel">;',
+]) {
+  if (!workspaceMediaRetentionOwnerActionsButtonsTypesSource.includes(requiredWorkspaceMediaRetentionOwnerActionsButtonsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-owner-actions-buttons.types.ts must own owner-action buttons prop typing: ${requiredWorkspaceMediaRetentionOwnerActionsButtonsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionOwnerActionsButtonsTypesLines = 2;
+if (workspaceMediaRetentionOwnerActionsButtonsTypesLines > maxWorkspaceMediaRetentionOwnerActionsButtonsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-owner-actions-buttons.types.ts exceeded ${maxWorkspaceMediaRetentionOwnerActionsButtonsTypesLines} lines: ${workspaceMediaRetentionOwnerActionsButtonsTypesLines}`,
   );
 }
 
