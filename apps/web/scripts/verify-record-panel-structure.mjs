@@ -15140,11 +15140,13 @@ if (mediaAssetCardActionsTypesLines > maxMediaAssetCardActionsTypesLines) {
 }
 
 for (const requiredMapPanelContentUsage of [
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
   'import { useStoredLocale } from "../lib/locale";',
   'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import type { MapPanelContentProps } from "./map-panel-content.types";',
   "const { locale } = useStoredLocale();",
   "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "getLocationSourceLabel(draftLocation?.source, panelCopy)",
   "panelCopy.mapTitle",
   "panelCopy.locationSearch",
   "panelCopy.currentPoint",
@@ -15385,6 +15387,7 @@ for (const requiredMapStatusNoticesUsage of [
   'import type { MapStatusNoticesProps } from "./map-status-notices.types";',
   "}: MapStatusNoticesProps) {",
   "currentPointLabel",
+  "draftLocationSourceLabel",
   "noLocationSelectedLabel",
   "noMappedRecordsLabel",
 ]) {
@@ -15407,7 +15410,7 @@ for (const forbiddenMapStatusNoticesToken of [
 }
 
 for (const requiredMapStatusNoticesTypesUsage of [
-  'import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { currentPointLabel: string; draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; isEditable: boolean; loadError: string; mappedRecordCount: number; noLocationSelectedLabel: string; noMappedRecordsLabel: string; searchError: string };',
+  'import type { LocationDraft } from "../lib/map-panel"; export type MapStatusNoticesProps = { currentPointLabel: string; draftCoordinates: [number, number] | null; draftLocation?: LocationDraft | null; draftLocationSourceLabel?: string; isEditable: boolean; loadError: string; mappedRecordCount: number; noLocationSelectedLabel: string; noMappedRecordsLabel: string; searchError: string };',
 ]) {
   if (!mapStatusNoticesTypesSource.includes(requiredMapStatusNoticesTypesUsage)) {
     throw new Error(
@@ -21388,8 +21391,10 @@ if (locationReviewFormFieldsTypesLines > maxLocationReviewFormFieldsTypesLines) 
 }
 
 for (const requiredLocationReviewHistoryListUsage of [
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
   'import type { LocationReviewHistoryListProps } from "./location-review-history-list.types";',
   "}: LocationReviewHistoryListProps) {",
+  "getLocationSourceLabel(entry.source, panelCopy)",
 ]) {
   if (!locationReviewHistoryListSource.includes(requiredLocationReviewHistoryListUsage)) {
     throw new Error(

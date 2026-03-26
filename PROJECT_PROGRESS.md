@@ -2111,6 +2111,10 @@ Last updated: 2026-03-26
   - `use-map-panel-amap-init.ts` now resolves localized map-load error copy once and passes explicit browser/script-load labels into `loadAmapScript(...)`, so loader failures no longer fall back to hardcoded English messages
   - the missing-browser, script-load, and generic map-load failure paths now surface localized messages in English, Chinese, and Japanese through the existing map notice area
   - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now cover the localized AMap init error chain so future map-loader updates stay maintainable
+- Location Source Label Localization V1:
+  - `location-source-display.ts` now owns the UI-facing mapping from internal location source codes to localized labels, so source-display logic no longer leaks across map, editor, and review-history surfaces
+  - the map status notice, record editor location field, and location review history list now show localized source labels in English, Chinese, and Japanese instead of raw values like `manual`, `map`, `search`, or `quick_add`
+  - `verify-record-panel-structure.mjs`, `verify-record-editor-fields-structure.mjs`, and `verify-record-panel-copy.mjs` now lock the helper usage and copy keys so future location-source additions stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

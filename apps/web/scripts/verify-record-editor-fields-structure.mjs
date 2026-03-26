@@ -47,6 +47,15 @@ if (!locationSource.includes('inputMode="decimal"')) {
   throw new Error("record-editor-location-fields.tsx must keep decimal coordinate inputs");
 }
 
+for (const requiredLocationToken of [
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
+  "getLocationSourceLabel(form.location.source, panelCopy)",
+]) {
+  if (!locationSource.includes(requiredLocationToken)) {
+    throw new Error(`record-editor-location-fields.tsx must localize location source labels: ${requiredLocationToken}`);
+  }
+}
+
 if (!primarySource.includes("panelCopy.contentPlaceholder")) {
   throw new Error("record-editor-primary-fields.tsx must keep content placeholder rendering");
 }

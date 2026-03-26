@@ -1,5 +1,6 @@
 "use client";
 
+import { getLocationSourceLabel } from "../lib/location-source-display";
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapDrilldownCard } from "./map-drilldown-card";
@@ -56,6 +57,7 @@ export function MapPanelContent({
         currentPointLabel={panelCopy.currentPoint}
         draftCoordinates={controller.draftCoordinates}
         draftLocation={draftLocation}
+        draftLocationSourceLabel={getLocationSourceLabel(draftLocation?.source, panelCopy)}
         isEditable={controller.isEditable}
         loadError={controller.loadError}
         mappedRecordCount={controller.mappedRecords.length}

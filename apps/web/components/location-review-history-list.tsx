@@ -1,5 +1,6 @@
 "use client";
 
+import { getLocationSourceLabel } from "../lib/location-source-display";
 import type { LocationReviewHistoryListProps } from "./location-review-history-list.types";
 
 export function LocationReviewHistoryList({
@@ -32,7 +33,7 @@ export function LocationReviewHistoryList({
               </div>
             ) : null}
             <div className="tag-row">
-              {entry.source ? <span className="tag">{entry.source}</span> : null}
+              {entry.source ? <span className="tag">{getLocationSourceLabel(entry.source, panelCopy)}</span> : null}
               {entry.review_status ? <span className="tag">{formatReviewStatusLabel(entry.review_status)}</span> : null}
             </div>
             {entry.review_note ? (

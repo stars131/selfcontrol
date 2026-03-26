@@ -1,5 +1,6 @@
 "use client";
 
+import { getLocationSourceLabel } from "../lib/location-source-display";
 import type { RecordEditorLocationFieldsProps } from "./record-editor-location-fields.types";
 
 export function RecordEditorLocationFields({
@@ -70,7 +71,7 @@ export function RecordEditorLocationFields({
         </label>
         <label className="field">
           <span className="field-label">{panelCopy.locationSource}</span>
-          <input className="input" disabled value={form.location.source || "manual"} />
+          <input className="input" disabled value={getLocationSourceLabel(form.location.source, panelCopy)} />
         </label>
       </div>
     </>

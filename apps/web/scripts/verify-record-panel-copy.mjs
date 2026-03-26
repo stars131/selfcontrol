@@ -85,7 +85,7 @@ verifyFlatLocaleFile("lib/record-panel-detail-copy.json", [
 
 verifyNestedLocaleFile("lib/record-panel-ui-copy.json", {
   mediaIssue: ["recentIssuesTitle", "retryNow", "dimensions", "deleteMedia"],
-  panel: ["workspace", "advancedSearch", "locationReview", "storageHealth"]
+  panel: ["workspace", "advancedSearch", "locationReview", "storageHealth", "locationSourceManual", "locationSourceUnknown"]
 });
 
 const recordPanelSource = fs.readFileSync(path.resolve(process.cwd(), "components/record-panel-v2.tsx"), "utf8");

@@ -6,6 +6,7 @@ export function MapStatusNotices({
   currentPointLabel,
   draftCoordinates,
   draftLocation,
+  draftLocationSourceLabel,
   isEditable,
   loadError,
   mappedRecordCount,
@@ -28,7 +29,7 @@ export function MapStatusNotices({
       {draftLocation?.latitude && draftLocation?.longitude ? (
         <div className="muted" style={{ marginTop: 12 }}>
           {currentPointLabel}: {draftLocation.latitude}, {draftLocation.longitude}
-          {draftLocation.source ? ` | ${draftLocation.source}` : ""}
+          {draftLocationSourceLabel ? ` | ${draftLocationSourceLabel}` : ""}
         </div>
       ) : null}
       {!mappedRecordCount && !draftCoordinates ? (
