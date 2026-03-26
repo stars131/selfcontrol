@@ -1931,6 +1931,10 @@ Last updated: 2026-03-25
   - `map-drilldown-card.tsx` now delegates location-filter action buttons to `map-drilldown-card-actions.tsx` instead of keeping the action row inline below the filter fields
   - the new `map-drilldown-card-actions.types.ts` file keeps the drilldown-actions contract explicit and reusable while the parent drilldown card remains focused on filter-field composition
   - `verify-record-panel-structure.mjs` now enforces that delegated map-drilldown actions boundary, exact one-line type contract, and line-count ceilings so future map drilldown updates stay safer and easier to maintain
+- Map Drilldown Fields Split V1:
+  - `map-drilldown-card.tsx` now delegates place-query, map-status, and review filter controls to `map-drilldown-card-fields.tsx` instead of keeping the form field block inline above the actions leaf
+  - the new `map-drilldown-card-fields.types.ts` file keeps the drilldown-fields contract explicit and reusable while the parent drilldown card remains focused on high-level card composition
+  - `verify-record-panel-structure.mjs` now enforces that delegated map-drilldown fields boundary, exact one-line type contract, and line-count ceilings so future map drilldown filter updates stay safer and easier to maintain
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
