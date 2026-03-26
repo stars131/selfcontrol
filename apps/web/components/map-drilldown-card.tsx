@@ -1,5 +1,6 @@
 "use client";
 
+import { MapDrilldownCardActions } from "./map-drilldown-card-actions";
 import type { MapDrilldownCardProps } from "./map-drilldown-card.types";
 
 export function MapDrilldownCard({
@@ -64,17 +65,7 @@ export function MapDrilldownCard({
           </select>
         </label>
       </div>
-      <div className="action-row">
-        <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onApplyFilter()}>
-          {filteringRecords ? "Filtering..." : "Apply location filter"}
-        </button>
-        <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onUseMappedOnly()}>
-          Mapped only
-        </button>
-        <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onClearFilter()}>
-          Clear location filter
-        </button>
-      </div>
+      <MapDrilldownCardActions filteringRecords={filteringRecords} onApplyFilter={onApplyFilter} onClearFilter={onClearFilter} onUseMappedOnly={onUseMappedOnly} />
     </div>
   );
 }

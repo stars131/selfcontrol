@@ -1159,6 +1159,14 @@ const mapDrilldownCardTypesPath = path.resolve(
   process.cwd(),
   "components/map-drilldown-card.types.ts",
 );
+const mapDrilldownCardActionsPath = path.resolve(
+  process.cwd(),
+  "components/map-drilldown-card-actions.tsx",
+);
+const mapDrilldownCardActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/map-drilldown-card-actions.types.ts",
+);
 const mapStatusNoticesPath = path.resolve(process.cwd(), "components/map-status-notices.tsx");
 const mapStatusNoticesTypesPath = path.resolve(
   process.cwd(),
@@ -2755,6 +2763,11 @@ const mapPanelContentSource = fs.readFileSync(mapPanelContentPath, "utf8");
 const mapPanelContentTypesSource = fs.readFileSync(mapPanelContentTypesPath, "utf8");
 const mapDrilldownCardSource = fs.readFileSync(mapDrilldownCardPath, "utf8");
 const mapDrilldownCardTypesSource = fs.readFileSync(mapDrilldownCardTypesPath, "utf8");
+const mapDrilldownCardActionsSource = fs.readFileSync(mapDrilldownCardActionsPath, "utf8");
+const mapDrilldownCardActionsTypesSource = fs.readFileSync(
+  mapDrilldownCardActionsTypesPath,
+  "utf8",
+);
 const mapStatusNoticesSource = fs.readFileSync(mapStatusNoticesPath, "utf8");
 const mapStatusNoticesTypesSource = fs.readFileSync(mapStatusNoticesTypesPath, "utf8");
 const mapPanelHeaderSource = fs.readFileSync(mapPanelHeaderPath, "utf8");
@@ -4441,7 +4454,11 @@ const recordEditorWorkspaceMainSectionsPropsTypesLines =
 const recordReminderToolsPanelPropsTypesLines =
   recordReminderToolsPanelPropsTypesSource.split(/\r?\n/).length;
 const mapPanelContentTypesLines = mapPanelContentTypesSource.split(/\r?\n/).length;
+const mapDrilldownCardLines = mapDrilldownCardSource.split(/\r?\n/).length;
 const mapDrilldownCardTypesLines = mapDrilldownCardTypesSource.split(/\r?\n/).length;
+const mapDrilldownCardActionsLines = mapDrilldownCardActionsSource.split(/\r?\n/).length;
+const mapDrilldownCardActionsTypesLines =
+  mapDrilldownCardActionsTypesSource.split(/\r?\n/).length;
 const mapStatusNoticesTypesLines = mapStatusNoticesTypesSource.split(/\r?\n/).length;
 const mapPanelHeaderTypesLines = mapPanelHeaderTypesSource.split(/\r?\n/).length;
 const mappedRecordsListTypesLines = mappedRecordsListTypesSource.split(/\r?\n/).length;
@@ -14830,8 +14847,10 @@ if (mapPanelContentTypesLines > maxMapPanelContentTypesLines) {
 }
 
 for (const requiredMapDrilldownCardUsage of [
+  'import { MapDrilldownCardActions } from "./map-drilldown-card-actions";',
   'import type { MapDrilldownCardProps } from "./map-drilldown-card.types";',
   "}: MapDrilldownCardProps) {",
+  "<MapDrilldownCardActions",
 ]) {
   if (!mapDrilldownCardSource.includes(requiredMapDrilldownCardUsage)) {
     throw new Error(
@@ -14843,12 +14862,23 @@ for (const requiredMapDrilldownCardUsage of [
 for (const forbiddenMapDrilldownCardToken of [
   'import type { LocationFilterState } from "../lib/types";',
   "}: {",
+  '<div className="action-row">',
+  '{filteringRecords ? "Filtering..." : "Apply location filter"}',
+  "Mapped only",
+  "Clear location filter",
 ]) {
   if (mapDrilldownCardSource.includes(forbiddenMapDrilldownCardToken)) {
     throw new Error(
       `map-drilldown-card.tsx must keep map drill-down prop typing delegated: ${forbiddenMapDrilldownCardToken}`,
     );
   }
+}
+
+const maxMapDrilldownCardLines = 75;
+if (mapDrilldownCardLines > maxMapDrilldownCardLines) {
+  throw new Error(
+    `map-drilldown-card.tsx exceeded ${maxMapDrilldownCardLines} lines: ${mapDrilldownCardLines}`,
+  );
 }
 
 for (const requiredMapDrilldownCardTypesUsage of [
@@ -14865,6 +14895,49 @@ const maxMapDrilldownCardTypesLines = 2;
 if (mapDrilldownCardTypesLines > maxMapDrilldownCardTypesLines) {
   throw new Error(
     `map-drilldown-card.types.ts exceeded ${maxMapDrilldownCardTypesLines} lines: ${mapDrilldownCardTypesLines}`,
+  );
+}
+
+for (const requiredMapDrilldownCardActionsUsage of [
+  'import type { MapDrilldownCardActionsProps } from "./map-drilldown-card-actions.types";',
+  "}: MapDrilldownCardActionsProps) {",
+  '<div className="action-row">',
+  '{filteringRecords ? "Filtering..." : "Apply location filter"}',
+  "Mapped only",
+  "Clear location filter",
+]) {
+  if (!mapDrilldownCardActionsSource.includes(requiredMapDrilldownCardActionsUsage)) {
+    throw new Error(
+      `map-drilldown-card-actions.tsx must reuse the extracted map drill-down actions props type: ${requiredMapDrilldownCardActionsUsage}`,
+    );
+  }
+}
+
+if (mapDrilldownCardActionsSource.includes("type MapDrilldownCardActionsProps = Pick<")) {
+  throw new Error("map-drilldown-card-actions.tsx must keep map drill-down actions prop typing delegated");
+}
+
+const maxMapDrilldownCardActionsLines = 8;
+if (mapDrilldownCardActionsLines > maxMapDrilldownCardActionsLines) {
+  throw new Error(
+    `map-drilldown-card-actions.tsx exceeded ${maxMapDrilldownCardActionsLines} lines: ${mapDrilldownCardActionsLines}`,
+  );
+}
+
+for (const requiredMapDrilldownCardActionsTypesUsage of [
+  'import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardActionsProps = Pick<MapDrilldownCardProps, "filteringRecords" | "onApplyFilter" | "onClearFilter" | "onUseMappedOnly">;',
+]) {
+  if (!mapDrilldownCardActionsTypesSource.includes(requiredMapDrilldownCardActionsTypesUsage)) {
+    throw new Error(
+      `map-drilldown-card-actions.types.ts must own map drill-down actions prop typing: ${requiredMapDrilldownCardActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxMapDrilldownCardActionsTypesLines = 2;
+if (mapDrilldownCardActionsTypesLines > maxMapDrilldownCardActionsTypesLines) {
+  throw new Error(
+    `map-drilldown-card-actions.types.ts exceeded ${maxMapDrilldownCardActionsTypesLines} lines: ${mapDrilldownCardActionsTypesLines}`,
   );
 }
 

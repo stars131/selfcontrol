@@ -1,0 +1,1 @@
+import type { MapDrilldownCardProps } from "./map-drilldown-card.types"; export type MapDrilldownCardActionsProps = Pick<MapDrilldownCardProps, "filteringRecords" | "onApplyFilter" | "onClearFilter" | "onUseMappedOnly">;
