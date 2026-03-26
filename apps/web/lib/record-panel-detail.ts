@@ -32,6 +32,22 @@ function formatTimelineDate(value: string, locale: LocaleCode): string {
 export function getRecordPanelDetailBundle(locale: LocaleCode) {
   const copy = DETAIL_COPY[locale];
 
+  const formatRecordTypeLabel = (value?: string | null) => {
+    if (value === "food") {
+      return copy.recordTypeFood;
+    }
+    if (value === "snack") {
+      return copy.recordTypeSnack;
+    }
+    if (value === "bad_experience") {
+      return copy.recordTypeBadExperience;
+    }
+    if (value === "memo") {
+      return copy.recordTypeMemo;
+    }
+    return value || copy.recordTypeMemo;
+  };
+
   const formatReviewStatusLabel = (value?: string | null) => {
     if (value === "confirmed") {
       return copy.reviewConfirmed;
@@ -75,7 +91,7 @@ export function getRecordPanelDetailBundle(locale: LocaleCode) {
         parts.push(`${copy.filterText}:${filter.query}`);
       }
       if (filter.typeCode !== "all") {
-        parts.push(`${copy.filterType}:${filter.typeCode}`);
+        parts.push(`${copy.filterType}:${formatRecordTypeLabel(filter.typeCode)}`);
       }
       if (filter.avoidOnly !== "all") {
         parts.push(filter.avoidOnly === "avoid" ? copy.filterAvoidOnly : copy.filterNonAvoid);

@@ -80,7 +80,9 @@ verifyFlatLocaleFile("lib/record-panel-detail-copy.json", [
   "contentRequiredError",
   "reminderSectionTitle",
   "timelineView",
-  "noRecords"
+  "noRecords",
+  "recordTypeMemo",
+  "recordTypeBadExperience"
 ]);
 
 verifyNestedLocaleFile("lib/record-panel-ui-copy.json", {

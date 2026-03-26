@@ -2115,6 +2115,10 @@ Last updated: 2026-03-26
   - `location-source-display.ts` now owns the UI-facing mapping from internal location source codes to localized labels, so source-display logic no longer leaks across map, editor, and review-history surfaces
   - the map status notice, record editor location field, and location review history list now show localized source labels in English, Chinese, and Japanese instead of raw values like `manual`, `map`, `search`, or `quick_add`
   - `verify-record-panel-structure.mjs`, `verify-record-editor-fields-structure.mjs`, and `verify-record-panel-copy.mjs` now lock the helper usage and copy keys so future location-source additions stay maintainable under the enterprise standard
+- Record Filter Type Summary Localization V1:
+  - `record-panel-detail-copy.json` now defines localized record-type labels for memo, food, snack, and bad-experience records inside the shared detail-copy bundle
+  - `record-panel-detail.ts` now formats `filter.typeCode` through those localized labels, so current-filter summaries and saved search preset summaries no longer expose raw internal type codes
+  - `verify-record-panel-copy.mjs` now treats the new record-type copy keys as required across all locales so future filter-summary changes stay safe and maintainable
 
 ## Next
 - Continue the next product slice
