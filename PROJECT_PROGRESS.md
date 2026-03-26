@@ -2083,6 +2083,10 @@ Last updated: 2026-03-26
   - quick add now supports leading time tokens such as `18:30` and `18:30:15`, so one-line capture can store a precise occurrence time instead of only a date-level timestamp
   - time-of-day parsing composes with existing relative or absolute date tokens, and the explicit current rule is that the last recognized leading time token wins
   - invalid time values now fall through safely instead of writing malformed occurred-at data, and behavior plus structure verification both cover the new rule
+- Record Quick Add Explicit Title Parsing V1:
+  - quick add now supports explicit titles via `[Title] body` and `【标题】 正文`, so one-line capture can stay lightweight without giving up structured titles
+  - explicit title parsing happens after other recognized quick-add control tokens, so type, time, rating, and place prefixes still work together with a custom title
+  - the live preview now shows the final title explicitly, and verification covers the new title syntax in both English and Chinese bracket forms
 
 ## Next
 - Continue the next product slice

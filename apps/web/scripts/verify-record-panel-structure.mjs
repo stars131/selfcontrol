@@ -5408,10 +5408,11 @@ for (const requiredRecordQuickAddPreviewUsage of [
   'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
   'import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";',
   "function shouldShowQuickAddPreview(draft: string)",
-  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|\\d{1,2}:\\d{2}(?::\\d{2})?|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206))/i.test(draft);',
+  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|\\d{1,2}:\\d{2}(?::\\d{2})?|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206)|\\[|\\u3010)/i.test(draft);',
   "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
   "const parsed = buildQuickAddRecordDraft(draft.trim());",
   "panelCopy.quickAddPreview",
+  "panelCopy.title",
   "panelCopy.occurredAt",
   "panelCopy.rating",
   "panelCopy.placeName",
@@ -5434,7 +5435,7 @@ if (recordQuickAddPreviewLines > maxRecordQuickAddPreviewLines) {
 }
 
 for (const requiredRecordQuickAddPreviewTypesUsage of [
-  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack"> };',
+  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack" | "title"> };',
 ]) {
   if (!recordQuickAddPreviewTypesSource.includes(requiredRecordQuickAddPreviewTypesUsage)) {
     throw new Error(
@@ -5480,6 +5481,8 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "const latitude = match[2] ? readQuickAddCoordinate(match[2], -90, 90) : null;",
   "const longitude = match[3] ? readQuickAddCoordinate(match[3], -180, 180) : null;",
   "const address = match[4]?.trim();",
+  "function parseQuickAddExplicitTitle(content: string)",
+  'const match = content.match(/^(?:\\[(.+?)\\]|\\u3010(.+?)\\u3011)\\s*(.*)$/);',
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
   "const absoluteDate = parseQuickAddAbsoluteDateToken(tokens[startIndex], now);",
@@ -5488,10 +5491,11 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "if (absoluteDate) nextOccurredAt = absoluteDate;",
   "if (timeOfDay) nextOccurredAt = timeOfDay;",
   'const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());',
+  "const parsedTitle = parseQuickAddExplicitTitle(parsedLocation.content);",
   "extra_data: parsedLocation.extra_data,",
   "rating: nextRating,",
   "occurred_at: nextOccurredAt,",
-  "return { ...parsed, title: buildQuickAddTitle(parsed.content) };",
+  "return { ...parsed, title: parsed.title ?? buildQuickAddTitle(parsed.content) };",
 ]) {
   if (!recordQuickAddBarHelpersSource.includes(requiredRecordQuickAddBarHelpersUsage)) {
     throw new Error(

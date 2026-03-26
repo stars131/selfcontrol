@@ -2,7 +2,7 @@ import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";
 import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";
 
 function shouldShowQuickAddPreview(draft: string) {
-  return /^\s*(#|@|\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}:\d{2}(?::\d{2})?|today\b|yesterday\b|\u4eca\u5929|\u6628\u5929|\d(?:\/5|star|\u661f|\u5206))/i.test(draft);
+  return /^\s*(#|@|\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}:\d{2}(?::\d{2})?|today\b|yesterday\b|\u4eca\u5929|\u6628\u5929|\d(?:\/5|star|\u661f|\u5206)|\[|\u3010)/i.test(draft);
 }
 
 function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps["panelCopy"]) {
@@ -25,6 +25,7 @@ export function RecordQuickAddPreview({ draft, locale, panelCopy }: RecordQuickA
   return (
     <div className="tag-row" style={{ marginTop: 8 }}>
       <span className="tag">{panelCopy.quickAddPreview}</span>
+      <span className="tag">{panelCopy.title}: {parsed.title}</span>
       <span className="tag">{formatTypeLabel(parsed.type_code, panelCopy)}</span>
       <span className="tag">{panelCopy.occurredAt}: {new Date(parsed.occurred_at ?? "").toLocaleString(locale)}</span>
       {parsed.rating !== null && parsed.rating !== undefined ? <span className="tag">{panelCopy.rating}: {parsed.rating}/5</span> : null}

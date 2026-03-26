@@ -61,12 +61,10 @@ function parseQuickAddRatingToken(token: string) {
   const match = token.match(/^([1-5])(?:\/5|star|\u661f|\u5206)$/i);
   return match ? Number(match[1]) : null;
 }
-
 function readQuickAddCoordinate(value: string, min: number, max: number) {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= min && parsed <= max ? parsed : null;
 }
-
 function parseQuickAddLocationSegment(content: string) {
   const match = content.match(/^@(.+?)(?:\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\))?(?:\s*\|\s*([^:\uFF1A]+))?[:\uFF1A]\s*(.*)$/);
   if (!match) return { content, extra_data: undefined };
@@ -88,14 +86,18 @@ function parseQuickAddLocationSegment(content: string) {
       }
     : { content, extra_data: undefined };
 }
-
+function parseQuickAddExplicitTitle(content: string) {
+  const match = content.match(/^(?:\[(.+?)\]|\u3010(.+?)\u3011)\s*(.*)$/);
+  if (!match) return { content, title: null };
+  const title = (match[1] ?? match[2] ?? "").trim();
+  return title ? { content: match[3].trim() || title, title } : { content, title: null };
+}
 function parseQuickAddControlTokens(rawContent: string, now: Date) {
   const tokens = rawContent.trim().split(/\s+/);
   let nextRule = DEFAULT_QUICK_ADD_RULE;
   let nextOccurredAt = now.toISOString();
   let nextRating: number | null = null;
   let startIndex = 0;
-
   while (startIndex < tokens.length) {
     const token = tokens[startIndex].toLowerCase();
     const rule = QUICK_ADD_TAG_RULES[token];
@@ -111,18 +113,15 @@ function parseQuickAddControlTokens(rawContent: string, now: Date) {
     if (rating !== null) nextRating = rating;
     startIndex += 1;
   }
-
   const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());
+  const parsedTitle = parseQuickAddExplicitTitle(parsedLocation.content);
   return {
     ...nextRule,
-    content: parsedLocation.content,
+    content: parsedTitle.content,
     occurred_at: nextOccurredAt,
     rating: nextRating,
     extra_data: parsedLocation.extra_data,
+    title: parsedTitle.title,
   };
 }
-
-export function buildQuickAddRecordDraft(rawContent: string, now = new Date()): QuickAddRecordDraft {
-  const parsed = parseQuickAddControlTokens(rawContent, now);
-  return { ...parsed, title: buildQuickAddTitle(parsed.content) };
-}
+export function buildQuickAddRecordDraft(rawContent: string, now = new Date()): QuickAddRecordDraft { const parsed = parseQuickAddControlTokens(rawContent, now); return { ...parsed, title: parsed.title ?? buildQuickAddTitle(parsed.content) }; }

@@ -49,6 +49,16 @@ for (const [label, input, expected] of [
     { title: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", content: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
   ],
   [
+    "explicit bracket title",
+    "[Trip noodles] found a good ramen place",
+    { title: "Trip noodles", content: "found a good ramen place", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
+    "explicit chinese bracket title with controls",
+    "yesterday #bad \u3010\u673a\u573a\u62c9\u9762\u3011 \u6c64\u5f88\u5dee",
+    { title: "\u673a\u573a\u62c9\u9762", content: "\u6c64\u5f88\u5dee", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-25T12:00:00.000Z", rating: null, extra_data: undefined },
+  ],
+  [
     "today token alias",
     "\u4eca\u5929 #\u96f6\u98df \u65b0\u53d1\u73b0\u7684\u997c\u5e72",
     { title: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", content: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null, extra_data: undefined },
