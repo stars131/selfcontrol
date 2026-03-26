@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types"; export type WorkspaceMediaRetentionSummaryNoteProps = Pick<WorkspaceMediaRetentionSummaryProps, "copy" | "report">;

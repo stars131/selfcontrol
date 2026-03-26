@@ -1,56 +1,14 @@
 "use client";
 
+import { WorkspaceMediaRetentionSummaryGrid } from "./workspace-media-retention-summary-grid";
+import { WorkspaceMediaRetentionSummaryNote } from "./workspace-media-retention-summary-note";
 import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types";
 
-export function WorkspaceMediaRetentionSummary({
-  copy,
-  remoteMediaLabel,
-  report,
-  storageRiskLabel,
-}: WorkspaceMediaRetentionSummaryProps) {
+export function WorkspaceMediaRetentionSummary({ copy, remoteMediaLabel, report, storageRiskLabel }: WorkspaceMediaRetentionSummaryProps) {
   return (
     <>
-      <div className="detail-grid" style={{ marginTop: 16 }}>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.totalTracked}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.total_count} / ${report.total_size_label}` : "-"}
-          </div>
-          {report?.oldest_media_age_days != null ? (
-            <div className="muted" style={{ marginTop: 8 }}>
-              {copy.oldestMedia} {report.oldest_media_age_days} {copy.days}
-            </div>
-          ) : null}
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.agedMedia}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.old_item_count} / ${report.old_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.archivedMedia}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.archived_item_count} / ${report.archived_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{remoteMediaLabel}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {report ? `${report.remote_item_count} / ${report.remote_item_size_label}` : "-"}
-          </div>
-        </div>
-        <div className="subtle-card">
-          <div className="eyebrow">{copy.storageRisk}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>{storageRiskLabel}</div>
-        </div>
-      </div>
-
-      <div className="muted" style={{ marginTop: 16 }}>
-        {report
-          ? `${copy.orphanFiles}: ${report.orphan_file_count} / ${report.orphan_file_size_label}. ${copy.cleanupNote}`
-          : copy.cleanupNote}
-      </div>
+      <WorkspaceMediaRetentionSummaryGrid copy={copy} remoteMediaLabel={remoteMediaLabel} report={report} storageRiskLabel={storageRiskLabel} />
+      <WorkspaceMediaRetentionSummaryNote copy={copy} report={report} />
     </>
   );
 }

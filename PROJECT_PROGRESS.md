@@ -1907,6 +1907,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-owner-actions.tsx` now delegates selected-item summary and owner action-button row rendering to `workspace-media-retention-owner-actions-summary.tsx` and `workspace-media-retention-owner-actions-buttons.tsx` instead of keeping both blocks inline in one owner-only panel
   - the new retention-owner-action `*.types.ts` files keep summary and buttons prop contracts explicit and reusable while the parent action panel remains focused on shell composition
   - `verify-record-panel-structure.mjs` now enforces those delegated owner-action boundaries, exact one-line type contracts, and line-count ceilings so future retention-operation updates stay safer and easier to maintain
+- Workspace Retention Summary Grid And Note Split V1:
+  - `workspace-media-retention-summary.tsx` now delegates storage-stat card grid and cleanup-note rendering to `workspace-media-retention-summary-grid.tsx` and `workspace-media-retention-summary-note.tsx` instead of keeping both blocks inline in one summary leaf
+  - the new retention-summary `*.types.ts` files keep grid and note prop contracts explicit and reusable while the parent summary component remains focused on shell composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated retention-summary boundaries, exact one-line type contracts, and line-count ceilings so future retention-report updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

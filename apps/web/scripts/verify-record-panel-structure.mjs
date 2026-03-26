@@ -1588,6 +1588,22 @@ const workspaceMediaRetentionSummaryPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-summary.tsx",
 );
+const workspaceMediaRetentionSummaryGridPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-summary-grid.tsx",
+);
+const workspaceMediaRetentionSummaryGridTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-summary-grid.types.ts",
+);
+const workspaceMediaRetentionSummaryNotePath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-summary-note.tsx",
+);
+const workspaceMediaRetentionSummaryNoteTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-summary-note.types.ts",
+);
 const workspaceMediaRetentionSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-summary.types.ts",
@@ -2888,6 +2904,22 @@ const workspaceMediaRetentionNoticesTypesSource = fs.readFileSync(
 );
 const workspaceMediaRetentionSummarySource = fs.readFileSync(
   workspaceMediaRetentionSummaryPath,
+  "utf8",
+);
+const workspaceMediaRetentionSummaryGridSource = fs.readFileSync(
+  workspaceMediaRetentionSummaryGridPath,
+  "utf8",
+);
+const workspaceMediaRetentionSummaryGridTypesSource = fs.readFileSync(
+  workspaceMediaRetentionSummaryGridTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionSummaryNoteSource = fs.readFileSync(
+  workspaceMediaRetentionSummaryNotePath,
+  "utf8",
+);
+const workspaceMediaRetentionSummaryNoteTypesSource = fs.readFileSync(
+  workspaceMediaRetentionSummaryNoteTypesPath,
   "utf8",
 );
 const workspaceMediaRetentionSummaryTypesSource = fs.readFileSync(
@@ -4198,6 +4230,16 @@ const workspaceMediaRetentionListsTypesLines =
   workspaceMediaRetentionListsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionNoticesTypesLines =
   workspaceMediaRetentionNoticesTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionSummaryLines =
+  workspaceMediaRetentionSummarySource.split(/\r?\n/).length;
+const workspaceMediaRetentionSummaryGridLines =
+  workspaceMediaRetentionSummaryGridSource.split(/\r?\n/).length;
+const workspaceMediaRetentionSummaryGridTypesLines =
+  workspaceMediaRetentionSummaryGridTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionSummaryNoteLines =
+  workspaceMediaRetentionSummaryNoteSource.split(/\r?\n/).length;
+const workspaceMediaRetentionSummaryNoteTypesLines =
+  workspaceMediaRetentionSummaryNoteTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionSummaryTypesLines =
   workspaceMediaRetentionSummaryTypesSource.split(/\r?\n/).length;
 const mediaRetentionItemCardTypesLines = mediaRetentionItemCardTypesSource.split(/\r?\n/).length;
@@ -16377,8 +16419,12 @@ if (workspaceMediaRetentionHeaderTypesLines > maxWorkspaceMediaRetentionHeaderTy
 }
 
 for (const requiredWorkspaceMediaRetentionSummaryUsage of [
+  'import { WorkspaceMediaRetentionSummaryGrid } from "./workspace-media-retention-summary-grid";',
+  'import { WorkspaceMediaRetentionSummaryNote } from "./workspace-media-retention-summary-note";',
   'import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types";',
   "}: WorkspaceMediaRetentionSummaryProps) {",
+  "<WorkspaceMediaRetentionSummaryGrid",
+  "<WorkspaceMediaRetentionSummaryNote",
 ]) {
   if (!workspaceMediaRetentionSummarySource.includes(requiredWorkspaceMediaRetentionSummaryUsage)) {
     throw new Error(
@@ -16390,12 +16436,110 @@ for (const requiredWorkspaceMediaRetentionSummaryUsage of [
 for (const forbiddenWorkspaceMediaRetentionSummaryToken of [
   "type WorkspaceMediaRetentionSummaryCopy = {",
   "copy: WorkspaceMediaRetentionSummaryCopy;",
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
+  "report.oldest_media_age_days",
+  "report.orphan_file_count",
 ]) {
   if (workspaceMediaRetentionSummarySource.includes(forbiddenWorkspaceMediaRetentionSummaryToken)) {
     throw new Error(
       `workspace-media-retention-summary.tsx must keep retention-summary prop typing delegated: ${forbiddenWorkspaceMediaRetentionSummaryToken}`,
     );
   }
+}
+
+const maxWorkspaceMediaRetentionSummaryLines = 15;
+if (workspaceMediaRetentionSummaryLines > maxWorkspaceMediaRetentionSummaryLines) {
+  throw new Error(
+    `workspace-media-retention-summary.tsx exceeded ${maxWorkspaceMediaRetentionSummaryLines} lines: ${workspaceMediaRetentionSummaryLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionSummaryGridUsage of [
+  'import type { WorkspaceMediaRetentionSummaryGridProps } from "./workspace-media-retention-summary-grid.types";',
+  "}: WorkspaceMediaRetentionSummaryGridProps) {",
+  '<div className="detail-grid" style={{ marginTop: 16 }}>',
+  "report.oldest_media_age_days",
+  "report.remote_item_count",
+  "{storageRiskLabel}",
+]) {
+  if (!workspaceMediaRetentionSummaryGridSource.includes(requiredWorkspaceMediaRetentionSummaryGridUsage)) {
+    throw new Error(
+      `workspace-media-retention-summary-grid.tsx must own retention-summary grid rendering: ${requiredWorkspaceMediaRetentionSummaryGridUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionSummaryGridSource.includes("type WorkspaceMediaRetentionSummaryGridProps =")) {
+  throw new Error(
+    "workspace-media-retention-summary-grid.tsx must keep retention-summary grid prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionSummaryGridLines = 28;
+if (workspaceMediaRetentionSummaryGridLines > maxWorkspaceMediaRetentionSummaryGridLines) {
+  throw new Error(
+    `workspace-media-retention-summary-grid.tsx exceeded ${maxWorkspaceMediaRetentionSummaryGridLines} lines: ${workspaceMediaRetentionSummaryGridLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionSummaryGridTypesUsage of [
+  'import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types"; export type WorkspaceMediaRetentionSummaryGridProps = Pick<WorkspaceMediaRetentionSummaryProps, "copy" | "remoteMediaLabel" | "report" | "storageRiskLabel">;',
+]) {
+  if (!workspaceMediaRetentionSummaryGridTypesSource.includes(requiredWorkspaceMediaRetentionSummaryGridTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-summary-grid.types.ts must own retention-summary grid prop typing: ${requiredWorkspaceMediaRetentionSummaryGridTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionSummaryGridTypesLines = 2;
+if (workspaceMediaRetentionSummaryGridTypesLines > maxWorkspaceMediaRetentionSummaryGridTypesLines) {
+  throw new Error(
+    `workspace-media-retention-summary-grid.types.ts exceeded ${maxWorkspaceMediaRetentionSummaryGridTypesLines} lines: ${workspaceMediaRetentionSummaryGridTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionSummaryNoteUsage of [
+  'import type { WorkspaceMediaRetentionSummaryNoteProps } from "./workspace-media-retention-summary-note.types";',
+  "}: WorkspaceMediaRetentionSummaryNoteProps) {",
+  "report.orphan_file_count",
+  "copy.cleanupNote",
+]) {
+  if (!workspaceMediaRetentionSummaryNoteSource.includes(requiredWorkspaceMediaRetentionSummaryNoteUsage)) {
+    throw new Error(
+      `workspace-media-retention-summary-note.tsx must own retention-summary note rendering: ${requiredWorkspaceMediaRetentionSummaryNoteUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionSummaryNoteSource.includes("type WorkspaceMediaRetentionSummaryNoteProps =")) {
+  throw new Error(
+    "workspace-media-retention-summary-note.tsx must keep retention-summary note prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionSummaryNoteLines = 8;
+if (workspaceMediaRetentionSummaryNoteLines > maxWorkspaceMediaRetentionSummaryNoteLines) {
+  throw new Error(
+    `workspace-media-retention-summary-note.tsx exceeded ${maxWorkspaceMediaRetentionSummaryNoteLines} lines: ${workspaceMediaRetentionSummaryNoteLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionSummaryNoteTypesUsage of [
+  'import type { WorkspaceMediaRetentionSummaryProps } from "./workspace-media-retention-summary.types"; export type WorkspaceMediaRetentionSummaryNoteProps = Pick<WorkspaceMediaRetentionSummaryProps, "copy" | "report">;',
+]) {
+  if (!workspaceMediaRetentionSummaryNoteTypesSource.includes(requiredWorkspaceMediaRetentionSummaryNoteTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-summary-note.types.ts must own retention-summary note prop typing: ${requiredWorkspaceMediaRetentionSummaryNoteTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionSummaryNoteTypesLines = 2;
+if (workspaceMediaRetentionSummaryNoteTypesLines > maxWorkspaceMediaRetentionSummaryNoteTypesLines) {
+  throw new Error(
+    `workspace-media-retention-summary-note.types.ts exceeded ${maxWorkspaceMediaRetentionSummaryNoteTypesLines} lines: ${workspaceMediaRetentionSummaryNoteTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceMediaRetentionSummaryTypesUsage of [
