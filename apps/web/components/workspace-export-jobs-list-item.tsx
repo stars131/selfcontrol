@@ -1,6 +1,7 @@
 "use client";
 
 import { WorkspaceExportJobsListItemAction } from "./workspace-export-jobs-list-item-action";
+import { WorkspaceExportJobsListItemError } from "./workspace-export-jobs-list-item-error";
 import { WorkspaceExportJobsListItemSummary } from "./workspace-export-jobs-list-item-summary";
 import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";
 
@@ -11,7 +12,7 @@ export function WorkspaceExportJobsListItem({ actionLoading, downloadLabel, job,
         <WorkspaceExportJobsListItemSummary job={job} locale={locale} />
         <WorkspaceExportJobsListItemAction actionLoading={actionLoading} downloadLabel={downloadLabel} job={job} onDownload={onDownload} />
       </div>
-      {job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null}
+      <WorkspaceExportJobsListItemError job={job} />
     </article>
   );
 }

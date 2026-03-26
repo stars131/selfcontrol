@@ -1895,6 +1895,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-list-item.tsx` now delegates completed-job download button rendering to `workspace-export-jobs-list-item-action.tsx` instead of keeping the action branch inline beside the summary leaf
   - the new `workspace-export-jobs-list-item-action.types.ts` file keeps the item-action contract explicit and reusable while the parent list-item remains focused on shell layout, summary composition, and error notice rendering
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs item-action boundary, exact one-line type contract, and line-count ceilings so future export-jobs item updates stay safer and easier to maintain
+- Workspace Export Jobs Item Error Split V1:
+  - `workspace-export-jobs-list-item.tsx` now delegates error notice rendering to `workspace-export-jobs-list-item-error.tsx` instead of keeping the failure branch inline under the summary and action leaves
+  - the new `workspace-export-jobs-list-item-error.types.ts` file keeps the item-error contract explicit and reusable while the parent list-item remains focused on shell layout and composition only
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs item-error boundary, exact one-line type contract, and line-count ceilings so future export-jobs item updates stay safer and easier to maintain
 - Workspace Export Jobs Empty State Split V1:
   - `workspace-export-jobs-list.tsx` now delegates empty-list notice rendering to `workspace-export-jobs-empty-state.tsx` instead of keeping the empty-state markup inline beside the job iteration branch
   - the new `workspace-export-jobs-empty-state.types.ts` file keeps the empty-state contract explicit and reusable while the parent list remains focused on iteration and list shell composition

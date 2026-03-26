@@ -78,6 +78,14 @@ const exportJobsListItemActionTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item-action.types.ts",
 );
+const exportJobsListItemErrorPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-error.tsx",
+);
+const exportJobsListItemErrorTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-error.types.ts",
+);
 const exportJobsListItemSummaryPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item-summary.tsx",
@@ -110,6 +118,8 @@ const noticesTypesSource = fs.readFileSync(exportJobsNoticesTypesPath, "utf8");
 const listItemSource = fs.readFileSync(exportJobsListItemPath, "utf8");
 const listItemActionSource = fs.readFileSync(exportJobsListItemActionPath, "utf8");
 const listItemActionTypesSource = fs.readFileSync(exportJobsListItemActionTypesPath, "utf8");
+const listItemErrorSource = fs.readFileSync(exportJobsListItemErrorPath, "utf8");
+const listItemErrorTypesSource = fs.readFileSync(exportJobsListItemErrorTypesPath, "utf8");
 const listItemSummarySource = fs.readFileSync(exportJobsListItemSummaryPath, "utf8");
 const listItemSummaryTypesSource = fs.readFileSync(exportJobsListItemSummaryTypesPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
@@ -133,6 +143,8 @@ const noticesTypesLineCount = noticesTypesSource.split(/\r?\n/).length;
 const listItemLineCount = listItemSource.split(/\r?\n/).length;
 const listItemActionLineCount = listItemActionSource.split(/\r?\n/).length;
 const listItemActionTypesLineCount = listItemActionTypesSource.split(/\r?\n/).length;
+const listItemErrorLineCount = listItemErrorSource.split(/\r?\n/).length;
+const listItemErrorTypesLineCount = listItemErrorTypesSource.split(/\r?\n/).length;
 const listItemSummaryLineCount = listItemSummarySource.split(/\r?\n/).length;
 const listItemSummaryTypesLineCount = listItemSummaryTypesSource.split(/\r?\n/).length;
 const listItemTypesLineCount = listItemTypesSource.split(/\r?\n/).length;
@@ -397,12 +409,13 @@ if (noticesTypesLineCount > 2) {
 
 for (const requiredListItemUsage of [
   'import { WorkspaceExportJobsListItemAction } from "./workspace-export-jobs-list-item-action";',
+  'import { WorkspaceExportJobsListItemError } from "./workspace-export-jobs-list-item-error";',
   'import { WorkspaceExportJobsListItemSummary } from "./workspace-export-jobs-list-item-summary";',
   'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";',
   "}: WorkspaceExportJobsListItemProps) {",
   "<WorkspaceExportJobsListItemAction",
+  "<WorkspaceExportJobsListItemError",
   "<WorkspaceExportJobsListItemSummary",
-  'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
 ]) {
   if (!listItemSource.includes(requiredListItemUsage)) {
     throw new Error(`workspace-export-jobs-list-item.tsx must own single-job rendering: ${requiredListItemUsage}`);
@@ -413,6 +426,7 @@ for (const forbiddenListItemToken of [
   'job.status === "completed"',
   'onClick={() => void onDownload(job.id)}',
   '<button className="button secondary" disabled={actionLoading} type="button" onClick={() => void onDownload(job.id)}>',
+  'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
   'new Date(job.created_at).toLocaleString(locale)',
   '<div className="eyebrow">{job.job_type} / {job.status}</div>',
   '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
@@ -456,6 +470,36 @@ for (const requiredListItemActionTypesUsage of [
 
 if (listItemActionTypesLineCount > 2) {
   throw new Error(`workspace-export-jobs-list-item-action.types.ts exceeded 2 lines: ${listItemActionTypesLineCount}`);
+}
+
+for (const requiredListItemErrorUsage of [
+  'import type { WorkspaceExportJobsListItemErrorProps } from "./workspace-export-jobs-list-item-error.types";',
+  "}: WorkspaceExportJobsListItemErrorProps) {",
+  'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
+]) {
+  if (!listItemErrorSource.includes(requiredListItemErrorUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-error.tsx must own item-error rendering: ${requiredListItemErrorUsage}`);
+  }
+}
+
+if (listItemErrorSource.includes("type WorkspaceExportJobsListItemErrorProps = Pick<")) {
+  throw new Error("workspace-export-jobs-list-item-error.tsx must keep item-error prop typing delegated");
+}
+
+if (listItemErrorLineCount > 8) {
+  throw new Error(`workspace-export-jobs-list-item-error.tsx exceeded 8 lines: ${listItemErrorLineCount}`);
+}
+
+for (const requiredListItemErrorTypesUsage of [
+  'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types"; export type WorkspaceExportJobsListItemErrorProps = Pick<WorkspaceExportJobsListItemProps, "job">;',
+]) {
+  if (!listItemErrorTypesSource.includes(requiredListItemErrorTypesUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-error.types.ts must own item-error prop typing: ${requiredListItemErrorTypesUsage}`);
+  }
+}
+
+if (listItemErrorTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-list-item-error.types.ts exceeded 2 lines: ${listItemErrorTypesLineCount}`);
 }
 
 for (const requiredListItemSummaryUsage of [
