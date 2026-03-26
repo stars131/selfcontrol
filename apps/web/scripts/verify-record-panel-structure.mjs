@@ -5411,7 +5411,9 @@ for (const requiredRecordQuickAddPreviewUsage of [
   'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|\\d{1,2}:\\d{2}(?::\\d{2})?|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206)|\\[|\\u3010)/i.test(draft);',
   "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
   "const parsed = buildQuickAddRecordDraft(draft.trim());",
+  "const contentPreview = parsed.content !== parsed.title ? parsed.content : \"\";",
   "panelCopy.quickAddPreview",
+  "panelCopy.content",
   "panelCopy.food",
   "panelCopy.title",
   "panelCopy.occurredAt",
@@ -5436,7 +5438,7 @@ if (recordQuickAddPreviewLines > maxRecordQuickAddPreviewLines) {
 }
 
 for (const requiredRecordQuickAddPreviewTypesUsage of [
-  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "food" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack" | "title"> };',
+  'import type { LocaleCode } from "../lib/locale"; import type { PanelCopy } from "../lib/record-panel-ui"; export type RecordQuickAddPreviewProps = { draft: string; locale: LocaleCode; panelCopy: Pick<PanelCopy, "address" | "badExperience" | "content" | "food" | "latitude" | "longitude" | "memo" | "occurredAt" | "placeName" | "quickAddPreview" | "rating" | "snack" | "title"> };',
 ]) {
   if (!recordQuickAddPreviewTypesSource.includes(requiredRecordQuickAddPreviewTypesUsage)) {
     throw new Error(

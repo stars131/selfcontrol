@@ -15,6 +15,7 @@ function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps
 export function RecordQuickAddPreview({ draft, locale, panelCopy }: RecordQuickAddPreviewProps) {
   if (!shouldShowQuickAddPreview(draft.trim())) return null;
   const parsed = buildQuickAddRecordDraft(draft.trim());
+  const contentPreview = parsed.content !== parsed.title ? parsed.content : "";
   const location = parsed.extra_data && typeof parsed.extra_data.location === "object" && parsed.extra_data.location !== null
     ? (parsed.extra_data.location as Record<string, unknown>)
     : null;
@@ -27,6 +28,7 @@ export function RecordQuickAddPreview({ draft, locale, panelCopy }: RecordQuickA
     <div className="tag-row" style={{ marginTop: 8 }}>
       <span className="tag">{panelCopy.quickAddPreview}</span>
       <span className="tag">{panelCopy.title}: {parsed.title}</span>
+      {contentPreview ? <span className="tag">{panelCopy.content}: {contentPreview}</span> : null}
       <span className="tag">{formatTypeLabel(parsed.type_code, panelCopy)}</span>
       <span className="tag">{panelCopy.occurredAt}: {new Date(parsed.occurred_at ?? "").toLocaleString(locale)}</span>
       {parsed.rating !== null && parsed.rating !== undefined ? <span className="tag">{panelCopy.rating}: {parsed.rating}/5</span> : null}

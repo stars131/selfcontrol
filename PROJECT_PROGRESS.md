@@ -2091,6 +2091,10 @@ Last updated: 2026-03-26
   - quick add now supports meal-oriented tags such as `#food`, `#meal`, and `#正餐`, so one-line capture can classify full meals directly instead of falling back to generic memo records
   - the quick-add preview now maps `food` records to the existing localized food label instead of showing them as generic memos
   - behavior and structure verification now cover the new food-tag aliases, and the quick-add hint copy documents them in all supported interface languages
+- Record Quick Add Content Preview V1:
+  - quick add preview now shows parsed body content whenever it differs from the final title, so explicit-title entries can be confirmed before save without duplicating plain one-line notes
+  - the preview typing and structure verification now treat `content` as part of the quick-add preview contract, keeping the new summary detail explicit and maintainable
+  - localized quick-add hints now mention the `[Title] body` syntax so the one-input workflow remains discoverable in English, Chinese, and Japanese
 
 ## Next
 - Continue the next product slice
