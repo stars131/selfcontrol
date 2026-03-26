@@ -2019,6 +2019,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-actions.tsx` now delegates owner/editor branch rendering to `workspace-media-retention-actions-content.tsx` instead of keeping both branches inline beside the section shell and title
   - the new retention-actions-content `*.types.ts` file keeps the branch-composition contract explicit and reusable while the parent actions panel remains focused on shell layout
   - `verify-record-panel-structure.mjs` now enforces that delegated retention-actions-content boundary, exact one-line type contract, and line-count ceilings so future retention-action updates stay safer and easier to maintain
+- Provider Media Storage Toggle Group Split V1:
+  - `provider-feature-media-storage-options.tsx` now delegates the fallback and auto-retry checkbox group to `provider-feature-media-storage-option-toggles.tsx` instead of keeping those boolean controls inline beside the retry text inputs
+  - the new `provider-feature-media-storage-option-toggles.types.ts` file keeps the toggle-group contract explicit and reusable while the parent options component remains focused on retry field composition
+  - `verify-record-panel-structure.mjs` now enforces that delegated media-storage toggle boundary, exact one-line type contract, and line-count ceilings so future provider media-storage updates stay easier to maintain under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
