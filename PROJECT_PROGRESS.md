@@ -1923,6 +1923,10 @@ Last updated: 2026-03-25
   - `workspace-settings-client.tsx` now delegates panel-body composition and error notice rendering to `workspace-settings-main-content.tsx` and `workspace-settings-error-notice.tsx` instead of keeping those layout blocks inline beside top-level data assembly
   - the new settings-content `*.types.ts` files keep main-content and error-notice prop contracts explicit and reusable while the client component remains focused on controller wiring, locale state, and helper-based prop construction
   - `verify-workspace-settings-structure.mjs` now enforces those delegated settings-content boundaries, exact one-line type contracts, and line-count ceilings so future settings-page updates stay safer and easier to maintain
+- Workspace Entry Main Panel Body And Error Notice Split V1:
+  - `workspace-entry-main-panel.tsx` now delegates panel-body composition and error notice rendering to `workspace-entry-panel-body.tsx` and `workspace-entry-error-notice.tsx` instead of keeping those layout blocks inline beside the entry header
+  - the new entry-panel `*.types.ts` files keep body and error-notice prop contracts explicit and reusable while the main panel remains focused on page-shell and header composition
+  - `verify-workspace-entry-structure.mjs` now enforces those delegated entry-panel boundaries, exact one-line type contracts, and line-count ceilings so future workspace-entry updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

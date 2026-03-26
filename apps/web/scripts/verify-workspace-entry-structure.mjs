@@ -23,6 +23,22 @@ const workspaceEntryLoadingShellTypesPath = path.resolve(
   "components/workspace-entry-loading-shell.types.ts",
 );
 const workspaceEntryMainPanelPath = path.resolve(process.cwd(), "components/workspace-entry-main-panel.tsx");
+const workspaceEntryPanelBodyPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-panel-body.tsx",
+);
+const workspaceEntryPanelBodyTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-panel-body.types.ts",
+);
+const workspaceEntryErrorNoticePath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-error-notice.tsx",
+);
+const workspaceEntryErrorNoticeTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-entry-error-notice.types.ts",
+);
 const workspaceEntrySectionsGridPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-sections-grid.tsx",
@@ -83,6 +99,10 @@ const clientTypesSource = fs.readFileSync(workspaceEntryClientTypesPath, "utf8")
 const loadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const loadingShellTypesSource = fs.readFileSync(workspaceEntryLoadingShellTypesPath, "utf8");
 const mainPanelSource = fs.readFileSync(workspaceEntryMainPanelPath, "utf8");
+const panelBodySource = fs.readFileSync(workspaceEntryPanelBodyPath, "utf8");
+const panelBodyTypesSource = fs.readFileSync(workspaceEntryPanelBodyTypesPath, "utf8");
+const errorNoticeSource = fs.readFileSync(workspaceEntryErrorNoticePath, "utf8");
+const errorNoticeTypesSource = fs.readFileSync(workspaceEntryErrorNoticeTypesPath, "utf8");
 const sectionsGridSource = fs.readFileSync(workspaceEntrySectionsGridPath, "utf8");
 const sectionsGridTypesSource = fs.readFileSync(workspaceEntrySectionsGridTypesPath, "utf8");
 const transferJobsSectionSource = fs.readFileSync(workspaceTransferJobsSectionPath, "utf8");
@@ -107,6 +127,10 @@ const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const loadingShellLineCount = loadingShellSource.split(/\r?\n/).length;
 const loadingShellTypesLineCount = loadingShellTypesSource.split(/\r?\n/).length;
 const mainPanelLineCount = mainPanelSource.split(/\r?\n/).length;
+const panelBodyLineCount = panelBodySource.split(/\r?\n/).length;
+const panelBodyTypesLineCount = panelBodyTypesSource.split(/\r?\n/).length;
+const errorNoticeLineCount = errorNoticeSource.split(/\r?\n/).length;
+const errorNoticeTypesLineCount = errorNoticeTypesSource.split(/\r?\n/).length;
 const sectionsGridLineCount = sectionsGridSource.split(/\r?\n/).length;
 const sectionsGridTypesLineCount = sectionsGridTypesSource.split(/\r?\n/).length;
 const transferJobsSectionLineCount = transferJobsSectionSource.split(/\r?\n/).length;
@@ -167,9 +191,9 @@ for (const requiredClientUsage of [
 }
 
 for (const requiredImport of [
+  'import { WorkspaceEntryPanelBody } from "./workspace-entry-panel-body";',
   'import { WorkspaceEntryHeader } from "./workspace-entry-header";',
   'import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types";',
-  'import { WorkspaceEntrySectionsGrid } from "./workspace-entry-sections-grid";',
 ]) {
   if (!mainPanelSource.includes(requiredImport)) {
     throw new Error(`workspace-entry-main-panel.tsx must keep using extracted entry sections: ${requiredImport}`);
@@ -178,7 +202,7 @@ for (const requiredImport of [
 
 for (const requiredUsage of [
   "<WorkspaceEntryHeader",
-  "<WorkspaceEntrySectionsGrid",
+  "<WorkspaceEntryPanelBody",
 ]) {
   if (!mainPanelSource.includes(requiredUsage)) {
     throw new Error(`workspace-entry-main-panel.tsx must compose the extracted entry sections: ${requiredUsage}`);
@@ -186,6 +210,9 @@ for (const requiredUsage of [
 }
 
 for (const forbiddenMainPanelToken of [
+  '<div className="panel-body">',
+  'className="notice error"',
+  "<WorkspaceEntrySectionsGrid",
   "<WorkspaceCreateSection",
   "<WorkspaceJoinSection",
   "<WorkspaceImportSection",
@@ -195,6 +222,78 @@ for (const forbiddenMainPanelToken of [
   if (mainPanelSource.includes(forbiddenMainPanelToken)) {
     throw new Error(`workspace-entry-main-panel.tsx must keep entry sections delegated: ${forbiddenMainPanelToken}`);
   }
+}
+
+for (const requiredPanelBodyImport of [
+  'import { WorkspaceEntryErrorNotice } from "./workspace-entry-error-notice";',
+  'import type { WorkspaceEntryPanelBodyProps } from "./workspace-entry-panel-body.types";',
+  'import { WorkspaceEntrySectionsGrid } from "./workspace-entry-sections-grid";',
+]) {
+  if (!panelBodySource.includes(requiredPanelBodyImport)) {
+    throw new Error(`workspace-entry-panel-body.tsx must import delegated body leaves: ${requiredPanelBodyImport}`);
+  }
+}
+
+for (const requiredPanelBodyUsage of [
+  "}: WorkspaceEntryPanelBodyProps) {",
+  '<div className="panel-body">',
+  "<WorkspaceEntryErrorNotice",
+  "<WorkspaceEntrySectionsGrid",
+]) {
+  if (!panelBodySource.includes(requiredPanelBodyUsage)) {
+    throw new Error(`workspace-entry-panel-body.tsx must compose delegated body leaves: ${requiredPanelBodyUsage}`);
+  }
+}
+
+if (panelBodySource.includes("type WorkspaceEntryPanelBodyProps =")) {
+  throw new Error("workspace-entry-panel-body.tsx must keep panel-body prop typing delegated");
+}
+
+if (panelBodyLineCount > 40) {
+  throw new Error(`workspace-entry-panel-body.tsx exceeded 40 lines: ${panelBodyLineCount}`);
+}
+
+for (const requiredPanelBodyTypesUsage of [
+  'import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types"; export type WorkspaceEntryPanelBodyProps = Pick<WorkspaceEntryMainPanelProps, "copy" | "creating" | "error" | "fileInputRef" | "importFile" | "importName" | "importSlug" | "importing" | "jobsLoading" | "joining" | "locale" | "name" | "onAcceptShare" | "onCreate" | "onDownloadTransferJob" | "onImportFileChange" | "onImportNameChange" | "onImportSlugChange" | "onImportWorkspace" | "onNameChange" | "onPreviewShare" | "onQueueImportJob" | "onRefreshJobs" | "onShareTokenInputChange" | "previewing" | "queueingImportJob" | "sharePreview" | "shareTokenInput" | "suggestedSlug" | "token" | "transferJobs" | "workspaces">;',
+]) {
+  if (!panelBodyTypesSource.includes(requiredPanelBodyTypesUsage)) {
+    throw new Error(`workspace-entry-panel-body.types.ts must own panel-body prop typing: ${requiredPanelBodyTypesUsage}`);
+  }
+}
+
+if (panelBodyTypesLineCount > 2) {
+  throw new Error(`workspace-entry-panel-body.types.ts exceeded 2 lines: ${panelBodyTypesLineCount}`);
+}
+
+for (const requiredErrorNoticeUsage of [
+  'import type { WorkspaceEntryErrorNoticeProps } from "./workspace-entry-error-notice.types";',
+  "}: WorkspaceEntryErrorNoticeProps) {",
+  "if (!error) {",
+  'className="notice error"',
+]) {
+  if (!errorNoticeSource.includes(requiredErrorNoticeUsage)) {
+    throw new Error(`workspace-entry-error-notice.tsx must own error-notice rendering: ${requiredErrorNoticeUsage}`);
+  }
+}
+
+if (errorNoticeSource.includes("type WorkspaceEntryErrorNoticeProps =")) {
+  throw new Error("workspace-entry-error-notice.tsx must keep error-notice prop typing delegated");
+}
+
+if (errorNoticeLineCount > 10) {
+  throw new Error(`workspace-entry-error-notice.tsx exceeded 10 lines: ${errorNoticeLineCount}`);
+}
+
+for (const requiredErrorNoticeTypesUsage of [
+  'import type { WorkspaceEntryPanelBodyProps } from "./workspace-entry-panel-body.types"; export type WorkspaceEntryErrorNoticeProps = Pick<WorkspaceEntryPanelBodyProps, "error">;',
+]) {
+  if (!errorNoticeTypesSource.includes(requiredErrorNoticeTypesUsage)) {
+    throw new Error(`workspace-entry-error-notice.types.ts must own error-notice prop typing: ${requiredErrorNoticeTypesUsage}`);
+  }
+}
+
+if (errorNoticeTypesLineCount > 2) {
+  throw new Error(`workspace-entry-error-notice.types.ts exceeded 2 lines: ${errorNoticeTypesLineCount}`);
 }
 
 for (const requiredSectionsGridImport of [
@@ -502,7 +601,7 @@ if (transferJobCardTypesLineCount > 2) {
   throw new Error(`workspace-transfer-job-card.types.ts exceeded 2 lines: ${transferJobCardTypesLineCount}`);
 }
 
-const maxMainPanelLines = 110;
+const maxMainPanelLines = 80;
 if (mainPanelLineCount > maxMainPanelLines) {
   throw new Error(`workspace-entry-main-panel.tsx exceeded ${maxMainPanelLines} lines: ${mainPanelLineCount}`);
 }
