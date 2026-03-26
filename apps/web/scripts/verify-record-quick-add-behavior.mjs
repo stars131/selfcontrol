@@ -16,52 +16,67 @@ for (const [label, input, expected] of [
   [
     "english snack tag",
     "#snack good chips",
-    { title: "good chips", content: "good chips", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "good chips", content: "good chips", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "chinese snack tag",
     "#\u96f6\u98df \u597d\u5403\u7684\u85af\u7247",
-    { title: "\u597d\u5403\u7684\u85af\u7247", content: "\u597d\u5403\u7684\u85af\u7247", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u597d\u5403\u7684\u85af\u7247", content: "\u597d\u5403\u7684\u85af\u7247", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "english avoid tag",
     "#avoid airport ramen trap",
-    { title: "airport ramen trap", content: "airport ramen trap", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "airport ramen trap", content: "airport ramen trap", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "chinese avoid tag",
     "#\u8e29\u96f7 \u673a\u573a\u62c9\u9762\u5f88\u96be\u5403",
-    { title: "\u673a\u573a\u62c9\u9762\u5f88\u96be\u5403", content: "\u673a\u573a\u62c9\u9762\u5f88\u96be\u5403", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u673a\u573a\u62c9\u9762\u5f88\u96be\u5403", content: "\u673a\u573a\u62c9\u9762\u5f88\u96be\u5403", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "memo tag alias",
     "#\u5907\u5fd8 \u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910",
-    { title: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", content: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", content: "\u4e0b\u6b21\u8bd5\u8bd5\u5348\u9910\u5957\u9910", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "last leading tag wins",
     "#\u96f6\u98df #\u907f\u96f7 \u592a\u54b8\u4e86",
-    { title: "\u592a\u54b8\u4e86", content: "\u592a\u54b8\u4e86", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u592a\u54b8\u4e86", content: "\u592a\u54b8\u4e86", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "plain note default",
     "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9",
-    { title: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", content: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", content: "\u53ea\u662f\u8bb0\u4e00\u4e0b\u4eca\u5929\u5403\u5230\u4e86\u65b0\u751c\u70b9", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "today token alias",
     "\u4eca\u5929 #\u96f6\u98df \u65b0\u53d1\u73b0\u7684\u997c\u5e72",
-    { title: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", content: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z" },
+    { title: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", content: "\u65b0\u53d1\u73b0\u7684\u997c\u5e72", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: null },
   ],
   [
     "yesterday token alias",
     "yesterday #bad airport noodles",
-    { title: "airport noodles", content: "airport noodles", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-25T12:00:00.000Z" },
+    { title: "airport noodles", content: "airport noodles", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-25T12:00:00.000Z", rating: null },
   ],
   [
     "last leading time token wins",
     "#today \u6628\u5929 #memo \u665a\u996d\u4e0d\u9519",
-    { title: "\u665a\u996d\u4e0d\u9519", content: "\u665a\u996d\u4e0d\u9519", type_code: "memo", is_avoid: false, occurred_at: "2026-03-25T12:00:00.000Z" },
+    { title: "\u665a\u996d\u4e0d\u9519", content: "\u665a\u996d\u4e0d\u9519", type_code: "memo", is_avoid: false, occurred_at: "2026-03-25T12:00:00.000Z", rating: null },
+  ],
+  [
+    "rating token alias",
+    "5\u661f #\u96f6\u98df \u9ed1\u5de7\u514b\u529b",
+    { title: "\u9ed1\u5de7\u514b\u529b", content: "\u9ed1\u5de7\u514b\u529b", type_code: "snack", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: 5 },
+  ],
+  [
+    "slash rating token alias",
+    "1/5 #bad airport noodles",
+    { title: "airport noodles", content: "airport noodles", type_code: "bad_experience", is_avoid: true, occurred_at: "2026-03-26T12:00:00.000Z", rating: 1 },
+  ],
+  [
+    "last leading rating token wins",
+    "2star 4/5 #memo brunch spot",
+    { title: "brunch spot", content: "brunch spot", type_code: "memo", is_avoid: false, occurred_at: "2026-03-26T12:00:00.000Z", rating: 4 },
   ],
 ]) {
   const actual = buildQuickAddRecordDraft(input, referenceNow);

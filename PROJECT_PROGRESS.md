@@ -2055,6 +2055,10 @@ Last updated: 2026-03-26
   - quick add now supports lightweight leading time tokens such as `today`, `yesterday`, and their Chinese equivalents so one-line capture can store a more accurate occurrence time without opening the full editor
   - `record-quick-add-bar.helpers.ts` now owns both control-token parsing and occurred-at derivation, while the UI component continues delegating quick-capture semantics into the helper layer
   - behavior verification now covers bilingual time aliases and the explicit current rule that the last leading recognized time token wins when multiple time shortcuts are stacked
+- Record Quick Add Rating Parsing V1:
+  - quick add now supports lightweight leading rating tokens such as `5star`, `5星`, `5分`, and `4/5`, so one-line capture can save a usable rating without opening the full editor
+  - rating parsing follows the same control-token pattern as tags and time shortcuts, and the current explicit rule is that the last leading recognized rating token wins
+  - behavior and structure verification now cover rating parsing and the expanded quick-add draft typing so the single-input capture path remains stable under future refactors
 
 ## Next
 - Continue the next product slice

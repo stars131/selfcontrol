@@ -5403,8 +5403,12 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   '"#\\u8e29\\u96f7": AVOID_QUICK_ADD_RULE,',
   "function buildQuickAddTitle(content: string)",
   "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
+  "function parseQuickAddRatingToken(token: string)",
+  'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
+  "const rating = parseQuickAddRatingToken(token);",
+  "rating: nextRating,",
   "occurred_at: buildQuickAddOccurredAt(nextTimeRule, now),",
   "return { ...parsed, title: buildQuickAddTitle(parsed.content) };",
 ]) {
@@ -5435,7 +5439,7 @@ if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
 }
 
 for (const requiredRecordQuickAddBarHelpersTypesUsage of [
-  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "occurred_at" | "type_code"> & { title: string };',
+  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "occurred_at" | "rating" | "type_code"> & { title: string };',
 ]) {
   if (!recordQuickAddBarHelpersTypesSource.includes(requiredRecordQuickAddBarHelpersTypesUsage)) {
     throw new Error(
