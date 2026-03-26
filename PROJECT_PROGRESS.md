@@ -2067,6 +2067,10 @@ Last updated: 2026-03-26
   - quick add now supports optional coordinates in the place prefix via `@Place(lat,lng): content`, which writes validated latitude and longitude into `extra_data.location` for immediate map-aware records
   - invalid coordinate pairs now degrade safely back to place-only parsing instead of storing broken numeric location data
   - behavior and structure verification now cover coordinate extraction and invalid-coordinate fallback so future quick-add map work stays stable under refactors
+- Record Quick Add Place Address V1:
+  - quick add now supports an optional address segment via `@Place(lat,lng) | Address: content`, which writes `address` into `extra_data.location` alongside the place name and any validated coordinates
+  - the address segment is optional and backward compatible with existing place-prefix entries, so older quick-add input formats continue to work unchanged
+  - behavior and structure verification now cover address extraction so future quick-add location enhancements remain safe under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice

@@ -92,6 +92,19 @@ for (const [label, input, expected] of [
     },
   ],
   [
+    "place segment with address",
+    "@West Lake Sushi | Hubin Road: fresh uni tonight",
+    {
+      title: "fresh uni tonight",
+      content: "fresh uni tonight",
+      type_code: "memo",
+      is_avoid: false,
+      occurred_at: "2026-03-26T12:00:00.000Z",
+      rating: null,
+      extra_data: { location: { place_name: "West Lake Sushi", address: "Hubin Road", source: "quick_add" } },
+    },
+  ],
+  [
     "place segment with coordinates",
     "@West Lake Sushi(30.2741,120.1551): fresh uni tonight",
     {
@@ -102,6 +115,19 @@ for (const [label, input, expected] of [
       occurred_at: "2026-03-26T12:00:00.000Z",
       rating: null,
       extra_data: { location: { place_name: "West Lake Sushi", latitude: 30.2741, longitude: 120.1551, source: "quick_add" } },
+    },
+  ],
+  [
+    "place segment with coordinates and address",
+    "@West Lake Sushi(30.2741,120.1551) | Hubin Road: fresh uni tonight",
+    {
+      title: "fresh uni tonight",
+      content: "fresh uni tonight",
+      type_code: "memo",
+      is_avoid: false,
+      occurred_at: "2026-03-26T12:00:00.000Z",
+      rating: null,
+      extra_data: { location: { place_name: "West Lake Sushi", address: "Hubin Road", latitude: 30.2741, longitude: 120.1551, source: "quick_add" } },
     },
   ],
   [

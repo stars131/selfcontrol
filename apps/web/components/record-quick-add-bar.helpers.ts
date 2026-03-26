@@ -55,17 +55,19 @@ function readQuickAddCoordinate(value: string, min: number, max: number) {
 }
 
 function parseQuickAddLocationSegment(content: string) {
-  const match = content.match(/^@(.+?)(?:\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\))?[:\uFF1A]\s*(.*)$/);
+  const match = content.match(/^@(.+?)(?:\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\))?(?:\s*\|\s*([^:\uFF1A]+))?[:\uFF1A]\s*(.*)$/);
   if (!match) return { content, extra_data: undefined };
   const placeName = match[1].trim();
   const latitude = match[2] ? readQuickAddCoordinate(match[2], -90, 90) : null;
   const longitude = match[3] ? readQuickAddCoordinate(match[3], -180, 180) : null;
+  const address = match[4]?.trim();
   return placeName
     ? {
-        content: match[4].trim() || content,
+        content: match[5].trim() || content,
         extra_data: {
           location: {
             place_name: placeName,
+            ...(address ? { address } : {}),
             ...(latitude !== null && longitude !== null ? { latitude, longitude } : {}),
             source: "quick_add",
           },
