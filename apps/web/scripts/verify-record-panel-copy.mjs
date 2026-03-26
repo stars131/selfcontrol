@@ -82,7 +82,10 @@ verifyFlatLocaleFile("lib/record-panel-detail-copy.json", [
   "timelineView",
   "noRecords",
   "recordTypeMemo",
-  "recordTypeBadExperience"
+  "recordTypeBadExperience",
+  "recordTypeUnknown",
+  "recordSourceManual",
+  "recordStatusActive"
 ]);
 
 verifyNestedLocaleFile("lib/record-panel-ui-copy.json", {

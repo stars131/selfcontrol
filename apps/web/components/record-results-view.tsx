@@ -14,7 +14,10 @@ export function RecordResultsView(props: RecordResultsViewProps) {
     ratingPrefixLabel: props.ratingPrefixLabel,
     unknownPlaceLabel: props.unknownPlaceLabel,
     untitledRecordLabel: props.untitledRecordLabel,
+    formatRecordSourceLabel: props.formatRecordSourceLabel,
+    formatRecordStatusLabel: props.formatRecordStatusLabel,
     formatRecordTimestampLabel: props.formatRecordTimestampLabel,
+    formatRecordTypeLabel: props.formatRecordTypeLabel,
     formatReviewStatusLabel: props.formatReviewStatusLabel,
     onSelectRecord: props.onSelectRecord,
   };

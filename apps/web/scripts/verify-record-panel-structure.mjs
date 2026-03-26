@@ -6318,7 +6318,7 @@ for (const requiredBrowseWorkspaceOutputPropsTypesImport of [
 
 for (const requiredBrowseWorkspaceOutputPropsTypesUsage of [
   'export type RecordBrowseWorkspaceFilterProps = Pick<RecordBrowseWorkspaceProps, "currentFilterSummary" | "filterDraft" | "onApplyFilter" | "onApplyLocationFilter" | "onApplyPreset" | "onDeletePreset" | "onResetFilter" | "onSavePreset" | "presetName" | "recordFilter" | "savingSearchPreset" | "searchPresets" | "setFilterDraft" | "setPresetName" | "summarizeRecordFilterLabel">;',
-  'export type RecordBrowseWorkspaceRecordProps = Pick<RecordBrowseWorkspaceProps, "avoidCount" | "canWriteWorkspace" | "filteringRecords" | "foodCount" | "formatAvoidCountLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "onSelectRecord" | "panelCopy" | "records" | "selectedRecordId" | "setViewMode" | "timelineDays" | "viewMode" | "visibleRecordCount">;',
+  'export type RecordBrowseWorkspaceRecordProps = Pick<RecordBrowseWorkspaceProps, "avoidCount" | "canWriteWorkspace" | "filteringRecords" | "foodCount" | "formatAvoidCountLabel" | "formatRecordSourceLabel" | "formatRecordStatusLabel" | "formatRecordTimestampLabel" | "formatRecordTypeLabel" | "formatReviewStatusLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "onSelectRecord" | "panelCopy" | "records" | "selectedRecordId" | "setViewMode" | "timelineDays" | "viewMode" | "visibleRecordCount">;',
   'export type RecordBrowseWorkspaceCopyProps = Pick<RecordBrowseWorkspaceProps, "applyPresetLabel" | "avoidRecordLabel" | "avoidStatsLabel" | "deletePresetLabel" | "flatListViewLabel" | "foodLabel" | "mapPrefixLabel" | "noContentLabel" | "noRecordsLabel" | "noSavedFiltersLabel" | "ratingPrefixLabel" | "savedPresetLabel" | "timelineDayLabel" | "timelineViewLabel" | "unknownPlaceLabel" | "untitledRecordLabel" | "visibleRecordsLabel">;',
   'export type RecordBrowseWorkspaceDraftLocationProps = Pick<RecordBrowseWorkspaceProps, "draftLocation" | "onDraftLocationChange">;',
 ]) {
@@ -6782,6 +6782,9 @@ for (const requiredBrowseWorkspaceControllerInputImport of [
 for (const requiredBrowseWorkspaceControllerInputUsage of [
   "export function buildRecordBrowseWorkspaceControllerInput({ controller }: BuildRecordBrowseWorkspaceControllerInputArgs) {",
   "avoidCount: controller.avoidCount",
+  "formatRecordSourceLabel: controller.formatRecordSourceLabel",
+  "formatRecordStatusLabel: controller.formatRecordStatusLabel",
+  "formatRecordTypeLabel: controller.formatRecordTypeLabel",
   "handleSavePreset: controller.handleSavePreset",
   "summarizeRecordFilterLabel: controller.summarizeRecordFilterLabel",
   "viewMode: controller.viewMode",
@@ -9227,6 +9230,9 @@ for (const requiredControllerLocalizedViewDataUsage of [
   "getRecordPanelUiBundle(locale)",
   "getRecordPanelDetailBundle(locale)",
   "detailCopy: detailBundle.copy",
+  "formatRecordSourceLabel: detailBundle.formatRecordSourceLabel",
+  "formatRecordStatusLabel: detailBundle.formatRecordStatusLabel",
+  "formatRecordTypeLabel: detailBundle.formatRecordTypeLabel",
   "summarizeRecordFilterLabel: detailBundle.summarizeRecordFilterLabel",
 ]) {
   if (!controllerLocalizedViewDataSource.includes(requiredControllerLocalizedViewDataUsage)) {
@@ -9987,6 +9993,9 @@ for (const requiredControllerLocalizedViewDataResultImport of [
 for (const requiredControllerLocalizedViewDataResultUsage of [
   "export function buildRecordPanelControllerLocalizedViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
   "detailCopy: viewData.detailCopy,",
+  "formatRecordSourceLabel: viewData.formatRecordSourceLabel,",
+  "formatRecordStatusLabel: viewData.formatRecordStatusLabel,",
+  "formatRecordTypeLabel: viewData.formatRecordTypeLabel,",
   "formatReminderStatusLabel: viewData.formatReminderStatusLabel,",
   "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
 ]) {
@@ -20898,6 +20907,9 @@ if (workspaceEntryShareActionsTypesLines > maxWorkspaceEntryShareActionsTypesLin
 
 for (const requiredRecordSummaryCardUsage of [
   'import type { RecordSummaryCardProps } from "./record-summary-card.types";',
+  "formatRecordSourceLabel",
+  "formatRecordStatusLabel",
+  "formatRecordTypeLabel",
   "}: RecordSummaryCardProps) {",
 ]) {
   if (!recordSummaryCardSource.includes(requiredRecordSummaryCardUsage)) {
@@ -20919,7 +20931,7 @@ for (const forbiddenRecordSummaryCardToken of [
 }
 
 for (const requiredRecordSummaryCardTypesUsage of [
-  'import type { RecordItem } from "../lib/types"; import type { RecordResultsSharedCardProps } from "./record-results-view.types"; export type RecordSummaryCardProps = Pick<RecordResultsSharedCardProps, "avoidLabel" | "formatRecordTimestampLabel" | "formatReviewStatusLabel" | "mapPrefixLabel" | "noContentLabel" | "onSelectRecord" | "ratingPrefixLabel" | "unknownPlaceLabel" | "untitledRecordLabel"> & { isSelected: boolean; record: RecordItem };',
+  'import type { RecordItem } from "../lib/types"; import type { RecordResultsSharedCardProps } from "./record-results-view.types"; export type RecordSummaryCardProps = Pick<RecordResultsSharedCardProps, "avoidLabel" | "formatRecordSourceLabel" | "formatRecordStatusLabel" | "formatRecordTimestampLabel" | "formatRecordTypeLabel" | "formatReviewStatusLabel" | "mapPrefixLabel" | "noContentLabel" | "onSelectRecord" | "ratingPrefixLabel" | "unknownPlaceLabel" | "untitledRecordLabel"> & { isSelected: boolean; record: RecordItem };',
 ]) {
   if (!recordSummaryCardTypesSource.includes(requiredRecordSummaryCardTypesUsage)) {
     throw new Error(

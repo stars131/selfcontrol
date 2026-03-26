@@ -2119,6 +2119,10 @@ Last updated: 2026-03-26
   - `record-panel-detail-copy.json` now defines localized record-type labels for memo, food, snack, and bad-experience records inside the shared detail-copy bundle
   - `record-panel-detail.ts` now formats `filter.typeCode` through those localized labels, so current-filter summaries and saved search preset summaries no longer expose raw internal type codes
   - `verify-record-panel-copy.mjs` now treats the new record-type copy keys as required across all locales so future filter-summary changes stay safe and maintainable
+- Record Summary Card Metadata Localization V1:
+  - `record-panel-detail.ts` now also formats record type, source, and status labels through localized detail-bundle helpers instead of leaving summary cards to render raw backend codes
+  - the browse results summary cards now show localized metadata for `type_code`, `source_type`, and `status`, while unknown future values degrade to explicit localized unknown labels instead of leaking raw internals
+  - the browse-workspace formatter chain and `verify-record-panel-structure.mjs` now enforce those new formatter props end to end so future summary-card changes stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

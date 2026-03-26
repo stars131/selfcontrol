@@ -19,7 +19,10 @@ export type RecordResultsViewProps = {
   ratingPrefixLabel: string;
   unknownPlaceLabel: string;
   untitledRecordLabel: string;
+  formatRecordSourceLabel: (value?: string | null) => string;
+  formatRecordStatusLabel: (value?: string | null) => string;
   formatRecordTimestampLabel: (record: RecordItem) => string;
+  formatRecordTypeLabel: (value?: string | null) => string;
   formatReviewStatusLabel: (value?: string | null) => string;
   formatTimelineDateLabel: (value: string) => string;
   formatTimelineCountLabel: (count: number) => string;
@@ -35,7 +38,10 @@ export type RecordResultsSharedCardProps = Pick<
   | "ratingPrefixLabel"
   | "unknownPlaceLabel"
   | "untitledRecordLabel"
+  | "formatRecordSourceLabel"
+  | "formatRecordStatusLabel"
   | "formatRecordTimestampLabel"
+  | "formatRecordTypeLabel"
   | "formatReviewStatusLabel"
   | "onSelectRecord"
 >;

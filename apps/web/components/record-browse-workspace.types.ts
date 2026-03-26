@@ -44,7 +44,10 @@ export type RecordBrowseWorkspaceProps = {
   unknownPlaceLabel: string;
   untitledRecordLabel: string;
   formatAvoidCountLabel: (count: number) => string;
+  formatRecordSourceLabel: (value?: string | null) => string;
+  formatRecordStatusLabel: (value?: string | null) => string;
   formatRecordTimestampLabel: (record: RecordItem) => string;
+  formatRecordTypeLabel: (value?: string | null) => string;
   formatReviewStatusLabel: (value?: string | null) => string;
   formatTimelineCountLabel: (count: number) => string;
   formatTimelineDateLabel: (value: string) => string;

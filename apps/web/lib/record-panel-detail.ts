@@ -45,7 +45,30 @@ export function getRecordPanelDetailBundle(locale: LocaleCode) {
     if (value === "memo") {
       return copy.recordTypeMemo;
     }
-    return value || copy.recordTypeMemo;
+    return value ? copy.recordTypeUnknown : copy.recordTypeMemo;
+  };
+
+  const formatRecordSourceLabel = (value?: string | null) => {
+    if (value === "chat") {
+      return copy.recordSourceChat;
+    }
+    if (value === "imported") {
+      return copy.recordSourceImported;
+    }
+    if (value === "manual") {
+      return copy.recordSourceManual;
+    }
+    return value ? copy.recordSourceUnknown : copy.recordSourceManual;
+  };
+
+  const formatRecordStatusLabel = (value?: string | null) => {
+    if (value === "archived") {
+      return copy.recordStatusArchived;
+    }
+    if (value === "active") {
+      return copy.recordStatusActive;
+    }
+    return value ? copy.recordStatusUnknown : copy.recordStatusActive;
   };
 
   const formatReviewStatusLabel = (value?: string | null) => {
@@ -69,6 +92,9 @@ export function getRecordPanelDetailBundle(locale: LocaleCode) {
       }
       return `${count} file${count === 1 ? "" : "s"}`;
     },
+    formatRecordSourceLabel,
+    formatRecordStatusLabel,
+    formatRecordTypeLabel,
     formatReviewStatusLabel,
     summarizeHistoryActionLabel(entry: LocationHistoryEntry) {
       if (entry.action_code === "set") {

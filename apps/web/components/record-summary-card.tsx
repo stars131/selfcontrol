@@ -12,8 +12,11 @@ export function RecordSummaryCard({
   unknownPlaceLabel,
   ratingPrefixLabel,
   avoidLabel,
+  formatRecordSourceLabel,
+  formatRecordStatusLabel,
   mapPrefixLabel,
   formatRecordTimestampLabel,
+  formatRecordTypeLabel,
   formatReviewStatusLabel,
   onSelectRecord,
 }: RecordSummaryCardProps) {
@@ -25,10 +28,10 @@ export function RecordSummaryCard({
       className={`record-card selectable-card ${isSelected ? "selected" : ""}`}
       onClick={() => onSelectRecord(record.id)}
     >
-      <div className="eyebrow">{record.type_code}</div>
+      <div className="eyebrow">{formatRecordTypeLabel(record.type_code)}</div>
       <h3 style={{ margin: "8px 0 6px", fontSize: 20 }}>{record.title || untitledRecordLabel}</h3>
       <div className="muted">
-        {formatRecordTimestampLabel(record)} | {record.source_type}
+        {formatRecordTimestampLabel(record)} | {formatRecordSourceLabel(record.source_type)}
       </div>
       <p style={{ margin: "12px 0 0", lineHeight: 1.6 }}>{record.content || noContentLabel}</p>
       {location.place_name || location.address ? (
@@ -38,7 +41,7 @@ export function RecordSummaryCard({
         </div>
       ) : null}
       <div className="tag-row">
-        <span className="tag">{record.status}</span>
+        <span className="tag">{formatRecordStatusLabel(record.status)}</span>
         {record.rating ? <span className="tag">{ratingPrefixLabel} {record.rating}</span> : null}
         {record.is_avoid ? <span className="tag">{avoidLabel}</span> : null}
         {location.latitude && location.longitude ? (

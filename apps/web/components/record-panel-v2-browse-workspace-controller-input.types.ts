@@ -5,19 +5,14 @@ export type BuildRecordBrowseWorkspaceControllerInputArgs = { controller: Record
 export type BuildRecordBrowseWorkspaceControllerInput =
   RecordBrowseWorkspaceTypeSupport & {
     avoidCount: number;
-    detailCopy: RecordPanelDetailCopy;
-    filteringRecords: boolean;
-    foodCount: number;
-    formatAvoidCountLabel: (count: number) => string;
+    detailCopy: RecordPanelDetailCopy; filteringRecords: boolean; foodCount: number;
+    formatAvoidCountLabel: (count: number) => string; formatRecordSourceLabel: (value?: string | null) => string;
+    formatRecordStatusLabel: (value?: string | null) => string;
     formatRecordTimestampLabel: (record: RecordBrowseWorkspaceProps["records"][number]) => string;
-    formatReviewStatusLabel: (value?: string | null) => string;
-    formatTimelineCountLabel: (count: number) => string;
-    formatTimelineDateLabel: (value: string) => string;
-    handleApplyFilter: () => Promise<void>;
-    handleDeletePreset: (presetId: string) => Promise<void>;
-    handleSavePreset: () => Promise<void>;
-    presetName: string;
-    savingSearchPreset: boolean;
+    formatRecordTypeLabel: (value?: string | null) => string; formatReviewStatusLabel: (value?: string | null) => string;
+    formatTimelineCountLabel: (count: number) => string; formatTimelineDateLabel: (value: string) => string;
+    handleApplyFilter: () => Promise<void>; handleDeletePreset: (presetId: string) => Promise<void>; handleSavePreset: () => Promise<void>;
+    presetName: string; savingSearchPreset: boolean;
     summarizeRecordFilterLabel: (filter: RecordBrowseWorkspaceTypeSupport["filterDraft"]) => string;
     viewMode: "timeline" | "list";
   };

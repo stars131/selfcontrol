@@ -8,7 +8,10 @@ export function renderRecordSummaryCard(record: RecordItem, props: RecordResults
   return (
     <RecordSummaryCard
       avoidLabel={props.avoidLabel}
+      formatRecordSourceLabel={props.formatRecordSourceLabel}
+      formatRecordStatusLabel={props.formatRecordStatusLabel}
       formatRecordTimestampLabel={props.formatRecordTimestampLabel}
+      formatRecordTypeLabel={props.formatRecordTypeLabel}
       formatReviewStatusLabel={props.formatReviewStatusLabel}
       isSelected={record.id === props.selectedRecordId}
       key={record.id}
