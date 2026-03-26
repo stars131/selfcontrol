@@ -35,12 +35,15 @@ export async function searchMapPanelLocation({
   geocoder,
   keyword,
   map,
+  noMatchingLocationLabel,
   onDraftLocationChange,
+  searchCoordinatesErrorLabel,
+  searchFailedLabel,
 }: SearchMapPanelLocationInput) {
   const result = await new Promise<Record<string, unknown>>((resolve, reject) => {
     geocoder.getLocation?.(keyword, (status, geocodeResult) => {
       if (status !== "complete") {
-        reject(new Error("Location search failed"));
+        reject(new Error(searchFailedLabel));
         return;
       }
       resolve(geocodeResult);
@@ -49,12 +52,12 @@ export async function searchMapPanelLocation({
 
   const firstItem = readFirstGeocode(result);
   if (!firstItem) {
-    throw new Error("No matching location found");
+    throw new Error(noMatchingLocationLabel);
   }
 
   const { longitude, latitude } = readSearchCoordinates(firstItem);
   if (latitude === null || longitude === null) {
-    throw new Error("Failed to read coordinates from the search result");
+    throw new Error(searchCoordinatesErrorLabel);
   }
 
   onDraftLocationChange({

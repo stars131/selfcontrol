@@ -2103,6 +2103,10 @@ Last updated: 2026-03-26
   - `map-panel-content.tsx` now resolves localized panel copy once and passes explicit copy props into the header, search form, status notices, and mapped-record list so the main map surface follows the selected interface language
   - the map header summary, place-search form, current-point notice, empty-state notice, mapped-record review labels, and missing-key notice are now localized in English, Chinese, and Japanese
   - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now cover the new localized map-panel boundaries and copy keys so future map updates stay maintainable under the enterprise standard
+- Map Search Error Localization V1:
+  - `use-map-panel-controller.ts` now resolves localized map-search error copy once and passes explicit fallback/error labels into the controller action and search helpers instead of leaving error strings hardcoded in English
+  - geocoder failure, no-match results, and unreadable-coordinate results now surface localized error messages in English, Chinese, and Japanese through the existing map status notice area
+  - `verify-record-panel-structure.mjs`, `verify-map-panel-structure.mjs`, and `verify-record-panel-copy.mjs` now lock those localized map-search error contracts and copy keys so future controller changes stay maintainable
 
 ## Next
 - Continue the next product slice

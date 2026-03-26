@@ -1,5 +1,7 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { createMapPanelControllerActions } from "./map-panel-controller-actions";
 import { useMapPanelDerivedData } from "./use-map-panel-derived-data";
 import { useMapPanelControllerState } from "./use-map-panel-controller-state";
@@ -17,6 +19,8 @@ export function useMapPanelController({
   geocoderRef,
   mapRef,
 }: UseMapPanelControllerProps) {
+  const { locale } = useStoredLocale();
+  const { panelCopy } = getRecordPanelUiBundle(locale);
   const {
     loadError,
     setLoadError,
@@ -49,8 +53,11 @@ export function useMapPanelController({
       filterDraft,
       geocoderRef,
       mapRef,
+      noMatchingLocationLabel: panelCopy.mapNoMatchingLocation,
       onApplyLocationFilter,
       onDraftLocationChange,
+      searchCoordinatesErrorLabel: panelCopy.mapSearchCoordinatesError,
+      searchFailedLabel: panelCopy.mapSearchFailed,
       searchQuery,
       setFilterDraft,
       setSearchError,

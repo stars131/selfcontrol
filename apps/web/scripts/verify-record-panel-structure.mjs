@@ -15546,7 +15546,14 @@ if (mapPanelControllerSource.includes("export type MapPanelControllerState = Ret
 }
 
 for (const requiredMapPanelControllerUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import type { UseMapPanelControllerProps } from "./use-map-panel-controller.types";',
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapSearchFailed",
+  "panelCopy.mapNoMatchingLocation",
+  "panelCopy.mapSearchCoordinatesError",
   "}: UseMapPanelControllerProps) {",
 ]) {
   if (!mapPanelControllerSource.includes(requiredMapPanelControllerUsage)) {
@@ -15610,6 +15617,9 @@ if (mapPanelControllerTypesLines > maxMapPanelControllerTypesLines) {
 for (const requiredMapPanelControllerActionsUsage of [
   'import type { CreateMapPanelControllerActionsInput } from "./map-panel-controller-actions.types";',
   "}: CreateMapPanelControllerActionsInput) {",
+  "noMatchingLocationLabel",
+  "searchCoordinatesErrorLabel",
+  "searchFailedLabel",
 ]) {
   if (!mapPanelControllerActionsSource.includes(requiredMapPanelControllerActionsUsage)) {
     throw new Error(
@@ -15631,7 +15641,7 @@ for (const forbiddenMapPanelControllerActionsToken of [
 }
 
 for (const requiredMapPanelControllerActionsTypesUsage of [
-  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; import type { LocationFilterState } from "../lib/types"; export type CreateMapPanelControllerActionsInput = { draftLocation?: LocationDraft | null; filterDraft: LocationFilterState; geocoderRef: { current: AMapGeocoderInstance | null }; mapRef: { current: AMapMapInstance | null }; onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>; onDraftLocationChange?: (next: LocationDraft) => void; searchQuery: string; setFilterDraft: (nextFilter: LocationFilterState) => void; setSearchError: (value: string) => void; setSearching: (value: boolean) => void };',
+  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; import type { LocationFilterState } from "../lib/types"; export type CreateMapPanelControllerActionsInput = { draftLocation?: LocationDraft | null; filterDraft: LocationFilterState; geocoderRef: { current: AMapGeocoderInstance | null }; mapRef: { current: AMapMapInstance | null }; noMatchingLocationLabel: string; onApplyLocationFilter: (nextFilter: LocationFilterState) => Promise<void>; onDraftLocationChange?: (next: LocationDraft) => void; searchCoordinatesErrorLabel: string; searchFailedLabel: string; searchQuery: string; setFilterDraft: (nextFilter: LocationFilterState) => void; setSearchError: (value: string) => void; setSearching: (value: boolean) => void };',
 ]) {
   if (!mapPanelControllerActionsTypesSource.includes(requiredMapPanelControllerActionsTypesUsage)) {
     throw new Error(
@@ -15650,6 +15660,9 @@ if (mapPanelControllerActionsTypesLines > maxMapPanelControllerActionsTypesLines
 for (const requiredMapPanelControllerSearchUsage of [
   'import type { SearchMapPanelLocationInput } from "./map-panel-controller-search.types";',
   "}: SearchMapPanelLocationInput) {",
+  "noMatchingLocationLabel",
+  "searchCoordinatesErrorLabel",
+  "searchFailedLabel",
 ]) {
   if (!mapPanelControllerSearchSource.includes(requiredMapPanelControllerSearchUsage)) {
     throw new Error(
@@ -15672,7 +15685,7 @@ for (const forbiddenMapPanelControllerSearchToken of [
 }
 
 for (const requiredMapPanelControllerSearchTypesUsage of [
-  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; export type SearchMapPanelLocationInput = { draftLocation?: LocationDraft | null; geocoder: AMapGeocoderInstance; keyword: string; map?: AMapMapInstance | null; onDraftLocationChange: (next: LocationDraft) => void };',
+  'import type { AMapGeocoderInstance, AMapMapInstance, LocationDraft } from "../lib/map-panel"; export type SearchMapPanelLocationInput = { draftLocation?: LocationDraft | null; geocoder: AMapGeocoderInstance; keyword: string; map?: AMapMapInstance | null; noMatchingLocationLabel: string; onDraftLocationChange: (next: LocationDraft) => void; searchCoordinatesErrorLabel: string; searchFailedLabel: string };',
 ]) {
   if (!mapPanelControllerSearchTypesSource.includes(requiredMapPanelControllerSearchTypesUsage)) {
     throw new Error(

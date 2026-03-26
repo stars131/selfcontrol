@@ -101,10 +101,17 @@ for (const requiredControllerImport of [
 }
 
 for (const requiredControllerUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   "createMapPanelControllerActions({",
   "useMapPanelDerivedData({",
   "useMapPanelControllerState(locationFilter)",
   "useMapPanelSync({",
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.mapSearchFailed",
+  "panelCopy.mapNoMatchingLocation",
+  "panelCopy.mapSearchCoordinatesError",
 ]) {
   if (!mapPanelControllerSource.includes(requiredControllerUsage)) {
     throw new Error(`use-map-panel-controller.ts must delegate controller helper logic: ${requiredControllerUsage}`);
@@ -186,6 +193,9 @@ for (const requiredControllerActionsUsage of [
   'from "./map-panel-controller-search";',
   "export function createMapPanelControllerActions({",
   "searchMapPanelLocation({",
+  "noMatchingLocationLabel",
+  "searchCoordinatesErrorLabel",
+  "searchFailedLabel",
   "buildMappedOnlyLocationFilter(filterDraft)",
   "buildClearedLocationFilter()",
 ]) {

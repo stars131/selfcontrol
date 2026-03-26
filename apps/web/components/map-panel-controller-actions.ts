@@ -9,8 +9,11 @@ export function createMapPanelControllerActions({
   filterDraft,
   geocoderRef,
   mapRef,
+  noMatchingLocationLabel,
   onApplyLocationFilter,
   onDraftLocationChange,
+  searchCoordinatesErrorLabel,
+  searchFailedLabel,
   searchQuery,
   setFilterDraft,
   setSearchError,
@@ -32,10 +35,13 @@ export function createMapPanelControllerActions({
         geocoder: geocoderRef.current,
         keyword,
         map: mapRef.current,
+        noMatchingLocationLabel,
         onDraftLocationChange,
+        searchCoordinatesErrorLabel,
+        searchFailedLabel,
       });
     } catch (caught) {
-      setSearchError(getMapPanelActionErrorMessage(caught, "Location search failed"));
+      setSearchError(getMapPanelActionErrorMessage(caught, searchFailedLabel));
     } finally {
       setSearching(false);
     }
