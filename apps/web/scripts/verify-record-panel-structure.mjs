@@ -2143,6 +2143,14 @@ const locationReviewPanelPath = path.resolve(
   process.cwd(),
   "components/location-review-panel.tsx",
 );
+const locationReviewIntroPath = path.resolve(
+  process.cwd(),
+  "components/location-review-intro.tsx",
+);
+const locationReviewIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-intro.types.ts",
+);
 const locationReviewActionsPath = path.resolve(
   process.cwd(),
   "components/location-review-actions.tsx",
@@ -3404,6 +3412,8 @@ const deadLetterRecoverySummaryStatsTypesSource = fs.readFileSync(
   "utf8",
 );
 const locationReviewPanelSource = fs.readFileSync(locationReviewPanelPath, "utf8");
+const locationReviewIntroSource = fs.readFileSync(locationReviewIntroPath, "utf8");
+const locationReviewIntroTypesSource = fs.readFileSync(locationReviewIntroTypesPath, "utf8");
 const locationReviewActionsSource = fs.readFileSync(locationReviewActionsPath, "utf8");
 const locationReviewActionsTypesSource = fs.readFileSync(
   locationReviewActionsTypesPath,
@@ -4596,6 +4606,8 @@ const deadLetterRecoverySummaryActionsTypesLines =
 const deadLetterRecoverySummaryStatsTypesLines =
   deadLetterRecoverySummaryStatsTypesSource.split(/\r?\n/).length;
 const locationReviewPanelLines = locationReviewPanelSource.split(/\r?\n/).length;
+const locationReviewIntroLines = locationReviewIntroSource.split(/\r?\n/).length;
+const locationReviewIntroTypesLines = locationReviewIntroTypesSource.split(/\r?\n/).length;
 const locationReviewActionsLines = locationReviewActionsSource.split(/\r?\n/).length;
 const locationReviewActionsTypesLines =
   locationReviewActionsTypesSource.split(/\r?\n/).length;
@@ -19915,9 +19927,11 @@ for (const requiredLocationReviewPanelUsage of [
   'import { LocationReviewActions } from "./location-review-actions";',
   'import { LocationReviewFormFields } from "./location-review-form-fields";',
   'import { LocationReviewHistoryList } from "./location-review-history-list";',
+  'import { LocationReviewIntro } from "./location-review-intro";',
   'import { LocationReviewStatusSummary } from "./location-review-status-summary";',
   'import type { LocationReviewPanelProps } from "./location-review-panel.types";',
   "}: LocationReviewPanelProps) {",
+  "<LocationReviewIntro",
   "<LocationReviewFormFields",
   "<LocationReviewActions",
   "<LocationReviewStatusSummary",
@@ -19937,6 +19951,8 @@ for (const forbiddenLocationReviewPanelToken of [
   "onClick={onMarkNeedsReview}",
   "onClick={onResetReview}",
   "placeholder={panelCopy.reviewNotePlaceholder}",
+  '<div className="eyebrow">{panelCopy.locationReview}</div>',
+  "{panelCopy.locationReviewDescription}",
 ]) {
   if (locationReviewPanelSource.includes(forbiddenLocationReviewPanelToken)) {
     throw new Error(
@@ -19949,6 +19965,47 @@ const maxLocationReviewPanelLines = 65;
 if (locationReviewPanelLines > maxLocationReviewPanelLines) {
   throw new Error(
     `location-review-panel.tsx exceeded ${maxLocationReviewPanelLines} lines: ${locationReviewPanelLines}`,
+  );
+}
+
+for (const requiredLocationReviewIntroUsage of [
+  'import type { LocationReviewIntroProps } from "./location-review-intro.types";',
+  "}: LocationReviewIntroProps) {",
+  '<div className="eyebrow">{panelCopy.locationReview}</div>',
+  "{panelCopy.locationReviewDescription}",
+]) {
+  if (!locationReviewIntroSource.includes(requiredLocationReviewIntroUsage)) {
+    throw new Error(
+      `location-review-intro.tsx must reuse the extracted review-intro props type: ${requiredLocationReviewIntroUsage}`,
+    );
+  }
+}
+
+if (locationReviewIntroSource.includes("type LocationReviewIntroProps = Pick<")) {
+  throw new Error("location-review-intro.tsx must keep review-intro prop typing delegated");
+}
+
+const maxLocationReviewIntroLines = 8;
+if (locationReviewIntroLines > maxLocationReviewIntroLines) {
+  throw new Error(
+    `location-review-intro.tsx exceeded ${maxLocationReviewIntroLines} lines: ${locationReviewIntroLines}`,
+  );
+}
+
+for (const requiredLocationReviewIntroTypesUsage of [
+  'import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewIntroProps = Pick<LocationReviewPanelProps, "panelCopy">;',
+]) {
+  if (!locationReviewIntroTypesSource.includes(requiredLocationReviewIntroTypesUsage)) {
+    throw new Error(
+      `location-review-intro.types.ts must own review-intro prop typing: ${requiredLocationReviewIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewIntroTypesLines = 2;
+if (locationReviewIntroTypesLines > maxLocationReviewIntroTypesLines) {
+  throw new Error(
+    `location-review-intro.types.ts exceeded ${maxLocationReviewIntroTypesLines} lines: ${locationReviewIntroTypesLines}`,
   );
 }
 

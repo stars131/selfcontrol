@@ -3,6 +3,7 @@
 import { LocationReviewActions } from "./location-review-actions";
 import { LocationReviewFormFields } from "./location-review-form-fields";
 import { LocationReviewHistoryList } from "./location-review-history-list";
+import { LocationReviewIntro } from "./location-review-intro";
 import { LocationReviewStatusSummary } from "./location-review-status-summary";
 import type { LocationReviewPanelProps } from "./location-review-panel.types";
 
@@ -24,8 +25,7 @@ export function LocationReviewPanel({
 }: LocationReviewPanelProps) {
   return (
     <div className="record-card form-stack">
-      <div className="eyebrow">{panelCopy.locationReview}</div>
-      <div className="muted">{panelCopy.locationReviewDescription}</div>
+      <LocationReviewIntro panelCopy={panelCopy} />
       <LocationReviewFormFields
         canWriteWorkspace={canWriteWorkspace}
         onNoteChange={onNoteChange}

@@ -1879,6 +1879,10 @@ Last updated: 2026-03-25
   - `workspace-settings-header.tsx` now delegates eyebrow/title/subtitle and current-user summary rendering to `workspace-settings-header-intro.tsx` instead of keeping the identity block inline beside the header actions
   - the new `workspace-settings-header-intro.types.ts` file keeps the header-intro contract explicit and reusable while the parent header remains focused on top-level settings-header composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated header-intro boundary, exact one-line type contract, and line-count ceilings so future settings-header updates stay safer and easier to maintain
+- Location Review Intro Split V1:
+  - `location-review-panel.tsx` now delegates title and description rendering to `location-review-intro.tsx` instead of keeping the review intro copy inline above the form and actions leaves
+  - the new `location-review-intro.types.ts` file keeps the review-intro contract explicit and reusable while the parent panel remains focused on shell layout and conditional composition
+  - `verify-record-panel-structure.mjs` now enforces that delegated location-review intro boundary, exact one-line type contract, and line-count ceilings so future location-review updates stay safer and easier to maintain
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
