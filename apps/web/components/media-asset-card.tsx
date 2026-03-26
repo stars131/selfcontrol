@@ -2,6 +2,7 @@
 
 import { MediaAssetCardActions } from "./media-asset-card-actions";
 import { MediaAssetCardError } from "./media-asset-card-error";
+import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";
 import { MediaAssetCardIntro } from "./media-asset-card-intro";
 import { MediaAssetCardMetadata } from "./media-asset-card-metadata";
 import { MediaPreview } from "./media-preview";
@@ -36,11 +37,7 @@ export function MediaAssetCard({
           <MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />
         </div>
       ) : null}
-      {asset.extracted_text ? (
-        <p style={{ margin: "10px 0 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-          {asset.extracted_text.length > 280 ? `${asset.extracted_text.slice(0, 280)}...` : asset.extracted_text}
-        </p>
-      ) : null}
+      <MediaAssetCardExtractedText asset={asset} />
       <MediaAssetCardError asset={asset} />
       <MediaAssetCardActions
         asset={asset}

@@ -1903,6 +1903,10 @@ Last updated: 2026-03-25
   - `media-asset-card.tsx` now delegates processing error notice rendering to `media-asset-card-error.tsx` instead of keeping the failure branch inline above the action row
   - the new `media-asset-card-error.types.ts` file keeps the asset-card error contract explicit and reusable while the parent media card remains focused on intro, metadata, preview, extracted text, and action composition
   - `verify-record-panel-structure.mjs` now enforces that delegated media-asset card-error boundary, exact one-line type contract, and line-count ceilings so future media-card error handling stays safer and easier to maintain
+- Media Asset Card Extracted Text Split V1:
+  - `media-asset-card.tsx` now delegates extracted-text preview rendering to `media-asset-card-extracted-text.tsx` instead of keeping the truncation and paragraph branch inline above the error and action leaves
+  - the new `media-asset-card-extracted-text.types.ts` file keeps the extracted-text contract explicit and reusable while the parent media card remains focused on intro, metadata, preview, error, and action composition
+  - `verify-record-panel-structure.mjs` now enforces that delegated media-asset extracted-text boundary, exact one-line type contract, and line-count ceilings so future media-card text-preview updates stay safer and easier to maintain
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition
