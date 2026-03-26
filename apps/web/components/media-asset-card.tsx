@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCardActions } from "./media-asset-card-actions";
+import { MediaAssetCardError } from "./media-asset-card-error";
 import { MediaAssetCardIntro } from "./media-asset-card-intro";
 import { MediaAssetCardMetadata } from "./media-asset-card-metadata";
 import { MediaPreview } from "./media-preview";
@@ -40,11 +41,7 @@ export function MediaAssetCard({
           {asset.extracted_text.length > 280 ? `${asset.extracted_text.slice(0, 280)}...` : asset.extracted_text}
         </p>
       ) : null}
-      {asset.processing_error ? (
-        <div className="notice error" style={{ marginTop: 10 }}>
-          {asset.processing_error}
-        </div>
-      ) : null}
+      <MediaAssetCardError asset={asset} />
       <MediaAssetCardActions
         asset={asset}
         canWriteWorkspace={canWriteWorkspace}
