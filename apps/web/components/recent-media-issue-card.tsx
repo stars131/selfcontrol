@@ -5,6 +5,7 @@ import {
 } from "../lib/media-issue-display";
 import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";
 import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";
+import { RecentMediaIssueCardError } from "./recent-media-issue-card-error";
 import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";
 import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";
 import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
@@ -53,11 +54,7 @@ export function RecentMediaIssueCard({
         retryingMediaId={retryingMediaId}
         settingsHref={settingsHref}
       />
-      {issue.processing_error ? (
-        <div className="notice error" style={{ marginTop: 10 }}>
-          {issue.processing_error}
-        </div>
-      ) : null}
+      <RecentMediaIssueCardError issue={issue} />
     </article>
   );
 }
