@@ -5349,7 +5349,9 @@ for (const requiredRecordQuickAddBarUsage of [
   "const { panelCopy } = getRecordPanelUiBundle(locale)",
   "const quickAddDraft = buildQuickAddRecordDraft(content);",
   "...quickAddDraft,",
-  'extra_data: { capture_mode: "quick_add" },',
+  "extra_data: {",
+  "...quickAddDraft.extra_data,",
+  'capture_mode: "quick_add",',
   "panelCopy.quickAddPlaceholder",
   "panelCopy.quickAddDisabled",
   "panelCopy.quickAddHint",
@@ -5405,9 +5407,13 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
   "function parseQuickAddRatingToken(token: string)",
   'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
+  "function parseQuickAddLocationSegment(content: string)",
+  'const match = content.match(/^@([^:\\uFF1A]+)[:\\uFF1A]\\s*(.*)$/);',
   "function parseQuickAddControlTokens(rawContent: string, now: Date)",
   "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
   "const rating = parseQuickAddRatingToken(token);",
+  'const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());',
+  "extra_data: parsedLocation.extra_data,",
   "rating: nextRating,",
   "occurred_at: buildQuickAddOccurredAt(nextTimeRule, now),",
   "return { ...parsed, title: buildQuickAddTitle(parsed.content) };",
@@ -5431,7 +5437,7 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 80;
+const maxRecordQuickAddBarHelpersLines = 105;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,
@@ -5439,7 +5445,7 @@ if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
 }
 
 for (const requiredRecordQuickAddBarHelpersTypesUsage of [
-  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "occurred_at" | "rating" | "type_code"> & { title: string };',
+  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "extra_data" | "is_avoid" | "occurred_at" | "rating" | "type_code"> & { title: string };',
 ]) {
   if (!recordQuickAddBarHelpersTypesSource.includes(requiredRecordQuickAddBarHelpersTypesUsage)) {
     throw new Error(

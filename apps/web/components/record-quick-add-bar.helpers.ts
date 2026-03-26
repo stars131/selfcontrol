@@ -1,9 +1,12 @@
 import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";
+
 type QuickAddTagRule = Pick<QuickAddRecordDraft, "is_avoid" | "type_code">;
 type QuickAddTimeTokenRule = "today" | "yesterday";
+
 const DEFAULT_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "memo", is_avoid: false };
 const SNACK_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "snack", is_avoid: false };
 const AVOID_QUICK_ADD_RULE: QuickAddTagRule = { type_code: "bad_experience", is_avoid: true };
+
 const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {
   "#memo": DEFAULT_QUICK_ADD_RULE,
   "#note": DEFAULT_QUICK_ADD_RULE,
@@ -16,6 +19,7 @@ const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {
   "#\u907f\u96f7": AVOID_QUICK_ADD_RULE,
   "#\u8e29\u96f7": AVOID_QUICK_ADD_RULE,
 };
+
 const QUICK_ADD_TIME_TOKENS: Record<string, QuickAddTimeTokenRule> = {
   today: "today",
   "#today": "today",
@@ -45,6 +49,15 @@ function parseQuickAddRatingToken(token: string) {
   return match ? Number(match[1]) : null;
 }
 
+function parseQuickAddLocationSegment(content: string) {
+  const match = content.match(/^@([^:\uFF1A]+)[:\uFF1A]\s*(.*)$/);
+  if (!match) return { content, extra_data: undefined };
+  const placeName = match[1].trim();
+  return placeName
+    ? { content: match[2].trim() || content, extra_data: { location: { place_name: placeName, source: "quick_add" } } }
+    : { content, extra_data: undefined };
+}
+
 function parseQuickAddControlTokens(rawContent: string, now: Date) {
   const tokens = rawContent.trim().split(/\s+/);
   let nextRule = DEFAULT_QUICK_ADD_RULE;
@@ -64,12 +77,13 @@ function parseQuickAddControlTokens(rawContent: string, now: Date) {
     startIndex += 1;
   }
 
-  const normalizedContent = tokens.slice(startIndex).join(" ").trim();
+  const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());
   return {
     ...nextRule,
-    content: normalizedContent || rawContent.trim(),
+    content: parsedLocation.content,
     occurred_at: buildQuickAddOccurredAt(nextTimeRule, now),
     rating: nextRating,
+    extra_data: parsedLocation.extra_data,
   };
 }
 

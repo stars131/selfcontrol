@@ -24,7 +24,10 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
     try {
       await onSaveRecord({
         ...quickAddDraft,
-        extra_data: { capture_mode: "quick_add" },
+        extra_data: {
+          ...quickAddDraft.extra_data,
+          capture_mode: "quick_add",
+        },
       });
       setDraft("");
     } catch (caught) {

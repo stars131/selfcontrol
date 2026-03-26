@@ -2059,6 +2059,10 @@ Last updated: 2026-03-26
   - quick add now supports lightweight leading rating tokens such as `5star`, `5星`, `5分`, and `4/5`, so one-line capture can save a usable rating without opening the full editor
   - rating parsing follows the same control-token pattern as tags and time shortcuts, and the current explicit rule is that the last leading recognized rating token wins
   - behavior and structure verification now cover rating parsing and the expanded quick-add draft typing so the single-input capture path remains stable under future refactors
+- Record Quick Add Place Prefix V1:
+  - quick add now supports a lightweight place prefix in the form `@Place: content`, which writes the parsed place name into `extra_data.location.place_name` while keeping location capture compatible with the existing map and review pipeline
+  - the place prefix is parsed after leading tags, time shortcuts, and rating shortcuts so a single input can describe classification, time, rating, and place together without opening the full editor
+  - behavior and structure verification now cover quick-add location payload generation so future single-input location work stays aligned with the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
