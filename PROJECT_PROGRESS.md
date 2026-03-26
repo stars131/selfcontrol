@@ -1919,6 +1919,10 @@ Last updated: 2026-03-25
   - `media-asset-card-metadata.tsx` now delegates detail-grid rendering to `media-asset-card-metadata-details.tsx` instead of keeping the dimensions, text stats, and retry timing cards inline under the metadata tags
   - the new `media-asset-card-metadata-details.types.ts` file keeps the metadata-details contract explicit and reusable while the parent metadata component remains focused on data lookup and high-level composition
   - `verify-record-panel-structure.mjs` now enforces that delegated metadata-details boundary, exact one-line type contract, and line-count ceilings so future media metadata detail updates stay safer and easier to maintain
+- Media Asset Section Summary Split V1:
+  - `media-asset-section.tsx` now delegates largest-file summary rendering to `media-asset-section-summary.tsx` instead of keeping the summary line inline above the asset list
+  - the new `media-asset-section-summary.types.ts` file keeps the section-summary contract explicit and reusable while the parent section remains focused on list composition and empty-state branching
+  - `verify-record-panel-structure.mjs` now enforces that delegated media-asset section-summary boundary, exact one-line type contract, and line-count ceilings so future media list summary updates stay safer and easier to maintain
 - Workspace Export Jobs Notices Split V1:
   - `workspace-export-jobs-card.tsx` now delegates owner-only, error, and queued-message notice rendering to `workspace-export-jobs-notices.tsx` instead of keeping all notice blocks inline between the header and job list
   - the new `workspace-export-jobs-notices.types.ts` file keeps the notice contract explicit and reusable while the parent export-jobs card remains focused on controller wiring and top-level composition

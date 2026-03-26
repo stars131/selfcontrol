@@ -1,0 +1,1 @@
+import type { MediaAssetSectionProps } from "./media-asset-section.types"; export type MediaAssetSectionSummaryProps = Pick<MediaAssetSectionProps, "largestFilePrefixLabel" | "largestItemName" | "largestItemSizeLabel">;

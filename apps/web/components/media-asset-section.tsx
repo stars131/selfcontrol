@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCard } from "./media-asset-card";
+import { MediaAssetSectionSummary } from "./media-asset-section-summary";
 import type { MediaAssetSectionProps } from "./media-asset-section.types";
 
 export function MediaAssetSection({
@@ -25,12 +26,7 @@ export function MediaAssetSection({
 }: MediaAssetSectionProps) {
   return (
     <>
-      {largestItemName ? (
-        <div className="muted" style={{ marginBottom: 16 }}>
-          {largestFilePrefixLabel}: {largestItemName}
-          {largestItemSizeLabel ? ` (${largestItemSizeLabel})` : ""}
-        </div>
-      ) : null}
+      <MediaAssetSectionSummary largestFilePrefixLabel={largestFilePrefixLabel} largestItemName={largestItemName} largestItemSizeLabel={largestItemSizeLabel} />
       <div className="record-list compact-list">
         {mediaAssets.length ? (
           mediaAssets.map((asset) => (
