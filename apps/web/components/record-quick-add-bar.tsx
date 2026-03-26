@@ -24,7 +24,6 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
     try {
       await onSaveRecord({
         ...quickAddDraft,
-        occurred_at: new Date().toISOString(),
         extra_data: { capture_mode: "quick_add" },
       });
       setDraft("");

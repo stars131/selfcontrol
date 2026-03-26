@@ -5389,19 +5389,24 @@ for (const requiredRecordQuickAddBarHelpersUsage of [
   'import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";',
   'const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {',
   '"#memo": DEFAULT_QUICK_ADD_RULE,',
-  '"#备忘": DEFAULT_QUICK_ADD_RULE,',
+  '"#\\u5907\\u5fd8": DEFAULT_QUICK_ADD_RULE,',
+  'const QUICK_ADD_TIME_TOKENS: Record<string, QuickAddTimeTokenRule> = {',
+  '"\\u4eca\\u5929": "today",',
+  '"\\u6628\\u5929": "yesterday",',
   "const SNACK_QUICK_ADD_RULE: QuickAddTagRule = {",
   'type_code: "snack",',
-  '"#零食": SNACK_QUICK_ADD_RULE,',
+  '"#\\u96f6\\u98df": SNACK_QUICK_ADD_RULE,',
   "const AVOID_QUICK_ADD_RULE: QuickAddTagRule = {",
   'type_code: "bad_experience",',
   '"#warning": AVOID_QUICK_ADD_RULE,',
-  '"#避雷": AVOID_QUICK_ADD_RULE,',
-  '"#踩雷": AVOID_QUICK_ADD_RULE,',
+  '"#\\u907f\\u96f7": AVOID_QUICK_ADD_RULE,',
+  '"#\\u8e29\\u96f7": AVOID_QUICK_ADD_RULE,',
   "function buildQuickAddTitle(content: string)",
-  "function parseQuickAddTags(rawContent: string)",
-  "tokens[startIndex].toLowerCase()",
-  "title: buildQuickAddTitle(parsed.content),",
+  "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
+  "function parseQuickAddControlTokens(rawContent: string, now: Date)",
+  "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
+  "occurred_at: buildQuickAddOccurredAt(nextTimeRule, now),",
+  "return { ...parsed, title: buildQuickAddTitle(parsed.content) };",
 ]) {
   if (!recordQuickAddBarHelpersSource.includes(requiredRecordQuickAddBarHelpersUsage)) {
     throw new Error(
@@ -5422,7 +5427,7 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 60;
+const maxRecordQuickAddBarHelpersLines = 80;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,
@@ -5430,7 +5435,7 @@ if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
 }
 
 for (const requiredRecordQuickAddBarHelpersTypesUsage of [
-  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "type_code"> & { title: string };',
+  'import type { SaveRecordInput } from "./record-panel-v2-input.types"; export type QuickAddRecordDraft = Pick<SaveRecordInput, "content" | "is_avoid" | "occurred_at" | "type_code"> & { title: string };',
 ]) {
   if (!recordQuickAddBarHelpersTypesSource.includes(requiredRecordQuickAddBarHelpersTypesUsage)) {
     throw new Error(

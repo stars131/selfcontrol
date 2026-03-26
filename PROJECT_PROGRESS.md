@@ -2051,6 +2051,10 @@ Last updated: 2026-03-26
   - `verify-record-quick-add-behavior.mjs` now transpiles the quick-add helper in-memory with the existing TypeScript toolchain and runs behavior-level assertions without introducing a new test dependency
   - the verification covers English and Chinese tag aliases, default memo fallback, and the explicit current rule that the last leading tag wins when multiple quick-add tags are stacked
   - `package.json` now exposes `npm run verify:record-quick-add-behavior` so quick-add parsing regressions can be caught independently of the broader structure checks
+- Record Quick Add Time Parsing V1:
+  - quick add now supports lightweight leading time tokens such as `today`, `yesterday`, and their Chinese equivalents so one-line capture can store a more accurate occurrence time without opening the full editor
+  - `record-quick-add-bar.helpers.ts` now owns both control-token parsing and occurred-at derivation, while the UI component continues delegating quick-capture semantics into the helper layer
+  - behavior verification now covers bilingual time aliases and the explicit current rule that the last leading recognized time token wins when multiple time shortcuts are stacked
 
 ## Next
 - Continue the next product slice
