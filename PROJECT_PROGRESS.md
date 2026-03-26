@@ -1915,6 +1915,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-lists.tsx` now delegates largest-media rendering and retention-candidate rendering to `workspace-media-retention-largest-list.tsx` and `workspace-media-retention-candidates-list.tsx` instead of keeping both sections inline in one list component
   - the new retention-lists `*.types.ts` files keep largest-list and candidates-list prop contracts explicit and reusable while the parent list component remains focused on two-column composition
   - `verify-record-panel-structure.mjs` now enforces those delegated retention-list boundaries, exact one-line type contracts, and line-count ceilings so future retention-list updates stay safer and easier to maintain
+- Workspace Retention Header Intro And Controls Split V1:
+  - `workspace-media-retention-header.tsx` now delegates title/description copy and threshold/refresh controls to `workspace-media-retention-header-intro.tsx` and `workspace-media-retention-header-controls.tsx` instead of keeping both blocks inline in one header leaf
+  - the new retention-header `*.types.ts` files keep intro and controls prop contracts explicit and reusable while the parent header remains focused on top-level layout composition
+  - `verify-record-panel-structure.mjs` now enforces those delegated retention-header boundaries, exact one-line type contracts, and line-count ceilings so future retention-header updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

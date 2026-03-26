@@ -1476,6 +1476,22 @@ const workspaceMediaRetentionHeaderPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-header.tsx",
 );
+const workspaceMediaRetentionHeaderIntroPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-header-intro.tsx",
+);
+const workspaceMediaRetentionHeaderIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-header-intro.types.ts",
+);
+const workspaceMediaRetentionHeaderControlsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-header-controls.tsx",
+);
+const workspaceMediaRetentionHeaderControlsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-media-retention-header-controls.types.ts",
+);
 const workspaceMediaRetentionHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-media-retention-header.types.ts",
@@ -2898,6 +2914,22 @@ const workspaceMediaRetentionHeaderSource = fs.readFileSync(
   workspaceMediaRetentionHeaderPath,
   "utf8",
 );
+const workspaceMediaRetentionHeaderIntroSource = fs.readFileSync(
+  workspaceMediaRetentionHeaderIntroPath,
+  "utf8",
+);
+const workspaceMediaRetentionHeaderIntroTypesSource = fs.readFileSync(
+  workspaceMediaRetentionHeaderIntroTypesPath,
+  "utf8",
+);
+const workspaceMediaRetentionHeaderControlsSource = fs.readFileSync(
+  workspaceMediaRetentionHeaderControlsPath,
+  "utf8",
+);
+const workspaceMediaRetentionHeaderControlsTypesSource = fs.readFileSync(
+  workspaceMediaRetentionHeaderControlsTypesPath,
+  "utf8",
+);
 const workspaceMediaRetentionHeaderTypesSource = fs.readFileSync(
   workspaceMediaRetentionHeaderTypesPath,
   "utf8",
@@ -4256,6 +4288,16 @@ const workspaceMediaRetentionCardActionHelpersTypesLines =
   workspaceMediaRetentionCardActionHelpersTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardCopyHelpersTypesLines =
   workspaceMediaRetentionCardCopyHelpersTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionHeaderLines =
+  workspaceMediaRetentionHeaderSource.split(/\r?\n/).length;
+const workspaceMediaRetentionHeaderIntroLines =
+  workspaceMediaRetentionHeaderIntroSource.split(/\r?\n/).length;
+const workspaceMediaRetentionHeaderIntroTypesLines =
+  workspaceMediaRetentionHeaderIntroTypesSource.split(/\r?\n/).length;
+const workspaceMediaRetentionHeaderControlsLines =
+  workspaceMediaRetentionHeaderControlsSource.split(/\r?\n/).length;
+const workspaceMediaRetentionHeaderControlsTypesLines =
+  workspaceMediaRetentionHeaderControlsTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionHeaderTypesLines =
   workspaceMediaRetentionHeaderTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionListsLines =
@@ -16421,8 +16463,12 @@ if (workspaceMediaRetentionCardCopyHelpersTypesLines > maxWorkspaceMediaRetentio
 }
 
 for (const requiredWorkspaceMediaRetentionHeaderUsage of [
+  'import { WorkspaceMediaRetentionHeaderControls } from "./workspace-media-retention-header-controls";',
+  'import { WorkspaceMediaRetentionHeaderIntro } from "./workspace-media-retention-header-intro";',
   'import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types";',
   "}: WorkspaceMediaRetentionHeaderProps) {",
+  "<WorkspaceMediaRetentionHeaderIntro",
+  "<WorkspaceMediaRetentionHeaderControls",
 ]) {
   if (!workspaceMediaRetentionHeaderSource.includes(requiredWorkspaceMediaRetentionHeaderUsage)) {
     throw new Error(
@@ -16434,12 +16480,110 @@ for (const requiredWorkspaceMediaRetentionHeaderUsage of [
 for (const forbiddenWorkspaceMediaRetentionHeaderToken of [
   "type WorkspaceMediaRetentionHeaderCopy = {",
   "copy: WorkspaceMediaRetentionHeaderCopy;",
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  'className="form-stack"',
+  "<select className=\"input\"",
 ]) {
   if (workspaceMediaRetentionHeaderSource.includes(forbiddenWorkspaceMediaRetentionHeaderToken)) {
     throw new Error(
       `workspace-media-retention-header.tsx must keep retention-header prop typing delegated: ${forbiddenWorkspaceMediaRetentionHeaderToken}`,
     );
   }
+}
+
+const maxWorkspaceMediaRetentionHeaderLines = 15;
+if (workspaceMediaRetentionHeaderLines > maxWorkspaceMediaRetentionHeaderLines) {
+  throw new Error(
+    `workspace-media-retention-header.tsx exceeded ${maxWorkspaceMediaRetentionHeaderLines} lines: ${workspaceMediaRetentionHeaderLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionHeaderIntroUsage of [
+  'import type { WorkspaceMediaRetentionHeaderIntroProps } from "./workspace-media-retention-header-intro.types";',
+  "}: WorkspaceMediaRetentionHeaderIntroProps) {",
+  '<div className="eyebrow">{copy.eyebrow}</div>',
+  "{copy.title}",
+  "{copy.description}",
+]) {
+  if (!workspaceMediaRetentionHeaderIntroSource.includes(requiredWorkspaceMediaRetentionHeaderIntroUsage)) {
+    throw new Error(
+      `workspace-media-retention-header-intro.tsx must own retention-header intro rendering: ${requiredWorkspaceMediaRetentionHeaderIntroUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionHeaderIntroSource.includes("type WorkspaceMediaRetentionHeaderIntroProps =")) {
+  throw new Error(
+    "workspace-media-retention-header-intro.tsx must keep retention-header intro prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionHeaderIntroLines = 12;
+if (workspaceMediaRetentionHeaderIntroLines > maxWorkspaceMediaRetentionHeaderIntroLines) {
+  throw new Error(
+    `workspace-media-retention-header-intro.tsx exceeded ${maxWorkspaceMediaRetentionHeaderIntroLines} lines: ${workspaceMediaRetentionHeaderIntroLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionHeaderIntroTypesUsage of [
+  'import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types"; export type WorkspaceMediaRetentionHeaderIntroProps = Pick<WorkspaceMediaRetentionHeaderProps, "copy">;',
+]) {
+  if (!workspaceMediaRetentionHeaderIntroTypesSource.includes(requiredWorkspaceMediaRetentionHeaderIntroTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-header-intro.types.ts must own retention-header intro prop typing: ${requiredWorkspaceMediaRetentionHeaderIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionHeaderIntroTypesLines = 2;
+if (workspaceMediaRetentionHeaderIntroTypesLines > maxWorkspaceMediaRetentionHeaderIntroTypesLines) {
+  throw new Error(
+    `workspace-media-retention-header-intro.types.ts exceeded ${maxWorkspaceMediaRetentionHeaderIntroTypesLines} lines: ${workspaceMediaRetentionHeaderIntroTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionHeaderControlsUsage of [
+  'import type { WorkspaceMediaRetentionHeaderControlsProps } from "./workspace-media-retention-header-controls.types";',
+  "}: WorkspaceMediaRetentionHeaderControlsProps) {",
+  'className="form-stack"',
+  "<select className=\"input\"",
+  "onClick={() => void onRefresh()}",
+]) {
+  if (!workspaceMediaRetentionHeaderControlsSource.includes(requiredWorkspaceMediaRetentionHeaderControlsUsage)) {
+    throw new Error(
+      `workspace-media-retention-header-controls.tsx must own retention-header control rendering: ${requiredWorkspaceMediaRetentionHeaderControlsUsage}`,
+    );
+  }
+}
+
+if (workspaceMediaRetentionHeaderControlsSource.includes("type WorkspaceMediaRetentionHeaderControlsProps =")) {
+  throw new Error(
+    "workspace-media-retention-header-controls.tsx must keep retention-header controls prop typing delegated",
+  );
+}
+
+const maxWorkspaceMediaRetentionHeaderControlsLines = 22;
+if (workspaceMediaRetentionHeaderControlsLines > maxWorkspaceMediaRetentionHeaderControlsLines) {
+  throw new Error(
+    `workspace-media-retention-header-controls.tsx exceeded ${maxWorkspaceMediaRetentionHeaderControlsLines} lines: ${workspaceMediaRetentionHeaderControlsLines}`,
+  );
+}
+
+for (const requiredWorkspaceMediaRetentionHeaderControlsTypesUsage of [
+  'import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types"; export type WorkspaceMediaRetentionHeaderControlsProps = Pick<WorkspaceMediaRetentionHeaderProps, "copy" | "loading" | "olderThanDays" | "onOlderThanDaysChange" | "onRefresh">;',
+]) {
+  if (!workspaceMediaRetentionHeaderControlsTypesSource.includes(requiredWorkspaceMediaRetentionHeaderControlsTypesUsage)) {
+    throw new Error(
+      `workspace-media-retention-header-controls.types.ts must own retention-header controls prop typing: ${requiredWorkspaceMediaRetentionHeaderControlsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMediaRetentionHeaderControlsTypesLines = 2;
+if (workspaceMediaRetentionHeaderControlsTypesLines > maxWorkspaceMediaRetentionHeaderControlsTypesLines) {
+  throw new Error(
+    `workspace-media-retention-header-controls.types.ts exceeded ${maxWorkspaceMediaRetentionHeaderControlsTypesLines} lines: ${workspaceMediaRetentionHeaderControlsTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceMediaRetentionHeaderTypesUsage of [

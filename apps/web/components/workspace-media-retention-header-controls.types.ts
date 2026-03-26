@@ -1,0 +1,1 @@
+import type { WorkspaceMediaRetentionHeaderProps } from "./workspace-media-retention-header.types"; export type WorkspaceMediaRetentionHeaderControlsProps = Pick<WorkspaceMediaRetentionHeaderProps, "copy" | "loading" | "olderThanDays" | "onOlderThanDaysChange" | "onRefresh">;
