@@ -5,6 +5,7 @@ import {
 } from "../lib/media-issue-display";
 import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";
 import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";
+import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";
 import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";
 import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
 
@@ -23,8 +24,7 @@ export function RecentMediaIssueCard({
 
   return (
     <article className="record-card">
-      <div className="eyebrow">{issue.media_type}</div>
-      <div>{issue.original_filename}</div>
+      <RecentMediaIssueCardIntro issue={issue} />
       <RecentMediaIssueCardTags issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />
       <div className="muted" style={{ marginTop: 8 }}>
         {mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}

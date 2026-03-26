@@ -2183,6 +2183,18 @@ const locationReviewStatusSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-status-summary.types.ts",
 );
+const recentMediaIssueCardPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card.tsx",
+);
+const recentMediaIssueCardIntroPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-intro.tsx",
+);
+const recentMediaIssueCardIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-intro.types.ts",
+);
 const recentMediaIssueCardActionsPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-actions.tsx",
@@ -3437,6 +3449,12 @@ const locationReviewStatusSummaryTypesSource = fs.readFileSync(
   locationReviewStatusSummaryTypesPath,
   "utf8",
 );
+const recentMediaIssueCardSource = fs.readFileSync(recentMediaIssueCardPath, "utf8");
+const recentMediaIssueCardIntroSource = fs.readFileSync(recentMediaIssueCardIntroPath, "utf8");
+const recentMediaIssueCardIntroTypesSource = fs.readFileSync(
+  recentMediaIssueCardIntroTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardActionsSource = fs.readFileSync(recentMediaIssueCardActionsPath, "utf8");
 const recentMediaIssueCardActionsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionsTypesPath,
@@ -4619,6 +4637,10 @@ const locationReviewHistoryListTypesLines =
   locationReviewHistoryListTypesSource.split(/\r?\n/).length;
 const locationReviewStatusSummaryTypesLines =
   locationReviewStatusSummaryTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardLines = recentMediaIssueCardSource.split(/\r?\n/).length;
+const recentMediaIssueCardIntroLines = recentMediaIssueCardIntroSource.split(/\r?\n/).length;
+const recentMediaIssueCardIntroTypesLines =
+  recentMediaIssueCardIntroTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionsTypesLines =
   recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLines =
@@ -20156,6 +20178,82 @@ const maxLocationReviewStatusSummaryTypesLines = 2;
 if (locationReviewStatusSummaryTypesLines > maxLocationReviewStatusSummaryTypesLines) {
   throw new Error(
     `location-review-status-summary.types.ts exceeded ${maxLocationReviewStatusSummaryTypesLines} lines: ${locationReviewStatusSummaryTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardUsage of [
+  'import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";',
+  'import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";',
+  'import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";',
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
+  "}: RecentMediaIssueCardProps) {",
+  "<RecentMediaIssueCardIntro",
+  "<RecentMediaIssueCardTags",
+  "<RecentMediaIssueCardActions",
+]) {
+  if (!recentMediaIssueCardSource.includes(requiredRecentMediaIssueCardUsage)) {
+    throw new Error(
+      `recent-media-issue-card.tsx must delegate intro, tags, and actions to extracted leaves: ${requiredRecentMediaIssueCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardToken of [
+  '<div className="eyebrow">{issue.media_type}</div>',
+  "{issue.original_filename}",
+]) {
+  if (recentMediaIssueCardSource.includes(forbiddenRecentMediaIssueCardToken)) {
+    throw new Error(
+      `recent-media-issue-card.tsx must keep issue identity rendering delegated: ${forbiddenRecentMediaIssueCardToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardLines = 65;
+if (recentMediaIssueCardLines > maxRecentMediaIssueCardLines) {
+  throw new Error(
+    `recent-media-issue-card.tsx exceeded ${maxRecentMediaIssueCardLines} lines: ${recentMediaIssueCardLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardIntroUsage of [
+  'import type { RecentMediaIssueCardIntroProps } from "./recent-media-issue-card-intro.types";',
+  "}: RecentMediaIssueCardIntroProps) {",
+  '<div className="eyebrow">{issue.media_type}</div>',
+  "{issue.original_filename}",
+]) {
+  if (!recentMediaIssueCardIntroSource.includes(requiredRecentMediaIssueCardIntroUsage)) {
+    throw new Error(
+      `recent-media-issue-card-intro.tsx must reuse the extracted recent-media card-intro props type: ${requiredRecentMediaIssueCardIntroUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardIntroSource.includes("type RecentMediaIssueCardIntroProps = Pick<")) {
+  throw new Error("recent-media-issue-card-intro.tsx must keep recent-media card-intro prop typing delegated");
+}
+
+const maxRecentMediaIssueCardIntroLines = 8;
+if (recentMediaIssueCardIntroLines > maxRecentMediaIssueCardIntroLines) {
+  throw new Error(
+    `recent-media-issue-card-intro.tsx exceeded ${maxRecentMediaIssueCardIntroLines} lines: ${recentMediaIssueCardIntroLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardIntroTypesUsage of [
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type RecentMediaIssueCardIntroProps = Pick<RecentMediaIssueCardProps, "issue">;',
+]) {
+  if (!recentMediaIssueCardIntroTypesSource.includes(requiredRecentMediaIssueCardIntroTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-intro.types.ts must own recent-media card-intro prop typing: ${requiredRecentMediaIssueCardIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardIntroTypesLines = 2;
+if (recentMediaIssueCardIntroTypesLines > maxRecentMediaIssueCardIntroTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-intro.types.ts exceeded ${maxRecentMediaIssueCardIntroTypesLines} lines: ${recentMediaIssueCardIntroTypesLines}`,
   );
 }
 
