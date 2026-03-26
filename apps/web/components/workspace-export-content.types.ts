@@ -1,0 +1,1 @@
+import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types"; import type { WorkspaceExportSummaryProps } from "./workspace-export-summary.types"; export type WorkspaceExportContentProps = { contentProps: WorkspaceExportSummaryProps; controlsProps: WorkspaceExportControlsProps };

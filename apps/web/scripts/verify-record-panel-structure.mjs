@@ -1260,6 +1260,14 @@ const workspaceExportCardPath = path.resolve(
   process.cwd(),
   "components/workspace-export-card.tsx",
 );
+const workspaceExportContentPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-content.tsx",
+);
+const workspaceExportContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-content.types.ts",
+);
 const workspaceExportSummaryPath = path.resolve(
   process.cwd(),
   "components/workspace-export-summary.tsx",
@@ -2645,6 +2653,11 @@ const workspaceEntryJobActionsTypesSource = fs.readFileSync(
   "utf8",
 );
 const workspaceExportCardSource = fs.readFileSync(workspaceExportCardPath, "utf8");
+const workspaceExportContentSource = fs.readFileSync(workspaceExportContentPath, "utf8");
+const workspaceExportContentTypesSource = fs.readFileSync(
+  workspaceExportContentTypesPath,
+  "utf8",
+);
 const workspaceExportSummarySource = fs.readFileSync(workspaceExportSummaryPath, "utf8");
 const workspaceExportSummaryTypesSource = fs.readFileSync(
   workspaceExportSummaryTypesPath,
@@ -4195,6 +4208,10 @@ const workspaceTransferJobsListTypesLines =
   workspaceTransferJobsListTypesSource.split(/\r?\n/).length;
 const workspaceEntryJobActionsTypesLines =
   workspaceEntryJobActionsTypesSource.split(/\r?\n/).length;
+const workspaceExportCardLines = workspaceExportCardSource.split(/\r?\n/).length;
+const workspaceExportContentLines = workspaceExportContentSource.split(/\r?\n/).length;
+const workspaceExportContentTypesLines =
+  workspaceExportContentTypesSource.split(/\r?\n/).length;
 const workspaceExportSummaryLines = workspaceExportSummarySource.split(/\r?\n/).length;
 const workspaceExportSummaryTypesLines =
   workspaceExportSummaryTypesSource.split(/\r?\n/).length;
@@ -14889,10 +14906,10 @@ if (workspaceExportControllerTypesLines > maxWorkspaceExportControllerTypesLines
 }
 
 for (const requiredWorkspaceExportCardUsage of [
-  'import { WorkspaceExportSummary } from "./workspace-export-summary";',
+  'import { WorkspaceExportContent } from "./workspace-export-content";',
   'import type { WorkspaceExportCardProps } from "./workspace-export-card.types";',
   "}: WorkspaceExportCardProps) {",
-  "<WorkspaceExportSummary",
+  "<WorkspaceExportContent",
 ]) {
   if (!workspaceExportCardSource.includes(requiredWorkspaceExportCardUsage)) {
     throw new Error(
@@ -14905,15 +14922,69 @@ for (const forbiddenWorkspaceExportCardToken of [
   'import type { LocaleCode } from "../lib/locale";',
   "token: string;",
   'role: "owner" | "editor";',
+  'import { WorkspaceExportControls } from "./workspace-export-controls";',
+  'import { WorkspaceExportSummary } from "./workspace-export-summary";',
   '<div className="eyebrow">{copy.eyebrow}</div>',
   "{copy.description}",
   "{copy.note}",
+  "<WorkspaceExportControls",
+  "<WorkspaceExportSummary",
 ]) {
   if (workspaceExportCardSource.includes(forbiddenWorkspaceExportCardToken)) {
     throw new Error(
       `workspace-export-card.tsx must keep export card prop typing delegated: ${forbiddenWorkspaceExportCardToken}`,
     );
   }
+}
+
+const maxWorkspaceExportCardLines = 30;
+if (workspaceExportCardLines > maxWorkspaceExportCardLines) {
+  throw new Error(
+    `workspace-export-card.tsx exceeded ${maxWorkspaceExportCardLines} lines: ${workspaceExportCardLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportContentUsage of [
+  'import { WorkspaceExportControls } from "./workspace-export-controls";',
+  'import { WorkspaceExportSummary } from "./workspace-export-summary";',
+  'import type { WorkspaceExportContentProps } from "./workspace-export-content.types";',
+  "}: WorkspaceExportContentProps) {",
+  "<WorkspaceExportSummary",
+  "<WorkspaceExportControls",
+]) {
+  if (!workspaceExportContentSource.includes(requiredWorkspaceExportContentUsage)) {
+    throw new Error(
+      `workspace-export-content.tsx must own export-content composition: ${requiredWorkspaceExportContentUsage}`,
+    );
+  }
+}
+
+if (workspaceExportContentSource.includes("type WorkspaceExportContentProps =")) {
+  throw new Error("workspace-export-content.tsx must keep export-content prop typing delegated");
+}
+
+const maxWorkspaceExportContentLines = 9;
+if (workspaceExportContentLines > maxWorkspaceExportContentLines) {
+  throw new Error(
+    `workspace-export-content.tsx exceeded ${maxWorkspaceExportContentLines} lines: ${workspaceExportContentLines}`,
+  );
+}
+
+for (const requiredWorkspaceExportContentTypesUsage of [
+  'import type { WorkspaceExportControlsProps } from "./workspace-export-controls.types"; import type { WorkspaceExportSummaryProps } from "./workspace-export-summary.types"; export type WorkspaceExportContentProps = { contentProps: WorkspaceExportSummaryProps; controlsProps: WorkspaceExportControlsProps };',
+]) {
+  if (!workspaceExportContentTypesSource.includes(requiredWorkspaceExportContentTypesUsage)) {
+    throw new Error(
+      `workspace-export-content.types.ts must own export-content prop typing: ${requiredWorkspaceExportContentTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceExportContentTypesLines = 2;
+if (workspaceExportContentTypesLines > maxWorkspaceExportContentTypesLines) {
+  throw new Error(
+    `workspace-export-content.types.ts exceeded ${maxWorkspaceExportContentTypesLines} lines: ${workspaceExportContentTypesLines}`,
+  );
 }
 
 for (const requiredWorkspaceExportSummaryUsage of [

@@ -1935,6 +1935,10 @@ Last updated: 2026-03-25
   - `workspace-export-jobs-card.tsx` now delegates header/notices/list composition to `workspace-export-jobs-content.tsx` instead of keeping all export-job sections inline beside controller wiring
   - the new export-jobs-content `*.types.ts` file keeps the composed content contract explicit and reusable while the card remains focused on locale copy lookup and controller state wiring
   - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs content boundary, exact one-line type contract, and line-count ceilings so future export-job card updates stay safer and easier to maintain
+- Workspace Export Content Split V1:
+  - `workspace-export-card.tsx` now delegates summary and controls composition to `workspace-export-content.tsx` instead of keeping both export sections inline beside controller wiring
+  - the new export-content `*.types.ts` file keeps the composed export-content contract explicit and reusable while the card remains focused on locale copy lookup and controller state wiring
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-structure.mjs` now enforce that delegated export-content boundary, exact one-line type contract, and line-count ceilings so future export-card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

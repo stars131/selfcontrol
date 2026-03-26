@@ -1,9 +1,8 @@
 "use client";
 
 import { getWorkspaceExportCopy } from "./workspace-export-copy";
-import { WorkspaceExportControls } from "./workspace-export-controls";
-import { WorkspaceExportSummary } from "./workspace-export-summary";
 import type { WorkspaceExportCardProps } from "./workspace-export-card.types";
+import { WorkspaceExportContent } from "./workspace-export-content";
 import { useWorkspaceExportController } from "./use-workspace-export-controller";
 
 export function WorkspaceExportCard({
@@ -24,16 +23,7 @@ export function WorkspaceExportCard({
 
   return (
     <section className="record-card" style={{ marginTop: 24 }}>
-      <WorkspaceExportSummary copy={copy} />
-      <WorkspaceExportControls
-        buttonLabel={loading ? copy.loading : copy.button}
-        error={error}
-        loading={loading}
-        ownerOnlyLabel={copy.ownerOnly}
-        role={role}
-        success={success}
-        onDownload={() => void handleDownload()}
-      />
+      <WorkspaceExportContent contentProps={{ copy }} controlsProps={{ buttonLabel: loading ? copy.loading : copy.button, error, loading, ownerOnlyLabel: copy.ownerOnly, role, success, onDownload: () => void handleDownload() }} />
     </section>
   );
 }
