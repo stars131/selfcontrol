@@ -1,0 +1,1 @@
+import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types"; export type WorkspaceExportJobsListItemActionProps = Pick<WorkspaceExportJobsListItemProps, "actionLoading" | "downloadLabel" | "job" | "onDownload">;

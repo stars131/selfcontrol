@@ -70,6 +70,14 @@ const exportJobsListItemPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item.tsx",
 );
+const exportJobsListItemActionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-action.tsx",
+);
+const exportJobsListItemActionTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-list-item-action.types.ts",
+);
 const exportJobsListItemSummaryPath = path.resolve(
   process.cwd(),
   "components/workspace-export-jobs-list-item-summary.tsx",
@@ -100,6 +108,8 @@ const headerTypesSource = fs.readFileSync(exportJobsHeaderTypesPath, "utf8");
 const noticesSource = fs.readFileSync(exportJobsNoticesPath, "utf8");
 const noticesTypesSource = fs.readFileSync(exportJobsNoticesTypesPath, "utf8");
 const listItemSource = fs.readFileSync(exportJobsListItemPath, "utf8");
+const listItemActionSource = fs.readFileSync(exportJobsListItemActionPath, "utf8");
+const listItemActionTypesSource = fs.readFileSync(exportJobsListItemActionTypesPath, "utf8");
 const listItemSummarySource = fs.readFileSync(exportJobsListItemSummaryPath, "utf8");
 const listItemSummaryTypesSource = fs.readFileSync(exportJobsListItemSummaryTypesPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
@@ -121,6 +131,8 @@ const headerTypesLineCount = headerTypesSource.split(/\r?\n/).length;
 const noticesLineCount = noticesSource.split(/\r?\n/).length;
 const noticesTypesLineCount = noticesTypesSource.split(/\r?\n/).length;
 const listItemLineCount = listItemSource.split(/\r?\n/).length;
+const listItemActionLineCount = listItemActionSource.split(/\r?\n/).length;
+const listItemActionTypesLineCount = listItemActionTypesSource.split(/\r?\n/).length;
 const listItemSummaryLineCount = listItemSummarySource.split(/\r?\n/).length;
 const listItemSummaryTypesLineCount = listItemSummaryTypesSource.split(/\r?\n/).length;
 const listItemTypesLineCount = listItemTypesSource.split(/\r?\n/).length;
@@ -384,11 +396,12 @@ if (noticesTypesLineCount > 2) {
 }
 
 for (const requiredListItemUsage of [
+  'import { WorkspaceExportJobsListItemAction } from "./workspace-export-jobs-list-item-action";',
   'import { WorkspaceExportJobsListItemSummary } from "./workspace-export-jobs-list-item-summary";',
   'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types";',
   "}: WorkspaceExportJobsListItemProps) {",
+  "<WorkspaceExportJobsListItemAction",
   "<WorkspaceExportJobsListItemSummary",
-  'job.status === "completed"',
   'job.error_message ? <div className="notice error" style={{ marginTop: 12 }}>{job.error_message}</div> : null',
 ]) {
   if (!listItemSource.includes(requiredListItemUsage)) {
@@ -397,6 +410,9 @@ for (const requiredListItemUsage of [
 }
 
 for (const forbiddenListItemToken of [
+  'job.status === "completed"',
+  'onClick={() => void onDownload(job.id)}',
+  '<button className="button secondary" disabled={actionLoading} type="button" onClick={() => void onDownload(job.id)}>',
   'new Date(job.created_at).toLocaleString(locale)',
   '<div className="eyebrow">{job.job_type} / {job.status}</div>',
   '<div style={{ marginTop: 8, fontWeight: 600 }}>{job.id}</div>',
@@ -408,6 +424,38 @@ for (const forbiddenListItemToken of [
 
 if (listItemLineCount > 22) {
   throw new Error(`workspace-export-jobs-list-item.tsx exceeded 22 lines: ${listItemLineCount}`);
+}
+
+for (const requiredListItemActionUsage of [
+  'import type { WorkspaceExportJobsListItemActionProps } from "./workspace-export-jobs-list-item-action.types";',
+  "}: WorkspaceExportJobsListItemActionProps) {",
+  'job.status === "completed"',
+  'onClick={() => void onDownload(job.id)}',
+  "{downloadLabel}",
+]) {
+  if (!listItemActionSource.includes(requiredListItemActionUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-action.tsx must own item-action rendering: ${requiredListItemActionUsage}`);
+  }
+}
+
+if (listItemActionSource.includes("type WorkspaceExportJobsListItemActionProps = Pick<")) {
+  throw new Error("workspace-export-jobs-list-item-action.tsx must keep item-action prop typing delegated");
+}
+
+if (listItemActionLineCount > 8) {
+  throw new Error(`workspace-export-jobs-list-item-action.tsx exceeded 8 lines: ${listItemActionLineCount}`);
+}
+
+for (const requiredListItemActionTypesUsage of [
+  'import type { WorkspaceExportJobsListItemProps } from "./workspace-export-jobs-list-item.types"; export type WorkspaceExportJobsListItemActionProps = Pick<WorkspaceExportJobsListItemProps, "actionLoading" | "downloadLabel" | "job" | "onDownload">;',
+]) {
+  if (!listItemActionTypesSource.includes(requiredListItemActionTypesUsage)) {
+    throw new Error(`workspace-export-jobs-list-item-action.types.ts must own item-action prop typing: ${requiredListItemActionTypesUsage}`);
+  }
+}
+
+if (listItemActionTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-list-item-action.types.ts exceeded 2 lines: ${listItemActionTypesLineCount}`);
 }
 
 for (const requiredListItemSummaryUsage of [
