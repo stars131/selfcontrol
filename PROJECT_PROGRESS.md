@@ -2031,6 +2031,10 @@ Last updated: 2026-03-25
   - `use-workspace-entry-load.ts` now keeps a per-token initialization guard so the workspace entry page no longer re-runs transfer-job loading on every render after login
   - `use-workspace-shell-initial-load.ts` now keeps a per-workspace/token initialization guard so the main workspace shell no longer replays its bootstrap refresh chain when render-time dependencies are recreated
   - this keeps login-time refresh behavior stable and predictable without changing the underlying refresh helpers or polling responsibilities
+- Workspace Provider Config Removal V1:
+  - the workspace chat management area no longer renders `ProviderSettingsPanel`, so model/provider configuration now stays exclusively on the settings page instead of appearing in the main workspace surface
+  - the workspace shell no longer carries provider-config state, bootstrap loading, or provider-save actions through its chat/panel wiring, which removes unnecessary refresh work and keeps the runtime boundary aligned with the product requirement
+  - `verify-chat-panel-structure.mjs` and `verify-workspace-shell-structure.mjs` now enforce that workspace-side boundary so future changes do not accidentally reintroduce provider configuration into the main workspace page
 
 ## Next
 - Continue the next product slice

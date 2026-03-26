@@ -1,9 +1,7 @@
 "use client";
 
-import { useStoredLocale } from "../lib/locale";
 import { ChatKnowledgeCard } from "./chat-knowledge-card";
 import { ChatShareLinksCard } from "./chat-share-links-card";
-import { ProviderSettingsPanel } from "./provider-settings-panel";
 import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types";
 
 export function ChatPanelManagementSection({
@@ -16,8 +14,6 @@ export function ChatPanelManagementSection({
   onCreateShareLink,
   onDisableShareLink,
   onReindexKnowledge,
-  onSaveProviderConfig,
-  providerConfigs,
   reindexing,
   setShareMaxUses,
   setShareName,
@@ -27,8 +23,6 @@ export function ChatPanelManagementSection({
   shareName,
   sharePermission,
 }: ChatPanelManagementSectionProps) {
-  const { locale } = useStoredLocale();
-
   if (!canManageWorkspace) {
     return null;
   }
@@ -57,13 +51,6 @@ export function ChatPanelManagementSection({
           sharePermission={sharePermission}
         />
       ) : null}
-      <div style={{ marginBottom: 16 }}>
-        <ProviderSettingsPanel
-          locale={locale}
-          onSaveProviderConfig={onSaveProviderConfig}
-          providerConfigs={providerConfigs}
-        />
-      </div>
     </>
   );
 }

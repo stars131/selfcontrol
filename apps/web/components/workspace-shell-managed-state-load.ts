@@ -2,7 +2,6 @@
 
 import {
   refreshMediaDeadLetterOverviewData,
-  refreshProviderConfigItems,
   refreshShareLinkItems,
 } from "../lib/workspace-shell-refresh";
 import type { LoadWorkspaceShellManagedStateInput } from "./workspace-shell-managed-state-load.types";
@@ -17,13 +16,11 @@ export async function loadWorkspaceShellManagedState({
   role,
   setLatestSharePath,
   setMediaDeadLetterOverview,
-  setProviderConfigs,
   setShareLinks,
   workspaceId,
 }: LoadWorkspaceShellManagedStateInput) {
   if (canManageWorkspace(role)) {
     await refreshMediaDeadLetterOverviewData(activeToken, workspaceId, setMediaDeadLetterOverview);
-    await refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs);
     if (role === "owner") {
       await refreshShareLinkItems(activeToken, workspaceId, setShareLinks);
     } else {
@@ -34,7 +31,6 @@ export async function loadWorkspaceShellManagedState({
   }
 
   setMediaDeadLetterOverview(null);
-  setProviderConfigs([]);
   setShareLinks([]);
   setLatestSharePath("");
 }

@@ -230,14 +230,9 @@ for (const requiredManagementContentUsage of [
   }
 }
 
-if (!chatPanelManagementSectionSource.includes('import { useStoredLocale } from "../lib/locale";')) {
-  throw new Error("chat-panel-management-section.tsx must own locale lookup for provider settings");
-}
-
 for (const requiredImport of [
   'import { ChatKnowledgeCard } from "./chat-knowledge-card";',
   'import { ChatShareLinksCard } from "./chat-share-links-card";',
-  'import { ProviderSettingsPanel } from "./provider-settings-panel";',
 ]) {
   if (!chatPanelManagementSectionSource.includes(requiredImport)) {
     throw new Error(`chat-panel-management-section.tsx must import delegated management cards: ${requiredImport}`);
@@ -247,7 +242,6 @@ for (const requiredImport of [
 for (const requiredUsage of [
   "<ChatKnowledgeCard",
   "<ChatShareLinksCard",
-  "<ProviderSettingsPanel",
 ]) {
   if (!chatPanelManagementSectionSource.includes(requiredUsage)) {
     throw new Error(`chat-panel-management-section.tsx must compose delegated management cards: ${requiredUsage}`);
@@ -357,13 +351,10 @@ for (const forbiddenToken of [
   'className={`message ${message.role === "assistant" ? "assistant" : ""}`}',
   "className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}",
   'href={`/app/workspaces/${workspaceId}/settings`}',
-  'import { useStoredLocale } from "../lib/locale";',
   'import { ChatKnowledgeCard } from "./chat-knowledge-card";',
   'import { ChatShareLinksCard } from "./chat-share-links-card";',
-  'import { ProviderSettingsPanel } from "./provider-settings-panel";',
   "<ChatKnowledgeCard",
   "<ChatShareLinksCard",
-  "<ProviderSettingsPanel",
   'placeholder={',
 ]) {
   if (source.includes(forbiddenToken)) {

@@ -5,8 +5,6 @@ export type ChatPanelManagementSectionProps = Pick<
   | "canManageSharing"
   | "canManageWorkspace"
   | "knowledgeStats"
-  | "onSaveProviderConfig"
-  | "providerConfigs"
   | "shareLinks"
 > & {
   creatingShare: boolean;

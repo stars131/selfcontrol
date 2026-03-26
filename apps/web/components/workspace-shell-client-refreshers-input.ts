@@ -16,7 +16,6 @@ export function buildWorkspaceShellRefreshersInput({
     setMediaStorageSummary: state.setMediaStorageSummary,
     setMessages: state.setMessages,
     setNotifications: state.setNotifications,
-    setProviderConfigs: state.setProviderConfigs,
     setRecords: state.setRecords,
     setReminders: state.setReminders,
     setSearchPresets: state.setSearchPresets,

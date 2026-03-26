@@ -7,7 +7,6 @@ import {
   refreshMediaProcessingOverviewData,
   refreshMediaStorageSummaryData,
   refreshNotificationItems,
-  refreshProviderConfigItems,
   refreshReminderItems,
   refreshSearchPresetItems,
   refreshShareLinkItems,
@@ -22,7 +21,6 @@ export function createWorkspaceShellManagedRefreshers({
   setMediaProcessingOverview,
   setMediaStorageSummary,
   setNotifications,
-  setProviderConfigs,
   setReminders,
   setSearchPresets,
   setShareLinks,
@@ -41,8 +39,6 @@ export function createWorkspaceShellManagedRefreshers({
       refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary),
     refreshNotifications: async (activeToken: string) =>
       refreshNotificationItems(activeToken, workspaceId, setNotifications),
-    refreshProviderConfigs: async (activeToken: string) =>
-      refreshProviderConfigItems(activeToken, workspaceId, setProviderConfigs),
     refreshReminders: async (activeToken: string, recordId: string | null) =>
       refreshReminderItems(activeToken, workspaceId, recordId, setReminders),
     refreshSearchPresets: async (activeToken: string) =>

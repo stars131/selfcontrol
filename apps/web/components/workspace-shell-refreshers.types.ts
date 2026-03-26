@@ -11,7 +11,6 @@ import type {
   MediaProcessingOverview,
   MediaStorageSummary,
   NotificationItem,
-  ProviderFeatureConfig,
   RecordItem,
   ReminderItem,
   SearchPresetItem,
@@ -29,7 +28,6 @@ export type WorkspaceShellRefreshersParams = {
   setMediaStorageSummary: Dispatch<SetStateAction<MediaStorageSummary | null>>;
   setMessages: Dispatch<SetStateAction<ChatMessage[]>>;
   setNotifications: Dispatch<SetStateAction<NotificationItem[]>>;
-  setProviderConfigs: Dispatch<SetStateAction<ProviderFeatureConfig[]>>;
   setRecords: Dispatch<SetStateAction<RecordItem[]>>;
   setReminders: Dispatch<SetStateAction<ReminderItem[]>>;
   setSearchPresets: Dispatch<SetStateAction<SearchPresetItem[]>>;

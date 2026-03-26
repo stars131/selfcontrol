@@ -41,7 +41,6 @@ export function buildWorkspaceShellActionsInput({
     setFilteringRecords: state.setFilteringRecords,
     setSavingSearchPreset: state.setSavingSearchPreset,
     setKnowledgeStats: state.setKnowledgeStats,
-    setProviderConfigs: state.setProviderConfigs,
     setLatestSharePath: state.setLatestSharePath,
     initialRecordFilter: refreshers.initialRecordFilter,
   };

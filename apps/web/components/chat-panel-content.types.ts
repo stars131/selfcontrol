@@ -21,11 +21,9 @@ export type ChatPanelContentProps = Pick<
   | "onMarkNotificationRead"
   | "onRefreshAuditLogs"
   | "onReindexKnowledge"
-  | "onSaveProviderConfig"
   | "onSelectConversation"
   | "onSendMessage"
   | "onSyncNotifications"
-  | "providerConfigs"
   | "shareLinks"
 > &
   ChatPanelActions;
@@ -45,8 +43,6 @@ export type ChatPanelManagementContentProps = Pick<
   | "latestShareUrl"
   | "notifications"
   | "onMarkNotificationRead"
-  | "onSaveProviderConfig"
-  | "providerConfigs"
   | "refreshingAudit"
   | "reindexing"
   | "setShareMaxUses"

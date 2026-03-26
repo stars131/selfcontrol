@@ -12,7 +12,6 @@ import type {
   MediaProcessingOverview,
   MediaStorageSummary,
   NotificationItem,
-  ProviderFeatureConfig,
   RecordItem,
   ReminderItem,
   SearchPresetItem,
@@ -48,7 +47,6 @@ export type UseWorkspaceShellEffectsProps = {
   setReminders: StateSetter<ReminderItem[]>;
   setNotifications: StateSetter<NotificationItem[]>;
   setKnowledgeStats: StateSetter<KnowledgeStats | null>;
-  setProviderConfigs: StateSetter<ProviderFeatureConfig[]>;
   setSearchPresets: StateSetter<SearchPresetItem[]>;
   setShareLinks: StateSetter<ShareLinkItem[]>;
   setLatestSharePath: StateSetter<string>;
@@ -73,7 +71,6 @@ export type WorkspaceShellInitialLoadProps = Pick<
   | "setMediaStorageSummary"
   | "setMessages"
   | "setNotifications"
-  | "setProviderConfigs"
   | "setRecords"
   | "setSearchPresets"
   | "setSelectedRecordId"

@@ -8,7 +8,6 @@ import type {
   MediaProcessingOverview,
   MediaStorageSummary,
   NotificationItem,
-  ProviderFeatureConfig,
   RecordFilterState,
   RecordItem,
   ReminderItem,
@@ -57,17 +56,6 @@ export type WorkspaceShellPanelsProps = {
   onReindexKnowledge: () => Promise<void>;
   onResetFilter: () => Promise<void>;
   onRetryMedia: (mediaId: string) => Promise<void>;
-  onSaveProviderConfig: (
-    featureCode: string,
-    input: {
-      provider_code: string;
-      model_name?: string | null;
-      is_enabled: boolean;
-      api_base_url?: string | null;
-      api_key_env_name?: string | null;
-      options_json?: Record<string, unknown>;
-    },
-  ) => Promise<void>;
   onSaveRecord: (input: SaveRecordInput) => Promise<void>;
   onSelectConversation: (conversationId: string) => void;
   onSelectRecord: (recordId: string | null) => void;
@@ -75,7 +63,6 @@ export type WorkspaceShellPanelsProps = {
   onSyncNotifications: () => Promise<void>;
   onUpdateReminder: (reminderId: string, input: ReminderUpdateInput) => Promise<void>;
   onUploadMedia: RecordPanelV2Props["onUploadMedia"];
-  providerConfigs: ProviderFeatureConfig[];
   recordFilter: RecordFilterState;
   records: RecordItem[];
   reminders: ReminderItem[];

@@ -4,7 +4,6 @@ import type {
   Conversation,
   KnowledgeStats,
   NotificationItem,
-  ProviderFeatureConfig,
   ShareLinkItem,
 } from "../lib/types";
 
@@ -19,7 +18,6 @@ export type ChatPanelProps = {
   messages: ChatMessage[];
   notifications: NotificationItem[];
   knowledgeStats: KnowledgeStats | null;
-  providerConfigs: ProviderFeatureConfig[];
   shareLinks: ShareLinkItem[];
   latestSharePath: string;
   auditLogs: AuditLogItem[];
@@ -34,17 +32,6 @@ export type ChatPanelProps = {
     max_uses?: number | null;
   }) => Promise<void>;
   onDisableShareLink: (shareLinkId: string) => Promise<void>;
-  onSaveProviderConfig: (
-    featureCode: string,
-    input: {
-      provider_code: string;
-      model_name?: string | null;
-      is_enabled: boolean;
-      api_base_url?: string | null;
-      api_key_env_name?: string | null;
-      options_json?: Record<string, unknown>;
-    },
-  ) => Promise<void>;
   onSyncNotifications: () => Promise<void>;
   onSendMessage: (message: string) => Promise<void>;
 };

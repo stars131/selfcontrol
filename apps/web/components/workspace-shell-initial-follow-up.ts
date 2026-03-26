@@ -13,7 +13,6 @@ export async function loadWorkspaceShellInitialFollowUp({
   setAuditLogs,
   setLatestSharePath,
   setMediaDeadLetterOverview,
-  setProviderConfigs,
   setSearchPresets,
   setShareLinks,
   workspaceId,
@@ -23,7 +22,6 @@ export async function loadWorkspaceShellInitialFollowUp({
     role,
     setLatestSharePath,
     setMediaDeadLetterOverview,
-    setProviderConfigs,
     setShareLinks,
     workspaceId,
   });

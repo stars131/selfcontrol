@@ -6,7 +6,6 @@ import type {
   ChatMessage,
   Conversation,
   KnowledgeStats,
-  ProviderFeatureConfig,
   RecordFilterState,
   RecordItem,
   TimelineDay,
@@ -27,15 +26,6 @@ export type WorkspaceShellReminderCreateInput = {
   message?: string;
   remind_at: string;
   channel_code?: string;
-};
-
-export type WorkspaceShellProviderConfigInput = {
-  provider_code: string;
-  model_name?: string | null;
-  is_enabled: boolean;
-  api_base_url?: string | null;
-  api_key_env_name?: string | null;
-  options_json?: Record<string, unknown>;
 };
 
 export type WorkspaceShellShareLinkInput = {
@@ -78,7 +68,6 @@ export type UseWorkspaceShellActionsProps = {
   setFilteringRecords: StateSetter<boolean>;
   setSavingSearchPreset: StateSetter<boolean>;
   setKnowledgeStats: StateSetter<KnowledgeStats | null>;
-  setProviderConfigs: StateSetter<ProviderFeatureConfig[]>;
   setLatestSharePath: StateSetter<string>;
   initialRecordFilter: RecordFilterState;
 };

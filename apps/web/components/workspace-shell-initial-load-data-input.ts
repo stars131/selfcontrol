@@ -18,7 +18,6 @@ export function buildWorkspaceShellInitialDataInput(
     setMediaStorageSummary: props.setMediaStorageSummary,
     setMessages: props.setMessages,
     setNotifications: props.setNotifications,
-    setProviderConfigs: props.setProviderConfigs,
     setRecords: props.setRecords,
     setSearchPresets: props.setSearchPresets,
     setSelectedRecordId: props.setSelectedRecordId,

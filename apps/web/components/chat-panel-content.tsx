@@ -28,9 +28,7 @@ export function ChatPanelContent({
   notifications,
   onCreateConversation,
   onMarkNotificationRead,
-  onSaveProviderConfig,
   onSelectConversation,
-  providerConfigs,
   refreshingAudit,
   reindexing,
   setDraft,
@@ -75,8 +73,6 @@ export function ChatPanelContent({
         latestShareUrl={latestShareUrl}
         notifications={notifications}
         onMarkNotificationRead={onMarkNotificationRead}
-        onSaveProviderConfig={onSaveProviderConfig}
-        providerConfigs={providerConfigs}
         reindexing={reindexing}
         refreshingAudit={refreshingAudit}
         setShareMaxUses={setShareMaxUses}

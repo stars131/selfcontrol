@@ -28,7 +28,6 @@ export function buildWorkspaceShellEffectsInput({
     setReminders: state.setReminders,
     setNotifications: state.setNotifications,
     setKnowledgeStats: state.setKnowledgeStats,
-    setProviderConfigs: state.setProviderConfigs,
     setSearchPresets: state.setSearchPresets,
     setShareLinks: state.setShareLinks,
     setLatestSharePath: state.setLatestSharePath,

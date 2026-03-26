@@ -19,8 +19,6 @@ export function ChatPanelManagementContent({
   latestShareUrl,
   notifications,
   onMarkNotificationRead,
-  onSaveProviderConfig,
-  providerConfigs,
   refreshingAudit,
   reindexing,
   setShareMaxUses,
@@ -44,8 +42,6 @@ export function ChatPanelManagementContent({
         onCreateShareLink={handleCreateShareLink}
         onDisableShareLink={handleDisableShareLink}
         onReindexKnowledge={handleReindexKnowledge}
-        onSaveProviderConfig={onSaveProviderConfig}
-        providerConfigs={providerConfigs}
         reindexing={reindexing}
         setShareMaxUses={setShareMaxUses}
         setShareName={setShareName}
