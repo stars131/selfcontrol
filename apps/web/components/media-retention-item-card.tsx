@@ -1,5 +1,6 @@
 "use client";
 
+import { getProcessingStatusLabel } from "../lib/media-issue-display";
 import type { LocaleCode } from "../lib/locale";
 import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";
 
@@ -49,7 +50,7 @@ export function MediaRetentionItemCard({
           </div>
         </div>
         <div className="tag-row" style={{ marginTop: 12 }}>
-          <span className="tag">{item.processing_status}</span>
+          <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
           <span className="tag">{item.storage_provider}</span>
           <span className="tag">{item.storage_tier === "archive" ? copy.archived : copy.primary}</span>
           {item.storage_provider !== "local" ? <span className="tag">{remoteReferenceLabel}</span> : null}

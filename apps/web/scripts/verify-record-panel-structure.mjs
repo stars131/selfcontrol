@@ -18399,8 +18399,10 @@ if (workspaceMediaRetentionSummaryTypesLines > maxWorkspaceMediaRetentionSummary
 }
 
 for (const requiredMediaRetentionItemCardUsage of [
+  'import { getProcessingStatusLabel } from "../lib/media-issue-display";',
   'import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";',
   "}: MediaRetentionItemCardProps) {",
+  "getProcessingStatusLabel(locale, item.processing_status)",
 ]) {
   if (!mediaRetentionItemCardSource.includes(requiredMediaRetentionItemCardUsage)) {
     throw new Error(
