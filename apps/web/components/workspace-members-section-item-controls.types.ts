@@ -1,0 +1,1 @@
+import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemControlsProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "member" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "workspaceRole"> & { isProtected: boolean };

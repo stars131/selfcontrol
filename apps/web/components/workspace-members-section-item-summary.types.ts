@@ -1,0 +1,1 @@
+import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemSummaryProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "locale" | "member">;

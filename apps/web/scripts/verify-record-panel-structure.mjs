@@ -1428,6 +1428,22 @@ const workspaceMembersSectionItemPath = path.resolve(
   process.cwd(),
   "components/workspace-members-section-item.tsx",
 );
+const workspaceMembersSectionItemSummaryPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-item-summary.tsx",
+);
+const workspaceMembersSectionItemSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-item-summary.types.ts",
+);
+const workspaceMembersSectionItemControlsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-item-controls.tsx",
+);
+const workspaceMembersSectionItemControlsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-members-section-item-controls.types.ts",
+);
 const workspaceMembersSectionItemTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-members-section-item.types.ts",
@@ -2680,6 +2696,22 @@ const workspaceMembersSectionTypesSource = fs.readFileSync(
 );
 const workspaceMembersSectionItemSource = fs.readFileSync(
   workspaceMembersSectionItemPath,
+  "utf8",
+);
+const workspaceMembersSectionItemSummarySource = fs.readFileSync(
+  workspaceMembersSectionItemSummaryPath,
+  "utf8",
+);
+const workspaceMembersSectionItemSummaryTypesSource = fs.readFileSync(
+  workspaceMembersSectionItemSummaryTypesPath,
+  "utf8",
+);
+const workspaceMembersSectionItemControlsSource = fs.readFileSync(
+  workspaceMembersSectionItemControlsPath,
+  "utf8",
+);
+const workspaceMembersSectionItemControlsTypesSource = fs.readFileSync(
+  workspaceMembersSectionItemControlsTypesPath,
   "utf8",
 );
 const workspaceMembersSectionItemTypesSource = fs.readFileSync(
@@ -4045,6 +4077,14 @@ const workspaceMembersSectionTypesLines =
   workspaceMembersSectionTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionItemLines =
   workspaceMembersSectionItemSource.split(/\r?\n/).length;
+const workspaceMembersSectionItemSummaryLines =
+  workspaceMembersSectionItemSummarySource.split(/\r?\n/).length;
+const workspaceMembersSectionItemSummaryTypesLines =
+  workspaceMembersSectionItemSummaryTypesSource.split(/\r?\n/).length;
+const workspaceMembersSectionItemControlsLines =
+  workspaceMembersSectionItemControlsSource.split(/\r?\n/).length;
+const workspaceMembersSectionItemControlsTypesLines =
+  workspaceMembersSectionItemControlsTypesSource.split(/\r?\n/).length;
 const workspaceMembersSectionItemTypesLines =
   workspaceMembersSectionItemTypesSource.split(/\r?\n/).length;
 const workspaceMediaRetentionCardTypesLines =
@@ -15532,11 +15572,14 @@ if (workspaceMembersSectionTypesLines > maxWorkspaceMembersSectionTypesLines) {
 }
 
 for (const requiredWorkspaceMembersSectionItemUsage of [
+  'import { WorkspaceMembersSectionItemControls } from "./workspace-members-section-item-controls";',
+  'import { WorkspaceMembersSectionItemSummary } from "./workspace-members-section-item-summary";',
   'import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types";',
   "}: WorkspaceMembersSectionItemProps) {",
   "const isProtected = member.role === \"owner\" || member.user_id === userId;",
   '<article className="message">',
-  'new Date(member.created_at).toLocaleString(locale)',
+  "<WorkspaceMembersSectionItemSummary",
+  "<WorkspaceMembersSectionItemControls",
 ]) {
   if (!workspaceMembersSectionItemSource.includes(requiredWorkspaceMembersSectionItemUsage)) {
     throw new Error(
@@ -15548,6 +15591,10 @@ for (const requiredWorkspaceMembersSectionItemUsage of [
 for (const forbiddenWorkspaceMembersSectionItemToken of [
   'import type { WorkspaceSettingsManagedSectionsProps } from "./workspace-settings-managed-sections.types";',
   "type WorkspaceMembersSectionItemProps = Pick<",
+  'new Date(member.created_at).toLocaleString(locale)',
+  '<div style={{ minWidth: 220 }}>',
+  '<select',
+  '<button',
 ]) {
   if (workspaceMembersSectionItemSource.includes(forbiddenWorkspaceMembersSectionItemToken)) {
     throw new Error(
@@ -15556,10 +15603,99 @@ for (const forbiddenWorkspaceMembersSectionItemToken of [
   }
 }
 
-const maxWorkspaceMembersSectionItemLines = 65;
+const maxWorkspaceMembersSectionItemLines = 30;
 if (workspaceMembersSectionItemLines > maxWorkspaceMembersSectionItemLines) {
   throw new Error(
     `workspace-members-section-item.tsx exceeded ${maxWorkspaceMembersSectionItemLines} lines: ${workspaceMembersSectionItemLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionItemSummaryUsage of [
+  'import type { WorkspaceMembersSectionItemSummaryProps } from "./workspace-members-section-item-summary.types";',
+  "}: WorkspaceMembersSectionItemSummaryProps) {",
+  '<div className="eyebrow">{member.username}</div>',
+  "member.display_name || member.email || member.user_id",
+  'new Date(member.created_at).toLocaleString(locale)',
+]) {
+  if (!workspaceMembersSectionItemSummarySource.includes(requiredWorkspaceMembersSectionItemSummaryUsage)) {
+    throw new Error(
+      `workspace-members-section-item-summary.tsx must own member summary rendering: ${requiredWorkspaceMembersSectionItemSummaryUsage}`,
+    );
+  }
+}
+
+if (workspaceMembersSectionItemSummarySource.includes("type WorkspaceMembersSectionItemSummaryProps = Pick<")) {
+  throw new Error(
+    "workspace-members-section-item-summary.tsx must keep member-summary prop typing delegated",
+  );
+}
+
+const maxWorkspaceMembersSectionItemSummaryLines = 18;
+if (workspaceMembersSectionItemSummaryLines > maxWorkspaceMembersSectionItemSummaryLines) {
+  throw new Error(
+    `workspace-members-section-item-summary.tsx exceeded ${maxWorkspaceMembersSectionItemSummaryLines} lines: ${workspaceMembersSectionItemSummaryLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionItemSummaryTypesUsage of [
+  'import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemSummaryProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "locale" | "member">;',
+]) {
+  if (!workspaceMembersSectionItemSummaryTypesSource.includes(requiredWorkspaceMembersSectionItemSummaryTypesUsage)) {
+    throw new Error(
+      `workspace-members-section-item-summary.types.ts must own member-summary prop typing: ${requiredWorkspaceMembersSectionItemSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMembersSectionItemSummaryTypesLines = 2;
+if (workspaceMembersSectionItemSummaryTypesLines > maxWorkspaceMembersSectionItemSummaryTypesLines) {
+  throw new Error(
+    `workspace-members-section-item-summary.types.ts exceeded ${maxWorkspaceMembersSectionItemSummaryTypesLines} lines: ${workspaceMembersSectionItemSummaryTypesLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionItemControlsUsage of [
+  'import type { WorkspaceMembersSectionItemControlsProps } from "./workspace-members-section-item-controls.types";',
+  "}: WorkspaceMembersSectionItemControlsProps) {",
+  '<div style={{ minWidth: 220 }}>',
+  '<select',
+  '<button',
+  "{isProtected ? <div className=\"muted\">{copy.ownerProtected}</div> : null}",
+]) {
+  if (!workspaceMembersSectionItemControlsSource.includes(requiredWorkspaceMembersSectionItemControlsUsage)) {
+    throw new Error(
+      `workspace-members-section-item-controls.tsx must own member-controls rendering: ${requiredWorkspaceMembersSectionItemControlsUsage}`,
+    );
+  }
+}
+
+if (workspaceMembersSectionItemControlsSource.includes("type WorkspaceMembersSectionItemControlsProps = Pick<")) {
+  throw new Error(
+    "workspace-members-section-item-controls.tsx must keep member-controls prop typing delegated",
+  );
+}
+
+const maxWorkspaceMembersSectionItemControlsLines = 42;
+if (workspaceMembersSectionItemControlsLines > maxWorkspaceMembersSectionItemControlsLines) {
+  throw new Error(
+    `workspace-members-section-item-controls.tsx exceeded ${maxWorkspaceMembersSectionItemControlsLines} lines: ${workspaceMembersSectionItemControlsLines}`,
+  );
+}
+
+for (const requiredWorkspaceMembersSectionItemControlsTypesUsage of [
+  'import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemControlsProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "member" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "workspaceRole"> & { isProtected: boolean };',
+]) {
+  if (!workspaceMembersSectionItemControlsTypesSource.includes(requiredWorkspaceMembersSectionItemControlsTypesUsage)) {
+    throw new Error(
+      `workspace-members-section-item-controls.types.ts must own member-controls prop typing: ${requiredWorkspaceMembersSectionItemControlsTypesUsage}`,
+    );
+  }
+}
+
+const maxWorkspaceMembersSectionItemControlsTypesLines = 2;
+if (workspaceMembersSectionItemControlsTypesLines > maxWorkspaceMembersSectionItemControlsTypesLines) {
+  throw new Error(
+    `workspace-members-section-item-controls.types.ts exceeded ${maxWorkspaceMembersSectionItemControlsTypesLines} lines: ${workspaceMembersSectionItemControlsTypesLines}`,
   );
 }
 

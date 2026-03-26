@@ -1895,6 +1895,10 @@ Last updated: 2026-03-25
   - `workspace-settings-overview-card.tsx` now delegates overview eyebrow/title/description rendering to `workspace-settings-overview-summary.tsx` instead of keeping the summary copy inline above the details grid leaf
   - the new `workspace-settings-overview-summary.types.ts` file keeps the overview-summary contract explicit and reusable while the parent overview card remains focused on shell composition
   - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce that delegated overview-summary boundary, exact one-line type contract, and line-count ceilings so future settings-overview updates stay safer and easier to maintain
+- Workspace Members Item Summary And Controls Split V1:
+  - `workspace-members-section-item.tsx` now delegates member identity summary and role-management controls to `workspace-members-section-item-summary.tsx` and `workspace-members-section-item-controls.tsx` instead of keeping both blocks inline inside one member card
+  - the new member-item `*.types.ts` files keep summary and controls prop contracts explicit and reusable while the parent member item remains focused on shell composition and protection-state wiring
+  - `verify-record-panel-structure.mjs` now enforces those delegated member-item boundaries, exact one-line type contracts, and line-count ceilings so future workspace member management updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice
