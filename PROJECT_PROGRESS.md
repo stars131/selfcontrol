@@ -1931,6 +1931,10 @@ Last updated: 2026-03-25
   - `workspace-media-retention-card.tsx` now delegates header/notices/summary/actions/lists composition to `workspace-media-retention-content.tsx` instead of keeping all card sections inline beside controller wiring
   - the new retention-content `*.types.ts` file keeps the composed content contract explicit and reusable while the card remains focused on copy-building, controller state, and action prop derivation
   - `verify-record-panel-structure.mjs` now enforces that delegated retention-content boundary, exact one-line type contract, and line-count ceilings so future retention-card updates stay safer and easier to maintain
+- Workspace Export Jobs Content Split V1:
+  - `workspace-export-jobs-card.tsx` now delegates header/notices/list composition to `workspace-export-jobs-content.tsx` instead of keeping all export-job sections inline beside controller wiring
+  - the new export-jobs-content `*.types.ts` file keeps the composed content contract explicit and reusable while the card remains focused on locale copy lookup and controller state wiring
+  - `verify-record-panel-structure.mjs` and `verify-workspace-export-jobs-structure.mjs` now enforce that delegated export-jobs content boundary, exact one-line type contract, and line-count ceilings so future export-job card updates stay safer and easier to maintain
 
 ## Next
 - Continue the next product slice

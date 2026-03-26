@@ -2,6 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 
 const exportJobsPath = path.resolve(process.cwd(), "components/workspace-export-jobs-card.tsx");
+const exportJobsContentPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-content.tsx",
+);
+const exportJobsContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-export-jobs-content.types.ts",
+);
 const exportJobsControllerPath = path.resolve(
   process.cwd(),
   "components/use-workspace-export-jobs-controller.ts",
@@ -67,6 +75,8 @@ const exportJobsListItemTypesPath = path.resolve(
   "components/workspace-export-jobs-list-item.types.ts",
 );
 const source = fs.readFileSync(exportJobsPath, "utf8");
+const contentSource = fs.readFileSync(exportJobsContentPath, "utf8");
+const contentTypesSource = fs.readFileSync(exportJobsContentTypesPath, "utf8");
 const controllerSource = fs.readFileSync(exportJobsControllerPath, "utf8");
 const stateSource = fs.readFileSync(exportJobsStatePath, "utf8");
 const actionsSource = fs.readFileSync(exportJobsActionsPath, "utf8");
@@ -84,6 +94,8 @@ const listItemSummarySource = fs.readFileSync(exportJobsListItemSummaryPath, "ut
 const listItemSummaryTypesSource = fs.readFileSync(exportJobsListItemSummaryTypesPath, "utf8");
 const listItemTypesSource = fs.readFileSync(exportJobsListItemTypesPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
+const contentLineCount = contentSource.split(/\r?\n/).length;
+const contentTypesLineCount = contentTypesSource.split(/\r?\n/).length;
 const controllerLineCount = controllerSource.split(/\r?\n/).length;
 const stateLineCount = stateSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
@@ -113,32 +125,51 @@ if (!source.includes('import { getWorkspaceExportJobsCopy } from "./workspace-ex
   throw new Error("workspace-export-jobs-card.tsx must import getWorkspaceExportJobsCopy");
 }
 
-if (!source.includes('import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";')) {
-  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsHeader");
-}
-
-if (!source.includes('import { WorkspaceExportJobsNotices } from "./workspace-export-jobs-notices";')) {
-  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsNotices");
-}
-
-if (!source.includes('import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";')) {
-  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsList");
+if (!source.includes('import { WorkspaceExportJobsContent } from "./workspace-export-jobs-content";')) {
+  throw new Error("workspace-export-jobs-card.tsx must import WorkspaceExportJobsContent");
 }
 
 if (!source.includes("getWorkspaceExportJobsCopy(locale)")) {
   throw new Error("workspace-export-jobs-card.tsx must delegate locale copy lookup");
 }
 
-if (!source.includes("<WorkspaceExportJobsList")) {
-  throw new Error("workspace-export-jobs-card.tsx must delegate export-job list rendering");
+if (!source.includes("<WorkspaceExportJobsContent")) {
+  throw new Error("workspace-export-jobs-card.tsx must delegate export-job content rendering");
 }
 
-if (!source.includes("<WorkspaceExportJobsHeader")) {
-  throw new Error("workspace-export-jobs-card.tsx must delegate export-job header rendering");
+for (const requiredContentUsage of [
+  'import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";',
+  'import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";',
+  'import { WorkspaceExportJobsNotices } from "./workspace-export-jobs-notices";',
+  'import type { WorkspaceExportJobsContentProps } from "./workspace-export-jobs-content.types";',
+  "}: WorkspaceExportJobsContentProps) {",
+  "<WorkspaceExportJobsHeader",
+  "<WorkspaceExportJobsNotices",
+  "<WorkspaceExportJobsList",
+]) {
+  if (!contentSource.includes(requiredContentUsage)) {
+    throw new Error(`workspace-export-jobs-content.tsx must own export-job content composition: ${requiredContentUsage}`);
+  }
 }
 
-if (!source.includes("<WorkspaceExportJobsNotices")) {
-  throw new Error("workspace-export-jobs-card.tsx must delegate export-job notices rendering");
+if (contentSource.includes("type WorkspaceExportJobsContentProps =")) {
+  throw new Error("workspace-export-jobs-content.tsx must keep export-job content prop typing delegated");
+}
+
+if (contentLineCount > 10) {
+  throw new Error(`workspace-export-jobs-content.tsx exceeded 10 lines: ${contentLineCount}`);
+}
+
+for (const requiredContentTypesUsage of [
+  'import type { WorkspaceExportJobsHeaderProps } from "./workspace-export-jobs-header.types"; import type { WorkspaceExportJobsListProps } from "./workspace-export-jobs-list.types"; import type { WorkspaceExportJobsNoticesProps } from "./workspace-export-jobs-notices.types"; export type WorkspaceExportJobsContentProps = { headerProps: WorkspaceExportJobsHeaderProps; listProps: WorkspaceExportJobsListProps; noticesProps: WorkspaceExportJobsNoticesProps };',
+]) {
+  if (!contentTypesSource.includes(requiredContentTypesUsage)) {
+    throw new Error(`workspace-export-jobs-content.types.ts must own export-job content prop typing: ${requiredContentTypesUsage}`);
+  }
+}
+
+if (contentTypesLineCount > 2) {
+  throw new Error(`workspace-export-jobs-content.types.ts exceeded 2 lines: ${contentTypesLineCount}`);
 }
 
 for (const requiredListUsage of [
