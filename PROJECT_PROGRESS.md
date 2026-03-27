@@ -2323,6 +2323,9 @@ Last updated: 2026-03-26
 - Web API Client Record Boundary Extraction V1:
   - record listing, advanced search presets, timeline, record CRUD, and knowledge search entry calls now live in `apps/web/lib/api-records.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
   - record-specific query-shaping and preset mapping now sit beside each other in one module, reducing coupling between record workflows and unrelated auth, sharing, or provider client code
+- Web API Client Chat Boundary Extraction V1:
+  - conversation listing, creation, message listing, and assistant send calls now live in `apps/web/lib/api-chat.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
+  - chat transport behavior is now isolated from records, providers, and audit queries, which lowers future review scope for assistant workflow changes
 
 ## Next
 - Continue the next product slice

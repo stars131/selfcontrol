@@ -1,14 +1,17 @@
 import type {
   AuditLogItem,
-  ChatMessage,
-  Conversation,
   KnowledgeStats,
   MediaStorageProviderHealth,
   ProviderFeatureConfig,
-  RecordItem,
   User,
 } from "./types";
 import { request } from "./api-core";
+export {
+  createConversation,
+  listConversations,
+  listMessages,
+  sendMessage,
+} from "./api-chat";
 export {
   archiveMediaRetention,
   bulkRetryMediaDeadLetter,
@@ -72,12 +75,6 @@ type LoginResult = {
   token_type: string;
   user: User;
 };
-
-type SendMessageResult = {
-  user_message: ChatMessage;
-  assistant_message: ChatMessage;
-  records: RecordItem[];
-};
 export async function register(input: {
   username: string;
   email?: string;
@@ -99,49 +96,6 @@ export async function login(input: { account: string; password: string }) {
 
 export async function getCurrentUser(token: string) {
   return request<{ user: User }>("/auth/me", { method: "GET" }, token);
-}
-
-export async function listConversations(token: string, workspaceId: string) {
-  return request<{ items: Conversation[] }>(
-    `/workspaces/${workspaceId}/conversations`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function createConversation(token: string, workspaceId: string, title: string) {
-  return request<{ conversation: Conversation }>(
-    `/workspaces/${workspaceId}/conversations`,
-    {
-      method: "POST",
-      body: JSON.stringify({ title }),
-    },
-    token,
-  );
-}
-
-export async function listMessages(token: string, workspaceId: string, conversationId: string) {
-  return request<{ items: ChatMessage[] }>(
-    `/workspaces/${workspaceId}/conversations/${conversationId}/messages`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function sendMessage(
-  token: string,
-  workspaceId: string,
-  conversationId: string,
-  content: string,
-) {
-  return request<SendMessageResult>(
-    `/workspaces/${workspaceId}/conversations/${conversationId}/messages`,
-    {
-      method: "POST",
-      body: JSON.stringify({ content }),
-    },
-    token,
-  );
 }
 
 export async function getKnowledgeStats(token: string, workspaceId: string) {
