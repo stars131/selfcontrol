@@ -2703,6 +2703,10 @@ Last updated: 2026-03-28
   - recent-media issue action-notice rendering now lives in `apps/web/components/recent-media-issue-card-action-notice.tsx` instead of remaining inline inside `recent-media-issue-card-metadata.tsx`
   - `recent-media-issue-card-metadata.tsx` now stays focused on timestamp metadata composition while action-notice rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this action-notice boundary so future recent-media metadata changes do not regrow a mixed metadata-and-notice rendering module
+- Dead-Letter Retry State Tag Extraction V1:
+  - dead-letter item retry-state tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-retry-state-tag.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-tags.tsx`
+  - `dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared tag composition while retry-state rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-state-tag boundary so future dead-letter item tag changes do not regrow a mixed composition-and-retry-state rendering module
 
 ## Next
 - Continue the next product slice
