@@ -2552,6 +2552,14 @@ const recentMediaIssueCardMetadataPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-metadata.tsx",
 );
+const recentMediaIssueCardActionNoticePath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-action-notice.tsx",
+);
+const recentMediaIssueCardActionNoticeTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-action-notice.types.ts",
+);
 const recentMediaIssueCardMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-metadata.types.ts",
@@ -4110,6 +4118,14 @@ const recentMediaIssueCardMetadataSource = fs.readFileSync(
   recentMediaIssueCardMetadataPath,
   "utf8",
 );
+const recentMediaIssueCardActionNoticeSource = fs.readFileSync(
+  recentMediaIssueCardActionNoticePath,
+  "utf8",
+);
+const recentMediaIssueCardActionNoticeTypesSource = fs.readFileSync(
+  recentMediaIssueCardActionNoticeTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardMetadataTypesSource = fs.readFileSync(
   recentMediaIssueCardMetadataTypesPath,
   "utf8",
@@ -5511,6 +5527,10 @@ const recentMediaIssueCardErrorTypesLines =
   recentMediaIssueCardErrorTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataLines =
   recentMediaIssueCardMetadataSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionNoticeLines =
+  recentMediaIssueCardActionNoticeSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionNoticeTypesLines =
+  recentMediaIssueCardActionNoticeTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataTypesLines =
   recentMediaIssueCardMetadataTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionButtonsLines =
@@ -24277,12 +24297,13 @@ if (recentMediaIssueCardErrorTypesLines > maxRecentMediaIssueCardErrorTypesLines
 }
 
 for (const requiredRecentMediaIssueCardMetadataUsage of [
+  'import { RecentMediaIssueCardActionNotice } from "./recent-media-issue-card-action-notice";',
   'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";',
   "}: RecentMediaIssueCardMetadataProps) {",
   '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
   '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
   '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
-  '{action.label}{action.detail ? `: ${action.detail}` : ""}',
+  "<RecentMediaIssueCardActionNotice action={action} />",
 ]) {
   if (!recentMediaIssueCardMetadataSource.includes(requiredRecentMediaIssueCardMetadataUsage)) {
     throw new Error(
@@ -24295,7 +24316,18 @@ if (recentMediaIssueCardMetadataSource.includes("type RecentMediaIssueCardMetada
   throw new Error("recent-media-issue-card-metadata.tsx must keep recent-media card-metadata prop typing delegated");
 }
 
-const maxRecentMediaIssueCardMetadataLines = 8;
+for (const forbiddenRecentMediaIssueCardMetadataToken of [
+  '{action.label}{action.detail ? `: ${action.detail}` : ""}',
+  '<div className="notice" style={{ marginTop: 10 }}>',
+]) {
+  if (recentMediaIssueCardMetadataSource.includes(forbiddenRecentMediaIssueCardMetadataToken)) {
+    throw new Error(
+      `recent-media-issue-card-metadata.tsx must keep action-notice rendering delegated: ${forbiddenRecentMediaIssueCardMetadataToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataLines = 10;
 if (recentMediaIssueCardMetadataLines > maxRecentMediaIssueCardMetadataLines) {
   throw new Error(
     `recent-media-issue-card-metadata.tsx exceeded ${maxRecentMediaIssueCardMetadataLines} lines: ${recentMediaIssueCardMetadataLines}`,
@@ -24316,6 +24348,56 @@ const maxRecentMediaIssueCardMetadataTypesLines = 2;
 if (recentMediaIssueCardMetadataTypesLines > maxRecentMediaIssueCardMetadataTypesLines) {
   throw new Error(
     `recent-media-issue-card-metadata.types.ts exceeded ${maxRecentMediaIssueCardMetadataTypesLines} lines: ${recentMediaIssueCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardActionNoticeUsage of [
+  'import type { RecentMediaIssueCardActionNoticeProps } from "./recent-media-issue-card-action-notice.types";',
+  "}: RecentMediaIssueCardActionNoticeProps) {",
+  "action.label ? (",
+  '<div className="notice" style={{ marginTop: 10 }}>',
+  '{action.detail ? `: ${action.detail}` : ""}',
+]) {
+  if (!recentMediaIssueCardActionNoticeSource.includes(requiredRecentMediaIssueCardActionNoticeUsage)) {
+    throw new Error(
+      `recent-media-issue-card-action-notice.tsx must own action-notice rendering: ${requiredRecentMediaIssueCardActionNoticeUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardActionNoticeToken of [
+  "formatHistoryTimestampLabel(",
+  "processing_last_attempt_at",
+  "processing_retry_next_attempt_at",
+]) {
+  if (recentMediaIssueCardActionNoticeSource.includes(forbiddenRecentMediaIssueCardActionNoticeToken)) {
+    throw new Error(
+      `recent-media-issue-card-action-notice.tsx must keep timestamp metadata concerns delegated: ${forbiddenRecentMediaIssueCardActionNoticeToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardActionNoticeLines = 14;
+if (recentMediaIssueCardActionNoticeLines > maxRecentMediaIssueCardActionNoticeLines) {
+  throw new Error(
+    `recent-media-issue-card-action-notice.tsx exceeded ${maxRecentMediaIssueCardActionNoticeLines} lines: ${recentMediaIssueCardActionNoticeLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardActionNoticeTypesUsage of [
+  'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types"; export type RecentMediaIssueCardActionNoticeProps = Pick<RecentMediaIssueCardMetadataProps, "action">;',
+]) {
+  if (!recentMediaIssueCardActionNoticeTypesSource.includes(requiredRecentMediaIssueCardActionNoticeTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-action-notice.types.ts must own action-notice prop typing: ${requiredRecentMediaIssueCardActionNoticeTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardActionNoticeTypesLines = 2;
+if (recentMediaIssueCardActionNoticeTypesLines > maxRecentMediaIssueCardActionNoticeTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-action-notice.types.ts exceeded ${maxRecentMediaIssueCardActionNoticeTypesLines} lines: ${recentMediaIssueCardActionNoticeTypesLines}`,
   );
 }
 
