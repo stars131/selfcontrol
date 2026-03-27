@@ -71,6 +71,10 @@ const workspaceShellMediaActionRefreshPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-action-refresh.ts",
 );
+const workspaceShellRecordActionRefreshPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-action-refresh.ts",
+);
 const workspaceShellChatRecordActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-record-actions.ts",
@@ -154,6 +158,10 @@ const mediaActionRefreshSource = fs.readFileSync(
   workspaceShellMediaActionRefreshPath,
   "utf8",
 );
+const recordActionRefreshSource = fs.readFileSync(
+  workspaceShellRecordActionRefreshPath,
+  "utf8",
+);
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
 const conversationStateLoadSource = fs.readFileSync(
@@ -206,6 +214,7 @@ const initialLoadHelpersTypesLineCount = initialLoadHelpersTypesSource.split(/\r
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
 const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
 const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
+const recordActionRefreshLineCount = recordActionRefreshSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 const conversationStateLoadLineCount = conversationStateLoadSource.split(/\r?\n/).length;
@@ -1329,6 +1338,121 @@ const maxChatRecordActionsLines = 20;
 if (chatRecordActionsLineCount > maxChatRecordActionsLines) {
   throw new Error(
     `workspace-shell-chat-record-actions.ts exceeded ${maxChatRecordActionsLines} lines: ${chatRecordActionsLineCount}`,
+  );
+}
+
+const workspaceShellChatActionsSource = fs.readFileSync(
+  path.resolve(process.cwd(), "components/workspace-shell-chat-actions.ts"),
+  "utf8",
+);
+for (const requiredWorkspaceShellChatActionsImport of [
+  'from "../lib/api";',
+  'from "../lib/timeline";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-refresh";',
+]) {
+  if (!workspaceShellChatActionsSource.includes(requiredWorkspaceShellChatActionsImport)) {
+    throw new Error(
+      `workspace-shell-chat-actions.ts must keep create-mode refreshes delegated: ${requiredWorkspaceShellChatActionsImport}`,
+    );
+  }
+}
+
+for (const requiredChatActionsPath of [
+  "refreshWorkspaceShellRecordMutation(",
+  "setVisibleRecords(result.records)",
+  "setTimelineDays(buildTimelineDays(result.records))",
+]) {
+  if (!fs.readFileSync(path.resolve(process.cwd(), "components/workspace-shell-chat-actions.ts"), "utf8").includes(requiredChatActionsPath)) {
+    throw new Error(
+      `workspace-shell-chat-actions.ts must delegate record-create refresh sequences: ${requiredChatActionsPath}`,
+    );
+  }
+}
+for (const forbiddenChatActionsToken of [
+  "await refreshRecords(activeToken, recordFilter);",
+  "await refreshKnowledge(activeToken);",
+  "await refreshAuditLogs(activeToken);",
+]) {
+  if (workspaceShellChatActionsSource.includes(forbiddenChatActionsToken)) {
+    throw new Error(
+      `workspace-shell-chat-actions.ts must keep create-mode refresh sequences delegated: ${forbiddenChatActionsToken}`,
+    );
+  }
+}
+
+const workspaceShellRecordActionsSource = fs.readFileSync(
+  path.resolve(process.cwd(), "components/workspace-shell-record-actions.ts"),
+  "utf8",
+);
+for (const requiredRecordActionsImport of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-refresh";',
+  "refreshWorkspaceShellRecordMutation(",
+  "refreshWorkspaceShellRecordDeletion(",
+]) {
+  if (!workspaceShellRecordActionsSource.includes(requiredRecordActionsImport)) {
+    throw new Error(
+      `workspace-shell-record-actions.ts must delegate record refresh sequences: ${requiredRecordActionsImport}`,
+    );
+  }
+}
+
+for (const forbiddenRecordActionsToken of [
+  "await refreshRecords(activeToken, recordFilter);",
+  "await refreshKnowledge(activeToken);",
+  "await refreshAuditLogs(activeToken);",
+  "await refreshMediaStorageSummary(activeToken);",
+  "await refreshMediaProcessingOverview(activeToken);",
+  "await refreshMediaDeadLetterOverview(activeToken);",
+]) {
+  if (workspaceShellRecordActionsSource.includes(forbiddenRecordActionsToken)) {
+    throw new Error(
+      `workspace-shell-record-actions.ts must keep repeated refresh sequences delegated: ${forbiddenRecordActionsToken}`,
+    );
+  }
+}
+
+for (const requiredRecordActionRefreshUsage of [
+  'import type { RecordFilterState } from "../lib/types";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export async function refreshWorkspaceShellRecordMutation(",
+  "export async function refreshWorkspaceShellRecordDeletion(",
+  "await refreshers.refreshRecords(activeToken, recordFilter);",
+  "await refreshers.refreshKnowledge(activeToken);",
+  "await refreshers.refreshAuditLogs(activeToken);",
+  "await refreshers.refreshMediaStorageSummary(activeToken);",
+  "await refreshers.refreshMediaProcessingOverview(activeToken);",
+  "await refreshers.refreshMediaDeadLetterOverview(activeToken);",
+]) {
+  if (!recordActionRefreshSource.includes(requiredRecordActionRefreshUsage)) {
+    throw new Error(
+      `workspace-shell-record-action-refresh.ts must own shared record refresh sequences: ${requiredRecordActionRefreshUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordActionRefreshToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  "createRecord(",
+  "updateRecord(",
+  "deleteRecord(",
+  "createConversation(",
+  "sendMessage(",
+]) {
+  if (recordActionRefreshSource.includes(forbiddenRecordActionRefreshToken)) {
+    throw new Error(
+      `workspace-shell-record-action-refresh.ts must keep API calls delegated: ${forbiddenRecordActionRefreshToken}`,
+    );
+  }
+}
+
+const maxRecordActionRefreshLines = 40;
+if (recordActionRefreshLineCount > maxRecordActionRefreshLines) {
+  throw new Error(
+    `workspace-shell-record-action-refresh.ts exceeded ${maxRecordActionRefreshLines} lines: ${recordActionRefreshLineCount}`,
   );
 }
 

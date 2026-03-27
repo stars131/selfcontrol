@@ -2451,11 +2451,15 @@ Last updated: 2026-03-27
   - repeated post-upload, post-mutation, and status-refresh media update chains now live in `apps/web/components/workspace-shell-media-action-refresh.ts` instead of being duplicated across media actions
   - `workspace-shell-media-actions.ts` now stays focused on token/selection guards and API calls while refresh sequencing remains reusable and easier to adjust safely when media-related panels expand
   - the workspace-shell structure guardrail now enforces this media refresh boundary so future media action updates do not reintroduce duplicated refresh choreography
+- Workspace Shell Record Refresh Sequence Extraction V1:
+  - record mutation and deletion refresh chains now live in `apps/web/components/workspace-shell-record-action-refresh.ts` and are reused by both chat-created-record flows and direct record actions
+  - `workspace-shell-chat-actions.ts` and `workspace-shell-record-actions.ts` now stay focused on API decisions and UI selection updates while repeated record refresh sequencing remains centralized
+  - the workspace-shell structure guardrail now enforces this shared record refresh boundary so future chat and record action updates do not diverge or duplicate refresh choreography
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell record/chat action orchestration so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell record/chat action payload shaping so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

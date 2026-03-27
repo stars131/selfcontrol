@@ -8,6 +8,7 @@ import {
   requireActiveConversationContext,
   requireWritableWorkspaceToken,
 } from "./workspace-shell-action-guards";
+import { refreshWorkspaceShellRecordMutation } from "./workspace-shell-record-action-refresh";
 
 export function createWorkspaceShellChatActions({
   activeConversationId,
@@ -39,9 +40,11 @@ export function createWorkspaceShellChatActions({
 
     const mode = String(result.assistant_message.metadata_json.mode ?? "");
     if (mode === "create") {
-      await refreshRecords(activeToken, recordFilter);
-      await refreshKnowledge(activeToken);
-      await refreshAuditLogs(activeToken);
+      await refreshWorkspaceShellRecordMutation(
+        { refreshRecords, refreshKnowledge, refreshAuditLogs },
+        activeToken,
+        recordFilter,
+      );
       if (result.records[0]) {
         setSelectedRecordId(result.records[0].id);
       }

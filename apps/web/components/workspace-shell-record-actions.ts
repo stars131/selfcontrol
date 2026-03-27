@@ -6,6 +6,10 @@ import type {
   WorkspaceShellSaveRecordInput,
 } from "./workspace-shell-actions.types";
 import { requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
+import {
+  refreshWorkspaceShellRecordDeletion,
+  refreshWorkspaceShellRecordMutation,
+} from "./workspace-shell-record-action-refresh";
 
 export function createWorkspaceShellRecordActions({
   canWriteWorkspace,
@@ -33,9 +37,11 @@ export function createWorkspaceShellRecordActions({
         is_avoid: input.is_avoid,
         extra_data: input.extra_data,
       });
-      await refreshRecords(activeToken, recordFilter);
-      await refreshKnowledge(activeToken);
-      await refreshAuditLogs(activeToken);
+      await refreshWorkspaceShellRecordMutation(
+        { refreshRecords, refreshKnowledge, refreshAuditLogs },
+        activeToken,
+        recordFilter,
+      );
       setSelectedRecordId(input.recordId);
       return;
     }
@@ -50,9 +56,11 @@ export function createWorkspaceShellRecordActions({
       source_type: "manual",
       extra_data: input.extra_data,
     });
-    await refreshRecords(activeToken, recordFilter);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
+    await refreshWorkspaceShellRecordMutation(
+      { refreshRecords, refreshKnowledge, refreshAuditLogs },
+      activeToken,
+      recordFilter,
+    );
     setSelectedRecordId(result.record.id);
   }
 
@@ -61,12 +69,18 @@ export function createWorkspaceShellRecordActions({
     await deleteRecord(activeToken, workspaceId, recordId);
     const nextRecords = records.filter((record) => record.id !== recordId);
     setSelectedRecordId(nextRecords[0]?.id ?? null);
-    await refreshRecords(activeToken, recordFilter);
-    await refreshMediaStorageSummary(activeToken);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
+    await refreshWorkspaceShellRecordDeletion(
+      {
+        refreshRecords,
+        refreshMediaStorageSummary,
+        refreshMediaProcessingOverview,
+        refreshMediaDeadLetterOverview,
+        refreshKnowledge,
+        refreshAuditLogs,
+      },
+      activeToken,
+      recordFilter,
+    );
   }
 
   return {
