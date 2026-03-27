@@ -2583,6 +2583,10 @@ Last updated: 2026-03-27
   - single location-status card rendering now lives in `apps/web/components/location-review-status-card.tsx` instead of remaining inline inside `location-review-status-summary.tsx`
   - `location-review-status-summary.tsx` now stays focused on summary-level composition while single status-card rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this status-card boundary so future location-status changes do not regrow a mixed summary-and-card rendering module
+- Dead Letter Recovery Item Error Extraction V1:
+  - dead-letter item error rendering now lives in `apps/web/components/dead-letter-recovery-item-card-error.tsx` instead of remaining inline inside `dead-letter-recovery-item-card.tsx`
+  - `dead-letter-recovery-item-card.tsx` now stays focused on composing header, status, actions, and error leaves while single error rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this item-error boundary so future dead-letter item changes do not regrow a mixed card-and-error rendering module
 
 ## Next
 - Continue the next product slice

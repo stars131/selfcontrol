@@ -2,6 +2,7 @@
 
 import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";
 import { DeadLetterRecoveryItemCardActions } from "./dead-letter-recovery-item-card-actions";
+import { DeadLetterRecoveryItemCardError } from "./dead-letter-recovery-item-card-error";
 import { DeadLetterRecoveryItemCardHeader } from "./dead-letter-recovery-item-card-header";
 import { DeadLetterRecoveryItemCardStatus } from "./dead-letter-recovery-item-card-status";
 import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types";
@@ -46,11 +47,7 @@ export function DeadLetterRecoveryItemCard({
         retryingMediaId={retryingMediaId}
         settingsHref={settingsHref}
       />
-      {item.processing_error ? (
-        <div className="notice error" style={{ marginTop: 10 }}>
-          {item.processing_error}
-        </div>
-      ) : null}
+      <DeadLetterRecoveryItemCardError item={item} />
     </article>
   );
 }
