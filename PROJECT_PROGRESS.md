@@ -2763,6 +2763,10 @@ Last updated: 2026-03-28
   - dead-letter item last-failure metadata rendering now lives in `apps/web/components/dead-letter-recovery-item-card-last-failure.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now stays focused on timestamp metadata composition while last-failure rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this last-failure boundary so future dead-letter metadata changes do not regrow a mixed timestamp-and-last-failure rendering module
+- Dead-Letter Last Attempt Extraction V1:
+  - dead-letter item last-attempt metadata rendering now lives in `apps/web/components/dead-letter-recovery-item-card-last-attempt.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now stays focused on timestamp metadata composition while last-attempt rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this last-attempt boundary so future dead-letter metadata changes do not regrow a mixed timestamp-and-last-attempt rendering module
 
 ## Next
 - Continue the next product slice
