@@ -1,12 +1,13 @@
 # SelfControl
 
-SelfControl 是一个面向个人长期使用的多模态记忆与检索系统，支持聊天式录入、结构化记录、媒体附件、地图、RAG 知识检索和可扩展的 AI Provider 配置。
+SelfControl 是一个面向长期个人使用、同时保留多人协作扩展能力的多模态备忘与检索系统。项目支持聊天式录入、结构化记录、媒体附件、地图位置、提醒、RAG 知识检索，以及可拆分的 AI Provider 配置。
 
 当前仓库包含：
+
 - `apps/api`: FastAPI 后端
 - `apps/web`: Next.js 前端
-- `infra`: 部署相关配置
-- `docs`: 项目和开发文档
+- `infra`: 部署与运维相关配置
+- `docs`: 项目与部署文档
 
 ## 快速开始
 
@@ -22,7 +23,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-3. 执行数据库迁移
+3. 初始化数据库迁移
 
 ```bash
 cd apps/api
@@ -36,12 +37,41 @@ alembic upgrade head
 - API Docs: `http://localhost:8000/docs`
 - Health: `http://localhost:8000/health`
 
+## 推荐开发方式
+
+- 本地宿主机：Windows
+- 主要运行环境：Linux 虚拟机
+- 推荐通过 VS Code Remote SSH 或等价远程方式开发
+
+## 常用验证命令
+
+前端：
+
+```bash
+cd apps/web
+npm run verify:ui-guardrails
+```
+
+后端：
+
+```bash
+python -m pytest apps/api/tests -q
+```
+
 ## 运行说明
 
-- `MEDIA_PROCESSING_MODE=async`：媒体上传和重试通过 Celery worker 异步处理，适合 Linux 服务器部署。
-- `MEDIA_PROCESSING_MODE=sync`：API 进程同步处理媒体，适合本地调试和最小依赖场景。
-- `/health` 会返回当前媒体处理模式、存储目录状态和基础运行配置。
-- 生产环境应设置强 `SECRET_KEY`，并将 `AUTO_CREATE_TABLES=false`，通过 Alembic 迁移管理数据库结构。
+- `MEDIA_PROCESSING_MODE=async`
+  - 媒体上传和重试通过 Celery worker 异步处理
+  - 更适合 Linux 服务器和长期运行环境
+- `MEDIA_PROCESSING_MODE=sync`
+  - API 进程同步处理媒体
+  - 更适合本地调试和最小依赖场景
+- `/health`
+  - 返回当前媒体处理模式、存储目录状态和基础运行配置
+- 生产环境
+  - 必须设置强 `SECRET_KEY`
+  - 应关闭 `AUTO_CREATE_TABLES`
+  - 通过 Alembic 管理数据库迁移
 
 ## 文档
 

@@ -2269,6 +2269,9 @@ Last updated: 2026-03-26
 - CI Guardrail Workflow V1:
   - the repository now includes a GitHub Actions CI workflow that runs backend pytest coverage and frontend `verify:ui-guardrails` checks on pushes to `main` and on pull requests
   - the API now has a dedicated `requirements-dev.txt` entrypoint so local and CI test environments can install runtime and test dependencies through one maintainable contract
+- README And Dev Setup Repair V1:
+  - `README.md` and `docs/DEVELOPMENT_SETUP.md` now use clean Chinese documentation instead of garbled text, restoring the primary project and VM development entrypoints
+  - the repaired docs now include the current frontend and backend validation commands so local setup, CI expectations, and enterprise guardrails stay aligned
 
 ## Next
 - Continue the next product slice
