@@ -2787,6 +2787,10 @@ Last updated: 2026-03-28
   - media-asset metadata next-retry detail rendering now lives in `apps/web/components/media-asset-card-next-retry-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while next-retry rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this next-retry-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-next-retry rendering module
+- Media Asset Dimensions Detail Extraction V1:
+  - media-asset metadata dimensions detail rendering now lives in `apps/web/components/media-asset-card-dimensions-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while dimensions rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this dimensions-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-dimensions rendering module
 
 ## Next
 - Continue the next product slice

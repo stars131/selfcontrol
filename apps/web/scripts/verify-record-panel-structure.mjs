@@ -2172,6 +2172,14 @@ const mediaAssetCardLastAttemptDetailTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-last-attempt-detail.types.ts",
 );
+const mediaAssetCardDimensionsDetailPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-dimensions-detail.tsx",
+);
+const mediaAssetCardDimensionsDetailTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-dimensions-detail.types.ts",
+);
 const mediaAssetCardNextRetryDetailPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-next-retry-detail.tsx",
@@ -4138,6 +4146,14 @@ const mediaAssetCardLastAttemptDetailTypesSource = fs.readFileSync(
   mediaAssetCardLastAttemptDetailTypesPath,
   "utf8",
 );
+const mediaAssetCardDimensionsDetailSource = fs.readFileSync(
+  mediaAssetCardDimensionsDetailPath,
+  "utf8",
+);
+const mediaAssetCardDimensionsDetailTypesSource = fs.readFileSync(
+  mediaAssetCardDimensionsDetailTypesPath,
+  "utf8",
+);
 const mediaAssetCardNextRetryDetailSource = fs.readFileSync(
   mediaAssetCardNextRetryDetailPath,
   "utf8",
@@ -5975,6 +5991,10 @@ const mediaAssetCardLastAttemptDetailLines =
   mediaAssetCardLastAttemptDetailSource.split(/\r?\n/).length;
 const mediaAssetCardLastAttemptDetailTypesLines =
   mediaAssetCardLastAttemptDetailTypesSource.split(/\r?\n/).length;
+const mediaAssetCardDimensionsDetailLines =
+  mediaAssetCardDimensionsDetailSource.split(/\r?\n/).length;
+const mediaAssetCardDimensionsDetailTypesLines =
+  mediaAssetCardDimensionsDetailTypesSource.split(/\r?\n/).length;
 const mediaAssetCardNextRetryDetailLines =
   mediaAssetCardNextRetryDetailSource.split(/\r?\n/).length;
 const mediaAssetCardNextRetryDetailTypesLines =
@@ -22232,14 +22252,15 @@ if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
 }
 
 for (const requiredMediaAssetCardMetadataDetailsUsage of [
+  'import { MediaAssetCardDimensionsDetail } from "./media-asset-card-dimensions-detail";',
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
   'import { MediaAssetCardNextRetryDetail } from "./media-asset-card-next-retry-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
-  "{mediaIssueCopy.dimensions}",
   "{mediaIssueCopy.textChars}",
   "{mediaIssueCopy.textLines}",
+  "<MediaAssetCardDimensionsDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
 ]) {
@@ -22255,6 +22276,7 @@ if (mediaAssetCardMetadataDetailsSource.includes("type MediaAssetCardMetadataDet
 }
 
 for (const forbiddenMediaAssetCardMetadataDetailsToken of [
+  '{typeof asset.metadata_json.width === "number" && typeof asset.metadata_json.height === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.dimensions}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.width} x {asset.metadata_json.height}</div></div> : null}',
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
   '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
 ]) {
@@ -22335,6 +22357,55 @@ const maxMediaAssetCardLastAttemptDetailTypesLines = 2;
 if (mediaAssetCardLastAttemptDetailTypesLines > maxMediaAssetCardLastAttemptDetailTypesLines) {
   throw new Error(
     `media-asset-card-last-attempt-detail.types.ts exceeded ${maxMediaAssetCardLastAttemptDetailTypesLines} lines: ${mediaAssetCardLastAttemptDetailTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDimensionsDetailUsage of [
+  'import type { MediaAssetCardDimensionsDetailProps } from "./media-asset-card-dimensions-detail.types";',
+  "}: MediaAssetCardDimensionsDetailProps) {",
+  "{mediaIssueCopy.dimensions}",
+  "{asset.metadata_json.width} x {asset.metadata_json.height}",
+]) {
+  if (!mediaAssetCardDimensionsDetailSource.includes(requiredMediaAssetCardDimensionsDetailUsage)) {
+    throw new Error(
+      `media-asset-card-dimensions-detail.tsx must own dimensions detail rendering: ${requiredMediaAssetCardDimensionsDetailUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardDimensionsDetailToken of [
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.textLines}",
+  "{mediaIssueCopy.nextRetry}",
+]) {
+  if (mediaAssetCardDimensionsDetailSource.includes(forbiddenMediaAssetCardDimensionsDetailToken)) {
+    throw new Error(
+      `media-asset-card-dimensions-detail.tsx must keep other detail concerns delegated: ${forbiddenMediaAssetCardDimensionsDetailToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDimensionsDetailLines = 6;
+if (mediaAssetCardDimensionsDetailLines > maxMediaAssetCardDimensionsDetailLines) {
+  throw new Error(
+    `media-asset-card-dimensions-detail.tsx exceeded ${maxMediaAssetCardDimensionsDetailLines} lines: ${mediaAssetCardDimensionsDetailLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDimensionsDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardDimensionsDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "asset" | "mediaIssueCopy">;',
+]) {
+  if (!mediaAssetCardDimensionsDetailTypesSource.includes(requiredMediaAssetCardDimensionsDetailTypesUsage)) {
+    throw new Error(
+      `media-asset-card-dimensions-detail.types.ts must own dimensions detail prop typing: ${requiredMediaAssetCardDimensionsDetailTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDimensionsDetailTypesLines = 2;
+if (mediaAssetCardDimensionsDetailTypesLines > maxMediaAssetCardDimensionsDetailTypesLines) {
+  throw new Error(
+    `media-asset-card-dimensions-detail.types.ts exceeded ${maxMediaAssetCardDimensionsDetailTypesLines} lines: ${mediaAssetCardDimensionsDetailTypesLines}`,
   );
 }
 
