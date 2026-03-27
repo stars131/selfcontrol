@@ -308,6 +308,10 @@ Last updated: 2026-03-28
   - recent-media metadata blocks now delegate attempt, failure, and next-retry lines to a dedicated metadata-details leaf
   - the metadata component now keeps only detail-plus-action-notice composition responsibilities, reducing future review scope for timestamp display changes
   - structure verification now enforces this boundary so timestamp detail rendering stays out of the higher-level metadata component
+- Recent-Media Retry Count Tag Extraction V1:
+  - recent-media tag rows now delegate retry-count and max-attempts rendering to a dedicated retry-count tag leaf
+  - the tags component now keeps only tag ordering and shared tag composition responsibilities, reducing future review scope for retry-visual changes
+  - structure verification now enforces this boundary so retry-count tag formatting stays out of the broader tags component
 - Dead-Letter Card Child Prop Builder Extraction V1:
   - dead-letter item cards now delegate header, status, and action child-prop assembly to a dedicated builder module
   - single-card rendering is reduced to layout composition, so future settings-link and child-contract changes can be updated in one place instead of inside the card component

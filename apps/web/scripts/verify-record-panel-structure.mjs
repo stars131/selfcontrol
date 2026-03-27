@@ -2628,6 +2628,14 @@ const recentMediaIssueCardTagsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-tags.types.ts",
 );
+const recentMediaIssueCardRetryCountTagPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-count-tag.tsx",
+);
+const recentMediaIssueCardRetryCountTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-count-tag.types.ts",
+);
 const mediaPreviewContentPath = path.resolve(process.cwd(), "components/media-preview-content.tsx");
 const mediaPreviewContentTypesPath = path.resolve(
   process.cwd(),
@@ -4300,6 +4308,14 @@ const recentMediaIssueCardTagsTypesSource = fs.readFileSync(
   recentMediaIssueCardTagsTypesPath,
   "utf8",
 );
+const recentMediaIssueCardRetryCountTagSource = fs.readFileSync(
+  recentMediaIssueCardRetryCountTagPath,
+  "utf8",
+);
+const recentMediaIssueCardRetryCountTagTypesSource = fs.readFileSync(
+  recentMediaIssueCardRetryCountTagTypesPath,
+  "utf8",
+);
 const mediaPreviewContentSource = fs.readFileSync(mediaPreviewContentPath, "utf8");
 const mediaPreviewContentTypesSource = fs.readFileSync(mediaPreviewContentTypesPath, "utf8");
 const providerFeatureCardStatusSource = fs.readFileSync(providerFeatureCardStatusPath, "utf8");
@@ -5783,6 +5799,10 @@ const recentMediaIssueCardActionButtonsTypesLines =
   recentMediaIssueCardActionButtonsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionsTypesLines =
   recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryCountTagLines =
+  recentMediaIssueCardRetryCountTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryCountTagTypesLines =
+  recentMediaIssueCardRetryCountTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLines =
   recentMediaIssueCardTagsTypesSource.split(/\r?\n/).length;
 const mediaPreviewContentTypesLines = mediaPreviewContentTypesSource.split(/\r?\n/).length;
@@ -25069,9 +25089,11 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 
 for (const requiredRecentMediaIssueCardTagsUsage of [
   'from "../lib/storage-provider-display";',
+  'import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
   "}: RecentMediaIssueCardTagsProps) {",
   "getStorageProviderLabel(locale, issue.storage_provider)",
+  "<RecentMediaIssueCardRetryCountTag issue={issue} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
     throw new Error(
@@ -25082,6 +25104,17 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
 
 if (recentMediaIssueCardTagsSource.includes("}: Pick<RecentMediaIssueCardProps")) {
   throw new Error("recent-media-issue-card-tags.tsx must keep recent-media tags prop typing delegated");
+}
+
+for (const forbiddenRecentMediaIssueCardTagsToken of [
+  "{mediaIssueCopy.retries} {issue.processing_retry_count}",
+  "`/${issue.processing_retry_max_attempts}`",
+]) {
+  if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
+    throw new Error(
+      `recent-media-issue-card-tags.tsx must keep retry-count tag rendering delegated: ${forbiddenRecentMediaIssueCardTagsToken}`,
+    );
+  }
 }
 
 for (const requiredRecentMediaIssueCardTagsTypesUsage of [
@@ -25098,6 +25131,61 @@ const maxRecentMediaIssueCardTagsTypesLines = 2;
 if (recentMediaIssueCardTagsTypesLines > maxRecentMediaIssueCardTagsTypesLines) {
   throw new Error(
     `recent-media-issue-card-tags.types.ts exceeded ${maxRecentMediaIssueCardTagsTypesLines} lines: ${recentMediaIssueCardTagsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryCountTagUsage of [
+  'import type { RecentMediaIssueCardRetryCountTagProps } from "./recent-media-issue-card-retry-count-tag.types";',
+  "}: RecentMediaIssueCardRetryCountTagProps) {",
+  "{mediaIssueCopy.retries} {issue.processing_retry_count}",
+  "`/${issue.processing_retry_max_attempts}`",
+]) {
+  if (!recentMediaIssueCardRetryCountTagSource.includes(requiredRecentMediaIssueCardRetryCountTagUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-count-tag.tsx must own retry-count tag rendering: ${requiredRecentMediaIssueCardRetryCountTagUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardRetryCountTagSource.includes("type RecentMediaIssueCardRetryCountTagProps =")) {
+  throw new Error(
+    "recent-media-issue-card-retry-count-tag.tsx must keep retry-count tag prop typing delegated",
+  );
+}
+
+for (const forbiddenRecentMediaIssueCardRetryCountTagToken of [
+  "getStorageProviderLabel(locale, issue.storage_provider)",
+  "getRemoteFetchStatusLabel(locale, issue.remote_fetch_status)",
+  "getRetryStateLabel(locale, issue.processing_retry_state)",
+]) {
+  if (recentMediaIssueCardRetryCountTagSource.includes(forbiddenRecentMediaIssueCardRetryCountTagToken)) {
+    throw new Error(
+      `recent-media-issue-card-retry-count-tag.tsx must keep other tag concerns delegated: ${forbiddenRecentMediaIssueCardRetryCountTagToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryCountTagLines = 6;
+if (recentMediaIssueCardRetryCountTagLines > maxRecentMediaIssueCardRetryCountTagLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-count-tag.tsx exceeded ${maxRecentMediaIssueCardRetryCountTagLines} lines: ${recentMediaIssueCardRetryCountTagLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryCountTagTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type RecentMediaIssueCardRetryCountTagProps = Pick<RecentMediaIssueCardTagsProps, "issue" | "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssueCardRetryCountTagTypesSource.includes(requiredRecentMediaIssueCardRetryCountTagTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-count-tag.types.ts must own retry-count tag prop typing: ${requiredRecentMediaIssueCardRetryCountTagTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryCountTagTypesLines = 2;
+if (recentMediaIssueCardRetryCountTagTypesLines > maxRecentMediaIssueCardRetryCountTagTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-count-tag.types.ts exceeded ${maxRecentMediaIssueCardRetryCountTagTypesLines} lines: ${recentMediaIssueCardRetryCountTagTypesLines}`,
   );
 }
 

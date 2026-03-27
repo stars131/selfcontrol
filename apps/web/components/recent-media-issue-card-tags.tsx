@@ -2,6 +2,7 @@
 
 import { getMediaIssueLabel, getProcessingStatusLabel, getRemoteFetchStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
 import { getStorageProviderLabel } from "../lib/storage-provider-display";
+import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";
 import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";
 
 export function RecentMediaIssueCardTags({
@@ -28,12 +29,7 @@ export function RecentMediaIssueCardTags({
         </span>
       ) : null}
       {issueLabel ? <span className="tag">{issueLabel}</span> : null}
-      {typeof issue.processing_retry_count === "number" ? (
-        <span className="tag">
-          {mediaIssueCopy.retries} {issue.processing_retry_count}
-          {typeof issue.processing_retry_max_attempts === "number" ? `/${issue.processing_retry_max_attempts}` : ""}
-        </span>
-      ) : null}
+      <RecentMediaIssueCardRetryCountTag issue={issue} mediaIssueCopy={mediaIssueCopy} />
     </div>
   );
 }
