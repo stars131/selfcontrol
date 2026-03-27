@@ -19744,8 +19744,12 @@ if (chatPanelActionsResultTypesLines > maxChatPanelActionsResultTypesLines) {
 }
 
 for (const requiredChatMessageThreadUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/chat-message-thread-display";',
   'import type { ChatMessageThreadProps } from "./chat-message-thread.types";',
   "}: ChatMessageThreadProps) {",
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatMessageThreadCopy(locale);",
 ]) {
   if (!chatMessageThreadSource.includes(requiredChatMessageThreadUsage)) {
     throw new Error(

@@ -2159,6 +2159,10 @@ Last updated: 2026-03-26
   - `workspace-role-display.ts` now owns localized workspace role labels for `owner`, `editor`, and `viewer`, with safe fallback for future role values
   - `workspace-members-section-item-controls.tsx` now uses localized role labels in both the role selector and read-only member summary instead of exposing raw permission codes in the settings UI
   - `verify-record-panel-structure.mjs` now enforces the role-label helper usage and the updated controls prop contract so future member-management changes stay maintainable under the enterprise standard
+- Chat Message Thread Localization V1:
+  - `chat-message-thread-display.ts` now owns localized labels for the assistant/user message eyebrow and the empty-thread guidance copy, while keeping English fallback text stable
+  - `chat-message-thread.tsx` now follows the active locale for message role labels and the initial empty-state prompt instead of hardcoding English UI text
+  - `verify-record-panel-structure.mjs` now enforces the locale-aware thread-copy helper usage so future chat thread updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

@@ -1,9 +1,13 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getChatMessageThreadCopy } from "../lib/chat-message-thread-display";
 import { ChatMessageSources } from "./chat-message-sources";
 import type { ChatMessageThreadProps } from "./chat-message-thread.types";
 
 export function ChatMessageThread({ messages }: ChatMessageThreadProps) {
+  const { locale } = useStoredLocale();
+  const copy = getChatMessageThreadCopy(locale);
   return (
     <div className="message-list">
       {messages.length ? (
@@ -12,7 +16,7 @@ export function ChatMessageThread({ messages }: ChatMessageThreadProps) {
             className={`message ${message.role === "assistant" ? "assistant" : ""}`}
             key={message.id}
           >
-            <div className="eyebrow">{message.role === "assistant" ? "assistant" : "you"}</div>
+            <div className="eyebrow">{message.role === "assistant" ? copy.assistant : copy.user}</div>
             <div style={{ marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{message.content}</div>
             {message.role === "assistant" && Array.isArray(message.metadata_json.sources) ? (
               <ChatMessageSources messageId={message.id} sources={message.metadata_json.sources} />
@@ -21,9 +25,9 @@ export function ChatMessageThread({ messages }: ChatMessageThreadProps) {
         ))
       ) : (
         <article className="message assistant">
-          <div className="eyebrow">assistant</div>
+          <div className="eyebrow">{copy.assistant}</div>
           <div style={{ marginTop: 8, lineHeight: 1.6 }}>
-            Start with a search query, or use save / add / note to turn your message into a new record.
+            {copy.empty}
           </div>
         </article>
       )}
