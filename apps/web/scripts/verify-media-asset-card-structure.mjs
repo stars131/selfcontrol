@@ -32,6 +32,10 @@ if (!cardSource.includes('import { MediaAssetCardActions } from "./media-asset-c
   throw new Error("media-asset-card.tsx must import MediaAssetCardActions");
 }
 
+if (!cardSource.includes('import { MediaAssetCardPreview } from "./media-asset-card-preview";')) {
+  throw new Error("media-asset-card.tsx must import MediaAssetCardPreview");
+}
+
 if (!cardSource.includes('import type { MediaAssetCardProps } from "./media-asset-card.types";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardProps");
 }
@@ -44,8 +48,8 @@ if (!cardSource.includes("<MediaAssetCardActions")) {
   throw new Error("media-asset-card.tsx must delegate action rendering");
 }
 
-if (!cardSource.includes('import { MediaPreview } from "./media-preview";')) {
-  throw new Error("media-asset-card.tsx must keep MediaPreview composition");
+if (!cardSource.includes("<MediaAssetCardPreview")) {
+  throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
 if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_source")')) {
@@ -132,14 +136,18 @@ if (previewTypesLineCount > 20) {
 
 for (const requiredPreviewHookUsage of [
   'from "../lib/api";',
+  'from "../lib/locale";',
+  'from "../lib/record-panel-ui";',
   'from "./media-preview.types";',
   "function isPreviewable(",
   "function readNumber(",
   "useEffect(",
   "useMemo(",
   "useState(",
+  "getRecordPanelUiBundle(getStoredLocale()).panelCopy",
   "fetchMediaBlob(token, workspaceId, asset.id)",
   "URL.createObjectURL(blob)",
+  "previewCopy.previewLoadFailed",
 ]) {
   if (!previewHookSource.includes(requiredPreviewHookUsage)) {
     throw new Error(`use-media-preview.ts must own preview loading state and fetch logic: ${requiredPreviewHookUsage}`);
@@ -151,11 +159,15 @@ if (previewHookLineCount > 90) {
 }
 
 for (const requiredPreviewContentUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import type { MediaPreviewContentProps } from "./media-preview-content.types";',
   "}: MediaPreviewContentProps) {",
+  "getRecordPanelUiBundle(locale)",
   "if (!previewable) {",
-  "Loading preview...",
-  "Preview not ready.",
+  "panelCopy.previewUnavailable",
+  "panelCopy.previewLoading",
+  "panelCopy.previewNotReady",
   'className="media-preview-shell"',
   'className="media-preview-image"',
   'className="media-preview-player"',

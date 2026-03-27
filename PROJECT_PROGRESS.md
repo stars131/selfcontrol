@@ -2197,6 +2197,9 @@ Last updated: 2026-03-26
 - Workspace Entry Error Localization V1:
   - workspace entry load, share, create, import, and transfer-download flows now reuse localized workspace-entry copy for user-visible fallback errors instead of surfacing English-only failures
   - `verify-record-panel-structure.mjs` now enforces the shared entry-copy usage inside those action boundaries so future entry-shell maintenance keeps a consistent enterprise localization baseline
+- Media Preview Localization V1:
+  - media preview loading, unavailable, not-ready, and fallback error text now reuse the shared record-panel UI copy instead of showing English-only preview states
+  - media preview structure verification now enforces the locale-aware preview copy usage so future media-surface changes keep the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice

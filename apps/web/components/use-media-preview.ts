@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
+import { getStoredLocale } from "../lib/locale";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import type { MediaPreviewControllerResult, MediaPreviewProps } from "./media-preview.types";
 
 function isPreviewable(mediaType: MediaPreviewProps["asset"]["media_type"]) {
@@ -21,6 +23,7 @@ export function useMediaPreview({
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const previewCopy = getRecordPanelUiBundle(getStoredLocale()).panelCopy;
   const width = readNumber(asset.metadata_json.width);
   const height = readNumber(asset.metadata_json.height);
   const previewable = isPreviewable(asset.media_type);
@@ -55,7 +58,7 @@ export function useMediaPreview({
         if (isDisposed) {
           return;
         }
-        setError(caught instanceof Error ? caught.message : "Failed to load preview");
+        setError(caught instanceof Error ? caught.message : previewCopy.previewLoadFailed);
       } finally {
         if (!isDisposed) {
           setLoading(false);
@@ -71,7 +74,7 @@ export function useMediaPreview({
         URL.revokeObjectURL(currentUrl);
       }
     };
-  }, [asset.id, previewable, token, workspaceId]);
+  }, [asset.id, previewCopy.previewLoadFailed, previewable, token, workspaceId]);
 
   return {
     blobUrl,

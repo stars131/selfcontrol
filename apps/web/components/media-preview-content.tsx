@@ -1,5 +1,7 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import type { MediaPreviewContentProps } from "./media-preview-content.types";
 
 export function MediaPreviewContent({
@@ -10,12 +12,13 @@ export function MediaPreviewContent({
   previewLabel,
   previewable,
 }: MediaPreviewContentProps) {
+  const { locale } = useStoredLocale(), { panelCopy } = getRecordPanelUiBundle(locale);
   if (!previewable) {
-    return <div className="media-preview-placeholder">Preview is not available for this file type.</div>;
+    return <div className="media-preview-placeholder">{panelCopy.previewUnavailable}</div>;
   }
 
   if (loading && !blobUrl) {
-    return <div className="media-preview-placeholder">Loading preview...</div>;
+    return <div className="media-preview-placeholder">{panelCopy.previewLoading}</div>;
   }
 
   if (error) {
@@ -23,7 +26,7 @@ export function MediaPreviewContent({
   }
 
   if (!blobUrl) {
-    return <div className="media-preview-placeholder">Preview not ready.</div>;
+    return <div className="media-preview-placeholder">{panelCopy.previewNotReady}</div>;
   }
 
   return (
@@ -37,11 +40,7 @@ export function MediaPreviewContent({
       {asset.media_type === "video" ? (
         <video className="media-preview-video" controls preload="metadata" src={blobUrl} />
       ) : null}
-      {previewLabel ? (
-        <div className="muted" style={{ marginTop: 8 }}>
-          {previewLabel}
-        </div>
-      ) : null}
+      {previewLabel ? <div className="muted" style={{ marginTop: 8 }}>{previewLabel}</div> : null}
     </div>
   );
 }
