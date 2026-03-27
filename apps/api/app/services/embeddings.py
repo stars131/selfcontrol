@@ -9,11 +9,14 @@ import httpx
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.services.provider_transport import (
+    infer_provider_transport_mode,
+    resolve_provider_api_base_url,
+    resolve_provider_secret,
+)
 from app.services.provider_configs import (
     ProviderFeatureConfig,
     get_effective_provider_config,
-    read_secret_from_env_name,
-    resolve_secret_env_name,
 )
 
 
@@ -62,41 +65,15 @@ def local_hash_embedding(value: str, dimensions: int) -> list[float]:
 
 
 def get_secret_for_provider(config: ProviderFeatureConfig) -> str | None:
-    env_name = resolve_secret_env_name(config)
-    if not env_name:
-        return None
-
-    secret = read_secret_from_env_name(env_name)
-    if not secret:
-        raise EmbeddingProviderError(f"Required secret environment variable is missing: {env_name}")
-    return secret
+    return resolve_provider_secret(config, error_type=EmbeddingProviderError)
 
 
 def get_effective_api_base_url(config: ProviderFeatureConfig) -> str:
-    if config.api_base_url:
-        return config.api_base_url.rstrip("/")
-    if config.provider_code == "openai":
-        return "https://api.openai.com/v1"
-    if config.provider_code == "openrouter":
-        return "https://openrouter.ai/api/v1"
-    raise EmbeddingProviderError("API base URL is required for this provider")
+    return resolve_provider_api_base_url(config, error_type=EmbeddingProviderError)
 
 
 def infer_transport_mode(config: ProviderFeatureConfig) -> str:
-    explicit = str(config.options_json.get("transport_mode", "")).strip().lower()
-    if explicit in {"openai_compatible", "webhook_json"}:
-        return explicit
-
-    if config.provider_code in {"openai", "openrouter"}:
-        return "openai_compatible"
-    if config.provider_code == "custom":
-        base_url = (config.api_base_url or "").lower()
-        if base_url.endswith("/v1") or "/v1/" in base_url:
-            return "openai_compatible"
-        return "webhook_json"
-    if config.provider_code == "local":
-        return "local"
-    return "unsupported"
+    return infer_provider_transport_mode(config, local_provider_mode="local")
 
 
 def request_openai_compatible_embedding(config: ProviderFeatureConfig, value: str) -> EmbeddingResult:

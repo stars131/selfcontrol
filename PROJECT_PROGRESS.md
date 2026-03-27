@@ -2383,11 +2383,15 @@ Last updated: 2026-03-27
   - record-level chunk model assembly, record reindex orchestration, workspace reindex aggregation, and reindex-result summarization now live in `apps/api/app/services/knowledge_reindexing.py`
   - `knowledge.py` now focuses more narrowly on knowledge stats while reindexing and retrieval logic both live behind dedicated service boundaries
   - dedicated backend unit tests now cover knowledge chunk model assembly and workspace reindex result aggregation for the extracted reindexing boundary
+- Shared Provider Transport Boundary Extraction V1:
+  - provider API base URL resolution, provider secret lookup, and transport-mode inference now live in `apps/api/app/services/provider_transport.py`
+  - `media_provider.py` and `embeddings.py` now reuse the same provider-transport core instead of carrying parallel implementations of the same routing and secret-resolution rules
+  - dedicated backend unit tests now cover default API URL resolution, missing-secret failure behavior, and custom/local transport-mode inference for the extracted shared transport boundary
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining large backend service files outside `media_processing.py`, with `knowledge.py` and `media_provider.py` as the next highest-value maintainability targets
-- Continue simplifying the remaining large backend service files with `media_provider.py` now the highest-value maintainability target and `knowledge.py` stats/reporting as a smaller follow-up target
+- Continue simplifying the remaining large backend service files with `media_provider.py` now the highest-value maintainability target, especially the openai-compatible and custom-webhook extraction branches
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
