@@ -300,6 +300,10 @@ Last updated: 2026-03-28
   - recent-media panel rendering now delegates panel-to-list prop projection to a dedicated builder module
   - panel-level rendering is reduced to intro plus empty-versus-list branching, so future list contract changes can be updated in one place instead of across long JSX prop chains
   - structure verification now enforces this projection boundary to keep panel rendering separate from list prop assembly
+- Recent-Media Card Child Prop Builder Extraction V1:
+  - recent-media issue cards now delegate metadata and action child-prop assembly to a dedicated builder module
+  - single-card rendering is reduced to layout composition, so future derived-action and settings-link changes can be updated in one place instead of inside the card component
+  - structure verification now enforces this projection boundary to keep child prop assembly separate from card rendering
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
