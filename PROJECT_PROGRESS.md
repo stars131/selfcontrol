@@ -2527,6 +2527,10 @@ Last updated: 2026-03-27
   - shared record-summary card prop projection now lives in `apps/web/components/record-results-shared-card-props.ts` instead of remaining inline inside `record-results-view.tsx`
   - `record-results-view.tsx` now stays focused on list-versus-timeline mode switching while shared card prop shaping remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this shared-card prop builder boundary so future result-surface changes do not regrow a mixed projection-and-rendering view module
+- Record Reminder Panel Child Prop Builder Extraction V1:
+  - reminder form and reminder list prop projection now live in `apps/web/components/record-reminder-panel-child-props.ts` instead of remaining inline inside `record-reminder-panel.tsx`
+  - `record-reminder-panel.tsx` now stays focused on section layout and copy while child prop shaping remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this reminder child-props boundary so future reminder-surface changes do not regrow a mixed projection-and-rendering panel module
 
 ## Next
 - Continue the next product slice

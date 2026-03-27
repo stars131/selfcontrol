@@ -2492,6 +2492,15 @@ const recordReminderFormActionsTypesPath = path.resolve(
   process.cwd(),
   "components/record-reminder-form-actions.types.ts",
 );
+const recordReminderPanelPath = path.resolve(process.cwd(), "components/record-reminder-panel.tsx");
+const recordReminderPanelChildPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-panel-child-props.ts",
+);
+const recordReminderPanelChildPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-panel-child-props.types.ts",
+);
 const recordReminderListPath = path.resolve(process.cwd(), "components/record-reminder-list.tsx");
 const recordReminderListTypesPath = path.resolve(
   process.cwd(),
@@ -3837,6 +3846,15 @@ const recordReminderFormActionsTypesSource = fs.readFileSync(
   recordReminderFormActionsTypesPath,
   "utf8",
 );
+const recordReminderPanelSource = fs.readFileSync(recordReminderPanelPath, "utf8");
+const recordReminderPanelChildPropsSource = fs.readFileSync(
+  recordReminderPanelChildPropsPath,
+  "utf8",
+);
+const recordReminderPanelChildPropsTypesSource = fs.readFileSync(
+  recordReminderPanelChildPropsTypesPath,
+  "utf8",
+);
 const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
 const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
 const providerSettingsControllerActionsSource = fs.readFileSync(
@@ -5075,6 +5093,11 @@ const recordReminderFormFieldsTypesLines =
 const recordReminderFormActionsLines = recordReminderFormActionsSource.split(/\r?\n/).length;
 const recordReminderFormActionsTypesLines =
   recordReminderFormActionsTypesSource.split(/\r?\n/).length;
+const recordReminderPanelLines = recordReminderPanelSource.split(/\r?\n/).length;
+const recordReminderPanelChildPropsLines =
+  recordReminderPanelChildPropsSource.split(/\r?\n/).length;
+const recordReminderPanelChildPropsTypesLines =
+  recordReminderPanelChildPropsTypesSource.split(/\r?\n/).length;
 const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardLines = deadLetterRecoveryItemCardSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsTypesLines =
@@ -23019,6 +23042,103 @@ const maxMediaStorageHealthMetadataTypesLines = 2;
 if (mediaStorageHealthMetadataTypesLines > maxMediaStorageHealthMetadataTypesLines) {
   throw new Error(
     `media-storage-health-metadata.types.ts exceeded ${maxMediaStorageHealthMetadataTypesLines} lines: ${mediaStorageHealthMetadataTypesLines}`,
+  );
+}
+
+for (const requiredRecordReminderPanelUsage of [
+  'import {',
+  'buildRecordReminderFormProps,',
+  'buildRecordReminderListProps,',
+  '} from "./record-reminder-panel-child-props";',
+  'import { RecordReminderForm } from "./record-reminder-form";',
+  'import { RecordReminderList } from "./record-reminder-list";',
+  'import type { RecordReminderPanelProps } from "./record-reminder-panel.types";',
+  "export function RecordReminderPanel(props: RecordReminderPanelProps) {",
+  "const formProps = buildRecordReminderFormProps(props);",
+  "const listProps = buildRecordReminderListProps(props);",
+  "<RecordReminderForm {...formProps} />",
+  "<RecordReminderList {...listProps} />",
+]) {
+  if (!recordReminderPanelSource.includes(requiredRecordReminderPanelUsage)) {
+    throw new Error(
+      `record-reminder-panel.tsx must reuse the extracted reminder child-props builders: ${requiredRecordReminderPanelUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderPanelToken of [
+  "channelInApp={",
+  "formatReminderEnabledLabel={",
+  "selectedRecordTitle={",
+  "onDeleteReminder={",
+]) {
+  if (recordReminderPanelSource.includes(forbiddenRecordReminderPanelToken)) {
+    throw new Error(
+      `record-reminder-panel.tsx must keep child prop projection delegated: ${forbiddenRecordReminderPanelToken}`,
+    );
+  }
+}
+
+const maxRecordReminderPanelLines = 30;
+if (recordReminderPanelLines > maxRecordReminderPanelLines) {
+  throw new Error(
+    `record-reminder-panel.tsx exceeded ${maxRecordReminderPanelLines} lines: ${recordReminderPanelLines}`,
+  );
+}
+
+for (const requiredRecordReminderPanelChildPropsUsage of [
+  'import type { RecordReminderFormProps } from "./record-reminder-form.types";',
+  'import type { RecordReminderListProps } from "./record-reminder-list.types";',
+  'import type { BuildRecordReminderPanelChildPropsInput } from "./record-reminder-panel-child-props.types";',
+  "export function buildRecordReminderFormProps({",
+  "}: BuildRecordReminderPanelChildPropsInput): RecordReminderFormProps {",
+  "export function buildRecordReminderListProps({",
+  "}: BuildRecordReminderPanelChildPropsInput): RecordReminderListProps {",
+  "onCreateReminder,",
+  "formatReminderEnabledLabel,",
+  "selectedRecordTitle,",
+]) {
+  if (!recordReminderPanelChildPropsSource.includes(requiredRecordReminderPanelChildPropsUsage)) {
+    throw new Error(
+      `record-reminder-panel-child-props.ts must own reminder child prop projection: ${requiredRecordReminderPanelChildPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderPanelChildPropsToken of [
+  "<RecordReminderForm",
+  "<RecordReminderList",
+  "reminderSectionTitle",
+  "reminderSectionDescription",
+]) {
+  if (recordReminderPanelChildPropsSource.includes(forbiddenRecordReminderPanelChildPropsToken)) {
+    throw new Error(
+      `record-reminder-panel-child-props.ts must keep panel rendering and section copy delegated: ${forbiddenRecordReminderPanelChildPropsToken}`,
+    );
+  }
+}
+
+const maxRecordReminderPanelChildPropsLines = 80;
+if (recordReminderPanelChildPropsLines > maxRecordReminderPanelChildPropsLines) {
+  throw new Error(
+    `record-reminder-panel-child-props.ts exceeded ${maxRecordReminderPanelChildPropsLines} lines: ${recordReminderPanelChildPropsLines}`,
+  );
+}
+
+for (const requiredRecordReminderPanelChildPropsTypesUsage of [
+  'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; export type BuildRecordReminderPanelChildPropsInput = RecordReminderPanelProps;',
+]) {
+  if (!recordReminderPanelChildPropsTypesSource.includes(requiredRecordReminderPanelChildPropsTypesUsage)) {
+    throw new Error(
+      `record-reminder-panel-child-props.types.ts must own reminder child-props input typing: ${requiredRecordReminderPanelChildPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordReminderPanelChildPropsTypesLines = 2;
+if (recordReminderPanelChildPropsTypesLines > maxRecordReminderPanelChildPropsTypesLines) {
+  throw new Error(
+    `record-reminder-panel-child-props.types.ts exceeded ${maxRecordReminderPanelChildPropsTypesLines} lines: ${recordReminderPanelChildPropsTypesLines}`,
   );
 }
 
