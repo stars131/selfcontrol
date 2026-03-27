@@ -2305,6 +2305,9 @@ Last updated: 2026-03-26
 - Development Environment Doctor V1:
   - the repository now includes root-level `scripts/doctor-dev.ps1` and `scripts/doctor-dev.sh` that check Node, Python, Git hooks, Docker, `.env`, and dependency readiness before local development or Linux VM work begins
   - dedicated `docs/DEV_ENV_DOCTOR.md`, plus README and contribution/setup doc entrypoints, now turn environment drift into a visible operator workflow instead of an ad hoc troubleshooting exercise
+- Issue Intake And Deployment Checklist V1:
+  - the repository now includes structured GitHub issue templates for bugs, feature requests, and operations changes, plus an issue config that routes security-sensitive and operational questions toward the right documentation entrypoints
+  - a dedicated `docs/DEPLOYMENT_VALIDATION_CHECKLIST.md` now standardizes pre-deploy, post-deploy, and rollback checks so future Linux server releases follow a more explicit enterprise delivery contract
 
 ## Next
 - Continue the next product slice

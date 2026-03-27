@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security policy
+    url: https://github.com/stars131/selfcontrol/blob/main/SECURITY.md
+    about: Review the responsible disclosure process for vulnerabilities and other security-sensitive issues.
+  - name: Operations handbook
+    url: https://github.com/stars131/selfcontrol/blob/main/docs/OPERATIONS.md
+    about: Check existing deployment, backup, restore, and runtime recovery guidance before opening an operations issue.
