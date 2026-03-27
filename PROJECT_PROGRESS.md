@@ -2218,6 +2218,9 @@ Last updated: 2026-03-26
 - Chat Panel Display Localization V1:
   - chat header labels, conversation action buttons, and auto-created conversation titles now reuse a shared locale-aware display copy instead of hardcoded English strings in the chat surface and shell actions
   - chat-panel and workspace-shell structure verification now enforce those copy-driven labels and seeded conversation titles so future assistant-surface maintenance keeps the enterprise localization baseline intact
+- Provider Settings Save Error Localization V1:
+  - provider settings save fallback errors now reuse locale-aware settings copy instead of hardcoded English text inside the controller action helper
+  - record-panel structure verification now enforces that copy-driven save failure fallback so future settings-surface maintenance keeps the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice

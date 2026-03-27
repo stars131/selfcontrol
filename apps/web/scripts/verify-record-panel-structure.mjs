@@ -19415,7 +19415,11 @@ if (workspaceSettingsProviderActionsTypesLines > maxWorkspaceSettingsProviderAct
 
 for (const requiredProviderSettingsControllerActionsUsage of [
   'import type { CreateProviderSettingsControllerActionsInput } from "./provider-settings-controller-actions.types";',
+  'import { getStoredLocale } from "../lib/locale";',
+  'import { getProviderSettingsCopy } from "./provider-settings-copy";',
   "}: CreateProviderSettingsControllerActionsInput) {",
+  "const copy = getProviderSettingsCopy(getStoredLocale());",
+  "copy.saveFailed",
 ]) {
   if (!providerSettingsControllerActionsSource.includes(requiredProviderSettingsControllerActionsUsage)) {
     throw new Error(
@@ -19428,6 +19432,7 @@ for (const forbiddenProviderSettingsControllerActionsToken of [
   "UseProviderSettingsControllerProps",
   "UseProviderSettingsControllerState",
   "}: Pick<",
+  '"Save failed"',
 ]) {
   if (providerSettingsControllerActionsSource.includes(forbiddenProviderSettingsControllerActionsToken)) {
     throw new Error(

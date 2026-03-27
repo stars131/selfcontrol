@@ -1,11 +1,13 @@
 "use client";
 
+import { getStoredLocale } from "../lib/locale";
 import type { ProviderFeatureConfig } from "../lib/types";
 import {
   buildProviderDraft,
   buildProviderDraftPatch,
   isProviderDraftDirty as readProviderDraftDirty,
 } from "./provider-settings-draft-helpers";
+import { getProviderSettingsCopy } from "./provider-settings-copy";
 import type { CreateProviderSettingsControllerActionsInput } from "./provider-settings-controller-actions.types";
 import type {
   ProviderDraft,
@@ -22,6 +24,8 @@ export function createProviderSettingsControllerActions({
   setProviderDrafts,
   setProviderSavingCode,
 }: CreateProviderSettingsControllerActionsInput) {
+  const copy = getProviderSettingsCopy(getStoredLocale());
+
   function handleProviderDraftChange(featureCode: string, patch: Partial<ProviderDraft>) {
     setProviderDrafts((current) => buildProviderDraftPatch(current, featureCode, patch));
   }
@@ -44,7 +48,7 @@ export function createProviderSettingsControllerActions({
         options_json: item.options_json,
       });
     } catch (caught) {
-      setError(getProviderSettingsActionErrorMessage(caught, "Save failed"));
+      setError(getProviderSettingsActionErrorMessage(caught, copy.saveFailed));
     } finally {
       setProviderSavingCode("");
     }

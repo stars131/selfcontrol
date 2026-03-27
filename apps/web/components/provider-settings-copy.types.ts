@@ -33,6 +33,7 @@ export type ProviderSettingsCopy = {
   endpointRoot: string;
   saveProvider: string;
   saving: string;
+  saveFailed: string;
   reset: string;
   unsavedChanges: string;
   healthSection: string;
