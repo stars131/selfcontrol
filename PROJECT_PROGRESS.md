@@ -2395,6 +2395,10 @@ Last updated: 2026-03-27
   - ffmpeg-based video-to-audio extraction and OpenAI-compatible video transcription temp-file orchestration now live in `apps/api/app/services/media_provider_video.py`
   - `media_provider.py` now delegates video preprocessing and temp-audio cleanup to the dedicated video helper boundary while preserving compatibility exports for downstream services
   - dedicated backend unit tests now cover missing-ffmpeg failure behavior, successful temp-audio extraction, and guaranteed cleanup after OpenAI-compatible video transcription for the extracted video boundary
+- Media Provider Dispatch Boundary Extraction V1:
+  - media-feature resolution and feature-specific provider dispatch now live in `apps/api/app/services/media_provider_dispatch.py`
+  - `media_provider.py` now reduces to provider-config lookup, transport validation, and a thin call into the dedicated dispatch helper instead of branching across image/audio/video extraction paths directly
+  - dedicated backend unit tests now cover media-type feature mapping, image/audio/video dispatch routing, and unsupported-feature rejection for the extracted dispatch boundary
 
 ## Next
 - Continue the next product slice
@@ -2402,6 +2406,7 @@ Last updated: 2026-03-27
 - Continue simplifying the remaining large backend service files with `media_provider.py` now the highest-value maintainability target, especially the openai-compatible and custom-webhook extraction branches
 - Continue simplifying `media_provider.py` by extracting video-audio preprocessing and feature-route dispatch into thinner enterprise-grade service boundaries
 - Continue simplifying `media_provider.py` by extracting media feature-route dispatch into a dedicated provider pipeline boundary
+- Continue simplifying the remaining backend provider stack around `media_provider.py`, with compatibility-export cleanup and any residual duplicated provider mapping as the next maintainability follow-up
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

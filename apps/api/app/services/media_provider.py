@@ -5,6 +5,10 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.models.media import MediaAsset
+from app.services.media_provider_dispatch import (
+    dispatch_media_provider_extraction,
+    resolve_media_feature_code,
+)
 from app.services.media_provider_http import (
     call_custom_webhook,
     call_openai_compatible_audio_transcription,
@@ -32,16 +36,6 @@ AUDIO_PROMPT = "Transcribe the spoken content into clean plain text."
 VIDEO_PROMPT = "Transcribe the video's spoken content into clean plain text."
 
 
-def resolve_media_feature_code(media: MediaAsset) -> str | None:
-    if media.media_type == "image":
-        return "image_ocr"
-    if media.media_type == "audio":
-        return "audio_asr"
-    if media.media_type == "video":
-        return "video_transcription"
-    return None
-
-
 def infer_transport_mode(config: ProviderFeatureConfig) -> str:
     return infer_provider_transport_mode(config)
 
@@ -59,25 +53,16 @@ def extract_text_via_provider(db: Session, media: MediaAsset, file_path: Path) -
     if transport_mode == "unsupported":
         raise DeferredMediaProcessingError(f"Provider {config.provider_code} is not supported for {feature_code} yet")
 
-    if feature_code == "image_ocr":
-        if transport_mode == "openai_compatible":
-            return call_openai_compatible_image_ocr(config, file_path)
-        return call_custom_webhook(config, file_path, feature_code=feature_code, prompt=IMAGE_PROMPT)
-
-    if feature_code == "audio_asr":
-        if transport_mode == "openai_compatible":
-            return call_openai_compatible_audio_transcription(config, file_path, feature_code, AUDIO_PROMPT)
-        return call_custom_webhook(config, file_path, feature_code=feature_code, prompt=AUDIO_PROMPT)
-
-    if feature_code == "video_transcription":
-        if transport_mode == "openai_compatible":
-            return transcribe_openai_compatible_video(
-                config,
-                file_path,
-                feature_code=feature_code,
-                prompt=VIDEO_PROMPT,
-                call_openai_compatible_audio_transcription_fn=call_openai_compatible_audio_transcription,
-            )
-        return call_custom_webhook(config, file_path, feature_code=feature_code, prompt=VIDEO_PROMPT)
-
-    raise DeferredMediaProcessingError("Unsupported media provider pipeline")
+    return dispatch_media_provider_extraction(
+        config,
+        file_path,
+        feature_code=feature_code,
+        transport_mode=transport_mode,
+        image_prompt=IMAGE_PROMPT,
+        audio_prompt=AUDIO_PROMPT,
+        video_prompt=VIDEO_PROMPT,
+        call_openai_compatible_image_ocr_fn=call_openai_compatible_image_ocr,
+        call_openai_compatible_audio_transcription_fn=call_openai_compatible_audio_transcription,
+        call_custom_webhook_fn=call_custom_webhook,
+        transcribe_openai_compatible_video_fn=transcribe_openai_compatible_video,
+    )
