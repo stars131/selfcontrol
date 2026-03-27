@@ -2332,6 +2332,9 @@ Last updated: 2026-03-26
 - Web API Client Audit Boundary Extraction V1:
   - audit-log query transport now lives in `apps/web/lib/api-audit.ts` and is re-exported from `apps/web/lib/api.ts`, completing the breakup of the remaining non-auth client surface into dedicated modules
   - the front-end API hub is now primarily an auth entrypoint plus stable re-export layer, which makes future enterprise-grade client maintenance and review significantly easier
+- Media Issue Tracking Service Boundary Extraction V1:
+  - media issue classification, dead-letter listing, and processing overview builders now live in `apps/api/app/services/media_issue_tracking.py`, while write-oriented storage retention and archive flows remain in `apps/api/app/services/media_storage.py`
+  - the media API routes now import operator-facing issue tracking reads from the dedicated service module, reducing coupling between observability logic and storage mutation logic under the backend enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
