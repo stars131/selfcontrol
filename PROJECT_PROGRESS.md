@@ -2707,6 +2707,10 @@ Last updated: 2026-03-28
   - dead-letter item retry-state tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-retry-state-tag.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-tags.tsx`
   - `dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared tag composition while retry-state rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this retry-state-tag boundary so future dead-letter item tag changes do not regrow a mixed composition-and-retry-state rendering module
+- Recent Media Remote Fetch Tag Extraction V1:
+  - recent-media issue remote-fetch tag rendering now lives in `apps/web/components/recent-media-issue-card-remote-fetch-tag.tsx` instead of remaining inline inside `recent-media-issue-card-tags.tsx`
+  - `recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while remote-fetch rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this remote-fetch-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-remote-fetch rendering module
 
 ## Next
 - Continue the next product slice
