@@ -3,6 +3,8 @@
 import type { FormEvent } from "react";
 
 import { createWorkspace } from "../lib/api";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
 import type { CreateWorkspaceEntryCreateActionsInput } from "./workspace-entry-create-actions.types";
 
@@ -11,6 +13,7 @@ export function createWorkspaceEntryCreateActions({
   state,
 }: CreateWorkspaceEntryCreateActionsInput) {
   const { name, setCreating, setError, setName, setWorkspaces, token } = state;
+  const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const handleCreate = async (
     event: FormEvent<HTMLFormElement>,
@@ -32,7 +35,7 @@ export function createWorkspaceEntryCreateActions({
       setName("");
       router.push(`/app/workspaces/${result.workspace.id}`);
     } catch (caught) {
-      setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to create workspace"));
+      setError(getWorkspaceEntryActionErrorMessage(caught, copy.createWorkspaceFailed));
     } finally {
       setCreating(false);
     }

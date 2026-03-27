@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 
 import { getCurrentUser, listWorkspaces } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
 import type { UseWorkspaceEntryLoadInput } from "./use-workspace-entry-load.types";
 
@@ -17,6 +19,7 @@ export function useWorkspaceEntryLoad({
   setWorkspaces,
 }: UseWorkspaceEntryLoadInput) {
   const lastLoadKeyRef = useRef<string | null>(null);
+  const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   useEffect(() => {
     const nextToken = getStoredToken();
@@ -43,7 +46,7 @@ export function useWorkspaceEntryLoad({
       } catch (caught) {
         lastLoadKeyRef.current = null;
         clearStoredSession();
-        setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to load workspace list"));
+        setError(getWorkspaceEntryActionErrorMessage(caught, copy.loadFailed));
         router.replace("/login");
       } finally {
         setLoading(false);

@@ -5,6 +5,8 @@ import {
   importWorkspaceArchive,
   listWorkspaces,
 } from "../lib/api";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import {
   getWorkspaceEntryActionErrorMessage,
   slugifyWorkspaceName,
@@ -30,6 +32,7 @@ export function createWorkspaceEntryImportActions({
     setWorkspaces,
     token,
   } = state;
+  const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const resetImportForm = () => {
     setImportName("");
@@ -59,7 +62,7 @@ export function createWorkspaceEntryImportActions({
       resetImportForm();
       router.push(`/app/workspaces/${result.result.workspace.id}`);
     } catch (caught) {
-      setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to import workspace"));
+      setError(getWorkspaceEntryActionErrorMessage(caught, copy.importWorkspaceFailed));
     } finally {
       setImporting(false);
     }
@@ -81,7 +84,7 @@ export function createWorkspaceEntryImportActions({
       await loadTransferJobs(token);
       resetImportForm();
     } catch (caught) {
-      setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to create import job"));
+      setError(getWorkspaceEntryActionErrorMessage(caught, copy.createImportJobFailed));
     } finally {
       setQueueingImportJob(false);
     }

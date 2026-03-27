@@ -1,6 +1,8 @@
 "use client";
 
 import { downloadWorkspaceTransferJob, listWorkspaceTransferJobs } from "../lib/api";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import { getWorkspaceEntryActionErrorMessage } from "./workspace-entry-controller-helpers";
 import type { CreateWorkspaceEntryJobActionsInput } from "./workspace-entry-job-actions.types";
 
@@ -10,6 +12,7 @@ export function createWorkspaceEntryJobActions({
   setTransferJobs,
   token,
 }: CreateWorkspaceEntryJobActionsInput) {
+  const copy = getWorkspaceEntryCopy(getStoredLocale());
   const loadTransferJobs = async (activeToken: string) => {
     setJobsLoading(true);
     try {
@@ -40,7 +43,7 @@ export function createWorkspaceEntryJobActions({
       setError(
         getWorkspaceEntryActionErrorMessage(
           caught,
-          "Failed to download transfer job result",
+          copy.downloadTransferJobFailed,
         ),
       );
     }

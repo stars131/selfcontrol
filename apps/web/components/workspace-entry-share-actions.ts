@@ -2,6 +2,8 @@
 
 import { acceptShareToken, listWorkspaces, previewShareToken } from "../lib/api";
 import { clearStoredSession } from "../lib/auth";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
 import {
   extractWorkspaceShareToken,
   getWorkspaceEntryActionErrorMessage,
@@ -20,6 +22,7 @@ export function createWorkspaceEntryShareActions({
     setWorkspaces,
     token,
   } = state;
+  const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const handlePreviewShare = async (shareTokenInput: string) => {
     const normalizedShareToken = extractWorkspaceShareToken(shareTokenInput);
@@ -34,7 +37,7 @@ export function createWorkspaceEntryShareActions({
       setSharePreview(result.preview);
     } catch (caught) {
       setSharePreview(null);
-      setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to preview share link"));
+      setError(getWorkspaceEntryActionErrorMessage(caught, copy.previewShareFailed));
     } finally {
       setPreviewing(false);
     }
@@ -54,7 +57,7 @@ export function createWorkspaceEntryShareActions({
       setWorkspaces(workspaceResult.items);
       router.push(`/app/workspaces/${result.workspace.id}`);
     } catch (caught) {
-      setError(getWorkspaceEntryActionErrorMessage(caught, "Failed to join shared workspace"));
+      setError(getWorkspaceEntryActionErrorMessage(caught, copy.joinSharedWorkspaceFailed));
     } finally {
       setJoining(false);
     }

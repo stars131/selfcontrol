@@ -35,6 +35,13 @@ export type WorkspaceEntryCopy = {
   noJobs: string;
   noWorkspace: string;
   loading: string;
+  loadFailed: string;
+  previewShareFailed: string;
+  joinSharedWorkspaceFailed: string;
+  createWorkspaceFailed: string;
+  importWorkspaceFailed: string;
+  createImportJobFailed: string;
+  downloadTransferJobFailed: string;
 };
 
 export type WorkspaceEntryCopyMap = Record<LocaleCode, WorkspaceEntryCopy>;

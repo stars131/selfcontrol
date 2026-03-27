@@ -16062,8 +16062,12 @@ if (workspaceTransferJobsListTypesLines > maxWorkspaceTransferJobsListTypesLines
 }
 
 for (const requiredWorkspaceEntryJobActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-entry-copy";',
   'import type { CreateWorkspaceEntryJobActionsInput } from "./workspace-entry-job-actions.types";',
   "}: CreateWorkspaceEntryJobActionsInput) {",
+  "const copy = getWorkspaceEntryCopy(getStoredLocale());",
+  "copy.downloadTransferJobFailed",
 ]) {
   if (!workspaceEntryJobActionsSource.includes(requiredWorkspaceEntryJobActionsUsage)) {
     throw new Error(
@@ -20786,8 +20790,12 @@ if (useWorkspaceEntryControllerDerivedDataTypesLines > maxUseWorkspaceEntryContr
 }
 
 for (const requiredUseWorkspaceEntryLoadUsage of [
+  'import { getStoredLocale } from "../lib/locale";',
+  'import { getWorkspaceEntryCopy } from "./workspace-entry-copy";',
   'import type { UseWorkspaceEntryLoadInput } from "./use-workspace-entry-load.types";',
   "}: UseWorkspaceEntryLoadInput) {",
+  "const copy = getWorkspaceEntryCopy(getStoredLocale());",
+  "copy.loadFailed",
 ]) {
   if (!useWorkspaceEntryLoadSource.includes(requiredUseWorkspaceEntryLoadUsage)) {
     throw new Error(
@@ -20865,8 +20873,12 @@ if (workspaceEntryControllerActionsTypesLines > maxWorkspaceEntryControllerActio
 }
 
 for (const requiredWorkspaceEntryCreateActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-entry-copy";',
   'import type { CreateWorkspaceEntryCreateActionsInput } from "./workspace-entry-create-actions.types";',
   "}: CreateWorkspaceEntryCreateActionsInput) {",
+  "const copy = getWorkspaceEntryCopy(getStoredLocale());",
+  "copy.createWorkspaceFailed",
 ]) {
   if (!workspaceEntryCreateActionsSource.includes(requiredWorkspaceEntryCreateActionsUsage)) {
     throw new Error(
@@ -20905,8 +20917,13 @@ if (workspaceEntryCreateActionsTypesLines > maxWorkspaceEntryCreateActionsTypesL
 }
 
 for (const requiredWorkspaceEntryImportActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-entry-copy";',
   'import type { CreateWorkspaceEntryImportActionsInput } from "./workspace-entry-import-actions.types";',
   "}: CreateWorkspaceEntryImportActionsInput) {",
+  "const copy = getWorkspaceEntryCopy(getStoredLocale());",
+  "copy.importWorkspaceFailed",
+  "copy.createImportJobFailed",
 ]) {
   if (!workspaceEntryImportActionsSource.includes(requiredWorkspaceEntryImportActionsUsage)) {
     throw new Error(
@@ -20985,8 +21002,13 @@ if (workspaceEntryWorkspaceActionsTypesLines > maxWorkspaceEntryWorkspaceActions
 }
 
 for (const requiredWorkspaceEntryShareActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-entry-copy";',
   'import type { CreateWorkspaceEntryShareActionsInput } from "./workspace-entry-share-actions.types";',
   "}: CreateWorkspaceEntryShareActionsInput) {",
+  "const copy = getWorkspaceEntryCopy(getStoredLocale());",
+  "copy.previewShareFailed",
+  "copy.joinSharedWorkspaceFailed",
 ]) {
   if (!workspaceEntryShareActionsSource.includes(requiredWorkspaceEntryShareActionsUsage)) {
     throw new Error(
