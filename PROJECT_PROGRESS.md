@@ -2272,6 +2272,9 @@ Last updated: 2026-03-26
 - README And Dev Setup Repair V1:
   - `README.md` and `docs/DEVELOPMENT_SETUP.md` now use clean Chinese documentation instead of garbled text, restoring the primary project and VM development entrypoints
   - the repaired docs now include the current frontend and backend validation commands so local setup, CI expectations, and enterprise guardrails stay aligned
+- Project Spec Repair V1:
+  - `PROJECT_SPEC.md` now uses a clean, readable Chinese specification aligned with the current product direction instead of garbled text
+  - the repaired spec restores the main project contract for feature scope, architecture, security, deployment, and long-term enterprise-grade evolution
 
 ## Next
 - Continue the next product slice
