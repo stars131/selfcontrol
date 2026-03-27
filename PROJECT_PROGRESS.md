@@ -2317,6 +2317,9 @@ Last updated: 2026-03-26
 - Web API Client Reminder Boundary Extraction V1:
   - reminder CRUD and notification sync/query/update calls now live in `apps/web/lib/api-reminders.ts` and are re-exported from `apps/web/lib/api.ts`, continuing to reduce the remaining front-end API hub without changing caller imports
   - the reminder and notification transport code is now isolated from record, chat, and provider client logic, which lowers future review scope for scheduling and in-app alert changes
+- Web API Client Sharing Boundary Extraction V1:
+  - share-link listing, creation, update, preview, and acceptance calls now live in `apps/web/lib/api-sharing.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
+  - collaboration-focused transport logic is now isolated from reminders, media, and workspace transfer flows, which lowers future review scope for multi-user sharing evolution
 
 ## Next
 - Continue the next product slice
