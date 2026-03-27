@@ -2380,6 +2380,14 @@ const deadLetterRecoverySummaryStatsPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-stats.tsx",
 );
+const deadLetterRecoverySummaryRetryStateTagsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-retry-state-tags.tsx",
+);
+const deadLetterRecoverySummaryRetryStateTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-retry-state-tags.types.ts",
+);
 const deadLetterRecoverySummaryStatsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-stats.types.ts",
@@ -3971,6 +3979,14 @@ const deadLetterRecoverySummaryStatsSource = fs.readFileSync(
   deadLetterRecoverySummaryStatsPath,
   "utf8",
 );
+const deadLetterRecoverySummaryRetryStateTagsSource = fs.readFileSync(
+  deadLetterRecoverySummaryRetryStateTagsPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryRetryStateTagsTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryRetryStateTagsTypesPath,
+  "utf8",
+);
 const deadLetterRecoverySummaryStatsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryStatsTypesPath,
   "utf8",
@@ -5388,6 +5404,10 @@ const deadLetterRecoverySummaryActionButtonsLines =
   deadLetterRecoverySummaryActionButtonsSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionButtonsTypesLines =
   deadLetterRecoverySummaryActionButtonsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryRetryStateTagsLines =
+  deadLetterRecoverySummaryRetryStateTagsSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryRetryStateTagsTypesLines =
+  deadLetterRecoverySummaryRetryStateTagsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionsTypesLines =
   deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryStatsTypesLines =
@@ -23074,8 +23094,10 @@ if (deadLetterRecoverySummaryActionButtonsTypesLines > maxDeadLetterRecoverySumm
 }
 
 for (const requiredDeadLetterRecoverySummaryStatsUsage of [
+  'import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";',
   'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";',
   "}: DeadLetterRecoverySummaryStatsProps) {",
+  "<DeadLetterRecoverySummaryRetryStateTags",
 ]) {
   if (!deadLetterRecoverySummaryStatsSource.includes(requiredDeadLetterRecoverySummaryStatsUsage)) {
     throw new Error(
@@ -23087,6 +23109,25 @@ for (const requiredDeadLetterRecoverySummaryStatsUsage of [
 if (deadLetterRecoverySummaryStatsSource.includes("type DeadLetterRecoverySummaryStatsProps = Pick<")) {
   throw new Error(
     "dead-letter-recovery-summary-stats.tsx must keep dead-letter summary-stats prop typing delegated",
+  );
+}
+
+for (const forbiddenDeadLetterRecoverySummaryStatsToken of [
+  'import { getRetryStateLabel } from "../lib/media-issue-display";',
+  "Object.entries(mediaDeadLetterOverview.by_retry_state).map",
+  "{getRetryStateLabel(locale, retryState)}: {count}",
+]) {
+  if (deadLetterRecoverySummaryStatsSource.includes(forbiddenDeadLetterRecoverySummaryStatsToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-stats.tsx must keep retry-state tag rendering delegated: ${forbiddenDeadLetterRecoverySummaryStatsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryStatsLines = 35;
+if (deadLetterRecoverySummaryStatsSource.split(/\r?\n/).length > maxDeadLetterRecoverySummaryStatsLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-stats.tsx exceeded ${maxDeadLetterRecoverySummaryStatsLines} lines: ${deadLetterRecoverySummaryStatsSource.split(/\r?\n/).length}`,
   );
 }
 
@@ -23104,6 +23145,56 @@ const maxDeadLetterRecoverySummaryStatsTypesLines = 2;
 if (deadLetterRecoverySummaryStatsTypesLines > maxDeadLetterRecoverySummaryStatsTypesLines) {
   throw new Error(
     `dead-letter-recovery-summary-stats.types.ts exceeded ${maxDeadLetterRecoverySummaryStatsTypesLines} lines: ${deadLetterRecoverySummaryStatsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryRetryStateTagsUsage of [
+  'import { getRetryStateLabel } from "../lib/media-issue-display";',
+  'import type { DeadLetterRecoverySummaryRetryStateTagsProps } from "./dead-letter-recovery-summary-retry-state-tags.types";',
+  "}: DeadLetterRecoverySummaryRetryStateTagsProps) {",
+  "Object.entries(mediaDeadLetterOverview.by_retry_state).map",
+  "{getRetryStateLabel(locale, retryState)}: {count}",
+]) {
+  if (!deadLetterRecoverySummaryRetryStateTagsSource.includes(requiredDeadLetterRecoverySummaryRetryStateTagsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-retry-state-tags.tsx must own retry-state tag rendering: ${requiredDeadLetterRecoverySummaryRetryStateTagsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoverySummaryRetryStateTagsToken of [
+  "mediaIssueCopy.itemSuffix",
+  "getMediaIssueLabel(",
+  "by_issue_category",
+]) {
+  if (deadLetterRecoverySummaryRetryStateTagsSource.includes(forbiddenDeadLetterRecoverySummaryRetryStateTagsToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-retry-state-tags.tsx must keep total-count and issue-category concerns delegated: ${forbiddenDeadLetterRecoverySummaryRetryStateTagsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryRetryStateTagsLines = 18;
+if (deadLetterRecoverySummaryRetryStateTagsLines > maxDeadLetterRecoverySummaryRetryStateTagsLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-retry-state-tags.tsx exceeded ${maxDeadLetterRecoverySummaryRetryStateTagsLines} lines: ${deadLetterRecoverySummaryRetryStateTagsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryRetryStateTagsTypesUsage of [
+  'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types"; export type DeadLetterRecoverySummaryRetryStateTagsProps = Pick<DeadLetterRecoverySummaryStatsProps, "locale" | "mediaDeadLetterOverview">;',
+]) {
+  if (!deadLetterRecoverySummaryRetryStateTagsTypesSource.includes(requiredDeadLetterRecoverySummaryRetryStateTagsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-retry-state-tags.types.ts must own retry-state tag prop typing: ${requiredDeadLetterRecoverySummaryRetryStateTagsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryRetryStateTagsTypesLines = 2;
+if (deadLetterRecoverySummaryRetryStateTagsTypesLines > maxDeadLetterRecoverySummaryRetryStateTagsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-retry-state-tags.types.ts exceeded ${maxDeadLetterRecoverySummaryRetryStateTagsTypesLines} lines: ${deadLetterRecoverySummaryRetryStateTagsTypesLines}`,
   );
 }
 

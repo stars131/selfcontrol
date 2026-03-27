@@ -2623,6 +2623,10 @@ Last updated: 2026-03-27
   - location-review action-button rendering now lives in `apps/web/components/location-review-action-buttons.tsx` instead of remaining inline inside `location-review-actions.tsx`
   - `location-review-actions.tsx` now stays focused on action composition while action-button rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this review-action-buttons boundary so future location-review action changes do not regrow a mixed composition-and-button rendering module
+- Dead Letter Recovery Summary Retry State Tags Extraction V1:
+  - dead-letter summary retry-state tag rendering now lives in `apps/web/components/dead-letter-recovery-summary-retry-state-tags.tsx` instead of remaining inline inside `dead-letter-recovery-summary-stats.tsx`
+  - `dead-letter-recovery-summary-stats.tsx` now stays focused on summary stat composition while retry-state tag rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-state-tag boundary so future dead-letter summary stat changes do not regrow a mixed composition-and-retry-state rendering module
 
 ## Next
 - Continue the next product slice

@@ -1,0 +1,1 @@
+import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types"; export type DeadLetterRecoverySummaryRetryStateTagsProps = Pick<DeadLetterRecoverySummaryStatsProps, "locale" | "mediaDeadLetterOverview">;

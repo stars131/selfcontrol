@@ -1,6 +1,7 @@
 "use client";
 
-import { getMediaIssueLabel, getRetryStateLabel } from "../lib/media-issue-display";
+import { getMediaIssueLabel } from "../lib/media-issue-display";
+import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";
 import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";
 
 export function DeadLetterRecoverySummaryStats({
@@ -13,13 +14,10 @@ export function DeadLetterRecoverySummaryStats({
       <span className="tag">
         {mediaDeadLetterOverview?.total_count ?? 0} {mediaIssueCopy.itemSuffix}
       </span>
-      {mediaDeadLetterOverview
-        ? Object.entries(mediaDeadLetterOverview.by_retry_state).map(([retryState, count]) => (
-            <span className="tag" key={retryState}>
-              {getRetryStateLabel(locale, retryState)}: {count}
-            </span>
-          ))
-        : null}
+      <DeadLetterRecoverySummaryRetryStateTags
+        locale={locale}
+        mediaDeadLetterOverview={mediaDeadLetterOverview}
+      />
       {mediaDeadLetterOverview
         ? Object.entries(mediaDeadLetterOverview.by_issue_category).map(([issueCategory, count]) => (
             <span className="tag" key={issueCategory}>
