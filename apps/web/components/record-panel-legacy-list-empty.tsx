@@ -1,9 +1,9 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
+
 export function RecordPanelLegacyListEmpty() {
-  return (
-    <div className="notice">
-      No records yet. Save one from the chat panel or create one manually above.
-    </div>
-  );
+  const { locale } = useStoredLocale();
+  return <div className="notice">{getRecordPanelDetailBundle(locale).copy.noRecords}</div>;
 }

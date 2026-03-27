@@ -13473,7 +13473,17 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     legacyRecordPanelFormActionsTypesSource,
     'import type { RecordPanelLegacyFormActionsProps } from "./record-panel-legacy-form-actions.types";',
     "}: RecordPanelLegacyFormActionsProps) {",
-    ['className="action-row"', '"Saving..."', '"Delete record"'],
+    [
+      'import { useStoredLocale } from "../lib/locale";',
+      'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+      "const { panelCopy } = getRecordPanelUiBundle(locale);",
+      'className="action-row"',
+      "panelCopy.saving",
+      "panelCopy.updateRecord",
+      "panelCopy.createRecord",
+      "panelCopy.deleting",
+      "panelCopy.deleteRecord",
+    ],
     [
       'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
       "}: Pick<RecordPanelLegacyFormProps",
@@ -13745,7 +13755,9 @@ if (legacyRecordPanelListItemLines > maxLegacyRecordPanelListItemLines) {
 
 for (const requiredLegacyListEmptyUsage of [
   "export function RecordPanelLegacyListEmpty() {",
-  "No records yet. Save one from the chat panel or create one manually above.",
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";',
+  "getRecordPanelDetailBundle(locale).copy.noRecords",
 ]) {
   if (!legacyRecordPanelListEmptySource.includes(requiredLegacyListEmptyUsage)) {
     throw new Error(`record-panel-legacy-list-empty.tsx must own legacy empty-state rendering: ${requiredLegacyListEmptyUsage}`);

@@ -2182,6 +2182,9 @@ Last updated: 2026-03-26
 - Workspace Export Copy Repair V1:
   - workspace export and async export job copy now restore valid Simplified Chinese and Japanese text instead of shipping mojibake to non-English users
   - owner-only notices, export descriptions, action buttons, and success/loading states now preserve the same meaning across locales while remaining ready for future enterprise export workflow upgrades
+- Legacy Record Actions Localization V1:
+  - legacy record form actions now reuse the shared record-panel UI copy for saving, updating, creating, deleting, and empty-list states instead of leaving English-only fallback text in the classic panel
+  - `verify-record-panel-structure.mjs` now enforces those locale-aware copy dependencies in the remaining legacy action leaves so future maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice
