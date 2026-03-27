@@ -19874,12 +19874,14 @@ if (useChatPanelActionsSource.includes('type UseChatPanelActionsProps,')) {
 }
 
 for (const requiredChatPanelShareHandlersUsage of [
-  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-share-create-handler";',
+  'from "./chat-panel-share-disable-handler";',
   'import type { CreateChatPanelShareHandlersInput } from "./chat-panel-share-handlers.types";',
-  "}: CreateChatPanelShareHandlersInput) {",
-  "const copy = getStoredChatPanelActionCopy();",
-  "copy.shareCreationFailed",
-  "copy.shareUpdateFailed",
+  "input: CreateChatPanelShareHandlersInput",
+  "createChatPanelShareCreateHandler(input)",
+  "createChatPanelShareDisableHandler(input)",
+  "handleCreateShareLink,",
+  "handleDisableShareLink,",
 ]) {
   if (!chatPanelShareHandlersSource.includes(requiredChatPanelShareHandlersUsage)) {
     throw new Error(
@@ -19890,6 +19892,20 @@ for (const requiredChatPanelShareHandlersUsage of [
 
 if (chatPanelShareHandlersSource.includes("}: {")) {
   throw new Error("chat-panel-share-handlers.ts must keep share-handler input typing delegated");
+}
+
+for (const forbiddenChatPanelShareHandlersToken of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  "copy.shareCreationFailed",
+  "copy.shareUpdateFailed",
+  "buildCreateShareLinkInput(",
+]) {
+  if (chatPanelShareHandlersSource.includes(forbiddenChatPanelShareHandlersToken)) {
+    throw new Error(
+      `chat-panel-share-handlers.ts must keep create/disable handler internals delegated: ${forbiddenChatPanelShareHandlersToken}`,
+    );
+  }
 }
 
 for (const requiredChatPanelShareHandlersTypesUsage of [

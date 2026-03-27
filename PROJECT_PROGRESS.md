@@ -2507,6 +2507,10 @@ Last updated: 2026-03-27
   - chat send submission now lives in `apps/web/components/chat-panel-send-handler.ts`, while notification sync, knowledge reindex, and audit refresh handlers now live in `apps/web/components/chat-panel-admin-handlers.ts`
   - `chat-panel-operator-handlers.ts` now stays as a thin composition boundary so user send flow and management action flow can evolve independently
   - the chat-panel structure guardrail now enforces this send-versus-admin split so future operator behavior does not regrow a mixed handler module
+- Chat Panel Share Create And Disable Handler Split V1:
+  - share-link creation now lives in `apps/web/components/chat-panel-share-create-handler.ts`, while share-link disable flow now lives in `apps/web/components/chat-panel-share-disable-handler.ts`
+  - `chat-panel-share-handlers.ts` now stays as a thin composition boundary so share creation and share status management can evolve independently
+  - the chat-panel and record-panel structure guardrails now enforce this create-versus-disable split so future sharing behavior does not regrow a mixed handler module
 
 ## Next
 - Continue the next product slice

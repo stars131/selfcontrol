@@ -96,6 +96,27 @@ const chatPanelAdminHandlersSource = fs.readFileSync(
   chatPanelAdminHandlersPath,
   "utf8",
 );
+const chatPanelShareHandlersPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-share-handlers.ts",
+);
+const chatPanelShareHandlersSource = fs.readFileSync(chatPanelShareHandlersPath, "utf8");
+const chatPanelShareCreateHandlerPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-share-create-handler.ts",
+);
+const chatPanelShareCreateHandlerSource = fs.readFileSync(
+  chatPanelShareCreateHandlerPath,
+  "utf8",
+);
+const chatPanelShareDisableHandlerPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-share-disable-handler.ts",
+);
+const chatPanelShareDisableHandlerSource = fs.readFileSync(
+  chatPanelShareDisableHandlerPath,
+  "utf8",
+);
 const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
@@ -130,6 +151,11 @@ const chatPanelOperatorHandlersLineCount =
   chatPanelOperatorHandlersSource.split(/\r?\n/).length;
 const chatPanelSendHandlerLineCount = chatPanelSendHandlerSource.split(/\r?\n/).length;
 const chatPanelAdminHandlersLineCount = chatPanelAdminHandlersSource.split(/\r?\n/).length;
+const chatPanelShareHandlersLineCount = chatPanelShareHandlersSource.split(/\r?\n/).length;
+const chatPanelShareCreateHandlerLineCount =
+  chatPanelShareCreateHandlerSource.split(/\r?\n/).length;
+const chatPanelShareDisableHandlerLineCount =
+  chatPanelShareDisableHandlerSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -898,6 +924,131 @@ const maxAdminHandlersLines = 50;
 if (chatPanelAdminHandlersLineCount > maxAdminHandlersLines) {
   throw new Error(
     `chat-panel-admin-handlers.ts exceeded ${maxAdminHandlersLines} lines: ${chatPanelAdminHandlersLineCount}`,
+  );
+}
+
+for (const requiredShareHandlersImport of [
+  'from "./chat-panel-share-create-handler";',
+  'from "./chat-panel-share-disable-handler";',
+  'from "./chat-panel-share-handlers.types";',
+]) {
+  if (!chatPanelShareHandlersSource.includes(requiredShareHandlersImport)) {
+    throw new Error(
+      `chat-panel-share-handlers.ts must import delegated share handler groups: ${requiredShareHandlersImport}`,
+    );
+  }
+}
+
+for (const requiredShareHandlersUsage of [
+  "createChatPanelShareCreateHandler(input)",
+  "createChatPanelShareDisableHandler(input)",
+  "handleCreateShareLink,",
+  "handleDisableShareLink,",
+]) {
+  if (!chatPanelShareHandlersSource.includes(requiredShareHandlersUsage)) {
+    throw new Error(
+      `chat-panel-share-handlers.ts must delegate share handler assembly: ${requiredShareHandlersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenShareHandlersToken of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  "buildCreateShareLinkInput(",
+  "copy.shareCreationFailed",
+  "copy.shareUpdateFailed",
+  "setCreatingShare(true)",
+  "setDisablingShareId(shareLinkId)",
+]) {
+  if (chatPanelShareHandlersSource.includes(forbiddenShareHandlersToken)) {
+    throw new Error(
+      `chat-panel-share-handlers.ts must keep share internals delegated: ${forbiddenShareHandlersToken}`,
+    );
+  }
+}
+
+const maxShareHandlersLines = 20;
+if (chatPanelShareHandlersLineCount > maxShareHandlersLines) {
+  throw new Error(
+    `chat-panel-share-handlers.ts exceeded ${maxShareHandlersLines} lines: ${chatPanelShareHandlersLineCount}`,
+  );
+}
+
+for (const requiredShareCreateHandlerUsage of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  'from "./chat-panel-share-handlers.types";',
+  "export function createChatPanelShareCreateHandler(",
+  "return async function handleCreateShareLink() {",
+  "await onCreateShareLink(",
+  "buildCreateShareLinkInput(",
+  'setShareName("");',
+  'setShareMaxUses("");',
+  "copy.shareCreationFailed",
+]) {
+  if (!chatPanelShareCreateHandlerSource.includes(requiredShareCreateHandlerUsage)) {
+    throw new Error(
+      `chat-panel-share-create-handler.ts must own share-create flow: ${requiredShareCreateHandlerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenShareCreateHandlerToken of [
+  "onDisableShareLink(",
+  "setDisablingShareId(",
+  "copy.shareUpdateFailed",
+]) {
+  if (chatPanelShareCreateHandlerSource.includes(forbiddenShareCreateHandlerToken)) {
+    throw new Error(
+      `chat-panel-share-create-handler.ts must keep disable-share flow delegated: ${forbiddenShareCreateHandlerToken}`,
+    );
+  }
+}
+
+const maxShareCreateHandlerLines = 40;
+if (chatPanelShareCreateHandlerLineCount > maxShareCreateHandlerLines) {
+  throw new Error(
+    `chat-panel-share-create-handler.ts exceeded ${maxShareCreateHandlerLines} lines: ${chatPanelShareCreateHandlerLineCount}`,
+  );
+}
+
+for (const requiredShareDisableHandlerUsage of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  'from "./chat-panel-share-handlers.types";',
+  "export function createChatPanelShareDisableHandler(",
+  "return async function handleDisableShareLink(shareLinkId: string) {",
+  "setDisablingShareId(shareLinkId);",
+  "await onDisableShareLink(shareLinkId);",
+  'setDisablingShareId("");',
+  "copy.shareUpdateFailed",
+]) {
+  if (!chatPanelShareDisableHandlerSource.includes(requiredShareDisableHandlerUsage)) {
+    throw new Error(
+      `chat-panel-share-disable-handler.ts must own share-disable flow: ${requiredShareDisableHandlerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenShareDisableHandlerToken of [
+  "onCreateShareLink(",
+  "buildCreateShareLinkInput(",
+  "setShareName(",
+  "setShareMaxUses(",
+  "copy.shareCreationFailed",
+]) {
+  if (chatPanelShareDisableHandlerSource.includes(forbiddenShareDisableHandlerToken)) {
+    throw new Error(
+      `chat-panel-share-disable-handler.ts must keep share-create flow delegated: ${forbiddenShareDisableHandlerToken}`,
+    );
+  }
+}
+
+const maxShareDisableHandlerLines = 30;
+if (chatPanelShareDisableHandlerLineCount > maxShareDisableHandlerLines) {
+  throw new Error(
+    `chat-panel-share-disable-handler.ts exceeded ${maxShareDisableHandlerLines} lines: ${chatPanelShareDisableHandlerLineCount}`,
   );
 }
 
