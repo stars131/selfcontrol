@@ -2172,6 +2172,14 @@ const mediaAssetCardMetadataTagsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tags.types.ts",
 );
+const mediaAssetCardRemoteFetchTagPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-remote-fetch-tag.tsx",
+);
+const mediaAssetCardRemoteFetchTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-remote-fetch-tag.types.ts",
+);
 const sharePreviewClientPath = path.resolve(process.cwd(), "components/share-preview-client.tsx");
 const sharePreviewClientTypesPath = path.resolve(
   process.cwd(),
@@ -4007,6 +4015,14 @@ const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataTagsTypesPath,
   "utf8",
 );
+const mediaAssetCardRemoteFetchTagSource = fs.readFileSync(
+  mediaAssetCardRemoteFetchTagPath,
+  "utf8",
+);
+const mediaAssetCardRemoteFetchTagTypesSource = fs.readFileSync(
+  mediaAssetCardRemoteFetchTagTypesPath,
+  "utf8",
+);
 const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
 const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
@@ -5721,6 +5737,10 @@ const mediaAssetCardMetadataDetailsTypesLines =
 const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsTypesLines =
   mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardRemoteFetchTagLines =
+  mediaAssetCardRemoteFetchTagSource.split(/\r?\n/).length;
+const mediaAssetCardRemoteFetchTagTypesLines =
+  mediaAssetCardRemoteFetchTagTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
@@ -21964,12 +21984,13 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { formatMediaSize } from "../lib/record-panel-format";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'from "../lib/storage-provider-display";',
+  'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
   "getProcessingStatusLabel(locale, asset.processing_status)",
   "getStorageProviderLabel(locale, asset.storage_provider)",
-  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+  "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "getRetryStateLabel(locale, retryState)",
   "{formatMediaSize(asset)}",
 ]) {
@@ -21982,6 +22003,17 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
 
 if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsProps = Pick<")) {
   throw new Error("media-asset-card-metadata-tags.tsx must keep metadata-tags prop typing delegated");
+}
+
+for (const forbiddenMediaAssetCardMetadataTagsToken of [
+  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+  "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
+]) {
+  if (mediaAssetCardMetadataTagsSource.includes(forbiddenMediaAssetCardMetadataTagsToken)) {
+    throw new Error(
+      `media-asset-card-metadata-tags.tsx must keep remote-fetch tag rendering delegated: ${forbiddenMediaAssetCardMetadataTagsToken}`,
+    );
+  }
 }
 
 const maxMediaAssetCardMetadataTagsLines = 17;
@@ -22005,6 +22037,55 @@ const maxMediaAssetCardMetadataTagsTypesLines = 2;
 if (mediaAssetCardMetadataTagsTypesLines > maxMediaAssetCardMetadataTagsTypesLines) {
   throw new Error(
     `media-asset-card-metadata-tags.types.ts exceeded ${maxMediaAssetCardMetadataTagsTypesLines} lines: ${mediaAssetCardMetadataTagsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRemoteFetchTagUsage of [
+  'import { getRemoteFetchStatusLabel } from "../lib/media-issue-display";',
+  'import type { MediaAssetCardRemoteFetchTagProps } from "./media-asset-card-remote-fetch-tag.types";',
+  "}: MediaAssetCardRemoteFetchTagProps) {",
+  "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
+]) {
+  if (!mediaAssetCardRemoteFetchTagSource.includes(requiredMediaAssetCardRemoteFetchTagUsage)) {
+    throw new Error(
+      `media-asset-card-remote-fetch-tag.tsx must own remote-fetch tag rendering: ${requiredMediaAssetCardRemoteFetchTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardRemoteFetchTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (mediaAssetCardRemoteFetchTagSource.includes(forbiddenMediaAssetCardRemoteFetchTagToken)) {
+    throw new Error(
+      `media-asset-card-remote-fetch-tag.tsx must keep other tag concerns delegated: ${forbiddenMediaAssetCardRemoteFetchTagToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRemoteFetchTagLines = 6;
+if (mediaAssetCardRemoteFetchTagLines > maxMediaAssetCardRemoteFetchTagLines) {
+  throw new Error(
+    `media-asset-card-remote-fetch-tag.tsx exceeded ${maxMediaAssetCardRemoteFetchTagLines} lines: ${mediaAssetCardRemoteFetchTagLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRemoteFetchTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; import type { LocaleCode } from "../lib/locale"; export type MediaAssetCardRemoteFetchTagProps = Pick<MediaAssetCardMetadataTagsProps, "mediaIssueCopy"> & { locale: LocaleCode; remoteFetchStatus: string | null };',
+]) {
+  if (!mediaAssetCardRemoteFetchTagTypesSource.includes(requiredMediaAssetCardRemoteFetchTagTypesUsage)) {
+    throw new Error(
+      `media-asset-card-remote-fetch-tag.types.ts must own remote-fetch tag prop typing: ${requiredMediaAssetCardRemoteFetchTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRemoteFetchTagTypesLines = 2;
+if (mediaAssetCardRemoteFetchTagTypesLines > maxMediaAssetCardRemoteFetchTagTypesLines) {
+  throw new Error(
+    `media-asset-card-remote-fetch-tag.types.ts exceeded ${maxMediaAssetCardRemoteFetchTagTypesLines} lines: ${mediaAssetCardRemoteFetchTagTypesLines}`,
   );
 }
 

@@ -21,6 +21,18 @@ const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8
 const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
+const metadataTagsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-tags.tsx");
+const metadataTagsSource = fs.readFileSync(metadataTagsPath, "utf8");
+const metadataTagsLineCount = metadataTagsSource.split(/\r?\n/).length;
+const metadataTagsTypesPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-tags.types.ts");
+const metadataTagsTypesSource = fs.readFileSync(metadataTagsTypesPath, "utf8");
+const metadataTagsTypesLineCount = metadataTagsTypesSource.split(/\r?\n/).length;
+const remoteFetchTagPath = path.resolve(process.cwd(), "components/media-asset-card-remote-fetch-tag.tsx");
+const remoteFetchTagSource = fs.readFileSync(remoteFetchTagPath, "utf8");
+const remoteFetchTagLineCount = remoteFetchTagSource.split(/\r?\n/).length;
+const remoteFetchTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-remote-fetch-tag.types.ts");
+const remoteFetchTagTypesSource = fs.readFileSync(remoteFetchTagTypesPath, "utf8");
+const remoteFetchTagTypesLineCount = remoteFetchTagTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
 
@@ -58,6 +70,79 @@ if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_
 
 if (!metadataSource.includes('readMetadataNumber(asset.metadata_json, "processing_retry_count")')) {
   throw new Error("media-asset-card-metadata.tsx must keep retry-count extraction logic");
+}
+
+for (const requiredMetadataTagsUsage of [
+  'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
+  "}: MediaAssetCardMetadataTagsProps) {",
+  'readMetadataText(asset.metadata_json, "remote_fetch_status")',
+  "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
+]) {
+  if (!metadataTagsSource.includes(requiredMetadataTagsUsage)) {
+    throw new Error(`media-asset-card-metadata-tags.tsx must delegate remote-fetch tag rendering: ${requiredMetadataTagsUsage}`);
+  }
+}
+
+for (const forbiddenMetadataTagsToken of [
+  "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
+]) {
+  if (metadataTagsSource.includes(forbiddenMetadataTagsToken)) {
+    throw new Error(`media-asset-card-metadata-tags.tsx must keep remote-fetch tag rendering delegated: ${forbiddenMetadataTagsToken}`);
+  }
+}
+
+if (metadataTagsLineCount > 15) {
+  throw new Error(`media-asset-card-metadata-tags.tsx exceeded 15 lines: ${metadataTagsLineCount}`);
+}
+
+for (const requiredMetadataTagsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type MediaAssetCardMetadataTagsProps = Pick<MediaAssetCardMetadataProps, "asset" | "mediaIssueCopy">;',
+]) {
+  if (!metadataTagsTypesSource.includes(requiredMetadataTagsTypesUsage)) {
+    throw new Error(`media-asset-card-metadata-tags.types.ts must own metadata tag props: ${requiredMetadataTagsTypesUsage}`);
+  }
+}
+
+if (metadataTagsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-metadata-tags.types.ts exceeded 2 lines: ${metadataTagsTypesLineCount}`);
+}
+
+for (const requiredRemoteFetchTagUsage of [
+  'import { getRemoteFetchStatusLabel } from "../lib/media-issue-display";',
+  'import type { MediaAssetCardRemoteFetchTagProps } from "./media-asset-card-remote-fetch-tag.types";',
+  "}: MediaAssetCardRemoteFetchTagProps) {",
+  "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
+]) {
+  if (!remoteFetchTagSource.includes(requiredRemoteFetchTagUsage)) {
+    throw new Error(`media-asset-card-remote-fetch-tag.tsx must own remote-fetch tag rendering: ${requiredRemoteFetchTagUsage}`);
+  }
+}
+
+for (const forbiddenRemoteFetchTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (remoteFetchTagSource.includes(forbiddenRemoteFetchTagToken)) {
+    throw new Error(`media-asset-card-remote-fetch-tag.tsx must keep other tag concerns delegated: ${forbiddenRemoteFetchTagToken}`);
+  }
+}
+
+if (remoteFetchTagLineCount > 6) {
+  throw new Error(`media-asset-card-remote-fetch-tag.tsx exceeded 6 lines: ${remoteFetchTagLineCount}`);
+}
+
+for (const requiredRemoteFetchTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; import type { LocaleCode } from "../lib/locale"; export type MediaAssetCardRemoteFetchTagProps = Pick<MediaAssetCardMetadataTagsProps, "mediaIssueCopy"> & { locale: LocaleCode; remoteFetchStatus: string | null };',
+]) {
+  if (!remoteFetchTagTypesSource.includes(requiredRemoteFetchTagTypesUsage)) {
+    throw new Error(`media-asset-card-remote-fetch-tag.types.ts must own remote-fetch tag props: ${requiredRemoteFetchTagTypesUsage}`);
+  }
+}
+
+if (remoteFetchTagTypesLineCount > 2) {
+  throw new Error(`media-asset-card-remote-fetch-tag.types.ts exceeded 2 lines: ${remoteFetchTagTypesLineCount}`);
 }
 
 if (!actionsSource.includes('asset.processing_status !== "completed"')) {

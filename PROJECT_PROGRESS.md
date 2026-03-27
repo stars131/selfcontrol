@@ -2723,6 +2723,10 @@ Last updated: 2026-03-28
   - dead-letter item issue-label tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-issue-label-tag.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-tags.tsx`
   - `dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared tag composition while issue-label rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this issue-label-tag boundary so future dead-letter tag changes do not regrow a mixed composition-and-issue-label rendering module
+- Media Asset Remote Fetch Tag Extraction V1:
+  - media-asset metadata remote-fetch tag rendering now lives in `apps/web/components/media-asset-card-remote-fetch-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while remote-fetch rendering remains centralized and easier to evolve safely
+  - the media-asset structure guardrail now enforces this remote-fetch-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-remote-fetch rendering module
 
 ## Next
 - Continue the next product slice
