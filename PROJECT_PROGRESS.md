@@ -2423,10 +2423,14 @@ Last updated: 2026-03-27
   - provider API base URL defaults now live in `apps/api/app/services/provider_transport_urls.py`, while transport-mode inference rules now live in `provider_transport_modes.py`
   - `provider_transport.py` now focuses on secret resolution plus compatibility re-exports for downstream embedding, media provider, and remote storage callers
   - dedicated backend unit tests now cover provider URL defaults, explicit transport mode overrides, and custom/local transport routing through the extracted boundaries
+- Remote Media Storage HTTP Boundary Extraction V1:
+  - remote media storage upload, download, and delete HTTP execution paths now live in `apps/api/app/services/media_remote_storage_http.py`, while shared remote media result dataclasses now live in `media_remote_storage_types.py`
+  - `media_remote_storage.py` now focuses on workspace/provider orchestration, fallback handling, temp-file persistence, and compatibility exports for existing monkeypatch paths instead of also owning raw HTTP execution details
+  - dedicated backend unit tests now cover direct upload payload handling, download/delete status behavior, and transport error mapping for the extracted remote media HTTP boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around remaining remote media helpers, provider compatibility exports, and any leftover duplicated provider-routing rules
+- Continue simplifying the remaining backend provider stack around remaining remote media helpers, provider compatibility exports, and any leftover duplicated provider-routing rules, then shift the next maintainability slice back to large frontend composition boundaries
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
