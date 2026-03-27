@@ -64,9 +64,14 @@ export type MappedRecord = {
   longitude: number;
 };
 
-export function loadAmapScript(key: string, errorMessages?: { browserOnlyLabel?: string; scriptLoadFailedLabel?: string }): Promise<void> {
+export type LoadAmapScriptErrorMessages = {
+  browserOnlyLabel: string;
+  scriptLoadFailedLabel: string;
+};
+
+export function loadAmapScript(key: string, errorMessages: LoadAmapScriptErrorMessages): Promise<void> {
   if (typeof window === "undefined") {
-    return Promise.reject(new Error(errorMessages?.browserOnlyLabel ?? "AMap is only available in the browser"));
+    return Promise.reject(new Error(errorMessages.browserOnlyLabel));
   }
 
   if (window.AMap) {
@@ -82,7 +87,7 @@ export function loadAmapScript(key: string, errorMessages?: { browserOnlyLabel?:
     script.src = `https://webapi.amap.com/maps?v=2.0&key=${key}&plugin=AMap.Geocoder`;
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error(errorMessages?.scriptLoadFailedLabel ?? "Failed to load AMap script"));
+    script.onerror = () => reject(new Error(errorMessages.scriptLoadFailedLabel));
     document.body.appendChild(script);
   });
 

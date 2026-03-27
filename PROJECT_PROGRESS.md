@@ -2227,6 +2227,9 @@ Last updated: 2026-03-26
 - Workspace Shell Loading Localization V1:
   - workspace shell loading state now reuses the shared shell action copy instead of hardcoded English text in the frame component
   - record-panel structure verification now enforces that copy-driven loading label so future shell-frame maintenance keeps the enterprise localization baseline intact
+- Map Loader Error Localization V1:
+  - AMap loader browser-only and script-failure errors no longer fall back to hardcoded English defaults inside the shared map helper and now require caller-provided localized copy
+  - the map loading path stays aligned with the existing locale-aware record-panel map copy, improving long-term maintainability for regional map integrations
 
 ## Next
 - Continue the next product slice
