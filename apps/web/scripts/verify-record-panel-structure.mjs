@@ -19876,8 +19876,15 @@ if (chatConversationBarTypesLines > maxChatConversationBarTypesLines) {
 }
 
 for (const requiredChatMessageSourcesUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/chat-message-source-display";',
   'import type { ChatMessageSource, ChatMessageSourcesProps } from "./chat-message-sources.types";',
   "}: ChatMessageSourcesProps) {",
+  "const { locale } = useStoredLocale();",
+  "getChatMessageSourceTypeLabel(locale, sourceItem.source_type)",
+  "getChatMessageSourceDefaultLabel(locale)",
+  "getChatMessageSourceRelatedRecordLabel(locale)",
+  "getChatMessageSourceScoreLabel(locale)",
 ]) {
   if (!chatMessageSourcesSource.includes(requiredChatMessageSourcesUsage)) {
     throw new Error(

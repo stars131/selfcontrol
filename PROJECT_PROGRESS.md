@@ -2147,6 +2147,10 @@ Last updated: 2026-03-26
   - `media-storage-health-display.ts` now owns localized labels for remote storage health states such as `ready`, `degraded`, `unreachable`, and `unhealthy`, while preserving safe fallback for future backend values
   - `media-storage-health-header.tsx` now shows a localized storage-health status instead of the raw backend `status` code, and `media-storage-health-card.tsx` passes locale through that boundary explicitly
   - `verify-record-panel-structure.mjs` now locks the helper-based health-status rendering and the updated header prop contract so future provider-settings maintenance stays maintainable under the enterprise standard
+- Chat Message Source Localization V1:
+  - `chat-message-source-display.ts` now owns localized source-type and fallback labels for chat citations, covering common `record`, `media`, `knowledge`, and `chat` source kinds with safe fallback for future values
+  - `chat-message-sources.tsx` now follows the active locale for source badges, default source labels, related-record fallback text, and score prefix instead of mixing raw backend values with hardcoded English placeholders
+  - `verify-record-panel-structure.mjs` now enforces the locale-aware citation helper usage so future chat-source UI changes stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice
