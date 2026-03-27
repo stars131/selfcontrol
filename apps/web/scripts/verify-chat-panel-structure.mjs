@@ -58,6 +58,16 @@ const chatPanelManagementContentSource = fs.readFileSync(
   chatPanelManagementContentPath,
   "utf8",
 );
+const chatPanelManagementContentPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-management-content-props.ts",
+);
+const chatPanelManagementContentPropsSource = fs.readFileSync(
+  chatPanelManagementContentPropsPath,
+  "utf8",
+);
+const chatPanelManagementContentPropsLineCount =
+  chatPanelManagementContentPropsSource.split(/\r?\n/).length;
 const chatPanelContentTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-content.types.ts",
@@ -263,6 +273,7 @@ for (const requiredManagementContentImport of [
   'import { ChatAuditLogsCard } from "./chat-audit-logs-card";',
   'import { ChatNotificationsCard } from "./chat-notifications-card";',
   'import { ChatPanelManagementSection } from "./chat-panel-management-section";',
+  'from "./chat-panel-management-content-props";',
   'import type { ChatPanelManagementContentProps } from "./chat-panel-content.types";',
 ]) {
   if (!chatPanelManagementContentSource.includes(requiredManagementContentImport)) {
@@ -273,15 +284,69 @@ for (const requiredManagementContentImport of [
 }
 
 for (const requiredManagementContentUsage of [
-  "<ChatPanelManagementSection",
-  "<ChatAuditLogsCard",
-  "<ChatNotificationsCard",
+  "<ChatPanelManagementSection {...buildChatPanelManagementSectionProps(props)} />",
+  "<ChatAuditLogsCard {...buildChatAuditLogsCardProps(props)} />",
+  "<ChatNotificationsCard {...buildChatNotificationsCardProps(props)} />",
 ]) {
   if (!chatPanelManagementContentSource.includes(requiredManagementContentUsage)) {
     throw new Error(
       `chat-panel-management-content.tsx must compose delegated management surfaces: ${requiredManagementContentUsage}`,
     );
   }
+}
+
+for (const forbiddenManagementContentToken of [
+  "canManageSharing={canManageSharing}",
+  "onRefreshAuditLogs={handleRefreshAuditLogs}",
+  "onMarkNotificationRead={onMarkNotificationRead}",
+  "sharePermission={sharePermission}",
+]) {
+  if (chatPanelManagementContentSource.includes(forbiddenManagementContentToken)) {
+    throw new Error(
+      `chat-panel-management-content.tsx must keep card prop mapping delegated: ${forbiddenManagementContentToken}`,
+    );
+  }
+}
+
+for (const requiredManagementContentPropsUsage of [
+  'import type { ChatAuditLogsCardProps } from "./chat-audit-logs-card.types";',
+  'import type { ChatNotificationsCardProps } from "./chat-notifications-card.types";',
+  'import type { ChatPanelManagementContentProps } from "./chat-panel-content.types";',
+  'import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types";',
+  "export function buildChatPanelManagementSectionProps(",
+  "export function buildChatAuditLogsCardProps(",
+  "export function buildChatNotificationsCardProps(",
+  "onCreateShareLink: handleCreateShareLink,",
+  "onDisableShareLink: handleDisableShareLink,",
+  "onReindexKnowledge: handleReindexKnowledge,",
+  "onRefreshAuditLogs: handleRefreshAuditLogs,",
+  "onMarkNotificationRead,",
+]) {
+  if (!chatPanelManagementContentPropsSource.includes(requiredManagementContentPropsUsage)) {
+    throw new Error(
+      `chat-panel-management-content-props.ts must own management card prop assembly: ${requiredManagementContentPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenManagementContentPropsToken of [
+  'from "./chat-panel-management-content";',
+  "<ChatPanelManagementSection",
+  "<ChatAuditLogsCard",
+  "<ChatNotificationsCard",
+]) {
+  if (chatPanelManagementContentPropsSource.includes(forbiddenManagementContentPropsToken)) {
+    throw new Error(
+      `chat-panel-management-content-props.ts must keep rendering delegated: ${forbiddenManagementContentPropsToken}`,
+    );
+  }
+}
+
+const maxManagementContentPropsLines = 75;
+if (chatPanelManagementContentPropsLineCount > maxManagementContentPropsLines) {
+  throw new Error(
+    `chat-panel-management-content-props.ts exceeded ${maxManagementContentPropsLines} lines: ${chatPanelManagementContentPropsLineCount}`,
+  );
 }
 
 for (const requiredImport of [

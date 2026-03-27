@@ -2471,11 +2471,15 @@ Last updated: 2026-03-27
   - conversation selection state updates and message-loading kickoff now live in `apps/web/components/workspace-shell-chat-action-selection.ts` instead of remaining inline inside `workspace-shell-chat-actions.ts`
   - `workspace-shell-chat-actions.ts` now stays focused on chat action routing while selection-side effects remain centralized and easier to evolve safely if conversation switching grows more complex later
   - the workspace-shell structure guardrail now enforces this conversation-selection helper boundary so future chat navigation changes do not reintroduce duplicated selection-and-load logic
+- Chat Panel Management Content Prop Builder Extraction V1:
+  - management-section, audit-log card, and notification card prop assembly now live in `apps/web/components/chat-panel-management-content-props.ts` instead of remaining inline inside `chat-panel-management-content.tsx`
+  - `chat-panel-management-content.tsx` now stays focused on composing the three management surfaces while prop mapping remains centralized and easier to evolve safely
+  - the chat-panel structure guardrail now enforces this management-content prop boundary so future management-surface updates do not regrow a fragile composition file
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell chat bootstrap helpers plus action payload boundaries so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell chat/bootstrap helpers plus action payload boundaries so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
