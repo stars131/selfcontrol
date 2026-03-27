@@ -71,6 +71,18 @@ const workspaceShellMediaFilterActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-filter-actions.ts",
 );
+const workspaceShellRecordFilterActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-filter-actions.ts",
+);
+const workspaceShellRecordFilterApplyActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-filter-apply-actions.ts",
+);
+const workspaceShellSearchPresetActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-search-preset-actions.ts",
+);
 const workspaceShellMediaActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-actions.ts",
@@ -197,6 +209,18 @@ const initialLoadHelpersTypesSource = fs.readFileSync(
   "utf8",
 );
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
+const recordFilterActionsSource = fs.readFileSync(
+  workspaceShellRecordFilterActionsPath,
+  "utf8",
+);
+const recordFilterApplyActionsSource = fs.readFileSync(
+  workspaceShellRecordFilterApplyActionsPath,
+  "utf8",
+);
+const searchPresetActionsSource = fs.readFileSync(
+  workspaceShellSearchPresetActionsPath,
+  "utf8",
+);
 const mediaActionsSource = fs.readFileSync(workspaceShellMediaActionsPath, "utf8");
 const mediaActionRefreshSource = fs.readFileSync(
   workspaceShellMediaActionRefreshPath,
@@ -285,6 +309,10 @@ const initialLoadRunnerLineCount = initialLoadRunnerSource.split(/\r?\n/).length
 const initialLoadHelpersLineCount = initialLoadHelpersSource.split(/\r?\n/).length;
 const initialLoadHelpersTypesLineCount = initialLoadHelpersTypesSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
+const recordFilterActionsLineCount = recordFilterActionsSource.split(/\r?\n/).length;
+const recordFilterApplyActionsLineCount =
+  recordFilterApplyActionsSource.split(/\r?\n/).length;
+const searchPresetActionsLineCount = searchPresetActionsSource.split(/\r?\n/).length;
 const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
 const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
 const recordActionRefreshLineCount = recordActionRefreshSource.split(/\r?\n/).length;
@@ -1356,6 +1384,135 @@ const maxMediaFilterActionsLines = 25;
 if (mediaFilterActionsLineCount > maxMediaFilterActionsLines) {
   throw new Error(
     `workspace-shell-media-filter-actions.ts exceeded ${maxMediaFilterActionsLines} lines: ${mediaFilterActionsLineCount}`,
+  );
+}
+
+for (const requiredRecordFilterActionsImport of [
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-record-filter-apply-actions";',
+  'from "./workspace-shell-search-preset-actions";',
+]) {
+  if (!recordFilterActionsSource.includes(requiredRecordFilterActionsImport)) {
+    throw new Error(
+      `workspace-shell-record-filter-actions.ts must import delegated filter and preset action groups: ${requiredRecordFilterActionsImport}`,
+    );
+  }
+}
+
+for (const requiredRecordFilterActionsUsage of [
+  "createWorkspaceShellRecordFilterApplyActions(props)",
+  "createWorkspaceShellSearchPresetActions(props)",
+  "...filterApplyActions",
+  "...searchPresetActions",
+]) {
+  if (!recordFilterActionsSource.includes(requiredRecordFilterActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-filter-actions.ts must delegate action-group assembly: ${requiredRecordFilterActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordFilterActionsToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-filter-actions.types";',
+  "const handleResetFilter",
+  "const handleCreateSearchPreset",
+  "createSearchPreset(",
+  "deleteSearchPreset(",
+  "refreshRecords(",
+]) {
+  if (recordFilterActionsSource.includes(forbiddenRecordFilterActionsToken)) {
+    throw new Error(
+      `workspace-shell-record-filter-actions.ts must keep filter and preset internals delegated: ${forbiddenRecordFilterActionsToken}`,
+    );
+  }
+}
+
+const maxRecordFilterActionsLines = 20;
+if (recordFilterActionsLineCount > maxRecordFilterActionsLines) {
+  throw new Error(
+    `workspace-shell-record-filter-actions.ts exceeded ${maxRecordFilterActionsLines} lines: ${recordFilterActionsLineCount}`,
+  );
+}
+
+for (const requiredRecordFilterApplyActionsUsage of [
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-filter-actions.types";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellRecordFilterApplyActions(",
+  "async function handleResetFilter()",
+  'async function handleApplyRecordFilter(nextFilter: UseWorkspaceShellActionsProps["recordFilter"])',
+  "async function handleApplyLocationFilter(",
+  "await refreshRecords(activeToken, initialRecordFilter);",
+  "await refreshRecords(activeToken, nextFilter);",
+]) {
+  if (!recordFilterApplyActionsSource.includes(requiredRecordFilterApplyActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-filter-apply-actions.ts must own filter application flow: ${requiredRecordFilterApplyActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordFilterApplyActionsToken of [
+  'from "../lib/api";',
+  "createSearchPreset(",
+  "deleteSearchPreset(",
+  "refreshSearchPresets(",
+  "refreshAuditLogs(",
+]) {
+  if (recordFilterApplyActionsSource.includes(forbiddenRecordFilterApplyActionsToken)) {
+    throw new Error(
+      `workspace-shell-record-filter-apply-actions.ts must keep preset persistence delegated: ${forbiddenRecordFilterApplyActionsToken}`,
+    );
+  }
+}
+
+const maxRecordFilterApplyActionsLines = 50;
+if (recordFilterApplyActionsLineCount > maxRecordFilterApplyActionsLines) {
+  throw new Error(
+    `workspace-shell-record-filter-apply-actions.ts exceeded ${maxRecordFilterApplyActionsLines} lines: ${recordFilterApplyActionsLineCount}`,
+  );
+}
+
+for (const requiredSearchPresetActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellSearchPresetActions(",
+  "async function handleCreateSearchPreset(",
+  "async function handleDeleteSearchPreset(presetId: string)",
+  "await createSearchPreset(activeToken, workspaceId, {",
+  "await deleteSearchPreset(activeToken, workspaceId, presetId);",
+  "await refreshSearchPresets(activeToken);",
+  "await refreshAuditLogs(activeToken);",
+]) {
+  if (!searchPresetActionsSource.includes(requiredSearchPresetActionsUsage)) {
+    throw new Error(
+      `workspace-shell-search-preset-actions.ts must own search preset persistence flow: ${requiredSearchPresetActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSearchPresetActionsToken of [
+  'from "./workspace-shell-record-filter-actions.types";',
+  "handleApplyLocationFilter(",
+  "handleResetFilter(",
+  "refreshRecords(",
+  "setFilteringRecords(",
+  "setRecordFilter(",
+]) {
+  if (searchPresetActionsSource.includes(forbiddenSearchPresetActionsToken)) {
+    throw new Error(
+      `workspace-shell-search-preset-actions.ts must keep filter-application flow delegated: ${forbiddenSearchPresetActionsToken}`,
+    );
+  }
+}
+
+const maxSearchPresetActionsLines = 45;
+if (searchPresetActionsLineCount > maxSearchPresetActionsLines) {
+  throw new Error(
+    `workspace-shell-search-preset-actions.ts exceeded ${maxSearchPresetActionsLines} lines: ${searchPresetActionsLineCount}`,
   );
 }
 

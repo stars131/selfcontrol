@@ -2487,6 +2487,10 @@ Last updated: 2026-03-27
   - reminder create, update, and delete flows now live in `apps/web/components/workspace-shell-reminder-actions.ts`, while notification sync and read-state updates live in `apps/web/components/workspace-shell-notification-actions.ts`
   - `workspace-shell-reminder-notification-actions.ts` now stays as a thin composition boundary so reminder-channel growth and notification behavior can evolve independently
   - the workspace-shell structure guardrail now enforces this reminder-versus-notification split so future admin-surface updates do not regrow a mixed action module
+- Workspace Shell Record Filter And Search Preset Split V1:
+  - filter reset, filter apply, and location-filter projection now live in `apps/web/components/workspace-shell-record-filter-apply-actions.ts`, while search preset create/delete persistence lives in `apps/web/components/workspace-shell-search-preset-actions.ts`
+  - `workspace-shell-record-filter-actions.ts` now stays as a thin composition boundary so filtering behavior and preset persistence can evolve independently
+  - the workspace-shell structure guardrail now enforces this filter-versus-preset split so future discovery UX changes do not regrow a mixed action module
 
 ## Next
 - Continue the next product slice

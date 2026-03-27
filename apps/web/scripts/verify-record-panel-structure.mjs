@@ -1051,6 +1051,10 @@ const workspaceShellRecordFilterActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-record-filter-actions.ts",
 );
+const workspaceShellRecordFilterApplyActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-filter-apply-actions.ts",
+);
 const workspaceShellRecordFilterActionsTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-record-filter-actions.types.ts",
@@ -2721,6 +2725,10 @@ const useWorkspaceShellSelectionEffectsTypesSource = fs.readFileSync(
 );
 const workspaceShellRecordFilterActionsSource = fs.readFileSync(
   workspaceShellRecordFilterActionsPath,
+  "utf8",
+);
+const workspaceShellRecordFilterApplyActionsSource = fs.readFileSync(
+  workspaceShellRecordFilterApplyActionsPath,
   "utf8",
 );
 const workspaceShellRecordFilterActionsTypesSource = fs.readFileSync(
@@ -14471,16 +14479,16 @@ for (const requiredWorkspaceShellRecordFilterActionsUsage of [
   'import type { ApplyWorkspaceShellLocationFilterInput } from "./workspace-shell-record-filter-actions.types";',
   "}: ApplyWorkspaceShellLocationFilterInput) {",
 ]) {
-  if (!workspaceShellRecordFilterActionsSource.includes(requiredWorkspaceShellRecordFilterActionsUsage)) {
+  if (!workspaceShellRecordFilterApplyActionsSource.includes(requiredWorkspaceShellRecordFilterActionsUsage)) {
     throw new Error(
-      `workspace-shell-record-filter-actions.ts must reuse the extracted shell-location-filter input type: ${requiredWorkspaceShellRecordFilterActionsUsage}`,
+      `workspace-shell-record-filter-apply-actions.ts must reuse the extracted shell-location-filter input type: ${requiredWorkspaceShellRecordFilterActionsUsage}`,
     );
   }
 }
 
-if (workspaceShellRecordFilterActionsSource.includes('}: Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">) {')) {
+if (workspaceShellRecordFilterApplyActionsSource.includes('}: Pick<UseWorkspaceShellActionsProps["recordFilter"], "placeQuery" | "reviewStatus" | "mappedOnly">) {')) {
   throw new Error(
-    "workspace-shell-record-filter-actions.ts must keep shell-location-filter input typing delegated",
+    "workspace-shell-record-filter-apply-actions.ts must keep shell-location-filter input typing delegated",
   );
 }
 
