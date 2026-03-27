@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types"; export type DeadLetterRecoveryPanelEmptyProps = Pick<DeadLetterRecoveryPanelContentProps, "mediaIssueCopy">;

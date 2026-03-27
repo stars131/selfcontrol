@@ -1,6 +1,7 @@
 "use client";
 
 import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";
+import { DeadLetterRecoveryPanelEmpty } from "./dead-letter-recovery-panel-empty";
 import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";
 
 export function DeadLetterRecoveryPanelContent({
@@ -17,7 +18,7 @@ export function DeadLetterRecoveryPanelContent({
   workspaceId,
 }: DeadLetterRecoveryPanelContentProps) {
   if (!mediaDeadLetterOverview?.items.length) {
-    return <div className="notice">{mediaIssueCopy.noDeadLetter}</div>;
+    return <DeadLetterRecoveryPanelEmpty mediaIssueCopy={mediaIssueCopy} />;
   }
 
   return (

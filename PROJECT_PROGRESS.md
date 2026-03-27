@@ -2595,6 +2595,10 @@ Last updated: 2026-03-27
   - recent-media panel empty-state rendering now lives in `apps/web/components/recent-media-issues-panel-empty.tsx` instead of remaining inline inside `recent-media-issues-panel.tsx`
   - `recent-media-issues-panel.tsx` now stays focused on intro, list, and empty-state composition while single empty-state rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this panel-empty boundary so future recent-media panel changes do not regrow a mixed panel-and-empty-state rendering module
+- Dead Letter Recovery Panel Empty State Extraction V1:
+  - dead-letter panel empty-state rendering now lives in `apps/web/components/dead-letter-recovery-panel-empty.tsx` instead of remaining inline inside `dead-letter-recovery-panel-content.tsx`
+  - `dead-letter-recovery-panel-content.tsx` now stays focused on item-list composition while single empty-state rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this panel-empty boundary so future dead-letter panel changes do not regrow a mixed panel-and-empty-state rendering module
 
 ## Next
 - Continue the next product slice
