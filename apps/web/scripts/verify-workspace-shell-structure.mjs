@@ -87,6 +87,18 @@ const workspaceShellRecordActionPayloadsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-record-action-payloads.ts",
 );
+const workspaceShellReminderNotificationActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-reminder-notification-actions.ts",
+);
+const workspaceShellReminderActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-reminder-actions.ts",
+);
+const workspaceShellNotificationActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-notification-actions.ts",
+);
 const workspaceShellChatActionResultsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-action-results.ts",
@@ -198,6 +210,15 @@ const recordActionPayloadsSource = fs.readFileSync(
   workspaceShellRecordActionPayloadsPath,
   "utf8",
 );
+const reminderNotificationActionsSource = fs.readFileSync(
+  workspaceShellReminderNotificationActionsPath,
+  "utf8",
+);
+const reminderActionsSource = fs.readFileSync(workspaceShellReminderActionsPath, "utf8");
+const notificationActionsSource = fs.readFileSync(
+  workspaceShellNotificationActionsPath,
+  "utf8",
+);
 const chatActionResultsSource = fs.readFileSync(
   workspaceShellChatActionResultsPath,
   "utf8",
@@ -268,6 +289,10 @@ const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
 const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
 const recordActionRefreshLineCount = recordActionRefreshSource.split(/\r?\n/).length;
 const recordActionPayloadsLineCount = recordActionPayloadsSource.split(/\r?\n/).length;
+const reminderNotificationActionsLineCount =
+  reminderNotificationActionsSource.split(/\r?\n/).length;
+const reminderActionsLineCount = reminderActionsSource.split(/\r?\n/).length;
+const notificationActionsLineCount = notificationActionsSource.split(/\r?\n/).length;
 const chatActionResultsLineCount = chatActionResultsSource.split(/\r?\n/).length;
 const chatActionConversationsLineCount =
   chatActionConversationsSource.split(/\r?\n/).length;
@@ -1753,6 +1778,133 @@ const maxRecordActionPayloadsLines = 35;
 if (recordActionPayloadsLineCount > maxRecordActionPayloadsLines) {
   throw new Error(
     `workspace-shell-record-action-payloads.ts exceeded ${maxRecordActionPayloadsLines} lines: ${recordActionPayloadsLineCount}`,
+  );
+}
+
+for (const requiredReminderNotificationActionsImport of [
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-notification-actions";',
+  'from "./workspace-shell-reminder-actions";',
+]) {
+  if (!reminderNotificationActionsSource.includes(requiredReminderNotificationActionsImport)) {
+    throw new Error(
+      `workspace-shell-reminder-notification-actions.ts must import delegated reminder and notification action groups: ${requiredReminderNotificationActionsImport}`,
+    );
+  }
+}
+
+for (const requiredReminderNotificationActionsUsage of [
+  "createWorkspaceShellReminderActions(props)",
+  "createWorkspaceShellNotificationActions(props)",
+  "...reminderActions",
+  "...notificationActions",
+]) {
+  if (!reminderNotificationActionsSource.includes(requiredReminderNotificationActionsUsage)) {
+    throw new Error(
+      `workspace-shell-reminder-notification-actions.ts must delegate action-group assembly: ${requiredReminderNotificationActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderNotificationActionsToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
+  'from "./workspace-shell-action-guards";',
+  "const handleCreateReminder",
+  "const handleSyncNotifications",
+  "createReminder(",
+  "deleteReminder(",
+  "updateReminder(",
+  "updateNotification(",
+]) {
+  if (reminderNotificationActionsSource.includes(forbiddenReminderNotificationActionsToken)) {
+    throw new Error(
+      `workspace-shell-reminder-notification-actions.ts must keep reminder/notification internals delegated: ${forbiddenReminderNotificationActionsToken}`,
+    );
+  }
+}
+
+const maxReminderNotificationActionsLines = 20;
+if (reminderNotificationActionsLineCount > maxReminderNotificationActionsLines) {
+  throw new Error(
+    `workspace-shell-reminder-notification-actions.ts exceeded ${maxReminderNotificationActionsLines} lines: ${reminderNotificationActionsLineCount}`,
+  );
+}
+
+for (const requiredReminderActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
+  'from "./workspace-shell-action-guards";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellReminderActions(",
+  "async function handleCreateReminder(input: WorkspaceShellReminderCreateInput)",
+  "async function handleUpdateReminder(",
+  "async function handleDeleteReminder(reminderId: string)",
+  "await createReminder(activeToken, workspaceId, input.recordId, {",
+  "await refreshReminders(activeToken, input.recordId);",
+  "await refreshReminders(activeToken, selectedRecordId);",
+]) {
+  if (!reminderActionsSource.includes(requiredReminderActionsUsage)) {
+    throw new Error(
+      `workspace-shell-reminder-actions.ts must own reminder mutation flow: ${requiredReminderActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderActionsToken of [
+  "syncDueNotifications(",
+  "updateNotification(",
+  "refreshNotifications(",
+]) {
+  if (reminderActionsSource.includes(forbiddenReminderActionsToken)) {
+    throw new Error(
+      `workspace-shell-reminder-actions.ts must keep notification actions delegated: ${forbiddenReminderActionsToken}`,
+    );
+  }
+}
+
+const maxReminderActionsLines = 55;
+if (reminderActionsLineCount > maxReminderActionsLines) {
+  throw new Error(
+    `workspace-shell-reminder-actions.ts exceeded ${maxReminderActionsLines} lines: ${reminderActionsLineCount}`,
+  );
+}
+
+for (const requiredNotificationActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellNotificationActions(",
+  "async function handleSyncNotifications()",
+  "async function handleMarkNotificationRead(notificationId: string)",
+  "await syncDueNotifications(activeToken);",
+  "await updateNotification(activeToken, workspaceId, notificationId, { is_read: true });",
+  "await refreshNotifications(activeToken);",
+]) {
+  if (!notificationActionsSource.includes(requiredNotificationActionsUsage)) {
+    throw new Error(
+      `workspace-shell-notification-actions.ts must own notification mutation flow: ${requiredNotificationActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenNotificationActionsToken of [
+  "createReminder(",
+  "updateReminder(",
+  "deleteReminder(",
+  "refreshReminders(",
+]) {
+  if (notificationActionsSource.includes(forbiddenNotificationActionsToken)) {
+    throw new Error(
+      `workspace-shell-notification-actions.ts must keep reminder actions delegated: ${forbiddenNotificationActionsToken}`,
+    );
+  }
+}
+
+const maxNotificationActionsLines = 30;
+if (notificationActionsLineCount > maxNotificationActionsLines) {
+  throw new Error(
+    `workspace-shell-notification-actions.ts exceeded ${maxNotificationActionsLines} lines: ${notificationActionsLineCount}`,
   );
 }
 

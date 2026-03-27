@@ -2483,6 +2483,10 @@ Last updated: 2026-03-27
   - `WorkspaceShellBulkRetryInput`, `WorkspaceShellReminderCreateInput`, `WorkspaceShellShareLinkInput`, `WorkspaceShellSaveRecordInput`, and `WorkspaceShellReminderUpdateInput` now live in `apps/web/components/workspace-shell-action-inputs.types.ts`
   - `workspace-shell-actions.types.ts` now stays focused on `UseWorkspaceShellActionsProps` so action orchestration contracts and action payload contracts can evolve independently
   - the workspace-shell structure guardrail now enforces this extracted input-type boundary so future record, reminder, media, and share actions do not drift back into a mixed type surface
+- Workspace Shell Reminder And Notification Action Split V1:
+  - reminder create, update, and delete flows now live in `apps/web/components/workspace-shell-reminder-actions.ts`, while notification sync and read-state updates live in `apps/web/components/workspace-shell-notification-actions.ts`
+  - `workspace-shell-reminder-notification-actions.ts` now stays as a thin composition boundary so reminder-channel growth and notification behavior can evolve independently
+  - the workspace-shell structure guardrail now enforces this reminder-versus-notification split so future admin-surface updates do not regrow a mixed action module
 
 ## Next
 - Continue the next product slice
