@@ -2,6 +2,8 @@
 
 import { useMemo } from "react";
 
+import { useStoredLocale } from "../lib/locale";
+import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import {
   parseDraftCoordinates,
   parseMappedRecords,
@@ -13,7 +15,12 @@ export function useMapPanelDerivedData({
   draftLocation,
   records,
 }: UseMapPanelDerivedDataInput) {
-  const mappedRecords = useMemo(() => parseMappedRecords(records), [records]);
+  const { locale } = useStoredLocale();
+  const { panelCopy } = getRecordPanelUiBundle(locale);
+  const mappedRecords = useMemo(
+    () => parseMappedRecords(records, { untitledRecord: panelCopy.untitledRecord, unknownPlace: panelCopy.unknownPlace }),
+    [panelCopy.unknownPlace, panelCopy.untitledRecord, records],
+  );
   const confirmedCount = useMemo(
     () => records.filter((record) => readLocationReview(record.extra_data)?.status === "confirmed").length,
     [records],

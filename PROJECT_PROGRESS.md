@@ -2236,6 +2236,9 @@ Last updated: 2026-03-26
 - Chat Knowledge Card Localization V1:
   - knowledge card labels, empty state, updated timestamp prefix, dimension label, and reindex button states now reuse shared chat display copy instead of hardcoded English strings
   - record-panel structure verification now enforces those copy-driven knowledge card labels and locale-aware timestamp formatting so future chat management maintenance stays aligned with the enterprise localization baseline
+- Map Record Fallback Localization V1:
+  - mapped record fallback titles and place names now come from shared record-panel UI copy instead of hardcoded English defaults inside the map parsing helper
+  - record-panel structure verification now enforces those locale-aware fallback labels so future map drill-down maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

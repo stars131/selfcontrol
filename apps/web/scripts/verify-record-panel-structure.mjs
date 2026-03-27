@@ -15800,8 +15800,15 @@ if (mapPanelControllerSearchTypesLines > maxMapPanelControllerSearchTypesLines) 
 }
 
 for (const requiredUseMapPanelDerivedDataUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   'import type { UseMapPanelDerivedDataInput } from "./use-map-panel-derived-data.types";',
   "}: UseMapPanelDerivedDataInput) {",
+  "const { locale } = useStoredLocale();",
+  "const { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.untitledRecord",
+  "panelCopy.unknownPlace",
+  "parseMappedRecords(records, {",
 ]) {
   if (!useMapPanelDerivedDataSource.includes(requiredUseMapPanelDerivedDataUsage)) {
     throw new Error(
@@ -15814,6 +15821,7 @@ for (const forbiddenUseMapPanelDerivedDataToken of [
   "type LocationDraft",
   'import type { RecordItem } from "../lib/types";',
   "}: {",
+  "parseMappedRecords(records)",
 ]) {
   if (useMapPanelDerivedDataSource.includes(forbiddenUseMapPanelDerivedDataToken)) {
     throw new Error(

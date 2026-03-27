@@ -64,6 +64,11 @@ export type MappedRecord = {
   longitude: number;
 };
 
+export type MapPanelRecordFallbackLabels = {
+  untitledRecord: string;
+  unknownPlace: string;
+};
+
 export type LoadAmapScriptErrorMessages = {
   browserOnlyLabel: string;
   scriptLoadFailedLabel: string;
@@ -183,7 +188,7 @@ export function readLongitudeValue(value: unknown): number | null {
   return readNumericValue(value);
 }
 
-export function parseMappedRecords(records: RecordItem[]): MappedRecord[] {
+export function parseMappedRecords(records: RecordItem[], labels: MapPanelRecordFallbackLabels): MappedRecord[] {
   return records
     .map((record) => {
       const location = readLocationInfo(record.extra_data);
@@ -197,8 +202,8 @@ export function parseMappedRecords(records: RecordItem[]): MappedRecord[] {
 
       return {
         id: record.id,
-        title: record.title || record.content || "Untitled",
-        placeName: location.place_name || "Unknown place",
+        title: record.title || record.content || labels.untitledRecord,
+        placeName: location.place_name || labels.unknownPlace,
         address: location.address || "",
         reviewStatus,
         latitude,
