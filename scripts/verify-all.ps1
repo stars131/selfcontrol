@@ -2,14 +2,25 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 
-Write-Host "==> Running web guardrails"
+function Invoke-NativeStep {
+  param(
+    [string]$Name,
+    [scriptblock]$Command
+  )
+
+  Write-Host "==> $Name"
+  & $Command
+  if ($LASTEXITCODE -ne 0) {
+    throw "$Name failed with exit code $LASTEXITCODE"
+  }
+}
+
 Push-Location (Join-Path $repoRoot "apps/web")
 try {
-  npm run verify:ui-guardrails
+  Invoke-NativeStep "Running web guardrails" { npm run verify:ui-guardrails }
 }
 finally {
   Pop-Location
 }
 
-Write-Host "==> Running API tests"
-python -m pytest (Join-Path $repoRoot "apps/api/tests") -q
+Invoke-NativeStep "Running API tests" { python -m pytest (Join-Path $repoRoot "apps/api/tests") -q }

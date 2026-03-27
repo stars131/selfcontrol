@@ -43,6 +43,22 @@ alembic upgrade head
 - 主要运行环境：Linux 虚拟机
 - 推荐通过 VS Code Remote SSH 或等价远程方式开发
 
+首次拉取仓库后的依赖安装：
+
+建议 Python 版本：`3.12` 或 `3.13`
+
+Windows PowerShell：
+
+```powershell
+./scripts/bootstrap-dev.ps1
+```
+
+Linux / macOS / VM：
+
+```bash
+sh ./scripts/bootstrap-dev.sh
+```
+
 ## 常用验证命令
 
 前端：

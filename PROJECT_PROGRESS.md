@@ -2281,6 +2281,12 @@ Last updated: 2026-03-26
 - Cross-Platform Text Normalization Guard V1:
   - the repository now includes `.editorconfig` and `.gitattributes` so UTF-8, indentation, and line-ending behavior stay predictable across Windows, Linux VM, and GitHub CI environments
   - this reduces noisy diffs, lowers the risk of accidental encoding drift, and strengthens long-term maintainability for a multilingual enterprise-grade codebase
+- Cross-Platform Dev Bootstrap Scripts V1:
+  - the repository now includes root-level `scripts/bootstrap-dev.ps1` and `scripts/bootstrap-dev.sh` so a fresh Windows or Linux VM environment can install API and web development dependencies through one shared onboarding flow
+  - the repaired setup docs and README now point to these scripts directly, reducing first-run setup drift between local development and future server-side maintenance work
+- Bootstrap Runtime Compatibility Guard V1:
+  - bootstrap scripts now fail fast on unsupported Python 3.14+ environments and explicitly direct developers to Python 3.12 or 3.13, matching the current dependency reality and CI baseline
+  - PowerShell helper scripts now check native command exit codes explicitly so failed installs or validation commands cannot silently pass in Windows environments
 
 ## Next
 - Continue the next product slice

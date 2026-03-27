@@ -5,8 +5,23 @@
 - 开发宿主机：Windows
 - 主要运行环境：Linux 虚拟机
 - 推荐使用 VS Code Remote SSH 或等价远程开发方式
+- 推荐 Python 版本：`3.12` 或 `3.13`
 
 ## 2. 首次启动
+
+如果是第一次拉取仓库，先安装开发依赖：
+
+Windows：
+
+```powershell
+./scripts/bootstrap-dev.ps1
+```
+
+Linux VM：
+
+```bash
+sh ./scripts/bootstrap-dev.sh
+```
 
 ```bash
 cp .env.example .env
