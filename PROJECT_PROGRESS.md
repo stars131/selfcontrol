@@ -2338,6 +2338,9 @@ Last updated: 2026-03-26
 - Media Retention Service Boundary Extraction V1:
   - media retention reports, cleanup actions, archive actions, and orphan-file scanning now live in `apps/api/app/services/media_retention.py`, while `apps/api/app/services/media_storage.py` has been reduced to storage primitives such as path resolution, local deletion, tier lookup, and storage summaries
   - the media API routes now import lifecycle-management writes from the dedicated retention service module, reducing coupling between storage primitives and retention policy logic under the backend enterprise maintainability standard
+- Provider Config Validation Boundary Extraction V1:
+  - provider feature definitions, secret/env validation, media-storage option normalization, warning generation, and feature-specific provider validation now live in `apps/api/app/services/provider_config_validation.py`
+  - `apps/api/app/services/provider_configs.py` now focuses more narrowly on dataclass assembly, default/merged config composition, and persistence orchestration, reducing coupling inside the provider configuration service
 
 ## Next
 - Continue the next product slice
