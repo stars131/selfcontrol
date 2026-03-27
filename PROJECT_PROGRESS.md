@@ -2719,6 +2719,10 @@ Last updated: 2026-03-28
   - recent-media issue-label tag rendering now lives in `apps/web/components/recent-media-issue-card-issue-label-tag.tsx` instead of remaining inline inside `recent-media-issue-card-tags.tsx`
   - `recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while issue-label rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this issue-label-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-issue-label rendering module
+- Dead-Letter Issue Label Tag Extraction V1:
+  - dead-letter item issue-label tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-issue-label-tag.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-tags.tsx`
+  - `dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared tag composition while issue-label rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this issue-label-tag boundary so future dead-letter tag changes do not regrow a mixed composition-and-issue-label rendering module
 
 ## Next
 - Continue the next product slice
