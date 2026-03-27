@@ -19239,8 +19239,11 @@ if (useWorkspaceSettingsAnchorTypesLines > maxUseWorkspaceSettingsAnchorTypesLin
 }
 
 for (const requiredUseWorkspaceSettingsLoadUsage of [
+  'import { getStoredLocale } from "../lib/locale";',
+  'import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";',
   'import type { UseWorkspaceSettingsLoadInput } from "./use-workspace-settings-load.types";',
   "}: UseWorkspaceSettingsLoadInput) {",
+  "getWorkspaceSettingsCopy(getStoredLocale()).loadFailed",
 ]) {
   if (!useWorkspaceSettingsLoadSource.includes(requiredUseWorkspaceSettingsLoadUsage)) {
     throw new Error(
@@ -19317,8 +19320,14 @@ if (workspaceSettingsActionsTypesLines > maxWorkspaceSettingsActionsTypesLines) 
 }
 
 for (const requiredWorkspaceSettingsMemberActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-settings-copy";',
   'import type { CreateWorkspaceSettingsMemberActionsInput } from "./workspace-settings-member-actions.types";',
   "}: CreateWorkspaceSettingsMemberActionsInput) {",
+  "const copy = getWorkspaceSettingsCopy(getStoredLocale());",
+  "copy.notAuthenticated",
+  "copy.updateMemberFailed",
+  "copy.removeMemberFailed",
 ]) {
   if (!workspaceSettingsMemberActionsSource.includes(requiredWorkspaceSettingsMemberActionsUsage)) {
     throw new Error(
@@ -19356,8 +19365,13 @@ if (workspaceSettingsMemberActionsTypesLines > maxWorkspaceSettingsMemberActions
 }
 
 for (const requiredWorkspaceSettingsProviderActionsUsage of [
+  'from "../lib/locale";',
+  'from "./workspace-settings-copy";',
   'import type { CreateWorkspaceSettingsProviderActionsInput } from "./workspace-settings-provider-actions.types";',
   "}: CreateWorkspaceSettingsProviderActionsInput) {",
+  "const copy = getWorkspaceSettingsCopy(getStoredLocale());",
+  "copy.loadMediaStorageHealthFailed",
+  "copy.notAuthenticated",
 ]) {
   if (!workspaceSettingsProviderActionsSource.includes(requiredWorkspaceSettingsProviderActionsUsage)) {
     throw new Error(

@@ -914,12 +914,17 @@ if (actionErrorLineCount > 10) {
 
 for (const requiredProviderActionsUsage of [
   'from "../lib/api";',
+  'from "../lib/locale";',
   'from "./workspace-settings-action-error";',
+  'from "./workspace-settings-copy";',
   "export function createWorkspaceSettingsProviderActions({",
+  "const copy = getWorkspaceSettingsCopy(getStoredLocale());",
   "async function refreshMediaStorageHealthState(",
   "async function handleSaveProviderConfig(",
   "getMediaStorageProviderHealth(",
   "updateProviderConfig(",
+  "copy.loadMediaStorageHealthFailed",
+  "copy.notAuthenticated",
 ]) {
   if (!providerActionsSource.includes(requiredProviderActionsUsage)) {
     throw new Error(`workspace-settings-provider-actions.ts must own provider action logic: ${requiredProviderActionsUsage}`);
@@ -932,12 +937,18 @@ if (providerActionsLineCount > 65) {
 
 for (const requiredMemberActionsUsage of [
   'from "../lib/api";',
+  'from "../lib/locale";',
   'from "./workspace-settings-action-error";',
+  'from "./workspace-settings-copy";',
   "export function createWorkspaceSettingsMemberActions({",
+  "const copy = getWorkspaceSettingsCopy(getStoredLocale());",
   "async function handleUpdateMemberRole(",
   "async function handleRemoveMember(",
   "updateWorkspaceMember(",
   "deleteWorkspaceMember(",
+  "copy.notAuthenticated",
+  "copy.updateMemberFailed",
+  "copy.removeMemberFailed",
 ]) {
   if (!memberActionsSource.includes(requiredMemberActionsUsage)) {
     throw new Error(`workspace-settings-member-actions.ts must own member action logic: ${requiredMemberActionsUsage}`);

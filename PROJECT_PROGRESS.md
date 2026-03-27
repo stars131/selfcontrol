@@ -2191,6 +2191,9 @@ Last updated: 2026-03-26
 - Legacy Record Error Localization V1:
   - legacy record save, delete, and upload actions now reuse localized record-detail error copy for required-content and failure fallbacks instead of surfacing English-only messages
   - `verify-record-panel-structure.mjs` now enforces the locale-aware error bundle usage inside those legacy actions so future maintenance does not regress localized error handling
+- Workspace Settings Error Localization V1:
+  - workspace settings load, provider refresh, and member-management flows now reuse localized settings copy for authentication and fallback error messages instead of surfacing English-only failures
+  - workspace-settings structure checks now enforce the shared settings-copy usage inside those action boundaries so future admin-panel maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

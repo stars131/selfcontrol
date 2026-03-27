@@ -25,6 +25,11 @@ export type WorkspaceSettingsCopy = {
   removingLabel: string;
   ownerProtected: string;
   loading: string;
+  notAuthenticated: string;
+  loadFailed: string;
+  loadMediaStorageHealthFailed: string;
+  updateMemberFailed: string;
+  removeMemberFailed: string;
 };
 
 type WorkspaceSettingsCopyMap = Record<LocaleCode, WorkspaceSettingsCopy>;
@@ -56,6 +61,11 @@ const COPY: WorkspaceSettingsCopyMap = {
     removingLabel: "移除中...",
     ownerProtected: "Owner 成员受保护，不能在这里修改或移除。",
     loading: "正在加载设置...",
+    notAuthenticated: "尚未登录",
+    loadFailed: "加载设置失败",
+    loadMediaStorageHealthFailed: "加载媒体存储健康状态失败",
+    updateMemberFailed: "更新工作区成员失败",
+    removeMemberFailed: "移除工作区成员失败",
   },
   en: {
     eyebrow: "Settings",
@@ -83,6 +93,11 @@ const COPY: WorkspaceSettingsCopyMap = {
     removingLabel: "Removing...",
     ownerProtected: "Owner memberships are protected and cannot be changed here.",
     loading: "Loading settings...",
+    notAuthenticated: "Not authenticated",
+    loadFailed: "Failed to load settings",
+    loadMediaStorageHealthFailed: "Failed to load media storage health",
+    updateMemberFailed: "Failed to update workspace member",
+    removeMemberFailed: "Failed to remove workspace member",
   },
   ja: {
     eyebrow: "設定",
@@ -110,6 +125,11 @@ const COPY: WorkspaceSettingsCopyMap = {
     removingLabel: "削除中...",
     ownerProtected: "Owner メンバーは保護されており、ここでは変更や削除はできません。",
     loading: "設定を読み込み中...",
+    notAuthenticated: "未認証です",
+    loadFailed: "設定の読み込みに失敗しました",
+    loadMediaStorageHealthFailed: "媒体保存先の健全性の読み込みに失敗しました",
+    updateMemberFailed: "ワークスペースメンバーの更新に失敗しました",
+    removeMemberFailed: "ワークスペースメンバーの削除に失敗しました",
   },
 };
 

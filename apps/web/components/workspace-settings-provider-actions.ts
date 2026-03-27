@@ -1,10 +1,12 @@
 "use client";
 
 import { getMediaStorageProviderHealth, updateProviderConfig } from "../lib/api";
+import { getStoredLocale } from "../lib/locale";
 import type {
   WorkspaceSettingsProviderConfigInput,
 } from "./workspace-settings-controller.types";
 import { getWorkspaceSettingsActionErrorMessage } from "./workspace-settings-action-error";
+import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
 import type { CreateWorkspaceSettingsProviderActionsInput } from "./workspace-settings-provider-actions.types";
 
 export function createWorkspaceSettingsProviderActions({
@@ -18,6 +20,7 @@ export function createWorkspaceSettingsProviderActions({
     setProviderConfigs,
     setRefreshingMediaStorageHealth,
   } = state;
+  const copy = getWorkspaceSettingsCopy(getStoredLocale());
 
   async function refreshMediaStorageHealthState(activeToken: string) {
     setRefreshingMediaStorageHealth(true);
@@ -26,7 +29,7 @@ export function createWorkspaceSettingsProviderActions({
       setMediaStorageHealth(result.health);
       setError("");
     } catch (caught) {
-      setError(getWorkspaceSettingsActionErrorMessage(caught, "Failed to load media storage health"));
+      setError(getWorkspaceSettingsActionErrorMessage(caught, copy.loadMediaStorageHealthFailed));
     } finally {
       setRefreshingMediaStorageHealth(false);
     }
@@ -37,7 +40,7 @@ export function createWorkspaceSettingsProviderActions({
     input: WorkspaceSettingsProviderConfigInput,
   ) {
     if (!token) {
-      throw new Error("Not authenticated");
+      throw new Error(copy.notAuthenticated);
     }
 
     const result = await updateProviderConfig(token, workspaceId, featureCode, input);

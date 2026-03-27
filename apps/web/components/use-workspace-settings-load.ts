@@ -11,10 +11,12 @@ import {
   listWorkspaceMembers,
 } from "../lib/api";
 import { clearStoredSession, getStoredToken } from "../lib/auth";
+import { getStoredLocale } from "../lib/locale";
+import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
 import type { UseWorkspaceSettingsLoadInput } from "./use-workspace-settings-load.types";
 
 function getWorkspaceSettingsLoadErrorMessage(caught: unknown) {
-  return caught instanceof Error ? caught.message : "Failed to load settings";
+  return caught instanceof Error ? caught.message : getWorkspaceSettingsCopy(getStoredLocale()).loadFailed;
 }
 
 export function useWorkspaceSettingsLoad({
