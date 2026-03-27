@@ -2427,10 +2427,14 @@ Last updated: 2026-03-27
   - remote media storage upload, download, and delete HTTP execution paths now live in `apps/api/app/services/media_remote_storage_http.py`, while shared remote media result dataclasses now live in `media_remote_storage_types.py`
   - `media_remote_storage.py` now focuses on workspace/provider orchestration, fallback handling, temp-file persistence, and compatibility exports for existing monkeypatch paths instead of also owning raw HTTP execution details
   - dedicated backend unit tests now cover direct upload payload handling, download/delete status behavior, and transport error mapping for the extracted remote media HTTP boundary
+- Media Retention Reporting Boundary Extraction V1:
+  - retention datetime coercion and orphan-file discovery now live in `apps/api/app/services/media_retention_common.py`, while retention report aggregation now lives in `media_retention_reporting.py`
+  - `media_retention.py` now focuses more narrowly on archive and cleanup mutation flows while re-exporting the report builder through the existing service entrypoint
+  - dedicated backend unit tests now cover retention datetime normalization, orphan-file scanning, and report aggregation across local, remote, archived, and missing-file cases for the extracted reporting boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around remaining remote media helpers, provider compatibility exports, and any leftover duplicated provider-routing rules, then shift the next maintainability slice back to large frontend composition boundaries
+- Continue simplifying the remaining backend provider stack around remaining remote media helpers and compatibility exports, then shift the next maintainability slice back to large frontend composition boundaries
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
