@@ -2271,6 +2271,14 @@ const recordSummaryCardTypesPath = path.resolve(
   process.cwd(),
   "components/record-summary-card.types.ts",
 );
+const recordSummaryCardDerivedPath = path.resolve(
+  process.cwd(),
+  "components/record-summary-card-derived.ts",
+);
+const recordSummaryCardDerivedTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-summary-card-derived.types.ts",
+);
 const recordResultsViewSwitcherPath = path.resolve(
   process.cwd(),
   "components/record-results-view-switcher.tsx",
@@ -3722,6 +3730,11 @@ const workspaceEntryShareActionsTypesSource = fs.readFileSync(
 );
 const recordSummaryCardSource = fs.readFileSync(recordSummaryCardPath, "utf8");
 const recordSummaryCardTypesSource = fs.readFileSync(recordSummaryCardTypesPath, "utf8");
+const recordSummaryCardDerivedSource = fs.readFileSync(recordSummaryCardDerivedPath, "utf8");
+const recordSummaryCardDerivedTypesSource = fs.readFileSync(
+  recordSummaryCardDerivedTypesPath,
+  "utf8",
+);
 const recordResultsViewSwitcherSource = fs.readFileSync(recordResultsViewSwitcherPath, "utf8");
 const recordResultsViewSwitcherTypesSource = fs.readFileSync(
   recordResultsViewSwitcherTypesPath,
@@ -5115,6 +5128,10 @@ const recentMediaIssueCardActionsTypesLines =
 const recentMediaIssueCardTagsTypesLines =
   recentMediaIssueCardTagsTypesSource.split(/\r?\n/).length;
 const mediaPreviewContentTypesLines = mediaPreviewContentTypesSource.split(/\r?\n/).length;
+const recordSummaryCardLines = recordSummaryCardSource.split(/\r?\n/).length;
+const recordSummaryCardDerivedLines = recordSummaryCardDerivedSource.split(/\r?\n/).length;
+const recordSummaryCardDerivedTypesLines =
+  recordSummaryCardDerivedTypesSource.split(/\r?\n/).length;
 const providerFeatureCardStatusTypesLines =
   providerFeatureCardStatusTypesSource.split(/\r?\n/).length;
 const recordEditorLocationFieldsTypesLines =
@@ -21757,10 +21774,16 @@ if (workspaceEntryShareActionsTypesLines > maxWorkspaceEntryShareActionsTypesLin
 }
 
 for (const requiredRecordSummaryCardUsage of [
+  'import { buildRecordSummaryCardDerivedState } from "./record-summary-card-derived";',
   'import type { RecordSummaryCardProps } from "./record-summary-card.types";',
   "formatRecordSourceLabel",
   "formatRecordStatusLabel",
   "formatRecordTypeLabel",
+  "const derivedState = buildRecordSummaryCardDerivedState({",
+  "derivedState.showLocation ? (",
+  "{derivedState.locationLabel}",
+  "{derivedState.locationAddressSuffix}",
+  "derivedState.mapStatusLabel ? <span className=\"tag\">{derivedState.mapStatusLabel}</span> : null",
   "}: RecordSummaryCardProps) {",
 ]) {
   if (!recordSummaryCardSource.includes(requiredRecordSummaryCardUsage)) {
@@ -21771,14 +21794,25 @@ for (const requiredRecordSummaryCardUsage of [
 }
 
 for (const forbiddenRecordSummaryCardToken of [
+  'import { readLocationReview } from "../lib/location";',
+  'import { readLocationForm } from "../lib/record-panel-forms";',
   'import type { RecordItem } from "../lib/types";',
   "type RecordSummaryCardProps = {",
+  "const location = readLocationForm(record);",
+  "const review = readLocationReview(record.extra_data);",
 ]) {
   if (recordSummaryCardSource.includes(forbiddenRecordSummaryCardToken)) {
     throw new Error(
       `record-summary-card.tsx must keep summary-card prop typing delegated: ${forbiddenRecordSummaryCardToken}`,
     );
   }
+}
+
+const maxRecordSummaryCardLines = 60;
+if (recordSummaryCardLines > maxRecordSummaryCardLines) {
+  throw new Error(
+    `record-summary-card.tsx exceeded ${maxRecordSummaryCardLines} lines: ${recordSummaryCardLines}`,
+  );
 }
 
 for (const requiredRecordSummaryCardTypesUsage of [
@@ -21795,6 +21829,60 @@ const maxRecordSummaryCardTypesLines = 2;
 if (recordSummaryCardTypesLines > maxRecordSummaryCardTypesLines) {
   throw new Error(
     `record-summary-card.types.ts exceeded ${maxRecordSummaryCardTypesLines} lines: ${recordSummaryCardTypesLines}`,
+  );
+}
+
+for (const requiredRecordSummaryCardDerivedUsage of [
+  'import { readLocationReview } from "../lib/location";',
+  'import { readLocationForm } from "../lib/record-panel-forms";',
+  'import type { BuildRecordSummaryCardDerivedStateInput } from "./record-summary-card-derived.types";',
+  "export function buildRecordSummaryCardDerivedState({",
+  "}: BuildRecordSummaryCardDerivedStateInput) {",
+  "const location = readLocationForm(record);",
+  "const review = readLocationReview(record.extra_data);",
+  "locationLabel: location.place_name || unknownPlaceLabel,",
+  "showLocation: Boolean(location.place_name || location.address),",
+]) {
+  if (!recordSummaryCardDerivedSource.includes(requiredRecordSummaryCardDerivedUsage)) {
+    throw new Error(
+      `record-summary-card-derived.ts must own summary-card derived state: ${requiredRecordSummaryCardDerivedUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSummaryCardDerivedToken of [
+  "<article",
+  "formatRecordTimestampLabel(",
+  "formatRecordSourceLabel(",
+]) {
+  if (recordSummaryCardDerivedSource.includes(forbiddenRecordSummaryCardDerivedToken)) {
+    throw new Error(
+      `record-summary-card-derived.ts must keep summary-card rendering delegated: ${forbiddenRecordSummaryCardDerivedToken}`,
+    );
+  }
+}
+
+const maxRecordSummaryCardDerivedLines = 25;
+if (recordSummaryCardDerivedLines > maxRecordSummaryCardDerivedLines) {
+  throw new Error(
+    `record-summary-card-derived.ts exceeded ${maxRecordSummaryCardDerivedLines} lines: ${recordSummaryCardDerivedLines}`,
+  );
+}
+
+for (const requiredRecordSummaryCardDerivedTypesUsage of [
+  'import type { RecordSummaryCardProps } from "./record-summary-card.types"; export type BuildRecordSummaryCardDerivedStateInput = Pick<RecordSummaryCardProps, "formatReviewStatusLabel" | "mapPrefixLabel" | "record" | "unknownPlaceLabel">;',
+]) {
+  if (!recordSummaryCardDerivedTypesSource.includes(requiredRecordSummaryCardDerivedTypesUsage)) {
+    throw new Error(
+      `record-summary-card-derived.types.ts must own summary-card derived input typing: ${requiredRecordSummaryCardDerivedTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSummaryCardDerivedTypesLines = 2;
+if (recordSummaryCardDerivedTypesLines > maxRecordSummaryCardDerivedTypesLines) {
+  throw new Error(
+    `record-summary-card-derived.types.ts exceeded ${maxRecordSummaryCardDerivedTypesLines} lines: ${recordSummaryCardDerivedTypesLines}`,
   );
 }
 

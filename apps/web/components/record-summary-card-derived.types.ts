@@ -1,0 +1,1 @@
+import type { RecordSummaryCardProps } from "./record-summary-card.types"; export type BuildRecordSummaryCardDerivedStateInput = Pick<RecordSummaryCardProps, "formatReviewStatusLabel" | "mapPrefixLabel" | "record" | "unknownPlaceLabel">;

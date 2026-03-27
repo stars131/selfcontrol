@@ -2543,6 +2543,10 @@ Last updated: 2026-03-27
   - summary-card prop projection now lives in `apps/web/components/record-results-summary-card-props.ts` instead of remaining inline inside `record-results-shared.tsx`
   - `record-results-shared.tsx` now stays focused on shared card rendering while summary-card prop shaping remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this summary-card prop builder boundary so future results-surface changes do not regrow a mixed projection-and-rendering shared helper
+- Record Summary Card Derived State Extraction V1:
+  - location and map-status derived state now live in `apps/web/components/record-summary-card-derived.ts` instead of remaining inline inside `record-summary-card.tsx`
+  - `record-summary-card.tsx` now stays focused on summary-card rendering while location review reads and derived display state remain centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this derived-state boundary so future summary-card changes do not regrow mixed data-access and rendering logic
 
 ## Next
 - Continue the next product slice
