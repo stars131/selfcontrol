@@ -2296,6 +2296,9 @@ Last updated: 2026-03-26
 - Pull Request Governance Template V1:
   - the repository now includes a GitHub pull request template that requires verification, documentation, and security/operations review checkpoints for future changes
   - this raises the change-management baseline so later multi-contributor or enterprise-style workflows do not depend on memory alone
+- Repository Security Policy V1:
+  - the repository now includes a dedicated root `SECURITY.md` covering vulnerability reporting expectations, priority risk surfaces, and minimum remediation standards
+  - this gives future production-facing changes an explicit security governance entrypoint instead of relying only on scattered operational notes
 
 ## Next
 - Continue the next product slice
