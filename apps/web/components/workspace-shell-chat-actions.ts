@@ -2,6 +2,7 @@
 
 import { createConversation, sendMessage } from "../lib/api";
 import { buildTimelineDays } from "../lib/timeline";
+import { getStoredChatPanelDisplayCopy } from "./chat-panel-display-copy";
 import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import {
   requireActiveConversationContext,
@@ -54,10 +55,11 @@ export function createWorkspaceShellChatActions({
 
   async function handleCreateConversation() {
     const activeToken = requireWritableWorkspaceToken(token, canWriteWorkspace);
+    const copy = getStoredChatPanelDisplayCopy();
     const result = await createConversation(
       activeToken,
       workspaceId,
-      `Chat ${conversationsCount + 1}`,
+      copy.buildConversationTitle(conversationsCount + 1),
     );
     setConversations((prev) => [result.conversation, ...prev]);
     setActiveConversationId(result.conversation.id);

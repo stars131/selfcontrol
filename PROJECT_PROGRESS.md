@@ -2215,6 +2215,9 @@ Last updated: 2026-03-26
 - Auth Form Error Localization V1:
   - login and registration fallback failures now reuse locale-aware auth-form copy instead of hardcoded English strings inside the submit handlers
   - auth-form structure verification now enforces those copy-driven fallback errors so future access-surface maintenance keeps the enterprise localization baseline intact
+- Chat Panel Display Localization V1:
+  - chat header labels, conversation action buttons, and auto-created conversation titles now reuse a shared locale-aware display copy instead of hardcoded English strings in the chat surface and shell actions
+  - chat-panel and workspace-shell structure verification now enforce those copy-driven labels and seeded conversation titles so future assistant-surface maintenance keeps the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice

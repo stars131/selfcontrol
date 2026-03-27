@@ -516,7 +516,7 @@ export async function listConversations(token: string, workspaceId: string) {
   );
 }
 
-export async function createConversation(token: string, workspaceId: string, title = "New conversation") {
+export async function createConversation(token: string, workspaceId: string, title: string) {
   return request<{ conversation: Conversation }>(
     `/workspaces/${workspaceId}/conversations`,
     {

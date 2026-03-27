@@ -2,10 +2,8 @@
 
 import { createConversation, listConversations } from "../lib/api";
 import { loadConversationMessagesForWorkspace } from "../lib/workspace-shell-refresh";
-import type {
-  LoadWorkspaceShellConversationStateInput,
-  WorkspaceShellLoadRole,
-} from "./workspace-shell-conversation-state-load.types";
+import { getStoredChatPanelDisplayCopy } from "./chat-panel-display-copy";
+import type { LoadWorkspaceShellConversationStateInput, WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";
 
 function canManageWorkspace(role: WorkspaceShellLoadRole) {
   return role === "owner" || role === "editor";
@@ -22,7 +20,7 @@ export async function loadWorkspaceShellConversationState({
   const conversationResult = await listConversations(activeToken, workspaceId);
   let items = conversationResult.items;
   if (!items.length && canManageWorkspace(role)) {
-    const created = await createConversation(activeToken, workspaceId, "Workspace chat");
+    const created = await createConversation(activeToken, workspaceId, getStoredChatPanelDisplayCopy().initialConversationTitle);
     items = [created.conversation];
   }
 

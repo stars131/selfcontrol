@@ -902,6 +902,7 @@ if (initialLoadHelpersTypesLineCount > maxInitialLoadHelpersTypesLines) {
 for (const requiredConversationStateLoadImport of [
   'from "../lib/api";',
   'from "../lib/workspace-shell-refresh";',
+  'from "./chat-panel-display-copy";',
   'import type {',
   'from "./workspace-shell-conversation-state-load.types";',
 ]) {
@@ -916,6 +917,7 @@ for (const requiredConversationStateLoadUsage of [
   "export async function loadWorkspaceShellConversationState({",
   "}: LoadWorkspaceShellConversationStateInput) {",
   "function canManageWorkspace(role: WorkspaceShellLoadRole)",
+  "getStoredChatPanelDisplayCopy().initialConversationTitle",
 ]) {
   if (!conversationStateLoadSource.includes(requiredConversationStateLoadUsage)) {
     throw new Error(
@@ -927,6 +929,7 @@ for (const requiredConversationStateLoadUsage of [
 for (const forbiddenConversationStateLoadToken of [
   'type WorkspaceRole = "owner" | "editor" | "viewer";',
   "type LoadWorkspaceShellConversationStateInput = {",
+  '"Workspace chat"',
 ]) {
   if (conversationStateLoadSource.includes(forbiddenConversationStateLoadToken)) {
     throw new Error(

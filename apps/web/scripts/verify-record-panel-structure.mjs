@@ -14016,9 +14016,7 @@ if (workspaceShellClientPanelsPropsTypesLines > maxWorkspaceShellClientPanelsPro
 }
 
 for (const requiredWorkspaceShellConversationStateLoadUsage of [
-  'from "./workspace-shell-conversation-state-load.types";',
-  "LoadWorkspaceShellConversationStateInput,",
-  "WorkspaceShellLoadRole,",
+  'import type { LoadWorkspaceShellConversationStateInput, WorkspaceShellLoadRole } from "./workspace-shell-conversation-state-load.types";',
   "}: LoadWorkspaceShellConversationStateInput) {",
 ]) {
   if (!workspaceShellConversationStateLoadSource.includes(requiredWorkspaceShellConversationStateLoadUsage)) {
@@ -19866,6 +19864,12 @@ if (chatMessageThreadTypesLines > maxChatMessageThreadTypesLines) {
 for (const requiredChatPanelHeaderUsage of [
   'import type { ChatPanelHeaderProps } from "./chat-panel-header.types";',
   "}: ChatPanelHeaderProps) {",
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getWorkspaceRoleLabel } from "../lib/workspace-role-display";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "getWorkspaceRoleLabel(locale, workspaceRole)",
 ]) {
   if (!chatPanelHeaderSource.includes(requiredChatPanelHeaderUsage)) {
     throw new Error(
@@ -19876,6 +19880,12 @@ for (const requiredChatPanelHeaderUsage of [
 
 if (chatPanelHeaderSource.includes("type ChatPanelHeaderProps = {")) {
   throw new Error("chat-panel-header.tsx must keep panel-header prop typing delegated");
+}
+
+for (const forbiddenChatPanelHeaderCopyToken of ['"Agent"', '"Chat Assistant"', '"Settings"']) {
+  if (chatPanelHeaderSource.includes(forbiddenChatPanelHeaderCopyToken)) {
+    throw new Error(`chat-panel-header.tsx must keep localized header copy delegated: ${forbiddenChatPanelHeaderCopyToken}`);
+  }
 }
 
 for (const requiredChatPanelHeaderTypesUsage of [
@@ -19930,6 +19940,13 @@ if (chatPanelComposerTypesLines > maxChatPanelComposerTypesLines) {
 for (const requiredChatConversationBarUsage of [
   'import type { ChatConversationBarProps } from "./chat-conversation-bar.types";',
   "}: ChatConversationBarProps) {",
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "copy.newConversationLabel",
+  "copy.syncingLabel",
+  "copy.syncRemindersLabel",
 ]) {
   if (!chatConversationBarSource.includes(requiredChatConversationBarUsage)) {
     throw new Error(
@@ -19941,6 +19958,9 @@ for (const requiredChatConversationBarUsage of [
 for (const forbiddenChatConversationBarToken of [
   'import type { Conversation } from "../lib/types";',
   "}: {",
+  '"New conversation"',
+  '"Syncing..."',
+  '"Sync reminders"',
 ]) {
   if (chatConversationBarSource.includes(forbiddenChatConversationBarToken)) {
     throw new Error(

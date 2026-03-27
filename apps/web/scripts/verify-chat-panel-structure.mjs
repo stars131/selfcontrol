@@ -264,8 +264,51 @@ if (!chatPanelHeaderSource.includes('href={`/app/workspaces/${workspaceId}/setti
   throw new Error("chat-panel-header.tsx must keep the workspace settings entry");
 }
 
+for (const requiredHeaderCopyUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getWorkspaceRoleLabel } from "../lib/workspace-role-display";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "getWorkspaceRoleLabel(locale, workspaceRole)",
+]) {
+  if (!chatPanelHeaderSource.includes(requiredHeaderCopyUsage)) {
+    throw new Error(`chat-panel-header.tsx must delegate localized display copy: ${requiredHeaderCopyUsage}`);
+  }
+}
+
+for (const forbiddenHeaderCopyToken of ['"Agent"', '"Chat Assistant"', '"Settings"']) {
+  if (chatPanelHeaderSource.includes(forbiddenHeaderCopyToken)) {
+    throw new Error(`chat-panel-header.tsx must not hardcode localized labels: ${forbiddenHeaderCopyToken}`);
+  }
+}
+
 if (!chatConversationBarSource.includes("className={`conversation-pill ${conversation.id === activeConversationId ? \"active\" : \"\"}`}")) {
   throw new Error("chat-conversation-bar.tsx must keep conversation pill rendering");
+}
+
+for (const requiredConversationBarCopyUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "copy.newConversationLabel",
+  "copy.syncingLabel",
+  "copy.syncRemindersLabel",
+]) {
+  if (!chatConversationBarSource.includes(requiredConversationBarCopyUsage)) {
+    throw new Error(
+      `chat-conversation-bar.tsx must delegate localized conversation actions: ${requiredConversationBarCopyUsage}`,
+    );
+  }
+}
+
+for (const forbiddenConversationBarCopyToken of ['"New conversation"', '"Syncing..."', '"Sync reminders"']) {
+  if (chatConversationBarSource.includes(forbiddenConversationBarCopyToken)) {
+    throw new Error(
+      `chat-conversation-bar.tsx must not hardcode localized action labels: ${forbiddenConversationBarCopyToken}`,
+    );
+  }
 }
 
 if (!chatPanelComposerSource.includes("Examples: save this snack note")) {

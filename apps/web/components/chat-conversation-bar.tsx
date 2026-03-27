@@ -1,5 +1,7 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";
 import type { ChatConversationBarProps } from "./chat-conversation-bar.types";
 
 export function ChatConversationBar({
@@ -11,6 +13,9 @@ export function ChatConversationBar({
   onSyncNotifications,
   syncing,
 }: ChatConversationBarProps) {
+  const { locale } = useStoredLocale();
+  const copy = getChatPanelDisplayCopy(locale);
+
   return (
     <div className="conversation-bar">
       <div className="action-row">
@@ -20,7 +25,7 @@ export function ChatConversationBar({
           type="button"
           onClick={() => void onCreateConversation()}
         >
-          New conversation
+          {copy.newConversationLabel}
         </button>
         <button
           className="button secondary"
@@ -28,7 +33,7 @@ export function ChatConversationBar({
           type="button"
           onClick={() => void onSyncNotifications()}
         >
-          {syncing ? "Syncing..." : "Sync reminders"}
+          {syncing ? copy.syncingLabel : copy.syncRemindersLabel}
         </button>
       </div>
       <div className="conversation-list">
