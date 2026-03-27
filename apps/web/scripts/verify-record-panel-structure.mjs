@@ -2514,6 +2514,14 @@ const recordReminderItemCardChildPropsTypesPath = path.resolve(
   "components/record-reminder-item-card-child-props.types.ts",
 );
 const recordReminderListPath = path.resolve(process.cwd(), "components/record-reminder-list.tsx");
+const recordReminderListItemPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-list-item-props.ts",
+);
+const recordReminderListItemPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-reminder-list-item-props.types.ts",
+);
 const recordReminderListTypesPath = path.resolve(
   process.cwd(),
   "components/record-reminder-list.types.ts",
@@ -3877,6 +3885,11 @@ const recordReminderItemCardChildPropsTypesSource = fs.readFileSync(
   "utf8",
 );
 const recordReminderListSource = fs.readFileSync(recordReminderListPath, "utf8");
+const recordReminderListItemPropsSource = fs.readFileSync(recordReminderListItemPropsPath, "utf8");
+const recordReminderListItemPropsTypesSource = fs.readFileSync(
+  recordReminderListItemPropsTypesPath,
+  "utf8",
+);
 const recordReminderListTypesSource = fs.readFileSync(recordReminderListTypesPath, "utf8");
 const providerSettingsControllerActionsSource = fs.readFileSync(
   providerSettingsControllerActionsPath,
@@ -5124,6 +5137,10 @@ const recordReminderItemCardChildPropsLines =
   recordReminderItemCardChildPropsSource.split(/\r?\n/).length;
 const recordReminderItemCardChildPropsTypesLines =
   recordReminderItemCardChildPropsTypesSource.split(/\r?\n/).length;
+const recordReminderListLines = recordReminderListSource.split(/\r?\n/).length;
+const recordReminderListItemPropsLines = recordReminderListItemPropsSource.split(/\r?\n/).length;
+const recordReminderListItemPropsTypesLines =
+  recordReminderListItemPropsTypesSource.split(/\r?\n/).length;
 const recordReminderListTypesLines = recordReminderListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardLines = deadLetterRecoveryItemCardSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsTypesLines =
@@ -23262,6 +23279,95 @@ const maxRecordReminderItemCardChildPropsTypesLines = 2;
 if (recordReminderItemCardChildPropsTypesLines > maxRecordReminderItemCardChildPropsTypesLines) {
   throw new Error(
     `record-reminder-item-card-child-props.types.ts exceeded ${maxRecordReminderItemCardChildPropsTypesLines} lines: ${recordReminderItemCardChildPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecordReminderListUsage of [
+  'import { buildRecordReminderItemCardProps } from "./record-reminder-list-item-props";',
+  'import { RecordReminderItemCard } from "./record-reminder-item-card";',
+  'import type { RecordReminderListProps } from "./record-reminder-list.types";',
+  "export function RecordReminderList({ ...props }: RecordReminderListProps) {",
+  "props.reminders.length ? (",
+  "{...buildRecordReminderItemCardProps({ props, reminder })}",
+  '<div className="notice">{props.noRemindersLabel}</div>',
+]) {
+  if (!recordReminderListSource.includes(requiredRecordReminderListUsage)) {
+    throw new Error(
+      `record-reminder-list.tsx must reuse the extracted reminder list item-props builder: ${requiredRecordReminderListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderListToken of [
+  "canWriteWorkspace={",
+  "deleteReminderLabel={",
+  "selectedRecordTitle={",
+  "untitledReminderLabel={",
+]) {
+  if (recordReminderListSource.includes(forbiddenRecordReminderListToken)) {
+    throw new Error(
+      `record-reminder-list.tsx must keep item-card prop projection delegated: ${forbiddenRecordReminderListToken}`,
+    );
+  }
+}
+
+const maxRecordReminderListLines = 25;
+if (recordReminderListLines > maxRecordReminderListLines) {
+  throw new Error(
+    `record-reminder-list.tsx exceeded ${maxRecordReminderListLines} lines: ${recordReminderListLines}`,
+  );
+}
+
+for (const requiredRecordReminderListItemPropsUsage of [
+  'import type { ReminderItem } from "../lib/types";',
+  'import type { RecordReminderItemCardProps } from "./record-reminder-panel.types";',
+  'import type { BuildRecordReminderItemCardPropsInput } from "./record-reminder-list-item-props.types";',
+  "export function buildRecordReminderItemCardProps({",
+  "}: BuildRecordReminderItemCardPropsInput): RecordReminderItemCardProps {",
+  "canWriteWorkspace: props.canWriteWorkspace,",
+  "onToggleReminderEnabled: props.onToggleReminderEnabled,",
+  "untitledReminderLabel: props.untitledReminderLabel,",
+]) {
+  if (!recordReminderListItemPropsSource.includes(requiredRecordReminderListItemPropsUsage)) {
+    throw new Error(
+      `record-reminder-list-item-props.ts must own reminder item-card prop projection: ${requiredRecordReminderListItemPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordReminderListItemPropsToken of [
+  "<RecordReminderItemCard",
+  "props.reminders.map(",
+  "props.noRemindersLabel",
+]) {
+  if (recordReminderListItemPropsSource.includes(forbiddenRecordReminderListItemPropsToken)) {
+    throw new Error(
+      `record-reminder-list-item-props.ts must keep list rendering delegated: ${forbiddenRecordReminderListItemPropsToken}`,
+    );
+  }
+}
+
+const maxRecordReminderListItemPropsLines = 30;
+if (recordReminderListItemPropsLines > maxRecordReminderListItemPropsLines) {
+  throw new Error(
+    `record-reminder-list-item-props.ts exceeded ${maxRecordReminderListItemPropsLines} lines: ${recordReminderListItemPropsLines}`,
+  );
+}
+
+for (const requiredRecordReminderListItemPropsTypesUsage of [
+  'import type { ReminderItem } from "../lib/types"; import type { RecordReminderListProps } from "./record-reminder-list.types"; export type BuildRecordReminderItemCardPropsInput = { props: RecordReminderListProps; reminder: ReminderItem };',
+]) {
+  if (!recordReminderListItemPropsTypesSource.includes(requiredRecordReminderListItemPropsTypesUsage)) {
+    throw new Error(
+      `record-reminder-list-item-props.types.ts must own reminder item-card props input typing: ${requiredRecordReminderListItemPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordReminderListItemPropsTypesLines = 2;
+if (recordReminderListItemPropsTypesLines > maxRecordReminderListItemPropsTypesLines) {
+  throw new Error(
+    `record-reminder-list-item-props.types.ts exceeded ${maxRecordReminderListItemPropsTypesLines} lines: ${recordReminderListItemPropsTypesLines}`,
   );
 }
 

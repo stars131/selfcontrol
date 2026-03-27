@@ -1,49 +1,20 @@
 "use client";
 
+import { buildRecordReminderItemCardProps } from "./record-reminder-list-item-props";
 import { RecordReminderItemCard } from "./record-reminder-item-card";
 import type { RecordReminderListProps } from "./record-reminder-list.types";
-
-export function RecordReminderList({
-  canWriteWorkspace,
-  deleteReminderLabel,
-  enableReminderLabel,
-  formatReminderEnabledLabel,
-  formatReminderStatusLabel,
-  formatReminderTimestampLabel,
-  markReminderDoneLabel,
-  noRemindersLabel,
-  onDeleteReminder,
-  onMarkReminderDone,
-  onToggleReminderEnabled,
-  pauseReminderLabel,
-  reminders,
-  selectedRecordTitle,
-  untitledReminderLabel,
-}: RecordReminderListProps) {
+export function RecordReminderList({ ...props }: RecordReminderListProps) {
   return (
     <div className="record-list compact-list">
-      {reminders.length ? (
-        reminders.map((reminder) => (
+      {props.reminders.length ? (
+        props.reminders.map((reminder) => (
           <RecordReminderItemCard
-            canWriteWorkspace={canWriteWorkspace}
-            deleteReminderLabel={deleteReminderLabel}
-            enableReminderLabel={enableReminderLabel}
-            formatReminderEnabledLabel={formatReminderEnabledLabel}
-            formatReminderStatusLabel={formatReminderStatusLabel}
-            formatReminderTimestampLabel={formatReminderTimestampLabel}
             key={reminder.id}
-            markReminderDoneLabel={markReminderDoneLabel}
-            onDeleteReminder={onDeleteReminder}
-            onMarkReminderDone={onMarkReminderDone}
-            onToggleReminderEnabled={onToggleReminderEnabled}
-            pauseReminderLabel={pauseReminderLabel}
-            reminder={reminder}
-            selectedRecordTitle={selectedRecordTitle}
-            untitledReminderLabel={untitledReminderLabel}
+            {...buildRecordReminderItemCardProps({ props, reminder })}
           />
         ))
       ) : (
-        <div className="notice">{noRemindersLabel}</div>
+        <div className="notice">{props.noRemindersLabel}</div>
       )}
     </div>
   );

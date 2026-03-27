@@ -1,0 +1,1 @@
+import type { ReminderItem } from "../lib/types"; import type { RecordReminderListProps } from "./record-reminder-list.types"; export type BuildRecordReminderItemCardPropsInput = { props: RecordReminderListProps; reminder: ReminderItem };
