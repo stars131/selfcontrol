@@ -1,0 +1,1 @@
+import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; import type { LocaleCode } from "../lib/locale"; export type MediaAssetCardRetryStateTagProps = Pick<MediaAssetCardMetadataTagsProps, "mediaIssueCopy"> & { locale: LocaleCode; retryState: string | null };

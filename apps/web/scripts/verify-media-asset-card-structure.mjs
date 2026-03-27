@@ -33,6 +33,12 @@ const remoteFetchTagLineCount = remoteFetchTagSource.split(/\r?\n/).length;
 const remoteFetchTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-remote-fetch-tag.types.ts");
 const remoteFetchTagTypesSource = fs.readFileSync(remoteFetchTagTypesPath, "utf8");
 const remoteFetchTagTypesLineCount = remoteFetchTagTypesSource.split(/\r?\n/).length;
+const retryStateTagPath = path.resolve(process.cwd(), "components/media-asset-card-retry-state-tag.tsx");
+const retryStateTagSource = fs.readFileSync(retryStateTagPath, "utf8");
+const retryStateTagLineCount = retryStateTagSource.split(/\r?\n/).length;
+const retryStateTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-retry-state-tag.types.ts");
+const retryStateTagTypesSource = fs.readFileSync(retryStateTagTypesPath, "utf8");
+const retryStateTagTypesLineCount = retryStateTagTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
 
@@ -74,10 +80,12 @@ if (!metadataSource.includes('readMetadataNumber(asset.metadata_json, "processin
 
 for (const requiredMetadataTagsUsage of [
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
+  'import { MediaAssetCardRetryStateTag } from "./media-asset-card-retry-state-tag";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   'readMetadataText(asset.metadata_json, "remote_fetch_status")',
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
+  "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
 ]) {
   if (!metadataTagsSource.includes(requiredMetadataTagsUsage)) {
     throw new Error(`media-asset-card-metadata-tags.tsx must delegate remote-fetch tag rendering: ${requiredMetadataTagsUsage}`);
@@ -86,6 +94,7 @@ for (const requiredMetadataTagsUsage of [
 
 for (const forbiddenMetadataTagsToken of [
   "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
+  '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
 ]) {
   if (metadataTagsSource.includes(forbiddenMetadataTagsToken)) {
     throw new Error(`media-asset-card-metadata-tags.tsx must keep remote-fetch tag rendering delegated: ${forbiddenMetadataTagsToken}`);
@@ -143,6 +152,43 @@ for (const requiredRemoteFetchTagTypesUsage of [
 
 if (remoteFetchTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-remote-fetch-tag.types.ts exceeded 2 lines: ${remoteFetchTagTypesLineCount}`);
+}
+
+for (const requiredRetryStateTagUsage of [
+  'import { getRetryStateLabel } from "../lib/media-issue-display";',
+  'import type { MediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag.types";',
+  "}: MediaAssetCardRetryStateTagProps) {",
+  "{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}",
+]) {
+  if (!retryStateTagSource.includes(requiredRetryStateTagUsage)) {
+    throw new Error(`media-asset-card-retry-state-tag.tsx must own retry-state tag rendering: ${requiredRetryStateTagUsage}`);
+  }
+}
+
+for (const forbiddenRetryStateTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+]) {
+  if (retryStateTagSource.includes(forbiddenRetryStateTagToken)) {
+    throw new Error(`media-asset-card-retry-state-tag.tsx must keep other tag concerns delegated: ${forbiddenRetryStateTagToken}`);
+  }
+}
+
+if (retryStateTagLineCount > 6) {
+  throw new Error(`media-asset-card-retry-state-tag.tsx exceeded 6 lines: ${retryStateTagLineCount}`);
+}
+
+for (const requiredRetryStateTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; import type { LocaleCode } from "../lib/locale"; export type MediaAssetCardRetryStateTagProps = Pick<MediaAssetCardMetadataTagsProps, "mediaIssueCopy"> & { locale: LocaleCode; retryState: string | null };',
+]) {
+  if (!retryStateTagTypesSource.includes(requiredRetryStateTagTypesUsage)) {
+    throw new Error(`media-asset-card-retry-state-tag.types.ts must own retry-state tag props: ${requiredRetryStateTagTypesUsage}`);
+  }
+}
+
+if (retryStateTagTypesLineCount > 2) {
+  throw new Error(`media-asset-card-retry-state-tag.types.ts exceeded 2 lines: ${retryStateTagTypesLineCount}`);
 }
 
 if (!actionsSource.includes('asset.processing_status !== "completed"')) {
