@@ -2326,6 +2326,9 @@ Last updated: 2026-03-26
 - Web API Client Chat Boundary Extraction V1:
   - conversation listing, creation, message listing, and assistant send calls now live in `apps/web/lib/api-chat.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
   - chat transport behavior is now isolated from records, providers, and audit queries, which lowers future review scope for assistant workflow changes
+- Web API Client Knowledge And Provider Boundary Extraction V1:
+  - knowledge stats and reindex calls now live in `apps/web/lib/api-knowledge.ts`, while provider configuration and media-storage health calls now live in `apps/web/lib/api-provider-configs.ts`, and both are re-exported from `apps/web/lib/api.ts`
+  - operator-facing knowledge and provider transport code is now isolated from auth, chat, and record workflows, which lowers future review scope for admin-surface changes
 
 ## Next
 - Continue the next product slice
