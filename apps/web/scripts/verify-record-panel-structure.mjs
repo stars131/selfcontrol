@@ -2396,6 +2396,14 @@ const locationReviewFormFieldsTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-form-fields.types.ts",
 );
+const locationReviewDetailsPath = path.resolve(
+  process.cwd(),
+  "components/location-review-details.tsx",
+);
+const locationReviewDetailsTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-details.types.ts",
+);
 const locationReviewHistoryListPath = path.resolve(
   process.cwd(),
   "components/location-review-history-list.tsx",
@@ -3848,6 +3856,11 @@ const locationReviewFormFieldsTypesSource = fs.readFileSync(
   locationReviewFormFieldsTypesPath,
   "utf8",
 );
+const locationReviewDetailsSource = fs.readFileSync(locationReviewDetailsPath, "utf8");
+const locationReviewDetailsTypesSource = fs.readFileSync(
+  locationReviewDetailsTypesPath,
+  "utf8",
+);
 const locationReviewHistoryListSource = fs.readFileSync(locationReviewHistoryListPath, "utf8");
 const locationReviewHistoryListTypesSource = fs.readFileSync(
   locationReviewHistoryListTypesPath,
@@ -5179,6 +5192,9 @@ const locationReviewFormFieldsLines =
   locationReviewFormFieldsSource.split(/\r?\n/).length;
 const locationReviewFormFieldsTypesLines =
   locationReviewFormFieldsTypesSource.split(/\r?\n/).length;
+const locationReviewDetailsLines = locationReviewDetailsSource.split(/\r?\n/).length;
+const locationReviewDetailsTypesLines =
+  locationReviewDetailsTypesSource.split(/\r?\n/).length;
 const locationReviewHistoryListTypesLines =
   locationReviewHistoryListTypesSource.split(/\r?\n/).length;
 const locationReviewStatusSummaryTypesLines =
@@ -22690,17 +22706,15 @@ if (deadLetterRecoverySummaryStatsTypesLines > maxDeadLetterRecoverySummaryStats
 
 for (const requiredLocationReviewPanelUsage of [
   'import { LocationReviewActions } from "./location-review-actions";',
+  'import { LocationReviewDetails } from "./location-review-details";',
   'import { LocationReviewFormFields } from "./location-review-form-fields";',
-  'import { LocationReviewHistoryList } from "./location-review-history-list";',
   'import { LocationReviewIntro } from "./location-review-intro";',
-  'import { LocationReviewStatusSummary } from "./location-review-status-summary";',
   'import type { LocationReviewPanelProps } from "./location-review-panel.types";',
   "}: LocationReviewPanelProps) {",
   "<LocationReviewIntro",
   "<LocationReviewFormFields",
   "<LocationReviewActions",
-  "<LocationReviewStatusSummary",
-  "<LocationReviewHistoryList",
+  "<LocationReviewDetails",
 ]) {
   if (!locationReviewPanelSource.includes(requiredLocationReviewPanelUsage)) {
     throw new Error(
@@ -22718,6 +22732,8 @@ for (const forbiddenLocationReviewPanelToken of [
   "placeholder={panelCopy.reviewNotePlaceholder}",
   '<div className="eyebrow">{panelCopy.locationReview}</div>',
   "{panelCopy.locationReviewDescription}",
+  "<LocationReviewStatusSummary",
+  "<LocationReviewHistoryList",
 ]) {
   if (locationReviewPanelSource.includes(forbiddenLocationReviewPanelToken)) {
     throw new Error(
@@ -22857,6 +22873,59 @@ const maxLocationReviewFormFieldsTypesLines = 2;
 if (locationReviewFormFieldsTypesLines > maxLocationReviewFormFieldsTypesLines) {
   throw new Error(
     `location-review-form-fields.types.ts exceeded ${maxLocationReviewFormFieldsTypesLines} lines: ${locationReviewFormFieldsTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewDetailsUsage of [
+  'import { LocationReviewHistoryList } from "./location-review-history-list";',
+  'import { LocationReviewStatusSummary } from "./location-review-status-summary";',
+  'import type { LocationReviewDetailsProps } from "./location-review-details.types";',
+  "}: LocationReviewDetailsProps) {",
+  "if (!hasSelectedRecord) {",
+  "<LocationReviewStatusSummary",
+  "<LocationReviewHistoryList",
+]) {
+  if (!locationReviewDetailsSource.includes(requiredLocationReviewDetailsUsage)) {
+    throw new Error(
+      `location-review-details.tsx must own selected-record review details composition: ${requiredLocationReviewDetailsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenLocationReviewDetailsToken of [
+  "LocationReviewPanelProps",
+  "<LocationReviewIntro",
+  "<LocationReviewFormFields",
+  "<LocationReviewActions",
+]) {
+  if (locationReviewDetailsSource.includes(forbiddenLocationReviewDetailsToken)) {
+    throw new Error(
+      `location-review-details.tsx must keep panel-level composition delegated: ${forbiddenLocationReviewDetailsToken}`,
+    );
+  }
+}
+
+const maxLocationReviewDetailsLines = 40;
+if (locationReviewDetailsLines > maxLocationReviewDetailsLines) {
+  throw new Error(
+    `location-review-details.tsx exceeded ${maxLocationReviewDetailsLines} lines: ${locationReviewDetailsLines}`,
+  );
+}
+
+for (const requiredLocationReviewDetailsTypesUsage of [
+  'import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewDetailsProps = Pick<LocationReviewPanelProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "hasSelectedRecord" | "panelCopy" | "selectedLocationHistory" | "selectedLocationReview" | "summarizeHistoryActionLabel">;',
+]) {
+  if (!locationReviewDetailsTypesSource.includes(requiredLocationReviewDetailsTypesUsage)) {
+    throw new Error(
+      `location-review-details.types.ts must own selected-record review detail prop typing: ${requiredLocationReviewDetailsTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewDetailsTypesLines = 2;
+if (locationReviewDetailsTypesLines > maxLocationReviewDetailsTypesLines) {
+  throw new Error(
+    `location-review-details.types.ts exceeded ${maxLocationReviewDetailsTypesLines} lines: ${locationReviewDetailsTypesLines}`,
   );
 }
 

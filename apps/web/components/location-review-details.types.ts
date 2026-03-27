@@ -1,0 +1,1 @@
+import type { LocationReviewPanelProps } from "./location-review-panel.types"; export type LocationReviewDetailsProps = Pick<LocationReviewPanelProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "hasSelectedRecord" | "panelCopy" | "selectedLocationHistory" | "selectedLocationReview" | "summarizeHistoryActionLabel">;

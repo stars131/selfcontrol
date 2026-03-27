@@ -2567,6 +2567,10 @@ Last updated: 2026-03-27
   - current filter-summary rendering now lives in `apps/web/components/record-search-panel-summary.tsx` instead of remaining inline inside `record-search-panel.tsx`
   - `record-search-panel.tsx` now stays focused on composing filter fields, actions, summary, and preset controls while summary rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this search-panel summary boundary so future search-panel changes do not regrow a mixed composition-and-summary rendering module
+- Location Review Details Extraction V1:
+  - selected-record location review details composition now lives in `apps/web/components/location-review-details.tsx` instead of remaining inline inside `location-review-panel.tsx`
+  - `location-review-panel.tsx` now stays focused on intro, edit controls, and top-level layout while selected-record detail composition remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this location-review details boundary so future location-review changes do not regrow a mixed top-level-and-selected-detail composition module
 
 ## Next
 - Continue the next product slice

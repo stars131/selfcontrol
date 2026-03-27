@@ -1,10 +1,9 @@
 "use client";
 
 import { LocationReviewActions } from "./location-review-actions";
+import { LocationReviewDetails } from "./location-review-details";
 import { LocationReviewFormFields } from "./location-review-form-fields";
-import { LocationReviewHistoryList } from "./location-review-history-list";
 import { LocationReviewIntro } from "./location-review-intro";
-import { LocationReviewStatusSummary } from "./location-review-status-summary";
 import type { LocationReviewPanelProps } from "./location-review-panel.types";
 
 export function LocationReviewPanel({
@@ -40,23 +39,15 @@ export function LocationReviewPanel({
         onResetReview={onResetReview}
         panelCopy={panelCopy}
       />
-      {hasSelectedRecord ? (
-        <LocationReviewStatusSummary
-          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-          formatReviewStatusLabel={formatReviewStatusLabel}
-          panelCopy={panelCopy}
-          selectedLocationReview={selectedLocationReview}
-        />
-      ) : null}
-      {hasSelectedRecord ? (
-        <LocationReviewHistoryList
-          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-          formatReviewStatusLabel={formatReviewStatusLabel}
-          panelCopy={panelCopy}
-          selectedLocationHistory={selectedLocationHistory}
-          summarizeHistoryActionLabel={summarizeHistoryActionLabel}
-        />
-      ) : null}
+      <LocationReviewDetails
+        formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+        formatReviewStatusLabel={formatReviewStatusLabel}
+        hasSelectedRecord={hasSelectedRecord}
+        panelCopy={panelCopy}
+        selectedLocationHistory={selectedLocationHistory}
+        selectedLocationReview={selectedLocationReview}
+        summarizeHistoryActionLabel={summarizeHistoryActionLabel}
+      />
     </div>
   );
 }
