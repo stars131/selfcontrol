@@ -1,5 +1,7 @@
 "use client";
 
+import { resolveErrorMessage } from "../lib/error-message";
+
 export function slugifyWorkspaceName(value: string) {
   return value
     .toLowerCase()
@@ -20,5 +22,5 @@ export function extractWorkspaceShareToken(value: string) {
 }
 
 export function getWorkspaceEntryActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }

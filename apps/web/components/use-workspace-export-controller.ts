@@ -3,10 +3,11 @@
 import { useState } from "react";
 
 import { downloadWorkspaceExport } from "../lib/api";
+import { resolveErrorMessage } from "../lib/error-message";
 import type { UseWorkspaceExportControllerProps } from "./use-workspace-export-controller.types";
 
 function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function useWorkspaceExportController({

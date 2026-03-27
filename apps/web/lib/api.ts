@@ -56,6 +56,41 @@ type SendMessageResult = {
   records: RecordItem[];
 };
 
+type ApiErrorPayload = {
+  error?: {
+    code?: string;
+    message?: string;
+  };
+  detail?: string;
+};
+
+class ApiRequestError extends Error {
+  code: string | null;
+  status: number;
+
+  constructor(message: string, { code, status }: { code?: string | null; status: number }) {
+    super(message);
+    this.name = "ApiRequestError";
+    this.code = code ?? null;
+    this.status = status;
+  }
+}
+
+function buildApiRequestError(response: Response, payload?: ApiErrorPayload | null) {
+  return new ApiRequestError(payload?.error?.message?.trim() || payload?.detail?.trim() || "", {
+    code: payload?.error?.code,
+    status: response.status,
+  });
+}
+
+async function readApiErrorPayload(response: Response) {
+  try {
+    return (await response.json()) as ApiErrorPayload;
+  } catch {
+    return null;
+  }
+}
+
 async function request<T>(path: string, init: RequestInit = {}, token?: string): Promise<T> {
   const headers = new Headers(init.headers);
   if (!headers.has("Content-Type") && init.body && !(init.body instanceof FormData)) {
@@ -69,10 +104,16 @@ async function request<T>(path: string, init: RequestInit = {}, token?: string):
     ...init,
     headers,
   });
-  const payload = (await response.json()) as Envelope<T> & { detail?: string };
+  let payload: (Envelope<T> & ApiErrorPayload) | null = null;
 
-  if (!response.ok || !payload.success) {
-    throw new Error(payload.error?.message || payload.detail || "Request failed");
+  try {
+    payload = (await response.json()) as Envelope<T> & ApiErrorPayload;
+  } catch {
+    throw buildApiRequestError(response);
+  }
+
+  if (!response.ok || !payload?.success) {
+    throw buildApiRequestError(response, payload);
   }
 
   return payload.data;
@@ -87,14 +128,7 @@ async function requestBlob(path: string, token: string): Promise<Blob> {
   });
 
   if (!response.ok) {
-    let message = "Request failed";
-    try {
-      const payload = (await response.json()) as { error?: { message?: string }; detail?: string };
-      message = payload.error?.message || payload.detail || message;
-    } catch {
-      message = response.statusText || message;
-    }
-    throw new Error(message);
+    throw buildApiRequestError(response, await readApiErrorPayload(response));
   }
 
   return response.blob();
@@ -109,14 +143,7 @@ async function requestDownload(path: string, token: string): Promise<{ blob: Blo
   });
 
   if (!response.ok) {
-    let message = "Request failed";
-    try {
-      const payload = (await response.json()) as { error?: { message?: string }; detail?: string };
-      message = payload.error?.message || payload.detail || message;
-    } catch {
-      message = response.statusText || message;
-    }
-    throw new Error(message);
+    throw buildApiRequestError(response, await readApiErrorPayload(response));
   }
 
   const blob = await response.blob();

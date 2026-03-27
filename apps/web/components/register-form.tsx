@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 
 import { login, register } from "../lib/api";
 import { setStoredSession } from "../lib/auth";
+import { resolveErrorMessage } from "../lib/error-message";
 import { useStoredLocale } from "../lib/locale";
 import { getRegisterFormCopy } from "./auth-form-copy";
 import { AuthFormFrame } from "./auth-form-frame";
@@ -41,7 +42,7 @@ export function RegisterForm() {
       setStoredSession(session.access_token, session.user);
       router.push("/app");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.registerFailed);
+      setError(resolveErrorMessage(caught, copy.registerFailed));
     } finally {
       setLoading(false);
     }

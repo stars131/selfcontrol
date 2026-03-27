@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveErrorMessage } from "../lib/error-message";
 import { getStoredLocale } from "../lib/locale";
 import type { ProviderFeatureConfig } from "../lib/types";
 import {
@@ -14,7 +15,7 @@ import type {
 } from "./provider-settings-controller.types";
 
 function getProviderSettingsActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function createProviderSettingsControllerActions({

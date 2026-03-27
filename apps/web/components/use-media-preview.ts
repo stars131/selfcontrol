@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { fetchMediaBlob } from "../lib/api";
+import { resolveErrorMessage } from "../lib/error-message";
 import { getStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import type { MediaPreviewControllerResult, MediaPreviewProps } from "./media-preview.types";
@@ -58,7 +59,7 @@ export function useMediaPreview({
         if (isDisposed) {
           return;
         }
-        setError(caught instanceof Error ? caught.message : previewCopy.previewLoadFailed);
+        setError(resolveErrorMessage(caught, previewCopy.previewLoadFailed));
       } finally {
         if (!isDisposed) {
           setLoading(false);

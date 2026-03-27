@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveErrorMessage } from "../lib/error-message";
 import {
   formatCoordinate,
   readLatitudeValue,
@@ -27,7 +28,7 @@ function readSearchCoordinates(item: Record<string, unknown>) {
 }
 
 export function getMapPanelActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export async function searchMapPanelLocation({

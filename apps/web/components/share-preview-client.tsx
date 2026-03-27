@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { acceptShareToken, previewShareToken } from "../lib/api";
 import { getStoredToken } from "../lib/auth";
+import { resolveErrorMessage } from "../lib/error-message";
 import { useStoredLocale } from "../lib/locale";
 import { getSharePermissionLabel, getSharePreviewPageCopy } from "../lib/share-link-display";
 import type { SharePreview } from "../lib/types";
@@ -26,7 +27,7 @@ export function SharePreviewClient({ tokenValue }: SharePreviewClientProps) {
         const result = await previewShareToken(tokenValue);
         setPreview(result.preview);
       } catch (caught) {
-        setError(caught instanceof Error ? caught.message : copy.loadFailed);
+        setError(resolveErrorMessage(caught, copy.loadFailed));
       } finally {
         setLoading(false);
       }
@@ -47,7 +48,7 @@ export function SharePreviewClient({ tokenValue }: SharePreviewClientProps) {
       const result = await acceptShareToken(token, tokenValue);
       router.push(`/app/workspaces/${result.workspace.id}`);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.joinFailed);
+      setError(resolveErrorMessage(caught, copy.joinFailed));
       setJoining(false);
     }
   };

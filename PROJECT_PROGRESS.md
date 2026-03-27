@@ -2242,6 +2242,9 @@ Last updated: 2026-03-26
 - Reminder Resolution Error Localization V1:
   - reminder creation now reuses detail-copy validation text when no record is selected instead of surfacing a hardcoded English error
   - record-panel structure verification now enforces that copy-driven reminder guard so future reminder workflow maintenance stays aligned with the enterprise localization baseline
+- Error Fallback Normalization V1:
+  - shared client-side error resolution now falls back to locale-aware copy when requests fail without a user-facing backend message, preventing generic English placeholders from leaking into login, chat, map, export, settings, share, media preview, quick-add, and workspace bootstrap flows
+  - the API client now normalizes empty fallback request errors centrally so enterprise localization and future provider integrations can reuse one maintainable error contract instead of duplicating ad hoc English defaults
 
 ## Next
 - Continue the next product slice

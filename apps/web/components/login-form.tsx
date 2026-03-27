@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 
 import { login } from "../lib/api";
 import { getStoredToken, setStoredSession } from "../lib/auth";
+import { resolveErrorMessage } from "../lib/error-message";
 import { useStoredLocale } from "../lib/locale";
 import { getLoginFormCopy } from "./auth-form-copy";
 import { AuthFormFrame } from "./auth-form-frame";
@@ -34,7 +35,7 @@ export function LoginForm() {
       setStoredSession(result.access_token, result.user);
       router.push("/app");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.loginFailed);
+      setError(resolveErrorMessage(caught, copy.loginFailed));
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveErrorMessage } from "../lib/error-message";
 import type { NotificationItem } from "../lib/types";
 import type { BuildCreateShareLinkInput } from "./chat-panel-action-helpers.types";
 
@@ -11,7 +12,7 @@ export function buildChatShareUrl(path: string) {
 }
 
 export function getChatPanelActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function countUnreadNotifications(notifications: NotificationItem[]) {

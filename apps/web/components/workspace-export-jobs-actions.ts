@@ -5,10 +5,11 @@ import {
   downloadWorkspaceTransferJob,
   listWorkspaceTransferJobs,
 } from "../lib/api";
+import { resolveErrorMessage } from "../lib/error-message";
 import type { CreateWorkspaceExportJobsActionsInput } from "./workspace-export-jobs-actions.types";
 
 function getActionErrorMessage(caught: unknown, fallbackMessage: string) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function createWorkspaceExportJobsActions({

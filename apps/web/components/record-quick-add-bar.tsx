@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
+import { resolveErrorMessage } from "../lib/error-message";
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";
@@ -31,7 +32,7 @@ export function RecordQuickAddBar({ canWriteWorkspace, onSaveRecord }: RecordQui
       });
       setDraft("");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : panelCopy.quickAddError);
+      setError(resolveErrorMessage(caught, panelCopy.quickAddError));
     } finally {
       setSaving(false);
     }
