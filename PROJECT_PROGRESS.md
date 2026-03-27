@@ -2230,6 +2230,9 @@ Last updated: 2026-03-26
 - Map Loader Error Localization V1:
   - AMap loader browser-only and script-failure errors no longer fall back to hardcoded English defaults inside the shared map helper and now require caller-provided localized copy
   - the map loading path stays aligned with the existing locale-aware record-panel map copy, improving long-term maintainability for regional map integrations
+- Legacy Record Panel Label Localization V1:
+  - legacy record primary fields, classification fields, stats header, and stats grid now reuse shared record-panel UI copy instead of hardcoded English labels
+  - record-panel structure verification now enforces those copy-driven legacy labels so old and new record surfaces stay aligned under the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

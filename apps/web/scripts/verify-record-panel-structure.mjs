@@ -13421,10 +13421,20 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     legacyRecordPanelPrimaryFieldsTypesSource,
     'import type { RecordPanelLegacyPrimaryFieldsProps } from "./record-panel-legacy-primary-fields.types";',
     "}: RecordPanelLegacyPrimaryFieldsProps) {",
-    ['placeholder="Optional title"', 'placeholder="Write a note, food review, or reminder"'],
+    [
+      'import { useStoredLocale } from "../lib/locale";',
+      'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+      "const { locale } = useStoredLocale(), { panelCopy } = getRecordPanelUiBundle(locale);",
+      "panelCopy.title",
+      "panelCopy.optionalTitle",
+      "panelCopy.content",
+      "panelCopy.contentPlaceholder",
+    ],
     [
       'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
       "}: Pick<RecordPanelLegacyFormProps",
+      'placeholder="Optional title"',
+      'placeholder="Write a note, food review, or reminder"',
     ],
     'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyPrimaryFieldsProps = Pick<RecordPanelLegacyFormProps, "form" | "setForm">;',
     2,
@@ -13437,14 +13447,24 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     'import type { RecordPanelLegacyClassificationFieldsProps } from "./record-panel-legacy-classification-fields.types";',
     "}: RecordPanelLegacyClassificationFieldsProps) {",
     [
-      '<option value="memo">memo</option>',
-      '<option value="bad_experience">bad_experience</option>',
+      'import { useStoredLocale } from "../lib/locale";',
+      'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+      "const { locale } = useStoredLocale(), { panelCopy } = getRecordPanelUiBundle(locale);",
+      "panelCopy.type",
+      'value="memo">{panelCopy.memo}',
+      'value="food">{panelCopy.food}',
+      'value="snack">{panelCopy.snack}',
+      'value="bad_experience">{panelCopy.badExperience}',
+      "panelCopy.rating",
       'placeholder="1-5"',
-      "Avoid item",
+      "panelCopy.avoidItem",
     ],
     [
       'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
       "}: Pick<RecordPanelLegacyFormProps",
+      '<option value="memo">memo</option>',
+      '<option value="bad_experience">bad_experience</option>',
+      "Avoid item",
     ],
     'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types"; export type RecordPanelLegacyClassificationFieldsProps = Pick<RecordPanelLegacyFormProps, "form" | "setForm">;',
     2,
@@ -13611,10 +13631,14 @@ if (legacyRecordPanelStatsTypesLines > maxLegacyRecordPanelStatsTypesLines) {
 
 for (const requiredLegacyStatsHeaderUsage of [
   'from "./record-panel-legacy-stats.types";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   "export function RecordPanelLegacyStatsHeader({ workspaceId, onResetFilter }: RecordPanelLegacyStatsHeaderProps)",
+  "const { locale } = useStoredLocale(), { panelCopy } = getRecordPanelUiBundle(locale);",
   '{workspaceId}',
-  "Structured Results",
-  "Reset list",
+  "panelCopy.workspace",
+  "panelCopy.structuredResults",
+  "panelCopy.resetList",
 ]) {
   if (!legacyRecordPanelStatsHeaderSource.includes(requiredLegacyStatsHeaderUsage)) {
     throw new Error(`record-panel-legacy-stats-header.tsx must own legacy stats header rendering: ${requiredLegacyStatsHeaderUsage}`);
@@ -13624,6 +13648,9 @@ for (const requiredLegacyStatsHeaderUsage of [
 for (const forbiddenLegacyStatsHeaderToken of [
   "workspaceId: string;",
   "onResetFilter: () => Promise<void>;",
+  '"Structured Results"',
+  '"Reset list"',
+  '"Workspace"',
 ]) {
   if (legacyRecordPanelStatsHeaderSource.includes(forbiddenLegacyStatsHeaderToken)) {
     throw new Error(`record-panel-legacy-stats-header.tsx must keep shared stats-header typing delegated: ${forbiddenLegacyStatsHeaderToken}`);
@@ -13639,8 +13666,13 @@ if (legacyRecordPanelStatsHeaderLines > maxLegacyRecordPanelStatsHeaderLines) {
 
 for (const requiredLegacyStatsGridUsage of [
   'from "./record-panel-legacy-stats.types";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
   "export function RecordPanelLegacyStatsGrid({ avoidCount, foodCount, recordCount }: RecordPanelLegacyStatsGridProps)",
-  "Visible records",
+  "const { locale } = useStoredLocale(), { panelCopy } = getRecordPanelUiBundle(locale);",
+  "panelCopy.visibleRecords",
+  "panelCopy.food",
+  "panelCopy.avoid",
   "{recordCount}",
   "{foodCount}",
   "{avoidCount}",
@@ -13654,6 +13686,9 @@ for (const forbiddenLegacyStatsGridToken of [
   "avoidCount: number;",
   "foodCount: number;",
   "recordCount: number;",
+  '"Visible records"',
+  '"Food"',
+  '"Avoid"',
 ]) {
   if (legacyRecordPanelStatsGridSource.includes(forbiddenLegacyStatsGridToken)) {
     throw new Error(`record-panel-legacy-stats-grid.tsx must keep shared stats-grid typing delegated: ${forbiddenLegacyStatsGridToken}`);
