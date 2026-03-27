@@ -2499,6 +2499,10 @@ Last updated: 2026-03-27
   - record create/update save flow now lives in `apps/web/components/workspace-shell-record-save-actions.ts`, while record deletion flow now lives in `apps/web/components/workspace-shell-record-delete-actions.ts`
   - `workspace-shell-record-actions.ts` now stays as a thin composition boundary so record-save evolution and record-deletion policy changes can evolve independently
   - the workspace-shell structure guardrail now enforces this save-versus-delete split so future record workflows do not regrow a mixed action module
+- Workspace Shell Chat Send And Conversation Action Split V1:
+  - chat send-message flow now lives in `apps/web/components/workspace-shell-chat-send-actions.ts`, while conversation create/select flow now lives in `apps/web/components/workspace-shell-chat-conversation-actions.ts`
+  - `workspace-shell-chat-actions.ts` now stays as a thin composition boundary so assistant-message flow and conversation lifecycle behavior can evolve independently
+  - the workspace-shell structure guardrail now enforces this send-versus-conversation split so future chat workflow growth does not regrow a mixed action module
 
 ## Next
 - Continue the next product slice

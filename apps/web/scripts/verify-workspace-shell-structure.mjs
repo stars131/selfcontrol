@@ -135,6 +135,14 @@ const workspaceShellChatActionResultsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-action-results.ts",
 );
+const workspaceShellChatSendActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-chat-send-actions.ts",
+);
+const workspaceShellChatConversationActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-chat-conversation-actions.ts",
+);
 const workspaceShellChatActionConversationsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-action-conversations.ts",
@@ -287,6 +295,11 @@ const chatActionResultsSource = fs.readFileSync(
   workspaceShellChatActionResultsPath,
   "utf8",
 );
+const chatSendActionsSource = fs.readFileSync(workspaceShellChatSendActionsPath, "utf8");
+const chatConversationActionsSource = fs.readFileSync(
+  workspaceShellChatConversationActionsPath,
+  "utf8",
+);
 const chatActionConversationsSource = fs.readFileSync(
   workspaceShellChatActionConversationsPath,
   "utf8",
@@ -368,6 +381,9 @@ const reminderNotificationActionsLineCount =
 const reminderActionsLineCount = reminderActionsSource.split(/\r?\n/).length;
 const notificationActionsLineCount = notificationActionsSource.split(/\r?\n/).length;
 const chatActionResultsLineCount = chatActionResultsSource.split(/\r?\n/).length;
+const chatSendActionsLineCount = chatSendActionsSource.split(/\r?\n/).length;
+const chatConversationActionsLineCount =
+  chatConversationActionsSource.split(/\r?\n/).length;
 const chatActionConversationsLineCount =
   chatActionConversationsSource.split(/\r?\n/).length;
 const chatActionSelectionLineCount = chatActionSelectionSource.split(/\r?\n/).length;
@@ -1838,35 +1854,46 @@ const workspaceShellChatActionsSource = fs.readFileSync(
   "utf8",
 );
 for (const requiredWorkspaceShellChatActionsImport of [
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-chat-conversation-actions";',
+  'from "./workspace-shell-chat-send-actions";',
+]) {
+  if (!workspaceShellChatActionsSource.includes(requiredWorkspaceShellChatActionsImport)) {
+    throw new Error(
+      `workspace-shell-chat-actions.ts must import delegated chat action groups: ${requiredWorkspaceShellChatActionsImport}`,
+    );
+  }
+}
+
+for (const requiredChatActionsPath of [
+  "createWorkspaceShellChatSendActions(props)",
+  "createWorkspaceShellChatConversationActions(props)",
+  "...chatSendActions",
+  "...chatConversationActions",
+]) {
+  if (!workspaceShellChatActionsSource.includes(requiredChatActionsPath)) {
+    throw new Error(
+      `workspace-shell-chat-actions.ts must delegate chat action-group assembly: ${requiredChatActionsPath}`,
+    );
+  }
+}
+for (const forbiddenChatActionsToken of [
   'from "../lib/api";',
   'from "./workspace-shell-action-guards";',
   'from "./workspace-shell-chat-action-conversations";',
   'from "./workspace-shell-chat-action-selection";',
   'from "./workspace-shell-chat-action-results";',
   'from "./workspace-shell-record-action-refresh";',
-]) {
-  if (!workspaceShellChatActionsSource.includes(requiredWorkspaceShellChatActionsImport)) {
-    throw new Error(
-      `workspace-shell-chat-actions.ts must keep create-mode refreshes delegated: ${requiredWorkspaceShellChatActionsImport}`,
-    );
-  }
-}
-
-for (const requiredChatActionsPath of [
+  "const handleSendMessage",
+  "const handleCreateConversation",
+  "sendMessage(",
+  "createConversation(",
   "refreshWorkspaceShellRecordMutation(",
-  "selectWorkspaceShellChatCreatedRecord(setSelectedRecordId, result.records)",
+  "selectWorkspaceShellChatCreatedRecord(",
   "applyWorkspaceShellChatSearchResult(",
-  "buildWorkspaceShellConversationTitle(conversationsCount)",
+  "buildWorkspaceShellConversationTitle(",
   "applyWorkspaceShellConversationCreation(",
   "selectWorkspaceShellConversation(",
-]) {
-  if (!fs.readFileSync(path.resolve(process.cwd(), "components/workspace-shell-chat-actions.ts"), "utf8").includes(requiredChatActionsPath)) {
-    throw new Error(
-      `workspace-shell-chat-actions.ts must delegate record-create refresh sequences: ${requiredChatActionsPath}`,
-    );
-  }
-}
-for (const forbiddenChatActionsToken of [
   "await refreshRecords(activeToken, recordFilter);",
   "await refreshKnowledge(activeToken);",
   "await refreshAuditLogs(activeToken);",
@@ -1881,9 +1908,99 @@ for (const forbiddenChatActionsToken of [
 ]) {
   if (workspaceShellChatActionsSource.includes(forbiddenChatActionsToken)) {
     throw new Error(
-      `workspace-shell-chat-actions.ts must keep create-mode refresh sequences delegated: ${forbiddenChatActionsToken}`,
+      `workspace-shell-chat-actions.ts must keep chat internals delegated: ${forbiddenChatActionsToken}`,
     );
   }
+}
+
+const maxChatActionsLines = 20;
+if (workspaceShellChatActionsSource.split(/\r?\n/).length > maxChatActionsLines) {
+  throw new Error(
+    `workspace-shell-chat-actions.ts exceeded ${maxChatActionsLines} lines: ${workspaceShellChatActionsSource.split(/\r?\n/).length}`,
+  );
+}
+
+for (const requiredChatSendActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-chat-action-results";',
+  'from "./workspace-shell-record-action-refresh";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellChatSendActions(",
+  "async function handleSendMessage(message: string)",
+  "await sendMessage(activeToken, workspaceId, conversationId, message);",
+  'const mode = String(result.assistant_message.metadata_json.mode ?? "");',
+  'if (mode === "create") {',
+  "await refreshWorkspaceShellRecordMutation(",
+  "selectWorkspaceShellChatCreatedRecord(setSelectedRecordId, result.records);",
+  "applyWorkspaceShellChatSearchResult(",
+]) {
+  if (!chatSendActionsSource.includes(requiredChatSendActionsUsage)) {
+    throw new Error(
+      `workspace-shell-chat-send-actions.ts must own send-message flow: ${requiredChatSendActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatSendActionsToken of [
+  "createConversation(",
+  "buildWorkspaceShellConversationTitle(",
+  "applyWorkspaceShellConversationCreation(",
+  "selectWorkspaceShellConversation(",
+]) {
+  if (chatSendActionsSource.includes(forbiddenChatSendActionsToken)) {
+    throw new Error(
+      `workspace-shell-chat-send-actions.ts must keep conversation lifecycle delegated: ${forbiddenChatSendActionsToken}`,
+    );
+  }
+}
+
+const maxChatSendActionsLines = 55;
+if (chatSendActionsLineCount > maxChatSendActionsLines) {
+  throw new Error(
+    `workspace-shell-chat-send-actions.ts exceeded ${maxChatSendActionsLines} lines: ${chatSendActionsLineCount}`,
+  );
+}
+
+for (const requiredChatConversationActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-chat-action-conversations";',
+  'from "./workspace-shell-chat-action-selection";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellChatConversationActions(",
+  "async function handleCreateConversation()",
+  "function handleSelectConversation(conversationId: string)",
+  "await createConversation(",
+  "buildWorkspaceShellConversationTitle(conversationsCount)",
+  "applyWorkspaceShellConversationCreation(",
+  "selectWorkspaceShellConversation(",
+]) {
+  if (!chatConversationActionsSource.includes(requiredChatConversationActionsUsage)) {
+    throw new Error(
+      `workspace-shell-chat-conversation-actions.ts must own conversation lifecycle flow: ${requiredChatConversationActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatConversationActionsToken of [
+  "sendMessage(",
+  "refreshWorkspaceShellRecordMutation(",
+  "selectWorkspaceShellChatCreatedRecord(",
+  "applyWorkspaceShellChatSearchResult(",
+]) {
+  if (chatConversationActionsSource.includes(forbiddenChatConversationActionsToken)) {
+    throw new Error(
+      `workspace-shell-chat-conversation-actions.ts must keep send-message flow delegated: ${forbiddenChatConversationActionsToken}`,
+    );
+  }
+}
+
+const maxChatConversationActionsLines = 40;
+if (chatConversationActionsLineCount > maxChatConversationActionsLines) {
+  throw new Error(
+    `workspace-shell-chat-conversation-actions.ts exceeded ${maxChatConversationActionsLines} lines: ${chatConversationActionsLineCount}`,
+  );
 }
 
 const workspaceShellRecordActionsSource = fs.readFileSync(
