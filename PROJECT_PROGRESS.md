@@ -2411,10 +2411,14 @@ Last updated: 2026-03-27
   - shared remote media storage contract constants, provider-config lookup, webhook header assembly, transport error mapping, and UTC timestamp helpers now live in `apps/api/app/services/media_remote_storage_contract.py`
   - `media_remote_storage.py` and `media_remote_storage_health.py` now reuse the same contract/helper boundary instead of duplicating webhook header, config lookup, and transport error logic while no longer depending on `media_provider` secret helpers for this path
   - dedicated backend unit tests now cover webhook header assembly, timeout vs generic transport error mapping, and timestamp formatting for the extracted contract helper boundary
+- Remote Media Storage Payload Helper Extraction V1:
+  - fallback option coercion, remote upload response key/size validation, metadata sanitization, and upload metadata assembly now live in `apps/api/app/services/media_remote_storage_payloads.py`
+  - `media_remote_storage.py` now focuses more narrowly on upload/download/delete orchestration and fallback flow control instead of also owning payload normalization and metadata tree sanitization rules
+  - dedicated backend unit tests now cover fallback option coercion, storage key and size coercion, metadata sanitization depth limits, and remote upload metadata enrichment for the extracted payload helper boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around remote media storage helpers, `provider_transport.py`, and any leftover compatibility exports or duplicated provider-routing rules
+- Continue simplifying the remaining backend provider stack around remote media storage helpers, `provider_transport.py`, `media_issue_tracking.py`, and any leftover compatibility exports or duplicated provider-routing rules
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
