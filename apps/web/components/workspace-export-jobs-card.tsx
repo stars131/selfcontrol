@@ -24,9 +24,9 @@ export function WorkspaceExportJobsCard({
   } = useWorkspaceExportJobsController({
     token,
     workspaceId,
-    loadFailedMessage: "Failed to load jobs",
-    createFailedMessage: "Failed to create export job",
-    downloadFailedMessage: "Failed to download job artifact",
+    loadFailedMessage: copy.loadFailed,
+    createFailedMessage: copy.createFailed,
+    downloadFailedMessage: copy.downloadFailed,
     queuedMessage: copy.queued,
   });
 

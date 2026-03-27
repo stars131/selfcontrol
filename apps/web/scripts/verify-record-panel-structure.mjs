@@ -16452,6 +16452,9 @@ for (const requiredWorkspaceExportJobsCardUsage of [
   'import { WorkspaceExportJobsContent } from "./workspace-export-jobs-content";',
   'import type { WorkspaceExportJobsCardProps } from "./workspace-export-jobs-card.types";',
   "}: WorkspaceExportJobsCardProps) {",
+  "loadFailedMessage: copy.loadFailed",
+  "createFailedMessage: copy.createFailed",
+  "downloadFailedMessage: copy.downloadFailed",
   "<WorkspaceExportJobsContent",
 ]) {
   if (!workspaceExportJobsCardSource.includes(requiredWorkspaceExportJobsCardUsage)) {

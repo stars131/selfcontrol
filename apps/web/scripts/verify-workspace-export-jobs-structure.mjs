@@ -173,6 +173,16 @@ if (!source.includes("<WorkspaceExportJobsContent")) {
   throw new Error("workspace-export-jobs-card.tsx must delegate export-job content rendering");
 }
 
+for (const requiredCardCopyUsage of [
+  "loadFailedMessage: copy.loadFailed",
+  "createFailedMessage: copy.createFailed",
+  "downloadFailedMessage: copy.downloadFailed",
+]) {
+  if (!source.includes(requiredCardCopyUsage)) {
+    throw new Error(`workspace-export-jobs-card.tsx must source controller failure copy from locale state: ${requiredCardCopyUsage}`);
+  }
+}
+
 for (const requiredContentUsage of [
   'import { WorkspaceExportJobsHeader } from "./workspace-export-jobs-header";',
   'import { WorkspaceExportJobsList } from "./workspace-export-jobs-list";',

@@ -2200,6 +2200,9 @@ Last updated: 2026-03-26
 - Media Preview Localization V1:
   - media preview loading, unavailable, not-ready, and fallback error text now reuse the shared record-panel UI copy instead of showing English-only preview states
   - media preview structure verification now enforces the locale-aware preview copy usage so future media-surface changes keep the enterprise localization baseline intact
+- Workspace Export Job Error Localization V1:
+  - workspace export job loading, queueing, and artifact-download fallback errors now come from the shared export-jobs copy instead of hardcoded English strings in the card shell
+  - export-jobs structure verification now enforces those copy-driven controller inputs so future admin-surface maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

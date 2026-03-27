@@ -11,6 +11,9 @@ export type WorkspaceExportJobsCopy = {
   queued: string;
   download: string;
   empty: string;
+  loadFailed: string;
+  createFailed: string;
+  downloadFailed: string;
 };
 
 const COPY: Record<LocaleCode, WorkspaceExportJobsCopy> = {
@@ -25,6 +28,9 @@ const COPY: Record<LocaleCode, WorkspaceExportJobsCopy> = {
     queued: "任务已创建",
     download: "下载结果",
     empty: "当前还没有导出任务。",
+    loadFailed: "加载导出任务失败",
+    createFailed: "创建导出任务失败",
+    downloadFailed: "下载导出任务结果失败",
   },
   en: {
     eyebrow: "Async Export",
@@ -38,6 +44,9 @@ const COPY: Record<LocaleCode, WorkspaceExportJobsCopy> = {
     queued: "Job created",
     download: "Download result",
     empty: "No export jobs yet.",
+    loadFailed: "Failed to load jobs",
+    createFailed: "Failed to create export job",
+    downloadFailed: "Failed to download job artifact",
   },
   ja: {
     eyebrow: "非同期エクスポート",
@@ -51,6 +60,9 @@ const COPY: Record<LocaleCode, WorkspaceExportJobsCopy> = {
     queued: "ジョブを作成しました",
     download: "結果をダウンロード",
     empty: "エクスポートジョブはまだありません。",
+    loadFailed: "エクスポートジョブの読み込みに失敗しました",
+    createFailed: "エクスポートジョブの作成に失敗しました",
+    downloadFailed: "ジョブ成果物のダウンロードに失敗しました",
   },
 };
 
