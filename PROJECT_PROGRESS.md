@@ -2341,6 +2341,9 @@ Last updated: 2026-03-26
 - Provider Config Validation Boundary Extraction V1:
   - provider feature definitions, secret/env validation, media-storage option normalization, warning generation, and feature-specific provider validation now live in `apps/api/app/services/provider_config_validation.py`
   - `apps/api/app/services/provider_configs.py` now focuses more narrowly on dataclass assembly, default/merged config composition, and persistence orchestration, reducing coupling inside the provider configuration service
+- Workspace Transfer Manifest Boundary Extraction V1:
+  - shared workspace transfer schema constants, datetime encode/decode helpers, and reference-only import metadata tagging now live in `apps/api/app/services/workspace_transfer_manifest.py`
+  - workspace export and import services now rely on the same transfer-manifest helper module for core protocol conventions, reducing drift risk when the archive schema evolves
 
 ## Next
 - Continue the next product slice

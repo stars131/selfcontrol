@@ -14,6 +14,10 @@ from app.models.media import MediaAsset
 from app.models.record import Record
 from app.models.workspace import Workspace, WorkspaceMember
 from app.services.media_storage import media_uses_local_storage, resolve_storage_path
+from app.services.workspace_transfer_manifest import (
+    WORKSPACE_EXPORT_SCHEMA_VERSION,
+    isoformat_optional_datetime,
+)
 
 SENSITIVE_METADATA_TOKENS = {
     "access_token",
@@ -34,14 +38,6 @@ SENSITIVE_METADATA_TOKENS = {
 }
 
 
-def _isoformat(value: datetime | None) -> str | None:
-    if value is None:
-        return None
-    if value.tzinfo is None:
-        value = value.replace(tzinfo=timezone.utc)
-    return value.isoformat()
-
-
 def _safe_filename_part(value: str, fallback: str) -> str:
     cleaned = re.sub(r"[^A-Za-z0-9._-]+", "-", value).strip("-._")
     return cleaned or fallback
@@ -55,7 +51,7 @@ def _serialize_member(member: WorkspaceMember) -> dict:
         "email": member.user.email,
         "display_name": member.user.display_name,
         "role": member.role,
-        "created_at": _isoformat(member.created_at),
+        "created_at": isoformat_optional_datetime(member.created_at),
     }
 
 
@@ -68,12 +64,12 @@ def _serialize_record(record: Record) -> dict:
         "content": record.content,
         "rating": record.rating,
         "is_avoid": record.is_avoid,
-        "occurred_at": _isoformat(record.occurred_at),
+        "occurred_at": isoformat_optional_datetime(record.occurred_at),
         "source_type": record.source_type,
         "status": record.status,
         "extra_data": record.extra_data,
-        "created_at": _isoformat(record.created_at),
-        "updated_at": _isoformat(record.updated_at),
+        "created_at": isoformat_optional_datetime(record.created_at),
+        "updated_at": isoformat_optional_datetime(record.updated_at),
     }
 
 
@@ -164,9 +160,9 @@ def build_workspace_export_archive(
                     "processing_status": media.processing_status,
                     "processing_error": media.processing_error,
                     "extracted_text": media.extracted_text,
-                    "processed_at": _isoformat(media.processed_at),
-                    "created_at": _isoformat(media.created_at),
-                    "updated_at": _isoformat(media.updated_at),
+                    "processed_at": isoformat_optional_datetime(media.processed_at),
+                    "created_at": isoformat_optional_datetime(media.created_at),
+                    "updated_at": isoformat_optional_datetime(media.updated_at),
                     "export_mode": export_mode,
                     "archive_path": archive_member_path if can_export_file else None,
                     "export_included": can_export_file,
@@ -186,8 +182,8 @@ def build_workspace_export_archive(
             exported_media_files += 1
 
         manifest = {
-            "schema_version": "workspace-export-v1",
-            "exported_at": _isoformat(datetime.now(timezone.utc)),
+            "schema_version": WORKSPACE_EXPORT_SCHEMA_VERSION,
+            "exported_at": isoformat_optional_datetime(datetime.now(timezone.utc)),
             "exported_by_user_id": exported_by_user_id,
             "workspace": {
                 "id": workspace.id,
@@ -195,8 +191,8 @@ def build_workspace_export_archive(
                 "slug": workspace.slug,
                 "owner_id": workspace.owner_id,
                 "visibility": workspace.visibility,
-                "created_at": _isoformat(workspace.created_at),
-                "updated_at": _isoformat(workspace.updated_at),
+                "created_at": isoformat_optional_datetime(workspace.created_at),
+                "updated_at": isoformat_optional_datetime(workspace.updated_at),
             },
             "members": [_serialize_member(member) for member in members],
             "records": [_serialize_record(record) for record in records],

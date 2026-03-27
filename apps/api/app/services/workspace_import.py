@@ -5,7 +5,6 @@ import re
 import uuid
 import zipfile
 from io import BytesIO
-from datetime import datetime, timezone
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -16,20 +15,15 @@ from app.models.record import Record
 from app.models.workspace import Workspace, WorkspaceMember
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_storage import is_local_storage_provider
+from app.services.workspace_transfer_manifest import (
+    WORKSPACE_EXPORT_SCHEMA_VERSION,
+    build_imported_reference_metadata,
+    parse_optional_datetime,
+)
 
 
 def _slugify(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower().strip()).strip("-")
-
-
-def _parse_datetime(value: object) -> datetime | None:
-    if not isinstance(value, str) or not value.strip():
-        return None
-    normalized = value.replace("Z", "+00:00")
-    try:
-        return datetime.fromisoformat(normalized)
-    except ValueError:
-        return None
 
 
 def _ensure_unique_workspace_slug(db: Session, slug: str) -> str:
@@ -40,15 +34,6 @@ def _ensure_unique_workspace_slug(db: Session, slug: str) -> str:
         candidate = f"{base_slug}-{index}"
         index += 1
     return candidate
-
-
-def _build_imported_reference_metadata(metadata_json: dict) -> dict:
-    return {
-        **metadata_json,
-        "import_mode": "reference_only",
-        "reference_only_imported_at": datetime.now(timezone.utc).isoformat(),
-    }
-
 
 def import_workspace_archive(
     db: Session,
@@ -71,7 +56,7 @@ def import_workspace_archive(
     except Exception as exc:  # noqa: BLE001
         raise ValueError("Archive manifest is invalid") from exc
 
-    if manifest.get("schema_version") != "workspace-export-v1":
+    if manifest.get("schema_version") != WORKSPACE_EXPORT_SCHEMA_VERSION:
         raise ValueError("Unsupported workspace export schema")
 
     workspace_payload = manifest.get("workspace")
@@ -119,7 +104,7 @@ def import_workspace_archive(
             content=item.get("content"),
             rating=item.get("rating"),
             is_avoid=bool(item.get("is_avoid", False)),
-            occurred_at=_parse_datetime(item.get("occurred_at")),
+            occurred_at=parse_optional_datetime(item.get("occurred_at")),
             source_type=item.get("source_type") or "imported",
             status=item.get("status") or "active",
             extra_data=item.get("extra_data") if isinstance(item.get("extra_data"), dict) else {},
@@ -169,7 +154,7 @@ def import_workspace_archive(
                 processing_status=item.get("processing_status") or "completed",
                 processing_error=item.get("processing_error"),
                 extracted_text=item.get("extracted_text"),
-                processed_at=_parse_datetime(item.get("processed_at")),
+                processed_at=parse_optional_datetime(item.get("processed_at")),
             )
             db.add(media)
             imported_media_count += 1
@@ -183,7 +168,7 @@ def import_workspace_archive(
             if not extracted_text and processing_status == "completed":
                 processing_status = "deferred"
                 processing_error = "Reference-only remote media was imported without local file payload"
-            processed_at = _parse_datetime(item.get("processed_at")) if processing_status == "completed" else None
+            processed_at = parse_optional_datetime(item.get("processed_at")) if processing_status == "completed" else None
 
             media = MediaAsset(
                 workspace_id=workspace.id,
@@ -195,7 +180,7 @@ def import_workspace_archive(
                 original_filename=str(original_filename),
                 mime_type=item.get("mime_type") or "application/octet-stream",
                 size_bytes=int(item.get("size_bytes") or 0),
-                metadata_json=_build_imported_reference_metadata(metadata_json),
+                metadata_json=build_imported_reference_metadata(metadata_json),
                 processing_status=processing_status,
                 processing_error=processing_error,
                 extracted_text=extracted_text if isinstance(extracted_text, str) else None,
