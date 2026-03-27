@@ -2571,6 +2571,10 @@ Last updated: 2026-03-27
   - selected-record location review details composition now lives in `apps/web/components/location-review-details.tsx` instead of remaining inline inside `location-review-panel.tsx`
   - `location-review-panel.tsx` now stays focused on intro, edit controls, and top-level layout while selected-record detail composition remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this location-review details boundary so future location-review changes do not regrow a mixed top-level-and-selected-detail composition module
+- Dead Letter Recovery Summary Header Extraction V1:
+  - dead-letter summary header rendering now lives in `apps/web/components/dead-letter-recovery-summary-header.tsx` instead of remaining inline inside `dead-letter-recovery-summary.tsx`
+  - `dead-letter-recovery-summary.tsx` now stays focused on summary-level composition while header rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this summary-header boundary so future dead-letter summary changes do not regrow a mixed composition-and-header rendering module
 
 ## Next
 - Continue the next product slice

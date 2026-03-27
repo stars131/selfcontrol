@@ -2352,6 +2352,14 @@ const deadLetterRecoverySummaryTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary.types.ts",
 );
+const deadLetterRecoverySummaryHeaderPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-header.tsx",
+);
+const deadLetterRecoverySummaryHeaderTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-header.types.ts",
+);
 const deadLetterRecoverySummaryActionsPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-actions.tsx",
@@ -3827,6 +3835,14 @@ const deadLetterRecoverySummaryTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryTypesPath,
   "utf8",
 );
+const deadLetterRecoverySummaryHeaderSource = fs.readFileSync(
+  deadLetterRecoverySummaryHeaderPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryHeaderTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryHeaderTypesPath,
+  "utf8",
+);
 const deadLetterRecoverySummaryActionsSource = fs.readFileSync(
   deadLetterRecoverySummaryActionsPath,
   "utf8",
@@ -5178,6 +5194,10 @@ const recordSearchPanelPresetControlsTypesLines =
 const recordPanelStatsTypesLines = recordPanelStatsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryTypesLines =
   deadLetterRecoverySummaryTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryHeaderLines =
+  deadLetterRecoverySummaryHeaderSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryHeaderTypesLines =
+  deadLetterRecoverySummaryHeaderTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionsTypesLines =
   deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryStatsTypesLines =
@@ -22605,8 +22625,10 @@ if (recordPanelStatCardTypesLines > maxRecordPanelStatCardTypesLines) {
 }
 
 for (const requiredDeadLetterRecoverySummaryUsage of [
+  'import { DeadLetterRecoverySummaryHeader } from "./dead-letter-recovery-summary-header";',
   'import type { DeadLetterRecoverySummaryProps } from "./dead-letter-recovery-summary.types";',
   "}: DeadLetterRecoverySummaryProps) {",
+  "<DeadLetterRecoverySummaryHeader",
 ]) {
   if (!deadLetterRecoverySummarySource.includes(requiredDeadLetterRecoverySummaryUsage)) {
     throw new Error(
@@ -22617,6 +22639,26 @@ for (const requiredDeadLetterRecoverySummaryUsage of [
 
 if (deadLetterRecoverySummarySource.includes("type DeadLetterRecoverySummaryProps = Pick<")) {
   throw new Error("dead-letter-recovery-summary.tsx must keep dead-letter summary prop typing delegated");
+}
+
+for (const forbiddenDeadLetterRecoverySummaryToken of [
+  'import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";',
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  "{mediaIssueCopy.deadLetterTitle}",
+  "{mediaIssueCopy.deadLetterDescription}",
+]) {
+  if (deadLetterRecoverySummarySource.includes(forbiddenDeadLetterRecoverySummaryToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary.tsx must keep summary header rendering delegated: ${forbiddenDeadLetterRecoverySummaryToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryLines = 30;
+if (deadLetterRecoverySummarySource.split(/\r?\n/).length > maxDeadLetterRecoverySummaryLines) {
+  throw new Error(
+    `dead-letter-recovery-summary.tsx exceeded ${maxDeadLetterRecoverySummaryLines} lines: ${deadLetterRecoverySummarySource.split(/\r?\n/).length}`,
+  );
 }
 
 for (const requiredDeadLetterRecoverySummaryTypesUsage of [
@@ -22633,6 +22675,57 @@ const maxDeadLetterRecoverySummaryTypesLines = 2;
 if (deadLetterRecoverySummaryTypesLines > maxDeadLetterRecoverySummaryTypesLines) {
   throw new Error(
     `dead-letter-recovery-summary.types.ts exceeded ${maxDeadLetterRecoverySummaryTypesLines} lines: ${deadLetterRecoverySummaryTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryHeaderUsage of [
+  'import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";',
+  'import type { DeadLetterRecoverySummaryHeaderProps } from "./dead-letter-recovery-summary-header.types";',
+  "}: DeadLetterRecoverySummaryHeaderProps) {",
+  '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  "{mediaIssueCopy.deadLetterTitle}",
+  "{mediaIssueCopy.deadLetterDescription}",
+]) {
+  if (!deadLetterRecoverySummaryHeaderSource.includes(requiredDeadLetterRecoverySummaryHeaderUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-header.tsx must own summary header rendering: ${requiredDeadLetterRecoverySummaryHeaderUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoverySummaryHeaderToken of [
+  "DeadLetterRecoverySummaryProps",
+  "<DeadLetterRecoverySummaryActions",
+  "bulkRetryingDeadLetter",
+]) {
+  if (deadLetterRecoverySummaryHeaderSource.includes(forbiddenDeadLetterRecoverySummaryHeaderToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-header.tsx must keep summary-level action concerns delegated: ${forbiddenDeadLetterRecoverySummaryHeaderToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryHeaderLines = 25;
+if (deadLetterRecoverySummaryHeaderLines > maxDeadLetterRecoverySummaryHeaderLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-header.tsx exceeded ${maxDeadLetterRecoverySummaryHeaderLines} lines: ${deadLetterRecoverySummaryHeaderLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryHeaderTypesUsage of [
+  'import type { DeadLetterRecoverySummaryProps } from "./dead-letter-recovery-summary.types"; export type DeadLetterRecoverySummaryHeaderProps = Pick<DeadLetterRecoverySummaryProps, "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy">;',
+]) {
+  if (!deadLetterRecoverySummaryHeaderTypesSource.includes(requiredDeadLetterRecoverySummaryHeaderTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-header.types.ts must own summary-header prop typing: ${requiredDeadLetterRecoverySummaryHeaderTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryHeaderTypesLines = 2;
+if (deadLetterRecoverySummaryHeaderTypesLines > maxDeadLetterRecoverySummaryHeaderTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-header.types.ts exceeded ${maxDeadLetterRecoverySummaryHeaderTypesLines} lines: ${deadLetterRecoverySummaryHeaderTypesLines}`,
   );
 }
 

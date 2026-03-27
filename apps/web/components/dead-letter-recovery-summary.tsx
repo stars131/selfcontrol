@@ -1,6 +1,6 @@
 "use client";
 import { DeadLetterRecoverySummaryActions } from "./dead-letter-recovery-summary-actions";
-import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";
+import { DeadLetterRecoverySummaryHeader } from "./dead-letter-recovery-summary-header";
 import type { DeadLetterRecoverySummaryProps } from "./dead-letter-recovery-summary.types";
 
 export function DeadLetterRecoverySummary({
@@ -16,13 +16,11 @@ export function DeadLetterRecoverySummary({
 }: DeadLetterRecoverySummaryProps) {
   return (
     <>
-      <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div>
-          <div className="eyebrow">{mediaIssueCopy.deadLetterTitle}</div>
-          <div className="muted" style={{ marginTop: 8 }}>{mediaIssueCopy.deadLetterDescription}</div>
-        </div>
-        <DeadLetterRecoverySummaryStats locale={locale} mediaDeadLetterOverview={mediaDeadLetterOverview} mediaIssueCopy={mediaIssueCopy} />
-      </div>
+      <DeadLetterRecoverySummaryHeader
+        locale={locale}
+        mediaDeadLetterOverview={mediaDeadLetterOverview}
+        mediaIssueCopy={mediaIssueCopy}
+      />
       <DeadLetterRecoverySummaryActions bulkRetryingDeadLetter={bulkRetryingDeadLetter} mediaDeadLetterOverview={mediaDeadLetterOverview} mediaIssueCopy={mediaIssueCopy} onBulkRetryAll={onBulkRetryAll} onBulkRetrySelected={onBulkRetrySelected} onClearSelection={onClearSelection} onSelectAll={onSelectAll} selectedDeadLetterIds={selectedDeadLetterIds} />
     </>
   );
