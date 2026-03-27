@@ -75,6 +75,10 @@ const workspaceShellRecordActionRefreshPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-record-action-refresh.ts",
 );
+const workspaceShellRecordActionPayloadsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-action-payloads.ts",
+);
 const workspaceShellChatRecordActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-record-actions.ts",
@@ -162,6 +166,10 @@ const recordActionRefreshSource = fs.readFileSync(
   workspaceShellRecordActionRefreshPath,
   "utf8",
 );
+const recordActionPayloadsSource = fs.readFileSync(
+  workspaceShellRecordActionPayloadsPath,
+  "utf8",
+);
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
 const conversationStateLoadSource = fs.readFileSync(
@@ -215,6 +223,7 @@ const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).leng
 const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
 const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
 const recordActionRefreshLineCount = recordActionRefreshSource.split(/\r?\n/).length;
+const recordActionPayloadsLineCount = recordActionPayloadsSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 const conversationStateLoadLineCount = conversationStateLoadSource.split(/\r?\n/).length;
@@ -1388,7 +1397,10 @@ const workspaceShellRecordActionsSource = fs.readFileSync(
 for (const requiredRecordActionsImport of [
   'from "../lib/api";',
   'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-payloads";',
   'from "./workspace-shell-record-action-refresh";',
+  "buildWorkspaceShellRecordUpdatePayload(input)",
+  "buildWorkspaceShellRecordCreatePayload(input)",
   "refreshWorkspaceShellRecordMutation(",
   "refreshWorkspaceShellRecordDeletion(",
 ]) {
@@ -1406,6 +1418,10 @@ for (const forbiddenRecordActionsToken of [
   "await refreshMediaStorageSummary(activeToken);",
   "await refreshMediaProcessingOverview(activeToken);",
   "await refreshMediaDeadLetterOverview(activeToken);",
+  "title: input.title,",
+  "content: input.content,",
+  "type_code: input.type_code,",
+  'source_type: "manual",',
 ]) {
   if (workspaceShellRecordActionsSource.includes(forbiddenRecordActionsToken)) {
     throw new Error(
@@ -1453,6 +1469,44 @@ const maxRecordActionRefreshLines = 40;
 if (recordActionRefreshLineCount > maxRecordActionRefreshLines) {
   throw new Error(
     `workspace-shell-record-action-refresh.ts exceeded ${maxRecordActionRefreshLines} lines: ${recordActionRefreshLineCount}`,
+  );
+}
+
+for (const requiredRecordActionPayloadUsage of [
+  'import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-actions.types";',
+  "export function buildWorkspaceShellRecordUpdatePayload(",
+  "export function buildWorkspaceShellRecordCreatePayload(",
+  "rating: input.rating ?? null,",
+  "rating: input.rating ?? undefined,",
+  'source_type: "manual",',
+  "type_code: input.type_code,",
+]) {
+  if (!recordActionPayloadsSource.includes(requiredRecordActionPayloadUsage)) {
+    throw new Error(
+      `workspace-shell-record-action-payloads.ts must own record request payload shaping: ${requiredRecordActionPayloadUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordActionPayloadToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  "createRecord(",
+  "updateRecord(",
+  "deleteRecord(",
+  "refreshWorkspaceShellRecordMutation(",
+]) {
+  if (recordActionPayloadsSource.includes(forbiddenRecordActionPayloadToken)) {
+    throw new Error(
+      `workspace-shell-record-action-payloads.ts must keep API and refresh orchestration delegated: ${forbiddenRecordActionPayloadToken}`,
+    );
+  }
+}
+
+const maxRecordActionPayloadsLines = 35;
+if (recordActionPayloadsLineCount > maxRecordActionPayloadsLines) {
+  throw new Error(
+    `workspace-shell-record-action-payloads.ts exceeded ${maxRecordActionPayloadsLines} lines: ${recordActionPayloadsLineCount}`,
   );
 }
 

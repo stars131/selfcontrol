@@ -7,6 +7,10 @@ import type {
 } from "./workspace-shell-actions.types";
 import { requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
 import {
+  buildWorkspaceShellRecordCreatePayload,
+  buildWorkspaceShellRecordUpdatePayload,
+} from "./workspace-shell-record-action-payloads";
+import {
   refreshWorkspaceShellRecordDeletion,
   refreshWorkspaceShellRecordMutation,
 } from "./workspace-shell-record-action-refresh";
@@ -29,14 +33,12 @@ export function createWorkspaceShellRecordActions({
     const activeToken = requireWritableWorkspaceToken(token, canWriteWorkspace);
 
     if (input.recordId) {
-      await updateRecord(activeToken, workspaceId, input.recordId, {
-        title: input.title,
-        content: input.content,
-        rating: input.rating ?? null,
-        occurred_at: input.occurred_at,
-        is_avoid: input.is_avoid,
-        extra_data: input.extra_data,
-      });
+      await updateRecord(
+        activeToken,
+        workspaceId,
+        input.recordId,
+        buildWorkspaceShellRecordUpdatePayload(input),
+      );
       await refreshWorkspaceShellRecordMutation(
         { refreshRecords, refreshKnowledge, refreshAuditLogs },
         activeToken,
@@ -46,16 +48,11 @@ export function createWorkspaceShellRecordActions({
       return;
     }
 
-    const result = await createRecord(activeToken, workspaceId, {
-      title: input.title,
-      content: input.content,
-      type_code: input.type_code,
-      rating: input.rating ?? undefined,
-      occurred_at: input.occurred_at,
-      is_avoid: input.is_avoid,
-      source_type: "manual",
-      extra_data: input.extra_data,
-    });
+    const result = await createRecord(
+      activeToken,
+      workspaceId,
+      buildWorkspaceShellRecordCreatePayload(input),
+    );
     await refreshWorkspaceShellRecordMutation(
       { refreshRecords, refreshKnowledge, refreshAuditLogs },
       activeToken,
