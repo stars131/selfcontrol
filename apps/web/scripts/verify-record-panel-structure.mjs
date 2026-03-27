@@ -14945,9 +14945,12 @@ if (mediaAssetCardLines > maxMediaAssetCardLines) {
 }
 
 for (const requiredMediaAssetCardIntroUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/media-type-display";',
   'import type { MediaAssetCardIntroProps } from "./media-asset-card-intro.types";',
   "}: MediaAssetCardIntroProps) {",
-  '<div className="eyebrow">{asset.media_type}</div>',
+  "const { locale } = useStoredLocale();",
+  "getMediaTypeLabel(locale, asset.media_type)",
   "{asset.original_filename}",
   '{asset.mime_type}',
 ]) {
@@ -18403,8 +18406,10 @@ if (workspaceMediaRetentionSummaryTypesLines > maxWorkspaceMediaRetentionSummary
 
 for (const requiredMediaRetentionItemCardUsage of [
   'import { getProcessingStatusLabel } from "../lib/media-issue-display";',
+  'import { getMediaTypeLabel } from "../lib/media-type-display";',
   'import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";',
   "}: MediaRetentionItemCardProps) {",
+  "getMediaTypeLabel(locale, item.media_type)",
   "getProcessingStatusLabel(locale, item.processing_status)",
 ]) {
   if (!mediaRetentionItemCardSource.includes(requiredMediaRetentionItemCardUsage)) {
@@ -21559,9 +21564,12 @@ if (recentMediaIssueCardLines > maxRecentMediaIssueCardLines) {
 }
 
 for (const requiredRecentMediaIssueCardIntroUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/media-type-display";',
   'import type { RecentMediaIssueCardIntroProps } from "./recent-media-issue-card-intro.types";',
   "}: RecentMediaIssueCardIntroProps) {",
-  '<div className="eyebrow">{issue.media_type}</div>',
+  "const { locale } = useStoredLocale();",
+  "getMediaTypeLabel(locale, issue.media_type)",
   "{issue.original_filename}",
 ]) {
   if (!recentMediaIssueCardIntroSource.includes(requiredRecentMediaIssueCardIntroUsage)) {
@@ -21967,11 +21975,13 @@ if (deadLetterRecoveryItemCardLines > maxDeadLetterRecoveryItemCardLines) {
 }
 
 for (const requiredDeadLetterRecoveryItemCardHeaderUsage of [
+  'import { getMediaTypeLabel } from "../lib/media-type-display";',
   'import { canRetryMediaIssue } from "../lib/record-panel-media";',
   'import { DeadLetterRecoveryItemCardTags } from "./dead-letter-recovery-item-card-tags";',
   'import type { DeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header.types";',
   "}: DeadLetterRecoveryItemCardHeaderProps) {",
   '<label className="action-row"',
+  "getMediaTypeLabel(locale, item.media_type)",
   "selectedDeadLetterIds.includes(item.media_id)",
   "onChange={(event) => onToggleSelection(item.media_id, event.target.checked)}",
 ]) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { getProcessingStatusLabel } from "../lib/media-issue-display";
+import { getMediaTypeLabel } from "../lib/media-type-display";
 import type { LocaleCode } from "../lib/locale";
 import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";
 
@@ -36,7 +37,7 @@ export function MediaRetentionItemCard({
       <article className="message">
         <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ minWidth: 0 }}>
-            <div className="eyebrow">{item.media_type}</div>
+            <div className="eyebrow">{getMediaTypeLabel(locale, item.media_type)}</div>
             <div style={{ marginTop: 8, fontWeight: 600, wordBreak: "break-word" }}>{item.original_filename}</div>
             <div className="muted" style={{ marginTop: 8 }}>
               {copy.createdAt} {formatCreatedAt(item.created_at, locale)}

@@ -2163,6 +2163,10 @@ Last updated: 2026-03-26
   - `chat-message-thread-display.ts` now owns localized labels for the assistant/user message eyebrow and the empty-thread guidance copy, while keeping English fallback text stable
   - `chat-message-thread.tsx` now follows the active locale for message role labels and the initial empty-state prompt instead of hardcoding English UI text
   - `verify-record-panel-structure.mjs` now enforces the locale-aware thread-copy helper usage so future chat thread updates stay maintainable under the enterprise standard
+- Media Type Label Localization V1:
+  - `media-type-display.ts` now owns localized labels for common media kinds such as `image`, `audio`, `video`, and `file`, with safe fallback for future backend values
+  - media asset cards, recent issue cards, dead-letter recovery cards, and media retention cards now render localized media type labels instead of exposing raw media-type codes in their eyebrow headers
+  - `verify-record-panel-structure.mjs` now enforces the helper-based media-type rendering on those focused card leaves so future media UI updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice
