@@ -1367,6 +1367,14 @@ const recordSearchPanelActionsTypesPath = path.resolve(
   process.cwd(),
   "components/record-search-panel-actions.types.ts",
 );
+const recordSearchPanelSummaryPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-summary.tsx",
+);
+const recordSearchPanelSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-summary.types.ts",
+);
 const recordSearchPanelFilterFieldsPath = path.resolve(
   process.cwd(),
   "components/record-search-panel-filter-fields.tsx",
@@ -3800,6 +3808,11 @@ const recordSearchPanelActionsTypesSource = fs.readFileSync(
   recordSearchPanelActionsTypesPath,
   "utf8",
 );
+const recordSearchPanelSummarySource = fs.readFileSync(recordSearchPanelSummaryPath, "utf8");
+const recordSearchPanelSummaryTypesSource = fs.readFileSync(
+  recordSearchPanelSummaryTypesPath,
+  "utf8",
+);
 const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
 const deadLetterRecoverySummarySource = fs.readFileSync(deadLetterRecoverySummaryPath, "utf8");
 const deadLetterRecoverySummaryTypesSource = fs.readFileSync(
@@ -5142,6 +5155,9 @@ const recordSearchPanelLines = recordSearchPanelSource.split(/\r?\n/).length;
 const recordSearchPanelActionsLines = recordSearchPanelActionsSource.split(/\r?\n/).length;
 const recordSearchPanelActionsTypesLines =
   recordSearchPanelActionsTypesSource.split(/\r?\n/).length;
+const recordSearchPanelSummaryLines = recordSearchPanelSummarySource.split(/\r?\n/).length;
+const recordSearchPanelSummaryTypesLines =
+  recordSearchPanelSummaryTypesSource.split(/\r?\n/).length;
 const recordSearchPanelFilterFieldsTypesLines =
   recordSearchPanelFilterFieldsTypesSource.split(/\r?\n/).length;
 const recordSearchPanelPresetControlsTypesLines =
@@ -22256,9 +22272,11 @@ for (const requiredRecordSearchPanelUsage of [
   'import { RecordSearchPanelActions } from "./record-search-panel-actions";',
   'import { RecordSearchPanelFilterFields } from "./record-search-panel-filter-fields";',
   'import { RecordSearchPanelPresetControls } from "./record-search-panel-preset-controls";',
+  'import { RecordSearchPanelSummary } from "./record-search-panel-summary";',
   'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
   "}: RecordSearchPanelProps) {",
   "<RecordSearchPanelActions",
+  "<RecordSearchPanelSummary currentFilterSummary={currentFilterSummary} />",
   "onApplyFilter={onApplyFilter}",
   "onResetFilter={onResetFilter}",
 ]) {
@@ -22273,6 +22291,7 @@ for (const forbiddenRecordSearchPanelToken of [
   '<div className="action-row">',
   "onClick={() => void onApplyFilter()}",
   "onClick={() => void onResetFilter()}",
+  '<div className="muted">{currentFilterSummary}</div>',
 ]) {
   if (recordSearchPanelSource.includes(forbiddenRecordSearchPanelToken)) {
     throw new Error(
@@ -22336,6 +22355,54 @@ const maxRecordSearchPanelActionsTypesLines = 2;
 if (recordSearchPanelActionsTypesLines > maxRecordSearchPanelActionsTypesLines) {
   throw new Error(
     `record-search-panel-actions.types.ts exceeded ${maxRecordSearchPanelActionsTypesLines} lines: ${recordSearchPanelActionsTypesLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelSummaryUsage of [
+  'import type { RecordSearchPanelSummaryProps } from "./record-search-panel-summary.types";',
+  "}: RecordSearchPanelSummaryProps) {",
+  '<div className="muted">{currentFilterSummary}</div>',
+]) {
+  if (!recordSearchPanelSummarySource.includes(requiredRecordSearchPanelSummaryUsage)) {
+    throw new Error(
+      `record-search-panel-summary.tsx must own search summary rendering: ${requiredRecordSearchPanelSummaryUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSearchPanelSummaryToken of [
+  "RecordSearchPanelProps",
+  "<RecordSearchPanelActions",
+  "<RecordSearchPanelPresetControls",
+]) {
+  if (recordSearchPanelSummarySource.includes(forbiddenRecordSearchPanelSummaryToken)) {
+    throw new Error(
+      `record-search-panel-summary.tsx must keep panel composition delegated: ${forbiddenRecordSearchPanelSummaryToken}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelSummaryLines = 10;
+if (recordSearchPanelSummaryLines > maxRecordSearchPanelSummaryLines) {
+  throw new Error(
+    `record-search-panel-summary.tsx exceeded ${maxRecordSearchPanelSummaryLines} lines: ${recordSearchPanelSummaryLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelSummaryTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelSummaryProps = Pick<RecordSearchPanelProps, "currentFilterSummary">;',
+]) {
+  if (!recordSearchPanelSummaryTypesSource.includes(requiredRecordSearchPanelSummaryTypesUsage)) {
+    throw new Error(
+      `record-search-panel-summary.types.ts must own search summary prop typing: ${requiredRecordSearchPanelSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelSummaryTypesLines = 2;
+if (recordSearchPanelSummaryTypesLines > maxRecordSearchPanelSummaryTypesLines) {
+  throw new Error(
+    `record-search-panel-summary.types.ts exceeded ${maxRecordSearchPanelSummaryTypesLines} lines: ${recordSearchPanelSummaryTypesLines}`,
   );
 }
 

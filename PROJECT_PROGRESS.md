@@ -2563,6 +2563,10 @@ Last updated: 2026-03-27
   - individual stats-card rendering now lives in `apps/web/components/record-panel-stat-card.tsx` instead of remaining inline inside `record-panel-stats.tsx`
   - `record-panel-stats.tsx` now stays focused on stats-grid composition while individual stat-card rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this stat-card boundary so future stats-surface changes do not regrow a mixed grid-and-card rendering module
+- Record Search Panel Summary Extraction V1:
+  - current filter-summary rendering now lives in `apps/web/components/record-search-panel-summary.tsx` instead of remaining inline inside `record-search-panel.tsx`
+  - `record-search-panel.tsx` now stays focused on composing filter fields, actions, summary, and preset controls while summary rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this search-panel summary boundary so future search-panel changes do not regrow a mixed composition-and-summary rendering module
 
 ## Next
 - Continue the next product slice

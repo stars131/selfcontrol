@@ -3,6 +3,7 @@
 import { RecordSearchPanelActions } from "./record-search-panel-actions";
 import { RecordSearchPanelFilterFields } from "./record-search-panel-filter-fields";
 import { RecordSearchPanelPresetControls } from "./record-search-panel-preset-controls";
+import { RecordSearchPanelSummary } from "./record-search-panel-summary";
 import type { RecordSearchPanelProps } from "./record-search-panel.types";
 
 export function RecordSearchPanel({
@@ -37,7 +38,7 @@ export function RecordSearchPanel({
         onResetFilter={onResetFilter}
         panelCopy={panelCopy}
       />
-      <div className="muted">{currentFilterSummary}</div>
+      <RecordSearchPanelSummary currentFilterSummary={currentFilterSummary} />
       <RecordSearchPanelPresetControls
         canWriteWorkspace={canWriteWorkspace}
         onPresetNameChange={onPresetNameChange}
