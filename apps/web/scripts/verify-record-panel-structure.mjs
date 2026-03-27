@@ -14332,7 +14332,12 @@ if (workspaceShellRecordFilterActionsTypesLines > maxWorkspaceShellRecordFilterA
 
 for (const requiredWorkspaceShellFrameUsage of [
   'import type { WorkspaceShellFrameProps } from "./workspace-shell-frame.types";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getWorkspaceShellActionCopy } from "./workspace-shell-action-copy";',
   "}: WorkspaceShellFrameProps) {",
+  "const { locale } = useStoredLocale();",
+  "const copy = getWorkspaceShellActionCopy(locale);",
+  "copy.loadingWorkspace",
 ]) {
   if (!workspaceShellFrameSource.includes(requiredWorkspaceShellFrameUsage)) {
     throw new Error(
@@ -14344,6 +14349,7 @@ for (const requiredWorkspaceShellFrameUsage of [
 for (const forbiddenWorkspaceShellFrameToken of [
   'import type { ReactNode } from "react";',
   "type WorkspaceShellFrameProps = {",
+  '"Loading workspace..."',
 ]) {
   if (workspaceShellFrameSource.includes(forbiddenWorkspaceShellFrameToken)) {
     throw new Error(

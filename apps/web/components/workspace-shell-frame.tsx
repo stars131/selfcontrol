@@ -1,3 +1,7 @@
+"use client";
+
+import { useStoredLocale } from "../lib/locale";
+import { getWorkspaceShellActionCopy } from "./workspace-shell-action-copy";
 import type { WorkspaceShellFrameProps } from "./workspace-shell-frame.types";
 
 export function WorkspaceShellFrame({
@@ -5,12 +9,15 @@ export function WorkspaceShellFrame({
   error,
   loading,
 }: WorkspaceShellFrameProps) {
+  const { locale } = useStoredLocale();
+  const copy = getWorkspaceShellActionCopy(locale);
+
   if (loading) {
     return (
       <main className="page-shell">
         <section className="panel auth-panel">
           <div className="panel-body">
-            <div className="notice">Loading workspace...</div>
+            <div className="notice">{copy.loadingWorkspace}</div>
           </div>
         </section>
       </main>

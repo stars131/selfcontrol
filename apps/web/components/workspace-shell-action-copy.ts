@@ -3,6 +3,7 @@
 import { getStoredLocale, type LocaleCode } from "../lib/locale";
 
 type WorkspaceShellActionCopy = {
+  loadingWorkspace: string;
   loadWorkspaceDataFailed: string;
   noActiveConversation: string;
   notAuthenticated: string;
@@ -12,6 +13,7 @@ type WorkspaceShellActionCopy = {
 
 const COPY: Record<LocaleCode, WorkspaceShellActionCopy> = {
   "zh-CN": {
+    loadingWorkspace: "正在加载工作区...",
     loadWorkspaceDataFailed: "加载工作区数据失败",
     noActiveConversation: "当前没有可用会话",
     notAuthenticated: "尚未登录",
@@ -19,6 +21,7 @@ const COPY: Record<LocaleCode, WorkspaceShellActionCopy> = {
     viewerReadOnly: "Viewer 仅可只读访问",
   },
   en: {
+    loadingWorkspace: "Loading workspace...",
     loadWorkspaceDataFailed: "Failed to load workspace data",
     noActiveConversation: "No active conversation",
     notAuthenticated: "Not authenticated",
@@ -26,6 +29,7 @@ const COPY: Record<LocaleCode, WorkspaceShellActionCopy> = {
     viewerReadOnly: "Viewer access is read-only",
   },
   ja: {
+    loadingWorkspace: "ワークスペースを読み込み中...",
     loadWorkspaceDataFailed: "ワークスペースデータの読み込みに失敗しました",
     noActiveConversation: "有効な会話がありません",
     notAuthenticated: "未認証です",

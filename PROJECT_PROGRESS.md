@@ -2224,6 +2224,9 @@ Last updated: 2026-03-26
 - Chat Composer Localization V1:
   - chat composer placeholder, read-only notice, send button, and working state now reuse the shared locale-aware chat display copy instead of hardcoded English strings
   - chat-panel and record-panel structure verification now enforce those copy-driven composer labels so future assistant input-surface maintenance keeps the enterprise localization baseline intact
+- Workspace Shell Loading Localization V1:
+  - workspace shell loading state now reuses the shared shell action copy instead of hardcoded English text in the frame component
+  - record-panel structure verification now enforces that copy-driven loading label so future shell-frame maintenance keeps the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice
