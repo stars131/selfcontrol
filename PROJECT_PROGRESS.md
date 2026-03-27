@@ -2443,11 +2443,15 @@ Last updated: 2026-03-27
   - quick-add preview trigger detection, type-label mapping, and parsed location extraction now live in `apps/web/components/record-quick-add-preview.helpers.ts` instead of remaining inline inside the preview component
   - `record-quick-add-preview.tsx` now stays focused on rendering preview tags from the parsed draft while reusable preview logic remains testable and easier to extend for future capture metadata
   - record-panel and quick-add structure guardrails now enforce this preview-helper boundary so the single-input capture preview stays maintainable under the enterprise engineering standard
+- Chat Panel Section Prop Builder Extraction V1:
+  - `apps/web/components/chat-panel-section-props.ts` now owns the conversation-section and management-section prop assembly that used to sit inline inside `chat-panel-content.tsx`
+  - `chat-panel-content.tsx` now stays focused on two-section composition while prop selection for thread and management surfaces remains reusable and easier to evolve safely
+  - the chat-panel structure guardrail now enforces this section-prop builder boundary so future chat-surface expansion does not regrow a fragile content composition file
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

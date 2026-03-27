@@ -23,6 +23,12 @@ const chatPanelContentPropsTypesLineCount =
 const chatPanelContentPath = path.resolve(process.cwd(), "components/chat-panel-content.tsx");
 const chatPanelContentSource = fs.readFileSync(chatPanelContentPath, "utf8");
 const chatPanelContentLineCount = chatPanelContentSource.split(/\r?\n/).length;
+const chatPanelSectionPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-section-props.ts",
+);
+const chatPanelSectionPropsSource = fs.readFileSync(chatPanelSectionPropsPath, "utf8");
+const chatPanelSectionPropsLineCount = chatPanelSectionPropsSource.split(/\r?\n/).length;
 const chatConversationBarPath = path.resolve(process.cwd(), "components/chat-conversation-bar.tsx");
 const chatConversationBarSource = fs.readFileSync(chatConversationBarPath, "utf8");
 const chatMessageThreadPath = path.resolve(process.cwd(), "components/chat-message-thread.tsx");
@@ -109,6 +115,7 @@ if (!source.includes("buildChatPanelContentProps({ actions, props })")) {
 for (const requiredContentImport of [
   'import { ChatPanelConversationContent } from "./chat-panel-conversation-content";',
   'import { ChatPanelManagementContent } from "./chat-panel-management-content";',
+  'import { buildChatPanelConversationContentProps, buildChatPanelManagementContentProps } from "./chat-panel-section-props";',
   'import type { ChatPanelContentProps } from "./chat-panel-content.types";',
 ]) {
   if (!chatPanelContentSource.includes(requiredContentImport)) {
@@ -119,8 +126,8 @@ for (const requiredContentImport of [
 }
 
 for (const requiredContentUsage of [
-  "<ChatPanelConversationContent",
-  "<ChatPanelManagementContent",
+  "<ChatPanelConversationContent {...buildChatPanelConversationContentProps(props)} />",
+  "<ChatPanelManagementContent {...buildChatPanelManagementContentProps(props)} />",
 ]) {
   if (!chatPanelContentSource.includes(requiredContentUsage)) {
     throw new Error(
@@ -142,6 +149,11 @@ for (const forbiddenContentToken of [
   "<ChatNotificationsCard",
   "<ChatMessageThread",
   "<ChatPanelComposer",
+  "activeConversationId={activeConversationId}",
+  "auditLogs={auditLogs}",
+  "canManageSharing={canManageSharing}",
+  "canWriteWorkspace={canWriteWorkspace}",
+  "draft={draft}",
 ]) {
   if (chatPanelContentSource.includes(forbiddenContentToken)) {
     throw new Error(
@@ -150,9 +162,51 @@ for (const forbiddenContentToken of [
   }
 }
 
-const maxContentLines = 100;
+const maxContentLines = 20;
 if (chatPanelContentLineCount > maxContentLines) {
   throw new Error(`chat-panel-content.tsx exceeded ${maxContentLines} lines: ${chatPanelContentLineCount}`);
+}
+
+for (const requiredSectionPropsUsage of [
+  'import type {',
+  'from "./chat-panel-content.types";',
+  "export function buildChatPanelConversationContentProps({",
+  "}: ChatPanelContentProps): ChatPanelConversationContentProps {",
+  "export function buildChatPanelManagementContentProps({",
+  "}: ChatPanelContentProps): ChatPanelManagementContentProps {",
+  "activeConversationId,",
+  "handleSend,",
+  "setDraft,",
+  "auditLogs,",
+  "handleCreateShareLink,",
+  "sharePermission,",
+  "unreadCount,",
+]) {
+  if (!chatPanelSectionPropsSource.includes(requiredSectionPropsUsage)) {
+    throw new Error(
+      `chat-panel-section-props.ts must own section prop assembly: ${requiredSectionPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSectionPropsToken of [
+  'from "./chat-panel-conversation-content";',
+  'from "./chat-panel-management-content";',
+  "<ChatPanelConversationContent",
+  "<ChatPanelManagementContent",
+]) {
+  if (chatPanelSectionPropsSource.includes(forbiddenSectionPropsToken)) {
+    throw new Error(
+      `chat-panel-section-props.ts must keep rendering delegated: ${forbiddenSectionPropsToken}`,
+    );
+  }
+}
+
+const maxSectionPropsLines = 95;
+if (chatPanelSectionPropsLineCount > maxSectionPropsLines) {
+  throw new Error(
+    `chat-panel-section-props.ts exceeded ${maxSectionPropsLines} lines: ${chatPanelSectionPropsLineCount}`,
+  );
 }
 
 for (const requiredContentTypeUsage of [
