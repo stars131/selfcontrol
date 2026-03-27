@@ -2280,9 +2280,14 @@ const recordResultsViewSwitcherTypesPath = path.resolve(
   "components/record-results-view-switcher.types.ts",
 );
 const recordResultsViewPath = path.resolve(process.cwd(), "components/record-results-view.tsx");
+const recordResultsSharedPath = path.resolve(process.cwd(), "components/record-results-shared.tsx");
 const recordResultsSharedCardPropsPath = path.resolve(
   process.cwd(),
   "components/record-results-shared-card-props.ts",
+);
+const recordResultsSummaryCardPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-results-summary-card-props.ts",
 );
 const recordResultsSharedCardPropsTypesPath = path.resolve(
   process.cwd(),
@@ -3723,8 +3728,13 @@ const recordResultsViewSwitcherTypesSource = fs.readFileSync(
   "utf8",
 );
 const recordResultsViewSource = fs.readFileSync(recordResultsViewPath, "utf8");
+const recordResultsSharedSource = fs.readFileSync(recordResultsSharedPath, "utf8");
 const recordResultsSharedCardPropsSource = fs.readFileSync(
   recordResultsSharedCardPropsPath,
+  "utf8",
+);
+const recordResultsSummaryCardPropsSource = fs.readFileSync(
+  recordResultsSummaryCardPropsPath,
   "utf8",
 );
 const recordResultsSharedCardPropsTypesSource = fs.readFileSync(
@@ -5167,8 +5177,11 @@ const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
 const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
+const recordResultsSharedLines = recordResultsSharedSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsLines =
   recordResultsSharedCardPropsSource.split(/\r?\n/).length;
+const recordResultsSummaryCardPropsLines =
+  recordResultsSummaryCardPropsSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsTypesLines =
   recordResultsSharedCardPropsTypesSource.split(/\r?\n/).length;
 const recordResultsListViewTypesLines =
@@ -21909,6 +21922,78 @@ const maxRecordResultsSharedCardPropsTypesLines = 2;
 if (recordResultsSharedCardPropsTypesLines > maxRecordResultsSharedCardPropsTypesLines) {
   throw new Error(
     `record-results-shared-card-props.types.ts exceeded ${maxRecordResultsSharedCardPropsTypesLines} lines: ${recordResultsSharedCardPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecordResultsSharedUsage of [
+  'import { buildRecordSummaryCardProps } from "./record-results-summary-card-props";',
+  'import { RecordSummaryCard } from "./record-summary-card";',
+  'import type { RecordResultsSharedCardProps } from "./record-results-view.types";',
+  'import type { RecordItem } from "../lib/types";',
+  "export function renderRecordSummaryCard(record: RecordItem, props: RecordResultsSharedCardProps) {",
+  "<RecordSummaryCard key={record.id} {...buildRecordSummaryCardProps(record, props)} />",
+]) {
+  if (!recordResultsSharedSource.includes(requiredRecordResultsSharedUsage)) {
+    throw new Error(
+      `record-results-shared.tsx must reuse the extracted summary-card props builder: ${requiredRecordResultsSharedUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsSharedToken of [
+  "avoidLabel={props.avoidLabel}",
+  "isSelected={record.id === props.selectedRecordId}",
+  "unknownPlaceLabel={props.unknownPlaceLabel}",
+]) {
+  if (recordResultsSharedSource.includes(forbiddenRecordResultsSharedToken)) {
+    throw new Error(
+      `record-results-shared.tsx must keep summary-card prop projection delegated: ${forbiddenRecordResultsSharedToken}`,
+    );
+  }
+}
+
+const maxRecordResultsSharedLines = 12;
+if (recordResultsSharedLines > maxRecordResultsSharedLines) {
+  throw new Error(
+    `record-results-shared.tsx exceeded ${maxRecordResultsSharedLines} lines: ${recordResultsSharedLines}`,
+  );
+}
+
+for (const requiredRecordResultsSummaryCardPropsUsage of [
+  'import type { RecordItem } from "../lib/types";',
+  'import type { RecordSummaryCardProps } from "./record-summary-card.types";',
+  'import type { RecordResultsSharedCardProps } from "./record-results-view.types";',
+  "export function buildRecordSummaryCardProps(",
+  "record: RecordItem,",
+  "props: RecordResultsSharedCardProps,",
+  "): RecordSummaryCardProps {",
+  "avoidLabel: props.avoidLabel,",
+  "isSelected: record.id === props.selectedRecordId,",
+  "record,",
+]) {
+  if (!recordResultsSummaryCardPropsSource.includes(requiredRecordResultsSummaryCardPropsUsage)) {
+    throw new Error(
+      `record-results-summary-card-props.ts must own summary-card prop projection: ${requiredRecordResultsSummaryCardPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsSummaryCardPropsToken of [
+  "<RecordSummaryCard",
+  "renderRecordSummaryCard(",
+  "key={record.id}",
+]) {
+  if (recordResultsSummaryCardPropsSource.includes(forbiddenRecordResultsSummaryCardPropsToken)) {
+    throw new Error(
+      `record-results-summary-card-props.ts must keep shared rendering delegated: ${forbiddenRecordResultsSummaryCardPropsToken}`,
+    );
+  }
+}
+
+const maxRecordResultsSummaryCardPropsLines = 30;
+if (recordResultsSummaryCardPropsLines > maxRecordResultsSummaryCardPropsLines) {
+  throw new Error(
+    `record-results-summary-card-props.ts exceeded ${maxRecordResultsSummaryCardPropsLines} lines: ${recordResultsSummaryCardPropsLines}`,
   );
 }
 

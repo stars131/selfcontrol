@@ -2539,6 +2539,10 @@ Last updated: 2026-03-27
   - reminder item-card prop projection now lives in `apps/web/components/record-reminder-list-item-props.ts` instead of remaining inline inside `record-reminder-list.tsx`
   - `record-reminder-list.tsx` now stays focused on list iteration and empty-state rendering while item-card prop shaping remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this reminder list item-props boundary so future reminder-list changes do not regrow a mixed projection-and-rendering list module
+- Record Results Summary Card Prop Builder Extraction V1:
+  - summary-card prop projection now lives in `apps/web/components/record-results-summary-card-props.ts` instead of remaining inline inside `record-results-shared.tsx`
+  - `record-results-shared.tsx` now stays focused on shared card rendering while summary-card prop shaping remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this summary-card prop builder boundary so future results-surface changes do not regrow a mixed projection-and-rendering shared helper
 
 ## Next
 - Continue the next product slice
