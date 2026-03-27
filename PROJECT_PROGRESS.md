@@ -2755,6 +2755,10 @@ Last updated: 2026-03-28
   - recent-media issue extraction-mode tag rendering now lives in `apps/web/components/recent-media-issue-card-extraction-mode-tag.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while extraction-mode rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this extraction-mode-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-extraction-mode rendering module
+- Dead-Letter Retry Budget Extraction V1:
+  - dead-letter item retry-budget metadata rendering now lives in `apps/web/components/dead-letter-recovery-item-card-retry-budget-used.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now stays focused on timestamp metadata composition while retry-budget rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-budget boundary so future dead-letter metadata changes do not regrow a mixed timestamp-and-retry-budget rendering module
 
 ## Next
 - Continue the next product slice
