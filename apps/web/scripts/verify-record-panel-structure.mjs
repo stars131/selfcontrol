@@ -2196,6 +2196,14 @@ const mediaAssetCardRetryCountTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-retry-count-tag.types.ts",
 );
+const mediaAssetCardFileExtensionTagPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-file-extension-tag.tsx",
+);
+const mediaAssetCardFileExtensionTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-file-extension-tag.types.ts",
+);
 const sharePreviewClientPath = path.resolve(process.cwd(), "components/share-preview-client.tsx");
 const sharePreviewClientTypesPath = path.resolve(
   process.cwd(),
@@ -4055,6 +4063,14 @@ const mediaAssetCardRetryCountTagTypesSource = fs.readFileSync(
   mediaAssetCardRetryCountTagTypesPath,
   "utf8",
 );
+const mediaAssetCardFileExtensionTagSource = fs.readFileSync(
+  mediaAssetCardFileExtensionTagPath,
+  "utf8",
+);
+const mediaAssetCardFileExtensionTagTypesSource = fs.readFileSync(
+  mediaAssetCardFileExtensionTagTypesPath,
+  "utf8",
+);
 const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
 const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
@@ -5781,6 +5797,10 @@ const mediaAssetCardRetryCountTagLines =
   mediaAssetCardRetryCountTagSource.split(/\r?\n/).length;
 const mediaAssetCardRetryCountTagTypesLines =
   mediaAssetCardRetryCountTagTypesSource.split(/\r?\n/).length;
+const mediaAssetCardFileExtensionTagLines =
+  mediaAssetCardFileExtensionTagSource.split(/\r?\n/).length;
+const mediaAssetCardFileExtensionTagTypesLines =
+  mediaAssetCardFileExtensionTagTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
@@ -22024,6 +22044,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { formatMediaSize } from "../lib/record-panel-format";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'from "../lib/storage-provider-display";',
+  'import { MediaAssetCardFileExtensionTag } from "./media-asset-card-file-extension-tag";',
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
   'import { MediaAssetCardRetryStateTag } from "./media-asset-card-retry-state-tag";',
@@ -22032,6 +22053,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   '<div className="tag-row">',
   "getProcessingStatusLabel(locale, asset.processing_status)",
   "getStorageProviderLabel(locale, asset.storage_provider)",
+  "<MediaAssetCardFileExtensionTag asset={asset} />",
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
@@ -22054,6 +22076,7 @@ for (const forbiddenMediaAssetCardMetadataTagsToken of [
   '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
+  "asset.metadata_json.file_extension",
 ]) {
   if (mediaAssetCardMetadataTagsSource.includes(forbiddenMediaAssetCardMetadataTagsToken)) {
     throw new Error(
@@ -22230,6 +22253,55 @@ const maxMediaAssetCardRetryCountTagTypesLines = 2;
 if (mediaAssetCardRetryCountTagTypesLines > maxMediaAssetCardRetryCountTagTypesLines) {
   throw new Error(
     `media-asset-card-retry-count-tag.types.ts exceeded ${maxMediaAssetCardRetryCountTagTypesLines} lines: ${mediaAssetCardRetryCountTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardFileExtensionTagUsage of [
+  'import type { MediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag.types";',
+  "}: MediaAssetCardFileExtensionTagProps) {",
+  "asset.metadata_json.file_extension",
+  "{String(asset.metadata_json.file_extension)}",
+]) {
+  if (!mediaAssetCardFileExtensionTagSource.includes(requiredMediaAssetCardFileExtensionTagUsage)) {
+    throw new Error(
+      `media-asset-card-file-extension-tag.tsx must own file-extension tag rendering: ${requiredMediaAssetCardFileExtensionTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardFileExtensionTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (mediaAssetCardFileExtensionTagSource.includes(forbiddenMediaAssetCardFileExtensionTagToken)) {
+    throw new Error(
+      `media-asset-card-file-extension-tag.tsx must keep other tag concerns delegated: ${forbiddenMediaAssetCardFileExtensionTagToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardFileExtensionTagLines = 6;
+if (mediaAssetCardFileExtensionTagLines > maxMediaAssetCardFileExtensionTagLines) {
+  throw new Error(
+    `media-asset-card-file-extension-tag.tsx exceeded ${maxMediaAssetCardFileExtensionTagLines} lines: ${mediaAssetCardFileExtensionTagLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardFileExtensionTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardFileExtensionTagProps = Pick<MediaAssetCardMetadataTagsProps, "asset">;',
+]) {
+  if (!mediaAssetCardFileExtensionTagTypesSource.includes(requiredMediaAssetCardFileExtensionTagTypesUsage)) {
+    throw new Error(
+      `media-asset-card-file-extension-tag.types.ts must own file-extension tag prop typing: ${requiredMediaAssetCardFileExtensionTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardFileExtensionTagTypesLines = 2;
+if (mediaAssetCardFileExtensionTagTypesLines > maxMediaAssetCardFileExtensionTagTypesLines) {
+  throw new Error(
+    `media-asset-card-file-extension-tag.types.ts exceeded ${maxMediaAssetCardFileExtensionTagTypesLines} lines: ${mediaAssetCardFileExtensionTagTypesLines}`,
   );
 }
 
