@@ -59,6 +59,20 @@ Linux / macOS / VM：
 sh ./scripts/bootstrap-dev.sh
 ```
 
+可选安装 Git pre-push hooks：
+
+Windows PowerShell：
+
+```powershell
+./scripts/install-git-hooks.ps1
+```
+
+Linux / macOS / VM：
+
+```bash
+sh ./scripts/install-git-hooks.sh
+```
+
 ## 常用验证命令
 
 前端：
@@ -93,6 +107,12 @@ sh ./scripts/verify-all.sh
 - 仓库使用 `.editorconfig` 统一 UTF-8、缩进和默认换行规范
 - 仓库使用 `.gitattributes` 约束 Git 中的文本行尾，降低 Windows 和 Linux VM 间的无效 diff
 - `*.ps1` 保持 `CRLF`，其余主要源码和文档默认保持 `LF`
+
+## 推送前校验
+
+- 安装 hooks 后，`git push` 前会自动运行项目级校验
+- 如遇紧急情况，可临时设置 `SELFCONTROL_SKIP_VERIFY=1` 跳过
+- 该跳过开关只应用于例外情况，不应作为日常流程
 
 ## 运行说明
 

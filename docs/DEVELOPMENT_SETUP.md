@@ -23,6 +23,20 @@ Linux VM：
 sh ./scripts/bootstrap-dev.sh
 ```
 
+如需在本地推送前自动执行校验，可安装仓库级 Git hooks：
+
+Windows：
+
+```powershell
+./scripts/install-git-hooks.ps1
+```
+
+Linux VM：
+
+```bash
+sh ./scripts/install-git-hooks.sh
+```
+
 ```bash
 cp .env.example .env
 docker compose up --build
@@ -85,6 +99,9 @@ Linux VM：
 ```bash
 sh ./scripts/verify-all.sh
 ```
+
+如果 hooks 已安装，`git push` 时会自动执行上述项目级校验。
+如确有必要临时跳过，可设置 `SELFCONTROL_SKIP_VERIFY=1`。
 
 ## 6. 当前建议
 

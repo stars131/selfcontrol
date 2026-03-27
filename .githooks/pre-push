@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+
+repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+
+if [ "${SELFCONTROL_SKIP_VERIFY:-0}" = "1" ]; then
+  echo "Skipping pre-push verification because SELFCONTROL_SKIP_VERIFY=1"
+  exit 0
+fi
+
+echo "Running SelfControl pre-push verification"
+sh "$repo_root/scripts/verify-all.sh"

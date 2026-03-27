@@ -2287,6 +2287,9 @@ Last updated: 2026-03-26
 - Bootstrap Runtime Compatibility Guard V1:
   - bootstrap scripts now fail fast on unsupported Python 3.14+ environments and explicitly direct developers to Python 3.12 or 3.13, matching the current dependency reality and CI baseline
   - PowerShell helper scripts now check native command exit codes explicitly so failed installs or validation commands cannot silently pass in Windows environments
+- Local Pre-Push Guardrail Hooks V1:
+  - the repository now includes opt-in Git hook install scripts plus a `.githooks/pre-push` guard that runs project verification before pushes
+  - the hook supports an explicit emergency skip flag, but the default path now catches frontend and backend regressions earlier than remote CI alone
 
 ## Next
 - Continue the next product slice
