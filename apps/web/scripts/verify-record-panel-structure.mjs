@@ -2388,6 +2388,14 @@ const deadLetterRecoverySummaryRetryStateTagsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-retry-state-tags.types.ts",
 );
+const deadLetterRecoverySummaryIssueCategoryTagsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-issue-category-tags.tsx",
+);
+const deadLetterRecoverySummaryIssueCategoryTagsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-issue-category-tags.types.ts",
+);
 const deadLetterRecoverySummaryStatsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-stats.types.ts",
@@ -3987,6 +3995,14 @@ const deadLetterRecoverySummaryRetryStateTagsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryRetryStateTagsTypesPath,
   "utf8",
 );
+const deadLetterRecoverySummaryIssueCategoryTagsSource = fs.readFileSync(
+  deadLetterRecoverySummaryIssueCategoryTagsPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryIssueCategoryTagsTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryIssueCategoryTagsTypesPath,
+  "utf8",
+);
 const deadLetterRecoverySummaryStatsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryStatsTypesPath,
   "utf8",
@@ -5408,6 +5424,10 @@ const deadLetterRecoverySummaryRetryStateTagsLines =
   deadLetterRecoverySummaryRetryStateTagsSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryRetryStateTagsTypesLines =
   deadLetterRecoverySummaryRetryStateTagsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryIssueCategoryTagsLines =
+  deadLetterRecoverySummaryIssueCategoryTagsSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryIssueCategoryTagsTypesLines =
+  deadLetterRecoverySummaryIssueCategoryTagsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionsTypesLines =
   deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryStatsTypesLines =
@@ -23094,9 +23114,11 @@ if (deadLetterRecoverySummaryActionButtonsTypesLines > maxDeadLetterRecoverySumm
 }
 
 for (const requiredDeadLetterRecoverySummaryStatsUsage of [
+  'import { DeadLetterRecoverySummaryIssueCategoryTags } from "./dead-letter-recovery-summary-issue-category-tags";',
   'import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";',
   'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";',
   "}: DeadLetterRecoverySummaryStatsProps) {",
+  "<DeadLetterRecoverySummaryIssueCategoryTags",
   "<DeadLetterRecoverySummaryRetryStateTags",
 ]) {
   if (!deadLetterRecoverySummaryStatsSource.includes(requiredDeadLetterRecoverySummaryStatsUsage)) {
@@ -23114,8 +23136,11 @@ if (deadLetterRecoverySummaryStatsSource.includes("type DeadLetterRecoverySummar
 
 for (const forbiddenDeadLetterRecoverySummaryStatsToken of [
   'import { getRetryStateLabel } from "../lib/media-issue-display";',
+  'import { getMediaIssueLabel } from "../lib/media-issue-display";',
   "Object.entries(mediaDeadLetterOverview.by_retry_state).map",
   "{getRetryStateLabel(locale, retryState)}: {count}",
+  "Object.entries(mediaDeadLetterOverview.by_issue_category).map",
+  'issue_category: issueCategory, issue_label: null',
 ]) {
   if (deadLetterRecoverySummaryStatsSource.includes(forbiddenDeadLetterRecoverySummaryStatsToken)) {
     throw new Error(
@@ -23195,6 +23220,56 @@ const maxDeadLetterRecoverySummaryRetryStateTagsTypesLines = 2;
 if (deadLetterRecoverySummaryRetryStateTagsTypesLines > maxDeadLetterRecoverySummaryRetryStateTagsTypesLines) {
   throw new Error(
     `dead-letter-recovery-summary-retry-state-tags.types.ts exceeded ${maxDeadLetterRecoverySummaryRetryStateTagsTypesLines} lines: ${deadLetterRecoverySummaryRetryStateTagsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryIssueCategoryTagsUsage of [
+  'import { getMediaIssueLabel } from "../lib/media-issue-display";',
+  'import type { DeadLetterRecoverySummaryIssueCategoryTagsProps } from "./dead-letter-recovery-summary-issue-category-tags.types";',
+  "}: DeadLetterRecoverySummaryIssueCategoryTagsProps) {",
+  "Object.entries(mediaDeadLetterOverview.by_issue_category).map",
+  'issue_category: issueCategory, issue_label: null',
+]) {
+  if (!deadLetterRecoverySummaryIssueCategoryTagsSource.includes(requiredDeadLetterRecoverySummaryIssueCategoryTagsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-issue-category-tags.tsx must own issue-category tag rendering: ${requiredDeadLetterRecoverySummaryIssueCategoryTagsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoverySummaryIssueCategoryTagsToken of [
+  "mediaIssueCopy.itemSuffix",
+  "getRetryStateLabel(",
+  "by_retry_state",
+]) {
+  if (deadLetterRecoverySummaryIssueCategoryTagsSource.includes(forbiddenDeadLetterRecoverySummaryIssueCategoryTagsToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-issue-category-tags.tsx must keep total-count and retry-state concerns delegated: ${forbiddenDeadLetterRecoverySummaryIssueCategoryTagsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryIssueCategoryTagsLines = 18;
+if (deadLetterRecoverySummaryIssueCategoryTagsLines > maxDeadLetterRecoverySummaryIssueCategoryTagsLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-issue-category-tags.tsx exceeded ${maxDeadLetterRecoverySummaryIssueCategoryTagsLines} lines: ${deadLetterRecoverySummaryIssueCategoryTagsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryIssueCategoryTagsTypesUsage of [
+  'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types"; export type DeadLetterRecoverySummaryIssueCategoryTagsProps = Pick<DeadLetterRecoverySummaryStatsProps, "locale" | "mediaDeadLetterOverview">;',
+]) {
+  if (!deadLetterRecoverySummaryIssueCategoryTagsTypesSource.includes(requiredDeadLetterRecoverySummaryIssueCategoryTagsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-issue-category-tags.types.ts must own issue-category tag prop typing: ${requiredDeadLetterRecoverySummaryIssueCategoryTagsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines = 2;
+if (deadLetterRecoverySummaryIssueCategoryTagsTypesLines > maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-issue-category-tags.types.ts exceeded ${maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines} lines: ${deadLetterRecoverySummaryIssueCategoryTagsTypesLines}`,
   );
 }
 

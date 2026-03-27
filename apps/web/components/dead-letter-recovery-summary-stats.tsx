@@ -1,6 +1,6 @@
 "use client";
 
-import { getMediaIssueLabel } from "../lib/media-issue-display";
+import { DeadLetterRecoverySummaryIssueCategoryTags } from "./dead-letter-recovery-summary-issue-category-tags";
 import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";
 import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";
 
@@ -18,13 +18,10 @@ export function DeadLetterRecoverySummaryStats({
         locale={locale}
         mediaDeadLetterOverview={mediaDeadLetterOverview}
       />
-      {mediaDeadLetterOverview
-        ? Object.entries(mediaDeadLetterOverview.by_issue_category).map(([issueCategory, count]) => (
-            <span className="tag" key={issueCategory}>
-              {getMediaIssueLabel(locale, { issue_category: issueCategory, issue_label: null })}: {count}
-            </span>
-          ))
-        : null}
+      <DeadLetterRecoverySummaryIssueCategoryTags
+        locale={locale}
+        mediaDeadLetterOverview={mediaDeadLetterOverview}
+      />
     </div>
   );
 }

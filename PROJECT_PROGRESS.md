@@ -2627,6 +2627,10 @@ Last updated: 2026-03-27
   - dead-letter summary retry-state tag rendering now lives in `apps/web/components/dead-letter-recovery-summary-retry-state-tags.tsx` instead of remaining inline inside `dead-letter-recovery-summary-stats.tsx`
   - `dead-letter-recovery-summary-stats.tsx` now stays focused on summary stat composition while retry-state tag rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this retry-state-tag boundary so future dead-letter summary stat changes do not regrow a mixed composition-and-retry-state rendering module
+- Dead Letter Recovery Summary Issue Category Tags Extraction V1:
+  - dead-letter summary issue-category tag rendering now lives in `apps/web/components/dead-letter-recovery-summary-issue-category-tags.tsx` instead of remaining inline inside `dead-letter-recovery-summary-stats.tsx`
+  - `dead-letter-recovery-summary-stats.tsx` now stays focused on summary stat composition while issue-category tag rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this issue-category-tag boundary so future dead-letter summary stat changes do not regrow a mixed composition-and-issue-category rendering module
 
 ## Next
 - Continue the next product slice
