@@ -2688,6 +2688,14 @@ const deadLetterRecoveryPanelEmptyTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-panel-empty.types.ts",
 );
+const deadLetterRecoveryPanelListPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-list.tsx",
+);
+const deadLetterRecoveryPanelListTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-list.types.ts",
+);
 const deadLetterRecoveryPanelContentTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-panel-content.types.ts",
@@ -4162,6 +4170,11 @@ const deadLetterRecoveryPanelEmptyTypesSource = fs.readFileSync(
   deadLetterRecoveryPanelEmptyTypesPath,
   "utf8",
 );
+const deadLetterRecoveryPanelListSource = fs.readFileSync(deadLetterRecoveryPanelListPath, "utf8");
+const deadLetterRecoveryPanelListTypesSource = fs.readFileSync(
+  deadLetterRecoveryPanelListTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryPanelContentTypesSource = fs.readFileSync(
   deadLetterRecoveryPanelContentTypesPath,
   "utf8",
@@ -5420,6 +5433,10 @@ const deadLetterRecoveryPanelEmptyLines =
   deadLetterRecoveryPanelEmptySource.split(/\r?\n/).length;
 const deadLetterRecoveryPanelEmptyTypesLines =
   deadLetterRecoveryPanelEmptyTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryPanelListLines =
+  deadLetterRecoveryPanelListSource.split(/\r?\n/).length;
+const deadLetterRecoveryPanelListTypesLines =
+  deadLetterRecoveryPanelListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryPanelContentTypesLines =
   deadLetterRecoveryPanelContentTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCardLines = mediaStorageHealthCardSource.split(/\r?\n/).length;
@@ -24664,31 +24681,34 @@ if (recordResultsTimelineDayTypesLines > maxRecordResultsTimelineDayTypesLines) 
 }
 
 for (const requiredDeadLetterRecoveryPanelContentUsage of [
-  'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
   'import { DeadLetterRecoveryPanelEmpty } from "./dead-letter-recovery-panel-empty";',
+  'import { DeadLetterRecoveryPanelList } from "./dead-letter-recovery-panel-list";',
   'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";',
   "}: DeadLetterRecoveryPanelContentProps) {",
   'return <DeadLetterRecoveryPanelEmpty mediaIssueCopy={mediaIssueCopy} />;',
-  "<DeadLetterRecoveryItemCard",
+  "<DeadLetterRecoveryPanelList",
 ]) {
   if (!deadLetterRecoveryPanelContentSource.includes(requiredDeadLetterRecoveryPanelContentUsage)) {
     throw new Error(
-      `dead-letter-recovery-panel-content.tsx must compose the extracted panel-empty leaf: ${requiredDeadLetterRecoveryPanelContentUsage}`,
+      `dead-letter-recovery-panel-content.tsx must compose the extracted panel empty and list leaves: ${requiredDeadLetterRecoveryPanelContentUsage}`,
     );
   }
 }
 
 for (const forbiddenDeadLetterRecoveryPanelContentToken of [
   'return <div className="notice">{mediaIssueCopy.noDeadLetter}</div>;',
+  'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
+  '<div className="record-list compact-list">',
+  "mediaDeadLetterOverview.items.map((item) => (",
 ]) {
   if (deadLetterRecoveryPanelContentSource.includes(forbiddenDeadLetterRecoveryPanelContentToken)) {
     throw new Error(
-      `dead-letter-recovery-panel-content.tsx must keep empty-state rendering delegated: ${forbiddenDeadLetterRecoveryPanelContentToken}`,
+      `dead-letter-recovery-panel-content.tsx must keep empty and list rendering delegated: ${forbiddenDeadLetterRecoveryPanelContentToken}`,
     );
   }
 }
 
-const maxDeadLetterRecoveryPanelContentLines = 45;
+const maxDeadLetterRecoveryPanelContentLines = 40;
 if (deadLetterRecoveryPanelContentSource.split(/\r?\n/).length > maxDeadLetterRecoveryPanelContentLines) {
   throw new Error(
     `dead-letter-recovery-panel-content.tsx exceeded ${maxDeadLetterRecoveryPanelContentLines} lines: ${deadLetterRecoveryPanelContentSource.split(/\r?\n/).length}`,
@@ -24740,6 +24760,57 @@ const maxDeadLetterRecoveryPanelEmptyTypesLines = 2;
 if (deadLetterRecoveryPanelEmptyTypesLines > maxDeadLetterRecoveryPanelEmptyTypesLines) {
   throw new Error(
     `dead-letter-recovery-panel-empty.types.ts exceeded ${maxDeadLetterRecoveryPanelEmptyTypesLines} lines: ${deadLetterRecoveryPanelEmptyTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryPanelListUsage of [
+  'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
+  'import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types";',
+  "}: DeadLetterRecoveryPanelListProps) {",
+  '<div className="record-list compact-list">',
+  "mediaDeadLetterOverview.items.map((item) => (",
+  "<DeadLetterRecoveryItemCard",
+]) {
+  if (!deadLetterRecoveryPanelListSource.includes(requiredDeadLetterRecoveryPanelListUsage)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list.tsx must own panel list rendering: ${requiredDeadLetterRecoveryPanelListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryPanelListToken of [
+  "mediaIssueCopy.noDeadLetter",
+  "DeadLetterRecoveryPanelContentProps",
+  "<DeadLetterRecoveryPanelEmpty",
+]) {
+  if (deadLetterRecoveryPanelListSource.includes(forbiddenDeadLetterRecoveryPanelListToken)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list.tsx must keep panel empty-state concerns delegated: ${forbiddenDeadLetterRecoveryPanelListToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryPanelListLines = 40;
+if (deadLetterRecoveryPanelListLines > maxDeadLetterRecoveryPanelListLines) {
+  throw new Error(
+    `dead-letter-recovery-panel-list.tsx exceeded ${maxDeadLetterRecoveryPanelListLines} lines: ${deadLetterRecoveryPanelListLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryPanelListTypesUsage of [
+  'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types"; export type DeadLetterRecoveryPanelListProps = Pick<DeadLetterRecoveryPanelContentProps, "bulkRetryingDeadLetter" | "canWriteWorkspace" | "formatHistoryTimestampLabel" | "locale" | "mediaIssueCopy" | "onRetryMediaProcessing" | "onToggleSelection" | "retryingMediaId" | "selectedDeadLetterIds" | "workspaceId"> & { mediaDeadLetterOverview: NonNullable<DeadLetterRecoveryPanelContentProps["mediaDeadLetterOverview"]> };',
+]) {
+  if (!deadLetterRecoveryPanelListTypesSource.includes(requiredDeadLetterRecoveryPanelListTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list.types.ts must own panel list prop typing: ${requiredDeadLetterRecoveryPanelListTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryPanelListTypesLines = 2;
+if (deadLetterRecoveryPanelListTypesLines > maxDeadLetterRecoveryPanelListTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-panel-list.types.ts exceeded ${maxDeadLetterRecoveryPanelListTypesLines} lines: ${deadLetterRecoveryPanelListTypesLines}`,
   );
 }
 

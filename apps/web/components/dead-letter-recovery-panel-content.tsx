@@ -1,7 +1,7 @@
 "use client";
 
-import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";
 import { DeadLetterRecoveryPanelEmpty } from "./dead-letter-recovery-panel-empty";
+import { DeadLetterRecoveryPanelList } from "./dead-letter-recovery-panel-list";
 import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";
 
 export function DeadLetterRecoveryPanelContent({
@@ -22,23 +22,18 @@ export function DeadLetterRecoveryPanelContent({
   }
 
   return (
-    <div className="record-list compact-list">
-      {mediaDeadLetterOverview.items.map((item) => (
-        <DeadLetterRecoveryItemCard
-          bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-          canWriteWorkspace={canWriteWorkspace}
-          formatHistoryTimestampLabel={formatHistoryTimestampLabel}
-          item={item}
-          key={item.media_id}
-          locale={locale}
-          mediaIssueCopy={mediaIssueCopy}
-          onRetryMediaProcessing={onRetryMediaProcessing}
-          onToggleSelection={onToggleSelection}
-          retryingMediaId={retryingMediaId}
-          selectedDeadLetterIds={selectedDeadLetterIds}
-          workspaceId={workspaceId}
-        />
-      ))}
-    </div>
+    <DeadLetterRecoveryPanelList
+      bulkRetryingDeadLetter={bulkRetryingDeadLetter}
+      canWriteWorkspace={canWriteWorkspace}
+      formatHistoryTimestampLabel={formatHistoryTimestampLabel}
+      locale={locale}
+      mediaDeadLetterOverview={mediaDeadLetterOverview}
+      mediaIssueCopy={mediaIssueCopy}
+      onRetryMediaProcessing={onRetryMediaProcessing}
+      onToggleSelection={onToggleSelection}
+      retryingMediaId={retryingMediaId}
+      selectedDeadLetterIds={selectedDeadLetterIds}
+      workspaceId={workspaceId}
+    />
   );
 }
