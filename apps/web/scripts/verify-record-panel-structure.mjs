@@ -2204,6 +2204,14 @@ const mediaAssetCardFileExtensionTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-file-extension-tag.types.ts",
 );
+const mediaAssetCardProcessingSourceTagPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-source-tag.tsx",
+);
+const mediaAssetCardProcessingSourceTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-source-tag.types.ts",
+);
 const sharePreviewClientPath = path.resolve(process.cwd(), "components/share-preview-client.tsx");
 const sharePreviewClientTypesPath = path.resolve(
   process.cwd(),
@@ -4071,6 +4079,14 @@ const mediaAssetCardFileExtensionTagTypesSource = fs.readFileSync(
   mediaAssetCardFileExtensionTagTypesPath,
   "utf8",
 );
+const mediaAssetCardProcessingSourceTagSource = fs.readFileSync(
+  mediaAssetCardProcessingSourceTagPath,
+  "utf8",
+);
+const mediaAssetCardProcessingSourceTagTypesSource = fs.readFileSync(
+  mediaAssetCardProcessingSourceTagTypesPath,
+  "utf8",
+);
 const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
 const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
@@ -5801,6 +5817,10 @@ const mediaAssetCardFileExtensionTagLines =
   mediaAssetCardFileExtensionTagSource.split(/\r?\n/).length;
 const mediaAssetCardFileExtensionTagTypesLines =
   mediaAssetCardFileExtensionTagTypesSource.split(/\r?\n/).length;
+const mediaAssetCardProcessingSourceTagLines =
+  mediaAssetCardProcessingSourceTagSource.split(/\r?\n/).length;
+const mediaAssetCardProcessingSourceTagTypesLines =
+  mediaAssetCardProcessingSourceTagTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
@@ -22045,6 +22065,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'from "../lib/storage-provider-display";',
   'import { MediaAssetCardFileExtensionTag } from "./media-asset-card-file-extension-tag";',
+  'import { MediaAssetCardProcessingSourceTag } from "./media-asset-card-processing-source-tag";',
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
   'import { MediaAssetCardRetryStateTag } from "./media-asset-card-retry-state-tag";',
@@ -22054,6 +22075,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   "getProcessingStatusLabel(locale, asset.processing_status)",
   "getStorageProviderLabel(locale, asset.storage_provider)",
   "<MediaAssetCardFileExtensionTag asset={asset} />",
+  "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
@@ -22077,6 +22099,7 @@ for (const forbiddenMediaAssetCardMetadataTagsToken of [
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
   "asset.metadata_json.file_extension",
+  '{processingSource ? <span className="tag">{processingSource}</span> : null}',
 ]) {
   if (mediaAssetCardMetadataTagsSource.includes(forbiddenMediaAssetCardMetadataTagsToken)) {
     throw new Error(
@@ -22302,6 +22325,54 @@ const maxMediaAssetCardFileExtensionTagTypesLines = 2;
 if (mediaAssetCardFileExtensionTagTypesLines > maxMediaAssetCardFileExtensionTagTypesLines) {
   throw new Error(
     `media-asset-card-file-extension-tag.types.ts exceeded ${maxMediaAssetCardFileExtensionTagTypesLines} lines: ${mediaAssetCardFileExtensionTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardProcessingSourceTagUsage of [
+  'import type { MediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag.types";',
+  "}: MediaAssetCardProcessingSourceTagProps) {",
+  "{processingSource}",
+]) {
+  if (!mediaAssetCardProcessingSourceTagSource.includes(requiredMediaAssetCardProcessingSourceTagUsage)) {
+    throw new Error(
+      `media-asset-card-processing-source-tag.tsx must own processing-source tag rendering: ${requiredMediaAssetCardProcessingSourceTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardProcessingSourceTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (mediaAssetCardProcessingSourceTagSource.includes(forbiddenMediaAssetCardProcessingSourceTagToken)) {
+    throw new Error(
+      `media-asset-card-processing-source-tag.tsx must keep other tag concerns delegated: ${forbiddenMediaAssetCardProcessingSourceTagToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardProcessingSourceTagLines = 6;
+if (mediaAssetCardProcessingSourceTagLines > maxMediaAssetCardProcessingSourceTagLines) {
+  throw new Error(
+    `media-asset-card-processing-source-tag.tsx exceeded ${maxMediaAssetCardProcessingSourceTagLines} lines: ${mediaAssetCardProcessingSourceTagLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardProcessingSourceTagTypesUsage of [
+  'export type MediaAssetCardProcessingSourceTagProps = { processingSource: string | null };',
+]) {
+  if (!mediaAssetCardProcessingSourceTagTypesSource.includes(requiredMediaAssetCardProcessingSourceTagTypesUsage)) {
+    throw new Error(
+      `media-asset-card-processing-source-tag.types.ts must own processing-source tag prop typing: ${requiredMediaAssetCardProcessingSourceTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardProcessingSourceTagTypesLines = 2;
+if (mediaAssetCardProcessingSourceTagTypesLines > maxMediaAssetCardProcessingSourceTagTypesLines) {
+  throw new Error(
+    `media-asset-card-processing-source-tag.types.ts exceeded ${maxMediaAssetCardProcessingSourceTagTypesLines} lines: ${mediaAssetCardProcessingSourceTagTypesLines}`,
   );
 }
 
