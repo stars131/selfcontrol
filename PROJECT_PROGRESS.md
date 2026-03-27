@@ -2320,6 +2320,9 @@ Last updated: 2026-03-26
 - Web API Client Sharing Boundary Extraction V1:
   - share-link listing, creation, update, preview, and acceptance calls now live in `apps/web/lib/api-sharing.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
   - collaboration-focused transport logic is now isolated from reminders, media, and workspace transfer flows, which lowers future review scope for multi-user sharing evolution
+- Web API Client Record Boundary Extraction V1:
+  - record listing, advanced search presets, timeline, record CRUD, and knowledge search entry calls now live in `apps/web/lib/api-records.ts` and are re-exported from `apps/web/lib/api.ts`, continuing the additive breakup of the front-end API hub without changing callers
+  - record-specific query-shaping and preset mapping now sit beside each other in one module, reducing coupling between record workflows and unrelated auth, sharing, or provider client code
 
 ## Next
 - Continue the next product slice
