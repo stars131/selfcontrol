@@ -2263,6 +2263,9 @@ Last updated: 2026-03-26
 - Locale Copy Integrity Guard V1:
   - the frontend now includes a dedicated `verify:locale-copy-integrity` script that scans locale-related source modules for common mojibake fragments before they can ship again
   - this adds an enterprise-grade regression guard around multilingual copy maintenance instead of relying on manual spot checks after each localization change
+- Frontend Guardrail Aggregation V1:
+  - the web app now exposes a single `verify:ui-guardrails` command that runs the core frontend type-check and structural verifier suite used during maintainability hardening
+  - this reduces operator error in local and Linux VM validation flows and makes future enterprise-grade pre-push checks easier to standardize
 
 ## Next
 - Continue the next product slice
