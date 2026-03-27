@@ -2403,10 +2403,14 @@ Last updated: 2026-03-27
   - `ProviderFeatureConfig` now lives in `apps/api/app/services/provider_config_types.py`, while default feature bootstrapping and saved-config merge logic live in `provider_config_defaults.py` and `provider_config_merging.py`
   - `provider_configs.py` now focuses on persistence queries, update validation, and compatibility re-exports instead of owning dataclass, defaults, merge, and storage orchestration in one file
   - dedicated backend unit tests now cover default feature bootstrap behavior, explicit secret-env resolution, default embedding secret readiness, and saved provider option merge normalization for the extracted boundary
+- Embedding Local And Remote Boundary Extraction V1:
+  - local tokenization, vector normalization, and hash-based embedding generation now live in `apps/api/app/services/embedding_local.py`, while remote transport helpers and request flows now live in `embedding_remote.py` and `embedding_types.py`
+  - `embeddings.py` now focuses on workspace-level provider selection and transport dispatch while preserving the existing `app.services.embeddings` compatibility entrypoint for downstream knowledge services
+  - dedicated backend unit tests now cover local tokenization and vector stability, openai-compatible and custom-webhook embedding response handling, and workspace-level local/remote dispatch behavior for the extracted boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around `provider_configs.py`, `embeddings.py`, and remote media storage helpers, especially any leftover compatibility exports or duplicated provider-routing rules
+- Continue simplifying the remaining backend provider stack around `embeddings.py`, remote media storage helpers, and any leftover compatibility exports or duplicated provider-routing rules
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend

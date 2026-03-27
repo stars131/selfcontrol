@@ -1,145 +1,22 @@
 from __future__ import annotations
 
-import math
-import re
-from dataclasses import dataclass
-from hashlib import blake2b
-
-import httpx
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.services.provider_transport import (
-    infer_provider_transport_mode,
-    resolve_provider_api_base_url,
-    resolve_provider_secret,
+from app.services.embedding_local import local_hash_embedding, normalize_vector, tokenize
+from app.services.embedding_remote import (
+    DEFAULT_OPENAI_EMBEDDING_MODEL,
+    get_effective_api_base_url,
+    get_secret_for_provider,
+    infer_transport_mode,
+    request_custom_webhook_embedding,
+    request_openai_compatible_embedding,
 )
+from app.services.embedding_types import EmbeddingProviderError, EmbeddingResult
 from app.services.provider_configs import (
     ProviderFeatureConfig,
     get_effective_provider_config,
 )
-
-
-TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+|[\u4e00-\u9fff]")
-DEFAULT_OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
-
-
-class EmbeddingProviderError(Exception):
-    pass
-
-
-@dataclass
-class EmbeddingResult:
-    vector: list[float]
-    provider_code: str
-    model_name: str
-    dimensions: int
-    metadata_json: dict
-
-
-def tokenize(value: str) -> list[str]:
-    return TOKEN_PATTERN.findall((value or "").lower())
-
-
-def normalize_vector(vector: list[float]) -> list[float]:
-    norm = math.sqrt(sum(item * item for item in vector))
-    if not norm:
-        return vector
-    return [round(item / norm, 6) for item in vector]
-
-
-def local_hash_embedding(value: str, dimensions: int) -> list[float]:
-    vector = [0.0] * dimensions
-    tokens = tokenize(value)
-    if not tokens:
-        return vector
-
-    for token in tokens:
-        digest = blake2b(token.encode("utf-8"), digest_size=16).digest()
-        index = int.from_bytes(digest[:8], "big") % dimensions
-        sign = 1.0 if digest[8] % 2 == 0 else -1.0
-        weight = 1.0 + min(len(token), 12) / 12
-        vector[index] += sign * weight
-
-    return normalize_vector(vector)
-
-
-def get_secret_for_provider(config: ProviderFeatureConfig) -> str | None:
-    return resolve_provider_secret(config, error_type=EmbeddingProviderError)
-
-
-def get_effective_api_base_url(config: ProviderFeatureConfig) -> str:
-    return resolve_provider_api_base_url(config, error_type=EmbeddingProviderError)
-
-
-def infer_transport_mode(config: ProviderFeatureConfig) -> str:
-    return infer_provider_transport_mode(config, local_provider_mode="local")
-
-
-def request_openai_compatible_embedding(config: ProviderFeatureConfig, value: str) -> EmbeddingResult:
-    secret = get_secret_for_provider(config)
-    model_name = config.model_name or DEFAULT_OPENAI_EMBEDDING_MODEL
-    payload = {
-        "model": model_name,
-        "input": value,
-        "encoding_format": "float",
-    }
-    headers = {"Authorization": f"Bearer {secret}"} if secret else {}
-    response = httpx.post(
-        f"{get_effective_api_base_url(config)}/embeddings",
-        headers=headers,
-        json=payload,
-        timeout=settings.provider_request_timeout_seconds,
-    )
-    response.raise_for_status()
-    body = response.json()
-    data = body.get("data") or []
-    if not data or not isinstance(data[0], dict):
-        raise ValueError("Embedding provider returned invalid payload")
-    vector = data[0].get("embedding") or []
-    if not vector:
-        raise ValueError("Embedding provider returned empty vector")
-    normalized = normalize_vector([float(item) for item in vector])
-    return EmbeddingResult(
-        vector=normalized,
-        provider_code=config.provider_code,
-        model_name=model_name,
-        dimensions=len(normalized),
-        metadata_json={"transport_mode": "openai_compatible"},
-    )
-
-
-def request_custom_webhook_embedding(config: ProviderFeatureConfig, value: str) -> EmbeddingResult:
-    if not config.api_base_url:
-        raise EmbeddingProviderError("Custom embedding provider requires api_base_url")
-
-    secret = get_secret_for_provider(config)
-    headers = {"Authorization": f"Bearer {secret}"} if secret else {}
-    response = httpx.post(
-        config.api_base_url,
-        headers=headers,
-        json={
-            "feature_code": "embeddings",
-            "provider_code": config.provider_code,
-            "model_name": config.model_name or "",
-            "input": value,
-            "options_json": config.options_json or {},
-        },
-        timeout=settings.provider_request_timeout_seconds,
-    )
-    response.raise_for_status()
-    body = response.json()
-    vector = body.get("embedding") or body.get("vector") or []
-    if not vector:
-        raise ValueError("Custom embedding provider returned empty vector")
-    normalized = normalize_vector([float(item) for item in vector])
-    return EmbeddingResult(
-        vector=normalized,
-        provider_code=config.provider_code,
-        model_name=config.model_name or "custom-embedding",
-        dimensions=len(normalized),
-        metadata_json={"transport_mode": "webhook_json", **(body.get("metadata") or {})},
-    )
 
 
 def embed_text_for_workspace(db: Session, workspace_id: str, value: str) -> EmbeddingResult:
