@@ -1,5 +1,7 @@
 "use client";
 
+import { useStoredLocale } from "../lib/locale";
+import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";
 import type { ChatKnowledgeCardProps } from "./chat-knowledge-card.types";
 
 export function ChatKnowledgeCard({
@@ -8,23 +10,26 @@ export function ChatKnowledgeCard({
   onReindexKnowledge,
   reindexing,
 }: ChatKnowledgeCardProps) {
+  const { locale } = useStoredLocale();
+  const copy = getChatPanelDisplayCopy(locale);
+
   return (
     <div className="record-card" style={{ marginBottom: 16 }}>
-      <div className="eyebrow">Knowledge Base</div>
+      <div className="eyebrow">{copy.knowledgeEyebrow}</div>
       <div className="muted" style={{ marginTop: 8 }}>
         {knowledgeStats
-          ? `${knowledgeStats.chunk_count} chunks across ${knowledgeStats.record_count} record(s)`
-          : "Knowledge stats unavailable."}
+          ? `${knowledgeStats.chunk_count} ${copy.knowledgeChunkLabel} / ${knowledgeStats.record_count} ${copy.knowledgeRecordLabel}`
+          : copy.knowledgeUnavailable}
       </div>
       {knowledgeStats ? (
         <div className="muted" style={{ marginTop: 8 }}>
-          {knowledgeStats.embedding_provider} / {knowledgeStats.embedding_model} / dim{" "}
+          {knowledgeStats.embedding_provider} / {knowledgeStats.embedding_model} / {copy.knowledgeDimensionLabel}{" "}
           {knowledgeStats.embedding_dimensions}
         </div>
       ) : null}
       {knowledgeStats?.latest_indexed_at ? (
         <div className="muted" style={{ marginTop: 8 }}>
-          Updated {new Date(knowledgeStats.latest_indexed_at).toLocaleString()}
+          {copy.knowledgeUpdatedPrefix} {new Date(knowledgeStats.latest_indexed_at).toLocaleString(locale)}
         </div>
       ) : null}
       <div className="action-row" style={{ marginTop: 12 }}>
@@ -34,7 +39,7 @@ export function ChatKnowledgeCard({
           type="button"
           onClick={() => void onReindexKnowledge()}
         >
-          {reindexing ? "Reindexing..." : "Rebuild knowledge index"}
+          {reindexing ? copy.knowledgeReindexingLabel : copy.knowledgeReindexLabel}
         </button>
       </div>
     </div>

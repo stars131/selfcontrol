@@ -14,6 +14,14 @@ type ChatPanelDisplayCopy = {
   composerViewerPlaceholder: string;
   sendLabel: string;
   workingLabel: string;
+  knowledgeEyebrow: string;
+  knowledgeUnavailable: string;
+  knowledgeUpdatedPrefix: string;
+  knowledgeChunkLabel: string;
+  knowledgeRecordLabel: string;
+  knowledgeDimensionLabel: string;
+  knowledgeReindexLabel: string;
+  knowledgeReindexingLabel: string;
   initialConversationTitle: string;
   buildConversationTitle: (index: number) => string;
 };
@@ -31,6 +39,14 @@ const COPY: Record<LocaleCode, ChatPanelDisplayCopy> = {
     composerViewerPlaceholder: "当前共享工作区为只读模式，无法创建聊天内容。",
     sendLabel: "发送",
     workingLabel: "处理中...",
+    knowledgeEyebrow: "知识库",
+    knowledgeUnavailable: "知识库统计暂不可用。",
+    knowledgeUpdatedPrefix: "最近更新",
+    knowledgeChunkLabel: "块",
+    knowledgeRecordLabel: "条记录",
+    knowledgeDimensionLabel: "维度",
+    knowledgeReindexLabel: "重建知识索引",
+    knowledgeReindexingLabel: "重建中...",
     initialConversationTitle: "工作区对话",
     buildConversationTitle: (index) => `对话 ${index}`,
   },
@@ -46,6 +62,14 @@ const COPY: Record<LocaleCode, ChatPanelDisplayCopy> = {
     composerViewerPlaceholder: "Viewer mode: chat creation is disabled for this shared workspace.",
     sendLabel: "Send",
     workingLabel: "Working...",
+    knowledgeEyebrow: "Knowledge Base",
+    knowledgeUnavailable: "Knowledge stats unavailable.",
+    knowledgeUpdatedPrefix: "Updated",
+    knowledgeChunkLabel: "chunks",
+    knowledgeRecordLabel: "record(s)",
+    knowledgeDimensionLabel: "dim",
+    knowledgeReindexLabel: "Rebuild knowledge index",
+    knowledgeReindexingLabel: "Reindexing...",
     initialConversationTitle: "Workspace chat",
     buildConversationTitle: (index) => `Chat ${index}`,
   },
@@ -61,6 +85,14 @@ const COPY: Record<LocaleCode, ChatPanelDisplayCopy> = {
     composerViewerPlaceholder: "共有ワークスペースは閲覧専用のため、チャットを作成できません。",
     sendLabel: "送信",
     workingLabel: "処理中...",
+    knowledgeEyebrow: "ナレッジベース",
+    knowledgeUnavailable: "ナレッジ統計を利用できません。",
+    knowledgeUpdatedPrefix: "更新日時",
+    knowledgeChunkLabel: "チャンク",
+    knowledgeRecordLabel: "件の記録",
+    knowledgeDimensionLabel: "次元",
+    knowledgeReindexLabel: "ナレッジ索引を再構築",
+    knowledgeReindexingLabel: "再構築中...",
     initialConversationTitle: "ワークスペース会話",
     buildConversationTitle: (index) => `会話 ${index}`,
   },

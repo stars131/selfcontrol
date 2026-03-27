@@ -2233,6 +2233,9 @@ Last updated: 2026-03-26
 - Legacy Record Panel Label Localization V1:
   - legacy record primary fields, classification fields, stats header, and stats grid now reuse shared record-panel UI copy instead of hardcoded English labels
   - record-panel structure verification now enforces those copy-driven legacy labels so old and new record surfaces stay aligned under the enterprise localization baseline
+- Chat Knowledge Card Localization V1:
+  - knowledge card labels, empty state, updated timestamp prefix, dimension label, and reindex button states now reuse shared chat display copy instead of hardcoded English strings
+  - record-panel structure verification now enforces those copy-driven knowledge card labels and locale-aware timestamp formatting so future chat management maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

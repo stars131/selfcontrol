@@ -20145,7 +20145,20 @@ if (chatAuditLogsCardTypesLines > maxChatAuditLogsCardTypesLines) {
 
 for (const requiredChatKnowledgeCardUsage of [
   'import type { ChatKnowledgeCardProps } from "./chat-knowledge-card.types";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
   "}: ChatKnowledgeCardProps) {",
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "copy.knowledgeEyebrow",
+  "copy.knowledgeUnavailable",
+  "copy.knowledgeUpdatedPrefix",
+  "copy.knowledgeChunkLabel",
+  "copy.knowledgeRecordLabel",
+  "copy.knowledgeDimensionLabel",
+  "copy.knowledgeReindexingLabel",
+  "copy.knowledgeReindexLabel",
+  "toLocaleString(locale)",
 ]) {
   if (!chatKnowledgeCardSource.includes(requiredChatKnowledgeCardUsage)) {
     throw new Error(
@@ -20157,6 +20170,11 @@ for (const requiredChatKnowledgeCardUsage of [
 for (const forbiddenChatKnowledgeCardToken of [
   'import type { KnowledgeStats } from "../lib/types";',
   "}: {",
+  '"Knowledge Base"',
+  '"Knowledge stats unavailable."',
+  '"Updated "',
+  '"Reindexing..."',
+  '"Rebuild knowledge index"',
 ]) {
   if (chatKnowledgeCardSource.includes(forbiddenChatKnowledgeCardToken)) {
     throw new Error(
