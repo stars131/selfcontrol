@@ -2367,10 +2367,14 @@ Last updated: 2026-03-27
   - local-versus-remote processing file acquisition, remote fetch success marking, missing-file rejection, and temp-file cleanup now live in `apps/api/app/services/media_processing_io.py`
   - `media_processing.py` now delegates file-handle lifecycle orchestration to the dedicated I/O helper boundary while preserving existing media-processing monkeypatch entrypoints for compatibility
   - dedicated backend unit tests now cover local acquisition, remote download acquisition, missing-file failures, and remote temp-file cleanup behavior for the extracted I/O boundary
+- Media Processing Execution Boundary Extraction V1:
+  - text-direct execution, provider-deferred execution, provider-success execution, and file-backed failure-state application now live in `apps/api/app/services/media_processing_execution.py`
+  - `media_processing.py` now acts as a very thin orchestration shell around state start, file acquisition, execution dispatch, finalize, and cleanup instead of owning the detailed branch logic itself
+  - dedicated backend unit tests now cover text execution, deferred provider execution, successful provider execution, and failure metadata application for the extracted execution boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying `apps/api/app/services/media_processing.py` by extracting the remaining happy-path versus failure-path workflow branching into thinner enterprise-grade service boundaries
+- Continue simplifying remaining large backend service files outside `media_processing.py`, with `knowledge.py` and `media_provider.py` as the next highest-value maintainability targets
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

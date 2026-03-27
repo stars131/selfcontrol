@@ -5,26 +5,21 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
-from app.services.media_file_analysis import collect_media_metadata, is_text_like_media
+from app.services.media_processing_execution import (
+    apply_media_processing_failure,
+    execute_media_processing_for_file,
+)
 from app.services.media_processing_io import (
     acquire_media_processing_file,
     cleanup_media_processing_file,
 )
-from app.services.media_processing_outcomes import (
-    build_provider_completed_processing_payload,
-    build_provider_deferred_processing_payload,
-    build_text_direct_processing_payload,
-    finalize_media_processing,
-)
+from app.services.media_processing_outcomes import finalize_media_processing
 from app.services.media_processing_state import (
-    mark_media_completed,
-    mark_media_deferred,
-    mark_media_failed,
     mark_media_processing_started,
     mark_media_remote_fetch_downloaded,
 )
 from app.services.media_retry_policy import get_remote_media_retry_policy
-from app.services.media_provider import DeferredMediaProcessingError, extract_text_via_provider
+from app.services.media_provider import extract_text_via_provider
 from app.services.media_remote_storage import download_remote_media_to_temp_file
 from app.services.media_storage import resolve_storage_path
 
@@ -51,23 +46,13 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
         )
         file_path = file_handle.file_path
 
-        if is_text_like_media(media):
-            media.extracted_text, metadata = build_text_direct_processing_payload(media, file_path)
-            mark_media_completed(media, metadata, retry_policy=retry_policy)
-        else:
-            try:
-                extraction = extract_text_via_provider(db, media, file_path)
-            except DeferredMediaProcessingError as exc:
-                media.extracted_text, metadata = build_provider_deferred_processing_payload(media, file_path, str(exc))
-                mark_media_deferred(
-                    media,
-                    str(exc),
-                    metadata_patch=metadata,
-                    retry_policy=retry_policy,
-                )
-            else:
-                media.extracted_text, metadata = build_provider_completed_processing_payload(media, file_path, extraction)
-                mark_media_completed(media, metadata, retry_policy=retry_policy)
+        execute_media_processing_for_file(
+            db,
+            media,
+            file_path,
+            retry_policy=retry_policy,
+            extract_text_via_provider_fn=extract_text_via_provider,
+        )
 
         return finalize_media_processing(
             db,
@@ -75,14 +60,11 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
             rebuild_record_knowledge_fn=rebuild_record_knowledge,
         )
     except Exception as exc:  # noqa: BLE001
-        metadata_patch = None
-        if "file_path" in locals() and file_path.exists():
-            metadata_patch = collect_media_metadata(media, file_path, media.extracted_text)
-        mark_media_failed(
+        apply_media_processing_failure(
             media,
-            str(exc),
+            exc,
             retry_policy=retry_policy,
-            metadata_patch=metadata_patch,
+            file_path=file_handle.file_path if file_handle else None,
         )
         return finalize_media_processing(
             db,
