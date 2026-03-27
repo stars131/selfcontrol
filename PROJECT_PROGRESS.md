@@ -2329,6 +2329,9 @@ Last updated: 2026-03-26
 - Web API Client Knowledge And Provider Boundary Extraction V1:
   - knowledge stats and reindex calls now live in `apps/web/lib/api-knowledge.ts`, while provider configuration and media-storage health calls now live in `apps/web/lib/api-provider-configs.ts`, and both are re-exported from `apps/web/lib/api.ts`
   - operator-facing knowledge and provider transport code is now isolated from auth, chat, and record workflows, which lowers future review scope for admin-surface changes
+- Web API Client Audit Boundary Extraction V1:
+  - audit-log query transport now lives in `apps/web/lib/api-audit.ts` and is re-exported from `apps/web/lib/api.ts`, completing the breakup of the remaining non-auth client surface into dedicated modules
+  - the front-end API hub is now primarily an auth entrypoint plus stable re-export layer, which makes future enterprise-grade client maintenance and review significantly easier
 
 ## Next
 - Continue the next product slice

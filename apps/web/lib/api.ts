@@ -1,8 +1,6 @@
-import type {
-  AuditLogItem,
-  User,
-} from "./types";
+import type { User } from "./types";
 import { request } from "./api-core";
+export { listAuditLogs } from "./api-audit";
 export {
   createConversation,
   listConversations,
@@ -99,23 +97,4 @@ export async function login(input: { account: string; password: string }) {
 
 export async function getCurrentUser(token: string) {
   return request<{ user: User }>("/auth/me", { method: "GET" }, token);
-}
-
-export async function listAuditLogs(
-  token: string,
-  workspaceId: string,
-  params?: { limit?: number; actionCode?: string },
-) {
-  const searchParams = new URLSearchParams();
-  if (params?.limit) {
-    searchParams.set("limit", String(params.limit));
-  }
-  if (params?.actionCode) {
-    searchParams.set("action_code", params.actionCode);
-  }
-  const query = searchParams.toString();
-  const path = query
-    ? `/workspaces/${workspaceId}/audit-logs?${query}`
-    : `/workspaces/${workspaceId}/audit-logs`;
-  return request<{ items: AuditLogItem[] }>(path, { method: "GET" }, token);
 }
