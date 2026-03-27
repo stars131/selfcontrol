@@ -2551,6 +2551,10 @@ Last updated: 2026-03-27
   - single-day timeline section rendering now lives in `apps/web/components/record-results-timeline-day.tsx` instead of remaining inline inside `record-results-timeline-view.tsx`
   - `record-results-timeline-view.tsx` now stays focused on timeline iteration and empty-state rendering while single-day layout remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this timeline-day boundary so future results timeline changes do not regrow a mixed list-and-day rendering module
+- Search Preset List Item Extraction V1:
+  - single preset card rendering now lives in `apps/web/components/search-preset-list-item.tsx` instead of remaining inline inside `search-preset-list.tsx`
+  - `search-preset-list.tsx` now stays focused on empty-state handling and list iteration while single preset rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this preset-item boundary so future preset-list changes do not regrow a mixed list-and-item rendering module
 
 ## Next
 - Continue the next product slice

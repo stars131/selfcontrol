@@ -1,5 +1,6 @@
 "use client";
 
+import { SearchPresetListItem } from "./search-preset-list-item";
 import type { SearchPresetListProps } from "./search-preset-list.types";
 
 export function SearchPresetList({
@@ -21,28 +22,18 @@ export function SearchPresetList({
   return (
     <div className="record-list compact-list">
       {presets.map((preset) => (
-        <article className="record-card" key={preset.id}>
-          <div className="eyebrow">{savedPresetLabel}</div>
-          <div style={{ marginTop: 8, fontWeight: 600 }}>{preset.name}</div>
-          <div className="muted" style={{ marginTop: 8 }}>
-            {summarizeRecordFilterLabel(preset.filters)}
-          </div>
-          <div className="action-row" style={{ marginTop: 12 }}>
-            <button
-              className="button secondary"
-              disabled={filteringRecords}
-              type="button"
-              onClick={() => void onApplyPreset(preset.filters)}
-            >
-              {applyPresetLabel}
-            </button>
-            {canWriteWorkspace ? (
-              <button className="button secondary" type="button" onClick={() => void onDeletePreset(preset.id)}>
-                {deletePresetLabel}
-              </button>
-            ) : null}
-          </div>
-        </article>
+        <SearchPresetListItem
+          applyPresetLabel={applyPresetLabel}
+          canWriteWorkspace={canWriteWorkspace}
+          deletePresetLabel={deletePresetLabel}
+          filteringRecords={filteringRecords}
+          key={preset.id}
+          onApplyPreset={onApplyPreset}
+          onDeletePreset={onDeletePreset}
+          preset={preset}
+          savedPresetLabel={savedPresetLabel}
+          summarizeRecordFilterLabel={summarizeRecordFilterLabel}
+        />
       ))}
     </div>
   );

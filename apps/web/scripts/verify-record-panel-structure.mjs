@@ -2302,6 +2302,14 @@ const recordResultsSharedCardPropsTypesPath = path.resolve(
   "components/record-results-shared-card-props.types.ts",
 );
 const searchPresetListPath = path.resolve(process.cwd(), "components/search-preset-list.tsx");
+const searchPresetListItemPath = path.resolve(
+  process.cwd(),
+  "components/search-preset-list-item.tsx",
+);
+const searchPresetListItemTypesPath = path.resolve(
+  process.cwd(),
+  "components/search-preset-list-item.types.ts",
+);
 const searchPresetListTypesPath = path.resolve(
   process.cwd(),
   "components/search-preset-list.types.ts",
@@ -3763,6 +3771,8 @@ const recordResultsSharedCardPropsTypesSource = fs.readFileSync(
   "utf8",
 );
 const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
+const searchPresetListItemSource = fs.readFileSync(searchPresetListItemPath, "utf8");
+const searchPresetListItemTypesSource = fs.readFileSync(searchPresetListItemTypesPath, "utf8");
 const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
 const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
 const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
@@ -5223,6 +5233,9 @@ const recordResultsTimelineDayTypesLines =
   recordResultsTimelineDayTypesSource.split(/\r?\n/).length;
 const recordResultsTimelineViewTypesLines =
   recordResultsTimelineViewTypesSource.split(/\r?\n/).length;
+const searchPresetListLines = searchPresetListSource.split(/\r?\n/).length;
+const searchPresetListItemLines = searchPresetListItemSource.split(/\r?\n/).length;
+const searchPresetListItemTypesLines = searchPresetListItemTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
 const recordPanelV2InputTypesLines = recordPanelV2InputTypesSource.split(/\r?\n/).length;
 const recordPanelV2PropsDataTypesLines = recordPanelV2PropsDataTypesSource.split(/\r?\n/).length;
@@ -22104,8 +22117,12 @@ if (recordResultsSummaryCardPropsLines > maxRecordResultsSummaryCardPropsLines) 
 }
 
 for (const requiredSearchPresetListUsage of [
+  'import { SearchPresetListItem } from "./search-preset-list-item";',
   'import type { SearchPresetListProps } from "./search-preset-list.types";',
   "}: SearchPresetListProps) {",
+  "<SearchPresetListItem",
+  "preset={preset}",
+  "summarizeRecordFilterLabel={summarizeRecordFilterLabel}",
 ]) {
   if (!searchPresetListSource.includes(requiredSearchPresetListUsage)) {
     throw new Error(
@@ -22117,12 +22134,22 @@ for (const requiredSearchPresetListUsage of [
 for (const forbiddenSearchPresetListToken of [
   'import type { RecordFilterState, SearchPresetItem } from "../lib/types";',
   "type SearchPresetListProps = {",
+  '<article className="record-card" key={preset.id}>',
+  "onClick={() => void onApplyPreset(preset.filters)}",
+  "onClick={() => void onDeletePreset(preset.id)}",
 ]) {
   if (searchPresetListSource.includes(forbiddenSearchPresetListToken)) {
     throw new Error(
       `search-preset-list.tsx must keep preset-list prop typing delegated: ${forbiddenSearchPresetListToken}`,
     );
   }
+}
+
+const maxSearchPresetListLines = 45;
+if (searchPresetListLines > maxSearchPresetListLines) {
+  throw new Error(
+    `search-preset-list.tsx exceeded ${maxSearchPresetListLines} lines: ${searchPresetListLines}`,
+  );
 }
 
 for (const requiredSearchPresetListTypesUsage of [
@@ -22139,6 +22166,57 @@ const maxSearchPresetListTypesLines = 2;
 if (searchPresetListTypesLines > maxSearchPresetListTypesLines) {
   throw new Error(
     `search-preset-list.types.ts exceeded ${maxSearchPresetListTypesLines} lines: ${searchPresetListTypesLines}`,
+  );
+}
+
+for (const requiredSearchPresetListItemUsage of [
+  'import type { SearchPresetListItemProps } from "./search-preset-list-item.types";',
+  "}: SearchPresetListItemProps) {",
+  '<article className="record-card">',
+  "{savedPresetLabel}",
+  "{summarizeRecordFilterLabel(preset.filters)}",
+  "onClick={() => void onApplyPreset(preset.filters)}",
+]) {
+  if (!searchPresetListItemSource.includes(requiredSearchPresetListItemUsage)) {
+    throw new Error(
+      `search-preset-list-item.tsx must own preset item rendering: ${requiredSearchPresetListItemUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSearchPresetListItemToken of [
+  "emptyLabel",
+  "presets.map(",
+  "SearchPresetListProps",
+]) {
+  if (searchPresetListItemSource.includes(forbiddenSearchPresetListItemToken)) {
+    throw new Error(
+      `search-preset-list-item.tsx must keep list-level preset concerns delegated: ${forbiddenSearchPresetListItemToken}`,
+    );
+  }
+}
+
+const maxSearchPresetListItemLines = 45;
+if (searchPresetListItemLines > maxSearchPresetListItemLines) {
+  throw new Error(
+    `search-preset-list-item.tsx exceeded ${maxSearchPresetListItemLines} lines: ${searchPresetListItemLines}`,
+  );
+}
+
+for (const requiredSearchPresetListItemTypesUsage of [
+  'import type { SearchPresetListProps } from "./search-preset-list.types"; export type SearchPresetListItemProps = Pick<SearchPresetListProps, "applyPresetLabel" | "canWriteWorkspace" | "deletePresetLabel" | "filteringRecords" | "onApplyPreset" | "onDeletePreset" | "savedPresetLabel" | "summarizeRecordFilterLabel"> & { preset: SearchPresetListProps["presets"][number] };',
+]) {
+  if (!searchPresetListItemTypesSource.includes(requiredSearchPresetListItemTypesUsage)) {
+    throw new Error(
+      `search-preset-list-item.types.ts must own preset item prop typing: ${requiredSearchPresetListItemTypesUsage}`,
+    );
+  }
+}
+
+const maxSearchPresetListItemTypesLines = 2;
+if (searchPresetListItemTypesLines > maxSearchPresetListItemTypesLines) {
+  throw new Error(
+    `search-preset-list-item.types.ts exceeded ${maxSearchPresetListItemTypesLines} lines: ${searchPresetListItemTypesLines}`,
   );
 }
 

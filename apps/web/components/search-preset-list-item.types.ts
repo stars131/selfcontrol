@@ -1,0 +1,1 @@
+import type { SearchPresetListProps } from "./search-preset-list.types"; export type SearchPresetListItemProps = Pick<SearchPresetListProps, "applyPresetLabel" | "canWriteWorkspace" | "deletePresetLabel" | "filteringRecords" | "onApplyPreset" | "onDeletePreset" | "savedPresetLabel" | "summarizeRecordFilterLabel"> & { preset: SearchPresetListProps["presets"][number] };
