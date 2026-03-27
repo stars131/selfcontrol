@@ -1,70 +1,22 @@
 from __future__ import annotations
 
 import math
-from dataclasses import asdict, dataclass
 from hashlib import blake2b
 
-from sqlalchemy import func, or_
-from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy import func
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.config import settings
 from app.models.knowledge import KnowledgeChunk
-from app.models.media import MediaAsset
 from app.models.record import Record
 from app.services.embeddings import EmbeddingProviderError, embed_text_for_workspace
 from app.services.knowledge_helpers import (
     build_record_documents,
-    build_snippet,
     chunk_text,
-    cosine_similarity,
-    keyword_overlap_score,
-    normalize_text,
-    tokenize,
 )
+from app.services.knowledge_search import search_knowledge, search_records_hybrid
+from app.services.knowledge_types import KnowledgeReindexResult, KnowledgeSearchHit, KnowledgeStats
 from app.services.provider_configs import get_effective_provider_config
-
-
-MIN_SIMILARITY_SCORE = 0.08
-KEYWORD_BONUS_WEIGHT = 0.2
-
-
-@dataclass
-class KnowledgeSearchHit:
-    chunk_id: str
-    record_id: str
-    record_title: str
-    record_type_code: str
-    source_type: str
-    source_label: str
-    media_id: str | None
-    score: float
-    snippet: str
-
-    def to_dict(self) -> dict:
-        return asdict(self)
-
-
-@dataclass
-class KnowledgeStats:
-    chunk_count: int
-    record_count: int
-    media_count: int
-    latest_indexed_at: str | None
-    embedding_provider: str
-    embedding_model: str
-    embedding_dimensions: int
-
-    def to_dict(self) -> dict:
-        return asdict(self)
-
-
-@dataclass
-class KnowledgeReindexResult:
-    record_count: int
-    chunk_count: int
-
-    def to_dict(self) -> dict:
-        return asdict(self)
 
 
 def rebuild_record_knowledge(db: Session, record_id: str) -> KnowledgeReindexResult:
@@ -147,111 +99,3 @@ def get_knowledge_stats(db: Session, workspace_id: str) -> KnowledgeStats:
         embedding_model=embedding_config.model_name or settings.embedding_model,
         embedding_dimensions=int(embedding_dimensions or max(settings.embedding_dimensions, 64)),
     )
-
-
-def search_knowledge(
-    db: Session,
-    workspace_id: str,
-    query: str,
-    limit: int | None = None,
-) -> list[KnowledgeSearchHit]:
-    normalized_query = normalize_text(query)
-    if not normalized_query:
-        return []
-
-    embedding_config = get_effective_provider_config(db, workspace_id, "embeddings")
-    if not embedding_config.is_enabled:
-        return []
-
-    search_limit = limit or settings.rag_search_limit
-    try:
-        query_embedding = embed_text_for_workspace(db, workspace_id, normalized_query)
-    except EmbeddingProviderError:
-        return []
-    query_vector = query_embedding.vector
-    query_tokens = set(tokenize(normalized_query))
-    chunks = (
-        db.query(KnowledgeChunk)
-        .options(joinedload(KnowledgeChunk.record))
-        .filter(KnowledgeChunk.workspace_id == workspace_id)
-        .all()
-    )
-
-    hits: list[KnowledgeSearchHit] = []
-    for chunk in chunks:
-        if not chunk.record or chunk.record.workspace_id != workspace_id:
-            continue
-        if chunk.embedding_dimensions != len(query_vector):
-            continue
-
-        score = cosine_similarity(query_vector, chunk.embedding_vector or [])
-        score += KEYWORD_BONUS_WEIGHT * keyword_overlap_score(query_tokens, set(tokenize(chunk.content)))
-        if score < MIN_SIMILARITY_SCORE:
-            continue
-
-        hits.append(
-            KnowledgeSearchHit(
-                chunk_id=chunk.id,
-                record_id=chunk.record.id,
-                record_title=chunk.record.title or "Untitled record",
-                record_type_code=chunk.record.type_code,
-                source_type=chunk.source_type,
-                source_label=chunk.source_label,
-                media_id=chunk.media_id,
-                score=round(score, 4),
-                snippet=build_snippet(chunk.content, query_tokens),
-            )
-        )
-
-    hits.sort(key=lambda item: item.score, reverse=True)
-    return hits[:search_limit]
-
-
-def search_records_hybrid(
-    db: Session,
-    workspace_id: str,
-    query: str,
-    limit: int = 10,
-) -> tuple[list[Record], list[KnowledgeSearchHit]]:
-    hits = search_knowledge(db, workspace_id, query, limit=max(limit, settings.rag_search_limit))
-    records: list[Record] = []
-    seen_record_ids: set[str] = set()
-
-    for hit in hits:
-        if hit.record_id in seen_record_ids:
-            continue
-        record = db.get(Record, hit.record_id)
-        if not record:
-            continue
-        records.append(record)
-        seen_record_ids.add(record.id)
-        if len(records) >= limit:
-            return records, hits
-
-    like_value = f"%{query}%"
-    fallback_records = (
-        db.query(Record)
-        .outerjoin(MediaAsset, MediaAsset.record_id == Record.id)
-        .filter(
-            Record.workspace_id == workspace_id,
-            or_(
-                Record.title.ilike(like_value),
-                Record.content.ilike(like_value),
-                MediaAsset.extracted_text.ilike(like_value),
-                MediaAsset.original_filename.ilike(like_value),
-            ),
-        )
-        .distinct()
-        .order_by(Record.created_at.desc())
-        .limit(limit)
-        .all()
-    )
-    for record in fallback_records:
-        if record.id in seen_record_ids:
-            continue
-        records.append(record)
-        seen_record_ids.add(record.id)
-        if len(records) >= limit:
-            break
-
-    return records, hits
