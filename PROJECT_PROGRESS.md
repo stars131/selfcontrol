@@ -2359,10 +2359,14 @@ Last updated: 2026-03-27
   - media processing start, remote-fetch success markers, deferred state transitions, completion state transitions, and failure-state metadata updates now live in `apps/api/app/services/media_processing_state.py`
   - `media_processing.py` now reuses shared processing-state helpers and the shared storage path helper from `media_storage.py`, reducing orchestration-file duplication and keeping state mutation rules centralized
   - dedicated backend unit tests now cover processing start, deferred retry scheduling, completion recovery, and failure metadata merges for the extracted state boundary
+- Media Processing Outcome Boundary Extraction V1:
+  - text-direct extraction payload shaping, provider-deferred placeholder payload shaping, provider-completed metadata shaping, and the shared commit-refresh-reindex finalize sequence now live in `apps/api/app/services/media_processing_outcomes.py`
+  - `media_processing.py` now acts more narrowly as the media workflow coordinator while outcome assembly and post-commit knowledge refresh behavior stay centralized behind the new helper boundary
+  - dedicated backend unit tests now cover text-direct payload assembly, deferred placeholder shaping, provider metadata merging, and finalize-sequence ordering for the extracted outcome boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying `apps/api/app/services/media_processing.py` by extracting provider-result shaping and post-commit knowledge refresh orchestration into thinner enterprise-grade service boundaries
+- Continue simplifying `apps/api/app/services/media_processing.py` by extracting local-vs-remote file acquisition and temp-file cleanup orchestration into thinner enterprise-grade service boundaries
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
