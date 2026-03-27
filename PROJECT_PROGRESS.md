@@ -2355,10 +2355,14 @@ Last updated: 2026-03-27
   - text-like file detection, best-effort text decoding, extracted-text normalization, image dimension parsing, checksum generation, and file metadata collection now live in `apps/api/app/services/media_file_analysis.py`
   - `media_processing.py` now focuses more narrowly on processing orchestration, while `media_storage.py` and `media_retention.py` reuse the shared file-analysis size-label helper through the new boundary
   - dedicated backend unit tests now cover text-media detection, JSON text normalization, and image metadata extraction for the extracted module
+- Media Processing State Boundary Extraction V1:
+  - media processing start, remote-fetch success markers, deferred state transitions, completion state transitions, and failure-state metadata updates now live in `apps/api/app/services/media_processing_state.py`
+  - `media_processing.py` now reuses shared processing-state helpers and the shared storage path helper from `media_storage.py`, reducing orchestration-file duplication and keeping state mutation rules centralized
+  - dedicated backend unit tests now cover processing start, deferred retry scheduling, completion recovery, and failure metadata merges for the extracted state boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying `apps/api/app/services/media_processing.py` by extracting processing outcome/state transition helpers into thinner enterprise-grade service boundaries
+- Continue simplifying `apps/api/app/services/media_processing.py` by extracting provider-result shaping and post-commit knowledge refresh orchestration into thinner enterprise-grade service boundaries
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
