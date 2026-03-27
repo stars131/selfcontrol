@@ -1,0 +1,1 @@
+import type { RecordPanelStatsProps } from "./record-panel-stats.types"; export type RecordPanelStatCardProps = { label: RecordPanelStatsProps["visibleRecordsLabel"]; value: RecordPanelStatsProps["visibleRecordCount"] };

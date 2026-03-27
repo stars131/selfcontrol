@@ -2324,6 +2324,14 @@ const searchPresetListTypesPath = path.resolve(
   "components/search-preset-list.types.ts",
 );
 const recordPanelStatsPath = path.resolve(process.cwd(), "components/record-panel-stats.tsx");
+const recordPanelStatCardPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-stat-card.tsx",
+);
+const recordPanelStatCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-stat-card.types.ts",
+);
 const recordPanelStatsTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-stats.types.ts",
@@ -3783,13 +3791,15 @@ const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
 const searchPresetListItemSource = fs.readFileSync(searchPresetListItemPath, "utf8");
 const searchPresetListItemTypesSource = fs.readFileSync(searchPresetListItemTypesPath, "utf8");
 const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
+const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
+const recordPanelStatCardSource = fs.readFileSync(recordPanelStatCardPath, "utf8");
+const recordPanelStatCardTypesSource = fs.readFileSync(recordPanelStatCardTypesPath, "utf8");
 const recordSearchPanelSource = fs.readFileSync(recordSearchPanelPath, "utf8");
 const recordSearchPanelActionsSource = fs.readFileSync(recordSearchPanelActionsPath, "utf8");
 const recordSearchPanelActionsTypesSource = fs.readFileSync(
   recordSearchPanelActionsTypesPath,
   "utf8",
 );
-const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
 const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
 const deadLetterRecoverySummarySource = fs.readFileSync(deadLetterRecoverySummaryPath, "utf8");
 const deadLetterRecoverySummaryTypesSource = fs.readFileSync(
@@ -5125,6 +5135,9 @@ const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).
 const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
 const searchPresetListTypesLines = searchPresetListTypesSource.split(/\r?\n/).length;
+const recordPanelStatsLines = recordPanelStatsSource.split(/\r?\n/).length;
+const recordPanelStatCardLines = recordPanelStatCardSource.split(/\r?\n/).length;
+const recordPanelStatCardTypesLines = recordPanelStatCardTypesSource.split(/\r?\n/).length;
 const recordSearchPanelLines = recordSearchPanelSource.split(/\r?\n/).length;
 const recordSearchPanelActionsLines = recordSearchPanelActionsSource.split(/\r?\n/).length;
 const recordSearchPanelActionsTypesLines =
@@ -22405,7 +22418,11 @@ if (recordSearchPanelPresetControlsTypesLines > maxRecordSearchPanelPresetContro
 }
 
 for (const requiredRecordPanelStatsUsage of [
+  'import { RecordPanelStatCard } from "./record-panel-stat-card";',
   'import type { RecordPanelStatsProps } from "./record-panel-stats.types";',
+  '<RecordPanelStatCard label={visibleRecordsLabel} value={visibleRecordCount} />',
+  '<RecordPanelStatCard label={foodLabel} value={foodCount} />',
+  '<RecordPanelStatCard label={avoidLabel} value={avoidCount} />',
   "}: RecordPanelStatsProps) {",
 ]) {
   if (!recordPanelStatsSource.includes(requiredRecordPanelStatsUsage)) {
@@ -22417,6 +22434,24 @@ for (const requiredRecordPanelStatsUsage of [
 
 if (recordPanelStatsSource.includes("type RecordPanelStatsProps = {")) {
   throw new Error("record-panel-stats.tsx must keep panel-stats prop typing delegated");
+}
+
+for (const forbiddenRecordPanelStatsToken of [
+  '<div className="stat-card">',
+  '<div className="title" style={{ fontSize: 20 }}>',
+]) {
+  if (recordPanelStatsSource.includes(forbiddenRecordPanelStatsToken)) {
+    throw new Error(
+      `record-panel-stats.tsx must keep stat-card rendering delegated: ${forbiddenRecordPanelStatsToken}`,
+    );
+  }
+}
+
+const maxRecordPanelStatsLines = 25;
+if (recordPanelStatsLines > maxRecordPanelStatsLines) {
+  throw new Error(
+    `record-panel-stats.tsx exceeded ${maxRecordPanelStatsLines} lines: ${recordPanelStatsLines}`,
+  );
 }
 
 for (const requiredRecordPanelStatsTypesUsage of [
@@ -22433,6 +22468,56 @@ const maxRecordPanelStatsTypesLines = 2;
 if (recordPanelStatsTypesLines > maxRecordPanelStatsTypesLines) {
   throw new Error(
     `record-panel-stats.types.ts exceeded ${maxRecordPanelStatsTypesLines} lines: ${recordPanelStatsTypesLines}`,
+  );
+}
+
+for (const requiredRecordPanelStatCardUsage of [
+  'import type { RecordPanelStatCardProps } from "./record-panel-stat-card.types";',
+  "export function RecordPanelStatCard({ label, value }: RecordPanelStatCardProps) {",
+  '<div className="stat-card">',
+  "{label}",
+  "{value}",
+]) {
+  if (!recordPanelStatCardSource.includes(requiredRecordPanelStatCardUsage)) {
+    throw new Error(
+      `record-panel-stat-card.tsx must own stat-card rendering: ${requiredRecordPanelStatCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordPanelStatCardToken of [
+  "RecordPanelStatsProps",
+  "visibleRecordCount",
+  "foodCount",
+]) {
+  if (recordPanelStatCardSource.includes(forbiddenRecordPanelStatCardToken)) {
+    throw new Error(
+      `record-panel-stat-card.tsx must keep stats-grid orchestration delegated: ${forbiddenRecordPanelStatCardToken}`,
+    );
+  }
+}
+
+const maxRecordPanelStatCardLines = 15;
+if (recordPanelStatCardLines > maxRecordPanelStatCardLines) {
+  throw new Error(
+    `record-panel-stat-card.tsx exceeded ${maxRecordPanelStatCardLines} lines: ${recordPanelStatCardLines}`,
+  );
+}
+
+for (const requiredRecordPanelStatCardTypesUsage of [
+  'import type { RecordPanelStatsProps } from "./record-panel-stats.types"; export type RecordPanelStatCardProps = { label: RecordPanelStatsProps["visibleRecordsLabel"]; value: RecordPanelStatsProps["visibleRecordCount"] };',
+]) {
+  if (!recordPanelStatCardTypesSource.includes(requiredRecordPanelStatCardTypesUsage)) {
+    throw new Error(
+      `record-panel-stat-card.types.ts must own stat-card prop typing: ${requiredRecordPanelStatCardTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordPanelStatCardTypesLines = 2;
+if (recordPanelStatCardTypesLines > maxRecordPanelStatCardTypesLines) {
+  throw new Error(
+    `record-panel-stat-card.types.ts exceeded ${maxRecordPanelStatCardTypesLines} lines: ${recordPanelStatCardTypesLines}`,
   );
 }
 
