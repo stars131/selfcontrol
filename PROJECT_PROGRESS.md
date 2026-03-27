@@ -2311,6 +2311,9 @@ Last updated: 2026-03-26
 - Web API Client Media Boundary Extraction V1:
   - `apps/web/lib/api-core.ts` now owns the shared request, download, blob, and API error helpers so future feature-specific client modules can reuse one transport boundary instead of growing `api.ts`
   - media upload, status, retention, dead-letter, and processing overview calls now live in `apps/web/lib/api-media.ts` and are re-exported from `apps/web/lib/api.ts`, reducing the main web API surface file without changing caller imports
+- Web API Client Workspace Boundary Extraction V1:
+  - workspace listing, export/import, transfer jobs, and member-management calls now live in `apps/web/lib/api-workspaces.ts` and are re-exported from `apps/web/lib/api.ts`, shrinking the remaining front-end API hub without changing callers
+  - the new workspace client module also centralizes optional trimmed `FormData` field assembly for archive import flows, reducing duplicate request-shaping logic in future workspace transfer changes
 
 ## Next
 - Continue the next product slice

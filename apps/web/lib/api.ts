@@ -15,11 +15,8 @@ import type {
   TimelineDay,
   User,
   Workspace,
-  WorkspaceImportResult,
-  WorkspaceTransferJob,
-  WorkspaceMemberItem,
 } from "./types";
-import { request, requestDownload } from "./api-core";
+import { request } from "./api-core";
 export {
   archiveMediaRetention,
   bulkRetryMediaDeadLetter,
@@ -35,6 +32,21 @@ export {
   retryMediaProcessing,
   uploadMedia,
 } from "./api-media";
+export {
+  createWorkspace,
+  createWorkspaceExportJob,
+  createWorkspaceImportJob,
+  deleteWorkspaceMember,
+  downloadWorkspaceExport,
+  downloadWorkspaceTransferJob,
+  getWorkspace,
+  getWorkspaceTransferJob,
+  importWorkspaceArchive,
+  listWorkspaceMembers,
+  listWorkspaceTransferJobs,
+  listWorkspaces,
+  updateWorkspaceMember,
+} from "./api-workspaces";
 
 type LoginResult = {
   access_token: string;
@@ -75,146 +87,6 @@ export async function login(input: { account: string; password: string }) {
 
 export async function getCurrentUser(token: string) {
   return request<{ user: User }>("/auth/me", { method: "GET" }, token);
-}
-
-export async function listWorkspaces(token: string) {
-  return request<{ items: Workspace[] }>("/workspaces", { method: "GET" }, token);
-}
-
-export async function getWorkspace(token: string, workspaceId: string) {
-  return request<{ workspace: Workspace }>(`/workspaces/${workspaceId}`, { method: "GET" }, token);
-}
-
-export async function downloadWorkspaceExport(token: string, workspaceId: string) {
-  return requestDownload(`/workspaces/${workspaceId}/export`, token);
-}
-
-export async function createWorkspace(
-  token: string,
-  input: { name: string; slug: string; visibility?: string },
-) {
-  return request<{ workspace: Workspace }>(
-    "/workspaces",
-    {
-      method: "POST",
-      body: JSON.stringify(input),
-    },
-    token,
-  );
-}
-
-export async function importWorkspaceArchive(
-  token: string,
-  input: {
-    file: File;
-    name?: string;
-    slug?: string;
-  },
-) {
-  const formData = new FormData();
-  formData.append("file", input.file);
-  if (input.name?.trim()) {
-    formData.append("name", input.name.trim());
-  }
-  if (input.slug?.trim()) {
-    formData.append("slug", input.slug.trim());
-  }
-  return request<{ result: WorkspaceImportResult }>(
-    "/workspaces/import",
-    {
-      method: "POST",
-      body: formData,
-    },
-    token,
-  );
-}
-
-export async function createWorkspaceImportJob(
-  token: string,
-  input: {
-    file: File;
-    name?: string;
-    slug?: string;
-  },
-) {
-  const formData = new FormData();
-  formData.append("file", input.file);
-  if (input.name?.trim()) {
-    formData.append("name", input.name.trim());
-  }
-  if (input.slug?.trim()) {
-    formData.append("slug", input.slug.trim());
-  }
-  return request<{ job: WorkspaceTransferJob; dispatch_mode: string }>(
-    "/workspaces/import-jobs",
-    {
-      method: "POST",
-      body: formData,
-    },
-    token,
-  );
-}
-
-export async function createWorkspaceExportJob(token: string, workspaceId: string) {
-  return request<{ job: WorkspaceTransferJob; dispatch_mode: string }>(
-    `/workspaces/${workspaceId}/export-jobs`,
-    {
-      method: "POST",
-    },
-    token,
-  );
-}
-
-export async function listWorkspaceTransferJobs(token: string) {
-  return request<{ items: WorkspaceTransferJob[] }>(
-    "/workspaces/jobs/transfer",
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function getWorkspaceTransferJob(token: string, jobId: string) {
-  return request<{ job: WorkspaceTransferJob }>(
-    `/workspaces/jobs/transfer/${jobId}`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function downloadWorkspaceTransferJob(token: string, jobId: string) {
-  return requestDownload(`/workspaces/jobs/transfer/${jobId}/download`, token);
-}
-
-export async function listWorkspaceMembers(token: string, workspaceId: string) {
-  return request<{ items: WorkspaceMemberItem[] }>(
-    `/workspaces/${workspaceId}/members`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function updateWorkspaceMember(
-  token: string,
-  workspaceId: string,
-  memberId: string,
-  input: { role: "viewer" | "editor" },
-) {
-  return request<{ member: WorkspaceMemberItem }>(
-    `/workspaces/${workspaceId}/members/${memberId}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(input),
-    },
-    token,
-  );
-}
-
-export async function deleteWorkspaceMember(token: string, workspaceId: string, memberId: string) {
-  return request<{ deleted: boolean }>(
-    `/workspaces/${workspaceId}/members/${memberId}`,
-    { method: "DELETE" },
-    token,
-  );
 }
 
 export async function listRecords(
