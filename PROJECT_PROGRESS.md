@@ -2248,6 +2248,9 @@ Last updated: 2026-03-26
 - Record Panel Error Helper Normalization V1:
   - record-panel filter, save, reminder, media, dead-letter, and retention helper modules now reuse the shared client-side error resolver so localized fallback copy stays consistent across structured memo workflows
   - the remaining enterprise guardrail files that still preserve literal fallback logic are left isolated for a later verifier-aligned cleanup, keeping this slice low-risk and maintainable
+- Error Helper Guardrail Alignment V1:
+  - record delete, legacy record-panel, and workspace settings error helper leaves now also reuse the shared error resolver, completing the client-side request fallback normalization path
+  - record-panel and workspace-settings verifier rules now enforce the shared resolver contract directly, so enterprise structural checks stay aligned with the maintainability standard instead of locking in duplicated legacy fallback code
 
 ## Next
 - Continue the next product slice

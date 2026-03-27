@@ -10857,9 +10857,10 @@ for (const requiredRecordDeleteHelpersImport of [
 }
 
 for (const requiredRecordDeleteHelpersUsage of [
+  'import { resolveErrorMessage } from "../lib/error-message";',
   "export function getRecordPanelRecordDeleteErrorMessage(",
   "export function getRecordPanelRecordDeleteFallbackMessage(detailCopy: RecordPanelControllerDetailCopy)",
-  "return caught instanceof Error ? caught.message : fallbackMessage;",
+  "return resolveErrorMessage(caught, fallbackMessage);",
   "return detailCopy.deleteRecordError;",
 ]) {
   if (!recordDeleteHelpersSource.includes(requiredRecordDeleteHelpersUsage)) {
@@ -13180,8 +13181,9 @@ if (legacyRecordPanelActionsLines > maxLegacyRecordPanelActionsLines) {
 }
 
 for (const requiredLegacyActionErrorUsage of [
+  'import { resolveErrorMessage } from "../lib/error-message";',
   "export function getRecordPanelErrorMessage(",
-  "return caught instanceof Error ? caught.message : fallbackMessage;",
+  "return resolveErrorMessage(caught, fallbackMessage);",
 ]) {
   if (!legacyRecordPanelActionErrorSource.includes(requiredLegacyActionErrorUsage)) {
     throw new Error(`record-panel-legacy-action-error.ts must own legacy action error formatting: ${requiredLegacyActionErrorUsage}`);

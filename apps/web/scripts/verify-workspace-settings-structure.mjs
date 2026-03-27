@@ -900,8 +900,9 @@ if (actionsLineCount > 30) {
 }
 
 for (const requiredActionErrorUsage of [
+  'import { resolveErrorMessage } from "../lib/error-message";',
   "export function getWorkspaceSettingsActionErrorMessage(",
-  "return caught instanceof Error ? caught.message : fallbackMessage;",
+  "return resolveErrorMessage(caught, fallbackMessage);",
 ]) {
   if (!actionErrorSource.includes(requiredActionErrorUsage)) {
     throw new Error(`workspace-settings-action-error.ts must own shared error formatting: ${requiredActionErrorUsage}`);
