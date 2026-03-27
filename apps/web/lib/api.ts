@@ -3,15 +3,7 @@ import type {
   ChatMessage,
   Conversation,
   KnowledgeStats,
-  MediaAsset,
-  MediaDeadLetterBulkRetryResult,
-  MediaDeadLetterOverview,
   MediaStorageProviderHealth,
-  MediaProcessingOverview,
-  MediaRetentionArchiveResult,
-  MediaRetentionCleanupResult,
-  MediaRetentionReport,
-  MediaStorageSummary,
   NotificationItem,
   ProviderFeatureConfig,
   RecordFilterState,
@@ -27,17 +19,22 @@ import type {
   WorkspaceTransferJob,
   WorkspaceMemberItem,
 } from "./types";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
-
-type Envelope<T> = {
-  success: boolean;
-  data: T;
-  error?: {
-    code?: string;
-    message?: string;
-  };
-};
+import { request, requestDownload } from "./api-core";
+export {
+  archiveMediaRetention,
+  bulkRetryMediaDeadLetter,
+  cleanupMediaRetention,
+  deleteMedia,
+  fetchMediaBlob,
+  getMediaDeadLetterOverview,
+  getMediaProcessingOverview,
+  getMediaRetentionReport,
+  getMediaStatus,
+  getMediaStorageSummary,
+  listMedia,
+  retryMediaProcessing,
+  uploadMedia,
+} from "./api-media";
 
 type LoginResult = {
   access_token: string;
@@ -56,104 +53,6 @@ type SendMessageResult = {
   records: RecordItem[];
 };
 
-type ApiErrorPayload = {
-  error?: {
-    code?: string;
-    message?: string;
-  };
-  detail?: string;
-};
-
-class ApiRequestError extends Error {
-  code: string | null;
-  status: number;
-
-  constructor(message: string, { code, status }: { code?: string | null; status: number }) {
-    super(message);
-    this.name = "ApiRequestError";
-    this.code = code ?? null;
-    this.status = status;
-  }
-}
-
-function buildApiRequestError(response: Response, payload?: ApiErrorPayload | null) {
-  return new ApiRequestError(payload?.error?.message?.trim() || payload?.detail?.trim() || "", {
-    code: payload?.error?.code,
-    status: response.status,
-  });
-}
-
-async function readApiErrorPayload(response: Response) {
-  try {
-    return (await response.json()) as ApiErrorPayload;
-  } catch {
-    return null;
-  }
-}
-
-async function request<T>(path: string, init: RequestInit = {}, token?: string): Promise<T> {
-  const headers = new Headers(init.headers);
-  if (!headers.has("Content-Type") && init.body && !(init.body instanceof FormData)) {
-    headers.set("Content-Type", "application/json");
-  }
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
-    headers,
-  });
-  let payload: (Envelope<T> & ApiErrorPayload) | null = null;
-
-  try {
-    payload = (await response.json()) as Envelope<T> & ApiErrorPayload;
-  } catch {
-    throw buildApiRequestError(response);
-  }
-
-  if (!response.ok || !payload?.success) {
-    throw buildApiRequestError(response, payload);
-  }
-
-  return payload.data;
-}
-
-async function requestBlob(path: string, token: string): Promise<Blob> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw buildApiRequestError(response, await readApiErrorPayload(response));
-  }
-
-  return response.blob();
-}
-
-async function requestDownload(path: string, token: string): Promise<{ blob: Blob; filename: string | null }> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw buildApiRequestError(response, await readApiErrorPayload(response));
-  }
-
-  const blob = await response.blob();
-  const contentDisposition = response.headers.get("content-disposition");
-  const filenameMatch = contentDisposition?.match(/filename="([^"]+)"/i) ?? null;
-  return {
-    blob,
-    filename: filenameMatch?.[1] ?? null,
-  };
-}
 
 export async function register(input: {
   username: string;
@@ -574,188 +473,6 @@ export async function sendMessage(
       method: "POST",
       body: JSON.stringify({ content }),
     },
-    token,
-  );
-}
-
-export async function listMedia(token: string, workspaceId: string, recordId: string) {
-  return request<{ items: MediaAsset[] }>(
-    `/workspaces/${workspaceId}/records/${recordId}/media`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function uploadMedia(token: string, workspaceId: string, recordId: string, file: File) {
-  const formData = new FormData();
-  formData.append("file", file);
-  return request<{ media: MediaAsset }>(
-    `/workspaces/${workspaceId}/records/${recordId}/media`,
-    {
-      method: "POST",
-      body: formData,
-    },
-    token,
-  );
-}
-
-export async function getMediaStatus(token: string, workspaceId: string, mediaId: string) {
-  return request<{ media: MediaAsset }>(
-    `/workspaces/${workspaceId}/media/${mediaId}/status`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function getMediaStorageSummary(token: string, workspaceId: string) {
-  return request<{ summary: MediaStorageSummary }>(
-    `/workspaces/${workspaceId}/media/storage-summary`,
-    { method: "GET" },
-    token,
-  );
-}
-
-export async function getMediaProcessingOverview(
-  token: string,
-  workspaceId: string,
-  params?: { issueLimit?: number },
-) {
-  const searchParams = new URLSearchParams();
-  if (params?.issueLimit) {
-    searchParams.set("issue_limit", String(params.issueLimit));
-  }
-  const query = searchParams.toString();
-  const path = query
-    ? `/workspaces/${workspaceId}/media/processing-overview?${query}`
-    : `/workspaces/${workspaceId}/media/processing-overview`;
-  return request<{ overview: MediaProcessingOverview }>(path, { method: "GET" }, token);
-}
-
-export async function getMediaDeadLetterOverview(
-  token: string,
-  workspaceId: string,
-  params?: { limit?: number; retryStates?: string[] },
-) {
-  const searchParams = new URLSearchParams();
-  if (params?.limit) {
-    searchParams.set("limit", String(params.limit));
-  }
-  for (const retryState of params?.retryStates ?? []) {
-    searchParams.append("retry_states", retryState);
-  }
-  const query = searchParams.toString();
-  const path = query
-    ? `/workspaces/${workspaceId}/media/dead-letter?${query}`
-    : `/workspaces/${workspaceId}/media/dead-letter`;
-  return request<{ overview: MediaDeadLetterOverview }>(path, { method: "GET" }, token);
-}
-
-export async function bulkRetryMediaDeadLetter(
-  token: string,
-  workspaceId: string,
-  input: {
-    mediaIds?: string[];
-    retryStates?: string[];
-    limit?: number;
-  },
-) {
-  return request<{ result: MediaDeadLetterBulkRetryResult }>(
-    `/workspaces/${workspaceId}/media/dead-letter/retry`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        media_ids: input.mediaIds ?? [],
-        retry_states: input.retryStates ?? [],
-        limit: input.limit ?? 20,
-      }),
-    },
-    token,
-  );
-}
-
-export async function getMediaRetentionReport(
-  token: string,
-  workspaceId: string,
-  params?: { olderThanDays?: number; limit?: number },
-) {
-  const searchParams = new URLSearchParams();
-  if (params?.olderThanDays) {
-    searchParams.set("older_than_days", String(params.olderThanDays));
-  }
-  if (params?.limit) {
-    searchParams.set("limit", String(params.limit));
-  }
-  const query = searchParams.toString();
-  const path = query
-    ? `/workspaces/${workspaceId}/media/retention-report?${query}`
-    : `/workspaces/${workspaceId}/media/retention-report`;
-  return request<{ report: MediaRetentionReport }>(path, { method: "GET" }, token);
-}
-
-export async function cleanupMediaRetention(
-  token: string,
-  workspaceId: string,
-  input: {
-    mediaIds: string[];
-    olderThanDays: number;
-    purgeOrphanFiles?: boolean;
-    dryRun?: boolean;
-  },
-) {
-  return request<{ result: MediaRetentionCleanupResult }>(
-    `/workspaces/${workspaceId}/media/retention-cleanup`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        media_ids: input.mediaIds,
-        older_than_days: input.olderThanDays,
-        purge_orphan_files: input.purgeOrphanFiles ?? false,
-        dry_run: input.dryRun ?? false,
-      }),
-    },
-    token,
-  );
-}
-
-export async function archiveMediaRetention(
-  token: string,
-  workspaceId: string,
-  input: {
-    mediaIds: string[];
-    olderThanDays: number;
-    dryRun?: boolean;
-  },
-) {
-  return request<{ result: MediaRetentionArchiveResult }>(
-    `/workspaces/${workspaceId}/media/retention-archive`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        media_ids: input.mediaIds,
-        older_than_days: input.olderThanDays,
-        dry_run: input.dryRun ?? false,
-      }),
-    },
-    token,
-  );
-}
-
-export async function fetchMediaBlob(token: string, workspaceId: string, mediaId: string) {
-  return requestBlob(`/workspaces/${workspaceId}/media/${mediaId}/content`, token);
-}
-
-export async function retryMediaProcessing(token: string, workspaceId: string, mediaId: string) {
-  return request<{ media: MediaAsset }>(
-    `/workspaces/${workspaceId}/media/${mediaId}/retry`,
-    { method: "POST" },
-    token,
-  );
-}
-
-export async function deleteMedia(token: string, workspaceId: string, mediaId: string) {
-  return request<{ deleted: boolean }>(
-    `/workspaces/${workspaceId}/media/${mediaId}`,
-    { method: "DELETE" },
     token,
   );
 }

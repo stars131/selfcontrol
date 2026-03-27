@@ -2308,6 +2308,9 @@ Last updated: 2026-03-26
 - Issue Intake And Deployment Checklist V1:
   - the repository now includes structured GitHub issue templates for bugs, feature requests, and operations changes, plus an issue config that routes security-sensitive and operational questions toward the right documentation entrypoints
   - a dedicated `docs/DEPLOYMENT_VALIDATION_CHECKLIST.md` now standardizes pre-deploy, post-deploy, and rollback checks so future Linux server releases follow a more explicit enterprise delivery contract
+- Web API Client Media Boundary Extraction V1:
+  - `apps/web/lib/api-core.ts` now owns the shared request, download, blob, and API error helpers so future feature-specific client modules can reuse one transport boundary instead of growing `api.ts`
+  - media upload, status, retention, dead-letter, and processing overview calls now live in `apps/web/lib/api-media.ts` and are re-exported from `apps/web/lib/api.ts`, reducing the main web API surface file without changing caller imports
 
 ## Next
 - Continue the next product slice
