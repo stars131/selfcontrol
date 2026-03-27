@@ -2293,6 +2293,9 @@ Last updated: 2026-03-26
 - Toolchain Version Pinning V1:
   - the repository now includes root-level `.nvmrc` and `.python-version` files so Linux VM and local development environments can align with the same Node and Python baseline used by CI and bootstrap guidance
   - this lowers setup drift and makes future dependency upgrades easier to plan as explicit repository-level changes instead of ad hoc local choices
+- Pull Request Governance Template V1:
+  - the repository now includes a GitHub pull request template that requires verification, documentation, and security/operations review checkpoints for future changes
+  - this raises the change-management baseline so later multi-contributor or enterprise-style workflows do not depend on memory alone
 
 ## Next
 - Continue the next product slice

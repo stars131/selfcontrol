@@ -120,6 +120,11 @@ sh ./scripts/verify-all.sh
 - 如遇紧急情况，可临时设置 `SELFCONTROL_SKIP_VERIFY=1` 跳过
 - 该跳过开关只应用于例外情况，不应作为日常流程
 
+## 变更管理
+
+- 仓库已提供 GitHub PR 模板，要求记录验证、文档更新、安全与部署影响
+- 即使当前以单人开发为主，也按后续多人协作和企业级交付标准维护
+
 ## 运行说明
 
 - `MEDIA_PROCESSING_MODE=async`
