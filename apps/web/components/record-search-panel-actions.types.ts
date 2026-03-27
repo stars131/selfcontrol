@@ -1,0 +1,1 @@
+import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelActionsProps = Pick<RecordSearchPanelProps, "filteringRecords" | "onApplyFilter" | "onResetFilter" | "panelCopy">;

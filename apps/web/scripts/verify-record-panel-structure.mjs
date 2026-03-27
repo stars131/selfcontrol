@@ -1358,6 +1358,15 @@ const providerSettingsControllerActionsTypesPath = path.resolve(
   process.cwd(),
   "components/provider-settings-controller-actions.types.ts",
 );
+const recordSearchPanelPath = path.resolve(process.cwd(), "components/record-search-panel.tsx");
+const recordSearchPanelActionsPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-actions.tsx",
+);
+const recordSearchPanelActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-search-panel-actions.types.ts",
+);
 const recordSearchPanelFilterFieldsPath = path.resolve(
   process.cwd(),
   "components/record-search-panel-filter-fields.tsx",
@@ -3774,6 +3783,12 @@ const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
 const searchPresetListItemSource = fs.readFileSync(searchPresetListItemPath, "utf8");
 const searchPresetListItemTypesSource = fs.readFileSync(searchPresetListItemTypesPath, "utf8");
 const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
+const recordSearchPanelSource = fs.readFileSync(recordSearchPanelPath, "utf8");
+const recordSearchPanelActionsSource = fs.readFileSync(recordSearchPanelActionsPath, "utf8");
+const recordSearchPanelActionsTypesSource = fs.readFileSync(
+  recordSearchPanelActionsTypesPath,
+  "utf8",
+);
 const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
 const recordPanelStatsTypesSource = fs.readFileSync(recordPanelStatsTypesPath, "utf8");
 const deadLetterRecoverySummarySource = fs.readFileSync(deadLetterRecoverySummaryPath, "utf8");
@@ -5110,6 +5125,10 @@ const recordSummaryCardTypesLines = recordSummaryCardTypesSource.split(/\r?\n/).
 const recordResultsViewSwitcherTypesLines =
   recordResultsViewSwitcherTypesSource.split(/\r?\n/).length;
 const searchPresetListTypesLines = searchPresetListTypesSource.split(/\r?\n/).length;
+const recordSearchPanelLines = recordSearchPanelSource.split(/\r?\n/).length;
+const recordSearchPanelActionsLines = recordSearchPanelActionsSource.split(/\r?\n/).length;
+const recordSearchPanelActionsTypesLines =
+  recordSearchPanelActionsTypesSource.split(/\r?\n/).length;
 const recordSearchPanelFilterFieldsTypesLines =
   recordSearchPanelFilterFieldsTypesSource.split(/\r?\n/).length;
 const recordSearchPanelPresetControlsTypesLines =
@@ -22217,6 +22236,93 @@ const maxSearchPresetListItemTypesLines = 2;
 if (searchPresetListItemTypesLines > maxSearchPresetListItemTypesLines) {
   throw new Error(
     `search-preset-list-item.types.ts exceeded ${maxSearchPresetListItemTypesLines} lines: ${searchPresetListItemTypesLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelUsage of [
+  'import { RecordSearchPanelActions } from "./record-search-panel-actions";',
+  'import { RecordSearchPanelFilterFields } from "./record-search-panel-filter-fields";',
+  'import { RecordSearchPanelPresetControls } from "./record-search-panel-preset-controls";',
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types";',
+  "}: RecordSearchPanelProps) {",
+  "<RecordSearchPanelActions",
+  "onApplyFilter={onApplyFilter}",
+  "onResetFilter={onResetFilter}",
+]) {
+  if (!recordSearchPanelSource.includes(requiredRecordSearchPanelUsage)) {
+    throw new Error(
+      `record-search-panel.tsx must reuse the extracted search-panel leaves: ${requiredRecordSearchPanelUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSearchPanelToken of [
+  '<div className="action-row">',
+  "onClick={() => void onApplyFilter()}",
+  "onClick={() => void onResetFilter()}",
+]) {
+  if (recordSearchPanelSource.includes(forbiddenRecordSearchPanelToken)) {
+    throw new Error(
+      `record-search-panel.tsx must keep action-row rendering delegated: ${forbiddenRecordSearchPanelToken}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelLines = 55;
+if (recordSearchPanelLines > maxRecordSearchPanelLines) {
+  throw new Error(
+    `record-search-panel.tsx exceeded ${maxRecordSearchPanelLines} lines: ${recordSearchPanelLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelActionsUsage of [
+  'import type { RecordSearchPanelActionsProps } from "./record-search-panel-actions.types";',
+  "}: RecordSearchPanelActionsProps) {",
+  '<div className="action-row">',
+  "onClick={() => void onApplyFilter()}",
+  "onClick={() => void onResetFilter()}",
+  "{filteringRecords ? panelCopy.filtering : panelCopy.applyAdvancedFilter}",
+]) {
+  if (!recordSearchPanelActionsSource.includes(requiredRecordSearchPanelActionsUsage)) {
+    throw new Error(
+      `record-search-panel-actions.tsx must own search action-row rendering: ${requiredRecordSearchPanelActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSearchPanelActionsToken of [
+  "RecordSearchPanelProps",
+  "<RecordSearchPanelFilterFields",
+  "<RecordSearchPanelPresetControls",
+]) {
+  if (recordSearchPanelActionsSource.includes(forbiddenRecordSearchPanelActionsToken)) {
+    throw new Error(
+      `record-search-panel-actions.tsx must keep panel composition delegated: ${forbiddenRecordSearchPanelActionsToken}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelActionsLines = 25;
+if (recordSearchPanelActionsLines > maxRecordSearchPanelActionsLines) {
+  throw new Error(
+    `record-search-panel-actions.tsx exceeded ${maxRecordSearchPanelActionsLines} lines: ${recordSearchPanelActionsLines}`,
+  );
+}
+
+for (const requiredRecordSearchPanelActionsTypesUsage of [
+  'import type { RecordSearchPanelProps } from "./record-search-panel.types"; export type RecordSearchPanelActionsProps = Pick<RecordSearchPanelProps, "filteringRecords" | "onApplyFilter" | "onResetFilter" | "panelCopy">;',
+]) {
+  if (!recordSearchPanelActionsTypesSource.includes(requiredRecordSearchPanelActionsTypesUsage)) {
+    throw new Error(
+      `record-search-panel-actions.types.ts must own search-panel action prop typing: ${requiredRecordSearchPanelActionsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordSearchPanelActionsTypesLines = 2;
+if (recordSearchPanelActionsTypesLines > maxRecordSearchPanelActionsTypesLines) {
+  throw new Error(
+    `record-search-panel-actions.types.ts exceeded ${maxRecordSearchPanelActionsTypesLines} lines: ${recordSearchPanelActionsTypesLines}`,
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { RecordSearchPanelActions } from "./record-search-panel-actions";
 import { RecordSearchPanelFilterFields } from "./record-search-panel-filter-fields";
 import { RecordSearchPanelPresetControls } from "./record-search-panel-preset-controls";
 import type { RecordSearchPanelProps } from "./record-search-panel.types";
@@ -30,14 +31,12 @@ export function RecordSearchPanel({
         onTypeCodeChange={onTypeCodeChange}
         panelCopy={panelCopy}
       />
-      <div className="action-row">
-        <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onApplyFilter()}>
-          {filteringRecords ? panelCopy.filtering : panelCopy.applyAdvancedFilter}
-        </button>
-        <button className="button secondary" disabled={filteringRecords} type="button" onClick={() => void onResetFilter()}>
-          {panelCopy.resetList}
-        </button>
-      </div>
+      <RecordSearchPanelActions
+        filteringRecords={filteringRecords}
+        onApplyFilter={onApplyFilter}
+        onResetFilter={onResetFilter}
+        panelCopy={panelCopy}
+      />
       <div className="muted">{currentFilterSummary}</div>
       <RecordSearchPanelPresetControls
         canWriteWorkspace={canWriteWorkspace}

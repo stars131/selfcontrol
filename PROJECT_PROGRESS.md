@@ -2555,6 +2555,10 @@ Last updated: 2026-03-27
   - single preset card rendering now lives in `apps/web/components/search-preset-list-item.tsx` instead of remaining inline inside `search-preset-list.tsx`
   - `search-preset-list.tsx` now stays focused on empty-state handling and list iteration while single preset rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this preset-item boundary so future preset-list changes do not regrow a mixed list-and-item rendering module
+- Record Search Panel Actions Extraction V1:
+  - search-panel apply/reset action-row rendering now lives in `apps/web/components/record-search-panel-actions.tsx` instead of remaining inline inside `record-search-panel.tsx`
+  - `record-search-panel.tsx` now stays focused on composing filter fields, action row, summary, and preset controls while action-row rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this search-panel actions boundary so future search-panel changes do not regrow a mixed composition-and-action rendering module
 
 ## Next
 - Continue the next product slice
