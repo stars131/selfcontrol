@@ -20007,8 +20007,13 @@ if (chatKnowledgeCardTypesLines > maxChatKnowledgeCardTypesLines) {
 }
 
 for (const requiredChatNotificationsCardUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/notification-display";',
   'import type { ChatNotificationsCardProps } from "./chat-notifications-card.types";',
   "}: ChatNotificationsCardProps) {",
+  "const { locale } = useStoredLocale();",
+  "const copy = getNotificationCardCopy(locale);",
+  "getNotificationEventLabel(locale, notification.event_type)",
 ]) {
   if (!chatNotificationsCardSource.includes(requiredChatNotificationsCardUsage)) {
     throw new Error(

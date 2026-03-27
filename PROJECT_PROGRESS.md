@@ -2151,6 +2151,10 @@ Last updated: 2026-03-26
   - `chat-message-source-display.ts` now owns localized source-type and fallback labels for chat citations, covering common `record`, `media`, `knowledge`, and `chat` source kinds with safe fallback for future values
   - `chat-message-sources.tsx` now follows the active locale for source badges, default source labels, related-record fallback text, and score prefix instead of mixing raw backend values with hardcoded English placeholders
   - `verify-record-panel-structure.mjs` now enforces the locale-aware citation helper usage so future chat-source UI changes stay maintainable under the enterprise standard
+- Chat Notification Localization V1:
+  - `notification-display.ts` now owns notification card copy and localized labels for common notification events such as `reminder_due`, with safe fallback for future backend event codes
+  - `chat-notifications-card.tsx` now follows the active locale for title, unread summary, event badges, timestamps, empty state, and mark-read action instead of mixing raw event codes with hardcoded English strings
+  - `verify-record-panel-structure.mjs` now enforces the locale-aware notification helper usage so future chat-management UI changes stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice
