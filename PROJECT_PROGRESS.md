@@ -2587,6 +2587,10 @@ Last updated: 2026-03-27
   - dead-letter item error rendering now lives in `apps/web/components/dead-letter-recovery-item-card-error.tsx` instead of remaining inline inside `dead-letter-recovery-item-card.tsx`
   - `dead-letter-recovery-item-card.tsx` now stays focused on composing header, status, actions, and error leaves while single error rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this item-error boundary so future dead-letter item changes do not regrow a mixed card-and-error rendering module
+- Recent Media Issues Panel Intro Extraction V1:
+  - recent-media panel intro rendering now lives in `apps/web/components/recent-media-issues-panel-intro.tsx` instead of remaining inline inside `recent-media-issues-panel.tsx`
+  - `recent-media-issues-panel.tsx` now stays focused on list and empty-state composition while panel intro rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this panel-intro boundary so future recent-media panel changes do not regrow a mixed panel-and-intro rendering module
 
 ## Next
 - Continue the next product slice

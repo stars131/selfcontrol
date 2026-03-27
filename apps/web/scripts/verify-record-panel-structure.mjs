@@ -2444,6 +2444,18 @@ const locationReviewStatusSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-status-summary.types.ts",
 );
+const recentMediaIssuesPanelPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel.tsx",
+);
+const recentMediaIssuesPanelIntroPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-intro.tsx",
+);
+const recentMediaIssuesPanelIntroTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-intro.types.ts",
+);
 const recentMediaIssueCardPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card.tsx",
@@ -3924,6 +3936,12 @@ const locationReviewStatusSummaryTypesSource = fs.readFileSync(
   locationReviewStatusSummaryTypesPath,
   "utf8",
 );
+const recentMediaIssuesPanelSource = fs.readFileSync(recentMediaIssuesPanelPath, "utf8");
+const recentMediaIssuesPanelIntroSource = fs.readFileSync(recentMediaIssuesPanelIntroPath, "utf8");
+const recentMediaIssuesPanelIntroTypesSource = fs.readFileSync(
+  recentMediaIssuesPanelIntroTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardSource = fs.readFileSync(recentMediaIssueCardPath, "utf8");
 const recentMediaIssueCardIntroSource = fs.readFileSync(recentMediaIssueCardIntroPath, "utf8");
 const recentMediaIssueCardIntroTypesSource = fs.readFileSync(
@@ -5269,6 +5287,11 @@ const locationReviewStatusSummaryLines =
   locationReviewStatusSummarySource.split(/\r?\n/).length;
 const locationReviewStatusSummaryTypesLines =
   locationReviewStatusSummaryTypesSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelLines = recentMediaIssuesPanelSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelIntroLines =
+  recentMediaIssuesPanelIntroSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelIntroTypesLines =
+  recentMediaIssuesPanelIntroTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardLines = recentMediaIssueCardSource.split(/\r?\n/).length;
 const recentMediaIssueCardIntroLines = recentMediaIssueCardIntroSource.split(/\r?\n/).length;
 const recentMediaIssueCardIntroTypesLines =
@@ -23284,6 +23307,88 @@ const maxLocationReviewStatusCardTypesLines = 2;
 if (locationReviewStatusCardTypesLines > maxLocationReviewStatusCardTypesLines) {
   throw new Error(
     `location-review-status-card.types.ts exceeded ${maxLocationReviewStatusCardTypesLines} lines: ${locationReviewStatusCardTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelUsage of [
+  'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
+  'import { RecentMediaIssuesPanelIntro } from "./recent-media-issues-panel-intro";',
+  'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
+  "}: RecentMediaIssuesPanelProps) {",
+  "<RecentMediaIssuesPanelIntro mediaIssueCopy={mediaIssueCopy} />",
+  "<RecentMediaIssueCard",
+]) {
+  if (!recentMediaIssuesPanelSource.includes(requiredRecentMediaIssuesPanelUsage)) {
+    throw new Error(
+      `recent-media-issues-panel.tsx must compose the extracted panel-intro leaf: ${requiredRecentMediaIssuesPanelUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssuesPanelToken of [
+  '<div className="eyebrow">{mediaIssueCopy.recentIssuesTitle}</div>',
+  '<div className="muted">{mediaIssueCopy.recentIssuesDescription}</div>',
+]) {
+  if (recentMediaIssuesPanelSource.includes(forbiddenRecentMediaIssuesPanelToken)) {
+    throw new Error(
+      `recent-media-issues-panel.tsx must keep panel-intro rendering delegated: ${forbiddenRecentMediaIssuesPanelToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelLines = 45;
+if (recentMediaIssuesPanelLines > maxRecentMediaIssuesPanelLines) {
+  throw new Error(
+    `recent-media-issues-panel.tsx exceeded ${maxRecentMediaIssuesPanelLines} lines: ${recentMediaIssuesPanelLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelIntroUsage of [
+  'import type { RecentMediaIssuesPanelIntroProps } from "./recent-media-issues-panel-intro.types";',
+  "}: RecentMediaIssuesPanelIntroProps) {",
+  '<div className="eyebrow">{mediaIssueCopy.recentIssuesTitle}</div>',
+  '<div className="muted">{mediaIssueCopy.recentIssuesDescription}</div>',
+]) {
+  if (!recentMediaIssuesPanelIntroSource.includes(requiredRecentMediaIssuesPanelIntroUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-intro.tsx must own panel-intro rendering: ${requiredRecentMediaIssuesPanelIntroUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssuesPanelIntroToken of [
+  "<RecentMediaIssueCard",
+  "mediaProcessingOverview.recent_issues.length",
+  "mediaIssueCopy.noRecentIssues",
+]) {
+  if (recentMediaIssuesPanelIntroSource.includes(forbiddenRecentMediaIssuesPanelIntroToken)) {
+    throw new Error(
+      `recent-media-issues-panel-intro.tsx must keep panel-level list and empty-state concerns delegated: ${forbiddenRecentMediaIssuesPanelIntroToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelIntroLines = 15;
+if (recentMediaIssuesPanelIntroLines > maxRecentMediaIssuesPanelIntroLines) {
+  throw new Error(
+    `recent-media-issues-panel-intro.tsx exceeded ${maxRecentMediaIssuesPanelIntroLines} lines: ${recentMediaIssuesPanelIntroLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelIntroTypesUsage of [
+  'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types"; export type RecentMediaIssuesPanelIntroProps = Pick<RecentMediaIssuesPanelProps, "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssuesPanelIntroTypesSource.includes(requiredRecentMediaIssuesPanelIntroTypesUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-intro.types.ts must own panel-intro prop typing: ${requiredRecentMediaIssuesPanelIntroTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelIntroTypesLines = 2;
+if (recentMediaIssuesPanelIntroTypesLines > maxRecentMediaIssuesPanelIntroTypesLines) {
+  throw new Error(
+    `recent-media-issues-panel-intro.types.ts exceeded ${maxRecentMediaIssuesPanelIntroTypesLines} lines: ${recentMediaIssuesPanelIntroTypesLines}`,
   );
 }
 
