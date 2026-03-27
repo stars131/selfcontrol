@@ -26,7 +26,6 @@ export function DeadLetterRecoveryItemCard({
     <article className="record-card">
       <DeadLetterRecoveryItemCardHeader
         bulkRetryingDeadLetter={bulkRetryingDeadLetter}
-        canWriteWorkspace={canWriteWorkspace}
         item={item}
         locale={locale}
         mediaIssueCopy={mediaIssueCopy}

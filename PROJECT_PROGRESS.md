@@ -276,6 +276,10 @@ Last updated: 2026-03-28
   - dead-letter recovery item headers now delegate media-type and filename rendering to a dedicated identity leaf component
   - the new identity leaf reuses the shared header contract through a narrow typed projection, keeping checkbox orchestration in the header only
   - structure verification now enforces this boundary so future updates do not pull item identity rendering back into the larger header component
+- Dead-Letter Item Selection Extraction V1:
+  - dead-letter recovery item headers now delegate checkbox selection behavior to a dedicated selection leaf component
+  - the header contract no longer carries the unused `canWriteWorkspace` prop, reducing pass-through surface while preserving retry gating behavior
+  - structure verification now enforces the selection boundary so future updates do not reintroduce checkbox logic into the larger header component
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
