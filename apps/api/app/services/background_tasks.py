@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
-from app.services.media_processing import (
+from app.services.media_processing import process_media_asset
+from app.services.media_retry_policy import (
     get_remote_media_retry_policy,
-    process_media_asset,
     reset_media_retry_tracking,
 )
 

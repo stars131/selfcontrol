@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-26
+Last updated: 2026-03-27
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -2347,9 +2347,14 @@ Last updated: 2026-03-26
 - Remote Media Storage Health Boundary Extraction V1:
   - media storage health result typing, capability parsing, and `/media/health` probe logic now live in `apps/api/app/services/media_remote_storage_health.py`, while upload/download/delete webhook transport stays in `apps/api/app/services/media_remote_storage.py`
   - provider-config routes now read remote storage health from the dedicated health module, reducing coupling between observability checks and binary transfer operations
+- Remote Media Retry Policy Boundary Extraction V1:
+  - remote media retry policy loading, retry-state reset, retry scheduling classification, and retry recovery metadata updates now live in `apps/api/app/services/media_retry_policy.py`
+  - `media_processing.py` now keeps the extraction workflow orchestration while `background_tasks.py` depends on the dedicated retry-policy boundary directly, reducing coupling between processing flow control and retry policy rules
+  - dedicated backend unit tests now cover retry scheduling, manual-only classification, recovery-state updates, and workspace override policy parsing for the extracted module
 
 ## Next
 - Continue the next product slice
+- Continue simplifying `apps/api/app/services/media_processing.py` by extracting file-analysis and metadata helpers into thinner enterprise-grade service boundaries
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
