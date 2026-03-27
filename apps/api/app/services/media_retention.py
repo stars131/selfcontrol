@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
-from app.services.media_processing import format_size_label
+from app.services.media_file_analysis import format_size_label
 from app.services.media_storage import (
     get_media_storage_tier,
     is_local_storage_provider,

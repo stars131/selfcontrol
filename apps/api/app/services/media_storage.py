@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
-from app.services.media_processing import format_size_label
+from app.services.media_file_analysis import format_size_label
 
 LOCAL_STORAGE_PROVIDER = "local"
 

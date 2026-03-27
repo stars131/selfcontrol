@@ -2351,10 +2351,14 @@ Last updated: 2026-03-27
   - remote media retry policy loading, retry-state reset, retry scheduling classification, and retry recovery metadata updates now live in `apps/api/app/services/media_retry_policy.py`
   - `media_processing.py` now keeps the extraction workflow orchestration while `background_tasks.py` depends on the dedicated retry-policy boundary directly, reducing coupling between processing flow control and retry policy rules
   - dedicated backend unit tests now cover retry scheduling, manual-only classification, recovery-state updates, and workspace override policy parsing for the extracted module
+- Media File Analysis Boundary Extraction V1:
+  - text-like file detection, best-effort text decoding, extracted-text normalization, image dimension parsing, checksum generation, and file metadata collection now live in `apps/api/app/services/media_file_analysis.py`
+  - `media_processing.py` now focuses more narrowly on processing orchestration, while `media_storage.py` and `media_retention.py` reuse the shared file-analysis size-label helper through the new boundary
+  - dedicated backend unit tests now cover text-media detection, JSON text normalization, and image metadata extraction for the extracted module
 
 ## Next
 - Continue the next product slice
-- Continue simplifying `apps/api/app/services/media_processing.py` by extracting file-analysis and metadata helpers into thinner enterprise-grade service boundaries
+- Continue simplifying `apps/api/app/services/media_processing.py` by extracting processing outcome/state transition helpers into thinner enterprise-grade service boundaries
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
