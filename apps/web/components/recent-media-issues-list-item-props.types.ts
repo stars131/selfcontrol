@@ -1,0 +1,1 @@
+import type { MediaProcessingIssue } from "../lib/types"; import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types"; export type BuildRecentMediaIssueCardPropsInput = { issue: MediaProcessingIssue; props: RecentMediaIssuesPanelListProps };
