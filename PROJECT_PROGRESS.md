@@ -2747,6 +2747,10 @@ Last updated: 2026-03-28
   - media-asset metadata extraction-mode tag rendering now lives in `apps/web/components/media-asset-card-extraction-mode-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while extraction-mode rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this extraction-mode-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-extraction-mode rendering module
+- Recent Media Processing Source Tag Extraction V1:
+  - recent-media issue processing-source tag rendering now lives in `apps/web/components/recent-media-issue-card-processing-source-tag.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
+  - `apps/web/components/recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while processing-source rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this processing-source-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-processing-source rendering module
 
 ## Next
 - Continue the next product slice

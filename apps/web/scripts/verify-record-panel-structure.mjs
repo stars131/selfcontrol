@@ -2704,6 +2704,14 @@ const recentMediaIssueCardIssueLabelTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-issue-label-tag.types.ts",
 );
+const recentMediaIssueCardProcessingSourceTagPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-processing-source-tag.tsx",
+);
+const recentMediaIssueCardProcessingSourceTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-processing-source-tag.types.ts",
+);
 const recentMediaIssueCardRetryCountTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-retry-count-tag.types.ts",
@@ -4472,6 +4480,14 @@ const recentMediaIssueCardIssueLabelTagTypesSource = fs.readFileSync(
   recentMediaIssueCardIssueLabelTagTypesPath,
   "utf8",
 );
+const recentMediaIssueCardProcessingSourceTagSource = fs.readFileSync(
+  recentMediaIssueCardProcessingSourceTagPath,
+  "utf8",
+);
+const recentMediaIssueCardProcessingSourceTagTypesSource = fs.readFileSync(
+  recentMediaIssueCardProcessingSourceTagTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardRetryCountTagTypesSource = fs.readFileSync(
   recentMediaIssueCardRetryCountTagTypesPath,
   "utf8",
@@ -6013,6 +6029,10 @@ const recentMediaIssueCardIssueLabelTagLines =
   recentMediaIssueCardIssueLabelTagSource.split(/\r?\n/).length;
 const recentMediaIssueCardIssueLabelTagTypesLines =
   recentMediaIssueCardIssueLabelTagTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardProcessingSourceTagLines =
+  recentMediaIssueCardProcessingSourceTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardProcessingSourceTagTypesLines =
+  recentMediaIssueCardProcessingSourceTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardRetryCountTagTypesLines =
   recentMediaIssueCardRetryCountTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLines =
@@ -25629,6 +25649,7 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 for (const requiredRecentMediaIssueCardTagsUsage of [
   'from "../lib/storage-provider-display";',
   'import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";',
+  'import { RecentMediaIssueCardProcessingSourceTag } from "./recent-media-issue-card-processing-source-tag";',
   'import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";',
   'import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";',
   'import { RecentMediaIssueCardRetryStateTag } from "./recent-media-issue-card-retry-state-tag";',
@@ -25636,6 +25657,7 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   "}: RecentMediaIssueCardTagsProps) {",
   "getStorageProviderLabel(locale, issue.storage_provider)",
   "<RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />",
+  "<RecentMediaIssueCardProcessingSourceTag issue={issue} />",
   "<RecentMediaIssueCardRemoteFetchTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCardRetryStateTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCardRetryCountTag issue={issue} mediaIssueCopy={mediaIssueCopy} />",
@@ -25660,6 +25682,7 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, issue.processing_retry_state)}",
   "{mediaIssueCopy.retries} {issue.processing_retry_count}",
   "`/${issue.processing_retry_max_attempts}`",
+  "{issue.processing_source}",
 ]) {
   if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
     throw new Error(
@@ -25848,6 +25871,60 @@ const maxRecentMediaIssueCardIssueLabelTagTypesLines = 2;
 if (recentMediaIssueCardIssueLabelTagTypesLines > maxRecentMediaIssueCardIssueLabelTagTypesLines) {
   throw new Error(
     `recent-media-issue-card-issue-label-tag.types.ts exceeded ${maxRecentMediaIssueCardIssueLabelTagTypesLines} lines: ${recentMediaIssueCardIssueLabelTagTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardProcessingSourceTagUsage of [
+  'import type { RecentMediaIssueCardProcessingSourceTagProps } from "./recent-media-issue-card-processing-source-tag.types";',
+  "}: RecentMediaIssueCardProcessingSourceTagProps) {",
+  "{issue.processing_source}",
+]) {
+  if (!recentMediaIssueCardProcessingSourceTagSource.includes(requiredRecentMediaIssueCardProcessingSourceTagUsage)) {
+    throw new Error(
+      `recent-media-issue-card-processing-source-tag.tsx must own processing-source tag rendering: ${requiredRecentMediaIssueCardProcessingSourceTagUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardProcessingSourceTagSource.includes("type RecentMediaIssueCardProcessingSourceTagProps =")) {
+  throw new Error(
+    "recent-media-issue-card-processing-source-tag.tsx must keep processing-source tag prop typing delegated",
+  );
+}
+
+for (const forbiddenRecentMediaIssueCardProcessingSourceTagToken of [
+  "getStorageProviderLabel(locale, issue.storage_provider)",
+  "getRemoteFetchStatusLabel(locale, issue.remote_fetch_status)",
+  "getRetryStateLabel(locale, issue.processing_retry_state)",
+]) {
+  if (recentMediaIssueCardProcessingSourceTagSource.includes(forbiddenRecentMediaIssueCardProcessingSourceTagToken)) {
+    throw new Error(
+      `recent-media-issue-card-processing-source-tag.tsx must keep other tag concerns delegated: ${forbiddenRecentMediaIssueCardProcessingSourceTagToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardProcessingSourceTagLines = 6;
+if (recentMediaIssueCardProcessingSourceTagLines > maxRecentMediaIssueCardProcessingSourceTagLines) {
+  throw new Error(
+    `recent-media-issue-card-processing-source-tag.tsx exceeded ${maxRecentMediaIssueCardProcessingSourceTagLines} lines: ${recentMediaIssueCardProcessingSourceTagLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardProcessingSourceTagTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type RecentMediaIssueCardProcessingSourceTagProps = Pick<RecentMediaIssueCardTagsProps, "issue">;',
+]) {
+  if (!recentMediaIssueCardProcessingSourceTagTypesSource.includes(requiredRecentMediaIssueCardProcessingSourceTagTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-processing-source-tag.types.ts must own processing-source tag prop typing: ${requiredRecentMediaIssueCardProcessingSourceTagTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardProcessingSourceTagTypesLines = 2;
+if (recentMediaIssueCardProcessingSourceTagTypesLines > maxRecentMediaIssueCardProcessingSourceTagTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-processing-source-tag.types.ts exceeded ${maxRecentMediaIssueCardProcessingSourceTagTypesLines} lines: ${recentMediaIssueCardProcessingSourceTagTypesLines}`,
   );
 }
 
