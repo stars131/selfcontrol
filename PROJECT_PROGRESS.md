@@ -2391,12 +2391,17 @@ Last updated: 2026-03-27
   - media-provider deferred error and extraction result types now live in `apps/api/app/services/media_provider_types.py`, while OpenAI-compatible OCR/ASR requests, custom-webhook extraction requests, and chat-content serialization now live in `apps/api/app/services/media_provider_http.py`
   - `media_provider.py` now focuses more narrowly on media-feature routing and video/audio preprocessing while the raw HTTP extraction implementations stay centralized behind a dedicated boundary
   - dedicated backend unit tests now cover OpenAI-compatible image parsing, OpenAI-compatible audio parsing, custom-webhook metadata merging, and chat-content serialization for the extracted media-provider HTTP boundary
+- Media Provider Video Boundary Extraction V1:
+  - ffmpeg-based video-to-audio extraction and OpenAI-compatible video transcription temp-file orchestration now live in `apps/api/app/services/media_provider_video.py`
+  - `media_provider.py` now delegates video preprocessing and temp-audio cleanup to the dedicated video helper boundary while preserving compatibility exports for downstream services
+  - dedicated backend unit tests now cover missing-ffmpeg failure behavior, successful temp-audio extraction, and guaranteed cleanup after OpenAI-compatible video transcription for the extracted video boundary
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining large backend service files outside `media_processing.py`, with `knowledge.py` and `media_provider.py` as the next highest-value maintainability targets
 - Continue simplifying the remaining large backend service files with `media_provider.py` now the highest-value maintainability target, especially the openai-compatible and custom-webhook extraction branches
 - Continue simplifying `media_provider.py` by extracting video-audio preprocessing and feature-route dispatch into thinner enterprise-grade service boundaries
+- Continue simplifying `media_provider.py` by extracting media feature-route dispatch into a dedicated provider pipeline boundary
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
