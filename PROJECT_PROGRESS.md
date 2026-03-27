@@ -2251,6 +2251,9 @@ Last updated: 2026-03-26
 - Error Helper Guardrail Alignment V1:
   - record delete, legacy record-panel, and workspace settings error helper leaves now also reuse the shared error resolver, completing the client-side request fallback normalization path
   - record-panel and workspace-settings verifier rules now enforce the shared resolver contract directly, so enterprise structural checks stay aligned with the maintainability standard instead of locking in duplicated legacy fallback code
+- Chat Display Copy Encoding Repair V1:
+  - audit-log display labels and chat message source labels now use repaired Chinese and Japanese text instead of mojibake, restoring readable multilingual UI output in chat management and source attribution surfaces
+  - the fix stays inside shared display helpers so future enterprise localization maintenance only needs to update one source of truth per surface
 
 ## Next
 - Continue the next product slice
