@@ -2432,6 +2432,14 @@ const locationReviewStatusSummaryPath = path.resolve(
   process.cwd(),
   "components/location-review-status-summary.tsx",
 );
+const locationReviewStatusCardPath = path.resolve(
+  process.cwd(),
+  "components/location-review-status-card.tsx",
+);
+const locationReviewStatusCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-status-card.types.ts",
+);
 const locationReviewStatusSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-status-summary.types.ts",
@@ -3899,6 +3907,11 @@ const locationReviewStatusSummarySource = fs.readFileSync(
   locationReviewStatusSummaryPath,
   "utf8",
 );
+const locationReviewStatusCardSource = fs.readFileSync(locationReviewStatusCardPath, "utf8");
+const locationReviewStatusCardTypesSource = fs.readFileSync(
+  locationReviewStatusCardTypesPath,
+  "utf8",
+);
 const locationReviewStatusSummaryTypesSource = fs.readFileSync(
   locationReviewStatusSummaryTypesPath,
   "utf8",
@@ -5233,6 +5246,11 @@ const locationReviewHistoryItemTypesLines =
   locationReviewHistoryItemTypesSource.split(/\r?\n/).length;
 const locationReviewHistoryListTypesLines =
   locationReviewHistoryListTypesSource.split(/\r?\n/).length;
+const locationReviewStatusCardLines = locationReviewStatusCardSource.split(/\r?\n/).length;
+const locationReviewStatusCardTypesLines =
+  locationReviewStatusCardTypesSource.split(/\r?\n/).length;
+const locationReviewStatusSummaryLines =
+  locationReviewStatusSummarySource.split(/\r?\n/).length;
 const locationReviewStatusSummaryTypesLines =
   locationReviewStatusSummaryTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardLines = recentMediaIssueCardSource.split(/\r?\n/).length;
@@ -23146,8 +23164,12 @@ if (locationReviewHistoryItemTypesLines > maxLocationReviewHistoryItemTypesLines
 }
 
 for (const requiredLocationReviewStatusSummaryUsage of [
+  'import { LocationReviewStatusCard } from "./location-review-status-card";',
   'import type { LocationReviewStatusSummaryProps } from "./location-review-status-summary.types";',
   "}: LocationReviewStatusSummaryProps) {",
+  "<LocationReviewStatusCard",
+  "label={panelCopy.storedStatus}",
+  "label={panelCopy.confirmedAt}",
 ]) {
   if (!locationReviewStatusSummarySource.includes(requiredLocationReviewStatusSummaryUsage)) {
     throw new Error(
@@ -23158,6 +23180,25 @@ for (const requiredLocationReviewStatusSummaryUsage of [
 
 if (locationReviewStatusSummarySource.includes("type LocationReviewStatusSummaryProps = Pick<")) {
   throw new Error("location-review-status-summary.tsx must keep location-status prop typing delegated");
+}
+
+for (const forbiddenLocationReviewStatusSummaryToken of [
+  '<div className="subtle-card">',
+  '<div className="eyebrow">{panelCopy.storedStatus}</div>',
+  '<div className="eyebrow">{panelCopy.confirmedAt}</div>',
+]) {
+  if (locationReviewStatusSummarySource.includes(forbiddenLocationReviewStatusSummaryToken)) {
+    throw new Error(
+      `location-review-status-summary.tsx must keep status-card rendering delegated: ${forbiddenLocationReviewStatusSummaryToken}`,
+    );
+  }
+}
+
+const maxLocationReviewStatusSummaryLines = 40;
+if (locationReviewStatusSummaryLines > maxLocationReviewStatusSummaryLines) {
+  throw new Error(
+    `location-review-status-summary.tsx exceeded ${maxLocationReviewStatusSummaryLines} lines: ${locationReviewStatusSummaryLines}`,
+  );
 }
 
 for (const requiredLocationReviewStatusSummaryTypesUsage of [
@@ -23174,6 +23215,55 @@ const maxLocationReviewStatusSummaryTypesLines = 2;
 if (locationReviewStatusSummaryTypesLines > maxLocationReviewStatusSummaryTypesLines) {
   throw new Error(
     `location-review-status-summary.types.ts exceeded ${maxLocationReviewStatusSummaryTypesLines} lines: ${locationReviewStatusSummaryTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewStatusCardUsage of [
+  'import type { LocationReviewStatusCardProps } from "./location-review-status-card.types";',
+  "}: LocationReviewStatusCardProps) {",
+  '<div className="subtle-card">',
+  '<div className="eyebrow">{label}</div>',
+]) {
+  if (!locationReviewStatusCardSource.includes(requiredLocationReviewStatusCardUsage)) {
+    throw new Error(
+      `location-review-status-card.tsx must own single status-card rendering: ${requiredLocationReviewStatusCardUsage}`,
+    );
+  }
+}
+
+for (const forbiddenLocationReviewStatusCardToken of [
+  "selectedLocationReview.confirmed_at",
+  "formatHistoryTimestampLabel(",
+  "formatReviewStatusLabel(",
+]) {
+  if (locationReviewStatusCardSource.includes(forbiddenLocationReviewStatusCardToken)) {
+    throw new Error(
+      `location-review-status-card.tsx must keep summary-level formatting delegated: ${forbiddenLocationReviewStatusCardToken}`,
+    );
+  }
+}
+
+const maxLocationReviewStatusCardLines = 15;
+if (locationReviewStatusCardLines > maxLocationReviewStatusCardLines) {
+  throw new Error(
+    `location-review-status-card.tsx exceeded ${maxLocationReviewStatusCardLines} lines: ${locationReviewStatusCardLines}`,
+  );
+}
+
+for (const requiredLocationReviewStatusCardTypesUsage of [
+  'export type LocationReviewStatusCardProps = { label: string; value: string };',
+]) {
+  if (!locationReviewStatusCardTypesSource.includes(requiredLocationReviewStatusCardTypesUsage)) {
+    throw new Error(
+      `location-review-status-card.types.ts must own single status-card prop typing: ${requiredLocationReviewStatusCardTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewStatusCardTypesLines = 2;
+if (locationReviewStatusCardTypesLines > maxLocationReviewStatusCardTypesLines) {
+  throw new Error(
+    `location-review-status-card.types.ts exceeded ${maxLocationReviewStatusCardTypesLines} lines: ${locationReviewStatusCardTypesLines}`,
   );
 }
 

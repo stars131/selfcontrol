@@ -1,5 +1,6 @@
 "use client";
 
+import { LocationReviewStatusCard } from "./location-review-status-card";
 import type { LocationReviewStatusSummaryProps } from "./location-review-status-summary.types";
 
 export function LocationReviewStatusSummary({
@@ -14,26 +15,22 @@ export function LocationReviewStatusSummary({
 
   return (
     <div className="detail-grid">
-      <div className="subtle-card">
-        <div className="eyebrow">{panelCopy.storedStatus}</div>
-        <div style={{ marginTop: 8, fontWeight: 600 }}>
-          {formatReviewStatusLabel(selectedLocationReview.status)}
-        </div>
-      </div>
-      <div className="subtle-card">
-        <div className="eyebrow">{panelCopy.lastUpdated}</div>
-        <div style={{ marginTop: 8, fontWeight: 600 }}>
-          {formatHistoryTimestampLabel(selectedLocationReview.updated_at)}
-        </div>
-      </div>
-      <div className="subtle-card">
-        <div className="eyebrow">{panelCopy.confirmedAt}</div>
-        <div style={{ marginTop: 8, fontWeight: 600 }}>
-          {selectedLocationReview.confirmed_at
+      <LocationReviewStatusCard
+        label={panelCopy.storedStatus}
+        value={formatReviewStatusLabel(selectedLocationReview.status)}
+      />
+      <LocationReviewStatusCard
+        label={panelCopy.lastUpdated}
+        value={formatHistoryTimestampLabel(selectedLocationReview.updated_at)}
+      />
+      <LocationReviewStatusCard
+        label={panelCopy.confirmedAt}
+        value={
+          selectedLocationReview.confirmed_at
             ? formatHistoryTimestampLabel(selectedLocationReview.confirmed_at)
-            : panelCopy.notConfirmed}
-        </div>
-      </div>
+            : panelCopy.notConfirmed
+        }
+      />
     </div>
   );
 }

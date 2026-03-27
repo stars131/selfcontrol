@@ -2579,6 +2579,10 @@ Last updated: 2026-03-27
   - single location-history entry rendering now lives in `apps/web/components/location-review-history-item.tsx` instead of remaining inline inside `location-review-history-list.tsx`
   - `location-review-history-list.tsx` now stays focused on empty-state handling and history iteration while single entry rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this history-item boundary so future location-history changes do not regrow a mixed list-and-item rendering module
+- Location Review Status Card Extraction V1:
+  - single location-status card rendering now lives in `apps/web/components/location-review-status-card.tsx` instead of remaining inline inside `location-review-status-summary.tsx`
+  - `location-review-status-summary.tsx` now stays focused on summary-level composition while single status-card rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this status-card boundary so future location-status changes do not regrow a mixed summary-and-card rendering module
 
 ## Next
 - Continue the next product slice
