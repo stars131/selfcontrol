@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
-
-import { canRetryMediaIssue } from "../lib/record-panel-media";
+import { RecentMediaIssueCardActionButtons } from "./recent-media-issue-card-action-buttons";
 import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";
 
 export function RecentMediaIssueCardActions({
@@ -13,29 +11,9 @@ export function RecentMediaIssueCardActions({
   retryingMediaId,
   settingsHref,
 }: RecentMediaIssueCardActionsProps) {
-  const retrying = retryingMediaId === issue.media_id;
-
   if (!canWriteWorkspace && !settingsHref) {
     return null;
   }
 
-  return (
-    <div className="action-row" style={{ marginTop: 10 }}>
-      {canWriteWorkspace && canRetryMediaIssue(issue) ? (
-        <button
-          className="button secondary"
-          disabled={retrying}
-          type="button"
-          onClick={() => void onRetryMediaProcessing(issue.media_id)}
-        >
-          {retrying ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
-        </button>
-      ) : null}
-      {settingsHref ? (
-        <Link className="button secondary" href={settingsHref}>
-          {mediaIssueCopy.openSettings}
-        </Link>
-      ) : null}
-    </div>
-  );
+  return <RecentMediaIssueCardActionButtons canWriteWorkspace={canWriteWorkspace} issue={issue} mediaIssueCopy={mediaIssueCopy} onRetryMediaProcessing={onRetryMediaProcessing} retryingMediaId={retryingMediaId} settingsHref={settingsHref} />;
 }

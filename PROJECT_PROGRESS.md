@@ -2615,6 +2615,10 @@ Last updated: 2026-03-27
   - location-review status select and note field rendering now live in `apps/web/components/location-review-status-select.tsx` and `apps/web/components/location-review-note-field.tsx` instead of remaining inline inside `location-review-form-fields.tsx`
   - `location-review-form-fields.tsx` now stays focused on form-field composition while individual field rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces these review-field boundaries so future location-review form changes do not regrow a mixed composition-and-field rendering module
+- Recent Media Issue Action Buttons Extraction V1:
+  - recent-media issue action-button rendering now lives in `apps/web/components/recent-media-issue-card-action-buttons.tsx` instead of remaining inline inside `recent-media-issue-card-actions.tsx`
+  - `recent-media-issue-card-actions.tsx` now stays focused on visibility gating while action-button rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this recent-media action-buttons boundary so future card-action changes do not regrow a mixed gating-and-button rendering module
 
 ## Next
 - Continue the next product slice
