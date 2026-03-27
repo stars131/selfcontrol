@@ -2363,10 +2363,14 @@ Last updated: 2026-03-27
   - text-direct extraction payload shaping, provider-deferred placeholder payload shaping, provider-completed metadata shaping, and the shared commit-refresh-reindex finalize sequence now live in `apps/api/app/services/media_processing_outcomes.py`
   - `media_processing.py` now acts more narrowly as the media workflow coordinator while outcome assembly and post-commit knowledge refresh behavior stay centralized behind the new helper boundary
   - dedicated backend unit tests now cover text-direct payload assembly, deferred placeholder shaping, provider metadata merging, and finalize-sequence ordering for the extracted outcome boundary
+- Media Processing File I/O Boundary Extraction V1:
+  - local-versus-remote processing file acquisition, remote fetch success marking, missing-file rejection, and temp-file cleanup now live in `apps/api/app/services/media_processing_io.py`
+  - `media_processing.py` now delegates file-handle lifecycle orchestration to the dedicated I/O helper boundary while preserving existing media-processing monkeypatch entrypoints for compatibility
+  - dedicated backend unit tests now cover local acquisition, remote download acquisition, missing-file failures, and remote temp-file cleanup behavior for the extracted I/O boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying `apps/api/app/services/media_processing.py` by extracting local-vs-remote file acquisition and temp-file cleanup orchestration into thinner enterprise-grade service boundaries
+- Continue simplifying `apps/api/app/services/media_processing.py` by extracting the remaining happy-path versus failure-path workflow branching into thinner enterprise-grade service boundaries
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

@@ -6,6 +6,10 @@ from app.core.config import settings
 from app.models.media import MediaAsset
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.media_file_analysis import collect_media_metadata, is_text_like_media
+from app.services.media_processing_io import (
+    acquire_media_processing_file,
+    cleanup_media_processing_file,
+)
 from app.services.media_processing_outcomes import (
     build_provider_completed_processing_payload,
     build_provider_deferred_processing_payload,
@@ -36,16 +40,16 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
     db.commit()
     db.refresh(media)
 
+    file_handle = None
     try:
-        cleanup_temp_file = False
-        if media.storage_provider == "local":
-            file_path = resolve_storage_path(media)
-        else:
-            file_path = download_remote_media_to_temp_file(db, media)
-            cleanup_temp_file = True
-            mark_media_remote_fetch_downloaded(media)
-        if not file_path.exists():
-            raise FileNotFoundError(f"Stored file not found: {file_path}")
+        file_handle = acquire_media_processing_file(
+            db,
+            media,
+            resolve_storage_path_fn=resolve_storage_path,
+            download_remote_media_to_temp_file_fn=download_remote_media_to_temp_file,
+            mark_media_remote_fetch_downloaded_fn=mark_media_remote_fetch_downloaded,
+        )
+        file_path = file_handle.file_path
 
         if is_text_like_media(media):
             media.extracted_text, metadata = build_text_direct_processing_payload(media, file_path)
@@ -86,8 +90,4 @@ def process_media_asset(db: Session, media_id: str) -> MediaAsset:
             rebuild_record_knowledge_fn=rebuild_record_knowledge,
         )
     finally:
-        if "cleanup_temp_file" in locals() and cleanup_temp_file and "file_path" in locals():
-            try:
-                file_path.unlink(missing_ok=True)
-            except OSError:
-                pass
+        cleanup_media_processing_file(file_handle)
