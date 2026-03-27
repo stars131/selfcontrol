@@ -304,6 +304,10 @@ Last updated: 2026-03-28
   - recent-media issue cards now delegate metadata and action child-prop assembly to a dedicated builder module
   - single-card rendering is reduced to layout composition, so future derived-action and settings-link changes can be updated in one place instead of inside the card component
   - structure verification now enforces this projection boundary to keep child prop assembly separate from card rendering
+- Recent-Media Metadata Details Extraction V1:
+  - recent-media metadata blocks now delegate attempt, failure, and next-retry lines to a dedicated metadata-details leaf
+  - the metadata component now keeps only detail-plus-action-notice composition responsibilities, reducing future review scope for timestamp display changes
+  - structure verification now enforces this boundary so timestamp detail rendering stays out of the higher-level metadata component
 - Dead-Letter Card Child Prop Builder Extraction V1:
   - dead-letter item cards now delegate header, status, and action child-prop assembly to a dedicated builder module
   - single-card rendering is reduced to layout composition, so future settings-link and child-contract changes can be updated in one place instead of inside the card component

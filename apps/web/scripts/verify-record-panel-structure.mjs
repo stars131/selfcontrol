@@ -2592,6 +2592,14 @@ const recentMediaIssueCardActionNoticeTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-action-notice.types.ts",
 );
+const recentMediaIssueCardMetadataDetailsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata-details.tsx",
+);
+const recentMediaIssueCardMetadataDetailsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata-details.types.ts",
+);
 const recentMediaIssueCardMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-metadata.types.ts",
@@ -4262,6 +4270,14 @@ const recentMediaIssueCardActionNoticeTypesSource = fs.readFileSync(
   recentMediaIssueCardActionNoticeTypesPath,
   "utf8",
 );
+const recentMediaIssueCardMetadataDetailsSource = fs.readFileSync(
+  recentMediaIssueCardMetadataDetailsPath,
+  "utf8",
+);
+const recentMediaIssueCardMetadataDetailsTypesSource = fs.readFileSync(
+  recentMediaIssueCardMetadataDetailsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardMetadataTypesSource = fs.readFileSync(
   recentMediaIssueCardMetadataTypesPath,
   "utf8",
@@ -5755,6 +5771,10 @@ const recentMediaIssueCardActionNoticeLines =
   recentMediaIssueCardActionNoticeSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionNoticeTypesLines =
   recentMediaIssueCardActionNoticeTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataDetailsLines =
+  recentMediaIssueCardMetadataDetailsSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataDetailsTypesLines =
+  recentMediaIssueCardMetadataDetailsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataTypesLines =
   recentMediaIssueCardMetadataTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionButtonsLines =
@@ -24778,12 +24798,11 @@ if (recentMediaIssueCardErrorTypesLines > maxRecentMediaIssueCardErrorTypesLines
 }
 
 for (const requiredRecentMediaIssueCardMetadataUsage of [
+  'import { RecentMediaIssueCardMetadataDetails } from "./recent-media-issue-card-metadata-details";',
   'import { RecentMediaIssueCardActionNotice } from "./recent-media-issue-card-action-notice";',
   'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";',
   "}: RecentMediaIssueCardMetadataProps) {",
-  '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
-  '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
-  '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
+  "<RecentMediaIssueCardMetadataDetails",
   "<RecentMediaIssueCardActionNotice action={action} />",
 ]) {
   if (!recentMediaIssueCardMetadataSource.includes(requiredRecentMediaIssueCardMetadataUsage)) {
@@ -24798,17 +24817,20 @@ if (recentMediaIssueCardMetadataSource.includes("type RecentMediaIssueCardMetada
 }
 
 for (const forbiddenRecentMediaIssueCardMetadataToken of [
+  '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
+  '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
+  '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
   '{action.label}{action.detail ? `: ${action.detail}` : ""}',
   '<div className="notice" style={{ marginTop: 10 }}>',
 ]) {
   if (recentMediaIssueCardMetadataSource.includes(forbiddenRecentMediaIssueCardMetadataToken)) {
     throw new Error(
-      `recent-media-issue-card-metadata.tsx must keep action-notice rendering delegated: ${forbiddenRecentMediaIssueCardMetadataToken}`,
+      `recent-media-issue-card-metadata.tsx must keep metadata-detail and action-notice rendering delegated: ${forbiddenRecentMediaIssueCardMetadataToken}`,
     );
   }
 }
 
-const maxRecentMediaIssueCardMetadataLines = 10;
+const maxRecentMediaIssueCardMetadataLines = 8;
 if (recentMediaIssueCardMetadataLines > maxRecentMediaIssueCardMetadataLines) {
   throw new Error(
     `recent-media-issue-card-metadata.tsx exceeded ${maxRecentMediaIssueCardMetadataLines} lines: ${recentMediaIssueCardMetadataLines}`,
@@ -24829,6 +24851,62 @@ const maxRecentMediaIssueCardMetadataTypesLines = 2;
 if (recentMediaIssueCardMetadataTypesLines > maxRecentMediaIssueCardMetadataTypesLines) {
   throw new Error(
     `recent-media-issue-card-metadata.types.ts exceeded ${maxRecentMediaIssueCardMetadataTypesLines} lines: ${recentMediaIssueCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataDetailsUsage of [
+  'import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types";',
+  "}: RecentMediaIssueCardMetadataDetailsProps) {",
+  '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
+  '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
+  '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
+]) {
+  if (!recentMediaIssueCardMetadataDetailsSource.includes(requiredRecentMediaIssueCardMetadataDetailsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details.tsx must own metadata-detail rendering: ${requiredRecentMediaIssueCardMetadataDetailsUsage}`,
+    );
+  }
+}
+
+if (recentMediaIssueCardMetadataDetailsSource.includes("type RecentMediaIssueCardMetadataDetailsProps =")) {
+  throw new Error(
+    "recent-media-issue-card-metadata-details.tsx must keep metadata-detail prop typing delegated",
+  );
+}
+
+for (const forbiddenRecentMediaIssueCardMetadataDetailsToken of [
+  "<RecentMediaIssueCardActionNotice",
+  '{action.label}{action.detail ? `: ${action.detail}` : ""}',
+  "action.label ? (",
+]) {
+  if (recentMediaIssueCardMetadataDetailsSource.includes(forbiddenRecentMediaIssueCardMetadataDetailsToken)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details.tsx must keep action-notice concerns delegated: ${forbiddenRecentMediaIssueCardMetadataDetailsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataDetailsLines = 8;
+if (recentMediaIssueCardMetadataDetailsLines > maxRecentMediaIssueCardMetadataDetailsLines) {
+  throw new Error(
+    `recent-media-issue-card-metadata-details.tsx exceeded ${maxRecentMediaIssueCardMetadataDetailsLines} lines: ${recentMediaIssueCardMetadataDetailsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataDetailsTypesUsage of [
+  'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types"; export type RecentMediaIssueCardMetadataDetailsProps = Pick<RecentMediaIssueCardMetadataProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssueCardMetadataDetailsTypesSource.includes(requiredRecentMediaIssueCardMetadataDetailsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details.types.ts must own metadata-detail prop typing: ${requiredRecentMediaIssueCardMetadataDetailsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataDetailsTypesLines = 2;
+if (recentMediaIssueCardMetadataDetailsTypesLines > maxRecentMediaIssueCardMetadataDetailsTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-metadata-details.types.ts exceeded ${maxRecentMediaIssueCardMetadataDetailsTypesLines} lines: ${recentMediaIssueCardMetadataDetailsTypesLines}`,
   );
 }
 
