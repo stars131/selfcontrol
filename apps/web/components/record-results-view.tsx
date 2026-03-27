@@ -1,26 +1,13 @@
 "use client";
 
+import { buildRecordResultsSharedCardProps } from "./record-results-shared-card-props";
 import { RecordResultsListView } from "./record-results-list-view";
 import { RecordResultsTimelineView } from "./record-results-timeline-view";
 import { RecordResultsViewSwitcher } from "./record-results-view-switcher";
 import type { RecordResultsViewProps } from "./record-results-view.types";
 
 export function RecordResultsView(props: RecordResultsViewProps) {
-  const sharedCardProps = {
-    selectedRecordId: props.selectedRecordId,
-    avoidLabel: props.avoidLabel,
-    mapPrefixLabel: props.mapPrefixLabel,
-    noContentLabel: props.noContentLabel,
-    ratingPrefixLabel: props.ratingPrefixLabel,
-    unknownPlaceLabel: props.unknownPlaceLabel,
-    untitledRecordLabel: props.untitledRecordLabel,
-    formatRecordSourceLabel: props.formatRecordSourceLabel,
-    formatRecordStatusLabel: props.formatRecordStatusLabel,
-    formatRecordTimestampLabel: props.formatRecordTimestampLabel,
-    formatRecordTypeLabel: props.formatRecordTypeLabel,
-    formatReviewStatusLabel: props.formatReviewStatusLabel,
-    onSelectRecord: props.onSelectRecord,
-  };
+  const sharedCardProps = buildRecordResultsSharedCardProps(props);
 
   return (
     <>

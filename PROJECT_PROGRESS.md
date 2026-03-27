@@ -2523,6 +2523,10 @@ Last updated: 2026-03-27
   - record save submission execution now lives in `apps/web/components/record-panel-controller-record-save-submit-runner.ts`, and reminder submission execution now lives in `apps/web/components/record-panel-controller-reminder-submit-runner.ts`
   - the two submit-action entrypoints now stay focused on trigger handling, payload resolution, and early validation while async state transitions and success/error finalization remain centralized in dedicated runners
   - the record-panel structure guardrail now enforces this submit-runner boundary so future save and reminder workflow changes do not regrow mixed validation-plus-execution action modules
+- Record Results Shared Card Prop Builder Extraction V1:
+  - shared record-summary card prop projection now lives in `apps/web/components/record-results-shared-card-props.ts` instead of remaining inline inside `record-results-view.tsx`
+  - `record-results-view.tsx` now stays focused on list-versus-timeline mode switching while shared card prop shaping remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this shared-card prop builder boundary so future result-surface changes do not regrow a mixed projection-and-rendering view module
 
 ## Next
 - Continue the next product slice

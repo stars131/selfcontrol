@@ -2279,6 +2279,15 @@ const recordResultsViewSwitcherTypesPath = path.resolve(
   process.cwd(),
   "components/record-results-view-switcher.types.ts",
 );
+const recordResultsViewPath = path.resolve(process.cwd(), "components/record-results-view.tsx");
+const recordResultsSharedCardPropsPath = path.resolve(
+  process.cwd(),
+  "components/record-results-shared-card-props.ts",
+);
+const recordResultsSharedCardPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-results-shared-card-props.types.ts",
+);
 const searchPresetListPath = path.resolve(process.cwd(), "components/search-preset-list.tsx");
 const searchPresetListTypesPath = path.resolve(
   process.cwd(),
@@ -3684,6 +3693,15 @@ const recordResultsViewSwitcherTypesSource = fs.readFileSync(
   recordResultsViewSwitcherTypesPath,
   "utf8",
 );
+const recordResultsViewSource = fs.readFileSync(recordResultsViewPath, "utf8");
+const recordResultsSharedCardPropsSource = fs.readFileSync(
+  recordResultsSharedCardPropsPath,
+  "utf8",
+);
+const recordResultsSharedCardPropsTypesSource = fs.readFileSync(
+  recordResultsSharedCardPropsTypesPath,
+  "utf8",
+);
 const searchPresetListSource = fs.readFileSync(searchPresetListPath, "utf8");
 const searchPresetListTypesSource = fs.readFileSync(searchPresetListTypesPath, "utf8");
 const recordPanelStatsSource = fs.readFileSync(recordPanelStatsPath, "utf8");
@@ -5082,6 +5100,11 @@ const mediaStorageHealthHeaderTypesLines =
 const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
+const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
+const recordResultsSharedCardPropsLines =
+  recordResultsSharedCardPropsSource.split(/\r?\n/).length;
+const recordResultsSharedCardPropsTypesLines =
+  recordResultsSharedCardPropsTypesSource.split(/\r?\n/).length;
 const recordResultsListViewTypesLines =
   recordResultsListViewTypesSource.split(/\r?\n/).length;
 const recordResultsTimelineViewTypesLines =
@@ -21727,6 +21750,99 @@ const maxRecordResultsViewSwitcherTypesLines = 2;
 if (recordResultsViewSwitcherTypesLines > maxRecordResultsViewSwitcherTypesLines) {
   throw new Error(
     `record-results-view-switcher.types.ts exceeded ${maxRecordResultsViewSwitcherTypesLines} lines: ${recordResultsViewSwitcherTypesLines}`,
+  );
+}
+
+for (const requiredRecordResultsViewUsage of [
+  'import { buildRecordResultsSharedCardProps } from "./record-results-shared-card-props";',
+  'import { RecordResultsListView } from "./record-results-list-view";',
+  'import { RecordResultsTimelineView } from "./record-results-timeline-view";',
+  'import { RecordResultsViewSwitcher } from "./record-results-view-switcher";',
+  'import type { RecordResultsViewProps } from "./record-results-view.types";',
+  "export function RecordResultsView(props: RecordResultsViewProps) {",
+  "const sharedCardProps = buildRecordResultsSharedCardProps(props);",
+  "<RecordResultsViewSwitcher",
+  "<RecordResultsTimelineView",
+  "<RecordResultsListView",
+]) {
+  if (!recordResultsViewSource.includes(requiredRecordResultsViewUsage)) {
+    throw new Error(
+      `record-results-view.tsx must reuse the extracted shared-card props builder: ${requiredRecordResultsViewUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsViewToken of [
+  "selectedRecordId: props.selectedRecordId",
+  "avoidLabel: props.avoidLabel",
+  "formatRecordStatusLabel: props.formatRecordStatusLabel",
+  "formatReviewStatusLabel: props.formatReviewStatusLabel",
+]) {
+  if (recordResultsViewSource.includes(forbiddenRecordResultsViewToken)) {
+    throw new Error(
+      `record-results-view.tsx must keep shared-card prop projection delegated: ${forbiddenRecordResultsViewToken}`,
+    );
+  }
+}
+
+const maxRecordResultsViewLines = 40;
+if (recordResultsViewLines > maxRecordResultsViewLines) {
+  throw new Error(
+    `record-results-view.tsx exceeded ${maxRecordResultsViewLines} lines: ${recordResultsViewLines}`,
+  );
+}
+
+for (const requiredRecordResultsSharedCardPropsUsage of [
+  'import type { BuildRecordResultsSharedCardPropsInput } from "./record-results-shared-card-props.types";',
+  'import type { RecordResultsSharedCardProps } from "./record-results-view.types";',
+  "export function buildRecordResultsSharedCardProps({",
+  "}: BuildRecordResultsSharedCardPropsInput): RecordResultsSharedCardProps {",
+  "selectedRecordId,",
+  "formatRecordStatusLabel,",
+  "formatReviewStatusLabel,",
+  "onSelectRecord,",
+]) {
+  if (!recordResultsSharedCardPropsSource.includes(requiredRecordResultsSharedCardPropsUsage)) {
+    throw new Error(
+      `record-results-shared-card-props.ts must own shared-card prop projection: ${requiredRecordResultsSharedCardPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsSharedCardPropsToken of [
+  "RecordResultsViewSwitcher",
+  "RecordResultsTimelineView",
+  "RecordResultsListView",
+  "viewMode === ",
+]) {
+  if (recordResultsSharedCardPropsSource.includes(forbiddenRecordResultsSharedCardPropsToken)) {
+    throw new Error(
+      `record-results-shared-card-props.ts must keep view rendering delegated: ${forbiddenRecordResultsSharedCardPropsToken}`,
+    );
+  }
+}
+
+const maxRecordResultsSharedCardPropsLines = 35;
+if (recordResultsSharedCardPropsLines > maxRecordResultsSharedCardPropsLines) {
+  throw new Error(
+    `record-results-shared-card-props.ts exceeded ${maxRecordResultsSharedCardPropsLines} lines: ${recordResultsSharedCardPropsLines}`,
+  );
+}
+
+for (const requiredRecordResultsSharedCardPropsTypesUsage of [
+  'import type { RecordResultsSharedCardProps } from "./record-results-view.types"; export type BuildRecordResultsSharedCardPropsInput = RecordResultsSharedCardProps;',
+]) {
+  if (!recordResultsSharedCardPropsTypesSource.includes(requiredRecordResultsSharedCardPropsTypesUsage)) {
+    throw new Error(
+      `record-results-shared-card-props.types.ts must own shared-card props input typing: ${requiredRecordResultsSharedCardPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordResultsSharedCardPropsTypesLines = 2;
+if (recordResultsSharedCardPropsTypesLines > maxRecordResultsSharedCardPropsTypesLines) {
+  throw new Error(
+    `record-results-shared-card-props.types.ts exceeded ${maxRecordResultsSharedCardPropsTypesLines} lines: ${recordResultsSharedCardPropsTypesLines}`,
   );
 }
 
