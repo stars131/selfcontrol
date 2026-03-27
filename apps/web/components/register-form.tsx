@@ -41,7 +41,7 @@ export function RegisterForm() {
       setStoredSession(session.access_token, session.user);
       router.push("/app");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Register failed");
+      setError(caught instanceof Error ? caught.message : copy.registerFailed);
     } finally {
       setLoading(false);
     }

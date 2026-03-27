@@ -23,6 +23,14 @@ for (const [relativePath, getterName, maxAllowedLines] of [
     throw new Error(`${relativePath} must delegate locale copy lookup to ${getterName}`);
   }
 
+  if (relativePath === "components/login-form.tsx" && !source.includes("copy.loginFailed")) {
+    throw new Error(`${relativePath} must delegate login fallback errors to auth-form copy`);
+  }
+
+  if (relativePath === "components/register-form.tsx" && !source.includes("copy.registerFailed")) {
+    throw new Error(`${relativePath} must delegate register fallback errors to auth-form copy`);
+  }
+
   if (!source.includes('import { AuthFormFrame } from "./auth-form-frame";')) {
     throw new Error(`${relativePath} must import AuthFormFrame`);
   }
@@ -54,6 +62,12 @@ for (const [relativePath, getterName, maxAllowedLines] of [
   for (const forbiddenToken of ["const COPY:", "const DISPLAY_COPY:", "Record<", "LocaleCode"]) {
     if (source.includes(forbiddenToken)) {
       throw new Error(`${relativePath} must keep auth-form copy delegated: ${forbiddenToken}`);
+    }
+  }
+
+  for (const forbiddenErrorFallback of ['"Login failed"', '"Register failed"']) {
+    if (source.includes(forbiddenErrorFallback)) {
+      throw new Error(`${relativePath} must not hardcode auth fallback errors: ${forbiddenErrorFallback}`);
     }
   }
 

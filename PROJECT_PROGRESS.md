@@ -2212,6 +2212,9 @@ Last updated: 2026-03-26
 - Chat Panel Error Localization V1:
   - chat panel operator and share handlers now reuse a shared locale-aware chat action copy for request, sync, reindex, audit, and share fallback errors instead of hardcoded English strings
   - record-panel structure verification now enforces those copy-driven chat handler fallbacks so future chat-surface maintenance stays aligned with the enterprise localization baseline
+- Auth Form Error Localization V1:
+  - login and registration fallback failures now reuse locale-aware auth-form copy instead of hardcoded English strings inside the submit handlers
+  - auth-form structure verification now enforces those copy-driven fallback errors so future access-surface maintenance keeps the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice

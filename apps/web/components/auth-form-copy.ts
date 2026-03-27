@@ -14,6 +14,7 @@ export type RegisterFormCopy = {
   passwordPlaceholder: string;
   loading: string;
   submit: string;
+  registerFailed: string;
 };
 
 export type LoginFormCopy = {
@@ -26,6 +27,7 @@ export type LoginFormCopy = {
   passwordPlaceholder: string;
   loading: string;
   submit: string;
+  loginFailed: string;
 };
 
 const REGISTER_COPY: Record<LocaleCode, RegisterFormCopy> = {
@@ -43,6 +45,7 @@ const REGISTER_COPY: Record<LocaleCode, RegisterFormCopy> = {
     passwordPlaceholder: "请使用更长的密码",
     loading: "创建中...",
     submit: "创建账号",
+    registerFailed: "注册失败",
   },
   en: {
     eyebrow: "Access",
@@ -58,6 +61,7 @@ const REGISTER_COPY: Record<LocaleCode, RegisterFormCopy> = {
     passwordPlaceholder: "Use a long password",
     loading: "Creating...",
     submit: "Create Account",
+    registerFailed: "Register failed",
   },
   ja: {
     eyebrow: "アクセス",
@@ -73,6 +77,7 @@ const REGISTER_COPY: Record<LocaleCode, RegisterFormCopy> = {
     passwordPlaceholder: "長めのパスワードを使用してください",
     loading: "作成中...",
     submit: "アカウント作成",
+    registerFailed: "登録に失敗しました",
   },
 };
 
@@ -87,6 +92,7 @@ const LOGIN_COPY: Record<LocaleCode, LoginFormCopy> = {
     passwordPlaceholder: "输入密码",
     loading: "登录中...",
     submit: "登录",
+    loginFailed: "登录失败",
   },
   en: {
     eyebrow: "Access",
@@ -98,6 +104,7 @@ const LOGIN_COPY: Record<LocaleCode, LoginFormCopy> = {
     passwordPlaceholder: "password",
     loading: "Signing in...",
     submit: "Sign In",
+    loginFailed: "Login failed",
   },
   ja: {
     eyebrow: "アクセス",
@@ -109,6 +116,7 @@ const LOGIN_COPY: Record<LocaleCode, LoginFormCopy> = {
     passwordPlaceholder: "パスワード",
     loading: "ログイン中...",
     submit: "ログイン",
+    loginFailed: "ログインに失敗しました",
   },
 };
 

@@ -34,7 +34,7 @@ export function LoginForm() {
       setStoredSession(result.access_token, result.user);
       router.push("/app");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Login failed");
+      setError(caught instanceof Error ? caught.message : copy.loginFailed);
     } finally {
       setLoading(false);
     }
