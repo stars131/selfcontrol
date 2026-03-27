@@ -2820,6 +2820,14 @@ const deadLetterRecoveryPanelContentTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-panel-content.types.ts",
 );
+const deadLetterRecoveryPanelListPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-list-props.ts",
+);
+const deadLetterRecoveryPanelListPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-panel-list-props.types.ts",
+);
 const deadLetterRecoveryListItemPropsPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-list-item-props.ts",
@@ -4418,6 +4426,14 @@ const deadLetterRecoveryPanelContentTypesSource = fs.readFileSync(
   deadLetterRecoveryPanelContentTypesPath,
   "utf8",
 );
+const deadLetterRecoveryPanelListPropsSource = fs.readFileSync(
+  deadLetterRecoveryPanelListPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryPanelListPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryPanelListPropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryListItemPropsSource = fs.readFileSync(
   deadLetterRecoveryListItemPropsPath,
   "utf8",
@@ -5746,6 +5762,10 @@ const deadLetterRecoveryPanelListTypesLines =
   deadLetterRecoveryPanelListTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryPanelContentTypesLines =
   deadLetterRecoveryPanelContentTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryPanelListPropsLines =
+  deadLetterRecoveryPanelListPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryPanelListPropsTypesLines =
+  deadLetterRecoveryPanelListPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryListItemPropsLines =
   deadLetterRecoveryListItemPropsSource.split(/\r?\n/).length;
 const deadLetterRecoveryListItemPropsTypesLines =
@@ -25914,15 +25934,16 @@ if (recordResultsTimelineDayTypesLines > maxRecordResultsTimelineDayTypesLines) 
 
 for (const requiredDeadLetterRecoveryPanelContentUsage of [
   'import { DeadLetterRecoveryPanelEmpty } from "./dead-letter-recovery-panel-empty";',
+  'import { buildDeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list-props";',
   'import { DeadLetterRecoveryPanelList } from "./dead-letter-recovery-panel-list";',
   'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";',
-  "}: DeadLetterRecoveryPanelContentProps) {",
-  'return <DeadLetterRecoveryPanelEmpty mediaIssueCopy={mediaIssueCopy} />;',
-  "<DeadLetterRecoveryPanelList",
+  "export function DeadLetterRecoveryPanelContent({ mediaDeadLetterOverview, ...props }: DeadLetterRecoveryPanelContentProps) {",
+  "return !mediaDeadLetterOverview?.items.length ? <DeadLetterRecoveryPanelEmpty mediaIssueCopy={props.mediaIssueCopy} /> :",
+  '<DeadLetterRecoveryPanelList {...buildDeadLetterRecoveryPanelListProps({ mediaDeadLetterOverview, ...props })} />',
 ]) {
   if (!deadLetterRecoveryPanelContentSource.includes(requiredDeadLetterRecoveryPanelContentUsage)) {
     throw new Error(
-      `dead-letter-recovery-panel-content.tsx must compose the extracted panel empty and list leaves: ${requiredDeadLetterRecoveryPanelContentUsage}`,
+      `dead-letter-recovery-panel-content.tsx must reuse the extracted panel list-props builder: ${requiredDeadLetterRecoveryPanelContentUsage}`,
     );
   }
 }
@@ -25932,18 +25953,72 @@ for (const forbiddenDeadLetterRecoveryPanelContentToken of [
   'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
   '<div className="record-list compact-list">',
   "mediaDeadLetterOverview.items.map((item) => (",
+  "bulkRetryingDeadLetter={",
+  "selectedDeadLetterIds={",
+  "workspaceId={",
 ]) {
   if (deadLetterRecoveryPanelContentSource.includes(forbiddenDeadLetterRecoveryPanelContentToken)) {
     throw new Error(
-      `dead-letter-recovery-panel-content.tsx must keep empty and list rendering delegated: ${forbiddenDeadLetterRecoveryPanelContentToken}`,
+      `dead-letter-recovery-panel-content.tsx must keep list prop projection delegated: ${forbiddenDeadLetterRecoveryPanelContentToken}`,
     );
   }
 }
 
-const maxDeadLetterRecoveryPanelContentLines = 40;
+const maxDeadLetterRecoveryPanelContentLines = 10;
 if (deadLetterRecoveryPanelContentSource.split(/\r?\n/).length > maxDeadLetterRecoveryPanelContentLines) {
   throw new Error(
     `dead-letter-recovery-panel-content.tsx exceeded ${maxDeadLetterRecoveryPanelContentLines} lines: ${deadLetterRecoveryPanelContentSource.split(/\r?\n/).length}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryPanelListPropsUsage of [
+  'import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types";',
+  'import type { BuildDeadLetterRecoveryPanelListPropsInput } from "./dead-letter-recovery-panel-list-props.types";',
+  "export function buildDeadLetterRecoveryPanelListProps({",
+  "}: BuildDeadLetterRecoveryPanelListPropsInput): DeadLetterRecoveryPanelListProps {",
+  "...props,",
+  "mediaDeadLetterOverview,",
+]) {
+  if (!deadLetterRecoveryPanelListPropsSource.includes(requiredDeadLetterRecoveryPanelListPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list-props.ts must own dead-letter panel list prop projection: ${requiredDeadLetterRecoveryPanelListPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryPanelListPropsToken of [
+  "<DeadLetterRecoveryPanelList",
+  "<DeadLetterRecoveryPanelEmpty",
+  "mediaDeadLetterOverview?.items.length",
+]) {
+  if (deadLetterRecoveryPanelListPropsSource.includes(forbiddenDeadLetterRecoveryPanelListPropsToken)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list-props.ts must keep panel rendering delegated: ${forbiddenDeadLetterRecoveryPanelListPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryPanelListPropsLines = 14;
+if (deadLetterRecoveryPanelListPropsLines > maxDeadLetterRecoveryPanelListPropsLines) {
+  throw new Error(
+    `dead-letter-recovery-panel-list-props.ts exceeded ${maxDeadLetterRecoveryPanelListPropsLines} lines: ${deadLetterRecoveryPanelListPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryPanelListPropsTypesUsage of [
+  'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types"; export type BuildDeadLetterRecoveryPanelListPropsInput = BuildRequiredDeadLetterRecoveryPanelListPropsInput & Omit<DeadLetterRecoveryPanelContentProps, "mediaDeadLetterOverview">; type BuildRequiredDeadLetterRecoveryPanelListPropsInput = { mediaDeadLetterOverview: NonNullable<DeadLetterRecoveryPanelContentProps["mediaDeadLetterOverview"]> };',
+]) {
+  if (!deadLetterRecoveryPanelListPropsTypesSource.includes(requiredDeadLetterRecoveryPanelListPropsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-panel-list-props.types.ts must own dead-letter panel list-props input typing: ${requiredDeadLetterRecoveryPanelListPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryPanelListPropsTypesLines = 2;
+if (deadLetterRecoveryPanelListPropsTypesLines > maxDeadLetterRecoveryPanelListPropsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-panel-list-props.types.ts exceeded ${maxDeadLetterRecoveryPanelListPropsTypesLines} lines: ${deadLetterRecoveryPanelListPropsTypesLines}`,
   );
 }
 

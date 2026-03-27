@@ -292,6 +292,10 @@ Last updated: 2026-03-28
   - recent-media issue list rendering now delegates single-card prop projection to a dedicated builder module
   - list-level rendering is reduced to iteration only, so future issue-card contract changes can be updated in one place instead of across long JSX prop chains
   - structure verification now enforces this projection boundary to keep panel list rendering separate from issue-card prop assembly
+- Dead-Letter Panel List Prop Builder Extraction V1:
+  - dead-letter content rendering now delegates content-to-list prop projection to a dedicated builder module
+  - content-level rendering is reduced to empty-versus-list branching, so future list contract changes can be updated in one place instead of across long JSX prop chains
+  - structure verification now enforces this projection boundary to keep panel content rendering separate from list prop assembly
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
