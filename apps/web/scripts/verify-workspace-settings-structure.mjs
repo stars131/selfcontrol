@@ -627,8 +627,12 @@ if (headerTypesLineCount > 2) {
 }
 
 for (const requiredHeaderIntroUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/workspace-role-display";',
   'import type { WorkspaceSettingsHeaderIntroProps } from "./workspace-settings-header-intro.types";',
   "}: WorkspaceSettingsHeaderIntroProps) {",
+  "const { locale } = useStoredLocale();",
+  "getWorkspaceRoleLabel(locale, workspace.role)",
   '<div className="eyebrow">{copy.eyebrow}</div>',
   '<h1 className="title">{copy.title}</h1>',
   "{copy.subtitle}",

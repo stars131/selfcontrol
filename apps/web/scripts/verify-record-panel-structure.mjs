@@ -17038,8 +17038,12 @@ if (workspaceSettingsHeaderTypesLines > maxWorkspaceSettingsHeaderTypesLines) {
 }
 
 for (const requiredWorkspaceSettingsHeaderIntroUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/workspace-role-display";',
   'import type { WorkspaceSettingsHeaderIntroProps } from "./workspace-settings-header-intro.types";',
   "}: WorkspaceSettingsHeaderIntroProps) {",
+  "const { locale } = useStoredLocale();",
+  "getWorkspaceRoleLabel(locale, workspace.role)",
   '<div className="eyebrow">{copy.eyebrow}</div>',
   '<h1 className="title">{copy.title}</h1>',
   "{copy.subtitle}",
@@ -20644,8 +20648,13 @@ if (workspaceImportSectionTypesLines > maxWorkspaceImportSectionTypesLines) {
 }
 
 for (const requiredWorkspaceListSectionUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/workspace-role-display";',
   'import type { WorkspaceListSectionProps } from "./workspace-list-section.types";',
   "}: WorkspaceListSectionProps) {",
+  "const { locale } = useStoredLocale();",
+  "getWorkspaceVisibilityLabel(locale, workspace.visibility)",
+  "getWorkspaceRoleLabel(locale, workspace.role)",
 ]) {
   if (!workspaceListSectionSource.includes(requiredWorkspaceListSectionUsage)) {
     throw new Error(

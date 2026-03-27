@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-
+import { useStoredLocale } from "../lib/locale";
+import { getWorkspaceRoleLabel, getWorkspaceVisibilityLabel } from "../lib/workspace-role-display";
 import type { WorkspaceListSectionProps } from "./workspace-list-section.types";
 
 export function WorkspaceListSection({
   copy,
   workspaces,
 }: WorkspaceListSectionProps) {
+  const { locale } = useStoredLocale();
   return (
     <section className="record-card" style={{ gridColumn: "1 / -1" }}>
       <div className="eyebrow">{copy.listEyebrow}</div>
@@ -17,7 +19,7 @@ export function WorkspaceListSection({
           workspaces.map((workspace) => (
             <article className="record-card" key={workspace.id}>
               <div className="eyebrow">
-                {workspace.visibility} / {workspace.role}
+                {getWorkspaceVisibilityLabel(locale, workspace.visibility)} / {getWorkspaceRoleLabel(locale, workspace.role)}
               </div>
               <h3 style={{ margin: "8px 0 6px" }}>{workspace.name}</h3>
               <div className="muted">{workspace.slug}</div>

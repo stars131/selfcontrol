@@ -2167,6 +2167,10 @@ Last updated: 2026-03-26
   - `media-type-display.ts` now owns localized labels for common media kinds such as `image`, `audio`, `video`, and `file`, with safe fallback for future backend values
   - media asset cards, recent issue cards, dead-letter recovery cards, and media retention cards now render localized media type labels instead of exposing raw media-type codes in their eyebrow headers
   - `verify-record-panel-structure.mjs` now enforces the helper-based media-type rendering on those focused card leaves so future media UI updates stay maintainable under the enterprise standard
+- Workspace Role And Visibility Label Localization V1:
+  - `workspace-role-display.ts` now also owns localized labels for workspace visibility states such as `private` and `public`, alongside the existing role labels
+  - `workspace-list-section.tsx` and `workspace-settings-header-intro.tsx` now render localized workspace visibility and role labels instead of exposing raw backend values in the entry list and settings header
+  - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce the locale-aware workspace label helper usage so future workspace shell updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice
