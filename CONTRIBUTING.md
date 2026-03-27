@@ -24,6 +24,9 @@ Repository helpers:
 - install dev dependencies:
   - Windows: `./scripts/bootstrap-dev.ps1`
   - Linux / macOS / VM: `sh ./scripts/bootstrap-dev.sh`
+- run environment doctor:
+  - Windows: `./scripts/doctor-dev.ps1`
+  - Linux / macOS / VM: `sh ./scripts/doctor-dev.sh`
 - install pre-push hooks:
   - Windows: `./scripts/install-git-hooks.ps1`
   - Linux / macOS / VM: `sh ./scripts/install-git-hooks.sh`

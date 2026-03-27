@@ -145,6 +145,7 @@ sh ./scripts/verify-all.sh
 - 项目规格：[PROJECT_SPEC.md](./PROJECT_SPEC.md)
 - 贡献指南：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全策略：[SECURITY.md](./SECURITY.md)
+- 开发环境体检：[docs/DEV_ENV_DOCTOR.md](./docs/DEV_ENV_DOCTOR.md)
 - ER 与表结构：[docs/ERD_AND_SCHEMA.md](./docs/ERD_AND_SCHEMA.md)
 - API 与工作流：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
 - 开发环境：[docs/DEVELOPMENT_SETUP.md](./docs/DEVELOPMENT_SETUP.md)

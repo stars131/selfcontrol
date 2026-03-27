@@ -2302,6 +2302,9 @@ Last updated: 2026-03-26
 - Repository Contribution Guide V1:
   - the repository now includes a dedicated root `CONTRIBUTING.md` that consolidates environment setup, verification flow, documentation expectations, and guarded push behavior
   - this gives future development work a single operational contribution contract instead of relying on scattered README, hooks, and CI knowledge
+- Development Environment Doctor V1:
+  - the repository now includes root-level `scripts/doctor-dev.ps1` and `scripts/doctor-dev.sh` that check Node, Python, Git hooks, Docker, `.env`, and dependency readiness before local development or Linux VM work begins
+  - dedicated `docs/DEV_ENV_DOCTOR.md`, plus README and contribution/setup doc entrypoints, now turn environment drift into a visible operator workflow instead of an ad hoc troubleshooting exercise
 
 ## Next
 - Continue the next product slice
