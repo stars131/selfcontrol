@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types"; export type DeadLetterRecoveryItemCardMetadataProps = Pick<DeadLetterRecoveryItemCardStatusProps, "formatHistoryTimestampLabel" | "item" | "mediaIssueCopy">;
