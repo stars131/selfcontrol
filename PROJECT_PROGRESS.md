@@ -1,6 +1,6 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-27
+Last updated: 2026-03-28
 
 ## Completed
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
@@ -272,6 +272,10 @@ Last updated: 2026-03-27
   - record-panel detail copy and formatting helpers are now extracted into dedicated `apps/web/lib` modules instead of living inline inside the large record panel component
   - a lightweight record-panel copy verification script now checks locale-key completeness and non-empty critical copy before future updates ship
   - the structured results panel now consumes a dedicated detail bundle so further locale or formatting changes can be updated in one place with smaller review scope
+- Dead-Letter Item Identity Extraction V1:
+  - dead-letter recovery item headers now delegate media-type and filename rendering to a dedicated identity leaf component
+  - the new identity leaf reuses the shared header contract through a narrow typed projection, keeping checkbox orchestration in the header only
+  - structure verification now enforces this boundary so future updates do not pull item identity rendering back into the larger header component
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
@@ -2643,6 +2647,10 @@ Last updated: 2026-03-27
   - dead-letter item action-notice rendering now lives in `apps/web/components/dead-letter-recovery-item-card-action-notice.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-status.tsx`
   - `dead-letter-recovery-item-card-status.tsx` now stays focused on timestamp and retry-budget metadata while action-notice rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this item-action-notice boundary so future dead-letter item status changes do not regrow a mixed metadata-and-notice rendering module
+- Dead Letter Recovery Item Identity Extraction V1:
+  - dead-letter item identity rendering now lives in `apps/web/components/dead-letter-recovery-item-card-identity.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-header.tsx`
+  - `dead-letter-recovery-item-card-header.tsx` now stays focused on selection control, layout, and tags while identity rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this item-identity boundary so future dead-letter item header changes do not regrow a mixed layout-and-identity rendering module
 - Recent Media Issue Action Notice Extraction V1:
   - recent-media issue action-notice rendering now lives in `apps/web/components/recent-media-issue-card-action-notice.tsx` instead of remaining inline inside `recent-media-issue-card-metadata.tsx`
   - `recent-media-issue-card-metadata.tsx` now stays focused on timestamp metadata composition while action-notice rendering remains centralized and easier to evolve safely

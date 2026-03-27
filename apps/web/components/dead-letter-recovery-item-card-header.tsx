@@ -1,7 +1,7 @@
 "use client";
 
-import { getMediaTypeLabel } from "../lib/media-type-display";
 import { canRetryMediaIssue } from "../lib/record-panel-media";
+import { DeadLetterRecoveryItemCardIdentity } from "./dead-letter-recovery-item-card-identity";
 import { DeadLetterRecoveryItemCardTags } from "./dead-letter-recovery-item-card-tags";
 import type { DeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header.types";
 
@@ -23,10 +23,7 @@ export function DeadLetterRecoveryItemCardHeader({
           type="checkbox"
           onChange={(event) => onToggleSelection(item.media_id, event.target.checked)}
         />
-        <div>
-          <div className="eyebrow">{getMediaTypeLabel(locale, item.media_type)}</div>
-          <div>{item.original_filename}</div>
-        </div>
+        <DeadLetterRecoveryItemCardIdentity item={item} locale={locale} />
       </div>
       <DeadLetterRecoveryItemCardTags item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />
     </label>
