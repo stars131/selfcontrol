@@ -111,6 +111,14 @@ const workspaceShellRecordActionPayloadsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-record-action-payloads.ts",
 );
+const workspaceShellRecordSaveActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-save-actions.ts",
+);
+const workspaceShellRecordDeleteActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-record-delete-actions.ts",
+);
 const workspaceShellReminderNotificationActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-reminder-notification-actions.ts",
@@ -258,6 +266,14 @@ const recordActionPayloadsSource = fs.readFileSync(
   workspaceShellRecordActionPayloadsPath,
   "utf8",
 );
+const recordSaveActionsSource = fs.readFileSync(
+  workspaceShellRecordSaveActionsPath,
+  "utf8",
+);
+const recordDeleteActionsSource = fs.readFileSync(
+  workspaceShellRecordDeleteActionsPath,
+  "utf8",
+);
 const reminderNotificationActionsSource = fs.readFileSync(
   workspaceShellReminderNotificationActionsPath,
   "utf8",
@@ -345,6 +361,8 @@ const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
 const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
 const recordActionRefreshLineCount = recordActionRefreshSource.split(/\r?\n/).length;
 const recordActionPayloadsLineCount = recordActionPayloadsSource.split(/\r?\n/).length;
+const recordSaveActionsLineCount = recordSaveActionsSource.split(/\r?\n/).length;
+const recordDeleteActionsLineCount = recordDeleteActionsSource.split(/\r?\n/).length;
 const reminderNotificationActionsLineCount =
   reminderNotificationActionsSource.split(/\r?\n/).length;
 const reminderActionsLineCount = reminderActionsSource.split(/\r?\n/).length;
@@ -1873,30 +1891,43 @@ const workspaceShellRecordActionsSource = fs.readFileSync(
   "utf8",
 );
 for (const requiredRecordActionsImport of [
-  'from "../lib/api";',
-  'from "./workspace-shell-action-inputs.types";',
-  'from "./workspace-shell-action-guards";',
-  'from "./workspace-shell-record-action-payloads";',
-  'from "./workspace-shell-record-action-refresh";',
-  "buildWorkspaceShellRecordUpdatePayload(input)",
-  "buildWorkspaceShellRecordCreatePayload(input)",
-  "refreshWorkspaceShellRecordMutation(",
-  "refreshWorkspaceShellRecordDeletion(",
+  'from "./workspace-shell-actions.types";',
+  'from "./workspace-shell-record-delete-actions";',
+  'from "./workspace-shell-record-save-actions";',
 ]) {
   if (!workspaceShellRecordActionsSource.includes(requiredRecordActionsImport)) {
     throw new Error(
-      `workspace-shell-record-actions.ts must delegate record refresh sequences: ${requiredRecordActionsImport}`,
+      `workspace-shell-record-actions.ts must import delegated record action groups: ${requiredRecordActionsImport}`,
+    );
+  }
+}
+
+for (const requiredRecordActionsUsage of [
+  "createWorkspaceShellRecordSaveActions(props)",
+  "createWorkspaceShellRecordDeleteActions(props)",
+  "...recordSaveActions",
+  "...recordDeleteActions",
+]) {
+  if (!workspaceShellRecordActionsSource.includes(requiredRecordActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-actions.ts must delegate record action-group assembly: ${requiredRecordActionsUsage}`,
     );
   }
 }
 
 for (const forbiddenRecordActionsToken of [
-  "await refreshRecords(activeToken, recordFilter);",
-  "await refreshKnowledge(activeToken);",
-  "await refreshAuditLogs(activeToken);",
-  "await refreshMediaStorageSummary(activeToken);",
-  "await refreshMediaProcessingOverview(activeToken);",
-  "await refreshMediaDeadLetterOverview(activeToken);",
+  'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-payloads";',
+  'from "./workspace-shell-record-action-refresh";',
+  "const handleSaveRecord",
+  "const handleDeleteRecord",
+  "createRecord(",
+  "updateRecord(",
+  "deleteRecord(",
+  "refreshWorkspaceShellRecordMutation(",
+  "refreshWorkspaceShellRecordDeletion(",
   "title: input.title,",
   "content: input.content,",
   "type_code: input.type_code,",
@@ -1904,9 +1935,101 @@ for (const forbiddenRecordActionsToken of [
 ]) {
   if (workspaceShellRecordActionsSource.includes(forbiddenRecordActionsToken)) {
     throw new Error(
-      `workspace-shell-record-actions.ts must keep repeated refresh sequences delegated: ${forbiddenRecordActionsToken}`,
+      `workspace-shell-record-actions.ts must keep record internals delegated: ${forbiddenRecordActionsToken}`,
     );
   }
+}
+
+const maxRecordActionsLines = 20;
+if (workspaceShellRecordActionsSource.split(/\r?\n/).length > maxRecordActionsLines) {
+  throw new Error(
+    `workspace-shell-record-actions.ts exceeded ${maxRecordActionsLines} lines: ${workspaceShellRecordActionsSource.split(/\r?\n/).length}`,
+  );
+}
+
+for (const requiredRecordSaveActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-payloads";',
+  'from "./workspace-shell-record-action-refresh";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellRecordSaveActions(",
+  "async function handleSaveRecord(input: WorkspaceShellSaveRecordInput)",
+  "await updateRecord(",
+  "await createRecord(",
+  "buildWorkspaceShellRecordUpdatePayload(input)",
+  "buildWorkspaceShellRecordCreatePayload(input)",
+  "await refreshWorkspaceShellRecordMutation(",
+  "setSelectedRecordId(input.recordId);",
+  "setSelectedRecordId(result.record.id);",
+]) {
+  if (!recordSaveActionsSource.includes(requiredRecordSaveActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-save-actions.ts must own record save flow: ${requiredRecordSaveActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSaveActionsToken of [
+  "deleteRecord(",
+  "refreshWorkspaceShellRecordDeletion(",
+  "refreshMediaStorageSummary(",
+  "refreshMediaProcessingOverview(",
+  "refreshMediaDeadLetterOverview(",
+]) {
+  if (recordSaveActionsSource.includes(forbiddenRecordSaveActionsToken)) {
+    throw new Error(
+      `workspace-shell-record-save-actions.ts must keep deletion flow delegated: ${forbiddenRecordSaveActionsToken}`,
+    );
+  }
+}
+
+const maxRecordSaveActionsLines = 55;
+if (recordSaveActionsLineCount > maxRecordSaveActionsLines) {
+  throw new Error(
+    `workspace-shell-record-save-actions.ts exceeded ${maxRecordSaveActionsLines} lines: ${recordSaveActionsLineCount}`,
+  );
+}
+
+for (const requiredRecordDeleteActionsUsage of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-record-action-refresh";',
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function createWorkspaceShellRecordDeleteActions(",
+  "async function handleDeleteRecord(recordId: string)",
+  "await deleteRecord(activeToken, workspaceId, recordId);",
+  "const nextRecords = records.filter((record) => record.id !== recordId);",
+  "setSelectedRecordId(nextRecords[0]?.id ?? null);",
+  "await refreshWorkspaceShellRecordDeletion(",
+]) {
+  if (!recordDeleteActionsSource.includes(requiredRecordDeleteActionsUsage)) {
+    throw new Error(
+      `workspace-shell-record-delete-actions.ts must own record deletion flow: ${requiredRecordDeleteActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordDeleteActionsToken of [
+  "createRecord(",
+  "updateRecord(",
+  "buildWorkspaceShellRecordUpdatePayload(",
+  "buildWorkspaceShellRecordCreatePayload(",
+  "refreshWorkspaceShellRecordMutation(",
+]) {
+  if (recordDeleteActionsSource.includes(forbiddenRecordDeleteActionsToken)) {
+    throw new Error(
+      `workspace-shell-record-delete-actions.ts must keep save flow delegated: ${forbiddenRecordDeleteActionsToken}`,
+    );
+  }
+}
+
+const maxRecordDeleteActionsLines = 45;
+if (recordDeleteActionsLineCount > maxRecordDeleteActionsLines) {
+  throw new Error(
+    `workspace-shell-record-delete-actions.ts exceeded ${maxRecordDeleteActionsLines} lines: ${recordDeleteActionsLineCount}`,
+  );
 }
 
 for (const requiredRecordActionRefreshUsage of [

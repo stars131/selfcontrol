@@ -2495,6 +2495,10 @@ Last updated: 2026-03-27
   - media upload now lives in `apps/web/components/workspace-shell-media-upload-actions.ts`, selected-record media delete/retry/status actions now live in `apps/web/components/workspace-shell-media-selected-actions.ts`, and dead-letter bulk recovery now lives in `apps/web/components/workspace-shell-media-dead-letter-actions.ts`
   - `workspace-shell-media-actions.ts` now stays as a thin composition boundary so upload flow, selected-media flow, and dead-letter recovery can evolve independently
   - the workspace-shell structure guardrail now enforces this media action-group split so future media-operations growth does not regrow a mixed action module
+- Workspace Shell Record Save And Delete Action Split V1:
+  - record create/update save flow now lives in `apps/web/components/workspace-shell-record-save-actions.ts`, while record deletion flow now lives in `apps/web/components/workspace-shell-record-delete-actions.ts`
+  - `workspace-shell-record-actions.ts` now stays as a thin composition boundary so record-save evolution and record-deletion policy changes can evolve independently
+  - the workspace-shell structure guardrail now enforces this save-versus-delete split so future record workflows do not regrow a mixed action module
 
 ## Next
 - Continue the next product slice
