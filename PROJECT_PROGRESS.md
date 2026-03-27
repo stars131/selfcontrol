@@ -2266,6 +2266,9 @@ Last updated: 2026-03-26
 - Frontend Guardrail Aggregation V1:
   - the web app now exposes a single `verify:ui-guardrails` command that runs the core frontend type-check and structural verifier suite used during maintainability hardening
   - this reduces operator error in local and Linux VM validation flows and makes future enterprise-grade pre-push checks easier to standardize
+- CI Guardrail Workflow V1:
+  - the repository now includes a GitHub Actions CI workflow that runs backend pytest coverage and frontend `verify:ui-guardrails` checks on pushes to `main` and on pull requests
+  - the API now has a dedicated `requirements-dev.txt` entrypoint so local and CI test environments can install runtime and test dependencies through one maintainable contract
 
 ## Next
 - Continue the next product slice
