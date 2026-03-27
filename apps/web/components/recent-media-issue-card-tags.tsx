@@ -2,6 +2,7 @@
 
 import { getProcessingStatusLabel } from "../lib/media-issue-display";
 import { getStorageProviderLabel } from "../lib/storage-provider-display";
+import { RecentMediaIssueCardExtractionModeTag } from "./recent-media-issue-card-extraction-mode-tag";
 import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";
 import { RecentMediaIssueCardProcessingSourceTag } from "./recent-media-issue-card-processing-source-tag";
 import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";
@@ -20,7 +21,7 @@ export function RecentMediaIssueCardTags({
       <span className="tag">{getStorageProviderLabel(locale, issue.storage_provider)}</span>
       <RecentMediaIssueCardProcessingSourceTag issue={issue} />
       <RecentMediaIssueCardRemoteFetchTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />
-      {issue.extraction_mode ? <span className="tag">{issue.extraction_mode}</span> : null}
+      <RecentMediaIssueCardExtractionModeTag issue={issue} />
       <RecentMediaIssueCardRetryStateTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />
       <RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />
       <RecentMediaIssueCardRetryCountTag issue={issue} mediaIssueCopy={mediaIssueCopy} />

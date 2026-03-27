@@ -2751,6 +2751,10 @@ Last updated: 2026-03-28
   - recent-media issue processing-source tag rendering now lives in `apps/web/components/recent-media-issue-card-processing-source-tag.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while processing-source rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this processing-source-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-processing-source rendering module
+- Recent Media Extraction Mode Tag Extraction V1:
+  - recent-media issue extraction-mode tag rendering now lives in `apps/web/components/recent-media-issue-card-extraction-mode-tag.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
+  - `apps/web/components/recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while extraction-mode rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this extraction-mode-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-extraction-mode rendering module
 
 ## Next
 - Continue the next product slice
