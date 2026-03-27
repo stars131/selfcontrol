@@ -11,6 +11,7 @@
     "verify:chat-panel-structure": "node ./scripts/verify-chat-panel-structure.mjs",
     "verify:dead-letter-recovery-structure": "node ./scripts/verify-dead-letter-recovery-structure.mjs",
     "verify:landing-page-structure": "node ./scripts/verify-landing-page-structure.mjs",
+    "verify:locale-copy-integrity": "node ./scripts/verify-locale-copy-integrity.mjs",
     "verify:map-panel-structure": "node ./scripts/verify-map-panel-structure.mjs",
     "verify:media-asset-card-structure": "node ./scripts/verify-media-asset-card-structure.mjs",
     "verify:provider-settings-structure": "node ./scripts/verify-provider-settings-structure.mjs",

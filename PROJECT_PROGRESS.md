@@ -2260,6 +2260,9 @@ Last updated: 2026-03-26
 - Media Issue Display Encoding Repair V1:
   - media issue categories, recommended actions, action details, retry states, processing states, and remote-fetch labels now use repaired Chinese and Japanese text in the shared diagnostics display helper
   - operator-facing issue triage and recovery guidance now stay readable across settings, recent-issues, and dead-letter surfaces while keeping locale maintenance centralized
+- Locale Copy Integrity Guard V1:
+  - the frontend now includes a dedicated `verify:locale-copy-integrity` script that scans locale-related source modules for common mojibake fragments before they can ship again
+  - this adds an enterprise-grade regression guard around multilingual copy maintenance instead of relying on manual spot checks after each localization change
 
 ## Next
 - Continue the next product slice
