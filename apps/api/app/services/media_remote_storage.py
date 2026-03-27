@@ -4,15 +4,21 @@ from dataclasses import dataclass
 import tempfile
 from pathlib import Path
 import time
+from typing import Any
 
 import httpx
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.media import MediaAsset
-from app.services.media_remote_storage_health import WEBHOOK_CONTRACT_VERSION
-from app.services.media_provider import DeferredMediaProcessingError, get_secret_for_provider
-from app.services.provider_configs import ProviderFeatureConfig, get_effective_provider_config
+from app.services.media_provider import DeferredMediaProcessingError
+from app.services.media_remote_storage_contract import (
+    WEBHOOK_CONTRACT_VERSION,
+    build_media_storage_webhook_headers,
+    get_media_storage_provider_config,
+    raise_media_storage_transport_error,
+)
+from app.services.provider_configs import ProviderFeatureConfig
 
 MAX_REMOTE_STORAGE_KEY_LENGTH = 1024
 MAX_METADATA_DEPTH = 4
@@ -42,25 +48,18 @@ class RemoteMediaContentResult:
     media_type: str | None
 
 
-def _get_media_storage_config(db: Session, workspace_id: str) -> ProviderFeatureConfig:
-    return get_effective_provider_config(db, workspace_id, "media_storage")
-
-
 def _build_custom_headers(
     config: ProviderFeatureConfig,
     *,
     operation: str,
     accept: str,
 ) -> dict[str, str]:
-    headers = {
-        "Accept": accept,
-        "X-SelfControl-Media-Storage-Contract": WEBHOOK_CONTRACT_VERSION,
-        "X-SelfControl-Media-Storage-Operation": operation,
-    }
-    secret = get_secret_for_provider(config)
-    if secret:
-        headers["Authorization"] = f"Bearer {secret}"
-    return headers
+    return build_media_storage_webhook_headers(
+        config,
+        operation=operation,
+        accept=accept,
+        error_type=DeferredMediaProcessingError,
+    )
 
 
 def _is_enabled_option(value: object) -> bool:
@@ -143,12 +142,6 @@ def _build_upload_metadata(payload: dict, response: Any) -> dict:
     return sanitized_metadata
 
 
-def _raise_transport_error(operation: str, exc: httpx.HTTPError) -> RuntimeError:
-    if isinstance(exc, httpx.TimeoutException):
-        return RuntimeError(f"Remote media {operation} timed out")
-    return RuntimeError(f"Remote media {operation} request failed")
-
-
 async def _perform_custom_upload(
     config: ProviderFeatureConfig,
     *,
@@ -175,7 +168,7 @@ async def _perform_custom_upload(
                 files={"file": (filename, content, mime_type)},
             )
     except httpx.HTTPError as exc:
-        raise _raise_transport_error("upload", exc) from exc
+        raise raise_media_storage_transport_error("upload", exc) from exc
     if response.status_code >= 400:
         raise RuntimeError(f"Remote media upload failed with status {response.status_code}")
 
@@ -212,7 +205,7 @@ def _perform_custom_download(config: ProviderFeatureConfig, *, storage_key: str)
                 },
             )
     except httpx.HTTPError as exc:
-        raise _raise_transport_error("download", exc) from exc
+        raise raise_media_storage_transport_error("download", exc) from exc
     if response.status_code == 404:
         raise FileNotFoundError("Remote media content was not found")
     if response.status_code >= 400:
@@ -239,7 +232,7 @@ def _perform_custom_delete(config: ProviderFeatureConfig, *, storage_key: str) -
                 },
             )
     except httpx.HTTPError as exc:
-        raise _raise_transport_error("delete", exc) from exc
+        raise raise_media_storage_transport_error("delete", exc) from exc
     if response.status_code == 404:
         return
     if response.status_code >= 400:
@@ -275,7 +268,7 @@ async def attempt_media_upload_via_provider(
     mime_type: str,
     content: bytes,
 ) -> RemoteMediaUploadAttemptResult:
-    config = _get_media_storage_config(db, workspace_id)
+    config = get_media_storage_provider_config(db, workspace_id)
     if not config.is_enabled or config.provider_code in {"", "none", "local"}:
         return RemoteMediaUploadAttemptResult(remote_upload=None, fallback_used=False)
     if config.provider_code != "custom":
@@ -303,7 +296,7 @@ async def attempt_media_upload_via_provider(
 
 
 def download_remote_media_via_provider(db: Session, media: MediaAsset) -> RemoteMediaContentResult:
-    config = _get_media_storage_config(db, media.workspace_id)
+    config = get_media_storage_provider_config(db, media.workspace_id)
     if config.provider_code != media.storage_provider:
         raise DeferredMediaProcessingError("Remote media provider configuration does not match the stored asset")
     if media.storage_provider != "custom":
@@ -328,7 +321,7 @@ def download_remote_media_to_temp_file(db: Session, media: MediaAsset) -> Path:
 
 
 def delete_remote_media_via_provider(db: Session, media: MediaAsset) -> None:
-    config = _get_media_storage_config(db, media.workspace_id)
+    config = get_media_storage_provider_config(db, media.workspace_id)
     if config.provider_code != media.storage_provider:
         raise DeferredMediaProcessingError("Remote media provider configuration does not match the stored asset")
     if media.storage_provider != "custom":

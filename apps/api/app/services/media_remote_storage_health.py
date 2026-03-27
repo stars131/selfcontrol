@@ -8,10 +8,14 @@ import httpx
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.services.media_provider import get_secret_for_provider
-from app.services.provider_configs import ProviderFeatureConfig, get_effective_provider_config
-
-WEBHOOK_CONTRACT_VERSION = "selfcontrol-media-storage-v1"
+from app.services.media_remote_storage_contract import (
+    WEBHOOK_CONTRACT_VERSION,
+    build_media_storage_webhook_headers,
+    get_media_storage_provider_config,
+    now_utc_iso,
+    raise_media_storage_transport_error,
+)
+from app.services.provider_configs import ProviderFeatureConfig
 
 
 @dataclass
@@ -54,29 +58,22 @@ class MediaStorageProviderHealthResult:
         }
 
 
-def _get_media_storage_config(db: Session, workspace_id: str) -> ProviderFeatureConfig:
-    return get_effective_provider_config(db, workspace_id, "media_storage")
-
-
 def _build_custom_headers(
     config: ProviderFeatureConfig,
     *,
     operation: str,
     accept: str,
 ) -> dict[str, str]:
-    headers = {
-        "Accept": accept,
-        "X-SelfControl-Media-Storage-Contract": WEBHOOK_CONTRACT_VERSION,
-        "X-SelfControl-Media-Storage-Operation": operation,
-    }
-    secret = get_secret_for_provider(config)
-    if secret:
-        headers["Authorization"] = f"Bearer {secret}"
-    return headers
+    return build_media_storage_webhook_headers(
+        config,
+        operation=operation,
+        accept=accept,
+        error_type=RuntimeError,
+    )
 
 
 def _now_iso() -> str:
-    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    return now_utc_iso()
 
 
 def _parse_capability_flag(value: object, *, default: bool) -> bool:
@@ -95,14 +92,8 @@ def _parse_capability_flag(value: object, *, default: bool) -> bool:
     return default
 
 
-def _raise_transport_error(operation: str, exc: httpx.HTTPError) -> RuntimeError:
-    if isinstance(exc, httpx.TimeoutException):
-        return RuntimeError(f"Remote media {operation} timed out")
-    return RuntimeError(f"Remote media {operation} request failed")
-
-
 def get_media_storage_provider_health(db: Session, workspace_id: str) -> MediaStorageProviderHealthResult:
-    config = _get_media_storage_config(db, workspace_id)
+    config = get_media_storage_provider_config(db, workspace_id)
     base_result = MediaStorageProviderHealthResult(
         feature_code="media_storage",
         provider_code=config.provider_code,
@@ -163,7 +154,9 @@ def get_media_storage_provider_health(db: Session, workspace_id: str) -> MediaSt
     except httpx.HTTPError as exc:
         base_result.status = "unreachable"
         base_result.reachable = False
-        base_result.message = str(_raise_transport_error("health check", exc))
+        base_result.message = str(
+            raise_media_storage_transport_error("health check", exc)
+        )
         return base_result
 
     base_result.response_time_ms = int((time.perf_counter() - request_started) * 1000)
