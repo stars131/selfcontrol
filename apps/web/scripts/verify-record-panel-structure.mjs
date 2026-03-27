@@ -2400,6 +2400,14 @@ const locationReviewActionsPath = path.resolve(
   process.cwd(),
   "components/location-review-actions.tsx",
 );
+const locationReviewActionButtonsPath = path.resolve(
+  process.cwd(),
+  "components/location-review-action-buttons.tsx",
+);
+const locationReviewActionButtonsTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-action-buttons.types.ts",
+);
 const locationReviewActionsTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-actions.types.ts",
@@ -3971,6 +3979,11 @@ const locationReviewPanelSource = fs.readFileSync(locationReviewPanelPath, "utf8
 const locationReviewIntroSource = fs.readFileSync(locationReviewIntroPath, "utf8");
 const locationReviewIntroTypesSource = fs.readFileSync(locationReviewIntroTypesPath, "utf8");
 const locationReviewActionsSource = fs.readFileSync(locationReviewActionsPath, "utf8");
+const locationReviewActionButtonsSource = fs.readFileSync(locationReviewActionButtonsPath, "utf8");
+const locationReviewActionButtonsTypesSource = fs.readFileSync(
+  locationReviewActionButtonsTypesPath,
+  "utf8",
+);
 const locationReviewActionsTypesSource = fs.readFileSync(
   locationReviewActionsTypesPath,
   "utf8",
@@ -5383,6 +5396,10 @@ const locationReviewPanelLines = locationReviewPanelSource.split(/\r?\n/).length
 const locationReviewIntroLines = locationReviewIntroSource.split(/\r?\n/).length;
 const locationReviewIntroTypesLines = locationReviewIntroTypesSource.split(/\r?\n/).length;
 const locationReviewActionsLines = locationReviewActionsSource.split(/\r?\n/).length;
+const locationReviewActionButtonsLines =
+  locationReviewActionButtonsSource.split(/\r?\n/).length;
+const locationReviewActionButtonsTypesLines =
+  locationReviewActionButtonsTypesSource.split(/\r?\n/).length;
 const locationReviewActionsTypesLines =
   locationReviewActionsTypesSource.split(/\r?\n/).length;
 const locationReviewFormFieldsLines =
@@ -23177,12 +23194,10 @@ if (locationReviewIntroTypesLines > maxLocationReviewIntroTypesLines) {
 }
 
 for (const requiredLocationReviewActionsUsage of [
+  'import { LocationReviewActionButtons } from "./location-review-action-buttons";',
   'import type { LocationReviewActionsProps } from "./location-review-actions.types";',
   "}: LocationReviewActionsProps) {",
-  '<div className="action-row">',
-  "onClick={onMarkConfirmed}",
-  "onClick={onMarkNeedsReview}",
-  "onClick={onResetReview}",
+  "return <LocationReviewActionButtons",
 ]) {
   if (!locationReviewActionsSource.includes(requiredLocationReviewActionsUsage)) {
     throw new Error(
@@ -23195,7 +23210,20 @@ if (locationReviewActionsSource.includes("type LocationReviewActionsProps = Pick
   throw new Error("location-review-actions.tsx must keep review-actions prop typing delegated");
 }
 
-const maxLocationReviewActionsLines = 30;
+for (const forbiddenLocationReviewActionsToken of [
+  '<div className="action-row">',
+  "onClick={onMarkConfirmed}",
+  "onClick={onMarkNeedsReview}",
+  "onClick={onResetReview}",
+]) {
+  if (locationReviewActionsSource.includes(forbiddenLocationReviewActionsToken)) {
+    throw new Error(
+      `location-review-actions.tsx must keep action-button rendering delegated: ${forbiddenLocationReviewActionsToken}`,
+    );
+  }
+}
+
+const maxLocationReviewActionsLines = 15;
 if (locationReviewActionsLines > maxLocationReviewActionsLines) {
   throw new Error(
     `location-review-actions.tsx exceeded ${maxLocationReviewActionsLines} lines: ${locationReviewActionsLines}`,
@@ -23216,6 +23244,56 @@ const maxLocationReviewActionsTypesLines = 2;
 if (locationReviewActionsTypesLines > maxLocationReviewActionsTypesLines) {
   throw new Error(
     `location-review-actions.types.ts exceeded ${maxLocationReviewActionsTypesLines} lines: ${locationReviewActionsTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewActionButtonsUsage of [
+  'import type { LocationReviewActionButtonsProps } from "./location-review-action-buttons.types";',
+  "}: LocationReviewActionButtonsProps) {",
+  '<div className="action-row">',
+  "onClick={onMarkConfirmed}",
+  "onClick={onMarkNeedsReview}",
+  "onClick={onResetReview}",
+]) {
+  if (!locationReviewActionButtonsSource.includes(requiredLocationReviewActionButtonsUsage)) {
+    throw new Error(
+      `location-review-action-buttons.tsx must own review action-button rendering: ${requiredLocationReviewActionButtonsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenLocationReviewActionButtonsToken of [
+  "LocationReviewActionsProps",
+  "return <LocationReviewActionButtons",
+]) {
+  if (locationReviewActionButtonsSource.includes(forbiddenLocationReviewActionButtonsToken)) {
+    throw new Error(
+      `location-review-action-buttons.tsx must keep parent composition and prop typing delegated: ${forbiddenLocationReviewActionButtonsToken}`,
+    );
+  }
+}
+
+const maxLocationReviewActionButtonsLines = 30;
+if (locationReviewActionButtonsLines > maxLocationReviewActionButtonsLines) {
+  throw new Error(
+    `location-review-action-buttons.tsx exceeded ${maxLocationReviewActionButtonsLines} lines: ${locationReviewActionButtonsLines}`,
+  );
+}
+
+for (const requiredLocationReviewActionButtonsTypesUsage of [
+  'import type { LocationReviewActionsProps } from "./location-review-actions.types"; export type LocationReviewActionButtonsProps = Pick<LocationReviewActionsProps, "canWriteWorkspace" | "onMarkConfirmed" | "onMarkNeedsReview" | "onResetReview" | "panelCopy">;',
+]) {
+  if (!locationReviewActionButtonsTypesSource.includes(requiredLocationReviewActionButtonsTypesUsage)) {
+    throw new Error(
+      `location-review-action-buttons.types.ts must own review action-button prop typing: ${requiredLocationReviewActionButtonsTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewActionButtonsTypesLines = 2;
+if (locationReviewActionButtonsTypesLines > maxLocationReviewActionButtonsTypesLines) {
+  throw new Error(
+    `location-review-action-buttons.types.ts exceeded ${maxLocationReviewActionButtonsTypesLines} lines: ${locationReviewActionButtonsTypesLines}`,
   );
 }
 

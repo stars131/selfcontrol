@@ -1,0 +1,1 @@
+import type { LocationReviewActionsProps } from "./location-review-actions.types"; export type LocationReviewActionButtonsProps = Pick<LocationReviewActionsProps, "canWriteWorkspace" | "onMarkConfirmed" | "onMarkNeedsReview" | "onResetReview" | "panelCopy">;

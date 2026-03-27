@@ -2619,6 +2619,10 @@ Last updated: 2026-03-27
   - recent-media issue action-button rendering now lives in `apps/web/components/recent-media-issue-card-action-buttons.tsx` instead of remaining inline inside `recent-media-issue-card-actions.tsx`
   - `recent-media-issue-card-actions.tsx` now stays focused on visibility gating while action-button rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this recent-media action-buttons boundary so future card-action changes do not regrow a mixed gating-and-button rendering module
+- Location Review Action Buttons Extraction V1:
+  - location-review action-button rendering now lives in `apps/web/components/location-review-action-buttons.tsx` instead of remaining inline inside `location-review-actions.tsx`
+  - `location-review-actions.tsx` now stays focused on action composition while action-button rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this review-action-buttons boundary so future location-review action changes do not regrow a mixed composition-and-button rendering module
 
 ## Next
 - Continue the next product slice
