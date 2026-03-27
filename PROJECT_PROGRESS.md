@@ -2531,6 +2531,10 @@ Last updated: 2026-03-27
   - reminder form and reminder list prop projection now live in `apps/web/components/record-reminder-panel-child-props.ts` instead of remaining inline inside `record-reminder-panel.tsx`
   - `record-reminder-panel.tsx` now stays focused on section layout and copy while child prop shaping remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this reminder child-props boundary so future reminder-surface changes do not regrow a mixed projection-and-rendering panel module
+- Record Reminder Item Card Child Prop Builder Extraction V1:
+  - reminder summary and reminder action prop projection now live in `apps/web/components/record-reminder-item-card-child-props.ts` instead of remaining inline inside `record-reminder-item-card.tsx`
+  - `record-reminder-item-card.tsx` now stays focused on card composition while child prop shaping remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this reminder item child-props boundary so future reminder-card changes do not regrow a mixed projection-and-rendering item module
 
 ## Next
 - Continue the next product slice
