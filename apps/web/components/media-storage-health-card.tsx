@@ -23,6 +23,7 @@ export function MediaStorageHealthCard({
     >
       <MediaStorageHealthHeader
         copy={copy}
+        locale={locale}
         mediaStorageHealth={mediaStorageHealth}
         onRefreshMediaStorageHealth={onRefreshMediaStorageHealth}
         refreshingMediaStorageHealth={refreshingMediaStorageHealth}

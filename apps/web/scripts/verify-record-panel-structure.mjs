@@ -22076,9 +22076,11 @@ if (mediaStorageHealthCardLines > maxMediaStorageHealthCardLines) {
 }
 
 for (const requiredMediaStorageHealthHeaderUsage of [
+  'import { getMediaStorageHealthStatusLabel } from "../lib/media-storage-health-display";',
   'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";',
   "}: MediaStorageHealthHeaderProps) {",
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  "getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)",
   "onClick={() => void onRefreshMediaStorageHealth()}",
   "{mediaStorageHealth.message}",
 ]) {
@@ -22101,7 +22103,7 @@ if (mediaStorageHealthHeaderLines > maxMediaStorageHealthHeaderLines) {
 }
 
 for (const requiredMediaStorageHealthHeaderTypesUsage of [
-  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types"; export type MediaStorageHealthHeaderProps = Pick<MediaStorageHealthCardProps, "copy" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;',
+  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types"; export type MediaStorageHealthHeaderProps = Pick<MediaStorageHealthCardProps, "copy" | "locale" | "mediaStorageHealth" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;',
 ]) {
   if (!mediaStorageHealthHeaderTypesSource.includes(requiredMediaStorageHealthHeaderTypesUsage)) {
     throw new Error(

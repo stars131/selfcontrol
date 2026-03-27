@@ -1,9 +1,11 @@
 "use client";
 
+import { getMediaStorageHealthStatusLabel } from "../lib/media-storage-health-display";
 import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";
 
 export function MediaStorageHealthHeader({
   copy,
+  locale,
   mediaStorageHealth,
   onRefreshMediaStorageHealth,
   refreshingMediaStorageHealth,
@@ -14,7 +16,7 @@ export function MediaStorageHealthHeader({
         <div>
           <div className="eyebrow">{copy.storageHealth}</div>
           <div style={{ marginTop: 8, fontWeight: 600 }}>
-            {mediaStorageHealth.status}
+            {getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)}
           </div>
         </div>
         {onRefreshMediaStorageHealth ? (

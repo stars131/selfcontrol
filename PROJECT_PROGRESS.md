@@ -2143,6 +2143,10 @@ Last updated: 2026-03-26
   - `media-retention-item-card.tsx` now reuses the shared media status display helper so retention candidate cards no longer leak raw `processing_status` values in the maintenance workspace
   - the media retention list keeps its current storage and lifecycle tags unchanged while making the execution status follow the active locale consistently with the rest of the media management UI
   - `verify-record-panel-structure.mjs` and `verify-workspace-media-retention-structure.mjs` now enforce the helper-based retention status rendering and current retention-content/list delegation so future retention maintenance updates stay maintainable under the enterprise standard
+- Media Storage Health Status Localization V1:
+  - `media-storage-health-display.ts` now owns localized labels for remote storage health states such as `ready`, `degraded`, `unreachable`, and `unhealthy`, while preserving safe fallback for future backend values
+  - `media-storage-health-header.tsx` now shows a localized storage-health status instead of the raw backend `status` code, and `media-storage-health-card.tsx` passes locale through that boundary explicitly
+  - `verify-record-panel-structure.mjs` now locks the helper-based health-status rendering and the updated header prop contract so future provider-settings maintenance stays maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice
