@@ -2275,6 +2275,9 @@ Last updated: 2026-03-26
 - Project Spec Repair V1:
   - `PROJECT_SPEC.md` now uses a clean, readable Chinese specification aligned with the current product direction instead of garbled text
   - the repaired spec restores the main project contract for feature scope, architecture, security, deployment, and long-term enterprise-grade evolution
+- Cross-Platform Project Verification Scripts V1:
+  - the repository now includes root-level `scripts/verify-all.ps1` and `scripts/verify-all.sh` so Windows and Linux VM development flows can run the same end-to-end verification contract locally
+  - these scripts align local validation with the existing frontend guardrails and backend pytest suite, reducing manual command drift before GitHub CI runs
 
 ## Next
 - Continue the next product slice

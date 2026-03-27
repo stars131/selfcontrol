@@ -57,6 +57,20 @@ python -m pip install -r apps/api/requirements-dev.txt
 python -m pytest apps/api/tests -q
 ```
 
+项目级统一校验：
+
+Windows：
+
+```powershell
+./scripts/verify-all.ps1
+```
+
+Linux VM：
+
+```bash
+sh ./scripts/verify-all.sh
+```
+
 ## 6. 当前建议
 
 - 本地 Windows + Linux VM 开发时，默认保持 `MEDIA_PROCESSING_MODE=async`

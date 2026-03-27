@@ -58,6 +58,20 @@ npm run verify:ui-guardrails
 python -m pytest apps/api/tests -q
 ```
 
+项目级一键校验：
+
+Windows PowerShell：
+
+```powershell
+./scripts/verify-all.ps1
+```
+
+Linux / macOS / VM：
+
+```bash
+sh ./scripts/verify-all.sh
+```
+
 ## 运行说明
 
 - `MEDIA_PROCESSING_MODE=async`
