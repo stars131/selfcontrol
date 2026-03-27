@@ -2278,6 +2278,9 @@ Last updated: 2026-03-26
 - Cross-Platform Project Verification Scripts V1:
   - the repository now includes root-level `scripts/verify-all.ps1` and `scripts/verify-all.sh` so Windows and Linux VM development flows can run the same end-to-end verification contract locally
   - these scripts align local validation with the existing frontend guardrails and backend pytest suite, reducing manual command drift before GitHub CI runs
+- Cross-Platform Text Normalization Guard V1:
+  - the repository now includes `.editorconfig` and `.gitattributes` so UTF-8, indentation, and line-ending behavior stay predictable across Windows, Linux VM, and GitHub CI environments
+  - this reduces noisy diffs, lowers the risk of accidental encoding drift, and strengthens long-term maintainability for a multilingual enterprise-grade codebase
 
 ## Next
 - Continue the next product slice

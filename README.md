@@ -72,6 +72,12 @@ Linux / macOS / VM：
 sh ./scripts/verify-all.sh
 ```
 
+## 跨平台文本规范
+
+- 仓库使用 `.editorconfig` 统一 UTF-8、缩进和默认换行规范
+- 仓库使用 `.gitattributes` 约束 Git 中的文本行尾，降低 Windows 和 Linux VM 间的无效 diff
+- `*.ps1` 保持 `CRLF`，其余主要源码和文档默认保持 `LF`
+
 ## 运行说明
 
 - `MEDIA_PROCESSING_MODE=async`
