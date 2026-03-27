@@ -14699,9 +14699,13 @@ if (mediaStorageOverviewProcessingGridTypesLines > maxMediaStorageOverviewProces
 }
 
 for (const requiredMediaStorageOverviewProviderTagsUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'from "../lib/storage-provider-display";',
   'import type { MediaStorageOverviewProviderTagsProps } from "./media-storage-overview-provider-tags.types";',
   "}: MediaStorageOverviewProviderTagsProps) {",
+  "const { locale } = useStoredLocale();",
   "Object.entries(mediaProcessingOverview.by_storage_provider)",
+  "getStorageProviderLabel(locale, providerCode)",
 ]) {
   if (!mediaStorageOverviewProviderTagsSource.includes(requiredMediaStorageOverviewProviderTagsUsage)) {
     throw new Error(
@@ -20340,13 +20344,14 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'from "../lib/media-issue-display";',
   'import { formatMediaSize } from "../lib/record-panel-format";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
+  'from "../lib/storage-provider-display";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
   "getProcessingStatusLabel(locale, asset.processing_status)",
+  "getStorageProviderLabel(locale, asset.storage_provider)",
   "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
   "getRetryStateLabel(locale, retryState)",
-  "{asset.storage_provider}",
   "{formatMediaSize(asset)}",
 ]) {
   if (!mediaAssetCardMetadataTagsSource.includes(requiredMediaAssetCardMetadataTagsUsage)) {
@@ -21732,8 +21737,10 @@ if (recentMediaIssueCardActionsTypesLines > maxRecentMediaIssueCardActionsTypesL
 }
 
 for (const requiredRecentMediaIssueCardTagsUsage of [
+  'from "../lib/storage-provider-display";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
   "}: RecentMediaIssueCardTagsProps) {",
+  "getStorageProviderLabel(locale, issue.storage_provider)",
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
     throw new Error(
@@ -21761,6 +21768,17 @@ if (recentMediaIssueCardTagsTypesLines > maxRecentMediaIssueCardTagsTypesLines) 
   throw new Error(
     `recent-media-issue-card-tags.types.ts exceeded ${maxRecentMediaIssueCardTagsTypesLines} lines: ${recentMediaIssueCardTagsTypesLines}`,
   );
+}
+
+for (const requiredDeadLetterRecoveryItemCardTagsUsage of [
+  'from "../lib/storage-provider-display";',
+  "getStorageProviderLabel(locale, item.storage_provider)",
+]) {
+  if (!deadLetterRecoveryItemCardTagsSource.includes(requiredDeadLetterRecoveryItemCardTagsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-tags.tsx must localize storage provider labels: ${requiredDeadLetterRecoveryItemCardTagsUsage}`,
+    );
+  }
 }
 
 for (const requiredMediaPreviewContentUsage of [
@@ -22158,9 +22176,11 @@ if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) 
 }
 
 for (const requiredMediaStorageHealthMetadataUsage of [
+  'import { getStorageProviderLabel } from "../lib/storage-provider-display";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
+  "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {

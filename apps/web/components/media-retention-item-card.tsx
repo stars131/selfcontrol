@@ -3,6 +3,7 @@
 import { getProcessingStatusLabel } from "../lib/media-issue-display";
 import { getMediaTypeLabel } from "../lib/media-type-display";
 import type { LocaleCode } from "../lib/locale";
+import { getStorageProviderLabel } from "../lib/storage-provider-display";
 import type { MediaRetentionItemCardProps } from "./media-retention-item-card.types";
 
 function formatCreatedAt(value: string, locale: LocaleCode) {
@@ -52,7 +53,7 @@ export function MediaRetentionItemCard({
         </div>
         <div className="tag-row" style={{ marginTop: 12 }}>
           <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
-          <span className="tag">{item.storage_provider}</span>
+          <span className="tag">{getStorageProviderLabel(locale, item.storage_provider)}</span>
           <span className="tag">{item.storage_tier === "archive" ? copy.archived : copy.primary}</span>
           {item.storage_provider !== "local" ? <span className="tag">{remoteReferenceLabel}</span> : null}
           {item.file_missing ? <span className="tag">{copy.missing}</span> : null}

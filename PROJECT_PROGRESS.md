@@ -2171,6 +2171,10 @@ Last updated: 2026-03-26
   - `workspace-role-display.ts` now also owns localized labels for workspace visibility states such as `private` and `public`, alongside the existing role labels
   - `workspace-list-section.tsx` and `workspace-settings-header-intro.tsx` now render localized workspace visibility and role labels instead of exposing raw backend values in the entry list and settings header
   - `verify-record-panel-structure.mjs` and `verify-workspace-settings-structure.mjs` now enforce the locale-aware workspace label helper usage so future workspace shell updates stay maintainable under the enterprise standard
+- Storage Provider Label Localization V1:
+  - `storage-provider-display.ts` now owns localized labels for common storage providers such as `local`, `custom`, and `s3`, while keeping unknown future provider codes visible as safe fallback text
+  - media status tags, dead-letter cards, retention cards, storage overview provider tags, and storage-health metadata now show localized provider labels instead of exposing raw storage-provider codes directly in the UI
+  - `verify-record-panel-structure.mjs` now enforces the shared storage-provider helper usage across those media and storage leaves so future observability updates stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

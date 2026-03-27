@@ -1,6 +1,7 @@
 "use client";
 
 import { getMediaIssueLabel, getProcessingStatusLabel, getRetryStateLabel } from "../lib/media-issue-display";
+import { getStorageProviderLabel } from "../lib/storage-provider-display";
 import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types";
 
 export function DeadLetterRecoveryItemCardTags({
@@ -13,7 +14,7 @@ export function DeadLetterRecoveryItemCardTags({
   return (
     <div className="tag-row">
       <span className="tag">{getProcessingStatusLabel(locale, item.processing_status)}</span>
-      <span className="tag">{item.storage_provider}</span>
+      <span className="tag">{getStorageProviderLabel(locale, item.storage_provider)}</span>
       {item.processing_retry_state ? (
         <span className="tag">
           {mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, item.processing_retry_state)}

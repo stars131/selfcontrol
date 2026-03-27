@@ -1,5 +1,6 @@
 "use client";
 
+import { getStorageProviderLabel } from "../lib/storage-provider-display";
 import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";
 
 export function MediaStorageHealthMetadata({
@@ -11,7 +12,7 @@ export function MediaStorageHealthMetadata({
   return (
     <>
       <div className="tag-row">
-        <span className="tag">provider {mediaStorageHealth.provider_code}</span>
+        <span className="tag">provider {getStorageProviderLabel(locale, mediaStorageHealth.provider_code)}</span>
         <span className="tag">{copy.secret} {formatSecretStatus(mediaStorageHealth.secret_status)}</span>
         {typeof mediaStorageHealth.reachable === "boolean" ? (
           <span className="tag">
