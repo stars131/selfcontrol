@@ -1962,6 +1962,10 @@ const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
 );
+const chatPanelActionsResultBuilderPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-actions-result-builder.ts",
+);
 const chatPanelActionHandlerInputsTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.types.ts",
@@ -3461,6 +3465,10 @@ const chatPanelActionDerivedDataResultTypesSource = fs.readFileSync(
 );
 const chatPanelActionHandlerInputsSource = fs.readFileSync(
   chatPanelActionHandlerInputsPath,
+  "utf8",
+);
+const chatPanelActionsResultBuilderSource = fs.readFileSync(
+  chatPanelActionsResultBuilderPath,
   "utf8",
 );
 const chatPanelActionHandlerInputsTypesSource = fs.readFileSync(
@@ -19684,7 +19692,6 @@ for (const requiredChatPanelActionHandlerInputsUsage of [
   'import type { ChatPanelActionState } from "./chat-panel-action-state-result.types";',
   "}: BuildChatPanelOperatorHandlerInput) {",
   "}: BuildChatPanelShareHandlerInput) {",
-  "}: BuildChatPanelActionsResultInput) {",
 ]) {
   if (!chatPanelActionHandlerInputsSource.includes(requiredChatPanelActionHandlerInputsUsage)) {
     throw new Error(
@@ -19701,10 +19708,39 @@ for (const forbiddenChatPanelActionHandlerInputsToken of [
   "}: {",
   "ReturnType<typeof useChatPanelActionDerivedData>",
   "ReturnType<typeof useChatPanelActionState>",
+  "}: BuildChatPanelActionsResultInput) {",
+  "unreadCount: derivedData.unreadCount,",
+  "handleDisableShareLink: shareHandlers.handleDisableShareLink,",
 ]) {
   if (chatPanelActionHandlerInputsSource.includes(forbiddenChatPanelActionHandlerInputsToken)) {
     throw new Error(
       `chat-panel-action-handler-inputs.ts must keep hook result inference delegated: ${forbiddenChatPanelActionHandlerInputsToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelActionsResultBuilderUsage of [
+  'import type { BuildChatPanelActionsResultInput } from "./chat-panel-action-handler-inputs.types";',
+  "export function buildChatPanelActionsResult(",
+  "}: BuildChatPanelActionsResultInput) {",
+  "unreadCount: derivedData.unreadCount,",
+  "handleDisableShareLink: shareHandlers.handleDisableShareLink,",
+]) {
+  if (!chatPanelActionsResultBuilderSource.includes(requiredChatPanelActionsResultBuilderUsage)) {
+    throw new Error(
+      `chat-panel-actions-result-builder.ts must own chat action result assembly: ${requiredChatPanelActionsResultBuilderUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelActionsResultBuilderToken of [
+  'from "./use-chat-panel-actions";',
+  "createChatPanelOperatorHandlers(",
+  "createChatPanelShareHandlers(",
+]) {
+  if (chatPanelActionsResultBuilderSource.includes(forbiddenChatPanelActionsResultBuilderToken)) {
+    throw new Error(
+      `chat-panel-actions-result-builder.ts must keep handler orchestration delegated: ${forbiddenChatPanelActionsResultBuilderToken}`,
     );
   }
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  buildChatPanelActionsResult,
   buildChatPanelOperatorHandlerInput,
   buildChatPanelShareHandlerInput,
 } from "./chat-panel-action-handler-inputs";
+import { buildChatPanelActionsResult } from "./chat-panel-actions-result-builder";
 import type { UseChatPanelActionsProps } from "./chat-panel-action-handler-inputs.types";
 import { createChatPanelOperatorHandlers } from "./chat-panel-operator-handlers";
 import { createChatPanelShareHandlers } from "./chat-panel-share-handlers";
@@ -24,5 +24,10 @@ export function useChatPanelActions(props: UseChatPanelActionsProps) {
     buildChatPanelShareHandlerInput({ props, state }),
   );
 
-  return buildChatPanelActionsResult({ derivedData, operatorHandlers, shareHandlers, state });
+  return buildChatPanelActionsResult({
+    derivedData,
+    operatorHandlers,
+    shareHandlers,
+    state,
+  });
 }
