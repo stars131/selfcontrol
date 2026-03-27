@@ -2575,6 +2575,10 @@ Last updated: 2026-03-27
   - dead-letter summary header rendering now lives in `apps/web/components/dead-letter-recovery-summary-header.tsx` instead of remaining inline inside `dead-letter-recovery-summary.tsx`
   - `dead-letter-recovery-summary.tsx` now stays focused on summary-level composition while header rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this summary-header boundary so future dead-letter summary changes do not regrow a mixed composition-and-header rendering module
+- Location Review History Item Extraction V1:
+  - single location-history entry rendering now lives in `apps/web/components/location-review-history-item.tsx` instead of remaining inline inside `location-review-history-list.tsx`
+  - `location-review-history-list.tsx` now stays focused on empty-state handling and history iteration while single entry rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this history-item boundary so future location-history changes do not regrow a mixed list-and-item rendering module
 
 ## Next
 - Continue the next product slice

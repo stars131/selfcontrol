@@ -2412,6 +2412,14 @@ const locationReviewDetailsTypesPath = path.resolve(
   process.cwd(),
   "components/location-review-details.types.ts",
 );
+const locationReviewHistoryItemPath = path.resolve(
+  process.cwd(),
+  "components/location-review-history-item.tsx",
+);
+const locationReviewHistoryItemTypesPath = path.resolve(
+  process.cwd(),
+  "components/location-review-history-item.types.ts",
+);
 const locationReviewHistoryListPath = path.resolve(
   process.cwd(),
   "components/location-review-history-list.tsx",
@@ -3877,6 +3885,11 @@ const locationReviewDetailsTypesSource = fs.readFileSync(
   locationReviewDetailsTypesPath,
   "utf8",
 );
+const locationReviewHistoryItemSource = fs.readFileSync(locationReviewHistoryItemPath, "utf8");
+const locationReviewHistoryItemTypesSource = fs.readFileSync(
+  locationReviewHistoryItemTypesPath,
+  "utf8",
+);
 const locationReviewHistoryListSource = fs.readFileSync(locationReviewHistoryListPath, "utf8");
 const locationReviewHistoryListTypesSource = fs.readFileSync(
   locationReviewHistoryListTypesPath,
@@ -5215,6 +5228,9 @@ const locationReviewFormFieldsTypesLines =
 const locationReviewDetailsLines = locationReviewDetailsSource.split(/\r?\n/).length;
 const locationReviewDetailsTypesLines =
   locationReviewDetailsTypesSource.split(/\r?\n/).length;
+const locationReviewHistoryItemLines = locationReviewHistoryItemSource.split(/\r?\n/).length;
+const locationReviewHistoryItemTypesLines =
+  locationReviewHistoryItemTypesSource.split(/\r?\n/).length;
 const locationReviewHistoryListTypesLines =
   locationReviewHistoryListTypesSource.split(/\r?\n/).length;
 const locationReviewStatusSummaryTypesLines =
@@ -23023,10 +23039,12 @@ if (locationReviewDetailsTypesLines > maxLocationReviewDetailsTypesLines) {
 }
 
 for (const requiredLocationReviewHistoryListUsage of [
-  'import { getLocationSourceLabel } from "../lib/location-source-display";',
+  'import { LocationReviewHistoryItem } from "./location-review-history-item";',
   'import type { LocationReviewHistoryListProps } from "./location-review-history-list.types";',
   "}: LocationReviewHistoryListProps) {",
-  "getLocationSourceLabel(entry.source, panelCopy)",
+  "<LocationReviewHistoryItem",
+  "entry={entry}",
+  "summarizeHistoryActionLabel={summarizeHistoryActionLabel}",
 ]) {
   if (!locationReviewHistoryListSource.includes(requiredLocationReviewHistoryListUsage)) {
     throw new Error(
@@ -23037,6 +23055,26 @@ for (const requiredLocationReviewHistoryListUsage of [
 
 if (locationReviewHistoryListSource.includes("type LocationReviewHistoryListProps = Pick<")) {
   throw new Error("location-review-history-list.tsx must keep location-history prop typing delegated");
+}
+
+for (const forbiddenLocationReviewHistoryListToken of [
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
+  '<article className="history-item" key={`${entry.changed_at}-${entry.action_code}`}>',
+  "getLocationSourceLabel(entry.source, panelCopy)",
+  "entry.review_note ? (",
+]) {
+  if (locationReviewHistoryListSource.includes(forbiddenLocationReviewHistoryListToken)) {
+    throw new Error(
+      `location-review-history-list.tsx must keep history-item rendering delegated: ${forbiddenLocationReviewHistoryListToken}`,
+    );
+  }
+}
+
+const maxLocationReviewHistoryListLines = 35;
+if (locationReviewHistoryListSource.split(/\r?\n/).length > maxLocationReviewHistoryListLines) {
+  throw new Error(
+    `location-review-history-list.tsx exceeded ${maxLocationReviewHistoryListLines} lines: ${locationReviewHistoryListSource.split(/\r?\n/).length}`,
+  );
 }
 
 for (const requiredLocationReviewHistoryListTypesUsage of [
@@ -23053,6 +23091,57 @@ const maxLocationReviewHistoryListTypesLines = 2;
 if (locationReviewHistoryListTypesLines > maxLocationReviewHistoryListTypesLines) {
   throw new Error(
     `location-review-history-list.types.ts exceeded ${maxLocationReviewHistoryListTypesLines} lines: ${locationReviewHistoryListTypesLines}`,
+  );
+}
+
+for (const requiredLocationReviewHistoryItemUsage of [
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
+  'import type { LocationReviewHistoryItemProps } from "./location-review-history-item.types";',
+  "}: LocationReviewHistoryItemProps) {",
+  '<article className="history-item">',
+  "getLocationSourceLabel(entry.source, panelCopy)",
+  "entry.review_note ? (",
+]) {
+  if (!locationReviewHistoryItemSource.includes(requiredLocationReviewHistoryItemUsage)) {
+    throw new Error(
+      `location-review-history-item.tsx must own history-item rendering: ${requiredLocationReviewHistoryItemUsage}`,
+    );
+  }
+}
+
+for (const forbiddenLocationReviewHistoryItemToken of [
+  "selectedLocationHistory.slice(0, 6)",
+  "panelCopy.noLocationHistory",
+  "LocationReviewHistoryListProps",
+]) {
+  if (locationReviewHistoryItemSource.includes(forbiddenLocationReviewHistoryItemToken)) {
+    throw new Error(
+      `location-review-history-item.tsx must keep list-level history concerns delegated: ${forbiddenLocationReviewHistoryItemToken}`,
+    );
+  }
+}
+
+const maxLocationReviewHistoryItemLines = 45;
+if (locationReviewHistoryItemLines > maxLocationReviewHistoryItemLines) {
+  throw new Error(
+    `location-review-history-item.tsx exceeded ${maxLocationReviewHistoryItemLines} lines: ${locationReviewHistoryItemLines}`,
+  );
+}
+
+for (const requiredLocationReviewHistoryItemTypesUsage of [
+  'import type { LocationHistoryEntry } from "../lib/types"; import type { LocationReviewHistoryListProps } from "./location-review-history-list.types"; export type LocationReviewHistoryItemProps = Pick<LocationReviewHistoryListProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "panelCopy" | "summarizeHistoryActionLabel"> & { entry: LocationHistoryEntry };',
+]) {
+  if (!locationReviewHistoryItemTypesSource.includes(requiredLocationReviewHistoryItemTypesUsage)) {
+    throw new Error(
+      `location-review-history-item.types.ts must own history-item prop typing: ${requiredLocationReviewHistoryItemTypesUsage}`,
+    );
+  }
+}
+
+const maxLocationReviewHistoryItemTypesLines = 2;
+if (locationReviewHistoryItemTypesLines > maxLocationReviewHistoryItemTypesLines) {
+  throw new Error(
+    `location-review-history-item.types.ts exceeded ${maxLocationReviewHistoryItemTypesLines} lines: ${locationReviewHistoryItemTypesLines}`,
   );
 }
 

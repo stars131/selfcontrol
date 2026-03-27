@@ -1,0 +1,1 @@
+import type { LocationHistoryEntry } from "../lib/types"; import type { LocationReviewHistoryListProps } from "./location-review-history-list.types"; export type LocationReviewHistoryItemProps = Pick<LocationReviewHistoryListProps, "formatHistoryTimestampLabel" | "formatReviewStatusLabel" | "panelCopy" | "summarizeHistoryActionLabel"> & { entry: LocationHistoryEntry };
