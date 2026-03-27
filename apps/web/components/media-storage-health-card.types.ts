@@ -4,6 +4,7 @@ import type { LocaleCode } from "../lib/locale";
 import type { MediaStorageProviderHealth, ProviderFeatureConfig } from "../lib/types";
 
 export type MediaStorageHealthCopy = {
+  provider: string;
   storageHealth: string;
   refreshHealth: string;
   refreshing: string;

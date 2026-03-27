@@ -22211,6 +22211,7 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
+  "copy.provider",
   "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',

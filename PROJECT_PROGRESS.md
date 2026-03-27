@@ -2185,6 +2185,9 @@ Last updated: 2026-03-26
 - Legacy Record Actions Localization V1:
   - legacy record form actions now reuse the shared record-panel UI copy for saving, updating, creating, deleting, and empty-list states instead of leaving English-only fallback text in the classic panel
   - `verify-record-panel-structure.mjs` now enforces those locale-aware copy dependencies in the remaining legacy action leaves so future maintenance stays aligned with the enterprise localization baseline
+- Media Storage Health Label Localization V1:
+  - media storage health metadata now uses the localized provider label prefix from provider settings copy instead of hardcoding an English `provider` tag in every locale
+  - shared health-card copy typing and structure verification now explicitly require the provider label so future storage observability work stays maintainable
 
 ## Next
 - Continue the next product slice

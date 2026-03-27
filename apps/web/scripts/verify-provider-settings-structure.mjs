@@ -520,6 +520,7 @@ if (mediaStorageHealthCapabilitiesLineCount > maxMediaStorageHealthCapabilitiesL
 
 for (const requiredHealthTypesUsage of [
   "export type MediaStorageHealthCopy = {",
+  "provider: string;",
   "export type MediaStorageHealthCardProps = {",
   'readAnchorHighlightClass: (targetId: string, highlightedAnchor?: string | null) => string;',
 ]) {
