@@ -2711,6 +2711,10 @@ Last updated: 2026-03-28
   - recent-media issue remote-fetch tag rendering now lives in `apps/web/components/recent-media-issue-card-remote-fetch-tag.tsx` instead of remaining inline inside `recent-media-issue-card-tags.tsx`
   - `recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while remote-fetch rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this remote-fetch-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-remote-fetch rendering module
+- Recent Media Retry State Tag Extraction V1:
+  - recent-media issue retry-state tag rendering now lives in `apps/web/components/recent-media-issue-card-retry-state-tag.tsx` instead of remaining inline inside `recent-media-issue-card-tags.tsx`
+  - `recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared tag composition while retry-state rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-state-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-retry-state rendering module
 
 ## Next
 - Continue the next product slice
