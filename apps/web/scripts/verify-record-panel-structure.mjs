@@ -19913,6 +19913,14 @@ if (chatPanelHeaderTypesLines > maxChatPanelHeaderTypesLines) {
 for (const requiredChatPanelComposerUsage of [
   'import type { ChatPanelComposerProps } from "./chat-panel-composer.types";',
   "}: ChatPanelComposerProps) {",
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "copy.composerPlaceholder",
+  "copy.composerViewerPlaceholder",
+  "copy.workingLabel",
+  "copy.sendLabel",
 ]) {
   if (!chatPanelComposerSource.includes(requiredChatPanelComposerUsage)) {
     throw new Error(
@@ -19923,6 +19931,17 @@ for (const requiredChatPanelComposerUsage of [
 
 if (chatPanelComposerSource.includes("type ChatPanelComposerProps = {")) {
   throw new Error("chat-panel-composer.tsx must keep panel-composer prop typing delegated");
+}
+
+for (const forbiddenChatPanelComposerCopyToken of [
+  '"Examples: save this snack note',
+  '"Viewer mode: chat creation is disabled for this shared workspace."',
+  '"Working..."',
+  '"Send"',
+]) {
+  if (chatPanelComposerSource.includes(forbiddenChatPanelComposerCopyToken)) {
+    throw new Error(`chat-panel-composer.tsx must keep localized composer copy delegated: ${forbiddenChatPanelComposerCopyToken}`);
+  }
 }
 
 for (const requiredChatPanelComposerTypesUsage of [

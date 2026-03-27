@@ -311,12 +311,30 @@ for (const forbiddenConversationBarCopyToken of ['"New conversation"', '"Syncing
   }
 }
 
-if (!chatPanelComposerSource.includes("Examples: save this snack note")) {
-  throw new Error("chat-panel-composer.tsx must keep the write-mode placeholder");
+for (const requiredComposerCopyUsage of [
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getChatPanelDisplayCopy } from "./chat-panel-display-copy";',
+  "const { locale } = useStoredLocale();",
+  "const copy = getChatPanelDisplayCopy(locale);",
+  "copy.composerPlaceholder",
+  "copy.composerViewerPlaceholder",
+  "copy.workingLabel",
+  "copy.sendLabel",
+]) {
+  if (!chatPanelComposerSource.includes(requiredComposerCopyUsage)) {
+    throw new Error(`chat-panel-composer.tsx must delegate localized composer copy: ${requiredComposerCopyUsage}`);
+  }
 }
 
-if (!chatPanelComposerSource.includes("Viewer mode: chat creation is disabled for this shared workspace.")) {
-  throw new Error("chat-panel-composer.tsx must keep the viewer-mode placeholder");
+for (const forbiddenComposerCopyToken of [
+  '"Examples: save this snack note',
+  '"Viewer mode: chat creation is disabled for this shared workspace."',
+  '"Working..."',
+  '"Send"',
+]) {
+  if (chatPanelComposerSource.includes(forbiddenComposerCopyToken)) {
+    throw new Error(`chat-panel-composer.tsx must not hardcode localized composer labels: ${forbiddenComposerCopyToken}`);
+  }
 }
 
 if (!chatMessageThreadSource.includes('import { ChatMessageSources } from "./chat-message-sources";')) {
