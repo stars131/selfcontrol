@@ -2547,6 +2547,10 @@ Last updated: 2026-03-27
   - location and map-status derived state now live in `apps/web/components/record-summary-card-derived.ts` instead of remaining inline inside `record-summary-card.tsx`
   - `record-summary-card.tsx` now stays focused on summary-card rendering while location review reads and derived display state remain centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this derived-state boundary so future summary-card changes do not regrow mixed data-access and rendering logic
+- Record Results Timeline Day Extraction V1:
+  - single-day timeline section rendering now lives in `apps/web/components/record-results-timeline-day.tsx` instead of remaining inline inside `record-results-timeline-view.tsx`
+  - `record-results-timeline-view.tsx` now stays focused on timeline iteration and empty-state rendering while single-day layout remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this timeline-day boundary so future results timeline changes do not regrow a mixed list-and-day rendering module
 
 ## Next
 - Continue the next product slice

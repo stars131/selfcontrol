@@ -2623,6 +2623,14 @@ const recordResultsTimelineViewPath = path.resolve(
   process.cwd(),
   "components/record-results-timeline-view.tsx",
 );
+const recordResultsTimelineDayPath = path.resolve(
+  process.cwd(),
+  "components/record-results-timeline-day.tsx",
+);
+const recordResultsTimelineDayTypesPath = path.resolve(
+  process.cwd(),
+  "components/record-results-timeline-day.types.ts",
+);
 const recordResultsTimelineViewTypesPath = path.resolve(
   process.cwd(),
   "components/record-results-timeline-view.types.ts",
@@ -4007,6 +4015,11 @@ const recordResultsTimelineViewSource = fs.readFileSync(
   recordResultsTimelineViewPath,
   "utf8",
 );
+const recordResultsTimelineDaySource = fs.readFileSync(recordResultsTimelineDayPath, "utf8");
+const recordResultsTimelineDayTypesSource = fs.readFileSync(
+  recordResultsTimelineDayTypesPath,
+  "utf8",
+);
 const recordResultsTimelineViewTypesSource = fs.readFileSync(
   recordResultsTimelineViewTypesPath,
   "utf8",
@@ -5201,8 +5214,13 @@ const recordResultsSummaryCardPropsLines =
   recordResultsSummaryCardPropsSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsTypesLines =
   recordResultsSharedCardPropsTypesSource.split(/\r?\n/).length;
+const recordResultsListViewLines = recordResultsListViewSource.split(/\r?\n/).length;
 const recordResultsListViewTypesLines =
   recordResultsListViewTypesSource.split(/\r?\n/).length;
+const recordResultsTimelineViewLines = recordResultsTimelineViewSource.split(/\r?\n/).length;
+const recordResultsTimelineDayLines = recordResultsTimelineDaySource.split(/\r?\n/).length;
+const recordResultsTimelineDayTypesLines =
+  recordResultsTimelineDayTypesSource.split(/\r?\n/).length;
 const recordResultsTimelineViewTypesLines =
   recordResultsTimelineViewTypesSource.split(/\r?\n/).length;
 const recordPanelV2TypesLines = recordPanelV2TypesSource.split(/\r?\n/).length;
@@ -23541,6 +23559,92 @@ const maxRecordReminderListItemPropsTypesLines = 2;
 if (recordReminderListItemPropsTypesLines > maxRecordReminderListItemPropsTypesLines) {
   throw new Error(
     `record-reminder-list-item-props.types.ts exceeded ${maxRecordReminderListItemPropsTypesLines} lines: ${recordReminderListItemPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecordResultsTimelineViewUsage of [
+  'import { RecordResultsTimelineDay } from "./record-results-timeline-day";',
+  'import type { RecordResultsTimelineViewProps } from "./record-results-timeline-view.types";',
+  "}: RecordResultsTimelineViewProps) {",
+  "<RecordResultsTimelineDay",
+  "day={day}",
+  "sharedCardProps={sharedCardProps}",
+]) {
+  if (!recordResultsTimelineViewSource.includes(requiredRecordResultsTimelineViewUsage)) {
+    throw new Error(
+      `record-results-timeline-view.tsx must reuse the extracted timeline-day leaf: ${requiredRecordResultsTimelineViewUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsTimelineViewToken of [
+  'import { renderRecordSummaryCard } from "./record-results-shared";',
+  '<section className="record-card" key={day.date}>',
+  'day.items.map((record) => renderRecordSummaryCard(record, sharedCardProps))',
+  'day.top_places.map((place) => (',
+]) {
+  if (recordResultsTimelineViewSource.includes(forbiddenRecordResultsTimelineViewToken)) {
+    throw new Error(
+      `record-results-timeline-view.tsx must keep timeline-day rendering delegated: ${forbiddenRecordResultsTimelineViewToken}`,
+    );
+  }
+}
+
+const maxRecordResultsTimelineViewLines = 35;
+if (recordResultsTimelineViewLines > maxRecordResultsTimelineViewLines) {
+  throw new Error(
+    `record-results-timeline-view.tsx exceeded ${maxRecordResultsTimelineViewLines} lines: ${recordResultsTimelineViewLines}`,
+  );
+}
+
+for (const requiredRecordResultsTimelineDayUsage of [
+  'import { renderRecordSummaryCard } from "./record-results-shared";',
+  'import type { RecordResultsTimelineDayProps } from "./record-results-timeline-day.types";',
+  "}: RecordResultsTimelineDayProps) {",
+  '<section className="record-card">',
+  'day.items.map((record) => renderRecordSummaryCard(record, sharedCardProps))',
+  'day.top_places.map((place) => (',
+]) {
+  if (!recordResultsTimelineDaySource.includes(requiredRecordResultsTimelineDayUsage)) {
+    throw new Error(
+      `record-results-timeline-day.tsx must own single-day timeline rendering: ${requiredRecordResultsTimelineDayUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordResultsTimelineDayToken of [
+  "noRecordsLabel",
+  "timelineDays.length ? (",
+  "RecordResultsTimelineViewProps",
+]) {
+  if (recordResultsTimelineDaySource.includes(forbiddenRecordResultsTimelineDayToken)) {
+    throw new Error(
+      `record-results-timeline-day.tsx must keep list-level timeline concerns delegated: ${forbiddenRecordResultsTimelineDayToken}`,
+    );
+  }
+}
+
+const maxRecordResultsTimelineDayLines = 45;
+if (recordResultsTimelineDayLines > maxRecordResultsTimelineDayLines) {
+  throw new Error(
+    `record-results-timeline-day.tsx exceeded ${maxRecordResultsTimelineDayLines} lines: ${recordResultsTimelineDayLines}`,
+  );
+}
+
+for (const requiredRecordResultsTimelineDayTypesUsage of [
+  'import type { TimelineDay } from "../lib/types"; import type { RecordResultsSharedCardProps, RecordResultsViewProps } from "./record-results-view.types"; export type RecordResultsTimelineDayProps = Pick<RecordResultsViewProps, "formatAvoidCountLabel" | "formatTimelineCountLabel" | "formatTimelineDateLabel" | "timelineDayLabel"> & { day: TimelineDay; sharedCardProps: RecordResultsSharedCardProps };',
+]) {
+  if (!recordResultsTimelineDayTypesSource.includes(requiredRecordResultsTimelineDayTypesUsage)) {
+    throw new Error(
+      `record-results-timeline-day.types.ts must own timeline-day prop typing: ${requiredRecordResultsTimelineDayTypesUsage}`,
+    );
+  }
+}
+
+const maxRecordResultsTimelineDayTypesLines = 2;
+if (recordResultsTimelineDayTypesLines > maxRecordResultsTimelineDayTypesLines) {
+  throw new Error(
+    `record-results-timeline-day.types.ts exceeded ${maxRecordResultsTimelineDayTypesLines} lines: ${recordResultsTimelineDayTypesLines}`,
   );
 }
 
