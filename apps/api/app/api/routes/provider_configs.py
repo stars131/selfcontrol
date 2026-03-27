@@ -8,7 +8,7 @@ from app.api.deps import get_current_user, require_workspace_write_access
 from app.db.session import get_db
 from app.models.user import User
 from app.services.audit import log_audit_event
-from app.services.media_remote_storage import get_media_storage_provider_health
+from app.services.media_remote_storage_health import get_media_storage_provider_health
 from app.services.provider_configs import list_provider_configs, upsert_provider_config
 
 

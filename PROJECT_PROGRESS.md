@@ -2344,6 +2344,9 @@ Last updated: 2026-03-26
 - Workspace Transfer Manifest Boundary Extraction V1:
   - shared workspace transfer schema constants, datetime encode/decode helpers, and reference-only import metadata tagging now live in `apps/api/app/services/workspace_transfer_manifest.py`
   - workspace export and import services now rely on the same transfer-manifest helper module for core protocol conventions, reducing drift risk when the archive schema evolves
+- Remote Media Storage Health Boundary Extraction V1:
+  - media storage health result typing, capability parsing, and `/media/health` probe logic now live in `apps/api/app/services/media_remote_storage_health.py`, while upload/download/delete webhook transport stays in `apps/api/app/services/media_remote_storage.py`
+  - provider-config routes now read remote storage health from the dedicated health module, reducing coupling between observability checks and binary transfer operations
 
 ## Next
 - Continue the next product slice
