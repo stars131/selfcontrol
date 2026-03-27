@@ -121,6 +121,14 @@ const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
 );
+const chatPanelOperatorHandlerInputPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-operator-handler-input.ts",
+);
+const chatPanelShareHandlerInputPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-share-handler-input.ts",
+);
 const chatPanelActionsResultBuilderPath = path.resolve(
   process.cwd(),
   "components/chat-panel-actions-result-builder.ts",
@@ -133,6 +141,14 @@ const chatPanelActionHandlerInputsSource = fs.readFileSync(
   chatPanelActionHandlerInputsPath,
   "utf8",
 );
+const chatPanelOperatorHandlerInputSource = fs.readFileSync(
+  chatPanelOperatorHandlerInputPath,
+  "utf8",
+);
+const chatPanelShareHandlerInputSource = fs.readFileSync(
+  chatPanelShareHandlerInputPath,
+  "utf8",
+);
 const chatPanelActionsResultBuilderSource = fs.readFileSync(
   chatPanelActionsResultBuilderPath,
   "utf8",
@@ -143,6 +159,10 @@ const chatPanelActionHandlerInputsTypesSource = fs.readFileSync(
 );
 const chatPanelActionHandlerInputsLineCount =
   chatPanelActionHandlerInputsSource.split(/\r?\n/).length;
+const chatPanelOperatorHandlerInputLineCount =
+  chatPanelOperatorHandlerInputSource.split(/\r?\n/).length;
+const chatPanelShareHandlerInputLineCount =
+  chatPanelShareHandlerInputSource.split(/\r?\n/).length;
 const chatPanelActionsResultBuilderLineCount =
   chatPanelActionsResultBuilderSource.split(/\r?\n/).length;
 const chatPanelActionHandlerInputsTypesLineCount =
@@ -698,13 +718,8 @@ for (const forbiddenActionsToken of [
 }
 
 for (const requiredActionHandlerInputsUsage of [
-  'from "./chat-panel-action-handler-inputs.types";',
-  "export function buildChatPanelOperatorHandlerInput(",
-  "export function buildChatPanelShareHandlerInput(",
-  "}: BuildChatPanelOperatorHandlerInput) {",
-  "}: BuildChatPanelShareHandlerInput) {",
-  "draft: state.draft,",
-  "onCreateShareLink: props.onCreateShareLink,",
+  'export { buildChatPanelOperatorHandlerInput } from "./chat-panel-operator-handler-input";',
+  'export { buildChatPanelShareHandlerInput } from "./chat-panel-share-handler-input";',
 ]) {
   if (!chatPanelActionHandlerInputsSource.includes(requiredActionHandlerInputsUsage)) {
     throw new Error(
@@ -726,6 +741,11 @@ for (const forbiddenActionHandlerInputsTypingToken of [
 }
 
 for (const forbiddenActionHandlerInputsToken of [
+  'from "./chat-panel-action-handler-inputs.types";',
+  "export function buildChatPanelOperatorHandlerInput(",
+  "export function buildChatPanelShareHandlerInput(",
+  "draft: state.draft,",
+  "onCreateShareLink: props.onCreateShareLink,",
   "useChatPanelActionState(",
   "useChatPanelActionDerivedData(",
   "createChatPanelOperatorHandlers(",
@@ -740,10 +760,80 @@ for (const forbiddenActionHandlerInputsToken of [
   }
 }
 
-const maxActionHandlerInputsLines = 50;
+const maxActionHandlerInputsLines = 5;
 if (chatPanelActionHandlerInputsLineCount > maxActionHandlerInputsLines) {
   throw new Error(
     `chat-panel-action-handler-inputs.ts exceeded ${maxActionHandlerInputsLines} lines: ${chatPanelActionHandlerInputsLineCount}`,
+  );
+}
+
+for (const requiredOperatorHandlerInputUsage of [
+  'from "./chat-panel-action-handler-inputs.types";',
+  "export function buildChatPanelOperatorHandlerInput(",
+  "}: BuildChatPanelOperatorHandlerInput) {",
+  "draft: state.draft,",
+  "onSendMessage: props.onSendMessage,",
+  "setSyncing: state.setSyncing,",
+]) {
+  if (!chatPanelOperatorHandlerInputSource.includes(requiredOperatorHandlerInputUsage)) {
+    throw new Error(
+      `chat-panel-operator-handler-input.ts must own operator input shaping: ${requiredOperatorHandlerInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenOperatorHandlerInputToken of [
+  "onCreateShareLink: props.onCreateShareLink,",
+  "onDisableShareLink: props.onDisableShareLink,",
+  "setCreatingShare: state.setCreatingShare,",
+  "setShareName: state.setShareName,",
+]) {
+  if (chatPanelOperatorHandlerInputSource.includes(forbiddenOperatorHandlerInputToken)) {
+    throw new Error(
+      `chat-panel-operator-handler-input.ts must keep share input shaping delegated: ${forbiddenOperatorHandlerInputToken}`,
+    );
+  }
+}
+
+const maxOperatorHandlerInputLines = 25;
+if (chatPanelOperatorHandlerInputLineCount > maxOperatorHandlerInputLines) {
+  throw new Error(
+    `chat-panel-operator-handler-input.ts exceeded ${maxOperatorHandlerInputLines} lines: ${chatPanelOperatorHandlerInputLineCount}`,
+  );
+}
+
+for (const requiredShareHandlerInputUsage of [
+  'from "./chat-panel-action-handler-inputs.types";',
+  "export function buildChatPanelShareHandlerInput(",
+  "}: BuildChatPanelShareHandlerInput) {",
+  "onCreateShareLink: props.onCreateShareLink,",
+  "onDisableShareLink: props.onDisableShareLink,",
+  "sharePermission: state.sharePermission,",
+]) {
+  if (!chatPanelShareHandlerInputSource.includes(requiredShareHandlerInputUsage)) {
+    throw new Error(
+      `chat-panel-share-handler-input.ts must own share input shaping: ${requiredShareHandlerInputUsage}`,
+    );
+  }
+}
+
+for (const forbiddenShareHandlerInputToken of [
+  "draft: state.draft,",
+  "onSendMessage: props.onSendMessage,",
+  "setLoading: state.setLoading,",
+  "setSyncing: state.setSyncing,",
+]) {
+  if (chatPanelShareHandlerInputSource.includes(forbiddenShareHandlerInputToken)) {
+    throw new Error(
+      `chat-panel-share-handler-input.ts must keep operator input shaping delegated: ${forbiddenShareHandlerInputToken}`,
+    );
+  }
+}
+
+const maxShareHandlerInputLines = 25;
+if (chatPanelShareHandlerInputLineCount > maxShareHandlerInputLines) {
+  throw new Error(
+    `chat-panel-share-handler-input.ts exceeded ${maxShareHandlerInputLines} lines: ${chatPanelShareHandlerInputLineCount}`,
   );
 }
 

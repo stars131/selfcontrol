@@ -2511,6 +2511,10 @@ Last updated: 2026-03-27
   - share-link creation now lives in `apps/web/components/chat-panel-share-create-handler.ts`, while share-link disable flow now lives in `apps/web/components/chat-panel-share-disable-handler.ts`
   - `chat-panel-share-handlers.ts` now stays as a thin composition boundary so share creation and share status management can evolve independently
   - the chat-panel and record-panel structure guardrails now enforce this create-versus-disable split so future sharing behavior does not regrow a mixed handler module
+- Chat Panel Operator And Share Handler Input Split V1:
+  - operator handler input shaping now lives in `apps/web/components/chat-panel-operator-handler-input.ts`, while share handler input shaping now lives in `apps/web/components/chat-panel-share-handler-input.ts`
+  - `chat-panel-action-handler-inputs.ts` now stays as a thin re-export boundary so operator and share input shaping can evolve independently
+  - the chat-panel and record-panel structure guardrails now enforce this operator-versus-share input split so future action wiring does not regrow a mixed input-shaping module
 
 ## Next
 - Continue the next product slice
