@@ -2491,6 +2491,10 @@ Last updated: 2026-03-27
   - filter reset, filter apply, and location-filter projection now live in `apps/web/components/workspace-shell-record-filter-apply-actions.ts`, while search preset create/delete persistence lives in `apps/web/components/workspace-shell-search-preset-actions.ts`
   - `workspace-shell-record-filter-actions.ts` now stays as a thin composition boundary so filtering behavior and preset persistence can evolve independently
   - the workspace-shell structure guardrail now enforces this filter-versus-preset split so future discovery UX changes do not regrow a mixed action module
+- Workspace Shell Media Action Group Split V1:
+  - media upload now lives in `apps/web/components/workspace-shell-media-upload-actions.ts`, selected-record media delete/retry/status actions now live in `apps/web/components/workspace-shell-media-selected-actions.ts`, and dead-letter bulk recovery now lives in `apps/web/components/workspace-shell-media-dead-letter-actions.ts`
+  - `workspace-shell-media-actions.ts` now stays as a thin composition boundary so upload flow, selected-media flow, and dead-letter recovery can evolve independently
+  - the workspace-shell structure guardrail now enforces this media action-group split so future media-operations growth does not regrow a mixed action module
 
 ## Next
 - Continue the next product slice
