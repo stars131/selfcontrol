@@ -2536,6 +2536,14 @@ const recentMediaIssuesPanelListTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issues-panel-list.types.ts",
 );
+const recentMediaIssuesPanelListPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-list-props.ts",
+);
+const recentMediaIssuesPanelListPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-list-props.types.ts",
+);
 const recentMediaIssuesListItemPropsPath = path.resolve(
   process.cwd(),
   "components/recent-media-issues-list-item-props.ts",
@@ -4175,6 +4183,14 @@ const recentMediaIssuesPanelListTypesSource = fs.readFileSync(
   recentMediaIssuesPanelListTypesPath,
   "utf8",
 );
+const recentMediaIssuesPanelListPropsSource = fs.readFileSync(
+  recentMediaIssuesPanelListPropsPath,
+  "utf8",
+);
+const recentMediaIssuesPanelListPropsTypesSource = fs.readFileSync(
+  recentMediaIssuesPanelListPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssuesListItemPropsSource = fs.readFileSync(
   recentMediaIssuesListItemPropsPath,
   "utf8",
@@ -5650,6 +5666,10 @@ const recentMediaIssuesPanelListLines =
   recentMediaIssuesPanelListSource.split(/\r?\n/).length;
 const recentMediaIssuesPanelListTypesLines =
   recentMediaIssuesPanelListTypesSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelListPropsLines =
+  recentMediaIssuesPanelListPropsSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelListPropsTypesLines =
+  recentMediaIssuesPanelListPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssuesListItemPropsLines =
   recentMediaIssuesListItemPropsSource.split(/\r?\n/).length;
 const recentMediaIssuesListItemPropsTypesLines =
@@ -24195,15 +24215,16 @@ for (const requiredRecentMediaIssuesPanelUsage of [
   'import { RecentMediaIssuesPanelEmpty } from "./recent-media-issues-panel-empty";',
   'import { RecentMediaIssuesPanelIntro } from "./recent-media-issues-panel-intro";',
   'import { RecentMediaIssuesPanelList } from "./recent-media-issues-panel-list";',
+  'import { buildRecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list-props";',
   'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
-  "}: RecentMediaIssuesPanelProps) {",
+  "export function RecentMediaIssuesPanel({ mediaIssueCopy, ...props }: RecentMediaIssuesPanelProps) {",
   "<RecentMediaIssuesPanelIntro mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssuesPanelEmpty mediaIssueCopy={mediaIssueCopy} />",
-  "<RecentMediaIssuesPanelList",
+  "...buildRecentMediaIssuesPanelListProps({ mediaIssueCopy, ...props })",
 ]) {
   if (!recentMediaIssuesPanelSource.includes(requiredRecentMediaIssuesPanelUsage)) {
     throw new Error(
-      `recent-media-issues-panel.tsx must compose the extracted panel-intro leaf: ${requiredRecentMediaIssuesPanelUsage}`,
+      `recent-media-issues-panel.tsx must reuse the extracted panel list-props builder: ${requiredRecentMediaIssuesPanelUsage}`,
     );
   }
 }
@@ -24216,15 +24237,18 @@ for (const forbiddenRecentMediaIssuesPanelToken of [
   'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
   '<div className="record-list compact-list" style={{ marginTop: 16 }}>',
   "mediaProcessingOverview.recent_issues.map((issue) => (",
+  "canWriteWorkspace={",
+  "retryingMediaId={",
+  "workspaceId={",
 ]) {
   if (recentMediaIssuesPanelSource.includes(forbiddenRecentMediaIssuesPanelToken)) {
     throw new Error(
-      `recent-media-issues-panel.tsx must keep panel-intro rendering delegated: ${forbiddenRecentMediaIssuesPanelToken}`,
+      `recent-media-issues-panel.tsx must keep panel list-projection delegated: ${forbiddenRecentMediaIssuesPanelToken}`,
     );
   }
 }
 
-const maxRecentMediaIssuesPanelLines = 40;
+const maxRecentMediaIssuesPanelLines = 18;
 if (recentMediaIssuesPanelLines > maxRecentMediaIssuesPanelLines) {
   throw new Error(
     `recent-media-issues-panel.tsx exceeded ${maxRecentMediaIssuesPanelLines} lines: ${recentMediaIssuesPanelLines}`,
@@ -24380,6 +24404,55 @@ const maxRecentMediaIssuesPanelListTypesLines = 2;
 if (recentMediaIssuesPanelListTypesLines > maxRecentMediaIssuesPanelListTypesLines) {
   throw new Error(
     `recent-media-issues-panel-list.types.ts exceeded ${maxRecentMediaIssuesPanelListTypesLines} lines: ${recentMediaIssuesPanelListTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelListPropsUsage of [
+  'import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types";',
+  'import type { BuildRecentMediaIssuesPanelListPropsInput } from "./recent-media-issues-panel-list-props.types";',
+  "export function buildRecentMediaIssuesPanelListProps(props: BuildRecentMediaIssuesPanelListPropsInput): RecentMediaIssuesPanelListProps {",
+  "return props;",
+]) {
+  if (!recentMediaIssuesPanelListPropsSource.includes(requiredRecentMediaIssuesPanelListPropsUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-list-props.ts must own recent-media panel list prop projection: ${requiredRecentMediaIssuesPanelListPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssuesPanelListPropsToken of [
+  "<RecentMediaIssuesPanelList",
+  "<RecentMediaIssuesPanelEmpty",
+  "recent_issues.length ? (",
+]) {
+  if (recentMediaIssuesPanelListPropsSource.includes(forbiddenRecentMediaIssuesPanelListPropsToken)) {
+    throw new Error(
+      `recent-media-issues-panel-list-props.ts must keep panel rendering delegated: ${forbiddenRecentMediaIssuesPanelListPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelListPropsLines = 8;
+if (recentMediaIssuesPanelListPropsLines > maxRecentMediaIssuesPanelListPropsLines) {
+  throw new Error(
+    `recent-media-issues-panel-list-props.ts exceeded ${maxRecentMediaIssuesPanelListPropsLines} lines: ${recentMediaIssuesPanelListPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelListPropsTypesUsage of [
+  'import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types"; export type BuildRecentMediaIssuesPanelListPropsInput = RecentMediaIssuesPanelListProps;',
+]) {
+  if (!recentMediaIssuesPanelListPropsTypesSource.includes(requiredRecentMediaIssuesPanelListPropsTypesUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-list-props.types.ts must own recent-media panel list-props input typing: ${requiredRecentMediaIssuesPanelListPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelListPropsTypesLines = 2;
+if (recentMediaIssuesPanelListPropsTypesLines > maxRecentMediaIssuesPanelListPropsTypesLines) {
+  throw new Error(
+    `recent-media-issues-panel-list-props.types.ts exceeded ${maxRecentMediaIssuesPanelListPropsTypesLines} lines: ${recentMediaIssuesPanelListPropsTypesLines}`,
   );
 }
 
