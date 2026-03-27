@@ -21,12 +21,24 @@ const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8
 const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
+const metadataDetailsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-details.tsx");
+const metadataDetailsSource = fs.readFileSync(metadataDetailsPath, "utf8");
+const metadataDetailsLineCount = metadataDetailsSource.split(/\r?\n/).length;
+const metadataDetailsTypesPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-details.types.ts");
+const metadataDetailsTypesSource = fs.readFileSync(metadataDetailsTypesPath, "utf8");
+const metadataDetailsTypesLineCount = metadataDetailsTypesSource.split(/\r?\n/).length;
 const metadataTagsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-tags.tsx");
 const metadataTagsSource = fs.readFileSync(metadataTagsPath, "utf8");
 const metadataTagsLineCount = metadataTagsSource.split(/\r?\n/).length;
 const metadataTagsTypesPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-tags.types.ts");
 const metadataTagsTypesSource = fs.readFileSync(metadataTagsTypesPath, "utf8");
 const metadataTagsTypesLineCount = metadataTagsTypesSource.split(/\r?\n/).length;
+const lastAttemptDetailPath = path.resolve(process.cwd(), "components/media-asset-card-last-attempt-detail.tsx");
+const lastAttemptDetailSource = fs.readFileSync(lastAttemptDetailPath, "utf8");
+const lastAttemptDetailLineCount = lastAttemptDetailSource.split(/\r?\n/).length;
+const lastAttemptDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-last-attempt-detail.types.ts");
+const lastAttemptDetailTypesSource = fs.readFileSync(lastAttemptDetailTypesPath, "utf8");
+const lastAttemptDetailTypesLineCount = lastAttemptDetailTypesSource.split(/\r?\n/).length;
 const remoteFetchTagPath = path.resolve(process.cwd(), "components/media-asset-card-remote-fetch-tag.tsx");
 const remoteFetchTagSource = fs.readFileSync(remoteFetchTagPath, "utf8");
 const remoteFetchTagLineCount = remoteFetchTagSource.split(/\r?\n/).length;
@@ -179,6 +191,66 @@ for (const requiredMetadataTagsTypesUsage of [
 
 if (metadataTagsTypesLineCount > 2) {
   throw new Error(`media-asset-card-metadata-tags.types.ts exceeded 2 lines: ${metadataTagsTypesLineCount}`);
+}
+
+for (const requiredLastAttemptDetailUsage of [
+  'import type { MediaAssetCardLastAttemptDetailProps } from "./media-asset-card-last-attempt-detail.types";',
+  "}: MediaAssetCardLastAttemptDetailProps) {",
+  "{mediaIssueCopy.lastAttempt}",
+  "{formatHistoryTimestampLabel(lastAttemptAt)}",
+]) {
+  if (!lastAttemptDetailSource.includes(requiredLastAttemptDetailUsage)) {
+    throw new Error(`media-asset-card-last-attempt-detail.tsx must own last-attempt detail rendering: ${requiredLastAttemptDetailUsage}`);
+  }
+}
+
+for (const forbiddenLastAttemptDetailToken of [
+  "{mediaIssueCopy.nextRetry}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+]) {
+  if (lastAttemptDetailSource.includes(forbiddenLastAttemptDetailToken)) {
+    throw new Error(`media-asset-card-last-attempt-detail.tsx must keep other detail concerns delegated: ${forbiddenLastAttemptDetailToken}`);
+  }
+}
+
+if (lastAttemptDetailLineCount > 6) {
+  throw new Error(`media-asset-card-last-attempt-detail.tsx exceeded 6 lines: ${lastAttemptDetailLineCount}`);
+}
+
+for (const requiredLastAttemptDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardLastAttemptDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "lastAttemptAt" | "mediaIssueCopy">;',
+]) {
+  if (!lastAttemptDetailTypesSource.includes(requiredLastAttemptDetailTypesUsage)) {
+    throw new Error(`media-asset-card-last-attempt-detail.types.ts must own last-attempt detail props: ${requiredLastAttemptDetailTypesUsage}`);
+  }
+}
+
+if (lastAttemptDetailTypesLineCount > 2) {
+  throw new Error(`media-asset-card-last-attempt-detail.types.ts exceeded 2 lines: ${lastAttemptDetailTypesLineCount}`);
+}
+
+for (const requiredMetadataDetailsUsage of [
+  'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
+  "}: MediaAssetCardMetadataDetailsProps) {",
+  '<div className="detail-grid" style={{ marginTop: 12 }}>',
+  "{mediaIssueCopy.dimensions}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.textLines}",
+  "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
+]) {
+  if (!metadataDetailsSource.includes(requiredMetadataDetailsUsage)) {
+    throw new Error(`media-asset-card-metadata-details.tsx must reuse the extracted metadata-details props type: ${requiredMetadataDetailsUsage}`);
+  }
+}
+
+for (const forbiddenMetadataDetailsToken of [
+  '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
+]) {
+  if (metadataDetailsSource.includes(forbiddenMetadataDetailsToken)) {
+    throw new Error(`media-asset-card-metadata-details.tsx must keep last-attempt rendering delegated: ${forbiddenMetadataDetailsToken}`);
+  }
 }
 
 for (const requiredRemoteFetchTagUsage of [

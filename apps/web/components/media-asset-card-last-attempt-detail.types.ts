@@ -1,0 +1,1 @@
+import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardLastAttemptDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "lastAttemptAt" | "mediaIssueCopy">;

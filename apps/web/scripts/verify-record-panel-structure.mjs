@@ -2164,6 +2164,14 @@ const mediaAssetCardMetadataDetailsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-details.types.ts",
 );
+const mediaAssetCardLastAttemptDetailPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-last-attempt-detail.tsx",
+);
+const mediaAssetCardLastAttemptDetailTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-last-attempt-detail.types.ts",
+);
 const mediaAssetCardMetadataTagsPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tags.tsx",
@@ -4114,6 +4122,14 @@ const mediaAssetCardMetadataDetailsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataDetailsTypesPath,
   "utf8",
 );
+const mediaAssetCardLastAttemptDetailSource = fs.readFileSync(
+  mediaAssetCardLastAttemptDetailPath,
+  "utf8",
+);
+const mediaAssetCardLastAttemptDetailTypesSource = fs.readFileSync(
+  mediaAssetCardLastAttemptDetailTypesPath,
+  "utf8",
+);
 const mediaAssetCardMetadataTagsSource = fs.readFileSync(mediaAssetCardMetadataTagsPath, "utf8");
 const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataTagsTypesPath,
@@ -5939,6 +5955,10 @@ const mediaAssetCardMetadataDetailsLines =
   mediaAssetCardMetadataDetailsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataDetailsTypesLines =
   mediaAssetCardMetadataDetailsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardLastAttemptDetailLines =
+  mediaAssetCardLastAttemptDetailSource.split(/\r?\n/).length;
+const mediaAssetCardLastAttemptDetailTypesLines =
+  mediaAssetCardLastAttemptDetailTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsTypesLines =
   mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
@@ -22192,12 +22212,14 @@ if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
 }
 
 for (const requiredMediaAssetCardMetadataDetailsUsage of [
+  'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
   "{mediaIssueCopy.dimensions}",
   "{mediaIssueCopy.textChars}",
   "{mediaIssueCopy.textLines}",
+  "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!mediaAssetCardMetadataDetailsSource.includes(requiredMediaAssetCardMetadataDetailsUsage)) {
     throw new Error(
@@ -22208,6 +22230,16 @@ for (const requiredMediaAssetCardMetadataDetailsUsage of [
 
 if (mediaAssetCardMetadataDetailsSource.includes("type MediaAssetCardMetadataDetailsProps =")) {
   throw new Error("media-asset-card-metadata-details.tsx must keep metadata-details prop typing delegated");
+}
+
+for (const forbiddenMediaAssetCardMetadataDetailsToken of [
+  '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
+]) {
+  if (mediaAssetCardMetadataDetailsSource.includes(forbiddenMediaAssetCardMetadataDetailsToken)) {
+    throw new Error(
+      `media-asset-card-metadata-details.tsx must keep last-attempt rendering delegated: ${forbiddenMediaAssetCardMetadataDetailsToken}`,
+    );
+  }
 }
 
 const maxMediaAssetCardMetadataDetailsLines = 8;
@@ -22231,6 +22263,55 @@ const maxMediaAssetCardMetadataDetailsTypesLines = 2;
 if (mediaAssetCardMetadataDetailsTypesLines > maxMediaAssetCardMetadataDetailsTypesLines) {
   throw new Error(
     `media-asset-card-metadata-details.types.ts exceeded ${maxMediaAssetCardMetadataDetailsTypesLines} lines: ${mediaAssetCardMetadataDetailsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardLastAttemptDetailUsage of [
+  'import type { MediaAssetCardLastAttemptDetailProps } from "./media-asset-card-last-attempt-detail.types";',
+  "}: MediaAssetCardLastAttemptDetailProps) {",
+  "{mediaIssueCopy.lastAttempt}",
+  "{formatHistoryTimestampLabel(lastAttemptAt)}",
+]) {
+  if (!mediaAssetCardLastAttemptDetailSource.includes(requiredMediaAssetCardLastAttemptDetailUsage)) {
+    throw new Error(
+      `media-asset-card-last-attempt-detail.tsx must own last-attempt detail rendering: ${requiredMediaAssetCardLastAttemptDetailUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardLastAttemptDetailToken of [
+  "{mediaIssueCopy.nextRetry}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+]) {
+  if (mediaAssetCardLastAttemptDetailSource.includes(forbiddenMediaAssetCardLastAttemptDetailToken)) {
+    throw new Error(
+      `media-asset-card-last-attempt-detail.tsx must keep other detail concerns delegated: ${forbiddenMediaAssetCardLastAttemptDetailToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardLastAttemptDetailLines = 6;
+if (mediaAssetCardLastAttemptDetailLines > maxMediaAssetCardLastAttemptDetailLines) {
+  throw new Error(
+    `media-asset-card-last-attempt-detail.tsx exceeded ${maxMediaAssetCardLastAttemptDetailLines} lines: ${mediaAssetCardLastAttemptDetailLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardLastAttemptDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardLastAttemptDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "lastAttemptAt" | "mediaIssueCopy">;',
+]) {
+  if (!mediaAssetCardLastAttemptDetailTypesSource.includes(requiredMediaAssetCardLastAttemptDetailTypesUsage)) {
+    throw new Error(
+      `media-asset-card-last-attempt-detail.types.ts must own last-attempt detail prop typing: ${requiredMediaAssetCardLastAttemptDetailTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardLastAttemptDetailTypesLines = 2;
+if (mediaAssetCardLastAttemptDetailTypesLines > maxMediaAssetCardLastAttemptDetailTypesLines) {
+  throw new Error(
+    `media-asset-card-last-attempt-detail.types.ts exceeded ${maxMediaAssetCardLastAttemptDetailTypesLines} lines: ${mediaAssetCardLastAttemptDetailTypesLines}`,
   );
 }
 

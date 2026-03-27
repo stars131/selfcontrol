@@ -2779,6 +2779,10 @@ Last updated: 2026-03-28
   - media-asset metadata storage-provider tag rendering now lives in `apps/web/components/media-asset-card-storage-provider-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while storage-provider rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this storage-provider-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-storage-provider rendering module
+- Media Asset Last Attempt Detail Extraction V1:
+  - media-asset metadata last-attempt detail rendering now lives in `apps/web/components/media-asset-card-last-attempt-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while last-attempt rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this last-attempt-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-last-attempt rendering module
 
 ## Next
 - Continue the next product slice
