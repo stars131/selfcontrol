@@ -1,5 +1,6 @@
 "use client";
 
+import { getStoredChatPanelActionCopy } from "./chat-panel-action-copy";
 import {
   buildCreateShareLinkInput,
   getChatPanelActionErrorMessage,
@@ -18,6 +19,7 @@ export function createChatPanelShareHandlers({
   shareName,
   sharePermission,
 }: CreateChatPanelShareHandlersInput) {
+  const copy = getStoredChatPanelActionCopy();
   return {
     async handleCreateShareLink() {
       setCreatingShare(true);
@@ -33,7 +35,7 @@ export function createChatPanelShareHandlers({
         setShareName("");
         setShareMaxUses("");
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Share creation failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.shareCreationFailed));
       } finally {
         setCreatingShare(false);
       }
@@ -44,7 +46,7 @@ export function createChatPanelShareHandlers({
       try {
         await onDisableShareLink(shareLinkId);
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Share update failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.shareUpdateFailed));
       } finally {
         setDisablingShareId("");
       }

@@ -2209,6 +2209,9 @@ Last updated: 2026-03-26
 - Workspace Shell Media Guard Localization V1:
   - workspace shell media delete and retry actions now reuse the shared shell action copy for read-only guard failures instead of keeping duplicated English strings beside the API logic
   - the shell action copy now becomes the single source for shell-side permission denial text, improving long-term maintainability
+- Chat Panel Error Localization V1:
+  - chat panel operator and share handlers now reuse a shared locale-aware chat action copy for request, sync, reindex, audit, and share fallback errors instead of hardcoded English strings
+  - record-panel structure verification now enforces those copy-driven chat handler fallbacks so future chat-surface maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

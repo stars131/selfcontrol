@@ -19580,8 +19580,14 @@ if (chatPanelActionHelpersTypesLines > maxChatPanelActionHelpersTypesLines) {
 }
 
 for (const requiredChatPanelOperatorHandlersUsage of [
+  'from "./chat-panel-action-copy";',
   'import type { CreateChatPanelOperatorHandlersInput } from "./chat-panel-operator-handlers.types";',
   "}: CreateChatPanelOperatorHandlersInput) {",
+  "const copy = getStoredChatPanelActionCopy();",
+  "copy.requestFailed",
+  "copy.syncFailed",
+  "copy.reindexFailed",
+  "copy.auditRefreshFailed",
 ]) {
   if (!chatPanelOperatorHandlersSource.includes(requiredChatPanelOperatorHandlersUsage)) {
     throw new Error(
@@ -19629,8 +19635,12 @@ if (useChatPanelActionsSource.includes('type UseChatPanelActionsProps,')) {
 }
 
 for (const requiredChatPanelShareHandlersUsage of [
+  'from "./chat-panel-action-copy";',
   'import type { CreateChatPanelShareHandlersInput } from "./chat-panel-share-handlers.types";',
   "}: CreateChatPanelShareHandlersInput) {",
+  "const copy = getStoredChatPanelActionCopy();",
+  "copy.shareCreationFailed",
+  "copy.shareUpdateFailed",
 ]) {
   if (!chatPanelShareHandlersSource.includes(requiredChatPanelShareHandlersUsage)) {
     throw new Error(

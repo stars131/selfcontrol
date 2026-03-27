@@ -1,5 +1,6 @@
 "use client";
 
+import { getStoredChatPanelActionCopy } from "./chat-panel-action-copy";
 import { getChatPanelActionErrorMessage } from "./chat-panel-action-helpers";
 import type { CreateChatPanelOperatorHandlersInput } from "./chat-panel-operator-handlers.types";
 
@@ -16,6 +17,7 @@ export function createChatPanelOperatorHandlers({
   setReindexing,
   setSyncing,
 }: CreateChatPanelOperatorHandlersInput) {
+  const copy = getStoredChatPanelActionCopy();
   return {
     async handleSend() {
       const value = draft.trim();
@@ -30,7 +32,7 @@ export function createChatPanelOperatorHandlers({
       try {
         await onSendMessage(value);
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Request failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.requestFailed));
       } finally {
         setLoading(false);
       }
@@ -41,7 +43,7 @@ export function createChatPanelOperatorHandlers({
       try {
         await onSyncNotifications();
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Sync failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.syncFailed));
       } finally {
         setSyncing(false);
       }
@@ -52,7 +54,7 @@ export function createChatPanelOperatorHandlers({
       try {
         await onReindexKnowledge();
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Reindex failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.reindexFailed));
       } finally {
         setReindexing(false);
       }
@@ -63,7 +65,7 @@ export function createChatPanelOperatorHandlers({
       try {
         await onRefreshAuditLogs();
       } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, "Audit refresh failed"));
+        setError(getChatPanelActionErrorMessage(caught, copy.auditRefreshFailed));
       } finally {
         setRefreshingAudit(false);
       }
