@@ -1,21 +1,17 @@
 "use client";
 
-import {
-  bulkRetryMediaDeadLetter,
-  deleteMedia,
-  getMediaStatus,
-  retryMediaProcessing,
-  uploadMedia,
-} from "../lib/api";
+import { bulkRetryMediaDeadLetter, deleteMedia, getMediaStatus, retryMediaProcessing, uploadMedia } from "../lib/api";
 import type {
   UseWorkspaceShellActionsProps,
   WorkspaceShellBulkRetryInput,
 } from "./workspace-shell-actions.types";
 import { getStoredWorkspaceShellActionCopy } from "./workspace-shell-action-copy";
+import { requireSelectedRecordContext, requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
 import {
-  requireSelectedRecordContext,
-  requireWritableWorkspaceToken,
-} from "./workspace-shell-action-guards";
+  refreshWorkspaceShellMediaMutation,
+  refreshWorkspaceShellMediaStatusViews,
+  refreshWorkspaceShellMediaUpload,
+} from "./workspace-shell-media-action-refresh";
 
 export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActionsProps) {
   const copy = getStoredWorkspaceShellActionCopy();
@@ -24,23 +20,13 @@ export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActions
     workspaceId,
     canWriteWorkspace,
     selectedRecordId,
-    refreshAuditLogs,
-    refreshKnowledge,
-    refreshMedia,
-    refreshMediaDeadLetterOverview,
-    refreshMediaProcessingOverview,
     refreshMediaStorageSummary,
   } = props;
 
   async function handleUploadMedia(recordId: string, file: File) {
     const activeToken = requireWritableWorkspaceToken(token, canWriteWorkspace);
     await uploadMedia(activeToken, workspaceId, recordId, file);
-    await refreshMedia(activeToken, recordId);
-    await refreshMediaStorageSummary(activeToken);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
+    await refreshWorkspaceShellMediaUpload(props, activeToken, recordId);
   }
 
   async function handleDeleteMedia(mediaId: string) {
@@ -49,12 +35,8 @@ export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActions
       throw new Error(copy.viewerReadOnly);
     }
     await deleteMedia(activeToken, workspaceId, mediaId);
-    await refreshMedia(activeToken, recordId);
+    await refreshWorkspaceShellMediaMutation(props, activeToken, recordId);
     await refreshMediaStorageSummary(activeToken);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
   }
 
   async function handleRetryMedia(mediaId: string) {
@@ -63,29 +45,19 @@ export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActions
       throw new Error(copy.viewerReadOnly);
     }
     await retryMediaProcessing(activeToken, workspaceId, mediaId);
-    await refreshMedia(activeToken, recordId);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
+    await refreshWorkspaceShellMediaMutation(props, activeToken, recordId);
   }
 
   async function handleRefreshMediaStatus(mediaId: string) {
     const { activeToken, recordId } = requireSelectedRecordContext(token, selectedRecordId);
     await getMediaStatus(activeToken, workspaceId, mediaId);
-    await refreshMedia(activeToken, recordId);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
+    await refreshWorkspaceShellMediaStatusViews(props, activeToken, recordId);
   }
 
   async function handleBulkRetryMediaDeadLetter(input: WorkspaceShellBulkRetryInput) {
     const activeToken = requireWritableWorkspaceToken(token, canWriteWorkspace);
     await bulkRetryMediaDeadLetter(activeToken, workspaceId, input);
-    await refreshMedia(activeToken, selectedRecordId);
-    await refreshMediaProcessingOverview(activeToken);
-    await refreshMediaDeadLetterOverview(activeToken);
-    await refreshKnowledge(activeToken);
-    await refreshAuditLogs(activeToken);
+    await refreshWorkspaceShellMediaMutation(props, activeToken, selectedRecordId);
   }
 
   return {

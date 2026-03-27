@@ -2447,11 +2447,15 @@ Last updated: 2026-03-27
   - `apps/web/components/chat-panel-section-props.ts` now owns the conversation-section and management-section prop assembly that used to sit inline inside `chat-panel-content.tsx`
   - `chat-panel-content.tsx` now stays focused on two-section composition while prop selection for thread and management surfaces remains reusable and easier to evolve safely
   - the chat-panel structure guardrail now enforces this section-prop builder boundary so future chat-surface expansion does not regrow a fragile content composition file
+- Workspace Shell Media Refresh Sequence Extraction V1:
+  - repeated post-upload, post-mutation, and status-refresh media update chains now live in `apps/web/components/workspace-shell-media-action-refresh.ts` instead of being duplicated across media actions
+  - `workspace-shell-media-actions.ts` now stays focused on token/selection guards and API calls while refresh sequencing remains reusable and easier to adjust safely when media-related panels expand
+  - the workspace-shell structure guardrail now enforces this media refresh boundary so future media action updates do not reintroduce duplicated refresh choreography
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell record/chat action orchestration so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

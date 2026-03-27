@@ -63,6 +63,14 @@ const workspaceShellMediaFilterActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-media-filter-actions.ts",
 );
+const workspaceShellMediaActionsPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-media-actions.ts",
+);
+const workspaceShellMediaActionRefreshPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-media-action-refresh.ts",
+);
 const workspaceShellChatRecordActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-record-actions.ts",
@@ -141,6 +149,11 @@ const initialLoadHelpersTypesSource = fs.readFileSync(
   "utf8",
 );
 const mediaFilterActionsSource = fs.readFileSync(workspaceShellMediaFilterActionsPath, "utf8");
+const mediaActionsSource = fs.readFileSync(workspaceShellMediaActionsPath, "utf8");
+const mediaActionRefreshSource = fs.readFileSync(
+  workspaceShellMediaActionRefreshPath,
+  "utf8",
+);
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
 const conversationStateLoadSource = fs.readFileSync(
@@ -191,6 +204,8 @@ const initialLoadRunnerLineCount = initialLoadRunnerSource.split(/\r?\n/).length
 const initialLoadHelpersLineCount = initialLoadHelpersSource.split(/\r?\n/).length;
 const initialLoadHelpersTypesLineCount = initialLoadHelpersTypesSource.split(/\r?\n/).length;
 const mediaFilterActionsLineCount = mediaFilterActionsSource.split(/\r?\n/).length;
+const mediaActionsLineCount = mediaActionsSource.split(/\r?\n/).length;
+const mediaActionRefreshLineCount = mediaActionRefreshSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 const conversationStateLoadLineCount = conversationStateLoadSource.split(/\r?\n/).length;
@@ -1180,6 +1195,95 @@ const maxMediaFilterActionsLines = 25;
 if (mediaFilterActionsLineCount > maxMediaFilterActionsLines) {
   throw new Error(
     `workspace-shell-media-filter-actions.ts exceeded ${maxMediaFilterActionsLines} lines: ${mediaFilterActionsLineCount}`,
+  );
+}
+
+for (const requiredMediaActionsImport of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-copy";',
+  'from "./workspace-shell-action-guards";',
+  'from "./workspace-shell-media-action-refresh";',
+]) {
+  if (!mediaActionsSource.includes(requiredMediaActionsImport)) {
+    throw new Error(
+      `workspace-shell-media-actions.ts must import delegated media refresh helpers: ${requiredMediaActionsImport}`,
+    );
+  }
+}
+
+for (const requiredMediaActionsUsage of [
+  "refreshWorkspaceShellMediaUpload(props, activeToken, recordId)",
+  "refreshWorkspaceShellMediaMutation(props, activeToken, recordId)",
+  "refreshWorkspaceShellMediaStatusViews(props, activeToken, recordId)",
+  "refreshWorkspaceShellMediaMutation(props, activeToken, selectedRecordId)",
+]) {
+  if (!mediaActionsSource.includes(requiredMediaActionsUsage)) {
+    throw new Error(
+      `workspace-shell-media-actions.ts must delegate repeated refresh sequences: ${requiredMediaActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaActionsToken of [
+  "await refreshMedia(activeToken, recordId);",
+  "await refreshMediaProcessingOverview(activeToken);",
+  "await refreshMediaDeadLetterOverview(activeToken);",
+  "await refreshKnowledge(activeToken);",
+  "await refreshAuditLogs(activeToken);",
+]) {
+  if (mediaActionsSource.includes(forbiddenMediaActionsToken)) {
+    throw new Error(
+      `workspace-shell-media-actions.ts must keep repeated refresh steps delegated: ${forbiddenMediaActionsToken}`,
+    );
+  }
+}
+
+const maxMediaActionsLines = 75;
+if (mediaActionsLineCount > maxMediaActionsLines) {
+  throw new Error(
+    `workspace-shell-media-actions.ts exceeded ${maxMediaActionsLines} lines: ${mediaActionsLineCount}`,
+  );
+}
+
+for (const requiredMediaActionRefreshUsage of [
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export async function refreshWorkspaceShellMediaUpload(",
+  "export async function refreshWorkspaceShellMediaMutation(",
+  "export async function refreshWorkspaceShellMediaStatusViews(",
+  "await refreshers.refreshMedia(activeToken, recordId);",
+  "await refreshers.refreshMediaStorageSummary(activeToken);",
+  "await refreshers.refreshMediaProcessingOverview(activeToken);",
+  "await refreshers.refreshMediaDeadLetterOverview(activeToken);",
+  "await refreshers.refreshKnowledge(activeToken);",
+  "await refreshers.refreshAuditLogs(activeToken);",
+]) {
+  if (!mediaActionRefreshSource.includes(requiredMediaActionRefreshUsage)) {
+    throw new Error(
+      `workspace-shell-media-action-refresh.ts must own media refresh sequences: ${requiredMediaActionRefreshUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaActionRefreshToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  "uploadMedia(",
+  "deleteMedia(",
+  "retryMediaProcessing(",
+  "getMediaStatus(",
+  "bulkRetryMediaDeadLetter(",
+]) {
+  if (mediaActionRefreshSource.includes(forbiddenMediaActionRefreshToken)) {
+    throw new Error(
+      `workspace-shell-media-action-refresh.ts must keep API calls delegated to media actions: ${forbiddenMediaActionRefreshToken}`,
+    );
+  }
+}
+
+const maxMediaActionRefreshLines = 55;
+if (mediaActionRefreshLineCount > maxMediaActionRefreshLines) {
+  throw new Error(
+    `workspace-shell-media-action-refresh.ts exceeded ${maxMediaActionRefreshLines} lines: ${mediaActionRefreshLineCount}`,
   );
 }
 
