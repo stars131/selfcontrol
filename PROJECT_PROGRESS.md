@@ -2257,6 +2257,9 @@ Last updated: 2026-03-26
 - Share And Thread Copy Encoding Repair V1:
   - chat message thread labels and share-link display copy now use repaired Chinese and Japanese text, restoring readable multilingual output in the main conversation stream and share preview flow
   - the fix stays inside shared display helpers so future enterprise localization updates remain centralized and maintainable
+- Media Issue Display Encoding Repair V1:
+  - media issue categories, recommended actions, action details, retry states, processing states, and remote-fetch labels now use repaired Chinese and Japanese text in the shared diagnostics display helper
+  - operator-facing issue triage and recovery guidance now stay readable across settings, recent-issues, and dead-letter surfaces while keeping locale maintenance centralized
 
 ## Next
 - Continue the next product slice
