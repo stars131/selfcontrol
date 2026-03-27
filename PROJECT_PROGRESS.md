@@ -2771,6 +2771,10 @@ Last updated: 2026-03-28
   - media-asset metadata size tag rendering now lives in `apps/web/components/media-asset-card-size-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while size rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this size-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-size rendering module
+- Media Asset Processing Status Tag Extraction V1:
+  - media-asset metadata processing-status tag rendering now lives in `apps/web/components/media-asset-card-processing-status-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while processing-status rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this processing-status-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-processing-status rendering module
 
 ## Next
 - Continue the next product slice

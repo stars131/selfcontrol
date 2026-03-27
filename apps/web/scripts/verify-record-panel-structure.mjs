@@ -2212,6 +2212,14 @@ const mediaAssetCardSizeTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-size-tag.types.ts",
 );
+const mediaAssetCardProcessingStatusTagPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-status-tag.tsx",
+);
+const mediaAssetCardProcessingStatusTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-status-tag.types.ts",
+);
 const mediaAssetCardProcessingSourceTagPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-processing-source-tag.tsx",
@@ -4140,6 +4148,14 @@ const mediaAssetCardSizeTagTypesSource = fs.readFileSync(
   mediaAssetCardSizeTagTypesPath,
   "utf8",
 );
+const mediaAssetCardProcessingStatusTagSource = fs.readFileSync(
+  mediaAssetCardProcessingStatusTagPath,
+  "utf8",
+);
+const mediaAssetCardProcessingStatusTagTypesSource = fs.readFileSync(
+  mediaAssetCardProcessingStatusTagTypesPath,
+  "utf8",
+);
 const mediaAssetCardProcessingSourceTagSource = fs.readFileSync(
   mediaAssetCardProcessingSourceTagPath,
   "utf8",
@@ -5929,6 +5945,10 @@ const mediaAssetCardFileExtensionTagTypesLines =
 const mediaAssetCardSizeTagLines = mediaAssetCardSizeTagSource.split(/\r?\n/).length;
 const mediaAssetCardSizeTagTypesLines =
   mediaAssetCardSizeTagTypesSource.split(/\r?\n/).length;
+const mediaAssetCardProcessingStatusTagLines =
+  mediaAssetCardProcessingStatusTagSource.split(/\r?\n/).length;
+const mediaAssetCardProcessingStatusTagTypesLines =
+  mediaAssetCardProcessingStatusTagTypesSource.split(/\r?\n/).length;
 const mediaAssetCardProcessingSourceTagLines =
   mediaAssetCardProcessingSourceTagSource.split(/\r?\n/).length;
 const mediaAssetCardProcessingSourceTagTypesLines =
@@ -22196,11 +22216,11 @@ if (mediaAssetCardMetadataDetailsTypesLines > maxMediaAssetCardMetadataDetailsTy
 
 for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { useStoredLocale } from "../lib/locale";',
-  'from "../lib/media-issue-display";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'from "../lib/storage-provider-display";',
   'import { MediaAssetCardExtractionModeTag } from "./media-asset-card-extraction-mode-tag";',
   'import { MediaAssetCardFileExtensionTag } from "./media-asset-card-file-extension-tag";',
+  'import { MediaAssetCardProcessingStatusTag } from "./media-asset-card-processing-status-tag";',
   'import { MediaAssetCardProcessingSourceTag } from "./media-asset-card-processing-source-tag";',
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
@@ -22209,8 +22229,8 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
-  "getProcessingStatusLabel(locale, asset.processing_status)",
   "getStorageProviderLabel(locale, asset.storage_provider)",
+  "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardFileExtensionTag asset={asset} />",
   "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
@@ -22232,6 +22252,7 @@ if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsPr
 
 for (const forbiddenMediaAssetCardMetadataTagsToken of [
   "formatMediaSize(asset)",
+  "getProcessingStatusLabel(locale, asset.processing_status)",
   "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
   "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
   '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
@@ -22514,6 +22535,55 @@ const maxMediaAssetCardSizeTagTypesLines = 2;
 if (mediaAssetCardSizeTagTypesLines > maxMediaAssetCardSizeTagTypesLines) {
   throw new Error(
     `media-asset-card-size-tag.types.ts exceeded ${maxMediaAssetCardSizeTagTypesLines} lines: ${mediaAssetCardSizeTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardProcessingStatusTagUsage of [
+  'import { getProcessingStatusLabel } from "../lib/media-issue-display";',
+  'import type { MediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag.types";',
+  "}: MediaAssetCardProcessingStatusTagProps) {",
+  "{getProcessingStatusLabel(locale, asset.processing_status)}",
+]) {
+  if (!mediaAssetCardProcessingStatusTagSource.includes(requiredMediaAssetCardProcessingStatusTagUsage)) {
+    throw new Error(
+      `media-asset-card-processing-status-tag.tsx must own processing-status tag rendering: ${requiredMediaAssetCardProcessingStatusTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardProcessingStatusTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "formatMediaSize(asset)",
+  "getRetryStateLabel(locale, retryState)",
+]) {
+  if (mediaAssetCardProcessingStatusTagSource.includes(forbiddenMediaAssetCardProcessingStatusTagToken)) {
+    throw new Error(
+      `media-asset-card-processing-status-tag.tsx must keep other tag concerns delegated: ${forbiddenMediaAssetCardProcessingStatusTagToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardProcessingStatusTagLines = 6;
+if (mediaAssetCardProcessingStatusTagLines > maxMediaAssetCardProcessingStatusTagLines) {
+  throw new Error(
+    `media-asset-card-processing-status-tag.tsx exceeded ${maxMediaAssetCardProcessingStatusTagLines} lines: ${mediaAssetCardProcessingStatusTagLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardProcessingStatusTagTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardProcessingStatusTagProps = Pick<MediaAssetCardMetadataTagsProps, "asset"> & { locale: LocaleCode };',
+]) {
+  if (!mediaAssetCardProcessingStatusTagTypesSource.includes(requiredMediaAssetCardProcessingStatusTagTypesUsage)) {
+    throw new Error(
+      `media-asset-card-processing-status-tag.types.ts must own processing-status tag prop typing: ${requiredMediaAssetCardProcessingStatusTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardProcessingStatusTagTypesLines = 2;
+if (mediaAssetCardProcessingStatusTagTypesLines > maxMediaAssetCardProcessingStatusTagTypesLines) {
+  throw new Error(
+    `media-asset-card-processing-status-tag.types.ts exceeded ${maxMediaAssetCardProcessingStatusTagTypesLines} lines: ${mediaAssetCardProcessingStatusTagTypesLines}`,
   );
 }
 

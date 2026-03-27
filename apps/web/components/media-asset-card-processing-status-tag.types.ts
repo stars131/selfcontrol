@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardProcessingStatusTagProps = Pick<MediaAssetCardMetadataTagsProps, "asset"> & { locale: LocaleCode };
