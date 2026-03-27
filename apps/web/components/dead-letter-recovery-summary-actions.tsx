@@ -1,4 +1,5 @@
 "use client";
+import { DeadLetterRecoverySummaryActionButtons } from "./dead-letter-recovery-summary-action-buttons";
 import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types";
 
 export function DeadLetterRecoverySummaryActions({
@@ -14,20 +15,5 @@ export function DeadLetterRecoverySummaryActions({
   if (!mediaDeadLetterOverview?.items.length) {
     return null;
   }
-  return (
-    <div className="action-row">
-      <button className="button secondary" disabled={bulkRetryingDeadLetter} type="button" onClick={onSelectAll}>
-        {mediaIssueCopy.selectVisible}
-      </button>
-      <button className="button secondary" disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length} type="button" onClick={onClearSelection}>
-        {mediaIssueCopy.clearSelection}
-      </button>
-      <button className="button secondary" disabled={bulkRetryingDeadLetter || !selectedDeadLetterIds.length} type="button" onClick={() => void onBulkRetrySelected()}>
-        {bulkRetryingDeadLetter ? mediaIssueCopy.retrying : `${mediaIssueCopy.retrySelectedPrefix} (${selectedDeadLetterIds.length})`}
-      </button>
-      <button className="button secondary" disabled={bulkRetryingDeadLetter} type="button" onClick={() => void onBulkRetryAll()}>
-        {bulkRetryingDeadLetter ? mediaIssueCopy.retrying : mediaIssueCopy.retryAll}
-      </button>
-    </div>
-  );
+  return <DeadLetterRecoverySummaryActionButtons bulkRetryingDeadLetter={bulkRetryingDeadLetter} mediaIssueCopy={mediaIssueCopy} onBulkRetryAll={onBulkRetryAll} onBulkRetrySelected={onBulkRetrySelected} onClearSelection={onClearSelection} onSelectAll={onSelectAll} selectedDeadLetterIds={selectedDeadLetterIds} />;
 }

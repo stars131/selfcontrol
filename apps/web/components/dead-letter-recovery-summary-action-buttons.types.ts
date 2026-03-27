@@ -1,0 +1,1 @@
+import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types"; export type DeadLetterRecoverySummaryActionButtonsProps = Pick<DeadLetterRecoverySummaryActionsProps, "bulkRetryingDeadLetter" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;

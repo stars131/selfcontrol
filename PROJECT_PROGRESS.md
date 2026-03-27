@@ -2607,6 +2607,10 @@ Last updated: 2026-03-27
   - dead-letter panel list rendering now lives in `apps/web/components/dead-letter-recovery-panel-list.tsx` instead of remaining inline inside `dead-letter-recovery-panel-content.tsx`
   - `dead-letter-recovery-panel-content.tsx` now stays focused on empty/list composition while list rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this panel-list boundary so future dead-letter panel changes do not regrow a mixed panel-and-list rendering module
+- Dead Letter Recovery Summary Action Buttons Extraction V1:
+  - dead-letter summary action-button rendering now lives in `apps/web/components/dead-letter-recovery-summary-action-buttons.tsx` instead of remaining inline inside `dead-letter-recovery-summary-actions.tsx`
+  - `dead-letter-recovery-summary-actions.tsx` now stays focused on empty-state gating while action-button rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this summary-action-buttons boundary so future dead-letter summary changes do not regrow a mixed gating-and-button rendering module
 
 ## Next
 - Continue the next product slice

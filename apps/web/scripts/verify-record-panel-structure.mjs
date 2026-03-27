@@ -2364,6 +2364,14 @@ const deadLetterRecoverySummaryActionsPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-actions.tsx",
 );
+const deadLetterRecoverySummaryActionButtonsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-action-buttons.tsx",
+);
+const deadLetterRecoverySummaryActionButtonsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-action-buttons.types.ts",
+);
 const deadLetterRecoverySummaryActionsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-actions.types.ts",
@@ -3915,6 +3923,14 @@ const deadLetterRecoverySummaryActionsSource = fs.readFileSync(
   deadLetterRecoverySummaryActionsPath,
   "utf8",
 );
+const deadLetterRecoverySummaryActionButtonsSource = fs.readFileSync(
+  deadLetterRecoverySummaryActionButtonsPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryActionButtonsTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryActionButtonsTypesPath,
+  "utf8",
+);
 const deadLetterRecoverySummaryActionsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryActionsTypesPath,
   "utf8",
@@ -5313,6 +5329,10 @@ const deadLetterRecoverySummaryHeaderLines =
   deadLetterRecoverySummaryHeaderSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryHeaderTypesLines =
   deadLetterRecoverySummaryHeaderTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryActionButtonsLines =
+  deadLetterRecoverySummaryActionButtonsSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryActionButtonsTypesLines =
+  deadLetterRecoverySummaryActionButtonsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionsTypesLines =
   deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryStatsTypesLines =
@@ -22878,8 +22898,10 @@ if (deadLetterRecoverySummaryHeaderTypesLines > maxDeadLetterRecoverySummaryHead
 }
 
 for (const requiredDeadLetterRecoverySummaryActionsUsage of [
+  'import { DeadLetterRecoverySummaryActionButtons } from "./dead-letter-recovery-summary-action-buttons";',
   'import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types";',
   "}: DeadLetterRecoverySummaryActionsProps) {",
+  'return <DeadLetterRecoverySummaryActionButtons',
 ]) {
   if (!deadLetterRecoverySummaryActionsSource.includes(requiredDeadLetterRecoverySummaryActionsUsage)) {
     throw new Error(
@@ -22891,6 +22913,25 @@ for (const requiredDeadLetterRecoverySummaryActionsUsage of [
 if (deadLetterRecoverySummaryActionsSource.includes("type DeadLetterRecoverySummaryActionsProps = Pick<")) {
   throw new Error(
     "dead-letter-recovery-summary-actions.tsx must keep dead-letter summary-actions prop typing delegated",
+  );
+}
+
+for (const forbiddenDeadLetterRecoverySummaryActionsToken of [
+  '<div className="action-row">',
+  "{mediaIssueCopy.selectVisible}",
+  "onClick={() => void onBulkRetrySelected()}",
+]) {
+  if (deadLetterRecoverySummaryActionsSource.includes(forbiddenDeadLetterRecoverySummaryActionsToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-actions.tsx must keep action-button rendering delegated: ${forbiddenDeadLetterRecoverySummaryActionsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryActionsLines = 20;
+if (deadLetterRecoverySummaryActionsSource.split(/\r?\n/).length > maxDeadLetterRecoverySummaryActionsLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-actions.tsx exceeded ${maxDeadLetterRecoverySummaryActionsLines} lines: ${deadLetterRecoverySummaryActionsSource.split(/\r?\n/).length}`,
   );
 }
 
@@ -22908,6 +22949,56 @@ const maxDeadLetterRecoverySummaryActionsTypesLines = 2;
 if (deadLetterRecoverySummaryActionsTypesLines > maxDeadLetterRecoverySummaryActionsTypesLines) {
   throw new Error(
     `dead-letter-recovery-summary-actions.types.ts exceeded ${maxDeadLetterRecoverySummaryActionsTypesLines} lines: ${deadLetterRecoverySummaryActionsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryActionButtonsUsage of [
+  'import type { DeadLetterRecoverySummaryActionButtonsProps } from "./dead-letter-recovery-summary-action-buttons.types";',
+  "}: DeadLetterRecoverySummaryActionButtonsProps) {",
+  '<div className="action-row">',
+  "{mediaIssueCopy.selectVisible}",
+  "onClick={() => void onBulkRetrySelected()}",
+]) {
+  if (!deadLetterRecoverySummaryActionButtonsSource.includes(requiredDeadLetterRecoverySummaryActionButtonsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-action-buttons.tsx must own summary action-button rendering: ${requiredDeadLetterRecoverySummaryActionButtonsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoverySummaryActionButtonsToken of [
+  "mediaDeadLetterOverview?.items.length",
+  "return null",
+  "DeadLetterRecoverySummaryActionsProps",
+]) {
+  if (deadLetterRecoverySummaryActionButtonsSource.includes(forbiddenDeadLetterRecoverySummaryActionButtonsToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-action-buttons.tsx must keep gating and parent props delegated: ${forbiddenDeadLetterRecoverySummaryActionButtonsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryActionButtonsLines = 35;
+if (deadLetterRecoverySummaryActionButtonsLines > maxDeadLetterRecoverySummaryActionButtonsLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-action-buttons.tsx exceeded ${maxDeadLetterRecoverySummaryActionButtonsLines} lines: ${deadLetterRecoverySummaryActionButtonsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryActionButtonsTypesUsage of [
+  'import type { DeadLetterRecoverySummaryActionsProps } from "./dead-letter-recovery-summary-actions.types"; export type DeadLetterRecoverySummaryActionButtonsProps = Pick<DeadLetterRecoverySummaryActionsProps, "bulkRetryingDeadLetter" | "mediaIssueCopy" | "onBulkRetryAll" | "onBulkRetrySelected" | "onClearSelection" | "onSelectAll" | "selectedDeadLetterIds">;',
+]) {
+  if (!deadLetterRecoverySummaryActionButtonsTypesSource.includes(requiredDeadLetterRecoverySummaryActionButtonsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-action-buttons.types.ts must own summary action-button prop typing: ${requiredDeadLetterRecoverySummaryActionButtonsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryActionButtonsTypesLines = 2;
+if (deadLetterRecoverySummaryActionButtonsTypesLines > maxDeadLetterRecoverySummaryActionButtonsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-action-buttons.types.ts exceeded ${maxDeadLetterRecoverySummaryActionButtonsTypesLines} lines: ${deadLetterRecoverySummaryActionButtonsTypesLines}`,
   );
 }
 
