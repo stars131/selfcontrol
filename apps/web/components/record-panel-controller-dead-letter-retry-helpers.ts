@@ -1,10 +1,11 @@
+import { resolveErrorMessage } from "../lib/error-message";
 import type { RecordPanelControllerDetailCopy } from "./record-panel-controller-detail-copy.types";
 
 export function getRecordPanelDeadLetterErrorMessage(
   caught: unknown,
   fallbackMessage: string,
 ) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function getRecordPanelDeadLetterRetryRequest(

@@ -1,12 +1,13 @@
 "use client";
 
+import { resolveErrorMessage } from "../lib/error-message";
 import type { WorkspaceMediaRetentionRiskLabelInput } from "./workspace-media-retention-controller.types";
 
 export function getWorkspaceMediaRetentionActionErrorMessage(
   caught: unknown,
   fallbackMessage: string,
 ) {
-  return caught instanceof Error ? caught.message : fallbackMessage;
+  return resolveErrorMessage(caught, fallbackMessage);
 }
 
 export function buildWorkspaceMediaRetentionRiskLabel({

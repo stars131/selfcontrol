@@ -2245,6 +2245,9 @@ Last updated: 2026-03-26
 - Error Fallback Normalization V1:
   - shared client-side error resolution now falls back to locale-aware copy when requests fail without a user-facing backend message, preventing generic English placeholders from leaking into login, chat, map, export, settings, share, media preview, quick-add, and workspace bootstrap flows
   - the API client now normalizes empty fallback request errors centrally so enterprise localization and future provider integrations can reuse one maintainable error contract instead of duplicating ad hoc English defaults
+- Record Panel Error Helper Normalization V1:
+  - record-panel filter, save, reminder, media, dead-letter, and retention helper modules now reuse the shared client-side error resolver so localized fallback copy stays consistent across structured memo workflows
+  - the remaining enterprise guardrail files that still preserve literal fallback logic are left isolated for a later verifier-aligned cleanup, keeping this slice low-risk and maintainable
 
 ## Next
 - Continue the next product slice
