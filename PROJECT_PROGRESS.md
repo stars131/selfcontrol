@@ -2239,6 +2239,9 @@ Last updated: 2026-03-26
 - Map Record Fallback Localization V1:
   - mapped record fallback titles and place names now come from shared record-panel UI copy instead of hardcoded English defaults inside the map parsing helper
   - record-panel structure verification now enforces those locale-aware fallback labels so future map drill-down maintenance stays aligned with the enterprise localization baseline
+- Reminder Resolution Error Localization V1:
+  - reminder creation now reuses detail-copy validation text when no record is selected instead of surfacing a hardcoded English error
+  - record-panel structure verification now enforces that copy-driven reminder guard so future reminder workflow maintenance stays aligned with the enterprise localization baseline
 
 ## Next
 - Continue the next product slice

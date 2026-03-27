@@ -11622,7 +11622,7 @@ for (const requiredReminderResolutionUsage of [
   "| { payload: ReminderPayload };",
   "export function resolveRecordPanelReminderActionInput(",
   "buildRecordPanelReminderPayload({",
-  '"Save or select a record before adding a reminder"',
+  "selectRecordBeforeReminderError",
   "reminderTimeRequiredError",
 ]) {
   if (!reminderResolutionSource.includes(requiredReminderResolutionUsage)) {
