@@ -2155,6 +2155,10 @@ Last updated: 2026-03-26
   - `notification-display.ts` now owns notification card copy and localized labels for common notification events such as `reminder_due`, with safe fallback for future backend event codes
   - `chat-notifications-card.tsx` now follows the active locale for title, unread summary, event badges, timestamps, empty state, and mark-read action instead of mixing raw event codes with hardcoded English strings
   - `verify-record-panel-structure.mjs` now enforces the locale-aware notification helper usage so future chat-management UI changes stay maintainable under the enterprise standard
+- Workspace Member Role Localization V1:
+  - `workspace-role-display.ts` now owns localized workspace role labels for `owner`, `editor`, and `viewer`, with safe fallback for future role values
+  - `workspace-members-section-item-controls.tsx` now uses localized role labels in both the role selector and read-only member summary instead of exposing raw permission codes in the settings UI
+  - `verify-record-panel-structure.mjs` now enforces the role-label helper usage and the updated controls prop contract so future member-management changes stay maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

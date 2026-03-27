@@ -11,7 +11,7 @@ export function WorkspaceMembersSectionItem({ copy, locale, member, onRemoveMemb
     <article className="message">
       <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
         <WorkspaceMembersSectionItemSummary copy={copy} locale={locale} member={member} />
-        <WorkspaceMembersSectionItemControls copy={copy} isProtected={isProtected} member={member} onRemoveMember={onRemoveMember} onUpdateMemberRole={onUpdateMemberRole} removingMemberId={removingMemberId} savingMemberId={savingMemberId} workspaceRole={workspaceRole} />
+        <WorkspaceMembersSectionItemControls copy={copy} isProtected={isProtected} locale={locale} member={member} onRemoveMember={onRemoveMember} onUpdateMemberRole={onUpdateMemberRole} removingMemberId={removingMemberId} savingMemberId={savingMemberId} workspaceRole={workspaceRole} />
       </div>
     </article>
   );

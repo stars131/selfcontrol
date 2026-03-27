@@ -17494,10 +17494,13 @@ if (workspaceMembersSectionItemSummaryTypesLines > maxWorkspaceMembersSectionIte
 }
 
 for (const requiredWorkspaceMembersSectionItemControlsUsage of [
+  'import { getWorkspaceRoleLabel } from "../lib/workspace-role-display";',
   'import type { WorkspaceMembersSectionItemControlsProps } from "./workspace-members-section-item-controls.types";',
   "}: WorkspaceMembersSectionItemControlsProps) {",
   '<div style={{ minWidth: 220 }}>',
   '<select',
+  'getWorkspaceRoleLabel(locale, "editor")',
+  "getWorkspaceRoleLabel(locale, member.role)",
   '<button',
   "{isProtected ? <div className=\"muted\">{copy.ownerProtected}</div> : null}",
 ]) {
@@ -17522,7 +17525,7 @@ if (workspaceMembersSectionItemControlsLines > maxWorkspaceMembersSectionItemCon
 }
 
 for (const requiredWorkspaceMembersSectionItemControlsTypesUsage of [
-  'import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemControlsProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "member" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "workspaceRole"> & { isProtected: boolean };',
+  'import type { WorkspaceMembersSectionItemProps } from "./workspace-members-section-item.types"; export type WorkspaceMembersSectionItemControlsProps = Pick<WorkspaceMembersSectionItemProps, "copy" | "locale" | "member" | "onRemoveMember" | "onUpdateMemberRole" | "removingMemberId" | "savingMemberId" | "workspaceRole"> & { isProtected: boolean };',
 ]) {
   if (!workspaceMembersSectionItemControlsTypesSource.includes(requiredWorkspaceMembersSectionItemControlsTypesUsage)) {
     throw new Error(

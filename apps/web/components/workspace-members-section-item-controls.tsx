@@ -1,7 +1,8 @@
 "use client";
+import { getWorkspaceRoleLabel } from "../lib/workspace-role-display";
 import type { WorkspaceMembersSectionItemControlsProps } from "./workspace-members-section-item-controls.types";
 
-export function WorkspaceMembersSectionItemControls({ copy, isProtected, member, onRemoveMember, onUpdateMemberRole, removingMemberId, savingMemberId, workspaceRole }: WorkspaceMembersSectionItemControlsProps) {
+export function WorkspaceMembersSectionItemControls({ copy, isProtected, locale, member, onRemoveMember, onUpdateMemberRole, removingMemberId, savingMemberId, workspaceRole }: WorkspaceMembersSectionItemControlsProps) {
   return (
     <div style={{ minWidth: 220 }}>
       <div className="eyebrow">{copy.roleLabel}</div>
@@ -13,8 +14,8 @@ export function WorkspaceMembersSectionItemControls({ copy, isProtected, member,
             value={member.role}
             onChange={(event) => void onUpdateMemberRole(member.id, event.target.value as "viewer" | "editor")}
           >
-            <option value="editor">editor</option>
-            <option value="viewer">viewer</option>
+            <option value="editor">{getWorkspaceRoleLabel(locale, "editor")}</option>
+            <option value="viewer">{getWorkspaceRoleLabel(locale, "viewer")}</option>
           </select>
           <button
             className="button secondary"
@@ -27,7 +28,7 @@ export function WorkspaceMembersSectionItemControls({ copy, isProtected, member,
         </div>
       ) : (
         <div className="form-stack" style={{ marginTop: 8 }}>
-          <div style={{ fontWeight: 600 }}>{member.role}</div>
+          <div style={{ fontWeight: 600 }}>{getWorkspaceRoleLabel(locale, member.role)}</div>
           {isProtected ? <div className="muted">{copy.ownerProtected}</div> : null}
         </div>
       )}
