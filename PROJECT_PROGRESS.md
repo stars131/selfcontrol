@@ -2290,6 +2290,9 @@ Last updated: 2026-03-26
 - Local Pre-Push Guardrail Hooks V1:
   - the repository now includes opt-in Git hook install scripts plus a `.githooks/pre-push` guard that runs project verification before pushes
   - the hook supports an explicit emergency skip flag, but the default path now catches frontend and backend regressions earlier than remote CI alone
+- Toolchain Version Pinning V1:
+  - the repository now includes root-level `.nvmrc` and `.python-version` files so Linux VM and local development environments can align with the same Node and Python baseline used by CI and bootstrap guidance
+  - this lowers setup drift and makes future dependency upgrades easier to plan as explicit repository-level changes instead of ad hoc local choices
 
 ## Next
 - Continue the next product slice

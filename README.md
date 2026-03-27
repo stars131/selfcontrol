@@ -108,6 +108,12 @@ sh ./scripts/verify-all.sh
 - 仓库使用 `.gitattributes` 约束 Git 中的文本行尾，降低 Windows 和 Linux VM 间的无效 diff
 - `*.ps1` 保持 `CRLF`，其余主要源码和文档默认保持 `LF`
 
+## 工具链基线
+
+- Node.js 基线版本见 `.nvmrc`，当前为 `20`
+- Python 基线版本见 `.python-version`，当前为 `3.12`
+- 本地开发建议保持与 GitHub CI 一致的主版本，减少依赖和构建差异
+
 ## 推送前校验
 
 - 安装 hooks 后，`git push` 前会自动运行项目级校验
