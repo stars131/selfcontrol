@@ -2515,6 +2515,10 @@ Last updated: 2026-03-27
   - operator handler input shaping now lives in `apps/web/components/chat-panel-operator-handler-input.ts`, while share handler input shaping now lives in `apps/web/components/chat-panel-share-handler-input.ts`
   - `chat-panel-action-handler-inputs.ts` now stays as a thin re-export boundary so operator and share input shaping can evolve independently
   - the chat-panel and record-panel structure guardrails now enforce this operator-versus-share input split so future action wiring does not regrow a mixed input-shaping module
+- Chat Panel Content Action And Data Prop Split V1:
+  - action-driven content prop shaping now lives in `apps/web/components/chat-panel-content-action-props.ts`, while workspace/data-driven content prop shaping now lives in `apps/web/components/chat-panel-content-data-props.ts`
+  - `chat-panel-content-props.ts` now stays as a thin composition boundary so action-state mapping and data mapping can evolve independently
+  - the chat-panel and record-panel structure guardrails now enforce this action-versus-data prop split so future content wiring does not regrow a mixed prop-shaping module
 
 ## Next
 - Continue the next product slice

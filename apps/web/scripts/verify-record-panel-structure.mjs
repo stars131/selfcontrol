@@ -2019,6 +2019,14 @@ const chatPanelContentPropsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-content-props.ts",
 );
+const chatPanelContentActionPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content-action-props.ts",
+);
+const chatPanelContentDataPropsPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-content-data-props.ts",
+);
 const chatPanelContentPropsTypesPath = path.resolve(
   process.cwd(),
   "components/chat-panel-content-props.types.ts",
@@ -3521,6 +3529,14 @@ const chatPanelShareHandlersTypesSource = fs.readFileSync(
 );
 const useChatPanelActionsSource = fs.readFileSync(useChatPanelActionsPath, "utf8");
 const chatPanelContentPropsSource = fs.readFileSync(chatPanelContentPropsPath, "utf8");
+const chatPanelContentActionPropsSource = fs.readFileSync(
+  chatPanelContentActionPropsPath,
+  "utf8",
+);
+const chatPanelContentDataPropsSource = fs.readFileSync(
+  chatPanelContentDataPropsPath,
+  "utf8",
+);
 const chatPanelContentPropsTypesSource = fs.readFileSync(chatPanelContentPropsTypesPath, "utf8");
 const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
 const useChatPanelActionDerivedDataTypesSource = fs.readFileSync(
@@ -19998,8 +20014,11 @@ if (chatPanelShareHandlersTypesLines > maxChatPanelShareHandlersTypesLines) {
 
 for (const requiredChatPanelContentPropsUsage of [
   'import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";',
-  'import type { ChatPanelActions } from "./chat-panel-actions-result.types";',
-  "}: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
+  'import { buildChatPanelContentActionProps } from "./chat-panel-content-action-props";',
+  'import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";',
+  "const input = { actions, props };",
+  "...buildChatPanelContentDataProps(input),",
+  "...buildChatPanelContentActionProps(input),",
 ]) {
   if (!chatPanelContentPropsSource.includes(requiredChatPanelContentPropsUsage)) {
     throw new Error(
@@ -20009,7 +20028,11 @@ for (const requiredChatPanelContentPropsUsage of [
 }
 
 for (const forbiddenChatPanelContentPropsToken of [
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types";',
   'import type { ChatPanelProps } from "./chat-panel.types";',
+  "creatingShare: actions.creatingShare,",
+  "activeConversationId: props.activeConversationId,",
+  "unreadCount: actions.unreadCount,",
   "ReturnType<typeof import(",
   'from "./use-chat-panel-actions"',
   "}: {",
@@ -20017,6 +20040,56 @@ for (const forbiddenChatPanelContentPropsToken of [
   if (chatPanelContentPropsSource.includes(forbiddenChatPanelContentPropsToken)) {
     throw new Error(
       `chat-panel-content-props.ts must keep chat action inference delegated: ${forbiddenChatPanelContentPropsToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelContentActionPropsUsage of [
+  'from "./chat-panel-content-props.types";',
+  "creatingShare: actions.creatingShare,",
+  "handleCreateShareLink: actions.handleCreateShareLink,",
+  "unreadCount: actions.unreadCount,",
+]) {
+  if (!chatPanelContentActionPropsSource.includes(requiredChatPanelContentActionPropsUsage)) {
+    throw new Error(
+      `chat-panel-content-action-props.ts must own chat action-prop assembly: ${requiredChatPanelContentActionPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelContentActionPropsToken of [
+  "activeConversationId: props.activeConversationId,",
+  "auditLogs: props.auditLogs,",
+  "messages: props.messages,",
+]) {
+  if (chatPanelContentActionPropsSource.includes(forbiddenChatPanelContentActionPropsToken)) {
+    throw new Error(
+      `chat-panel-content-action-props.ts must keep chat data-prop assembly delegated: ${forbiddenChatPanelContentActionPropsToken}`,
+    );
+  }
+}
+
+for (const requiredChatPanelContentDataPropsUsage of [
+  'from "./chat-panel-content-props.types";',
+  "activeConversationId: props.activeConversationId,",
+  "auditLogs: props.auditLogs,",
+  "messages: props.messages,",
+]) {
+  if (!chatPanelContentDataPropsSource.includes(requiredChatPanelContentDataPropsUsage)) {
+    throw new Error(
+      `chat-panel-content-data-props.ts must own chat data-prop assembly: ${requiredChatPanelContentDataPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatPanelContentDataPropsToken of [
+  "creatingShare: actions.creatingShare,",
+  "handleCreateShareLink: actions.handleCreateShareLink,",
+  "unreadCount: actions.unreadCount,",
+]) {
+  if (chatPanelContentDataPropsSource.includes(forbiddenChatPanelContentDataPropsToken)) {
+    throw new Error(
+      `chat-panel-content-data-props.ts must keep chat action-prop assembly delegated: ${forbiddenChatPanelContentDataPropsToken}`,
     );
   }
 }
