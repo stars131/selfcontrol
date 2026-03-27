@@ -2,14 +2,44 @@ import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 
-const helperPath = path.resolve(process.cwd(), "components/record-quick-add-bar.helpers.ts");
-const helperSource = fs.readFileSync(helperPath, "utf8");
-const transpiled = ts.transpileModule(helperSource, {
-  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 },
-}).outputText;
+const moduleUrlCache = new Map();
 
-const helperModuleUrl = `data:text/javascript;base64,${Buffer.from(transpiled).toString("base64")}`;
-const { buildQuickAddRecordDraft } = await import(helperModuleUrl);
+function resolveTsModulePath(importerPath, specifier) {
+  for (const candidate of [
+    path.resolve(path.dirname(importerPath), `${specifier}.ts`),
+    path.resolve(path.dirname(importerPath), `${specifier}.tsx`),
+    path.resolve(path.dirname(importerPath), specifier),
+  ]) {
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  throw new Error(`Unable to resolve quick-add dependency ${specifier} from ${importerPath}`);
+}
+
+function buildTsModuleUrl(modulePath) {
+  const normalizedModulePath = path.normalize(modulePath);
+  const cachedUrl = moduleUrlCache.get(normalizedModulePath);
+  if (cachedUrl) {
+    return cachedUrl;
+  }
+
+  const source = fs.readFileSync(normalizedModulePath, "utf8");
+  const transpiled = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 },
+  }).outputText;
+  const rewritten = transpiled.replace(/from "(\.\/[^"]+)"/g, (_match, specifier) => {
+    const dependencyPath = resolveTsModulePath(normalizedModulePath, specifier);
+    return `from "${buildTsModuleUrl(dependencyPath)}"`;
+  });
+  const moduleUrl = `data:text/javascript;base64,${Buffer.from(rewritten).toString("base64")}`;
+  moduleUrlCache.set(normalizedModulePath, moduleUrl);
+  return moduleUrl;
+}
+
+const helperPath = path.resolve(process.cwd(), "components/record-quick-add-bar.helpers.ts");
+const { buildQuickAddRecordDraft } = await import(buildTsModuleUrl(helperPath));
 const referenceNow = new Date("2026-03-26T12:00:00.000Z");
 
 for (const [label, input, expected] of [

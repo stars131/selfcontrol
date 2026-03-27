@@ -9,6 +9,18 @@ const recordQuickAddBarHelpersPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-bar.helpers.ts",
 );
+const recordQuickAddControlTokensPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-control-tokens.ts",
+);
+const recordQuickAddTokenParsersPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-token-parsers.ts",
+);
+const recordQuickAddRulesPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-rules.ts",
+);
 const recordQuickAddPreviewPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-preview.tsx",
@@ -3851,6 +3863,15 @@ const recordPanelHeaderSource = fs.readFileSync(recordPanelHeaderPath, "utf8");
 const recordPanelHeaderTypesSource = fs.readFileSync(recordPanelHeaderTypesPath, "utf8");
 const recordQuickAddBarSource = fs.readFileSync(recordQuickAddBarPath, "utf8");
 const recordQuickAddBarHelpersSource = fs.readFileSync(recordQuickAddBarHelpersPath, "utf8");
+const recordQuickAddControlTokensSource = fs.readFileSync(
+  recordQuickAddControlTokensPath,
+  "utf8",
+);
+const recordQuickAddTokenParsersSource = fs.readFileSync(
+  recordQuickAddTokenParsersPath,
+  "utf8",
+);
+const recordQuickAddRulesSource = fs.readFileSync(recordQuickAddRulesPath, "utf8");
 const recordQuickAddPreviewSource = fs.readFileSync(recordQuickAddPreviewPath, "utf8");
 const recordQuickAddPreviewTypesSource = fs.readFileSync(
   recordQuickAddPreviewTypesPath,
@@ -4420,6 +4441,9 @@ const recordPanelHeaderLines = recordPanelHeaderSource.split(/\r?\n/).length;
 const recordPanelHeaderTypesLines = recordPanelHeaderTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarLines = recordQuickAddBarSource.split(/\r?\n/).length;
 const recordQuickAddBarHelpersLines = recordQuickAddBarHelpersSource.split(/\r?\n/).length;
+const recordQuickAddControlTokensLines = recordQuickAddControlTokensSource.split(/\r?\n/).length;
+const recordQuickAddTokenParsersLines = recordQuickAddTokenParsersSource.split(/\r?\n/).length;
+const recordQuickAddRulesLines = recordQuickAddRulesSource.split(/\r?\n/).length;
 const recordQuickAddPreviewLines = recordQuickAddPreviewSource.split(/\r?\n/).length;
 const recordQuickAddPreviewTypesLines = recordQuickAddPreviewTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarHelpersTypesLines = recordQuickAddBarHelpersTypesSource.split(/\r?\n/).length;
@@ -5456,58 +5480,13 @@ if (recordQuickAddPreviewTypesLines > maxRecordQuickAddPreviewTypesLines) {
 
 for (const requiredRecordQuickAddBarHelpersUsage of [
   'import type { QuickAddRecordDraft } from "./record-quick-add-bar.helpers.types";',
-  'const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {',
-  '"#memo": DEFAULT_QUICK_ADD_RULE,',
-  '"#\\u5907\\u5fd8": DEFAULT_QUICK_ADD_RULE,',
-  "const FOOD_QUICK_ADD_RULE: QuickAddTagRule = {",
-  'type_code: "food",',
-  '"#food": FOOD_QUICK_ADD_RULE,',
-  '"#meal": FOOD_QUICK_ADD_RULE,',
-  '"#\\u6b63\\u9910": FOOD_QUICK_ADD_RULE,',
-  'const QUICK_ADD_TIME_TOKENS: Record<string, QuickAddTimeTokenRule> = {',
-  '"\\u4eca\\u5929": "today",',
-  '"\\u6628\\u5929": "yesterday",',
-  "const SNACK_QUICK_ADD_RULE: QuickAddTagRule = {",
-  'type_code: "snack",',
-  '"#\\u96f6\\u98df": SNACK_QUICK_ADD_RULE,',
-  "const AVOID_QUICK_ADD_RULE: QuickAddTagRule = {",
-  'type_code: "bad_experience",',
-  '"#warning": AVOID_QUICK_ADD_RULE,',
-  '"#\\u907f\\u96f7": AVOID_QUICK_ADD_RULE,',
-  '"#\\u8e29\\u96f7": AVOID_QUICK_ADD_RULE,',
-  "function buildQuickAddTitle(content: string)",
-  "function buildQuickAddOccurredAt(timeRule: QuickAddTimeTokenRule | null, now: Date)",
-  "function parseQuickAddAbsoluteDateToken(token: string, now: Date)",
-  'const match = token.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})$/);',
-  "function parseQuickAddTimeOfDayToken(token: string, baseOccurredAt: string)",
-  'const match = token.match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);',
-  "function parseQuickAddRatingToken(token: string)",
-  'const match = token.match(/^([1-5])(?:\\/5|star|\\u661f|\\u5206)$/i);',
-  "function readQuickAddCoordinate(value: string, min: number, max: number)",
-  "function parseQuickAddLocationSegment(content: string)",
-  'const match = content.match(/^@(.+?)(?:\\(\\s*(-?\\d+(?:\\.\\d+)?)\\s*,\\s*(-?\\d+(?:\\.\\d+)?)\\s*\\))?(?:\\s*\\|\\s*([^:\\uFF1A]+))?[:\\uFF1A]\\s*(.*)$/);',
-  "const latitude = match[2] ? readQuickAddCoordinate(match[2], -90, 90) : null;",
-  "const longitude = match[3] ? readQuickAddCoordinate(match[3], -180, 180) : null;",
-  "const address = match[4]?.trim();",
-  "function parseQuickAddExplicitTitle(content: string)",
-  'const match = content.match(/^(?:\\[(.+?)\\]|\\u3010(.+?)\\u3011)\\s*(.*)$/);',
-  "function parseQuickAddControlTokens(rawContent: string, now: Date)",
-  "const timeRule = QUICK_ADD_TIME_TOKENS[token];",
-  "const absoluteDate = parseQuickAddAbsoluteDateToken(tokens[startIndex], now);",
-  "const timeOfDay = parseQuickAddTimeOfDayToken(tokens[startIndex], nextOccurredAt);",
-  "const rating = parseQuickAddRatingToken(token);",
-  "if (absoluteDate) nextOccurredAt = absoluteDate;",
-  "if (timeOfDay) nextOccurredAt = timeOfDay;",
-  'const parsedLocation = parseQuickAddLocationSegment(tokens.slice(startIndex).join(" ").trim() || rawContent.trim());',
-  "const parsedTitle = parseQuickAddExplicitTitle(parsedLocation.content);",
-  "extra_data: parsedLocation.extra_data,",
-  "rating: nextRating,",
-  "occurred_at: nextOccurredAt,",
-  "return { ...parsed, title: parsed.title ?? buildQuickAddTitle(parsed.content) };",
+  'import { parseQuickAddControlTokens } from "./record-quick-add-control-tokens";',
+  'import { buildQuickAddTitle } from "./record-quick-add-token-parsers";',
+  "title: parsed.title ?? buildQuickAddTitle(parsed.content),",
 ]) {
   if (!recordQuickAddBarHelpersSource.includes(requiredRecordQuickAddBarHelpersUsage)) {
     throw new Error(
-      `record-quick-add-bar.helpers.ts must own quick-add parsing and title helpers: ${requiredRecordQuickAddBarHelpersUsage}`,
+      `record-quick-add-bar.helpers.ts must keep the public quick-add entrypoint thin and delegated: ${requiredRecordQuickAddBarHelpersUsage}`,
     );
   }
 }
@@ -5516,18 +5495,109 @@ for (const forbiddenRecordQuickAddBarHelpersToken of [
   'from "../lib/locale";',
   'from "../lib/record-panel-ui";',
   'from "./record-quick-add-bar.types";',
+  "const QUICK_ADD_TAG_RULES: Record<string, QuickAddTagRule> = {",
+  "function parseQuickAddControlTokens(rawContent: string, now: Date)",
+  "function parseQuickAddLocationSegment(content: string)",
 ]) {
   if (recordQuickAddBarHelpersSource.includes(forbiddenRecordQuickAddBarHelpersToken)) {
     throw new Error(
-      `record-quick-add-bar.helpers.ts must stay independent from UI-only concerns: ${forbiddenRecordQuickAddBarHelpersToken}`,
+      `record-quick-add-bar.helpers.ts must stay focused on the thin public helper boundary: ${forbiddenRecordQuickAddBarHelpersToken}`,
     );
   }
 }
 
-const maxRecordQuickAddBarHelpersLines = 130;
+const maxRecordQuickAddBarHelpersLines = 20;
 if (recordQuickAddBarHelpersLines > maxRecordQuickAddBarHelpersLines) {
   throw new Error(
     `record-quick-add-bar.helpers.ts exceeded ${maxRecordQuickAddBarHelpersLines} lines: ${recordQuickAddBarHelpersLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddControlTokensUsage of [
+  'from "./record-quick-add-rules";',
+  'from "./record-quick-add-token-parsers";',
+  "QUICK_ADD_TAG_RULES[normalizedToken]",
+  "QUICK_ADD_TIME_TOKENS[normalizedToken]",
+  "parseQuickAddAbsoluteDateToken(token, now)",
+  "parseQuickAddTimeOfDayToken(token, nextOccurredAt)",
+  "parseQuickAddRatingToken(normalizedToken)",
+  "parseQuickAddLocationSegment(",
+  "parseQuickAddExplicitTitle(",
+]) {
+  if (!recordQuickAddControlTokensSource.includes(requiredRecordQuickAddControlTokensUsage)) {
+    throw new Error(
+      `record-quick-add-control-tokens.ts must own quick-add control-token orchestration: ${requiredRecordQuickAddControlTokensUsage}`,
+    );
+  }
+}
+
+if (recordQuickAddControlTokensSource.includes("export function buildQuickAddRecordDraft(")) {
+  throw new Error(
+    "record-quick-add-control-tokens.ts must keep the public helper entrypoint delegated",
+  );
+}
+
+const maxRecordQuickAddControlTokensLines = 90;
+if (recordQuickAddControlTokensLines > maxRecordQuickAddControlTokensLines) {
+  throw new Error(
+    `record-quick-add-control-tokens.ts exceeded ${maxRecordQuickAddControlTokensLines} lines: ${recordQuickAddControlTokensLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddTokenParsersUsage of [
+  "export function buildQuickAddTitle(",
+  "export function buildQuickAddOccurredAt(",
+  "export function parseQuickAddAbsoluteDateToken(",
+  "export function parseQuickAddTimeOfDayToken(",
+  "export function parseQuickAddRatingToken(",
+  "export function parseQuickAddLocationSegment(",
+  "export function parseQuickAddExplicitTitle(",
+]) {
+  if (!recordQuickAddTokenParsersSource.includes(requiredRecordQuickAddTokenParsersUsage)) {
+    throw new Error(
+      `record-quick-add-token-parsers.ts must own reusable quick-add parser helpers: ${requiredRecordQuickAddTokenParsersUsage}`,
+    );
+  }
+}
+
+if (recordQuickAddTokenParsersSource.includes("export function parseQuickAddControlTokens(")) {
+  throw new Error(
+    "record-quick-add-token-parsers.ts must keep control-token orchestration delegated",
+  );
+}
+
+const maxRecordQuickAddTokenParsersLines = 125;
+if (recordQuickAddTokenParsersLines > maxRecordQuickAddTokenParsersLines) {
+  throw new Error(
+    `record-quick-add-token-parsers.ts exceeded ${maxRecordQuickAddTokenParsersLines} lines: ${recordQuickAddTokenParsersLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddRulesUsage of [
+  "export type QuickAddTagRule =",
+  'export type QuickAddTimeTokenRule = "today" | "yesterday";',
+  "export const QUICK_ADD_TAG_RULES",
+  "export const QUICK_ADD_TIME_TOKENS",
+  "#零食",
+  "#踩雷",
+]) {
+  if (!recordQuickAddRulesSource.includes(requiredRecordQuickAddRulesUsage)) {
+    throw new Error(
+      `record-quick-add-rules.ts must own quick-add rule tables: ${requiredRecordQuickAddRulesUsage}`,
+    );
+  }
+}
+
+if (recordQuickAddRulesSource.includes("parseQuickAddAbsoluteDateToken(")) {
+  throw new Error(
+    "record-quick-add-rules.ts must stay focused on static quick-add rule tables",
+  );
+}
+
+const maxRecordQuickAddRulesLines = 60;
+if (recordQuickAddRulesLines > maxRecordQuickAddRulesLines) {
+  throw new Error(
+    `record-quick-add-rules.ts exceeded ${maxRecordQuickAddRulesLines} lines: ${recordQuickAddRulesLines}`,
   );
 }
 
