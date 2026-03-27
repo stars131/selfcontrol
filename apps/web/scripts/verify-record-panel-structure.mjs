@@ -13196,6 +13196,8 @@ if (legacyRecordPanelActionErrorLines > maxLegacyActionErrorLines) {
 }
 
 for (const requiredLegacySubmitActionImport of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-detail";',
   'from "react";',
   'from "./record-panel-legacy-action-error";',
   'from "./record-panel-legacy-action-input.types";',
@@ -13207,10 +13209,11 @@ for (const requiredLegacySubmitActionImport of [
 
 for (const requiredLegacySubmitActionUsage of [
   "export function createRecordPanelLegacySubmitAction({",
+  "const detailCopy = getRecordPanelDetailBundle(getStoredLocale()).copy;",
   "event.preventDefault()",
-  'setError("Content is required")',
+  "setError(detailCopy.contentRequiredError)",
   "await onSaveRecord({",
-  'setError(getRecordPanelErrorMessage(caught, "Failed to save record"))',
+  "setError(getRecordPanelErrorMessage(caught, detailCopy.saveRecordError))",
 ]) {
   if (!legacyRecordPanelSubmitActionSource.includes(requiredLegacySubmitActionUsage)) {
     throw new Error(`record-panel-legacy-submit-action.ts must own legacy submit details: ${requiredLegacySubmitActionUsage}`);
@@ -13238,6 +13241,8 @@ if (legacyRecordPanelSubmitActionLines > maxLegacySubmitActionLines) {
 }
 
 for (const requiredLegacyDeleteActionImport of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-detail";',
   'from "./record-panel-legacy-action-error";',
   'from "./record-panel-legacy-action-input.types";',
 ]) {
@@ -13248,9 +13253,10 @@ for (const requiredLegacyDeleteActionImport of [
 
 for (const requiredLegacyDeleteActionUsage of [
   "export function createRecordPanelLegacyDeleteAction({",
+  "const detailCopy = getRecordPanelDetailBundle(getStoredLocale()).copy;",
   "if (!selectedRecord) {",
   "await onDeleteRecord(selectedRecord.id)",
-  'setError(getRecordPanelErrorMessage(caught, "Failed to delete record"))',
+  "setError(getRecordPanelErrorMessage(caught, detailCopy.deleteRecordError))",
 ]) {
   if (!legacyRecordPanelDeleteActionSource.includes(requiredLegacyDeleteActionUsage)) {
     throw new Error(`record-panel-legacy-delete-action.ts must own legacy delete details: ${requiredLegacyDeleteActionUsage}`);
@@ -13277,6 +13283,8 @@ if (legacyRecordPanelDeleteActionLines > maxLegacyDeleteActionLines) {
 }
 
 for (const requiredLegacyUploadActionImport of [
+  'from "../lib/locale";',
+  'from "../lib/record-panel-detail";',
   'from "react";',
   'from "./record-panel-legacy-action-error";',
   'from "./record-panel-legacy-action-input.types";',
@@ -13288,9 +13296,10 @@ for (const requiredLegacyUploadActionImport of [
 
 for (const requiredLegacyUploadActionUsage of [
   "export function createRecordPanelLegacyUploadAction({",
+  "const detailCopy = getRecordPanelDetailBundle(getStoredLocale()).copy;",
   "const file = event.target.files?.[0];",
   "await onUploadMedia(selectedRecord.id, file)",
-  'setError(getRecordPanelErrorMessage(caught, "Failed to upload media"))',
+  "setError(getRecordPanelErrorMessage(caught, detailCopy.uploadMediaError))",
 ]) {
   if (!legacyRecordPanelUploadActionSource.includes(requiredLegacyUploadActionUsage)) {
     throw new Error(`record-panel-legacy-upload-action.ts must own legacy upload details: ${requiredLegacyUploadActionUsage}`);

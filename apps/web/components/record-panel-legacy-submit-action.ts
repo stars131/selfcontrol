@@ -1,5 +1,7 @@
 "use client";
 import type { FormEvent } from "react";
+import { getStoredLocale } from "../lib/locale";
+import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";
 import { getRecordPanelErrorMessage } from "./record-panel-legacy-action-error";
 import type { RecordPanelLegacySubmitActionInput } from "./record-panel-legacy-action-input.types";
 export function createRecordPanelLegacySubmitAction({
@@ -9,10 +11,11 @@ export function createRecordPanelLegacySubmitAction({
   setError,
   setSaving,
 }: RecordPanelLegacySubmitActionInput) {
+  const detailCopy = getRecordPanelDetailBundle(getStoredLocale()).copy;
   return async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!form.content.trim()) {
-      setError("Content is required");
+      setError(detailCopy.contentRequiredError);
       return;
     }
     setSaving(true);
@@ -27,7 +30,7 @@ export function createRecordPanelLegacySubmitAction({
         is_avoid: form.is_avoid,
       });
     } catch (caught) {
-      setError(getRecordPanelErrorMessage(caught, "Failed to save record"));
+      setError(getRecordPanelErrorMessage(caught, detailCopy.saveRecordError));
     } finally {
       setSaving(false);
     }

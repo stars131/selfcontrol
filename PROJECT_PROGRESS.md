@@ -2188,6 +2188,9 @@ Last updated: 2026-03-26
 - Media Storage Health Label Localization V1:
   - media storage health metadata now uses the localized provider label prefix from provider settings copy instead of hardcoding an English `provider` tag in every locale
   - shared health-card copy typing and structure verification now explicitly require the provider label so future storage observability work stays maintainable
+- Legacy Record Error Localization V1:
+  - legacy record save, delete, and upload actions now reuse localized record-detail error copy for required-content and failure fallbacks instead of surfacing English-only messages
+  - `verify-record-panel-structure.mjs` now enforces the locale-aware error bundle usage inside those legacy actions so future maintenance does not regress localized error handling
 
 ## Next
 - Continue the next product slice
