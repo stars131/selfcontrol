@@ -2175,6 +2175,10 @@ Last updated: 2026-03-26
   - `storage-provider-display.ts` now owns localized labels for common storage providers such as `local`, `custom`, and `s3`, while keeping unknown future provider codes visible as safe fallback text
   - media status tags, dead-letter cards, retention cards, storage overview provider tags, and storage-health metadata now show localized provider labels instead of exposing raw storage-provider codes directly in the UI
   - `verify-record-panel-structure.mjs` now enforces the shared storage-provider helper usage across those media and storage leaves so future observability updates stay maintainable under the enterprise standard
+- Legacy Record Leaf Localization V1:
+  - legacy record cards now format record type, source, status, rating, avoid markers, and title/content fallbacks from the shared locale bundles instead of exposing raw backend values or English-only placeholders
+  - legacy media upload cards now reuse localized upload copy, localized empty-state copy, and localized media-type labels so the fallback panel remains usable across desktop and mobile locales
+  - `verify-record-panel-structure.mjs` now enforces those locale-aware helpers inside the legacy record leaves so future cleanup work stays maintainable under the enterprise standard
 
 ## Next
 - Continue the next product slice

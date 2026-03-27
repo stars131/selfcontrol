@@ -13447,7 +13447,18 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     legacyRecordPanelFormMediaTypesSource,
     'import type { RecordPanelLegacyFormMediaProps } from "./record-panel-legacy-form-media.types";',
     "}: RecordPanelLegacyFormMediaProps) {",
-    ["if (!selectedRecord) {", "Uploading media...", "No media uploaded for this record yet."],
+    [
+      'import { useStoredLocale } from "../lib/locale";',
+      'import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";',
+      'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+      'import { getMediaTypeLabel } from "../lib/media-type-display";',
+      "const { locale } = useStoredLocale(), { copy } = getRecordPanelDetailBundle(locale), { panelCopy } = getRecordPanelUiBundle(locale);",
+      "panelCopy.uploadAttachment",
+      "panelCopy.uploadingMedia",
+      "getMediaTypeLabel(locale, asset.media_type)",
+      "copy.noMedia",
+      "if (!selectedRecord) {",
+    ],
     [
       'import type { RecordPanelLegacyFormProps } from "./record-panel-legacy-form.types";',
       "}: Pick<RecordPanelLegacyFormProps",
@@ -13697,10 +13708,18 @@ if (legacyRecordPanelListTypesLines > maxLegacyRecordPanelListTypesLines) {
 
 for (const requiredLegacyListItemUsage of [
   'from "./record-panel-legacy-list.types";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getRecordPanelDetailBundle } from "../lib/record-panel-detail";',
   "export function RecordPanelLegacyListItem({ record, selected, onSelectRecord }: RecordPanelLegacyListItemProps)",
-  '{record.title || "Untitled"}',
-  '{record.content || "No content"}',
-  '{record.is_avoid ? <span className="tag">avoid</span> : null}',
+  "const detail = getRecordPanelDetailBundle(locale);",
+  "detail.formatRecordTypeLabel(record.type_code)",
+  "{record.title || detail.copy.untitledRecord}",
+  "detail.formatRecordTimestampLabel(record)",
+  "detail.formatRecordSourceLabel(record.source_type)",
+  "{record.content || detail.copy.noContent}",
+  "detail.formatRecordStatusLabel(record.status)",
+  "{detail.copy.ratingPrefix} {record.rating}",
+  '{record.is_avoid ? <span className="tag">{detail.copy.avoidLabel}</span> : null}',
 ]) {
   if (!legacyRecordPanelListItemSource.includes(requiredLegacyListItemUsage)) {
     throw new Error(`record-panel-legacy-list-item.tsx must own legacy record-card rendering: ${requiredLegacyListItemUsage}`);
