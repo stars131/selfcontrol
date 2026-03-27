@@ -2503,6 +2503,10 @@ Last updated: 2026-03-27
   - chat send-message flow now lives in `apps/web/components/workspace-shell-chat-send-actions.ts`, while conversation create/select flow now lives in `apps/web/components/workspace-shell-chat-conversation-actions.ts`
   - `workspace-shell-chat-actions.ts` now stays as a thin composition boundary so assistant-message flow and conversation lifecycle behavior can evolve independently
   - the workspace-shell structure guardrail now enforces this send-versus-conversation split so future chat workflow growth does not regrow a mixed action module
+- Chat Panel Operator Send And Admin Handler Split V1:
+  - chat send submission now lives in `apps/web/components/chat-panel-send-handler.ts`, while notification sync, knowledge reindex, and audit refresh handlers now live in `apps/web/components/chat-panel-admin-handlers.ts`
+  - `chat-panel-operator-handlers.ts` now stays as a thin composition boundary so user send flow and management action flow can evolve independently
+  - the chat-panel structure guardrail now enforces this send-versus-admin split so future operator behavior does not regrow a mixed handler module
 
 ## Next
 - Continue the next product slice

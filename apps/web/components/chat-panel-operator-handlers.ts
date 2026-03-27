@@ -1,74 +1,17 @@
 "use client";
 
-import { getStoredChatPanelActionCopy } from "./chat-panel-action-copy";
-import { getChatPanelActionErrorMessage } from "./chat-panel-action-helpers";
+import { createChatPanelAdminHandlers } from "./chat-panel-admin-handlers";
+import { createChatPanelSendHandler } from "./chat-panel-send-handler";
 import type { CreateChatPanelOperatorHandlersInput } from "./chat-panel-operator-handlers.types";
 
-export function createChatPanelOperatorHandlers({
-  draft,
-  onRefreshAuditLogs,
-  onReindexKnowledge,
-  onSendMessage,
-  onSyncNotifications,
-  setDraft,
-  setError,
-  setLoading,
-  setRefreshingAudit,
-  setReindexing,
-  setSyncing,
-}: CreateChatPanelOperatorHandlersInput) {
-  const copy = getStoredChatPanelActionCopy();
+export function createChatPanelOperatorHandlers(
+  input: CreateChatPanelOperatorHandlersInput,
+) {
+  const handleSend = createChatPanelSendHandler(input);
+  const adminHandlers = createChatPanelAdminHandlers(input);
+
   return {
-    async handleSend() {
-      const value = draft.trim();
-      if (!value) {
-        return;
-      }
-
-      setLoading(true);
-      setError("");
-      setDraft("");
-
-      try {
-        await onSendMessage(value);
-      } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, copy.requestFailed));
-      } finally {
-        setLoading(false);
-      }
-    },
-    async handleSyncNotifications() {
-      setSyncing(true);
-      setError("");
-      try {
-        await onSyncNotifications();
-      } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, copy.syncFailed));
-      } finally {
-        setSyncing(false);
-      }
-    },
-    async handleReindexKnowledge() {
-      setReindexing(true);
-      setError("");
-      try {
-        await onReindexKnowledge();
-      } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, copy.reindexFailed));
-      } finally {
-        setReindexing(false);
-      }
-    },
-    async handleRefreshAuditLogs() {
-      setRefreshingAudit(true);
-      setError("");
-      try {
-        await onRefreshAuditLogs();
-      } catch (caught) {
-        setError(getChatPanelActionErrorMessage(caught, copy.auditRefreshFailed));
-      } finally {
-        setRefreshingAudit(false);
-      }
-    },
+    handleSend,
+    ...adminHandlers,
   };
 }

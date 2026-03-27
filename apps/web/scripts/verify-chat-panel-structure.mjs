@@ -75,6 +75,27 @@ const chatPanelContentTypesPath = path.resolve(
 const chatPanelContentTypesSource = fs.readFileSync(chatPanelContentTypesPath, "utf8");
 const chatPanelActionsPath = path.resolve(process.cwd(), "components/use-chat-panel-actions.ts");
 const chatPanelActionsSource = fs.readFileSync(chatPanelActionsPath, "utf8");
+const chatPanelOperatorHandlersPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-operator-handlers.ts",
+);
+const chatPanelOperatorHandlersSource = fs.readFileSync(
+  chatPanelOperatorHandlersPath,
+  "utf8",
+);
+const chatPanelSendHandlerPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-send-handler.ts",
+);
+const chatPanelSendHandlerSource = fs.readFileSync(chatPanelSendHandlerPath, "utf8");
+const chatPanelAdminHandlersPath = path.resolve(
+  process.cwd(),
+  "components/chat-panel-admin-handlers.ts",
+);
+const chatPanelAdminHandlersSource = fs.readFileSync(
+  chatPanelAdminHandlersPath,
+  "utf8",
+);
 const chatPanelActionHandlerInputsPath = path.resolve(
   process.cwd(),
   "components/chat-panel-action-handler-inputs.ts",
@@ -105,6 +126,10 @@ const chatPanelActionsResultBuilderLineCount =
   chatPanelActionsResultBuilderSource.split(/\r?\n/).length;
 const chatPanelActionHandlerInputsTypesLineCount =
   chatPanelActionHandlerInputsTypesSource.split(/\r?\n/).length;
+const chatPanelOperatorHandlersLineCount =
+  chatPanelOperatorHandlersSource.split(/\r?\n/).length;
+const chatPanelSendHandlerLineCount = chatPanelSendHandlerSource.split(/\r?\n/).length;
+const chatPanelAdminHandlersLineCount = chatPanelAdminHandlersSource.split(/\r?\n/).length;
 
 if (!source.includes('import { useChatPanelActions } from "./use-chat-panel-actions";')) {
   throw new Error("chat-panel.tsx must import useChatPanelActions");
@@ -745,6 +770,134 @@ for (const requiredActionHandlerInputsTypesUsage of [
 if (chatPanelActionHandlerInputsTypesLineCount > 3) {
   throw new Error(
     `chat-panel-action-handler-inputs.types.ts exceeded 3 lines: ${chatPanelActionHandlerInputsTypesLineCount}`,
+  );
+}
+
+for (const requiredOperatorHandlersImport of [
+  'from "./chat-panel-admin-handlers";',
+  'from "./chat-panel-send-handler";',
+  'from "./chat-panel-operator-handlers.types";',
+]) {
+  if (!chatPanelOperatorHandlersSource.includes(requiredOperatorHandlersImport)) {
+    throw new Error(
+      `chat-panel-operator-handlers.ts must import delegated operator handler groups: ${requiredOperatorHandlersImport}`,
+    );
+  }
+}
+
+for (const requiredOperatorHandlersUsage of [
+  "createChatPanelSendHandler(input)",
+  "createChatPanelAdminHandlers(input)",
+  "handleSend,",
+  "...adminHandlers,",
+]) {
+  if (!chatPanelOperatorHandlersSource.includes(requiredOperatorHandlersUsage)) {
+    throw new Error(
+      `chat-panel-operator-handlers.ts must delegate operator handler assembly: ${requiredOperatorHandlersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenOperatorHandlersToken of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  "const value = draft.trim()",
+  "setLoading(true)",
+  "setSyncing(true)",
+  "setReindexing(true)",
+  "setRefreshingAudit(true)",
+]) {
+  if (chatPanelOperatorHandlersSource.includes(forbiddenOperatorHandlersToken)) {
+    throw new Error(
+      `chat-panel-operator-handlers.ts must keep operator internals delegated: ${forbiddenOperatorHandlersToken}`,
+    );
+  }
+}
+
+const maxOperatorHandlersLines = 20;
+if (chatPanelOperatorHandlersLineCount > maxOperatorHandlersLines) {
+  throw new Error(
+    `chat-panel-operator-handlers.ts exceeded ${maxOperatorHandlersLines} lines: ${chatPanelOperatorHandlersLineCount}`,
+  );
+}
+
+for (const requiredSendHandlerUsage of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  'from "./chat-panel-operator-handlers.types";',
+  "export function createChatPanelSendHandler(",
+  "return async function handleSend() {",
+  "const value = draft.trim();",
+  "setLoading(true);",
+  'setError("");',
+  'setDraft("");',
+  "await onSendMessage(value);",
+]) {
+  if (!chatPanelSendHandlerSource.includes(requiredSendHandlerUsage)) {
+    throw new Error(
+      `chat-panel-send-handler.ts must own send handler flow: ${requiredSendHandlerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSendHandlerToken of [
+  "onSyncNotifications()",
+  "onReindexKnowledge()",
+  "onRefreshAuditLogs()",
+  "setSyncing(true)",
+  "setReindexing(true)",
+  "setRefreshingAudit(true)",
+]) {
+  if (chatPanelSendHandlerSource.includes(forbiddenSendHandlerToken)) {
+    throw new Error(
+      `chat-panel-send-handler.ts must keep admin handlers delegated: ${forbiddenSendHandlerToken}`,
+    );
+  }
+}
+
+const maxSendHandlerLines = 35;
+if (chatPanelSendHandlerLineCount > maxSendHandlerLines) {
+  throw new Error(
+    `chat-panel-send-handler.ts exceeded ${maxSendHandlerLines} lines: ${chatPanelSendHandlerLineCount}`,
+  );
+}
+
+for (const requiredAdminHandlersUsage of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  'from "./chat-panel-operator-handlers.types";',
+  "export function createChatPanelAdminHandlers(",
+  "async handleSyncNotifications() {",
+  "async handleReindexKnowledge() {",
+  "async handleRefreshAuditLogs() {",
+  "await onSyncNotifications();",
+  "await onReindexKnowledge();",
+  "await onRefreshAuditLogs();",
+]) {
+  if (!chatPanelAdminHandlersSource.includes(requiredAdminHandlersUsage)) {
+    throw new Error(
+      `chat-panel-admin-handlers.ts must own admin handler flow: ${requiredAdminHandlersUsage}`,
+    );
+  }
+}
+
+for (const forbiddenAdminHandlersToken of [
+  "draft.trim()",
+  "setDraft(",
+  "setLoading(true)",
+  "await onSendMessage(",
+]) {
+  if (chatPanelAdminHandlersSource.includes(forbiddenAdminHandlersToken)) {
+    throw new Error(
+      `chat-panel-admin-handlers.ts must keep send handler delegated: ${forbiddenAdminHandlersToken}`,
+    );
+  }
+}
+
+const maxAdminHandlersLines = 50;
+if (chatPanelAdminHandlersLineCount > maxAdminHandlersLines) {
+  throw new Error(
+    `chat-panel-admin-handlers.ts exceeded ${maxAdminHandlersLines} lines: ${chatPanelAdminHandlersLineCount}`,
   );
 }
 

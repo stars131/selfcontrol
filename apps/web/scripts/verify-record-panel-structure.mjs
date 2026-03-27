@@ -19804,14 +19804,14 @@ if (chatPanelActionHelpersTypesLines > maxChatPanelActionHelpersTypesLines) {
 }
 
 for (const requiredChatPanelOperatorHandlersUsage of [
-  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-admin-handlers";',
+  'from "./chat-panel-send-handler";',
   'import type { CreateChatPanelOperatorHandlersInput } from "./chat-panel-operator-handlers.types";',
-  "}: CreateChatPanelOperatorHandlersInput) {",
-  "const copy = getStoredChatPanelActionCopy();",
-  "copy.requestFailed",
-  "copy.syncFailed",
-  "copy.reindexFailed",
-  "copy.auditRefreshFailed",
+  "input: CreateChatPanelOperatorHandlersInput",
+  "createChatPanelSendHandler(input)",
+  "createChatPanelAdminHandlers(input)",
+  "handleSend,",
+  "...adminHandlers,",
 ]) {
   if (!chatPanelOperatorHandlersSource.includes(requiredChatPanelOperatorHandlersUsage)) {
     throw new Error(
@@ -19824,6 +19824,21 @@ if (chatPanelOperatorHandlersSource.includes("}: {")) {
   throw new Error(
     "chat-panel-operator-handlers.ts must keep operator-handler input typing delegated",
   );
+}
+
+for (const forbiddenChatPanelOperatorHandlersToken of [
+  'from "./chat-panel-action-copy";',
+  'from "./chat-panel-action-helpers";',
+  "copy.requestFailed",
+  "copy.syncFailed",
+  "copy.reindexFailed",
+  "copy.auditRefreshFailed",
+]) {
+  if (chatPanelOperatorHandlersSource.includes(forbiddenChatPanelOperatorHandlersToken)) {
+    throw new Error(
+      `chat-panel-operator-handlers.ts must keep send/admin handler internals delegated: ${forbiddenChatPanelOperatorHandlersToken}`,
+    );
+  }
 }
 
 for (const requiredChatPanelOperatorHandlersTypesUsage of [
