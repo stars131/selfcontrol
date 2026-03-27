@@ -2,6 +2,7 @@
 
 import { DeadLetterRecoverySummaryIssueCategoryTags } from "./dead-letter-recovery-summary-issue-category-tags";
 import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";
+import { DeadLetterRecoverySummaryTotalCountTag } from "./dead-letter-recovery-summary-total-count-tag";
 import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";
 
 export function DeadLetterRecoverySummaryStats({
@@ -11,9 +12,10 @@ export function DeadLetterRecoverySummaryStats({
 }: DeadLetterRecoverySummaryStatsProps) {
   return (
     <div className="tag-row">
-      <span className="tag">
-        {mediaDeadLetterOverview?.total_count ?? 0} {mediaIssueCopy.itemSuffix}
-      </span>
+      <DeadLetterRecoverySummaryTotalCountTag
+        mediaDeadLetterOverview={mediaDeadLetterOverview}
+        mediaIssueCopy={mediaIssueCopy}
+      />
       <DeadLetterRecoverySummaryRetryStateTags
         locale={locale}
         mediaDeadLetterOverview={mediaDeadLetterOverview}

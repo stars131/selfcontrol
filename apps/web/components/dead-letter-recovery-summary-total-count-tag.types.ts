@@ -1,0 +1,1 @@
+import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types"; export type DeadLetterRecoverySummaryTotalCountTagProps = Pick<DeadLetterRecoverySummaryStatsProps, "mediaDeadLetterOverview" | "mediaIssueCopy">;

@@ -2396,6 +2396,14 @@ const deadLetterRecoverySummaryIssueCategoryTagsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-issue-category-tags.types.ts",
 );
+const deadLetterRecoverySummaryTotalCountTagPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-total-count-tag.tsx",
+);
+const deadLetterRecoverySummaryTotalCountTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-summary-total-count-tag.types.ts",
+);
 const deadLetterRecoverySummaryStatsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-summary-stats.types.ts",
@@ -4003,6 +4011,14 @@ const deadLetterRecoverySummaryIssueCategoryTagsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryIssueCategoryTagsTypesPath,
   "utf8",
 );
+const deadLetterRecoverySummaryTotalCountTagSource = fs.readFileSync(
+  deadLetterRecoverySummaryTotalCountTagPath,
+  "utf8",
+);
+const deadLetterRecoverySummaryTotalCountTagTypesSource = fs.readFileSync(
+  deadLetterRecoverySummaryTotalCountTagTypesPath,
+  "utf8",
+);
 const deadLetterRecoverySummaryStatsTypesSource = fs.readFileSync(
   deadLetterRecoverySummaryStatsTypesPath,
   "utf8",
@@ -5428,6 +5444,10 @@ const deadLetterRecoverySummaryIssueCategoryTagsLines =
   deadLetterRecoverySummaryIssueCategoryTagsSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryIssueCategoryTagsTypesLines =
   deadLetterRecoverySummaryIssueCategoryTagsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryTotalCountTagLines =
+  deadLetterRecoverySummaryTotalCountTagSource.split(/\r?\n/).length;
+const deadLetterRecoverySummaryTotalCountTagTypesLines =
+  deadLetterRecoverySummaryTotalCountTagTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryActionsTypesLines =
   deadLetterRecoverySummaryActionsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoverySummaryStatsTypesLines =
@@ -23116,10 +23136,12 @@ if (deadLetterRecoverySummaryActionButtonsTypesLines > maxDeadLetterRecoverySumm
 for (const requiredDeadLetterRecoverySummaryStatsUsage of [
   'import { DeadLetterRecoverySummaryIssueCategoryTags } from "./dead-letter-recovery-summary-issue-category-tags";',
   'import { DeadLetterRecoverySummaryRetryStateTags } from "./dead-letter-recovery-summary-retry-state-tags";',
+  'import { DeadLetterRecoverySummaryTotalCountTag } from "./dead-letter-recovery-summary-total-count-tag";',
   'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types";',
   "}: DeadLetterRecoverySummaryStatsProps) {",
   "<DeadLetterRecoverySummaryIssueCategoryTags",
   "<DeadLetterRecoverySummaryRetryStateTags",
+  "<DeadLetterRecoverySummaryTotalCountTag",
 ]) {
   if (!deadLetterRecoverySummaryStatsSource.includes(requiredDeadLetterRecoverySummaryStatsUsage)) {
     throw new Error(
@@ -23141,6 +23163,8 @@ for (const forbiddenDeadLetterRecoverySummaryStatsToken of [
   "{getRetryStateLabel(locale, retryState)}: {count}",
   "Object.entries(mediaDeadLetterOverview.by_issue_category).map",
   'issue_category: issueCategory, issue_label: null',
+  "mediaDeadLetterOverview?.total_count ?? 0",
+  "mediaIssueCopy.itemSuffix",
 ]) {
   if (deadLetterRecoverySummaryStatsSource.includes(forbiddenDeadLetterRecoverySummaryStatsToken)) {
     throw new Error(
@@ -23270,6 +23294,57 @@ const maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines = 2;
 if (deadLetterRecoverySummaryIssueCategoryTagsTypesLines > maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines) {
   throw new Error(
     `dead-letter-recovery-summary-issue-category-tags.types.ts exceeded ${maxDeadLetterRecoverySummaryIssueCategoryTagsTypesLines} lines: ${deadLetterRecoverySummaryIssueCategoryTagsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryTotalCountTagUsage of [
+  'import type { DeadLetterRecoverySummaryTotalCountTagProps } from "./dead-letter-recovery-summary-total-count-tag.types";',
+  "}: DeadLetterRecoverySummaryTotalCountTagProps) {",
+  '<span className="tag">',
+  "mediaDeadLetterOverview?.total_count ?? 0",
+  "mediaIssueCopy.itemSuffix",
+]) {
+  if (!deadLetterRecoverySummaryTotalCountTagSource.includes(requiredDeadLetterRecoverySummaryTotalCountTagUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-total-count-tag.tsx must own total-count tag rendering: ${requiredDeadLetterRecoverySummaryTotalCountTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoverySummaryTotalCountTagToken of [
+  "getRetryStateLabel(",
+  "getMediaIssueLabel(",
+  "by_retry_state",
+  "by_issue_category",
+]) {
+  if (deadLetterRecoverySummaryTotalCountTagSource.includes(forbiddenDeadLetterRecoverySummaryTotalCountTagToken)) {
+    throw new Error(
+      `dead-letter-recovery-summary-total-count-tag.tsx must keep retry-state and issue-category concerns delegated: ${forbiddenDeadLetterRecoverySummaryTotalCountTagToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryTotalCountTagLines = 16;
+if (deadLetterRecoverySummaryTotalCountTagLines > maxDeadLetterRecoverySummaryTotalCountTagLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-total-count-tag.tsx exceeded ${maxDeadLetterRecoverySummaryTotalCountTagLines} lines: ${deadLetterRecoverySummaryTotalCountTagLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoverySummaryTotalCountTagTypesUsage of [
+  'import type { DeadLetterRecoverySummaryStatsProps } from "./dead-letter-recovery-summary-stats.types"; export type DeadLetterRecoverySummaryTotalCountTagProps = Pick<DeadLetterRecoverySummaryStatsProps, "mediaDeadLetterOverview" | "mediaIssueCopy">;',
+]) {
+  if (!deadLetterRecoverySummaryTotalCountTagTypesSource.includes(requiredDeadLetterRecoverySummaryTotalCountTagTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-summary-total-count-tag.types.ts must own total-count tag prop typing: ${requiredDeadLetterRecoverySummaryTotalCountTagTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoverySummaryTotalCountTagTypesLines = 2;
+if (deadLetterRecoverySummaryTotalCountTagTypesLines > maxDeadLetterRecoverySummaryTotalCountTagTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-summary-total-count-tag.types.ts exceeded ${maxDeadLetterRecoverySummaryTotalCountTagTypesLines} lines: ${deadLetterRecoverySummaryTotalCountTagTypesLines}`,
   );
 }
 
