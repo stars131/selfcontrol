@@ -1,39 +1,46 @@
 "use client";
 
+import { getStoredWorkspaceShellActionCopy } from "./workspace-shell-action-copy";
+
 export function requireWorkspaceToken(token: string | null) {
+  const copy = getStoredWorkspaceShellActionCopy();
   if (!token) {
-    throw new Error("Not authenticated");
+    throw new Error(copy.notAuthenticated);
   }
   return token;
 }
 
 export function requireWritableWorkspaceToken(token: string | null, canWriteWorkspace: boolean) {
+  const copy = getStoredWorkspaceShellActionCopy();
   const activeToken = requireWorkspaceToken(token);
   if (!canWriteWorkspace) {
-    throw new Error("Viewer access is read-only");
+    throw new Error(copy.viewerReadOnly);
   }
   return activeToken;
 }
 
 export function requireManageWorkspaceToken(token: string | null, canManageWorkspace: boolean) {
+  const copy = getStoredWorkspaceShellActionCopy();
   const activeToken = requireWorkspaceToken(token);
   if (!canManageWorkspace) {
-    throw new Error("Viewer access is read-only");
+    throw new Error(copy.viewerReadOnly);
   }
   return activeToken;
 }
 
 export function requireShareManagerToken(token: string | null, canManageSharing: boolean) {
+  const copy = getStoredWorkspaceShellActionCopy();
   const activeToken = requireWorkspaceToken(token);
   if (!canManageSharing) {
-    throw new Error("Only workspace owners can manage share links");
+    throw new Error(copy.ownerOnlyShareLinks);
   }
   return activeToken;
 }
 
 export function requireSelectedRecordContext(token: string | null, selectedRecordId: string | null) {
+  const copy = getStoredWorkspaceShellActionCopy();
   if (!token || !selectedRecordId) {
-    throw new Error("Not authenticated");
+    throw new Error(copy.notAuthenticated);
   }
   return {
     activeToken: token,
@@ -46,11 +53,12 @@ export function requireActiveConversationContext(
   activeConversationId: string | null,
   canWriteWorkspace: boolean,
 ) {
+  const copy = getStoredWorkspaceShellActionCopy();
   if (!canWriteWorkspace) {
-    throw new Error("Viewer access is read-only");
+    throw new Error(copy.viewerReadOnly);
   }
   if (!token || !activeConversationId) {
-    throw new Error("No active conversation");
+    throw new Error(copy.noActiveConversation);
   }
   return {
     activeToken: token,

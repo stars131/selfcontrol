@@ -806,12 +806,15 @@ if (initialLoadDataInputLineCount > maxInitialLoadDataInputLines) {
 
 for (const requiredInitialLoadRunnerUsage of [
   'from "../lib/auth";',
+  'from "./workspace-shell-action-copy";',
   'from "./workspace-shell-initial-load-data-input";',
   'from "./workspace-shell-initial-load-helpers";',
   "export async function runWorkspaceShellInitialLoad(",
+  "const copy = getStoredWorkspaceShellActionCopy();",
   "props.setToken(activeToken)",
   "loadWorkspaceShellInitialData(buildWorkspaceShellInitialDataInput(activeToken, props))",
   "clearStoredSession()",
+  "copy.loadWorkspaceDataFailed",
   'props.router.replace("/login")',
 ]) {
   if (!initialLoadRunnerSource.includes(requiredInitialLoadRunnerUsage)) {

@@ -2203,6 +2203,9 @@ Last updated: 2026-03-26
 - Workspace Export Job Error Localization V1:
   - workspace export job loading, queueing, and artifact-download fallback errors now come from the shared export-jobs copy instead of hardcoded English strings in the card shell
   - export-jobs structure verification now enforces those copy-driven controller inputs so future admin-surface maintenance stays aligned with the enterprise localization baseline
+- Workspace Shell Error Localization V1:
+  - workspace shell auth guards and initial load runner now reuse a shared locale-aware shell action copy instead of hardcoded English errors for authentication, read-only, share-management, conversation, and load failures
+  - workspace-shell structure verification now enforces the copy-driven initial-load fallback so future shell maintenance keeps the enterprise localization baseline intact
 
 ## Next
 - Continue the next product slice
