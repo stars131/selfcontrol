@@ -2419,10 +2419,14 @@ Last updated: 2026-03-27
   - media issue metadata readers, retry-state normalization, integer parsing, and issue sorting now live in `apps/api/app/services/media_issue_tracking_metadata.py`
   - media issue category classification and settings-feature routing rules now live in `apps/api/app/services/media_issue_tracking_classification.py`, while `media_issue_tracking.py` now focuses on overview assembly and public entrypoints
   - dedicated backend unit tests now cover media-type feature mapping, settings-route resolution, representative issue classification paths, retry-state normalization, metadata value parsing, and issue sorting for the extracted boundaries
+- Provider Transport URL And Mode Boundary Extraction V1:
+  - provider API base URL defaults now live in `apps/api/app/services/provider_transport_urls.py`, while transport-mode inference rules now live in `provider_transport_modes.py`
+  - `provider_transport.py` now focuses on secret resolution plus compatibility re-exports for downstream embedding, media provider, and remote storage callers
+  - dedicated backend unit tests now cover provider URL defaults, explicit transport mode overrides, and custom/local transport routing through the extracted boundaries
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around `provider_transport.py`, remaining remote media helpers, and any leftover compatibility exports or duplicated provider-routing rules
+- Continue simplifying the remaining backend provider stack around remaining remote media helpers, provider compatibility exports, and any leftover duplicated provider-routing rules
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
