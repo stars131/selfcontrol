@@ -2431,10 +2431,14 @@ Last updated: 2026-03-27
   - retention datetime coercion and orphan-file discovery now live in `apps/api/app/services/media_retention_common.py`, while retention report aggregation now lives in `media_retention_reporting.py`
   - `media_retention.py` now focuses more narrowly on archive and cleanup mutation flows while re-exporting the report builder through the existing service entrypoint
   - dedicated backend unit tests now cover retention datetime normalization, orphan-file scanning, and report aggregation across local, remote, archived, and missing-file cases for the extracted reporting boundary
+- Media Retention Action Selection Boundary Extraction V1:
+  - cleanup and archive candidate selection rules now live in `apps/api/app/services/media_retention_actions.py`, alongside a shared retention action result builder for consistent API payload shaping
+  - `media_retention.py` now acts as a thinner service entrypoint that loads workspace media, executes archive or cleanup mutations, rebuilds knowledge, and keeps compatibility exports stable
+  - dedicated backend unit tests now cover cleanup skip reasons, archive eligibility rules, missing-file handling, and shared result aggregation for the extracted action-selection boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying the remaining backend provider stack around remaining remote media helpers and compatibility exports, then shift the next maintainability slice back to large frontend composition boundaries
+- Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
 - Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
