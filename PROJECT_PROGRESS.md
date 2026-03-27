@@ -2399,14 +2399,15 @@ Last updated: 2026-03-27
   - media-feature resolution and feature-specific provider dispatch now live in `apps/api/app/services/media_provider_dispatch.py`
   - `media_provider.py` now reduces to provider-config lookup, transport validation, and a thin call into the dedicated dispatch helper instead of branching across image/audio/video extraction paths directly
   - dedicated backend unit tests now cover media-type feature mapping, image/audio/video dispatch routing, and unsupported-feature rejection for the extracted dispatch boundary
+- Provider Config Defaults And Merge Boundary Extraction V1:
+  - `ProviderFeatureConfig` now lives in `apps/api/app/services/provider_config_types.py`, while default feature bootstrapping and saved-config merge logic live in `provider_config_defaults.py` and `provider_config_merging.py`
+  - `provider_configs.py` now focuses on persistence queries, update validation, and compatibility re-exports instead of owning dataclass, defaults, merge, and storage orchestration in one file
+  - dedicated backend unit tests now cover default feature bootstrap behavior, explicit secret-env resolution, default embedding secret readiness, and saved provider option merge normalization for the extracted boundary
 
 ## Next
 - Continue the next product slice
-- Continue simplifying remaining large backend service files outside `media_processing.py`, with `knowledge.py` and `media_provider.py` as the next highest-value maintainability targets
-- Continue simplifying the remaining large backend service files with `media_provider.py` now the highest-value maintainability target, especially the openai-compatible and custom-webhook extraction branches
-- Continue simplifying `media_provider.py` by extracting video-audio preprocessing and feature-route dispatch into thinner enterprise-grade service boundaries
-- Continue simplifying `media_provider.py` by extracting media feature-route dispatch into a dedicated provider pipeline boundary
-- Continue simplifying the remaining backend provider stack around `media_provider.py`, with compatibility-export cleanup and any residual duplicated provider mapping as the next maintainability follow-up
+- Continue simplifying the remaining backend provider stack around `provider_configs.py`, `embeddings.py`, and remote media storage helpers, especially any leftover compatibility exports or duplicated provider-routing rules
+- Continue simplifying remaining large UI module boundaries around quick-add, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
