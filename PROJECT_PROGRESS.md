@@ -2459,11 +2459,15 @@ Last updated: 2026-03-27
   - record create and update request-body shaping now lives in `apps/web/components/workspace-shell-record-action-payloads.ts` instead of remaining inline inside `workspace-shell-record-actions.ts`
   - `workspace-shell-record-actions.ts` now stays focused on token checks, mutation flow, and selection updates while payload construction remains centralized and easier to evolve safely
   - the workspace-shell structure guardrail now enforces this record payload boundary so future record-form changes do not reintroduce duplicated or drifting request-body shaping
+- Workspace Shell Chat Result Projection Extraction V1:
+  - chat search-result projection and create-mode record selection now live in `apps/web/components/workspace-shell-chat-action-results.ts` instead of remaining inline inside `workspace-shell-chat-actions.ts`
+  - `workspace-shell-chat-actions.ts` now stays focused on chat API flow, conversation selection, and mode branching while result projection remains centralized and easier to extend safely
+  - the workspace-shell structure guardrail now enforces this chat result boundary so future assistant-mode expansion does not reintroduce duplicated result-to-UI projection logic
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell chat action payload shaping so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell chat action payload shaping plus conversation bootstrap helpers so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

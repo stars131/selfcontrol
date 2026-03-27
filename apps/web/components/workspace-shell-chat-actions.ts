@@ -1,13 +1,16 @@
 "use client";
 
 import { createConversation, sendMessage } from "../lib/api";
-import { buildTimelineDays } from "../lib/timeline";
 import { getStoredChatPanelDisplayCopy } from "./chat-panel-display-copy";
 import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import {
   requireActiveConversationContext,
   requireWritableWorkspaceToken,
 } from "./workspace-shell-action-guards";
+import {
+  applyWorkspaceShellChatSearchResult,
+  selectWorkspaceShellChatCreatedRecord,
+} from "./workspace-shell-chat-action-results";
 import { refreshWorkspaceShellRecordMutation } from "./workspace-shell-record-action-refresh";
 
 export function createWorkspaceShellChatActions({
@@ -45,15 +48,14 @@ export function createWorkspaceShellChatActions({
         activeToken,
         recordFilter,
       );
-      if (result.records[0]) {
-        setSelectedRecordId(result.records[0].id);
-      }
+      selectWorkspaceShellChatCreatedRecord(setSelectedRecordId, result.records);
       return;
     }
 
-    setVisibleRecords(result.records);
-    setTimelineDays(buildTimelineDays(result.records));
-    setSelectedRecordId(result.records[0]?.id ?? null);
+    applyWorkspaceShellChatSearchResult(
+      { setVisibleRecords, setTimelineDays, setSelectedRecordId },
+      result.records,
+    );
   }
 
   async function handleCreateConversation() {
