@@ -1,12 +1,15 @@
 "use client";
 
 import { createConversation, sendMessage } from "../lib/api";
-import { getStoredChatPanelDisplayCopy } from "./chat-panel-display-copy";
 import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import {
   requireActiveConversationContext,
   requireWritableWorkspaceToken,
 } from "./workspace-shell-action-guards";
+import {
+  applyWorkspaceShellConversationCreation,
+  buildWorkspaceShellConversationTitle,
+} from "./workspace-shell-chat-action-conversations";
 import {
   applyWorkspaceShellChatSearchResult,
   selectWorkspaceShellChatCreatedRecord,
@@ -60,15 +63,15 @@ export function createWorkspaceShellChatActions({
 
   async function handleCreateConversation() {
     const activeToken = requireWritableWorkspaceToken(token, canWriteWorkspace);
-    const copy = getStoredChatPanelDisplayCopy();
     const result = await createConversation(
       activeToken,
       workspaceId,
-      copy.buildConversationTitle(conversationsCount + 1),
+      buildWorkspaceShellConversationTitle(conversationsCount),
     );
-    setConversations((prev) => [result.conversation, ...prev]);
-    setActiveConversationId(result.conversation.id);
-    setMessages([]);
+    applyWorkspaceShellConversationCreation(
+      { setConversations, setActiveConversationId, setMessages },
+      result.conversation,
+    );
   }
 
   function handleSelectConversation(conversationId: string) {

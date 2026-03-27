@@ -2463,11 +2463,15 @@ Last updated: 2026-03-27
   - chat search-result projection and create-mode record selection now live in `apps/web/components/workspace-shell-chat-action-results.ts` instead of remaining inline inside `workspace-shell-chat-actions.ts`
   - `workspace-shell-chat-actions.ts` now stays focused on chat API flow, conversation selection, and mode branching while result projection remains centralized and easier to extend safely
   - the workspace-shell structure guardrail now enforces this chat result boundary so future assistant-mode expansion does not reintroduce duplicated result-to-UI projection logic
+- Workspace Shell Conversation Creation Helper Extraction V1:
+  - conversation title building and post-create conversation state projection now live in `apps/web/components/workspace-shell-chat-action-conversations.ts` instead of remaining inline inside `workspace-shell-chat-actions.ts`
+  - `workspace-shell-chat-actions.ts` now stays focused on chat request flow and branching while conversation-creation helpers centralize title generation and state projection for safer future expansion
+  - the workspace-shell structure guardrail now enforces this conversation-creation helper boundary so future chat bootstrap changes do not reintroduce duplicated title and state setup logic
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell chat action payload shaping plus conversation bootstrap helpers so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel conversation/management surfaces and workspace shell conversation bootstrap plus chat-selection helpers so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard
