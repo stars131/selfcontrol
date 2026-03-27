@@ -35,10 +35,12 @@ from app.services.media_issue_tracking import (
     build_workspace_media_dead_letter_overview,
     build_workspace_media_processing_overview,
 )
-from app.services.media_storage import (
+from app.services.media_retention import (
     archive_workspace_media_retention,
     build_workspace_media_retention_report,
     cleanup_workspace_media_retention,
+)
+from app.services.media_storage import (
     media_uses_local_storage,
     remove_storage_file,
     resolve_storage_path,

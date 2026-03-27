@@ -2335,6 +2335,9 @@ Last updated: 2026-03-26
 - Media Issue Tracking Service Boundary Extraction V1:
   - media issue classification, dead-letter listing, and processing overview builders now live in `apps/api/app/services/media_issue_tracking.py`, while write-oriented storage retention and archive flows remain in `apps/api/app/services/media_storage.py`
   - the media API routes now import operator-facing issue tracking reads from the dedicated service module, reducing coupling between observability logic and storage mutation logic under the backend enterprise maintainability standard
+- Media Retention Service Boundary Extraction V1:
+  - media retention reports, cleanup actions, archive actions, and orphan-file scanning now live in `apps/api/app/services/media_retention.py`, while `apps/api/app/services/media_storage.py` has been reduced to storage primitives such as path resolution, local deletion, tier lookup, and storage summaries
+  - the media API routes now import lifecycle-management writes from the dedicated retention service module, reducing coupling between storage primitives and retention policy logic under the backend enterprise maintainability standard
 
 ## Next
 - Continue the next product slice
