@@ -2456,6 +2456,14 @@ const recentMediaIssuesPanelIntroTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issues-panel-intro.types.ts",
 );
+const recentMediaIssuesPanelEmptyPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-empty.tsx",
+);
+const recentMediaIssuesPanelEmptyTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-empty.types.ts",
+);
 const recentMediaIssueCardPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card.tsx",
@@ -3942,6 +3950,11 @@ const recentMediaIssuesPanelIntroTypesSource = fs.readFileSync(
   recentMediaIssuesPanelIntroTypesPath,
   "utf8",
 );
+const recentMediaIssuesPanelEmptySource = fs.readFileSync(recentMediaIssuesPanelEmptyPath, "utf8");
+const recentMediaIssuesPanelEmptyTypesSource = fs.readFileSync(
+  recentMediaIssuesPanelEmptyTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardSource = fs.readFileSync(recentMediaIssueCardPath, "utf8");
 const recentMediaIssueCardIntroSource = fs.readFileSync(recentMediaIssueCardIntroPath, "utf8");
 const recentMediaIssueCardIntroTypesSource = fs.readFileSync(
@@ -5292,6 +5305,10 @@ const recentMediaIssuesPanelIntroLines =
   recentMediaIssuesPanelIntroSource.split(/\r?\n/).length;
 const recentMediaIssuesPanelIntroTypesLines =
   recentMediaIssuesPanelIntroTypesSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelEmptyLines =
+  recentMediaIssuesPanelEmptySource.split(/\r?\n/).length;
+const recentMediaIssuesPanelEmptyTypesLines =
+  recentMediaIssuesPanelEmptyTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardLines = recentMediaIssueCardSource.split(/\r?\n/).length;
 const recentMediaIssueCardIntroLines = recentMediaIssueCardIntroSource.split(/\r?\n/).length;
 const recentMediaIssueCardIntroTypesLines =
@@ -23312,10 +23329,12 @@ if (locationReviewStatusCardTypesLines > maxLocationReviewStatusCardTypesLines) 
 
 for (const requiredRecentMediaIssuesPanelUsage of [
   'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
+  'import { RecentMediaIssuesPanelEmpty } from "./recent-media-issues-panel-empty";',
   'import { RecentMediaIssuesPanelIntro } from "./recent-media-issues-panel-intro";',
   'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
   "}: RecentMediaIssuesPanelProps) {",
   "<RecentMediaIssuesPanelIntro mediaIssueCopy={mediaIssueCopy} />",
+  "<RecentMediaIssuesPanelEmpty mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCard",
 ]) {
   if (!recentMediaIssuesPanelSource.includes(requiredRecentMediaIssuesPanelUsage)) {
@@ -23328,6 +23347,8 @@ for (const requiredRecentMediaIssuesPanelUsage of [
 for (const forbiddenRecentMediaIssuesPanelToken of [
   '<div className="eyebrow">{mediaIssueCopy.recentIssuesTitle}</div>',
   '<div className="muted">{mediaIssueCopy.recentIssuesDescription}</div>',
+  '<div className="notice" style={{ marginTop: 16 }}>',
+  "{mediaIssueCopy.noRecentIssues}",
 ]) {
   if (recentMediaIssuesPanelSource.includes(forbiddenRecentMediaIssuesPanelToken)) {
     throw new Error(
@@ -23359,7 +23380,6 @@ for (const requiredRecentMediaIssuesPanelIntroUsage of [
 for (const forbiddenRecentMediaIssuesPanelIntroToken of [
   "<RecentMediaIssueCard",
   "mediaProcessingOverview.recent_issues.length",
-  "mediaIssueCopy.noRecentIssues",
 ]) {
   if (recentMediaIssuesPanelIntroSource.includes(forbiddenRecentMediaIssuesPanelIntroToken)) {
     throw new Error(
@@ -23389,6 +23409,55 @@ const maxRecentMediaIssuesPanelIntroTypesLines = 2;
 if (recentMediaIssuesPanelIntroTypesLines > maxRecentMediaIssuesPanelIntroTypesLines) {
   throw new Error(
     `recent-media-issues-panel-intro.types.ts exceeded ${maxRecentMediaIssuesPanelIntroTypesLines} lines: ${recentMediaIssuesPanelIntroTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelEmptyUsage of [
+  'import type { RecentMediaIssuesPanelEmptyProps } from "./recent-media-issues-panel-empty.types";',
+  "}: RecentMediaIssuesPanelEmptyProps) {",
+  '<div className="notice" style={{ marginTop: 16 }}>',
+  "{mediaIssueCopy.noRecentIssues}",
+]) {
+  if (!recentMediaIssuesPanelEmptySource.includes(requiredRecentMediaIssuesPanelEmptyUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-empty.tsx must own panel empty-state rendering: ${requiredRecentMediaIssuesPanelEmptyUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssuesPanelEmptyToken of [
+  "<RecentMediaIssueCard",
+  "mediaProcessingOverview.recent_issues.length",
+  "recentIssuesTitle",
+]) {
+  if (recentMediaIssuesPanelEmptySource.includes(forbiddenRecentMediaIssuesPanelEmptyToken)) {
+    throw new Error(
+      `recent-media-issues-panel-empty.tsx must keep panel-level intro and list concerns delegated: ${forbiddenRecentMediaIssuesPanelEmptyToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelEmptyLines = 12;
+if (recentMediaIssuesPanelEmptyLines > maxRecentMediaIssuesPanelEmptyLines) {
+  throw new Error(
+    `recent-media-issues-panel-empty.tsx exceeded ${maxRecentMediaIssuesPanelEmptyLines} lines: ${recentMediaIssuesPanelEmptyLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssuesPanelEmptyTypesUsage of [
+  'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types"; export type RecentMediaIssuesPanelEmptyProps = Pick<RecentMediaIssuesPanelProps, "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssuesPanelEmptyTypesSource.includes(requiredRecentMediaIssuesPanelEmptyTypesUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-empty.types.ts must own panel empty-state prop typing: ${requiredRecentMediaIssuesPanelEmptyTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelEmptyTypesLines = 2;
+if (recentMediaIssuesPanelEmptyTypesLines > maxRecentMediaIssuesPanelEmptyTypesLines) {
+  throw new Error(
+    `recent-media-issues-panel-empty.types.ts exceeded ${maxRecentMediaIssuesPanelEmptyTypesLines} lines: ${recentMediaIssuesPanelEmptyTypesLines}`,
   );
 }
 

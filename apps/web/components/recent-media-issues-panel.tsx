@@ -1,6 +1,7 @@
 "use client";
 
 import { RecentMediaIssueCard } from "./recent-media-issue-card";
+import { RecentMediaIssuesPanelEmpty } from "./recent-media-issues-panel-empty";
 import { RecentMediaIssuesPanelIntro } from "./recent-media-issues-panel-intro";
 import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";
 
@@ -34,9 +35,7 @@ export function RecentMediaIssuesPanel({
           ))}
         </div>
       ) : (
-        <div className="notice" style={{ marginTop: 16 }}>
-          {mediaIssueCopy.noRecentIssues}
-        </div>
+        <RecentMediaIssuesPanelEmpty mediaIssueCopy={mediaIssueCopy} />
       )}
     </div>
   );
