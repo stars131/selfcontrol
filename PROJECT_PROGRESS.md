@@ -312,6 +312,10 @@ Last updated: 2026-03-28
   - dead-letter item action gating now delegates retry and settings button rendering to a dedicated action-buttons leaf
   - the parent actions component now keeps only visibility gating responsibilities, reducing future review scope for button-level UI changes
   - structure verification now enforces this boundary so detailed button rendering stays out of the higher-level actions component
+- Dead-Letter Status Props Builder Extraction V1:
+  - dead-letter item status rendering now delegates metadata and action-notice child-prop assembly to a dedicated status-props builder module
+  - the status component now keeps only layout composition responsibilities, reducing future review scope for action-derivation changes
+  - structure verification now enforces this boundary so status child prop assembly stays out of the higher-level status component
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
