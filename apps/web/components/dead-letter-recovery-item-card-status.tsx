@@ -1,6 +1,7 @@
 "use client";
 
 import { getMediaIssueAction } from "../lib/media-issue-display";
+import { DeadLetterRecoveryItemCardActionNotice } from "./dead-letter-recovery-item-card-action-notice";
 import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";
 
 export function DeadLetterRecoveryItemCardStatus({
@@ -29,12 +30,7 @@ export function DeadLetterRecoveryItemCardStatus({
             : ""}
         </div>
       ) : null}
-      {action.label ? (
-        <div className="notice" style={{ marginTop: 10 }}>
-          {action.label}
-          {action.detail ? `: ${action.detail}` : ""}
-        </div>
-      ) : null}
+      <DeadLetterRecoveryItemCardActionNotice action={action} />
     </>
   );
 }

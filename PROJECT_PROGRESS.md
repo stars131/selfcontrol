@@ -2639,6 +2639,10 @@ Last updated: 2026-03-27
   - dead-letter summary intro rendering now lives in `apps/web/components/dead-letter-recovery-summary-intro.tsx` instead of remaining inline inside `dead-letter-recovery-summary-header.tsx`
   - `dead-letter-recovery-summary-header.tsx` now stays focused on header-level layout while intro rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this summary-intro boundary so future dead-letter summary header changes do not regrow a mixed layout-and-intro rendering module
+- Dead Letter Recovery Item Action Notice Extraction V1:
+  - dead-letter item action-notice rendering now lives in `apps/web/components/dead-letter-recovery-item-card-action-notice.tsx` instead of remaining inline inside `dead-letter-recovery-item-card-status.tsx`
+  - `dead-letter-recovery-item-card-status.tsx` now stays focused on timestamp and retry-budget metadata while action-notice rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this item-action-notice boundary so future dead-letter item status changes do not regrow a mixed metadata-and-notice rendering module
 - Recent Media Issue Action Notice Extraction V1:
   - recent-media issue action-notice rendering now lives in `apps/web/components/recent-media-issue-card-action-notice.tsx` instead of remaining inline inside `recent-media-issue-card-metadata.tsx`
   - `recent-media-issue-card-metadata.tsx` now stays focused on timestamp metadata composition while action-notice rendering remains centralized and easier to evolve safely
