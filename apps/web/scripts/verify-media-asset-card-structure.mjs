@@ -39,6 +39,12 @@ const lastAttemptDetailLineCount = lastAttemptDetailSource.split(/\r?\n/).length
 const lastAttemptDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-last-attempt-detail.types.ts");
 const lastAttemptDetailTypesSource = fs.readFileSync(lastAttemptDetailTypesPath, "utf8");
 const lastAttemptDetailTypesLineCount = lastAttemptDetailTypesSource.split(/\r?\n/).length;
+const nextRetryDetailPath = path.resolve(process.cwd(), "components/media-asset-card-next-retry-detail.tsx");
+const nextRetryDetailSource = fs.readFileSync(nextRetryDetailPath, "utf8");
+const nextRetryDetailLineCount = nextRetryDetailSource.split(/\r?\n/).length;
+const nextRetryDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-next-retry-detail.types.ts");
+const nextRetryDetailTypesSource = fs.readFileSync(nextRetryDetailTypesPath, "utf8");
+const nextRetryDetailTypesLineCount = nextRetryDetailTypesSource.split(/\r?\n/).length;
 const remoteFetchTagPath = path.resolve(process.cwd(), "components/media-asset-card-remote-fetch-tag.tsx");
 const remoteFetchTagSource = fs.readFileSync(remoteFetchTagPath, "utf8");
 const remoteFetchTagLineCount = remoteFetchTagSource.split(/\r?\n/).length;
@@ -230,8 +236,46 @@ if (lastAttemptDetailTypesLineCount > 2) {
   throw new Error(`media-asset-card-last-attempt-detail.types.ts exceeded 2 lines: ${lastAttemptDetailTypesLineCount}`);
 }
 
+for (const requiredNextRetryDetailUsage of [
+  'import type { MediaAssetCardNextRetryDetailProps } from "./media-asset-card-next-retry-detail.types";',
+  "}: MediaAssetCardNextRetryDetailProps) {",
+  "{mediaIssueCopy.nextRetry}",
+  "{formatHistoryTimestampLabel(nextRetryAt)}",
+]) {
+  if (!nextRetryDetailSource.includes(requiredNextRetryDetailUsage)) {
+    throw new Error(`media-asset-card-next-retry-detail.tsx must own next-retry detail rendering: ${requiredNextRetryDetailUsage}`);
+  }
+}
+
+for (const forbiddenNextRetryDetailToken of [
+  "{mediaIssueCopy.lastAttempt}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+]) {
+  if (nextRetryDetailSource.includes(forbiddenNextRetryDetailToken)) {
+    throw new Error(`media-asset-card-next-retry-detail.tsx must keep other detail concerns delegated: ${forbiddenNextRetryDetailToken}`);
+  }
+}
+
+if (nextRetryDetailLineCount > 6) {
+  throw new Error(`media-asset-card-next-retry-detail.tsx exceeded 6 lines: ${nextRetryDetailLineCount}`);
+}
+
+for (const requiredNextRetryDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardNextRetryDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "mediaIssueCopy" | "nextRetryAt">;',
+]) {
+  if (!nextRetryDetailTypesSource.includes(requiredNextRetryDetailTypesUsage)) {
+    throw new Error(`media-asset-card-next-retry-detail.types.ts must own next-retry detail props: ${requiredNextRetryDetailTypesUsage}`);
+  }
+}
+
+if (nextRetryDetailTypesLineCount > 2) {
+  throw new Error(`media-asset-card-next-retry-detail.types.ts exceeded 2 lines: ${nextRetryDetailTypesLineCount}`);
+}
+
 for (const requiredMetadataDetailsUsage of [
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
+  'import { MediaAssetCardNextRetryDetail } from "./media-asset-card-next-retry-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
@@ -239,6 +283,7 @@ for (const requiredMetadataDetailsUsage of [
   "{mediaIssueCopy.textChars}",
   "{mediaIssueCopy.textLines}",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
+  "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
 ]) {
   if (!metadataDetailsSource.includes(requiredMetadataDetailsUsage)) {
     throw new Error(`media-asset-card-metadata-details.tsx must reuse the extracted metadata-details props type: ${requiredMetadataDetailsUsage}`);
@@ -247,6 +292,7 @@ for (const requiredMetadataDetailsUsage of [
 
 for (const forbiddenMetadataDetailsToken of [
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
+  '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
 ]) {
   if (metadataDetailsSource.includes(forbiddenMetadataDetailsToken)) {
     throw new Error(`media-asset-card-metadata-details.tsx must keep last-attempt rendering delegated: ${forbiddenMetadataDetailsToken}`);

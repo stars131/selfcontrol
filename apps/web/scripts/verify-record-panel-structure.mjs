@@ -2172,6 +2172,14 @@ const mediaAssetCardLastAttemptDetailTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-last-attempt-detail.types.ts",
 );
+const mediaAssetCardNextRetryDetailPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-next-retry-detail.tsx",
+);
+const mediaAssetCardNextRetryDetailTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-next-retry-detail.types.ts",
+);
 const mediaAssetCardMetadataTagsPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tags.tsx",
@@ -4130,6 +4138,14 @@ const mediaAssetCardLastAttemptDetailTypesSource = fs.readFileSync(
   mediaAssetCardLastAttemptDetailTypesPath,
   "utf8",
 );
+const mediaAssetCardNextRetryDetailSource = fs.readFileSync(
+  mediaAssetCardNextRetryDetailPath,
+  "utf8",
+);
+const mediaAssetCardNextRetryDetailTypesSource = fs.readFileSync(
+  mediaAssetCardNextRetryDetailTypesPath,
+  "utf8",
+);
 const mediaAssetCardMetadataTagsSource = fs.readFileSync(mediaAssetCardMetadataTagsPath, "utf8");
 const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataTagsTypesPath,
@@ -5959,6 +5975,10 @@ const mediaAssetCardLastAttemptDetailLines =
   mediaAssetCardLastAttemptDetailSource.split(/\r?\n/).length;
 const mediaAssetCardLastAttemptDetailTypesLines =
   mediaAssetCardLastAttemptDetailTypesSource.split(/\r?\n/).length;
+const mediaAssetCardNextRetryDetailLines =
+  mediaAssetCardNextRetryDetailSource.split(/\r?\n/).length;
+const mediaAssetCardNextRetryDetailTypesLines =
+  mediaAssetCardNextRetryDetailTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsTypesLines =
   mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
@@ -22213,6 +22233,7 @@ if (mediaAssetCardMetadataTypesLines > maxMediaAssetCardMetadataTypesLines) {
 
 for (const requiredMediaAssetCardMetadataDetailsUsage of [
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
+  'import { MediaAssetCardNextRetryDetail } from "./media-asset-card-next-retry-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
@@ -22220,6 +22241,7 @@ for (const requiredMediaAssetCardMetadataDetailsUsage of [
   "{mediaIssueCopy.textChars}",
   "{mediaIssueCopy.textLines}",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
+  "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
 ]) {
   if (!mediaAssetCardMetadataDetailsSource.includes(requiredMediaAssetCardMetadataDetailsUsage)) {
     throw new Error(
@@ -22234,6 +22256,7 @@ if (mediaAssetCardMetadataDetailsSource.includes("type MediaAssetCardMetadataDet
 
 for (const forbiddenMediaAssetCardMetadataDetailsToken of [
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
+  '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
 ]) {
   if (mediaAssetCardMetadataDetailsSource.includes(forbiddenMediaAssetCardMetadataDetailsToken)) {
     throw new Error(
@@ -22312,6 +22335,55 @@ const maxMediaAssetCardLastAttemptDetailTypesLines = 2;
 if (mediaAssetCardLastAttemptDetailTypesLines > maxMediaAssetCardLastAttemptDetailTypesLines) {
   throw new Error(
     `media-asset-card-last-attempt-detail.types.ts exceeded ${maxMediaAssetCardLastAttemptDetailTypesLines} lines: ${mediaAssetCardLastAttemptDetailTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardNextRetryDetailUsage of [
+  'import type { MediaAssetCardNextRetryDetailProps } from "./media-asset-card-next-retry-detail.types";',
+  "}: MediaAssetCardNextRetryDetailProps) {",
+  "{mediaIssueCopy.nextRetry}",
+  "{formatHistoryTimestampLabel(nextRetryAt)}",
+]) {
+  if (!mediaAssetCardNextRetryDetailSource.includes(requiredMediaAssetCardNextRetryDetailUsage)) {
+    throw new Error(
+      `media-asset-card-next-retry-detail.tsx must own next-retry detail rendering: ${requiredMediaAssetCardNextRetryDetailUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardNextRetryDetailToken of [
+  "{mediaIssueCopy.lastAttempt}",
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+]) {
+  if (mediaAssetCardNextRetryDetailSource.includes(forbiddenMediaAssetCardNextRetryDetailToken)) {
+    throw new Error(
+      `media-asset-card-next-retry-detail.tsx must keep other detail concerns delegated: ${forbiddenMediaAssetCardNextRetryDetailToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardNextRetryDetailLines = 6;
+if (mediaAssetCardNextRetryDetailLines > maxMediaAssetCardNextRetryDetailLines) {
+  throw new Error(
+    `media-asset-card-next-retry-detail.tsx exceeded ${maxMediaAssetCardNextRetryDetailLines} lines: ${mediaAssetCardNextRetryDetailLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardNextRetryDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardNextRetryDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "mediaIssueCopy" | "nextRetryAt">;',
+]) {
+  if (!mediaAssetCardNextRetryDetailTypesSource.includes(requiredMediaAssetCardNextRetryDetailTypesUsage)) {
+    throw new Error(
+      `media-asset-card-next-retry-detail.types.ts must own next-retry detail prop typing: ${requiredMediaAssetCardNextRetryDetailTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardNextRetryDetailTypesLines = 2;
+if (mediaAssetCardNextRetryDetailTypesLines > maxMediaAssetCardNextRetryDetailTypesLines) {
+  throw new Error(
+    `media-asset-card-next-retry-detail.types.ts exceeded ${maxMediaAssetCardNextRetryDetailTypesLines} lines: ${mediaAssetCardNextRetryDetailTypesLines}`,
   );
 }
 
