@@ -2179,6 +2179,9 @@ Last updated: 2026-03-26
   - legacy record cards now format record type, source, status, rating, avoid markers, and title/content fallbacks from the shared locale bundles instead of exposing raw backend values or English-only placeholders
   - legacy media upload cards now reuse localized upload copy, localized empty-state copy, and localized media-type labels so the fallback panel remains usable across desktop and mobile locales
   - `verify-record-panel-structure.mjs` now enforces those locale-aware helpers inside the legacy record leaves so future cleanup work stays maintainable under the enterprise standard
+- Workspace Export Copy Repair V1:
+  - workspace export and async export job copy now restore valid Simplified Chinese and Japanese text instead of shipping mojibake to non-English users
+  - owner-only notices, export descriptions, action buttons, and success/loading states now preserve the same meaning across locales while remaining ready for future enterprise export workflow upgrades
 
 ## Next
 - Continue the next product slice
