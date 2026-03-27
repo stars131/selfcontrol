@@ -308,6 +308,10 @@ Last updated: 2026-03-28
   - dead-letter item cards now delegate header, status, and action child-prop assembly to a dedicated builder module
   - single-card rendering is reduced to layout composition, so future settings-link and child-contract changes can be updated in one place instead of inside the card component
   - structure verification now enforces this projection boundary to keep child prop assembly separate from card rendering
+- Dead-Letter Action Buttons Extraction V1:
+  - dead-letter item action gating now delegates retry and settings button rendering to a dedicated action-buttons leaf
+  - the parent actions component now keeps only visibility gating responsibilities, reducing future review scope for button-level UI changes
+  - structure verification now enforces this boundary so detailed button rendering stays out of the higher-level actions component
 - Record-Panel UI Copy Extraction V1:
   - record-panel UI copy for the main editor/search sections and media-issue sections is now stored in dedicated `apps/web/lib` JSON resources instead of being defined inline inside the component
   - the record-panel copy verification script now validates both the detail-copy bundle and the UI-copy bundle through a single `verify:record-panel-copy` entrypoint
