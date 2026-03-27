@@ -2314,6 +2314,9 @@ Last updated: 2026-03-26
 - Web API Client Workspace Boundary Extraction V1:
   - workspace listing, export/import, transfer jobs, and member-management calls now live in `apps/web/lib/api-workspaces.ts` and are re-exported from `apps/web/lib/api.ts`, shrinking the remaining front-end API hub without changing callers
   - the new workspace client module also centralizes optional trimmed `FormData` field assembly for archive import flows, reducing duplicate request-shaping logic in future workspace transfer changes
+- Web API Client Reminder Boundary Extraction V1:
+  - reminder CRUD and notification sync/query/update calls now live in `apps/web/lib/api-reminders.ts` and are re-exported from `apps/web/lib/api.ts`, continuing to reduce the remaining front-end API hub without changing caller imports
+  - the reminder and notification transport code is now isolated from record, chat, and provider client logic, which lowers future review scope for scheduling and in-app alert changes
 
 ## Next
 - Continue the next product slice
