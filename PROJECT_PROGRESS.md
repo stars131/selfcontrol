@@ -2299,6 +2299,9 @@ Last updated: 2026-03-26
 - Repository Security Policy V1:
   - the repository now includes a dedicated root `SECURITY.md` covering vulnerability reporting expectations, priority risk surfaces, and minimum remediation standards
   - this gives future production-facing changes an explicit security governance entrypoint instead of relying only on scattered operational notes
+- Repository Contribution Guide V1:
+  - the repository now includes a dedicated root `CONTRIBUTING.md` that consolidates environment setup, verification flow, documentation expectations, and guarded push behavior
+  - this gives future development work a single operational contribution contract instead of relying on scattered README, hooks, and CI knowledge
 
 ## Next
 - Continue the next product slice

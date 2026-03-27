@@ -143,6 +143,7 @@ sh ./scripts/verify-all.sh
 ## 文档
 
 - 项目规格：[PROJECT_SPEC.md](./PROJECT_SPEC.md)
+- 贡献指南：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全策略：[SECURITY.md](./SECURITY.md)
 - ER 与表结构：[docs/ERD_AND_SCHEMA.md](./docs/ERD_AND_SCHEMA.md)
 - API 与工作流：[docs/API_AND_WORKFLOWS.md](./docs/API_AND_WORKFLOWS.md)
