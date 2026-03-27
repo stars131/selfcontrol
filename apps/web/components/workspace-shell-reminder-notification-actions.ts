@@ -7,10 +7,10 @@ import {
   updateReminder,
 } from "../lib/api";
 import type {
-  UseWorkspaceShellActionsProps,
   WorkspaceShellReminderCreateInput,
   WorkspaceShellReminderUpdateInput,
-} from "./workspace-shell-actions.types";
+} from "./workspace-shell-action-inputs.types";
+import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import {
   requireManageWorkspaceToken,
   requireWritableWorkspaceToken,

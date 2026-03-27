@@ -34,6 +34,14 @@ const workspaceShellStatePermissionsPath = path.resolve(
 );
 const workspaceShellRefreshersPath = path.resolve(process.cwd(), "components/use-workspace-shell-refreshers.ts");
 const workspaceShellActionsPath = path.resolve(process.cwd(), "components/use-workspace-shell-actions.ts");
+const workspaceShellActionsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-actions.types.ts",
+);
+const workspaceShellActionInputsTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-action-inputs.types.ts",
+);
 const workspaceShellEffectsPath = path.resolve(process.cwd(), "components/use-workspace-shell-effects.ts");
 const workspaceShellInitialLoadPath = path.resolve(
   process.cwd(),
@@ -158,6 +166,14 @@ const workspaceShellStatePermissionsSource = fs.readFileSync(
 );
 const refreshersSource = fs.readFileSync(workspaceShellRefreshersPath, "utf8");
 const actionsSource = fs.readFileSync(workspaceShellActionsPath, "utf8");
+const workspaceShellActionsTypesSource = fs.readFileSync(
+  workspaceShellActionsTypesPath,
+  "utf8",
+);
+const workspaceShellActionInputsTypesSource = fs.readFileSync(
+  workspaceShellActionInputsTypesPath,
+  "utf8",
+);
 const effectsSource = fs.readFileSync(workspaceShellEffectsPath, "utf8");
 const initialLoadSource = fs.readFileSync(workspaceShellInitialLoadPath, "utf8");
 const initialLoadAuthSource = fs.readFileSync(workspaceShellInitialLoadAuthPath, "utf8");
@@ -236,6 +252,10 @@ const workspaceShellStateManagedValuesLineCount =
 const workspaceShellStatePermissionsLineCount =
   workspaceShellStatePermissionsSource.split(/\r?\n/).length;
 const actionsLineCount = actionsSource.split(/\r?\n/).length;
+const workspaceShellActionsTypesLineCount =
+  workspaceShellActionsTypesSource.split(/\r?\n/).length;
+const workspaceShellActionInputsTypesLineCount =
+  workspaceShellActionInputsTypesSource.split(/\r?\n/).length;
 const effectsLineCount = effectsSource.split(/\r?\n/).length;
 const initialLoadLineCount = initialLoadSource.split(/\r?\n/).length;
 const initialLoadAuthLineCount = initialLoadAuthSource.split(/\r?\n/).length;
@@ -735,6 +755,76 @@ for (const forbiddenActionsToken of [
 const maxActionsLines = 40;
 if (actionsLineCount > maxActionsLines) {
   throw new Error(`use-workspace-shell-actions.ts exceeded ${maxActionsLines} lines: ${actionsLineCount}`);
+}
+
+for (const requiredActionsTypesUsage of [
+  'import type { Dispatch, SetStateAction } from "react";',
+  'from "../lib/types";',
+  "type StateSetter<T> = Dispatch<SetStateAction<T>>;",
+  "export type UseWorkspaceShellActionsProps = {",
+  "initialRecordFilter: RecordFilterState;",
+]) {
+  if (!workspaceShellActionsTypesSource.includes(requiredActionsTypesUsage)) {
+    throw new Error(
+      `workspace-shell-actions.types.ts must keep shared shell action prop typing centralized: ${requiredActionsTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenActionsTypesToken of [
+  'from "./record-panel-v2.types";',
+  "WorkspaceShellBulkRetryInput",
+  "WorkspaceShellReminderCreateInput",
+  "WorkspaceShellShareLinkInput",
+  "WorkspaceShellSaveRecordInput",
+  "WorkspaceShellReminderUpdateInput",
+]) {
+  if (workspaceShellActionsTypesSource.includes(forbiddenActionsTypesToken)) {
+    throw new Error(
+      `workspace-shell-actions.types.ts must not own action input payload types: ${forbiddenActionsTypesToken}`,
+    );
+  }
+}
+
+const maxActionsTypesLines = 60;
+if (workspaceShellActionsTypesLineCount > maxActionsTypesLines) {
+  throw new Error(
+    `workspace-shell-actions.types.ts exceeded ${maxActionsTypesLines} lines: ${workspaceShellActionsTypesLineCount}`,
+  );
+}
+
+for (const requiredActionInputsTypesUsage of [
+  'import type { ReminderUpdateInput, SaveRecordInput } from "./record-panel-v2.types";',
+  "export type WorkspaceShellBulkRetryInput = {",
+  "export type WorkspaceShellReminderCreateInput = {",
+  "export type WorkspaceShellShareLinkInput = {",
+  "export type WorkspaceShellSaveRecordInput = SaveRecordInput;",
+  "export type WorkspaceShellReminderUpdateInput = ReminderUpdateInput;",
+]) {
+  if (!workspaceShellActionInputsTypesSource.includes(requiredActionInputsTypesUsage)) {
+    throw new Error(
+      `workspace-shell-action-inputs.types.ts must own extracted action input payload types: ${requiredActionInputsTypesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenActionInputsTypesToken of [
+  'from "../lib/types";',
+  "export type UseWorkspaceShellActionsProps = {",
+  "Dispatch<SetStateAction",
+]) {
+  if (workspaceShellActionInputsTypesSource.includes(forbiddenActionInputsTypesToken)) {
+    throw new Error(
+      `workspace-shell-action-inputs.types.ts must remain focused on action input payload typing: ${forbiddenActionInputsTypesToken}`,
+    );
+  }
+}
+
+const maxActionInputsTypesLines = 30;
+if (workspaceShellActionInputsTypesLineCount > maxActionInputsTypesLines) {
+  throw new Error(
+    `workspace-shell-action-inputs.types.ts exceeded ${maxActionInputsTypesLines} lines: ${workspaceShellActionInputsTypesLineCount}`,
+  );
 }
 
 for (const requiredEffectsImport of [
@@ -1246,6 +1336,7 @@ if (mediaFilterActionsLineCount > maxMediaFilterActionsLines) {
 
 for (const requiredMediaActionsImport of [
   'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
   'from "./workspace-shell-action-copy";',
   'from "./workspace-shell-action-guards";',
   'from "./workspace-shell-media-action-refresh";',
@@ -1437,6 +1528,7 @@ const workspaceShellRecordActionsSource = fs.readFileSync(
 );
 for (const requiredRecordActionsImport of [
   'from "../lib/api";',
+  'from "./workspace-shell-action-inputs.types";',
   'from "./workspace-shell-action-guards";',
   'from "./workspace-shell-record-action-payloads";',
   'from "./workspace-shell-record-action-refresh";',
@@ -1627,7 +1719,7 @@ if (chatActionSelectionLineCount > maxChatActionSelectionLines) {
 }
 
 for (const requiredRecordActionPayloadUsage of [
-  'import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-actions.types";',
+  'import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-action-inputs.types";',
   "export function buildWorkspaceShellRecordUpdatePayload(",
   "export function buildWorkspaceShellRecordCreatePayload(",
   "rating: input.rating ?? null,",

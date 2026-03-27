@@ -2479,6 +2479,10 @@ Last updated: 2026-03-27
   - action-result output shaping now lives in `apps/web/components/chat-panel-actions-result-builder.ts` instead of remaining mixed into `chat-panel-action-handler-inputs.ts`
   - `chat-panel-action-handler-inputs.ts` now stays focused on operator/share handler input assembly while final action-state projection remains centralized and easier to evolve safely
   - the chat-panel structure guardrail now enforces this action-result builder boundary so future action-state expansion does not regrow a mixed input/output helper file
+- Workspace Shell Action Input Types Extraction V1:
+  - `WorkspaceShellBulkRetryInput`, `WorkspaceShellReminderCreateInput`, `WorkspaceShellShareLinkInput`, `WorkspaceShellSaveRecordInput`, and `WorkspaceShellReminderUpdateInput` now live in `apps/web/components/workspace-shell-action-inputs.types.ts`
+  - `workspace-shell-actions.types.ts` now stays focused on `UseWorkspaceShellActionsProps` so action orchestration contracts and action payload contracts can evolve independently
+  - the workspace-shell structure guardrail now enforces this extracted input-type boundary so future record, reminder, media, and share actions do not drift back into a mixed type surface
 
 ## Next
 - Continue the next product slice

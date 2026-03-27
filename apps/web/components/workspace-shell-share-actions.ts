@@ -1,10 +1,8 @@
 "use client";
 
 import { createShareLink, updateShareLink } from "../lib/api";
-import type {
-  UseWorkspaceShellActionsProps,
-  WorkspaceShellShareLinkInput,
-} from "./workspace-shell-actions.types";
+import type { WorkspaceShellShareLinkInput } from "./workspace-shell-action-inputs.types";
+import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import { requireShareManagerToken } from "./workspace-shell-action-guards";
 
 export function createWorkspaceShellShareActions({

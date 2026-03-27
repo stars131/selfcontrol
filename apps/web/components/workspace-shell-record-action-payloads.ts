@@ -1,6 +1,6 @@
 "use client";
 
-import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-actions.types";
+import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-action-inputs.types";
 
 export function buildWorkspaceShellRecordUpdatePayload(
   input: WorkspaceShellSaveRecordInput,

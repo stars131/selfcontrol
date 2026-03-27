@@ -1,10 +1,8 @@
 "use client";
 
 import { bulkRetryMediaDeadLetter, deleteMedia, getMediaStatus, retryMediaProcessing, uploadMedia } from "../lib/api";
-import type {
-  UseWorkspaceShellActionsProps,
-  WorkspaceShellBulkRetryInput,
-} from "./workspace-shell-actions.types";
+import type { WorkspaceShellBulkRetryInput } from "./workspace-shell-action-inputs.types";
+import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import { getStoredWorkspaceShellActionCopy } from "./workspace-shell-action-copy";
 import { requireSelectedRecordContext, requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
 import {

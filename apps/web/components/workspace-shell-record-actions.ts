@@ -1,10 +1,8 @@
 "use client";
 
 import { createRecord, deleteRecord, updateRecord } from "../lib/api";
-import type {
-  UseWorkspaceShellActionsProps,
-  WorkspaceShellSaveRecordInput,
-} from "./workspace-shell-actions.types";
+import type { WorkspaceShellSaveRecordInput } from "./workspace-shell-action-inputs.types";
+import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";
 import { requireWritableWorkspaceToken } from "./workspace-shell-action-guards";
 import {
   buildWorkspaceShellRecordCreatePayload,
