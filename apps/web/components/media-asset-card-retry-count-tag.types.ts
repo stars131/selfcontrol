@@ -1,0 +1,1 @@
+import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardRetryCountTagProps = Pick<MediaAssetCardMetadataTagsProps, "mediaIssueCopy"> & { retryCount: number | null; retryMaxAttempts: number | null };

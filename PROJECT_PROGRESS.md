@@ -2731,6 +2731,10 @@ Last updated: 2026-03-28
   - media-asset metadata retry-state tag rendering now lives in `apps/web/components/media-asset-card-retry-state-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while retry-state rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this retry-state-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-retry-state rendering module
+- Media Asset Retry Count Tag Extraction V1:
+  - media-asset metadata retry-count tag rendering now lives in `apps/web/components/media-asset-card-retry-count-tag.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on metadata value extraction and tag ordering while retry-count rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this retry-count-tag boundary so future media-asset metadata tag changes do not regrow a mixed composition-and-retry-count rendering module
 
 ## Next
 - Continue the next product slice
