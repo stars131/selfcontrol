@@ -2254,6 +2254,9 @@ Last updated: 2026-03-26
 - Chat Display Copy Encoding Repair V1:
   - audit-log display labels and chat message source labels now use repaired Chinese and Japanese text instead of mojibake, restoring readable multilingual UI output in chat management and source attribution surfaces
   - the fix stays inside shared display helpers so future enterprise localization maintenance only needs to update one source of truth per surface
+- Share And Thread Copy Encoding Repair V1:
+  - chat message thread labels and share-link display copy now use repaired Chinese and Japanese text, restoring readable multilingual output in the main conversation stream and share preview flow
+  - the fix stays inside shared display helpers so future enterprise localization updates remain centralized and maintainable
 
 ## Next
 - Continue the next product slice
