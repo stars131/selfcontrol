@@ -1,8 +1,8 @@
 "use client";
 
-import { getRecordPanelReminderErrorMessage, resolveRecordPanelReminderActionInput } from "./record-panel-controller-reminder-helpers";
+import { resolveRecordPanelReminderActionInput } from "./record-panel-controller-reminder-helpers";
 import type { RecordPanelControllerReminderActionInput } from "./record-panel-controller-reminder-action-input.types";
-import { applyRecordPanelReminderSuccessState } from "./record-panel-controller-reminder-success-helpers";
+import { runRecordPanelReminderSubmit } from "./record-panel-controller-reminder-submit-runner";
 
 export function createRecordPanelControllerReminderSubmitAction({
   detailCopy,
@@ -23,16 +23,10 @@ export function createRecordPanelControllerReminderSubmitAction({
       setError(reminderInput.errorMessage);
       return;
     }
-    setSavingReminder(true);
-    setError("");
-    try {
-      await onCreateReminder(reminderInput.payload);
-      applyRecordPanelReminderSuccessState({ setReminderForm });
-    } catch (caught) {
-      setError(getRecordPanelReminderErrorMessage(caught, detailCopy.createReminderError));
-    } finally {
-      setSavingReminder(false);
-    }
+    await runRecordPanelReminderSubmit(
+      { detailCopy, onCreateReminder, reminderForm, selectedRecord, setError, setReminderForm, setSavingReminder },
+      reminderInput.payload,
+    );
   }
 
   return {

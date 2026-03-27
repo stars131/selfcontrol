@@ -1,8 +1,8 @@
 "use client";
 import type { FormEvent } from "react";
-import { getRecordPanelRecordSaveErrorMessage, resolveRecordPanelRecordSaveActionInput } from "./record-panel-controller-record-save-helpers";
+import { resolveRecordPanelRecordSaveActionInput } from "./record-panel-controller-record-save-helpers";
 import type { RecordPanelControllerRecordSaveActionInput } from "./record-panel-controller-record-save-action-input.types";
-import { applyRecordPanelRecordSaveSuccessState } from "./record-panel-controller-record-save-success-helpers";
+import { runRecordPanelRecordSaveSubmit } from "./record-panel-controller-record-save-submit-runner";
 
 export function createRecordPanelControllerRecordSaveSubmitAction({
   detailCopy,
@@ -26,16 +26,10 @@ export function createRecordPanelControllerRecordSaveSubmitAction({
       setError(saveInput.errorMessage);
       return;
     }
-    setSaving(true);
-    setError("");
-    try {
-      await onSaveRecord(saveInput.payload);
-      applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm });
-    } catch (caught) {
-      setError(getRecordPanelRecordSaveErrorMessage(caught, detailCopy.saveRecordError));
-    } finally {
-      setSaving(false);
-    }
+    await runRecordPanelRecordSaveSubmit(
+      { detailCopy, onSaveRecord, selectedRecord, setError, setForm, setSaving, form, locationReviewForm },
+      saveInput.payload,
+    );
   }
 
   return {

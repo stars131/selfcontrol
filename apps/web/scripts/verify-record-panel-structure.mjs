@@ -636,6 +636,10 @@ const recordPanelRecordSaveSubmitActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-submit-action.ts",
 );
+const recordPanelRecordSaveSubmitRunnerPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-record-save-submit-runner.ts",
+);
 const recordPanelRecordSaveActionInputTypesPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-record-save-action-input.types.ts",
@@ -703,6 +707,10 @@ const recordPanelReminderActionsPath = path.resolve(
 const recordPanelReminderSubmitActionPath = path.resolve(
   process.cwd(),
   "components/record-panel-controller-reminder-submit-action.ts",
+);
+const recordPanelReminderSubmitRunnerPath = path.resolve(
+  process.cwd(),
+  "components/record-panel-controller-reminder-submit-runner.ts",
 );
 const recordPanelReminderActionInputTypesPath = path.resolve(
   process.cwd(),
@@ -4367,6 +4375,10 @@ const recordSaveSubmitActionSource = fs.readFileSync(
   recordPanelRecordSaveSubmitActionPath,
   "utf8",
 );
+const recordSaveSubmitRunnerSource = fs.readFileSync(
+  recordPanelRecordSaveSubmitRunnerPath,
+  "utf8",
+);
 const recordSaveActionInputTypesSource = fs.readFileSync(
   recordPanelRecordSaveActionInputTypesPath,
   "utf8",
@@ -4411,6 +4423,7 @@ const recordLocationPayloadTypesSource = fs.readFileSync(
 );
 const reminderActionsSource = fs.readFileSync(recordPanelReminderActionsPath, "utf8");
 const reminderSubmitActionSource = fs.readFileSync(recordPanelReminderSubmitActionPath, "utf8");
+const reminderSubmitRunnerSource = fs.readFileSync(recordPanelReminderSubmitRunnerPath, "utf8");
 const reminderActionInputTypesSource = fs.readFileSync(
   recordPanelReminderActionInputTypesPath,
   "utf8",
@@ -5276,6 +5289,7 @@ const recordSubmitActionInputTypesLines =
   recordSubmitActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveActionsLines = recordSaveActionsSource.split(/\r?\n/).length;
 const recordSaveSubmitActionLines = recordSaveSubmitActionSource.split(/\r?\n/).length;
+const recordSaveSubmitRunnerLines = recordSaveSubmitRunnerSource.split(/\r?\n/).length;
 const recordSaveActionInputTypesLines = recordSaveActionInputTypesSource.split(/\r?\n/).length;
 const recordSaveSuccessHelpersLines = recordSaveSuccessHelpersSource.split(/\r?\n/).length;
 const recordSaveSuccessHelpersTypesLines =
@@ -5296,6 +5310,7 @@ const recordLocationPayloadTypesLines =
   recordLocationPayloadTypesSource.split(/\r?\n/).length;
 const reminderActionsLines = reminderActionsSource.split(/\r?\n/).length;
 const reminderSubmitActionLines = reminderSubmitActionSource.split(/\r?\n/).length;
+const reminderSubmitRunnerLines = reminderSubmitRunnerSource.split(/\r?\n/).length;
 const reminderActionInputTypesLines = reminderActionInputTypesSource.split(/\r?\n/).length;
 const reminderSuccessHelpersLines = reminderSuccessHelpersSource.split(/\r?\n/).length;
 const reminderSuccessHelpersTypesLines =
@@ -11118,7 +11133,7 @@ for (const requiredRecordSaveSubmitActionImport of [
   'from "react";',
   'from "./record-panel-controller-record-save-helpers";',
   'from "./record-panel-controller-record-save-action-input.types";',
-  'from "./record-panel-controller-record-save-success-helpers";',
+  'from "./record-panel-controller-record-save-submit-runner";',
 ]) {
   if (!recordSaveSubmitActionSource.includes(requiredRecordSaveSubmitActionImport)) {
     throw new Error(
@@ -11131,9 +11146,8 @@ for (const requiredRecordSaveSubmitActionUsage of [
   "export function createRecordPanelControllerRecordSaveSubmitAction({",
   "async function handleSubmit(event: FormEvent<HTMLFormElement>)",
   "resolveRecordPanelRecordSaveActionInput({",
-  "await onSaveRecord(saveInput.payload)",
-  "applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm })",
-  "getRecordPanelRecordSaveErrorMessage(caught, detailCopy.saveRecordError)",
+  "await runRecordPanelRecordSaveSubmit(",
+  "saveInput.payload",
 ]) {
   if (!recordSaveSubmitActionSource.includes(requiredRecordSaveSubmitActionUsage)) {
     throw new Error(
@@ -11142,10 +11156,72 @@ for (const requiredRecordSaveSubmitActionUsage of [
   }
 }
 
+for (const forbiddenRecordSaveSubmitActionToken of [
+  "setSaving(true);",
+  "await onSaveRecord(",
+  "applyRecordPanelRecordSaveSuccessState(",
+  "getRecordPanelRecordSaveErrorMessage(",
+  "setSaving(false);",
+]) {
+  if (recordSaveSubmitActionSource.includes(forbiddenRecordSaveSubmitActionToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-action.ts must keep save execution delegated: ${forbiddenRecordSaveSubmitActionToken}`,
+    );
+  }
+}
+
 const maxRecordSaveSubmitActionLines = 45;
 if (recordSaveSubmitActionLines > maxRecordSaveSubmitActionLines) {
   throw new Error(
     `record-panel-controller-record-save-submit-action.ts exceeded ${maxRecordSaveSubmitActionLines} lines: ${recordSaveSubmitActionLines}`,
+  );
+}
+
+for (const requiredRecordSaveSubmitRunnerImport of [
+  'from "./record-panel-controller-record-save-payload.types";',
+  'from "./record-panel-controller-record-save-action-input.types";',
+  'from "./record-panel-controller-record-save-helpers";',
+  'from "./record-panel-controller-record-save-success-helpers";',
+]) {
+  if (!recordSaveSubmitRunnerSource.includes(requiredRecordSaveSubmitRunnerImport)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-runner.ts must import save runner contracts: ${requiredRecordSaveSubmitRunnerImport}`,
+    );
+  }
+}
+
+for (const requiredRecordSaveSubmitRunnerUsage of [
+  "export async function runRecordPanelRecordSaveSubmit(",
+  "payload: RecordSavePayload",
+  "setSaving(true);",
+  "await onSaveRecord(payload);",
+  "applyRecordPanelRecordSaveSuccessState({ selectedRecord, setForm });",
+  "getRecordPanelRecordSaveErrorMessage(caught, detailCopy.saveRecordError)",
+  "setSaving(false);",
+]) {
+  if (!recordSaveSubmitRunnerSource.includes(requiredRecordSaveSubmitRunnerUsage)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-runner.ts must own save execution flow: ${requiredRecordSaveSubmitRunnerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecordSaveSubmitRunnerToken of [
+  'from "react";',
+  "event.preventDefault()",
+  "resolveRecordPanelRecordSaveActionInput(",
+]) {
+  if (recordSaveSubmitRunnerSource.includes(forbiddenRecordSaveSubmitRunnerToken)) {
+    throw new Error(
+      `record-panel-controller-record-save-submit-runner.ts must keep submit-event handling delegated: ${forbiddenRecordSaveSubmitRunnerToken}`,
+    );
+  }
+}
+
+const maxRecordSaveSubmitRunnerLines = 35;
+if (recordSaveSubmitRunnerLines > maxRecordSaveSubmitRunnerLines) {
+  throw new Error(
+    `record-panel-controller-record-save-submit-runner.ts exceeded ${maxRecordSaveSubmitRunnerLines} lines: ${recordSaveSubmitRunnerLines}`,
   );
 }
 
@@ -11592,7 +11668,7 @@ if (reminderActionsLines > maxReminderActionsLines) {
 for (const requiredReminderSubmitActionImport of [
   'from "./record-panel-controller-reminder-helpers";',
   'from "./record-panel-controller-reminder-action-input.types";',
-  'from "./record-panel-controller-reminder-success-helpers";',
+  'from "./record-panel-controller-reminder-submit-runner";',
 ]) {
   if (!reminderSubmitActionSource.includes(requiredReminderSubmitActionImport)) {
     throw new Error(
@@ -11604,9 +11680,8 @@ for (const requiredReminderSubmitActionImport of [
 for (const requiredReminderSubmitActionUsage of [
   "export function createRecordPanelControllerReminderSubmitAction({",
   "resolveRecordPanelReminderActionInput({",
-  "getRecordPanelReminderErrorMessage(",
-  "await onCreateReminder(reminderInput.payload)",
-  "applyRecordPanelReminderSuccessState({ setReminderForm })",
+  "await runRecordPanelReminderSubmit(",
+  "reminderInput.payload",
 ]) {
   if (!reminderSubmitActionSource.includes(requiredReminderSubmitActionUsage)) {
     throw new Error(
@@ -11615,10 +11690,72 @@ for (const requiredReminderSubmitActionUsage of [
   }
 }
 
+for (const forbiddenReminderSubmitActionToken of [
+  "setSavingReminder(true);",
+  "await onCreateReminder(",
+  "applyRecordPanelReminderSuccessState(",
+  "getRecordPanelReminderErrorMessage(",
+  "setSavingReminder(false);",
+]) {
+  if (reminderSubmitActionSource.includes(forbiddenReminderSubmitActionToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-action.ts must keep reminder execution delegated: ${forbiddenReminderSubmitActionToken}`,
+    );
+  }
+}
+
 const maxReminderSubmitActionLines = 45;
 if (reminderSubmitActionLines > maxReminderSubmitActionLines) {
   throw new Error(
     `record-panel-controller-reminder-submit-action.ts exceeded ${maxReminderSubmitActionLines} lines: ${reminderSubmitActionLines}`,
+  );
+}
+
+for (const requiredReminderSubmitRunnerImport of [
+  'from "./record-panel-controller-reminder-action-input.types";',
+  'from "./record-panel-controller-reminder-payload.types";',
+  'from "./record-panel-controller-reminder-helpers";',
+  'from "./record-panel-controller-reminder-success-helpers";',
+]) {
+  if (!reminderSubmitRunnerSource.includes(requiredReminderSubmitRunnerImport)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-runner.ts must import reminder runner contracts: ${requiredReminderSubmitRunnerImport}`,
+    );
+  }
+}
+
+for (const requiredReminderSubmitRunnerUsage of [
+  "export async function runRecordPanelReminderSubmit(",
+  "payload: ReminderPayload",
+  "setSavingReminder(true);",
+  "await onCreateReminder(payload);",
+  "applyRecordPanelReminderSuccessState({ setReminderForm });",
+  "getRecordPanelReminderErrorMessage(caught, detailCopy.createReminderError)",
+  "setSavingReminder(false);",
+]) {
+  if (!reminderSubmitRunnerSource.includes(requiredReminderSubmitRunnerUsage)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-runner.ts must own reminder execution flow: ${requiredReminderSubmitRunnerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenReminderSubmitRunnerToken of [
+  'from "react";',
+  "resolveRecordPanelReminderActionInput(",
+  "event.preventDefault()",
+]) {
+  if (reminderSubmitRunnerSource.includes(forbiddenReminderSubmitRunnerToken)) {
+    throw new Error(
+      `record-panel-controller-reminder-submit-runner.ts must keep reminder submit-event handling delegated: ${forbiddenReminderSubmitRunnerToken}`,
+    );
+  }
+}
+
+const maxReminderSubmitRunnerLines = 30;
+if (reminderSubmitRunnerLines > maxReminderSubmitRunnerLines) {
+  throw new Error(
+    `record-panel-controller-reminder-submit-runner.ts exceeded ${maxReminderSubmitRunnerLines} lines: ${reminderSubmitRunnerLines}`,
   );
 }
 
