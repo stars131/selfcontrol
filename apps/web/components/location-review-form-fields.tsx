@@ -1,5 +1,7 @@
 "use client";
 
+import { LocationReviewNoteField } from "./location-review-note-field";
+import { LocationReviewStatusSelect } from "./location-review-status-select";
 import type { LocationReviewFormFieldsProps } from "./location-review-form-fields.types";
 
 export function LocationReviewFormFields({
@@ -11,29 +13,18 @@ export function LocationReviewFormFields({
 }: LocationReviewFormFieldsProps) {
   return (
     <div className="inline-fields">
-      <label className="field">
-        <span className="field-label">{panelCopy.reviewStatus}</span>
-        <select
-          className="input"
-          disabled={!canWriteWorkspace}
-          value={reviewForm.status}
-          onChange={(event) => onStatusChange(event.target.value)}
-        >
-          <option value="pending">{panelCopy.pending}</option>
-          <option value="confirmed">{panelCopy.confirmed}</option>
-          <option value="needs_review">{panelCopy.needsReview}</option>
-        </select>
-      </label>
-      <label className="field" style={{ gridColumn: "span 2" }}>
-        <span className="field-label">{panelCopy.reviewNote}</span>
-        <input
-          className="input"
-          disabled={!canWriteWorkspace}
-          value={reviewForm.note}
-          onChange={(event) => onNoteChange(event.target.value)}
-          placeholder={panelCopy.reviewNotePlaceholder}
-        />
-      </label>
+      <LocationReviewStatusSelect
+        canWriteWorkspace={canWriteWorkspace}
+        onStatusChange={onStatusChange}
+        panelCopy={panelCopy}
+        reviewForm={reviewForm}
+      />
+      <LocationReviewNoteField
+        canWriteWorkspace={canWriteWorkspace}
+        onNoteChange={onNoteChange}
+        panelCopy={panelCopy}
+        reviewForm={reviewForm}
+      />
     </div>
   );
 }

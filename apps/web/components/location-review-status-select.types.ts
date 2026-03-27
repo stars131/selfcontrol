@@ -1,0 +1,1 @@
+import type { LocationReviewFormFieldsProps } from "./location-review-form-fields.types"; export type LocationReviewStatusSelectProps = Pick<LocationReviewFormFieldsProps, "canWriteWorkspace" | "onStatusChange" | "panelCopy" | "reviewForm">;
