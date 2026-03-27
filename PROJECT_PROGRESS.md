@@ -2635,6 +2635,10 @@ Last updated: 2026-03-27
   - dead-letter summary total-count tag rendering now lives in `apps/web/components/dead-letter-recovery-summary-total-count-tag.tsx` instead of remaining inline inside `dead-letter-recovery-summary-stats.tsx`
   - `dead-letter-recovery-summary-stats.tsx` now stays focused on summary stat composition while total-count tag rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this total-count-tag boundary so future dead-letter summary stat changes do not regrow a mixed composition-and-total-count rendering module
+- Dead Letter Recovery Summary Intro Extraction V1:
+  - dead-letter summary intro rendering now lives in `apps/web/components/dead-letter-recovery-summary-intro.tsx` instead of remaining inline inside `dead-letter-recovery-summary-header.tsx`
+  - `dead-letter-recovery-summary-header.tsx` now stays focused on header-level layout while intro rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this summary-intro boundary so future dead-letter summary header changes do not regrow a mixed layout-and-intro rendering module
 - Recent Media Issue Action Notice Extraction V1:
   - recent-media issue action-notice rendering now lives in `apps/web/components/recent-media-issue-card-action-notice.tsx` instead of remaining inline inside `recent-media-issue-card-metadata.tsx`
   - `recent-media-issue-card-metadata.tsx` now stays focused on timestamp metadata composition while action-notice rendering remains centralized and easier to evolve safely

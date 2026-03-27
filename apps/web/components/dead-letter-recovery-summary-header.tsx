@@ -1,5 +1,6 @@
 "use client";
 
+import { DeadLetterRecoverySummaryIntro } from "./dead-letter-recovery-summary-intro";
 import { DeadLetterRecoverySummaryStats } from "./dead-letter-recovery-summary-stats";
 import type { DeadLetterRecoverySummaryHeaderProps } from "./dead-letter-recovery-summary-header.types";
 
@@ -10,10 +11,7 @@ export function DeadLetterRecoverySummaryHeader({
 }: DeadLetterRecoverySummaryHeaderProps) {
   return (
     <div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-      <div>
-        <div className="eyebrow">{mediaIssueCopy.deadLetterTitle}</div>
-        <div className="muted" style={{ marginTop: 8 }}>{mediaIssueCopy.deadLetterDescription}</div>
-      </div>
+      <DeadLetterRecoverySummaryIntro mediaIssueCopy={mediaIssueCopy} />
       <DeadLetterRecoverySummaryStats
         locale={locale}
         mediaDeadLetterOverview={mediaDeadLetterOverview}

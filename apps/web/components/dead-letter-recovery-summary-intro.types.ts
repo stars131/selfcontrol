@@ -1,0 +1,1 @@
+import type { DeadLetterRecoverySummaryHeaderProps } from "./dead-letter-recovery-summary-header.types"; export type DeadLetterRecoverySummaryIntroProps = Pick<DeadLetterRecoverySummaryHeaderProps, "mediaIssueCopy">;
