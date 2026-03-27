@@ -87,6 +87,10 @@ const workspaceShellChatActionConversationsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-action-conversations.ts",
 );
+const workspaceShellChatActionSelectionPath = path.resolve(
+  process.cwd(),
+  "components/workspace-shell-chat-action-selection.ts",
+);
 const workspaceShellChatRecordActionsPath = path.resolve(
   process.cwd(),
   "components/workspace-shell-chat-record-actions.ts",
@@ -186,6 +190,10 @@ const chatActionConversationsSource = fs.readFileSync(
   workspaceShellChatActionConversationsPath,
   "utf8",
 );
+const chatActionSelectionSource = fs.readFileSync(
+  workspaceShellChatActionSelectionPath,
+  "utf8",
+);
 const chatRecordActionsSource = fs.readFileSync(workspaceShellChatRecordActionsPath, "utf8");
 const adminActionsSource = fs.readFileSync(workspaceShellAdminActionsPath, "utf8");
 const conversationStateLoadSource = fs.readFileSync(
@@ -243,6 +251,7 @@ const recordActionPayloadsLineCount = recordActionPayloadsSource.split(/\r?\n/).
 const chatActionResultsLineCount = chatActionResultsSource.split(/\r?\n/).length;
 const chatActionConversationsLineCount =
   chatActionConversationsSource.split(/\r?\n/).length;
+const chatActionSelectionLineCount = chatActionSelectionSource.split(/\r?\n/).length;
 const chatRecordActionsLineCount = chatRecordActionsSource.split(/\r?\n/).length;
 const adminActionsLineCount = adminActionsSource.split(/\r?\n/).length;
 const conversationStateLoadLineCount = conversationStateLoadSource.split(/\r?\n/).length;
@@ -1377,6 +1386,7 @@ for (const requiredWorkspaceShellChatActionsImport of [
   'from "../lib/api";',
   'from "./workspace-shell-action-guards";',
   'from "./workspace-shell-chat-action-conversations";',
+  'from "./workspace-shell-chat-action-selection";',
   'from "./workspace-shell-chat-action-results";',
   'from "./workspace-shell-record-action-refresh";',
 ]) {
@@ -1393,6 +1403,7 @@ for (const requiredChatActionsPath of [
   "applyWorkspaceShellChatSearchResult(",
   "buildWorkspaceShellConversationTitle(conversationsCount)",
   "applyWorkspaceShellConversationCreation(",
+  "selectWorkspaceShellConversation(",
 ]) {
   if (!fs.readFileSync(path.resolve(process.cwd(), "components/workspace-shell-chat-actions.ts"), "utf8").includes(requiredChatActionsPath)) {
     throw new Error(
@@ -1411,6 +1422,7 @@ for (const forbiddenChatActionsToken of [
   "setConversations((prev) => [result.conversation, ...prev])",
   "setActiveConversationId(result.conversation.id)",
   "setMessages([])",
+  "void loadConversationMessages(token, conversationId)",
 ]) {
   if (workspaceShellChatActionsSource.includes(forbiddenChatActionsToken)) {
     throw new Error(
@@ -1576,6 +1588,41 @@ const maxChatActionConversationsLines = 24;
 if (chatActionConversationsLineCount > maxChatActionConversationsLines) {
   throw new Error(
     `workspace-shell-chat-action-conversations.ts exceeded ${maxChatActionConversationsLines} lines: ${chatActionConversationsLineCount}`,
+  );
+}
+
+for (const requiredChatActionSelectionUsage of [
+  'import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.types";',
+  "export function selectWorkspaceShellConversation(",
+  "if (!token) {",
+  "helpers.setActiveConversationId(conversationId);",
+  "void helpers.loadConversationMessages(token, conversationId);",
+]) {
+  if (!chatActionSelectionSource.includes(requiredChatActionSelectionUsage)) {
+    throw new Error(
+      `workspace-shell-chat-action-selection.ts must own conversation selection helpers: ${requiredChatActionSelectionUsage}`,
+    );
+  }
+}
+
+for (const forbiddenChatActionSelectionToken of [
+  'from "../lib/api";',
+  'from "./workspace-shell-action-guards";',
+  "createConversation(",
+  "sendMessage(",
+  "refreshWorkspaceShellRecordMutation(",
+]) {
+  if (chatActionSelectionSource.includes(forbiddenChatActionSelectionToken)) {
+    throw new Error(
+      `workspace-shell-chat-action-selection.ts must keep API and refresh orchestration delegated: ${forbiddenChatActionSelectionToken}`,
+    );
+  }
+}
+
+const maxChatActionSelectionLines = 20;
+if (chatActionSelectionLineCount > maxChatActionSelectionLines) {
+  throw new Error(
+    `workspace-shell-chat-action-selection.ts exceeded ${maxChatActionSelectionLines} lines: ${chatActionSelectionLineCount}`,
   );
 }
 

@@ -10,6 +10,7 @@ import {
   applyWorkspaceShellConversationCreation,
   buildWorkspaceShellConversationTitle,
 } from "./workspace-shell-chat-action-conversations";
+import { selectWorkspaceShellConversation } from "./workspace-shell-chat-action-selection";
 import {
   applyWorkspaceShellChatSearchResult,
   selectWorkspaceShellChatCreatedRecord,
@@ -75,11 +76,11 @@ export function createWorkspaceShellChatActions({
   }
 
   function handleSelectConversation(conversationId: string) {
-    if (!token) {
-      return;
-    }
-    setActiveConversationId(conversationId);
-    void loadConversationMessages(token, conversationId);
+    selectWorkspaceShellConversation(
+      { setActiveConversationId, loadConversationMessages },
+      token,
+      conversationId,
+    );
   }
 
   return {
