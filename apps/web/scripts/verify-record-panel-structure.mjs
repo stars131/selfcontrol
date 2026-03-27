@@ -2204,6 +2204,14 @@ const mediaAssetCardFileExtensionTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-file-extension-tag.types.ts",
 );
+const mediaAssetCardSizeTagPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-size-tag.tsx",
+);
+const mediaAssetCardSizeTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-size-tag.types.ts",
+);
 const mediaAssetCardProcessingSourceTagPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-processing-source-tag.tsx",
@@ -4127,6 +4135,11 @@ const mediaAssetCardFileExtensionTagTypesSource = fs.readFileSync(
   mediaAssetCardFileExtensionTagTypesPath,
   "utf8",
 );
+const mediaAssetCardSizeTagSource = fs.readFileSync(mediaAssetCardSizeTagPath, "utf8");
+const mediaAssetCardSizeTagTypesSource = fs.readFileSync(
+  mediaAssetCardSizeTagTypesPath,
+  "utf8",
+);
 const mediaAssetCardProcessingSourceTagSource = fs.readFileSync(
   mediaAssetCardProcessingSourceTagPath,
   "utf8",
@@ -5913,6 +5926,9 @@ const mediaAssetCardFileExtensionTagLines =
   mediaAssetCardFileExtensionTagSource.split(/\r?\n/).length;
 const mediaAssetCardFileExtensionTagTypesLines =
   mediaAssetCardFileExtensionTagTypesSource.split(/\r?\n/).length;
+const mediaAssetCardSizeTagLines = mediaAssetCardSizeTagSource.split(/\r?\n/).length;
+const mediaAssetCardSizeTagTypesLines =
+  mediaAssetCardSizeTagTypesSource.split(/\r?\n/).length;
 const mediaAssetCardProcessingSourceTagLines =
   mediaAssetCardProcessingSourceTagSource.split(/\r?\n/).length;
 const mediaAssetCardProcessingSourceTagTypesLines =
@@ -22181,7 +22197,6 @@ if (mediaAssetCardMetadataDetailsTypesLines > maxMediaAssetCardMetadataDetailsTy
 for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { useStoredLocale } from "../lib/locale";',
   'from "../lib/media-issue-display";',
-  'import { formatMediaSize } from "../lib/record-panel-format";',
   'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'from "../lib/storage-provider-display";',
   'import { MediaAssetCardExtractionModeTag } from "./media-asset-card-extraction-mode-tag";',
@@ -22190,6 +22205,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
   'import { MediaAssetCardRetryStateTag } from "./media-asset-card-retry-state-tag";',
+  'import { MediaAssetCardSizeTag } from "./media-asset-card-size-tag";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
@@ -22201,7 +22217,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
-  "{formatMediaSize(asset)}",
+  "<MediaAssetCardSizeTag asset={asset} />",
 ]) {
   if (!mediaAssetCardMetadataTagsSource.includes(requiredMediaAssetCardMetadataTagsUsage)) {
     throw new Error(
@@ -22215,6 +22231,7 @@ if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsPr
 }
 
 for (const forbiddenMediaAssetCardMetadataTagsToken of [
+  "formatMediaSize(asset)",
   "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
   "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
   '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
@@ -22448,6 +22465,55 @@ const maxMediaAssetCardFileExtensionTagTypesLines = 2;
 if (mediaAssetCardFileExtensionTagTypesLines > maxMediaAssetCardFileExtensionTagTypesLines) {
   throw new Error(
     `media-asset-card-file-extension-tag.types.ts exceeded ${maxMediaAssetCardFileExtensionTagTypesLines} lines: ${mediaAssetCardFileExtensionTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardSizeTagUsage of [
+  'import { formatMediaSize } from "../lib/record-panel-format";',
+  'import type { MediaAssetCardSizeTagProps } from "./media-asset-card-size-tag.types";',
+  "}: MediaAssetCardSizeTagProps) {",
+  "{formatMediaSize(asset)}",
+]) {
+  if (!mediaAssetCardSizeTagSource.includes(requiredMediaAssetCardSizeTagUsage)) {
+    throw new Error(
+      `media-asset-card-size-tag.tsx must own size-tag rendering: ${requiredMediaAssetCardSizeTagUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardSizeTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "getRetryStateLabel(locale, retryState)",
+  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+]) {
+  if (mediaAssetCardSizeTagSource.includes(forbiddenMediaAssetCardSizeTagToken)) {
+    throw new Error(
+      `media-asset-card-size-tag.tsx must keep other tag concerns delegated: ${forbiddenMediaAssetCardSizeTagToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardSizeTagLines = 6;
+if (mediaAssetCardSizeTagLines > maxMediaAssetCardSizeTagLines) {
+  throw new Error(
+    `media-asset-card-size-tag.tsx exceeded ${maxMediaAssetCardSizeTagLines} lines: ${mediaAssetCardSizeTagLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardSizeTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardSizeTagProps = Pick<MediaAssetCardMetadataTagsProps, "asset">;',
+]) {
+  if (!mediaAssetCardSizeTagTypesSource.includes(requiredMediaAssetCardSizeTagTypesUsage)) {
+    throw new Error(
+      `media-asset-card-size-tag.types.ts must own size-tag prop typing: ${requiredMediaAssetCardSizeTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardSizeTagTypesLines = 2;
+if (mediaAssetCardSizeTagTypesLines > maxMediaAssetCardSizeTagTypesLines) {
+  throw new Error(
+    `media-asset-card-size-tag.types.ts exceeded ${maxMediaAssetCardSizeTagTypesLines} lines: ${mediaAssetCardSizeTagTypesLines}`,
   );
 }
 

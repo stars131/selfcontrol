@@ -51,6 +51,12 @@ const fileExtensionTagLineCount = fileExtensionTagSource.split(/\r?\n/).length;
 const fileExtensionTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-file-extension-tag.types.ts");
 const fileExtensionTagTypesSource = fs.readFileSync(fileExtensionTagTypesPath, "utf8");
 const fileExtensionTagTypesLineCount = fileExtensionTagTypesSource.split(/\r?\n/).length;
+const sizeTagPath = path.resolve(process.cwd(), "components/media-asset-card-size-tag.tsx");
+const sizeTagSource = fs.readFileSync(sizeTagPath, "utf8");
+const sizeTagLineCount = sizeTagSource.split(/\r?\n/).length;
+const sizeTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-size-tag.types.ts");
+const sizeTagTypesSource = fs.readFileSync(sizeTagTypesPath, "utf8");
+const sizeTagTypesLineCount = sizeTagTypesSource.split(/\r?\n/).length;
 const processingSourceTagPath = path.resolve(process.cwd(), "components/media-asset-card-processing-source-tag.tsx");
 const processingSourceTagSource = fs.readFileSync(processingSourceTagPath, "utf8");
 const processingSourceTagLineCount = processingSourceTagSource.split(/\r?\n/).length;
@@ -109,6 +115,7 @@ for (const requiredMetadataTagsUsage of [
   'import { MediaAssetCardRemoteFetchTag } from "./media-asset-card-remote-fetch-tag";',
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
   'import { MediaAssetCardRetryStateTag } from "./media-asset-card-retry-state-tag";',
+  'import { MediaAssetCardSizeTag } from "./media-asset-card-size-tag";',
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   'readMetadataText(asset.metadata_json, "remote_fetch_status")',
@@ -118,6 +125,7 @@ for (const requiredMetadataTagsUsage of [
   "<MediaAssetCardFileExtensionTag asset={asset} />",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
+  "<MediaAssetCardSizeTag asset={asset} />",
 ]) {
   if (!metadataTagsSource.includes(requiredMetadataTagsUsage)) {
     throw new Error(`media-asset-card-metadata-tags.tsx must delegate remote-fetch tag rendering: ${requiredMetadataTagsUsage}`);
@@ -130,6 +138,7 @@ for (const forbiddenMetadataTagsToken of [
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
   "asset.metadata_json.file_extension",
+  "formatMediaSize(asset)",
   '{processingSource ? <span className="tag">{processingSource}</span> : null}',
   '{extractionMode ? <span className="tag">{extractionMode}</span> : null}',
 ]) {
@@ -300,6 +309,43 @@ for (const requiredFileExtensionTagTypesUsage of [
 
 if (fileExtensionTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-file-extension-tag.types.ts exceeded 2 lines: ${fileExtensionTagTypesLineCount}`);
+}
+
+for (const requiredSizeTagUsage of [
+  'import { formatMediaSize } from "../lib/record-panel-format";',
+  'import type { MediaAssetCardSizeTagProps } from "./media-asset-card-size-tag.types";',
+  "}: MediaAssetCardSizeTagProps) {",
+  "{formatMediaSize(asset)}",
+]) {
+  if (!sizeTagSource.includes(requiredSizeTagUsage)) {
+    throw new Error(`media-asset-card-size-tag.tsx must own size tag rendering: ${requiredSizeTagUsage}`);
+  }
+}
+
+for (const forbiddenSizeTagToken of [
+  "getStorageProviderLabel(locale, asset.storage_provider)",
+  "getRetryStateLabel(locale, retryState)",
+  "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
+]) {
+  if (sizeTagSource.includes(forbiddenSizeTagToken)) {
+    throw new Error(`media-asset-card-size-tag.tsx must keep other tag concerns delegated: ${forbiddenSizeTagToken}`);
+  }
+}
+
+if (sizeTagLineCount > 6) {
+  throw new Error(`media-asset-card-size-tag.tsx exceeded 6 lines: ${sizeTagLineCount}`);
+}
+
+for (const requiredSizeTagTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type MediaAssetCardSizeTagProps = Pick<MediaAssetCardMetadataTagsProps, "asset">;',
+]) {
+  if (!sizeTagTypesSource.includes(requiredSizeTagTypesUsage)) {
+    throw new Error(`media-asset-card-size-tag.types.ts must own size tag props: ${requiredSizeTagTypesUsage}`);
+  }
+}
+
+if (sizeTagTypesLineCount > 2) {
+  throw new Error(`media-asset-card-size-tag.types.ts exceeded 2 lines: ${sizeTagTypesLineCount}`);
 }
 
 for (const requiredProcessingSourceTagUsage of [
