@@ -2206,6 +2206,9 @@ Last updated: 2026-03-26
 - Workspace Shell Error Localization V1:
   - workspace shell auth guards and initial load runner now reuse a shared locale-aware shell action copy instead of hardcoded English errors for authentication, read-only, share-management, conversation, and load failures
   - workspace-shell structure verification now enforces the copy-driven initial-load fallback so future shell maintenance keeps the enterprise localization baseline intact
+- Workspace Shell Media Guard Localization V1:
+  - workspace shell media delete and retry actions now reuse the shared shell action copy for read-only guard failures instead of keeping duplicated English strings beside the API logic
+  - the shell action copy now becomes the single source for shell-side permission denial text, improving long-term maintainability
 
 ## Next
 - Continue the next product slice

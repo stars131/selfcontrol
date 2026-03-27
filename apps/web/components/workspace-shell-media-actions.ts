@@ -11,12 +11,14 @@ import type {
   UseWorkspaceShellActionsProps,
   WorkspaceShellBulkRetryInput,
 } from "./workspace-shell-actions.types";
+import { getStoredWorkspaceShellActionCopy } from "./workspace-shell-action-copy";
 import {
   requireSelectedRecordContext,
   requireWritableWorkspaceToken,
 } from "./workspace-shell-action-guards";
 
 export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActionsProps) {
+  const copy = getStoredWorkspaceShellActionCopy();
   const {
     token,
     workspaceId,
@@ -44,7 +46,7 @@ export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActions
   async function handleDeleteMedia(mediaId: string) {
     const { activeToken, recordId } = requireSelectedRecordContext(token, selectedRecordId);
     if (!canWriteWorkspace) {
-      throw new Error("Viewer access is read-only");
+      throw new Error(copy.viewerReadOnly);
     }
     await deleteMedia(activeToken, workspaceId, mediaId);
     await refreshMedia(activeToken, recordId);
@@ -58,7 +60,7 @@ export function createWorkspaceShellMediaActions(props: UseWorkspaceShellActions
   async function handleRetryMedia(mediaId: string) {
     const { activeToken, recordId } = requireSelectedRecordContext(token, selectedRecordId);
     if (!canWriteWorkspace) {
-      throw new Error("Viewer access is read-only");
+      throw new Error(copy.viewerReadOnly);
     }
     await retryMediaProcessing(activeToken, workspaceId, mediaId);
     await refreshMedia(activeToken, recordId);
