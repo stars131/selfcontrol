@@ -2439,11 +2439,15 @@ Last updated: 2026-03-27
   - the single-input quick-add parser now splits static rule tables, token parser helpers, and control-token orchestration across `apps/web/components/record-quick-add-rules.ts`, `record-quick-add-token-parsers.ts`, and `record-quick-add-control-tokens.ts`
   - `record-quick-add-bar.helpers.ts` now stays as the thin public quick-add entrypoint so future tags, date tokens, place tokens, and locale-specific parsing can expand without regrowing one fragile helper file
   - frontend guardrails now include both quick-add behavior verification and a dedicated quick-add structure verification so this high-frequency capture flow stays maintainable under the enterprise engineering standard
+- Quick Add Preview Helper Boundary Extraction V1:
+  - quick-add preview trigger detection, type-label mapping, and parsed location extraction now live in `apps/web/components/record-quick-add-preview.helpers.ts` instead of remaining inline inside the preview component
+  - `record-quick-add-preview.tsx` now stays focused on rendering preview tags from the parsed draft while reusable preview logic remains testable and easier to extend for future capture metadata
+  - record-panel and quick-add structure guardrails now enforce this preview-helper boundary so the single-input capture preview stays maintainable under the enterprise engineering standard
 
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together
-- Continue simplifying remaining large UI module boundaries around quick-add preview rendering, chat panel, and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
+- Continue simplifying remaining large UI module boundaries around chat panel and workspace shell composition so high-frequency user flows stay easy to test, update, and extend
 - Continue simplifying remaining large UI module boundaries around record-panel remaining action/payload contracts and helper/type slices
 - Continue carving record-panel composition modules into thinner enterprise-grade boundaries that stay easy to test, update, and extend
 - Keep shrinking fragile oversized files and feature coupling so future updates remain maintainable under the enterprise engineering standard

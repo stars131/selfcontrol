@@ -19,6 +19,15 @@ const tokenParsersLineCount = tokenParsersSource.split(/\r?\n/).length;
 const rulesPath = path.resolve(process.cwd(), "components/record-quick-add-rules.ts");
 const rulesSource = fs.readFileSync(rulesPath, "utf8");
 const rulesLineCount = rulesSource.split(/\r?\n/).length;
+const previewPath = path.resolve(process.cwd(), "components/record-quick-add-preview.tsx");
+const previewSource = fs.readFileSync(previewPath, "utf8");
+const previewLineCount = previewSource.split(/\r?\n/).length;
+const previewHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-preview.helpers.ts",
+);
+const previewHelpersSource = fs.readFileSync(previewHelpersPath, "utf8");
+const previewHelpersLineCount = previewHelpersSource.split(/\r?\n/).length;
 
 for (const requiredHelperImport of [
   'import { parseQuickAddControlTokens } from "./record-quick-add-control-tokens";',
@@ -134,6 +143,71 @@ if (rulesSource.includes("parseQuickAddAbsoluteDateToken(")) {
 
 if (rulesLineCount > 60) {
   throw new Error(`record-quick-add-rules.ts exceeded 60 lines: ${rulesLineCount}`);
+}
+
+for (const requiredPreviewImport of [
+  'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
+  'import {',
+  'from "./record-quick-add-preview.helpers";',
+  "const { placeName, address, latitude, longitude } = readQuickAddPreviewLocation(",
+  "formatQuickAddPreviewTypeLabel(parsed.type_code, panelCopy)",
+]) {
+  if (!previewSource.includes(requiredPreviewImport)) {
+    throw new Error(
+      `record-quick-add-preview.tsx must import delegated preview helpers: ${requiredPreviewImport}`,
+    );
+  }
+}
+
+for (const forbiddenPreviewToken of [
+  "function shouldShowQuickAddPreview(",
+  "function formatTypeLabel(",
+  "const location =",
+  "const placeName =",
+  "const address =",
+  "const latitude =",
+  "const longitude =",
+]) {
+  if (previewSource.includes(forbiddenPreviewToken)) {
+    throw new Error(
+      `record-quick-add-preview.tsx must keep preview logic delegated: ${forbiddenPreviewToken}`,
+    );
+  }
+}
+
+if (previewLineCount > 30) {
+  throw new Error(`record-quick-add-preview.tsx exceeded 30 lines: ${previewLineCount}`);
+}
+
+for (const requiredPreviewHelpersUsage of [
+  "export function shouldShowQuickAddPreview(",
+  "export function formatQuickAddPreviewTypeLabel(",
+  "export function readQuickAddPreviewLocation(",
+  'typeCode === "food"',
+  'typeCode === "snack"',
+  'typeCode === "bad_experience"',
+  "typeof location?.place_name === \"string\"",
+  "typeof location?.address === \"string\"",
+  "typeof location?.latitude === \"number\"",
+  "typeof location?.longitude === \"number\"",
+]) {
+  if (!previewHelpersSource.includes(requiredPreviewHelpersUsage)) {
+    throw new Error(
+      `record-quick-add-preview.helpers.ts must own preview helper logic: ${requiredPreviewHelpersUsage}`,
+    );
+  }
+}
+
+if (previewHelpersSource.includes("export function RecordQuickAddPreview(")) {
+  throw new Error(
+    "record-quick-add-preview.helpers.ts must not take over the preview component",
+  );
+}
+
+if (previewHelpersLineCount > 45) {
+  throw new Error(
+    `record-quick-add-preview.helpers.ts exceeded 45 lines: ${previewHelpersLineCount}`,
+  );
 }
 
 console.log("record-quick-add structure verification passed");

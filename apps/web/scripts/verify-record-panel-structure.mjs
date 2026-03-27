@@ -25,6 +25,10 @@ const recordQuickAddPreviewPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-preview.tsx",
 );
+const recordQuickAddPreviewHelpersPath = path.resolve(
+  process.cwd(),
+  "components/record-quick-add-preview.helpers.ts",
+);
 const recordQuickAddPreviewTypesPath = path.resolve(
   process.cwd(),
   "components/record-quick-add-preview.types.ts",
@@ -3873,6 +3877,10 @@ const recordQuickAddTokenParsersSource = fs.readFileSync(
 );
 const recordQuickAddRulesSource = fs.readFileSync(recordQuickAddRulesPath, "utf8");
 const recordQuickAddPreviewSource = fs.readFileSync(recordQuickAddPreviewPath, "utf8");
+const recordQuickAddPreviewHelpersSource = fs.readFileSync(
+  recordQuickAddPreviewHelpersPath,
+  "utf8",
+);
 const recordQuickAddPreviewTypesSource = fs.readFileSync(
   recordQuickAddPreviewTypesPath,
   "utf8",
@@ -4445,6 +4453,7 @@ const recordQuickAddControlTokensLines = recordQuickAddControlTokensSource.split
 const recordQuickAddTokenParsersLines = recordQuickAddTokenParsersSource.split(/\r?\n/).length;
 const recordQuickAddRulesLines = recordQuickAddRulesSource.split(/\r?\n/).length;
 const recordQuickAddPreviewLines = recordQuickAddPreviewSource.split(/\r?\n/).length;
+const recordQuickAddPreviewHelpersLines = recordQuickAddPreviewHelpersSource.split(/\r?\n/).length;
 const recordQuickAddPreviewTypesLines = recordQuickAddPreviewTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarHelpersTypesLines = recordQuickAddBarHelpersTypesSource.split(/\r?\n/).length;
 const recordQuickAddBarTypesLines = recordQuickAddBarTypesSource.split(/\r?\n/).length;
@@ -5430,15 +5439,14 @@ if (recordQuickAddBarLines > maxRecordQuickAddBarLines) {
 
 for (const requiredRecordQuickAddPreviewUsage of [
   'import { buildQuickAddRecordDraft } from "./record-quick-add-bar.helpers";',
+  'from "./record-quick-add-preview.helpers";',
   'import type { RecordQuickAddPreviewProps } from "./record-quick-add-preview.types";',
-  "function shouldShowQuickAddPreview(draft: string)",
-  'return /^\\s*(#|@|\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}|\\d{1,2}:\\d{2}(?::\\d{2})?|today\\b|yesterday\\b|\\u4eca\\u5929|\\u6628\\u5929|\\d(?:\\/5|star|\\u661f|\\u5206)|\\[|\\u3010)/i.test(draft);',
-  "function formatTypeLabel(typeCode: string, panelCopy: RecordQuickAddPreviewProps[\"panelCopy\"])",
   "const parsed = buildQuickAddRecordDraft(draft.trim());",
   "const contentPreview = parsed.content !== parsed.title ? parsed.content : \"\";",
+  "const { placeName, address, latitude, longitude } = readQuickAddPreviewLocation(",
+  "formatQuickAddPreviewTypeLabel(parsed.type_code, panelCopy)",
   "panelCopy.quickAddPreview",
   "panelCopy.content",
-  "panelCopy.food",
   "panelCopy.title",
   "panelCopy.occurredAt",
   "panelCopy.rating",
@@ -5449,15 +5457,63 @@ for (const requiredRecordQuickAddPreviewUsage of [
 ]) {
   if (!recordQuickAddPreviewSource.includes(requiredRecordQuickAddPreviewUsage)) {
     throw new Error(
-      `record-quick-add-preview.tsx must own quick-add preview rendering: ${requiredRecordQuickAddPreviewUsage}`,
+      `record-quick-add-preview.tsx must keep preview rendering thin and delegated: ${requiredRecordQuickAddPreviewUsage}`,
     );
   }
 }
 
-const maxRecordQuickAddPreviewLines = 45;
+for (const forbiddenRecordQuickAddPreviewToken of [
+  "function shouldShowQuickAddPreview(",
+  "function formatTypeLabel(",
+  "const location =",
+  "const placeName =",
+  "const address =",
+  "const latitude =",
+  "const longitude =",
+]) {
+  if (recordQuickAddPreviewSource.includes(forbiddenRecordQuickAddPreviewToken)) {
+    throw new Error(
+      `record-quick-add-preview.tsx must keep preview logic delegated: ${forbiddenRecordQuickAddPreviewToken}`,
+    );
+  }
+}
+
+const maxRecordQuickAddPreviewLines = 30;
 if (recordQuickAddPreviewLines > maxRecordQuickAddPreviewLines) {
   throw new Error(
     `record-quick-add-preview.tsx exceeded ${maxRecordQuickAddPreviewLines} lines: ${recordQuickAddPreviewLines}`,
+  );
+}
+
+for (const requiredRecordQuickAddPreviewHelpersUsage of [
+  "export function shouldShowQuickAddPreview(",
+  "export function formatQuickAddPreviewTypeLabel(",
+  "export function readQuickAddPreviewLocation(",
+  'typeCode === "food"',
+  'typeCode === "snack"',
+  'typeCode === "bad_experience"',
+  'typeof location?.place_name === "string"',
+  'typeof location?.address === "string"',
+  'typeof location?.latitude === "number"',
+  'typeof location?.longitude === "number"',
+]) {
+  if (!recordQuickAddPreviewHelpersSource.includes(requiredRecordQuickAddPreviewHelpersUsage)) {
+    throw new Error(
+      `record-quick-add-preview.helpers.ts must own reusable preview logic: ${requiredRecordQuickAddPreviewHelpersUsage}`,
+    );
+  }
+}
+
+if (recordQuickAddPreviewHelpersSource.includes("export function RecordQuickAddPreview(")) {
+  throw new Error(
+    "record-quick-add-preview.helpers.ts must not take over the preview component",
+  );
+}
+
+const maxRecordQuickAddPreviewHelpersLines = 45;
+if (recordQuickAddPreviewHelpersLines > maxRecordQuickAddPreviewHelpersLines) {
+  throw new Error(
+    `record-quick-add-preview.helpers.ts exceeded ${maxRecordQuickAddPreviewHelpersLines} lines: ${recordQuickAddPreviewHelpersLines}`,
   );
 }
 
