@@ -3007,6 +3007,10 @@ Last updated: 2026-03-28
   - dead-letter storage-provider tag prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-storage-provider-tag-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now keeps storage-provider tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this storage-provider-tag-props-builder boundary so future dead-letter tag-row changes do not regrow mixed child-prop projection logic
+- Dead-Letter Retry State Tag Props Builder Extraction V1:
+  - dead-letter retry-state tag prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-retry-state-tag-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now keeps retry-state tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-state-tag-props-builder boundary so future dead-letter tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

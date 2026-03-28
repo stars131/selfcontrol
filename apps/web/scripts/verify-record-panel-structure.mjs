@@ -3304,6 +3304,14 @@ const deadLetterRecoveryItemCardRetryStateTagPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-retry-state-tag.tsx",
 );
+const deadLetterRecoveryItemCardRetryStateTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-state-tag-props.ts",
+);
+const deadLetterRecoveryItemCardRetryStateTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-state-tag-props.types.ts",
+);
 const deadLetterRecoveryItemCardRetryStateTagTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-retry-state-tag.types.ts",
@@ -5542,6 +5550,14 @@ const deadLetterRecoveryItemCardRetryStateTagSource = fs.readFileSync(
   deadLetterRecoveryItemCardRetryStateTagPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardRetryStateTagPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryStateTagPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardRetryStateTagPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryStateTagPropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardRetryStateTagTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardRetryStateTagTypesPath,
   "utf8",
@@ -7250,6 +7266,10 @@ const deadLetterRecoveryItemCardStorageProviderTagPropsTypesLines =
   deadLetterRecoveryItemCardStorageProviderTagPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardStorageProviderTagTypesLines =
   deadLetterRecoveryItemCardStorageProviderTagTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryStateTagPropsLines =
+  deadLetterRecoveryItemCardRetryStateTagPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryStateTagPropsTypesLines =
+  deadLetterRecoveryItemCardRetryStateTagPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardRetryStateTagLines =
   deadLetterRecoveryItemCardRetryStateTagSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardRetryStateTagTypesLines =
@@ -28847,6 +28867,7 @@ for (const requiredDeadLetterRecoveryItemCardTagsUsage of [
   'import { buildDeadLetterRecoveryItemCardProcessingStatusTagProps } from "./dead-letter-recovery-item-card-processing-status-tag-props";',
   'import { DeadLetterRecoveryItemCardProcessingStatusTag } from "./dead-letter-recovery-item-card-processing-status-tag";',
   'import { DeadLetterRecoveryItemCardIssueLabelTag } from "./dead-letter-recovery-item-card-issue-label-tag";',
+  'import { buildDeadLetterRecoveryItemCardRetryStateTagProps } from "./dead-letter-recovery-item-card-retry-state-tag-props";',
   'import { DeadLetterRecoveryItemCardRetryStateTag } from "./dead-letter-recovery-item-card-retry-state-tag";',
   'import { buildDeadLetterRecoveryItemCardStorageProviderTagProps } from "./dead-letter-recovery-item-card-storage-provider-tag-props";',
   'import { DeadLetterRecoveryItemCardStorageProviderTag } from "./dead-letter-recovery-item-card-storage-provider-tag";',
@@ -28854,8 +28875,9 @@ for (const requiredDeadLetterRecoveryItemCardTagsUsage of [
   '<DeadLetterRecoveryItemCardProcessingStatusTag',
   "buildDeadLetterRecoveryItemCardStorageProviderTagProps({ item, locale })",
   '<DeadLetterRecoveryItemCardStorageProviderTag',
+  "buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy })",
+  '<DeadLetterRecoveryItemCardRetryStateTag',
   "<DeadLetterRecoveryItemCardIssueLabelTag item={item} locale={locale} />",
-  "<DeadLetterRecoveryItemCardRetryStateTag item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!deadLetterRecoveryItemCardTagsSource.includes(requiredDeadLetterRecoveryItemCardTagsUsage)) {
     throw new Error(
@@ -28871,6 +28893,7 @@ for (const forbiddenDeadLetterRecoveryItemCardTagsToken of [
   "getProcessingStatusLabel(locale, item.processing_status)",
   "getStorageProviderLabel(locale, item.storage_provider)",
   '<DeadLetterRecoveryItemCardProcessingStatusTag item={item} locale={locale} />',
+  '<DeadLetterRecoveryItemCardRetryStateTag item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />',
   '<DeadLetterRecoveryItemCardStorageProviderTag item={item} locale={locale} />',
 ]) {
   if (deadLetterRecoveryItemCardTagsSource.includes(forbiddenDeadLetterRecoveryItemCardTagsToken)) {
@@ -29139,6 +29162,68 @@ if (
 ) {
   throw new Error(
     `dead-letter-recovery-item-card-storage-provider-tag.types.ts exceeded ${maxDeadLetterRecoveryItemCardStorageProviderTagTypesLines} lines: ${deadLetterRecoveryItemCardStorageProviderTagTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryStateTagPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardRetryStateTagProps } from "./dead-letter-recovery-item-card-retry-state-tag.types";',
+  'import type { BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput } from "./dead-letter-recovery-item-card-retry-state-tag-props.types";',
+  "export function buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput): DeadLetterRecoveryItemCardRetryStateTagProps {",
+]) {
+  if (!deadLetterRecoveryItemCardRetryStateTagPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryStateTagPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-state-tag-props.ts must own retry-state tag prop projection: ${requiredDeadLetterRecoveryItemCardRetryStateTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardRetryStateTagPropsToken of [
+  "<DeadLetterRecoveryItemCardRetryStateTag",
+  "getRetryStateLabel(",
+  '<div className="tag-row">',
+]) {
+  if (
+    deadLetterRecoveryItemCardRetryStateTagPropsSource.includes(
+      forbiddenDeadLetterRecoveryItemCardRetryStateTagPropsToken,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-state-tag-props.ts must keep rendering and label rules delegated: ${forbiddenDeadLetterRecoveryItemCardRetryStateTagPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryStateTagPropsLines = 5;
+if (
+  deadLetterRecoveryItemCardRetryStateTagPropsLines >
+  maxDeadLetterRecoveryItemCardRetryStateTagPropsLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-state-tag-props.ts exceeded ${maxDeadLetterRecoveryItemCardRetryStateTagPropsLines} lines: ${deadLetterRecoveryItemCardRetryStateTagPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryStateTagPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types"; export type BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput = Pick<DeadLetterRecoveryItemCardTagsProps, "item" | "locale" | "mediaIssueCopy">;',
+]) {
+  if (
+    !deadLetterRecoveryItemCardRetryStateTagPropsTypesSource.includes(
+      requiredDeadLetterRecoveryItemCardRetryStateTagPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-state-tag-props.types.ts must own retry-state-tag-props input typing: ${requiredDeadLetterRecoveryItemCardRetryStateTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryStateTagPropsTypesLines = 2;
+if (
+  deadLetterRecoveryItemCardRetryStateTagPropsTypesLines >
+  maxDeadLetterRecoveryItemCardRetryStateTagPropsTypesLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-state-tag-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardRetryStateTagPropsTypesLines} lines: ${deadLetterRecoveryItemCardRetryStateTagPropsTypesLines}`,
   );
 }
 
