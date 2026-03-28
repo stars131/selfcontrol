@@ -3316,6 +3316,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-shell-view-props.ts` now flattens `props` and `controller` once before delegating into browse/editor workspace input assembly
   - `apps/web/components/record-panel-v2-browse-workspace-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-input.ts` now accept flattened workspace input contracts directly so the workspace input join layer no longer depends on `RecordPanelShellInput`
   - the record-panel structure guardrail now enforces this flattened workspace-input boundary so future browse/editor workspace assembly does not regrow nested `{ controller, props }` handoff layers
+- Record Panel Shell Input Flattening V1:
+  - `apps/web/components/record-panel-v2.tsx` now forwards one flattened shell input object into `buildRecordPanelShellViewProps` instead of wrapping `props` under a nested `props` key
+  - `apps/web/components/record-panel-v2-shell-props.types.ts` and `apps/web/components/record-panel-v2-shell-view-props.ts` now treat shell input as `RecordPanelV2Props & { controller }` so the shell-view boundary stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened shell-input boundary so future shell view assembly does not regrow `{ controller, props }` wrappers
 
 ## Next
 - Continue the next product slice

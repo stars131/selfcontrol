@@ -8487,7 +8487,7 @@ if (!source.includes("const controller = useRecordPanelController({")) {
   }
 }
 
-if (!source.includes("buildRecordPanelShellViewProps({ controller, props })")) {
+if (!source.includes("buildRecordPanelShellViewProps({ ...props, controller })")) {
   throw new Error("record-panel-v2.tsx must delegate shell view prop shaping to buildRecordPanelShellViewProps");
 }
 
@@ -11114,7 +11114,7 @@ for (const requiredShellPropsTypesImport of [
 for (const requiredShellPropsTypesUsage of [
   "export type RecordPanelHeaderProps = RecordPanelHeaderComponentProps;",
   "export type RecordPanelController = RecordPanelControllerValue;",
-  "export type RecordPanelShellInput = { controller: RecordPanelController; props: RecordPanelV2Props };",
+  "export type RecordPanelShellInput = RecordPanelV2Props & { controller: RecordPanelController };",
 ]) {
   if (!shellPropsTypesSource.includes(requiredShellPropsTypesUsage)) {
     throw new Error(
@@ -11159,7 +11159,7 @@ for (const requiredShellViewPropsImport of [
 }
 
 for (const requiredShellViewPropsUsage of [
-  "export function buildRecordPanelShellViewProps({ controller, props }: RecordPanelShellInput)",
+  "export function buildRecordPanelShellViewProps({ controller, ...props }: RecordPanelShellInput)",
   "buildRecordBrowseWorkspaceProps(",
   "buildRecordBrowseWorkspaceInput({ ...props, ...controller })",
   "buildRecordEditorWorkspaceProps(",

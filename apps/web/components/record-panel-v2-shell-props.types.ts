@@ -2,4 +2,4 @@ import type { RecordPanelController as RecordPanelControllerValue } from "./reco
 import type { RecordPanelHeaderComponentProps } from "./record-panel-header.types"; import type { RecordPanelV2Props } from "./record-panel-v2.types";
 export type RecordPanelHeaderProps = RecordPanelHeaderComponentProps;
 export type RecordPanelController = RecordPanelControllerValue;
-export type RecordPanelShellInput = { controller: RecordPanelController; props: RecordPanelV2Props };
+export type RecordPanelShellInput = RecordPanelV2Props & { controller: RecordPanelController };

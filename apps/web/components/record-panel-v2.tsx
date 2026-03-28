@@ -16,7 +16,7 @@ export function RecordPanelV2({
 }: RecordPanelV2Props) {
   const controller = useRecordPanelController(buildRecordPanelControllerInput(props));
   const { browseWorkspaceProps, editorWorkspaceProps, headerProps } =
-    buildRecordPanelShellViewProps({ controller, props });
+    buildRecordPanelShellViewProps({ ...props, controller });
 
   return (
     <section className="panel">

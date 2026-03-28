@@ -9,7 +9,7 @@ import {
   buildRecordEditorWorkspaceProps,
 } from "./record-panel-v2-workspace-props";
 
-export function buildRecordPanelShellViewProps({ controller, props }: RecordPanelShellInput) {
+export function buildRecordPanelShellViewProps({ controller, ...props }: RecordPanelShellInput) {
   return {
     browseWorkspaceProps: buildRecordBrowseWorkspaceProps(
       buildRecordBrowseWorkspaceInput({ ...props, ...controller }),
