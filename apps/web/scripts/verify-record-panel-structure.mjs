@@ -2212,6 +2212,14 @@ const mediaAssetCardMetadataTagsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tags.types.ts",
 );
+const mediaAssetCardMetadataTagValuesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tag-values.ts",
+);
+const mediaAssetCardMetadataTagValuesTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tag-values.types.ts",
+);
 const mediaAssetCardRemoteFetchTagPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-remote-fetch-tag.tsx",
@@ -4367,6 +4375,14 @@ const mediaAssetCardMetadataTagsTypesSource = fs.readFileSync(
   mediaAssetCardMetadataTagsTypesPath,
   "utf8",
 );
+const mediaAssetCardMetadataTagValuesSource = fs.readFileSync(
+  mediaAssetCardMetadataTagValuesPath,
+  "utf8",
+);
+const mediaAssetCardMetadataTagValuesTypesSource = fs.readFileSync(
+  mediaAssetCardMetadataTagValuesTypesPath,
+  "utf8",
+);
 const mediaAssetCardRemoteFetchTagSource = fs.readFileSync(
   mediaAssetCardRemoteFetchTagPath,
   "utf8",
@@ -6366,6 +6382,10 @@ const mediaAssetCardNextRetryDetailTypesLines =
 const mediaAssetCardMetadataTagsLines = mediaAssetCardMetadataTagsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagsTypesLines =
   mediaAssetCardMetadataTagsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataTagValuesLines =
+  mediaAssetCardMetadataTagValuesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataTagValuesTypesLines =
+  mediaAssetCardMetadataTagValuesTypesSource.split(/\r?\n/).length;
 const mediaAssetCardRemoteFetchTagLines =
   mediaAssetCardRemoteFetchTagSource.split(/\r?\n/).length;
 const mediaAssetCardRemoteFetchTagTypesLines =
@@ -23006,9 +23026,9 @@ if (mediaAssetCardNextRetryDetailTypesLines > maxMediaAssetCardNextRetryDetailTy
 
 for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { useStoredLocale } from "../lib/locale";',
-  'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
   'import { MediaAssetCardExtractionModeTag } from "./media-asset-card-extraction-mode-tag";',
   'import { MediaAssetCardFileExtensionTag } from "./media-asset-card-file-extension-tag";',
+  'import { readMediaAssetCardMetadataTagValues } from "./media-asset-card-metadata-tag-values";',
   'import { MediaAssetCardProcessingStatusTag } from "./media-asset-card-processing-status-tag";',
   'import { MediaAssetCardProcessingSourceTag } from "./media-asset-card-processing-source-tag";',
   'import { MediaAssetCardRetryCountTag } from "./media-asset-card-retry-count-tag";',
@@ -23019,6 +23039,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
+  "readMediaAssetCardMetadataTagValues({ asset })",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardFileExtensionTag asset={asset} />",
@@ -23052,6 +23073,8 @@ for (const forbiddenMediaAssetCardMetadataTagsToken of [
   "asset.metadata_json.file_extension",
   '{processingSource ? <span className="tag">{processingSource}</span> : null}',
   '{extractionMode ? <span className="tag">{extractionMode}</span> : null}',
+  'readMetadataText(asset.metadata_json, "remote_fetch_status")',
+  'readMetadataNumber(asset.metadata_json, "processing_retry_count")',
 ]) {
   if (mediaAssetCardMetadataTagsSource.includes(forbiddenMediaAssetCardMetadataTagsToken)) {
     throw new Error(
@@ -23081,6 +23104,60 @@ const maxMediaAssetCardMetadataTagsTypesLines = 2;
 if (mediaAssetCardMetadataTagsTypesLines > maxMediaAssetCardMetadataTagsTypesLines) {
   throw new Error(
     `media-asset-card-metadata-tags.types.ts exceeded ${maxMediaAssetCardMetadataTagsTypesLines} lines: ${mediaAssetCardMetadataTagsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataTagValuesUsage of [
+  'import { readMetadataNumber, readMetadataText } from "../lib/record-panel-media";',
+  'import type { ReadMediaAssetCardMetadataTagValuesInput } from "./media-asset-card-metadata-tag-values.types";',
+  "}: ReadMediaAssetCardMetadataTagValuesInput) {",
+  'readMetadataText(asset.metadata_json, "remote_fetch_status")',
+  'readMetadataNumber(asset.metadata_json, "processing_retry_count")',
+]) {
+  if (!mediaAssetCardMetadataTagValuesSource.includes(requiredMediaAssetCardMetadataTagValuesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-tag-values.ts must own metadata tag value extraction: ${requiredMediaAssetCardMetadataTagValuesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardMetadataTagValuesToken of [
+  "useStoredLocale(",
+  "<MediaAssetCardRemoteFetchTag",
+  "<MediaAssetCardRetryCountTag",
+]) {
+  if (mediaAssetCardMetadataTagValuesSource.includes(forbiddenMediaAssetCardMetadataTagValuesToken)) {
+    throw new Error(
+      `media-asset-card-metadata-tag-values.ts must keep render concerns delegated: ${forbiddenMediaAssetCardMetadataTagValuesToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataTagValuesLines = 4;
+if (mediaAssetCardMetadataTagValuesLines > maxMediaAssetCardMetadataTagValuesLines) {
+  throw new Error(
+    `media-asset-card-metadata-tag-values.ts exceeded ${maxMediaAssetCardMetadataTagValuesLines} lines: ${mediaAssetCardMetadataTagValuesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataTagValuesTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type ReadMediaAssetCardMetadataTagValuesInput = Pick<MediaAssetCardMetadataTagsProps, "asset">;',
+]) {
+  if (
+    !mediaAssetCardMetadataTagValuesTypesSource.includes(
+      requiredMediaAssetCardMetadataTagValuesTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `media-asset-card-metadata-tag-values.types.ts must own metadata tag value input typing: ${requiredMediaAssetCardMetadataTagValuesTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataTagValuesTypesLines = 2;
+if (mediaAssetCardMetadataTagValuesTypesLines > maxMediaAssetCardMetadataTagValuesTypesLines) {
+  throw new Error(
+    `media-asset-card-metadata-tag-values.types.ts exceeded ${maxMediaAssetCardMetadataTagValuesTypesLines} lines: ${mediaAssetCardMetadataTagValuesTypesLines}`,
   );
 }
 
