@@ -281,17 +281,16 @@ if (chatPanelContentLineCount > maxContentLines) {
 for (const requiredSectionPropsUsage of [
   'import type {',
   'from "./chat-panel-content.types";',
-  "export function buildChatPanelConversationContentProps({",
-  "}: ChatPanelContentProps): ChatPanelConversationContentProps {",
-  "export function buildChatPanelManagementContentProps({",
-  "}: ChatPanelContentProps): ChatPanelManagementContentProps {",
-  "activeConversationId,",
-  "handleSend,",
-  "setDraft,",
-  "auditLogs,",
-  "handleCreateShareLink,",
-  "sharePermission,",
-  "unreadCount,",
+  "export function buildChatPanelConversationContentProps(",
+  "input: ChatPanelContentProps,",
+  "export function buildChatPanelManagementContentProps(",
+  "activeConversationId: input.activeConversationId,",
+  "handleSend: input.handleSend,",
+  "setDraft: input.setDraft,",
+  "auditLogs: input.auditLogs,",
+  "handleCreateShareLink: input.handleCreateShareLink,",
+  "sharePermission: input.sharePermission,",
+  "unreadCount: input.unreadCount,",
 ]) {
   if (!chatPanelSectionPropsSource.includes(requiredSectionPropsUsage)) {
     throw new Error(
@@ -417,11 +416,11 @@ for (const requiredManagementContentPropsUsage of [
   "export function buildChatPanelManagementSectionProps(",
   "export function buildChatAuditLogsCardProps(",
   "export function buildChatNotificationsCardProps(",
-  "onCreateShareLink: handleCreateShareLink,",
-  "onDisableShareLink: handleDisableShareLink,",
-  "onReindexKnowledge: handleReindexKnowledge,",
-  "onRefreshAuditLogs: handleRefreshAuditLogs,",
-  "onMarkNotificationRead,",
+  "onCreateShareLink: input.handleCreateShareLink,",
+  "onDisableShareLink: input.handleDisableShareLink,",
+  "onReindexKnowledge: input.handleReindexKnowledge,",
+  "onRefreshAuditLogs: input.handleRefreshAuditLogs,",
+  "onMarkNotificationRead: input.onMarkNotificationRead,",
 ]) {
   if (!chatPanelManagementContentPropsSource.includes(requiredManagementContentPropsUsage)) {
     throw new Error(

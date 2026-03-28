@@ -3456,6 +3456,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-reminder-item-card-child-props.ts` and `record-reminder-panel-child-props.ts` now use explicit `input` parameters while keeping their reminder form/list/item prop projection unchanged
   - this keeps the reminder helper layer aligned with the broader helper-signature normalization work without changing reminder UX behavior
   - the record-panel structure guardrail now enforces this normalized reminder-helper boundary so future reminder helper edits stay easier to review and extend
+- Chat Panel Helper Naming Cleanup V1:
+  - `apps/web/components/chat-panel-section-props.ts` and `chat-panel-management-content-props.ts` now use explicit `input` parameters while keeping conversation/management prop assembly unchanged
+  - this keeps the chat-panel helper layer aligned with the broader helper-signature normalization work without changing chat or management behavior
+  - the chat-panel structure guardrail now enforces this normalized helper boundary so future chat-panel helper edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

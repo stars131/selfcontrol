@@ -5,66 +5,46 @@ import type { ChatNotificationsCardProps } from "./chat-notifications-card.types
 import type { ChatPanelManagementContentProps } from "./chat-panel-content.types";
 import type { ChatPanelManagementSectionProps } from "./chat-panel-management-section.types";
 
-export function buildChatPanelManagementSectionProps({
-  canManageSharing,
-  canManageWorkspace,
-  creatingShare,
-  disablingShareId,
-  knowledgeStats,
-  latestShareUrl,
-  handleCreateShareLink,
-  handleDisableShareLink,
-  handleReindexKnowledge,
-  reindexing,
-  setShareMaxUses,
-  setShareName,
-  setSharePermission,
-  shareLinks,
-  shareMaxUses,
-  shareName,
-  sharePermission,
-}: ChatPanelManagementContentProps): ChatPanelManagementSectionProps {
+export function buildChatPanelManagementSectionProps(
+  input: ChatPanelManagementContentProps,
+): ChatPanelManagementSectionProps {
   return {
-    canManageSharing,
-    canManageWorkspace,
-    creatingShare,
-    disablingShareId,
-    knowledgeStats,
-    latestShareUrl,
-    onCreateShareLink: handleCreateShareLink,
-    onDisableShareLink: handleDisableShareLink,
-    onReindexKnowledge: handleReindexKnowledge,
-    reindexing,
-    setShareMaxUses,
-    setShareName,
-    setSharePermission,
-    shareLinks,
-    shareMaxUses,
-    shareName,
-    sharePermission,
+    canManageSharing: input.canManageSharing,
+    canManageWorkspace: input.canManageWorkspace,
+    creatingShare: input.creatingShare,
+    disablingShareId: input.disablingShareId,
+    knowledgeStats: input.knowledgeStats,
+    latestShareUrl: input.latestShareUrl,
+    onCreateShareLink: input.handleCreateShareLink,
+    onDisableShareLink: input.handleDisableShareLink,
+    onReindexKnowledge: input.handleReindexKnowledge,
+    reindexing: input.reindexing,
+    setShareMaxUses: input.setShareMaxUses,
+    setShareName: input.setShareName,
+    setSharePermission: input.setSharePermission,
+    shareLinks: input.shareLinks,
+    shareMaxUses: input.shareMaxUses,
+    shareName: input.shareName,
+    sharePermission: input.sharePermission,
   };
 }
 
-export function buildChatAuditLogsCardProps({
-  auditLogs,
-  handleRefreshAuditLogs,
-  refreshingAudit,
-}: ChatPanelManagementContentProps): ChatAuditLogsCardProps {
+export function buildChatAuditLogsCardProps(
+  input: ChatPanelManagementContentProps,
+): ChatAuditLogsCardProps {
   return {
-    auditLogs,
-    onRefreshAuditLogs: handleRefreshAuditLogs,
-    refreshingAudit,
+    auditLogs: input.auditLogs,
+    onRefreshAuditLogs: input.handleRefreshAuditLogs,
+    refreshingAudit: input.refreshingAudit,
   };
 }
 
-export function buildChatNotificationsCardProps({
-  notifications,
-  onMarkNotificationRead,
-  unreadCount,
-}: ChatPanelManagementContentProps): ChatNotificationsCardProps {
+export function buildChatNotificationsCardProps(
+  input: ChatPanelManagementContentProps,
+): ChatNotificationsCardProps {
   return {
-    notifications,
-    onMarkNotificationRead,
-    unreadCount,
+    notifications: input.notifications,
+    onMarkNotificationRead: input.onMarkNotificationRead,
+    unreadCount: input.unreadCount,
   };
 }
