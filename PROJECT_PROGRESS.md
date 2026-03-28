@@ -3043,6 +3043,10 @@ Last updated: 2026-03-28
   - recent-media extraction-mode tag prop assembly now lives in `apps/web/components/recent-media-issue-card-extraction-mode-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps extraction-mode tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this extraction-mode-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
+- Recent Media Remote Fetch Tag Props Builder Extraction V1:
+  - recent-media remote-fetch tag prop assembly now lives in `apps/web/components/recent-media-issue-card-remote-fetch-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
+  - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps remote-fetch tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this remote-fetch-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
