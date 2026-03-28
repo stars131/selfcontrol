@@ -29263,9 +29263,7 @@ for (const requiredRecentMediaIssueCardChildPropsUsage of [
   'import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";',
   'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
   'import type { BuildRecentMediaIssueCardActionsPropsInput } from "./recent-media-issue-card-actions-props.types";',
-  "export function buildRecentMediaIssueCardActionsProps({",
-  "}: BuildRecentMediaIssueCardActionsPropsInput): RecentMediaIssueCardActionsProps {",
-  "settingsHref: buildMediaIssueSettingsHref(workspaceId, issue)",
+  "export function buildRecentMediaIssueCardActionsProps(input: BuildRecentMediaIssueCardActionsPropsInput): RecentMediaIssueCardActionsProps { return { canWriteWorkspace: input.canWriteWorkspace, issue: input.issue, mediaIssueCopy: input.mediaIssueCopy, onRetryMediaProcessing: input.onRetryMediaProcessing, retryingMediaId: input.retryingMediaId, settingsHref: buildMediaIssueSettingsHref(input.workspaceId, input.issue) }; }",
 ]) {
   if (!recentMediaIssueCardActionsPropsSource.includes(requiredRecentMediaIssueCardChildPropsUsage)) {
     throw new Error(
@@ -32431,9 +32429,7 @@ for (const requiredDeadLetterRecoveryItemCardActionsPropsUsage of [
   'import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";',
   'import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types";',
   'import type { BuildDeadLetterRecoveryItemCardActionsPropsInput } from "./dead-letter-recovery-item-card-actions-props.types";',
-  "export function buildDeadLetterRecoveryItemCardActionsProps({",
-  "}: BuildDeadLetterRecoveryItemCardActionsPropsInput): DeadLetterRecoveryItemCardActionsProps {",
-  "settingsHref: buildMediaIssueSettingsHref(workspaceId, item)",
+  "export function buildDeadLetterRecoveryItemCardActionsProps(input: BuildDeadLetterRecoveryItemCardActionsPropsInput): DeadLetterRecoveryItemCardActionsProps { return { canWriteWorkspace: input.canWriteWorkspace, item: input.item, mediaIssueCopy: input.mediaIssueCopy, onRetryMediaProcessing: input.onRetryMediaProcessing, retryingMediaId: input.retryingMediaId, settingsHref: buildMediaIssueSettingsHref(input.workspaceId, input.item) }; }",
 ]) {
   if (!deadLetterRecoveryItemCardActionsPropsSource.includes(requiredDeadLetterRecoveryItemCardActionsPropsUsage)) {
     throw new Error(

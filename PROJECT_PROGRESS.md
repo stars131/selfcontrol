@@ -3428,6 +3428,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-preview-media-preview-props.ts` and `media-asset-card-metadata-details-props.ts` now use explicit `input` parameters while keeping their token-mapping and timing-derivation behavior unchanged
   - this keeps the remaining media-asset derived helper layer aligned with the broader builder-signature normalization work without changing preview or metadata behavior
   - the media-asset and record-panel structure guardrails now enforce this normalized derived-helper boundary so future helper edits stay easier to review and extend
+- Media Issue Action Builder Naming Cleanup V1:
+  - `apps/web/components/dead-letter-recovery-item-card-actions-props.ts` and `recent-media-issue-card-actions-props.ts` now use explicit `input` parameters while keeping their `settingsHref` derivation behavior unchanged
+  - this keeps the media-issue action builder layer aligned across dead-letter and recent-media cards without changing retry or settings behavior
+  - the record-panel structure guardrail now enforces this normalized computed-helper boundary so future action builder edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
