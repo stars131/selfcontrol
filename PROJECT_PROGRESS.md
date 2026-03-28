@@ -2999,6 +2999,10 @@ Last updated: 2026-03-28
   - dead-letter tags prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-tags-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-header.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-header.tsx` now keeps selection, identity, and tags projection fully separated so the header orchestration stays easier to review and evolve safely
   - the record-panel structure guardrail now enforces this tags-props-builder boundary so future dead-letter header changes do not regrow mixed child-prop projection logic
+- Dead-Letter Processing Status Tag Props Builder Extraction V1:
+  - dead-letter processing-status tag prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-processing-status-tag-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now keeps processing-status tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this processing-status-tag-props-builder boundary so future dead-letter tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

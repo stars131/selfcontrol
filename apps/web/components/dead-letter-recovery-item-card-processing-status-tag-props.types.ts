@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types"; export type BuildDeadLetterRecoveryItemCardProcessingStatusTagPropsInput = Pick<DeadLetterRecoveryItemCardTagsProps, "item" | "locale">;
