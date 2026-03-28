@@ -4,6 +4,7 @@ import { MediaAssetCardActions } from "./media-asset-card-actions";
 import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";
 import { MediaAssetCardError } from "./media-asset-card-error";
 import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";
+import { buildMediaAssetCardIntroProps } from "./media-asset-card-intro-props";
 import { MediaAssetCardIntro } from "./media-asset-card-intro";
 import { buildMediaAssetCardMetadataProps } from "./media-asset-card-metadata-props";
 import { MediaAssetCardMetadata } from "./media-asset-card-metadata";
@@ -29,7 +30,7 @@ export function MediaAssetCard({
 }: MediaAssetCardProps) {
   return (
     <article className="record-card">
-      <MediaAssetCardIntro asset={asset} />
+      <MediaAssetCardIntro {...buildMediaAssetCardIntroProps({ asset })} />
       <MediaAssetCardMetadata
         {...buildMediaAssetCardMetadataProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })}
       />

@@ -28,6 +28,15 @@ const previewContentLineCount = previewContentSource.split(/\r?\n/).length;
 const previewContentTypesPath = path.resolve(process.cwd(), "components/media-preview-content.types.ts");
 const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8");
 const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
+const introPropsPath = path.resolve(process.cwd(), "components/media-asset-card-intro-props.ts");
+const introPropsSource = fs.readFileSync(introPropsPath, "utf8");
+const introPropsLineCount = introPropsSource.split(/\r?\n/).length;
+const introPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-intro-props.types.ts",
+);
+const introPropsTypesSource = fs.readFileSync(introPropsTypesPath, "utf8");
+const introPropsTypesLineCount = introPropsTypesSource.split(/\r?\n/).length;
 const metadataPropsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-props.ts");
 const metadataPropsSource = fs.readFileSync(metadataPropsPath, "utf8");
 const metadataPropsLineCount = metadataPropsSource.split(/\r?\n/).length;
@@ -471,6 +480,10 @@ if (!cardSource.includes('import { buildMediaAssetCardPreviewProps } from "./med
   throw new Error("media-asset-card.tsx must import delegated media preview props builder");
 }
 
+if (!cardSource.includes('import { buildMediaAssetCardIntroProps } from "./media-asset-card-intro-props";')) {
+  throw new Error("media-asset-card.tsx must import delegated media intro props builder");
+}
+
 if (!cardSource.includes('import type { MediaAssetCardProps } from "./media-asset-card.types";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardProps");
 }
@@ -497,6 +510,10 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
 
 if (!cardSource.includes("buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })")) {
   throw new Error("media-asset-card.tsx must delegate media preview prop assembly");
+}
+
+if (!cardSource.includes("buildMediaAssetCardIntroProps({ asset })")) {
+  throw new Error("media-asset-card.tsx must delegate media intro prop assembly");
 }
 
 for (const forbiddenCardActionPropsToken of [
@@ -537,6 +554,46 @@ for (const forbiddenCardMetadataPropsToken of [
       `media-asset-card.tsx must keep media metadata prop assembly delegated: ${forbiddenCardMetadataPropsToken}`,
     );
   }
+}
+
+if (cardSource.includes("<MediaAssetCardIntro asset={asset} />")) {
+  throw new Error("media-asset-card.tsx must keep media intro prop assembly delegated");
+}
+
+for (const requiredIntroPropsUsage of [
+  'import type { MediaAssetCardIntroProps } from "./media-asset-card-intro.types";',
+  'import type { BuildMediaAssetCardIntroPropsInput } from "./media-asset-card-intro-props.types";',
+  "export function buildMediaAssetCardIntroProps({ asset }: BuildMediaAssetCardIntroPropsInput): MediaAssetCardIntroProps {",
+]) {
+  if (!introPropsSource.includes(requiredIntroPropsUsage)) {
+    throw new Error(`media-asset-card-intro-props.ts must own media intro prop assembly: ${requiredIntroPropsUsage}`);
+  }
+}
+
+for (const forbiddenIntroPropsToken of [
+  "<MediaAssetCardIntro",
+  "<MediaAssetCardMetadata",
+  "<MediaAssetCardActions",
+]) {
+  if (introPropsSource.includes(forbiddenIntroPropsToken)) {
+    throw new Error(`media-asset-card-intro-props.ts must keep render concerns delegated: ${forbiddenIntroPropsToken}`);
+  }
+}
+
+if (introPropsLineCount > 5) {
+  throw new Error(`media-asset-card-intro-props.ts exceeded 5 lines: ${introPropsLineCount}`);
+}
+
+for (const requiredIntroPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardIntroPropsInput = Pick<MediaAssetCardProps, "asset">;',
+]) {
+  if (!introPropsTypesSource.includes(requiredIntroPropsTypesUsage)) {
+    throw new Error(`media-asset-card-intro-props.types.ts must own media intro prop input typing: ${requiredIntroPropsTypesUsage}`);
+  }
+}
+
+if (introPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-intro-props.types.ts exceeded 2 lines: ${introPropsTypesLineCount}`);
 }
 
 for (const requiredMetadataPropsUsage of [
