@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Route Helper Extraction V1:
+  - `apps/api/app/api/routes/media_route_helpers.py` now owns the repeated dead-letter retry normalization, workspace media and record lookups, media content response construction, upload-media asset construction, and bulk retry execution helpers
+  - `apps/api/app/api/routes/media.py` now delegates those responsibilities instead of carrying all branches inline, which shrinks a high-churn enterprise-critical route file without changing endpoint behavior
+  - this reduces the blast radius of future media changes and makes dead-letter recovery, secure media fetch, and upload fallback logic easier to review and extend
 - Repository Documentation Guardrail Test Coverage V1:
   - `scripts/verify-repository-docs.py` now exposes a reusable `verify_repository_docs` function instead of keeping all verification logic embedded inside the CLI entrypoint
   - `apps/api/tests/test_repository_docs_verification.py` now covers the repository documentation guard against the main failure modes: missing files, invalid UTF-8 content, and replacement-character corruption
