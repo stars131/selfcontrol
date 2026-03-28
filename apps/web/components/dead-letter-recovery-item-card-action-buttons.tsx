@@ -6,18 +6,11 @@ import { buildDeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-
 import { DeadLetterRecoveryItemCardSettingsLink } from "./dead-letter-recovery-item-card-settings-link";
 import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types";
 
-export function DeadLetterRecoveryItemCardActionButtons({
-  item,
-  canWriteWorkspace,
-  mediaIssueCopy,
-  onRetryMediaProcessing,
-  retryingMediaId,
-  settingsHref,
-}: DeadLetterRecoveryItemCardActionButtonsProps) {
+export function DeadLetterRecoveryItemCardActionButtons(props: DeadLetterRecoveryItemCardActionButtonsProps) {
   return (
     <div className="action-row" style={{ marginTop: 10 }}>
-      <DeadLetterRecoveryItemCardRetryButton {...buildDeadLetterRecoveryItemCardRetryButtonProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
-      <DeadLetterRecoveryItemCardSettingsLink {...buildDeadLetterRecoveryItemCardSettingsLinkProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
+      <DeadLetterRecoveryItemCardRetryButton {...buildDeadLetterRecoveryItemCardRetryButtonProps(props)} />
+      <DeadLetterRecoveryItemCardSettingsLink {...buildDeadLetterRecoveryItemCardSettingsLinkProps(props)} />
     </div>
   );
 }
