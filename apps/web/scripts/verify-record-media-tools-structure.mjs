@@ -10,6 +10,10 @@ const recentMediaIssuesPanelPath = path.resolve(
   process.cwd(),
   "components/recent-media-issues-panel.tsx",
 );
+const recentMediaIssuesPanelListPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issues-panel-list.tsx",
+);
 const recentMediaIssueCardPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card.tsx",
@@ -33,6 +37,7 @@ const recentMediaIssueCardActionsTypesPath = path.resolve(
 const source = fs.readFileSync(recordMediaToolsPath, "utf8");
 const selectedContentSource = fs.readFileSync(recordMediaSelectedContentPath, "utf8");
 const recentMediaIssuesPanelSource = fs.readFileSync(recentMediaIssuesPanelPath, "utf8");
+const recentMediaIssuesPanelListSource = fs.readFileSync(recentMediaIssuesPanelListPath, "utf8");
 const recentMediaIssueCardSource = fs.readFileSync(recentMediaIssueCardPath, "utf8");
 const recentMediaIssueCardTagsSource = fs.readFileSync(recentMediaIssueCardTagsPath, "utf8");
 const recentMediaIssueCardTagsTypesSource = fs.readFileSync(
@@ -47,6 +52,7 @@ const recentMediaIssueCardActionsTypesSource = fs.readFileSync(
 const lineCount = source.split(/\r?\n/).length;
 const selectedContentLineCount = selectedContentSource.split(/\r?\n/).length;
 const recentMediaIssuesPanelLineCount = recentMediaIssuesPanelSource.split(/\r?\n/).length;
+const recentMediaIssuesPanelListLineCount = recentMediaIssuesPanelListSource.split(/\r?\n/).length;
 const recentMediaIssueCardLineCount = recentMediaIssueCardSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsLineCount = recentMediaIssueCardTagsSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsTypesLineCount =
@@ -148,29 +154,40 @@ if (selectedContentLineCount > maxSelectedContentLines) {
 }
 
 for (const requiredImport of [
-  'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
+  'import { RecentMediaIssuesPanelEmpty } from "./recent-media-issues-panel-empty";',
+  'import { RecentMediaIssuesPanelIntro } from "./recent-media-issues-panel-intro";',
+  'import { RecentMediaIssuesPanelList } from "./recent-media-issues-panel-list";',
+  'import { buildRecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list-props";',
   'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
 ]) {
   if (!recentMediaIssuesPanelSource.includes(requiredImport)) {
     throw new Error(
-      `recent-media-issues-panel.tsx must keep issue-card boundaries delegated: ${requiredImport}`,
+      `recent-media-issues-panel.tsx must keep panel-level media issue boundaries delegated: ${requiredImport}`,
     );
   }
 }
 
-for (const requiredUsage of ["<RecentMediaIssueCard", "mediaProcessingOverview.recent_issues.map((issue) => ("]) {
+for (const requiredUsage of [
+  "<RecentMediaIssuesPanelIntro",
+  "<RecentMediaIssuesPanelList {...buildRecentMediaIssuesPanelListProps(props)} />",
+  "<RecentMediaIssuesPanelEmpty",
+  "mediaProcessingOverview.recent_issues.length ?",
+]) {
   if (!recentMediaIssuesPanelSource.includes(requiredUsage)) {
     throw new Error(
-      `recent-media-issues-panel.tsx must compose delegated issue cards: ${requiredUsage}`,
+      `recent-media-issues-panel.tsx must compose delegated panel sections: ${requiredUsage}`,
     );
   }
 }
 
 for (const forbiddenToken of [
+  'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
   'import Link from "next/link";',
   'from "../lib/media-issue-display";',
   'from "../lib/record-panel-media";',
   "<article className=\"record-card\"",
+  "<RecentMediaIssueCard",
+  "mediaProcessingOverview.recent_issues.map((issue) => (",
   "getMediaIssueAction(",
   "getMediaIssueLabel(",
   "getProcessingStatusLabel(",
@@ -192,10 +209,65 @@ if (recentMediaIssuesPanelLineCount > maxRecentMediaIssuesPanelLines) {
   );
 }
 
-for (const requiredImport of [
+for (const requiredListImport of [
+  'import { buildRecentMediaIssueCardProps } from "./recent-media-issues-list-item-props";',
+  'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
+  'import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types";',
+]) {
+  if (!recentMediaIssuesPanelListSource.includes(requiredListImport)) {
+    throw new Error(
+      `recent-media-issues-panel-list.tsx must keep delegated issue-list boundaries: ${requiredListImport}`,
+    );
+  }
+}
+
+for (const requiredListUsage of [
+  "<RecentMediaIssueCard",
+  "mediaProcessingOverview.recent_issues.map((issue) =>",
+  "buildRecentMediaIssueCardProps({ ...props, issue })",
+]) {
+  if (!recentMediaIssuesPanelListSource.includes(requiredListUsage)) {
+    throw new Error(
+      `recent-media-issues-panel-list.tsx must compose delegated issue cards: ${requiredListUsage}`,
+    );
+  }
+}
+
+for (const forbiddenListToken of [
+  'import Link from "next/link";',
   'from "../lib/media-issue-display";',
   'from "../lib/record-panel-media";',
+  "getMediaIssueAction(",
+  "getMediaIssueLabel(",
+  "getProcessingStatusLabel(",
+  "getRetryStateLabel(",
+  "buildMediaIssueSettingsHref(",
+  "canRetryMediaIssue(",
+]) {
+  if (recentMediaIssuesPanelListSource.includes(forbiddenListToken)) {
+    throw new Error(
+      `recent-media-issues-panel-list.tsx must keep per-issue rendering delegated: ${forbiddenListToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssuesPanelListLines = 40;
+if (recentMediaIssuesPanelListLineCount > maxRecentMediaIssuesPanelListLines) {
+  throw new Error(
+    `recent-media-issues-panel-list.tsx exceeded ${maxRecentMediaIssuesPanelListLines} lines: ${recentMediaIssuesPanelListLineCount}`,
+  );
+}
+
+for (const requiredImport of [
   'import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";',
+  'import { buildRecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions-props";',
+  'import { buildRecentMediaIssueCardErrorProps } from "./recent-media-issue-card-error-props";',
+  'import { RecentMediaIssueCardError } from "./recent-media-issue-card-error";',
+  'import { buildRecentMediaIssueCardIntroProps } from "./recent-media-issue-card-intro-props";',
+  'import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";',
+  'import { RecentMediaIssueCardMetadata } from "./recent-media-issue-card-metadata";',
+  'import { buildRecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata-props";',
+  'import { buildRecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags-props";',
   'import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";',
   'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
 ]) {
@@ -207,10 +279,11 @@ for (const requiredImport of [
 }
 
 for (const requiredUsage of [
-  "const action = getMediaIssueAction(locale, issue);",
-  "const settingsHref = buildMediaIssueSettingsHref(workspaceId, issue);",
+  "<RecentMediaIssueCardIntro",
   "<RecentMediaIssueCardTags",
+  "<RecentMediaIssueCardMetadata",
   "<RecentMediaIssueCardActions",
+  "<RecentMediaIssueCardError",
   "<article className=\"record-card\">",
 ]) {
   if (!recentMediaIssueCardSource.includes(requiredUsage)) {
@@ -224,9 +297,13 @@ for (const forbiddenToken of [
   "mediaProcessingOverview.recent_issues.map(",
   "type RecentMediaIssuesPanelProps = {",
   'import Link from "next/link";',
-  "const issueLabel = getMediaIssueLabel(locale, issue);",
+  'from "../lib/media-issue-display";',
+  'from "../lib/record-panel-media";',
   "getProcessingStatusLabel(",
   "getRetryStateLabel(",
+  "getRemoteFetchStatusLabel(",
+  "getMediaIssueLabel(",
+  "buildMediaIssueSettingsHref(",
   "canRetryMediaIssue(issue)",
   'className="tag-row"',
   'className="action-row"',
@@ -238,7 +315,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxRecentMediaIssueCardLines = 110;
+const maxRecentMediaIssueCardLines = 80;
 if (recentMediaIssueCardLineCount > maxRecentMediaIssueCardLines) {
   throw new Error(
     `recent-media-issue-card.tsx exceeded ${maxRecentMediaIssueCardLines} lines: ${recentMediaIssueCardLineCount}`,
@@ -246,7 +323,22 @@ if (recentMediaIssueCardLineCount > maxRecentMediaIssueCardLines) {
 }
 
 for (const requiredRecentMediaIssueCardTagsImport of [
-  'from "../lib/media-issue-display";',
+  'import { buildRecentMediaIssueCardExtractionModeTagProps } from "./recent-media-issue-card-extraction-mode-tag-props";',
+  'import { RecentMediaIssueCardExtractionModeTag } from "./recent-media-issue-card-extraction-mode-tag";',
+  'import { buildRecentMediaIssueCardIssueLabelTagProps } from "./recent-media-issue-card-issue-label-tag-props";',
+  'import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";',
+  'import { buildRecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag-props";',
+  'import { RecentMediaIssueCardProcessingStatusTag } from "./recent-media-issue-card-processing-status-tag";',
+  'import { buildRecentMediaIssueCardProcessingSourceTagProps } from "./recent-media-issue-card-processing-source-tag-props";',
+  'import { RecentMediaIssueCardProcessingSourceTag } from "./recent-media-issue-card-processing-source-tag";',
+  'import { buildRecentMediaIssueCardRemoteFetchTagProps } from "./recent-media-issue-card-remote-fetch-tag-props";',
+  'import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";',
+  'import { buildRecentMediaIssueCardRetryCountTagProps } from "./recent-media-issue-card-retry-count-tag-props";',
+  'import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";',
+  'import { buildRecentMediaIssueCardRetryStateTagProps } from "./recent-media-issue-card-retry-state-tag-props";',
+  'import { RecentMediaIssueCardRetryStateTag } from "./recent-media-issue-card-retry-state-tag";',
+  'import { buildRecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag-props";',
+  'import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsImport)) {
@@ -257,12 +349,15 @@ for (const requiredRecentMediaIssueCardTagsImport of [
 }
 
 for (const requiredRecentMediaIssueCardTagsUsage of [
-  "export function RecentMediaIssueCardTags({",
-  "}: RecentMediaIssueCardTagsProps) {",
-  "const issueLabel = getMediaIssueLabel(locale, issue);",
-  "getProcessingStatusLabel(locale, issue.processing_status)",
-  "getRemoteFetchStatusLabel(locale, issue.remote_fetch_status)",
-  "getRetryStateLabel(locale, issue.processing_retry_state)",
+  "export function RecentMediaIssueCardTags(props: RecentMediaIssueCardTagsProps) {",
+  "<RecentMediaIssueCardProcessingStatusTag",
+  "<RecentMediaIssueCardStorageProviderTag",
+  "<RecentMediaIssueCardProcessingSourceTag",
+  "<RecentMediaIssueCardRemoteFetchTag",
+  "<RecentMediaIssueCardExtractionModeTag",
+  "<RecentMediaIssueCardRetryStateTag",
+  "<RecentMediaIssueCardIssueLabelTag",
+  "<RecentMediaIssueCardRetryCountTag",
   'className="tag-row"',
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
@@ -273,8 +368,13 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
 }
 
 for (const forbiddenRecentMediaIssueCardTagsToken of [
+  'from "../lib/media-issue-display";',
   'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
   "type RecentMediaIssueCardTagsProps = Pick<",
+  "getProcessingStatusLabel(",
+  "getRemoteFetchStatusLabel(",
+  "getRetryStateLabel(",
+  "getMediaIssueLabel(",
 ]) {
   if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
     throw new Error(
@@ -283,9 +383,9 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   }
 }
 
-if (recentMediaIssueCardTagsLineCount > 40) {
+if (recentMediaIssueCardTagsLineCount > 80) {
   throw new Error(
-    `recent-media-issue-card-tags.tsx exceeded 40 lines: ${recentMediaIssueCardTagsLineCount}`,
+    `recent-media-issue-card-tags.tsx exceeded 80 lines: ${recentMediaIssueCardTagsLineCount}`,
   );
 }
 
@@ -306,8 +406,8 @@ if (recentMediaIssueCardTagsTypesLineCount > 2) {
 }
 
 for (const requiredRecentMediaIssueCardActionsImport of [
-  'import Link from "next/link";',
-  'from "../lib/record-panel-media";',
+  'import { buildRecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons-props";',
+  'import { RecentMediaIssueCardActionButtons } from "./recent-media-issue-card-action-buttons";',
   'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
 ]) {
   if (!recentMediaIssueCardActionsSource.includes(requiredRecentMediaIssueCardActionsImport)) {
@@ -318,12 +418,10 @@ for (const requiredRecentMediaIssueCardActionsImport of [
 }
 
 for (const requiredRecentMediaIssueCardActionsUsage of [
-  "export function RecentMediaIssueCardActions({",
-  "}: RecentMediaIssueCardActionsProps) {",
-  "const retrying = retryingMediaId === issue.media_id;",
-  "canRetryMediaIssue(issue)",
-  'href={settingsHref}',
-  "onClick={() => void onRetryMediaProcessing(issue.media_id)}",
+  "export function RecentMediaIssueCardActions(props: RecentMediaIssueCardActionsProps) {",
+  "if (!props.canWriteWorkspace && !props.settingsHref) {",
+  "return null;",
+  "<RecentMediaIssueCardActionButtons {...buildRecentMediaIssueCardActionButtonsProps(props)} />",
 ]) {
   if (!recentMediaIssueCardActionsSource.includes(requiredRecentMediaIssueCardActionsUsage)) {
     throw new Error(
@@ -333,8 +431,14 @@ for (const requiredRecentMediaIssueCardActionsUsage of [
 }
 
 for (const forbiddenRecentMediaIssueCardActionsToken of [
+  'import Link from "next/link";',
+  'from "../lib/record-panel-media";',
   'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
   "type RecentMediaIssueCardActionsProps = Pick<",
+  "const retrying = retryingMediaId === issue.media_id;",
+  "canRetryMediaIssue(issue)",
+  'href={settingsHref}',
+  "onClick={() => void onRetryMediaProcessing(issue.media_id)}",
 ]) {
   if (recentMediaIssueCardActionsSource.includes(forbiddenRecentMediaIssueCardActionsToken)) {
     throw new Error(
@@ -343,9 +447,9 @@ for (const forbiddenRecentMediaIssueCardActionsToken of [
   }
 }
 
-if (recentMediaIssueCardActionsLineCount > 50) {
+if (recentMediaIssueCardActionsLineCount > 30) {
   throw new Error(
-    `recent-media-issue-card-actions.tsx exceeded 50 lines: ${recentMediaIssueCardActionsLineCount}`,
+    `recent-media-issue-card-actions.tsx exceeded 30 lines: ${recentMediaIssueCardActionsLineCount}`,
   );
 }
 

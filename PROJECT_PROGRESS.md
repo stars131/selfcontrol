@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Record Media Tools Guardrail Realignment V1:
+  - `apps/web/scripts/verify-record-media-tools-structure.mjs` now matches the current panel/list/card layering for recent media issues instead of enforcing an outdated direct-card render path
+  - `apps/web/package.json` now includes `verify:record-media-tools-structure` inside `verify:ui-guardrails`, so this guardrail is exercised by the normal full verification pipeline again
+  - this closes a stale verification gap and keeps media-tools structure drift visible during routine enterprise-grade validation
 - Cross-Panel Hook Naming Cleanup V1:
   - `apps/web/components/use-chat-panel-actions.ts`, `use-map-panel-amap.ts`, and `use-record-panel-controller.ts` now use explicit `input` parameters while keeping chat action wiring, AMap orchestration, and record-panel controller composition unchanged
   - this keeps cross-panel high-frequency hook boundaries aligned with the broader helper-signature normalization work without changing chat, map, or record interaction behavior
