@@ -12,14 +12,14 @@ import { buildRecentMediaIssueCardTagsProps } from "./recent-media-issue-card-ta
 import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";
 import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
 
-export function RecentMediaIssueCard({ issue, locale, canWriteWorkspace, workspaceId, mediaIssueCopy, retryingMediaId, formatHistoryTimestampLabel, onRetryMediaProcessing }: RecentMediaIssueCardProps) {
+export function RecentMediaIssueCard(props: RecentMediaIssueCardProps) {
   return (
     <article className="record-card">
-      <RecentMediaIssueCardIntro {...buildRecentMediaIssueCardIntroProps({ issue })} />
-      <RecentMediaIssueCardTags {...buildRecentMediaIssueCardTagsProps({ issue, locale, mediaIssueCopy })} />
-      <RecentMediaIssueCardMetadata {...buildRecentMediaIssueCardMetadataProps({ formatHistoryTimestampLabel, issue, locale, mediaIssueCopy })} />
-      <RecentMediaIssueCardActions {...buildRecentMediaIssueCardActionsProps({ canWriteWorkspace, issue, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, workspaceId })} />
-      <RecentMediaIssueCardError {...buildRecentMediaIssueCardErrorProps({ issue })} />
+      <RecentMediaIssueCardIntro {...buildRecentMediaIssueCardIntroProps({ issue: props.issue })} />
+      <RecentMediaIssueCardTags {...buildRecentMediaIssueCardTagsProps(props)} />
+      <RecentMediaIssueCardMetadata {...buildRecentMediaIssueCardMetadataProps(props)} />
+      <RecentMediaIssueCardActions {...buildRecentMediaIssueCardActionsProps(props)} />
+      <RecentMediaIssueCardError {...buildRecentMediaIssueCardErrorProps({ issue: props.issue })} />
     </article>
   );
 }

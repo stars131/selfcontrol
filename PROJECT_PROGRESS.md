@@ -3163,6 +3163,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card.tsx` now forwards its full `MediaAssetCardProps` contract directly into the metadata, preview, and actions props builders while only narrowing `asset` for the tiny intro, extracted-text, and error builders
   - the top-level media card now stays focused on card composition instead of repeating broad child-prop projection across multiple sections
   - the media-asset-card and record-panel structure guardrails now enforce direct card-level props reuse so future card edits do not regrow duplicated builder input assembly
+- Recent Media Issue Card Props Reuse Simplification V1:
+  - `apps/web/components/recent-media-issue-card.tsx` now forwards its full `RecentMediaIssueCardProps` contract directly into the tags, metadata, and actions props builders while only narrowing `issue` for the tiny intro and error builders
+  - the recent-media issue card now stays focused on section composition instead of repeating broad child-prop projection across multiple sections
+  - the record-panel structure guardrail now enforces direct recent-media card props reuse so future card edits do not regrow duplicated builder input assembly
 
 ## Next
 - Continue the next product slice
