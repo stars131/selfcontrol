@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Record CRUD API Coverage V1:
+  - `apps/api/app/api/routes/record_route_helpers.py` now additionally owns generic record field mutation and record-delete media cleanup execution so the records route carries less low-level write-side branching inline
+  - `apps/api/tests/test_records_api.py` now covers record create/list/detail/update plus delete cleanup for mixed local and remote media attachments
+  - this locks down the highest-frequency record CRUD contract beyond the existing location-review and permission-focused coverage
 - Search And Audit Log API Coverage V1:
   - `apps/api/app/api/routes/audit_log_route_helpers.py` now owns audit-log item serialization so the audit route no longer carries its response-shaping details inline
   - `apps/api/tests/test_search_audit_api.py` now covers search summary mode switching between hybrid and keyword retrieval plus audit-log limit and action-code filtering behavior

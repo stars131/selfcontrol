@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from app.models.media import MediaAsset
 from app.models.record import Record
+from app.services.media_storage import media_uses_local_storage, remove_storage_file
 
 
 def read_record_location(record: Record) -> dict[str, object]:
@@ -71,3 +75,29 @@ def get_workspace_record_or_404(db: Session, *, workspace_id: str, record_id: st
     if not record or record.workspace_id != workspace_id:
         raise HTTPException(status_code=404, detail="Record not found")
     return record
+
+
+def apply_record_updates(record: Record, changes: dict) -> None:
+    for field, value in changes.items():
+        setattr(record, field, value)
+
+
+def remove_record_media_assets(
+    db: Session,
+    media_assets: list[MediaAsset],
+    *,
+    delete_remote_media_fn: Callable[[Session, MediaAsset], None],
+) -> int:
+    removed_media_count = 0
+    for media in media_assets:
+        if media_uses_local_storage(media):
+            if remove_storage_file(media):
+                removed_media_count += 1
+            continue
+
+        try:
+            delete_remote_media_fn(db, media)
+            removed_media_count += 1
+        except Exception:  # noqa: BLE001
+            continue
+    return removed_media_count

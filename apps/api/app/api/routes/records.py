@@ -6,8 +6,10 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.api.routes.record_route_helpers import (
+    apply_record_updates,
     filter_records_by_location_fields,
     get_workspace_record_or_404,
+    remove_record_media_assets,
 )
 from app.db.session import get_db
 from app.models.record import Record
@@ -17,7 +19,6 @@ from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.location_review import prepare_record_extra_data
 from app.services.media_remote_storage import delete_remote_media_via_provider
-from app.services.media_storage import media_uses_local_storage, remove_storage_file
 
 
 router = APIRouter()
@@ -141,8 +142,7 @@ def update_record(
             actor_user_id=current_user.id,
         )
 
-    for field, value in payload_data.items():
-        setattr(record, field, value)
+    apply_record_updates(record, payload_data)
 
     db.add(record)
     db.commit()
@@ -180,17 +180,11 @@ def delete_record(
     media_assets = list(record.media_assets)
     db.delete(record)
     db.commit()
-    removed_media_count = 0
-    for media in media_assets:
-        if media_uses_local_storage(media):
-            if remove_storage_file(media):
-                removed_media_count += 1
-        else:
-            try:
-                delete_remote_media_via_provider(db, media)
-                removed_media_count += 1
-            except Exception:  # noqa: BLE001
-                continue
+    removed_media_count = remove_record_media_assets(
+        db,
+        media_assets,
+        delete_remote_media_fn=delete_remote_media_via_provider,
+    )
     log_audit_event(
         db,
         workspace_id=workspace_id,
