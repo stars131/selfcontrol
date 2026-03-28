@@ -3268,6 +3268,10 @@ Last updated: 2026-03-28
   - `apps/web/components/use-workspace-entry-controller.ts` now forwards one flattened input object into `createWorkspaceEntryControllerActions` instead of wrapping controller state under `{ router, state }`
   - `apps/web/components/workspace-entry-controller-actions.types.ts` and `apps/web/components/workspace-entry-controller-actions.ts` now share one flattened controller-actions input contract so the entry controller action assembly stays easier to evolve without nested wrapper churn
   - the workspace-entry and record-panel structure guardrails now enforce this flattened controller-actions boundary so future entry controller action composition does not regrow double-wrapped input assembly
+- Workspace Export Jobs Actions Input Flattening V1:
+  - `apps/web/components/use-workspace-export-jobs-controller.ts` now forwards one flattened input object into `createWorkspaceExportJobsActions` instead of wrapping controller state under `{ ..., state }`
+  - `apps/web/components/workspace-export-jobs-actions.types.ts` and `apps/web/components/workspace-export-jobs-actions.ts` now share one flattened export-jobs action input contract so the export jobs action factory stays easier to evolve without nested wrapper churn
+  - the workspace-export-jobs and record-panel structure guardrails now enforce this flattened export-jobs action boundary so future transfer job action edits do not regrow double-wrapped action assembly
 
 ## Next
 - Continue the next product slice

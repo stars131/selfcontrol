@@ -23583,7 +23583,7 @@ for (const requiredWorkspaceExportJobsActionsTypesUsage of [
   'import type { WorkspaceTransferJob } from "../lib/types";',
   'import type { UseWorkspaceExportJobsControllerProps } from "./use-workspace-export-jobs-controller.types";',
   "export type WorkspaceExportJobsState = {",
-  "export type CreateWorkspaceExportJobsActionsInput = UseWorkspaceExportJobsControllerProps & { state: WorkspaceExportJobsState };",
+  "export type CreateWorkspaceExportJobsActionsInput = UseWorkspaceExportJobsControllerProps & WorkspaceExportJobsState;",
 ]) {
   if (!workspaceExportJobsActionsTypesSource.includes(requiredWorkspaceExportJobsActionsTypesUsage)) {
     throw new Error(

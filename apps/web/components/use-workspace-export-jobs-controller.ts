@@ -16,13 +16,13 @@ export function useWorkspaceExportJobsController({
 }: UseWorkspaceExportJobsControllerProps) {
   const state = useWorkspaceExportJobsState();
   const { loadJobs, handleCreateJob, handleDownload } = createWorkspaceExportJobsActions({
+    ...state,
     token,
     workspaceId,
     loadFailedMessage,
     createFailedMessage,
     downloadFailedMessage,
     queuedMessage,
-    state,
   });
 
   useEffect(() => {

@@ -19,10 +19,12 @@ export function createWorkspaceExportJobsActions({
   createFailedMessage,
   downloadFailedMessage,
   queuedMessage,
-  state,
+  setJobs,
+  setLoading,
+  setActionLoading,
+  setError,
+  setMessage,
 }: CreateWorkspaceExportJobsActionsInput) {
-  const { setJobs, setLoading, setActionLoading, setError, setMessage } = state;
-
   const loadJobs = async () => {
     setLoading(true);
     setError("");
