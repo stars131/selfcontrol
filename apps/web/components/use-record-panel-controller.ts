@@ -21,5 +21,5 @@ export function useRecordPanelController(props: ControllerProps) {
   const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(
     buildRecordPanelControllerHandlerGroupsInput({ ...props, ...state, ...viewData }),
   );
-  return buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData });
+  return buildRecordPanelControllerResult({ ...state, ...viewData, mediaHandlers, recordHandlers });
 }

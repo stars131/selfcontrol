@@ -11287,7 +11287,7 @@ for (const requiredControllerUsage of [
   "buildRecordPanelControllerHandlerGroupsInput({ ...props, ...state, ...viewData })",
   "createRecordPanelControllerHandlerGroups(",
   "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(",
-  "buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData })",
+  "buildRecordPanelControllerResult({ ...state, ...viewData, mediaHandlers, recordHandlers })",
 ]) {
   if (!controllerSource.includes(requiredControllerUsage)) {
     throw new Error(`use-record-panel-controller.ts must delegate controller orchestration: ${requiredControllerUsage}`);
@@ -12980,9 +12980,10 @@ for (const requiredControllerResultImport of [
 
 for (const requiredControllerResultUsage of [
   "export function buildRecordPanelControllerResult({",
+  "...input",
   "}: BuildRecordPanelControllerResultInput) {",
-  "buildRecordPanelControllerViewDataResult(viewData)",
-  "buildRecordPanelControllerStateResult(state)",
+  "buildRecordPanelControllerViewDataResult(input)",
+  "buildRecordPanelControllerStateResult(input)",
   "...recordHandlers",
   "...mediaHandlers",
 ]) {
@@ -13006,7 +13007,7 @@ for (const forbiddenControllerResultToken of [
   "type ControllerViewData = ReturnType<",
   "type ControllerHandlers = ReturnType<",
   "locale: viewData.locale,",
-  "form: state.form,",
+  "form: input.form,",
   "detailCopy: viewData.detailCopy,",
 ]) {
   if (controllerResultSource.includes(forbiddenControllerResultToken)) {
@@ -13036,7 +13037,7 @@ for (const requiredControllerResultTypesImport of [
 }
 
 for (const requiredControllerResultTypesUsage of [
-  'export type BuildRecordPanelControllerResultInput = { mediaHandlers: BuildRecordPanelControllerHandlerGroupsResultInput["mediaHandlers"]; recordHandlers: BuildRecordPanelControllerHandlerGroupsResultInput["recordHandlers"]; state: BuildRecordPanelControllerStateResultInput; viewData: BuildRecordPanelControllerViewDataResultInput };',
+  'export type BuildRecordPanelControllerResultInput = { mediaHandlers: BuildRecordPanelControllerHandlerGroupsResultInput["mediaHandlers"]; recordHandlers: BuildRecordPanelControllerHandlerGroupsResultInput["recordHandlers"] } & BuildRecordPanelControllerStateResultInput & BuildRecordPanelControllerViewDataResultInput;',
 ]) {
   if (!controllerResultTypesSource.includes(requiredControllerResultTypesUsage)) {
     throw new Error(

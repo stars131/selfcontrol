@@ -7,12 +7,11 @@ import { buildRecordPanelControllerViewDataResult } from "./record-panel-control
 export function buildRecordPanelControllerResult({
   mediaHandlers,
   recordHandlers,
-  state,
-  viewData,
+  ...input
 }: BuildRecordPanelControllerResultInput) {
   return {
-    ...buildRecordPanelControllerViewDataResult(viewData),
-    ...buildRecordPanelControllerStateResult(state),
+    ...buildRecordPanelControllerViewDataResult(input),
+    ...buildRecordPanelControllerStateResult(input),
     ...recordHandlers,
     ...mediaHandlers,
   };
