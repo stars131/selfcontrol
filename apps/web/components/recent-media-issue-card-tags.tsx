@@ -8,6 +8,7 @@ import { RecentMediaIssueCardProcessingSourceTag } from "./recent-media-issue-ca
 import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";
 import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";
 import { RecentMediaIssueCardRetryStateTag } from "./recent-media-issue-card-retry-state-tag";
+import { buildRecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag-props";
 import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";
 import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";
 
@@ -19,7 +20,7 @@ export function RecentMediaIssueCardTags({
   return (
     <div className="tag-row">
       <RecentMediaIssueCardProcessingStatusTag {...buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale })} />
-      <RecentMediaIssueCardStorageProviderTag issue={issue} locale={locale} />
+      <RecentMediaIssueCardStorageProviderTag {...buildRecentMediaIssueCardStorageProviderTagProps({ issue, locale })} />
       <RecentMediaIssueCardProcessingSourceTag issue={issue} />
       <RecentMediaIssueCardRemoteFetchTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />
       <RecentMediaIssueCardExtractionModeTag issue={issue} />
