@@ -157,6 +157,15 @@ const extractionModeTagTypesSource = fs.readFileSync(extractionModeTagTypesPath,
 const extractionModeTagTypesLineCount = extractionModeTagTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
+const deleteButtonPath = path.resolve(process.cwd(), "components/media-asset-card-delete-button.tsx");
+const deleteButtonSource = fs.readFileSync(deleteButtonPath, "utf8");
+const deleteButtonLineCount = deleteButtonSource.split(/\r?\n/).length;
+const deleteButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-delete-button.types.ts",
+);
+const deleteButtonTypesSource = fs.readFileSync(deleteButtonTypesPath, "utf8");
+const deleteButtonTypesLineCount = deleteButtonTypesSource.split(/\r?\n/).length;
 const downloadButtonPath = path.resolve(process.cwd(), "components/media-asset-card-download-button.tsx");
 const downloadButtonSource = fs.readFileSync(downloadButtonPath, "utf8");
 const downloadButtonLineCount = downloadButtonSource.split(/\r?\n/).length;
@@ -989,9 +998,11 @@ if (extractionModeTagTypesLineCount > 2) {
 }
 
 for (const requiredActionsUsage of [
+  'import { MediaAssetCardDeleteButton } from "./media-asset-card-delete-button";',
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
+  "<MediaAssetCardDeleteButton",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
   "<MediaAssetCardRetryButton",
@@ -1011,12 +1022,61 @@ for (const forbiddenActionsToken of [
   'asset.processing_status !== "completed"',
   "onClick={() => void onRetryMediaProcessing(asset.id)}",
   "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
+  "onClick={() => void onDeleteMediaAsset(asset.id)}",
+  "deletingMediaId === asset.id || !canWriteWorkspace",
+  "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
 ]) {
   if (actionsSource.includes(forbiddenActionsToken)) {
     throw new Error(
       `media-asset-card-actions.tsx must keep download button rendering delegated: ${forbiddenActionsToken}`,
     );
   }
+}
+
+for (const requiredDeleteButtonUsage of [
+  'import type { MediaAssetCardDeleteButtonProps } from "./media-asset-card-delete-button.types";',
+  "}: MediaAssetCardDeleteButtonProps) {",
+  "deletingMediaId === asset.id || !canWriteWorkspace",
+  "onClick={() => void onDeleteMediaAsset(asset.id)}",
+  "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
+]) {
+  if (!deleteButtonSource.includes(requiredDeleteButtonUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button.tsx must own delete button rendering: ${requiredDeleteButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeleteButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRefreshMedia(asset.id)",
+  "onRetryMediaProcessing(asset.id)",
+]) {
+  if (deleteButtonSource.includes(forbiddenDeleteButtonToken)) {
+    throw new Error(
+      `media-asset-card-delete-button.tsx must keep non-delete actions delegated: ${forbiddenDeleteButtonToken}`,
+    );
+  }
+}
+
+if (deleteButtonLineCount > 4) {
+  throw new Error(`media-asset-card-delete-button.tsx exceeded 4 lines: ${deleteButtonLineCount}`);
+}
+
+for (const requiredDeleteButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardDeleteButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset">;',
+]) {
+  if (!deleteButtonTypesSource.includes(requiredDeleteButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button.types.ts must own delete button prop typing: ${requiredDeleteButtonTypesUsage}`,
+    );
+  }
+}
+
+if (deleteButtonTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-delete-button.types.ts exceeded 2 lines: ${deleteButtonTypesLineCount}`,
+  );
 }
 
 for (const requiredDownloadButtonUsage of [

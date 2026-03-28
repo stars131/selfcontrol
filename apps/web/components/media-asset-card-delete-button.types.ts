@@ -1,0 +1,1 @@
+import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardDeleteButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset">;

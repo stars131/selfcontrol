@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";
+import { MediaAssetCardDeleteButton } from "./media-asset-card-delete-button";
 import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";
 import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";
 import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
@@ -38,14 +39,13 @@ export function MediaAssetCardActions({
         onRetryMediaProcessing={onRetryMediaProcessing}
         retryingMediaId={retryingMediaId}
       />
-      <button
-        className="button secondary"
-        type="button"
-        disabled={deletingMediaId === asset.id || !canWriteWorkspace}
-        onClick={() => void onDeleteMediaAsset(asset.id)}
-      >
-        {deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}
-      </button>
+      <MediaAssetCardDeleteButton
+        asset={asset}
+        canWriteWorkspace={canWriteWorkspace}
+        deletingMediaId={deletingMediaId}
+        mediaIssueCopy={mediaIssueCopy}
+        onDeleteMediaAsset={onDeleteMediaAsset}
+      />
     </div>
   );
 }

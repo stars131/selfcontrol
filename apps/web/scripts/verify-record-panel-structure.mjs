@@ -1146,6 +1146,14 @@ const mediaAssetCardActionsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-actions.types.ts",
 );
+const mediaAssetCardDeleteButtonPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-delete-button.tsx",
+);
+const mediaAssetCardDeleteButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-delete-button.types.ts",
+);
 const mediaAssetCardDownloadButtonPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-download-button.tsx",
@@ -3579,6 +3587,14 @@ const mediaAssetCardErrorTypesSource = fs.readFileSync(mediaAssetCardErrorTypesP
 const mediaAssetCardActionsSource = fs.readFileSync(mediaAssetCardActionsPath, "utf8");
 const mediaAssetCardActionsTypesSource = fs.readFileSync(
   mediaAssetCardActionsTypesPath,
+  "utf8",
+);
+const mediaAssetCardDeleteButtonSource = fs.readFileSync(
+  mediaAssetCardDeleteButtonPath,
+  "utf8",
+);
+const mediaAssetCardDeleteButtonTypesSource = fs.readFileSync(
+  mediaAssetCardDeleteButtonTypesPath,
   "utf8",
 );
 const mediaAssetCardDownloadButtonSource = fs.readFileSync(
@@ -6093,6 +6109,10 @@ const mediaAssetCardErrorLines = mediaAssetCardErrorSource.split(/\r?\n/).length
 const mediaAssetCardErrorTypesLines = mediaAssetCardErrorTypesSource.split(/\r?\n/).length;
 const mediaAssetCardActionsTypesLines =
   mediaAssetCardActionsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardDeleteButtonLines =
+  mediaAssetCardDeleteButtonSource.split(/\r?\n/).length;
+const mediaAssetCardDeleteButtonTypesLines =
+  mediaAssetCardDeleteButtonTypesSource.split(/\r?\n/).length;
 const mediaAssetCardDownloadButtonLines =
   mediaAssetCardDownloadButtonSource.split(/\r?\n/).length;
 const mediaAssetCardDownloadButtonTypesLines =
@@ -17361,11 +17381,13 @@ if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
 }
 
 for (const requiredMediaAssetCardActionsUsage of [
+  'import { MediaAssetCardDeleteButton } from "./media-asset-card-delete-button";',
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   "}: MediaAssetCardActionsProps) {",
+  "<MediaAssetCardDeleteButton",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
   "<MediaAssetCardRetryButton",
@@ -17388,6 +17410,9 @@ for (const forbiddenMediaAssetCardActionsToken of [
   'asset.processing_status !== "completed"',
   "onClick={() => void onRetryMediaProcessing(asset.id)}",
   "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
+  "onClick={() => void onDeleteMediaAsset(asset.id)}",
+  "deletingMediaId === asset.id || !canWriteWorkspace",
+  "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
 ]) {
   if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
     throw new Error(
@@ -17410,6 +17435,56 @@ const maxMediaAssetCardActionsTypesLines = 2;
 if (mediaAssetCardActionsTypesLines > maxMediaAssetCardActionsTypesLines) {
   throw new Error(
     `media-asset-card-actions.types.ts exceeded ${maxMediaAssetCardActionsTypesLines} lines: ${mediaAssetCardActionsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDeleteButtonUsage of [
+  'import type { MediaAssetCardDeleteButtonProps } from "./media-asset-card-delete-button.types";',
+  "}: MediaAssetCardDeleteButtonProps) {",
+  "deletingMediaId === asset.id || !canWriteWorkspace",
+  "onClick={() => void onDeleteMediaAsset(asset.id)}",
+  "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
+]) {
+  if (!mediaAssetCardDeleteButtonSource.includes(requiredMediaAssetCardDeleteButtonUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button.tsx must own media-asset delete button rendering: ${requiredMediaAssetCardDeleteButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardDeleteButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRefreshMedia(asset.id)",
+  "onRetryMediaProcessing(asset.id)",
+]) {
+  if (mediaAssetCardDeleteButtonSource.includes(forbiddenMediaAssetCardDeleteButtonToken)) {
+    throw new Error(
+      `media-asset-card-delete-button.tsx must keep non-delete actions delegated: ${forbiddenMediaAssetCardDeleteButtonToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDeleteButtonLines = 4;
+if (mediaAssetCardDeleteButtonLines > maxMediaAssetCardDeleteButtonLines) {
+  throw new Error(
+    `media-asset-card-delete-button.tsx exceeded ${maxMediaAssetCardDeleteButtonLines} lines: ${mediaAssetCardDeleteButtonLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDeleteButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardDeleteButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset">;',
+]) {
+  if (!mediaAssetCardDeleteButtonTypesSource.includes(requiredMediaAssetCardDeleteButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button.types.ts must own media-asset delete button prop typing: ${requiredMediaAssetCardDeleteButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDeleteButtonTypesLines = 2;
+if (mediaAssetCardDeleteButtonTypesLines > maxMediaAssetCardDeleteButtonTypesLines) {
+  throw new Error(
+    `media-asset-card-delete-button.types.ts exceeded ${maxMediaAssetCardDeleteButtonTypesLines} lines: ${mediaAssetCardDeleteButtonTypesLines}`,
   );
 }
 
