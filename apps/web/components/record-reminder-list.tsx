@@ -10,7 +10,7 @@ export function RecordReminderList({ ...props }: RecordReminderListProps) {
         props.reminders.map((reminder) => (
           <RecordReminderItemCard
             key={reminder.id}
-            {...buildRecordReminderItemCardProps({ props, reminder })}
+            {...buildRecordReminderItemCardProps({ ...props, reminder })}
           />
         ))
       ) : (

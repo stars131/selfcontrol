@@ -3280,6 +3280,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-panel-list.tsx` now forwards one flattened input object into `buildDeadLetterRecoveryItemCardProps` instead of wrapping list props under `{ item, props }`
   - `apps/web/components/dead-letter-recovery-list-item-props.types.ts` and `apps/web/components/dead-letter-recovery-list-item-props.ts` now share one flattened dead-letter item-card input contract so the item prop builder stays easier to evolve without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened dead-letter item-card boundary so future dead-letter list edits do not regrow double-wrapped prop assembly
+- Record Reminder List Item Props Input Flattening V1:
+  - `apps/web/components/record-reminder-list.tsx` now forwards one flattened input object into `buildRecordReminderItemCardProps` instead of wrapping list props under `{ props, reminder }`
+  - `apps/web/components/record-reminder-list-item-props.types.ts` and `apps/web/components/record-reminder-list-item-props.ts` now share one flattened reminder item-card input contract so the item prop builder stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened reminder item-card boundary so future reminder list edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice

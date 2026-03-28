@@ -35215,7 +35215,7 @@ for (const requiredRecordReminderListUsage of [
   'import type { RecordReminderListProps } from "./record-reminder-list.types";',
   "export function RecordReminderList({ ...props }: RecordReminderListProps) {",
   "props.reminders.length ? (",
-  "{...buildRecordReminderItemCardProps({ props, reminder })}",
+  "{...buildRecordReminderItemCardProps({ ...props, reminder })}",
   '<div className="notice">{props.noRemindersLabel}</div>',
 ]) {
   if (!recordReminderListSource.includes(requiredRecordReminderListUsage)) {
@@ -35251,9 +35251,9 @@ for (const requiredRecordReminderListItemPropsUsage of [
   'import type { BuildRecordReminderItemCardPropsInput } from "./record-reminder-list-item-props.types";',
   "export function buildRecordReminderItemCardProps({",
   "}: BuildRecordReminderItemCardPropsInput): RecordReminderItemCardProps {",
-  "canWriteWorkspace: props.canWriteWorkspace,",
-  "onToggleReminderEnabled: props.onToggleReminderEnabled,",
-  "untitledReminderLabel: props.untitledReminderLabel,",
+  "canWriteWorkspace,",
+  "onToggleReminderEnabled,",
+  "untitledReminderLabel,",
 ]) {
   if (!recordReminderListItemPropsSource.includes(requiredRecordReminderListItemPropsUsage)) {
     throw new Error(
@@ -35282,7 +35282,7 @@ if (recordReminderListItemPropsLines > maxRecordReminderListItemPropsLines) {
 }
 
 for (const requiredRecordReminderListItemPropsTypesUsage of [
-  'import type { ReminderItem } from "../lib/types"; import type { RecordReminderListProps } from "./record-reminder-list.types"; export type BuildRecordReminderItemCardPropsInput = { props: RecordReminderListProps; reminder: ReminderItem };',
+  'import type { ReminderItem } from "../lib/types"; import type { RecordReminderListProps } from "./record-reminder-list.types"; export type BuildRecordReminderItemCardPropsInput = RecordReminderListProps & { reminder: ReminderItem };',
 ]) {
   if (!recordReminderListItemPropsTypesSource.includes(requiredRecordReminderListItemPropsTypesUsage)) {
     throw new Error(
