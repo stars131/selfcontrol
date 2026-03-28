@@ -1,0 +1,1 @@
+import type { MediaAssetCardRemoteFetchTagProps } from "./media-asset-card-remote-fetch-tag.types"; export type BuildMediaAssetCardRemoteFetchTagPropsInput = Pick<MediaAssetCardRemoteFetchTagProps, "locale" | "mediaIssueCopy" | "remoteFetchStatus">;

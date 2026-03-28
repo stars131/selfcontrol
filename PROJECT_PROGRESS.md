@@ -3123,6 +3123,10 @@ Last updated: 2026-03-28
   - media-asset extraction-mode tag prop assembly now lives in `apps/web/components/media-asset-card-extraction-mode-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps extraction-mode tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
   - the media-asset-card and record-panel structure guardrails now enforce this extraction-mode-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
+- Media Asset Remote Fetch Tag Props Builder Extraction V1:
+  - media-asset remote-fetch tag prop assembly now lives in `apps/web/components/media-asset-card-remote-fetch-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps remote-fetch tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the media-asset-card and record-panel structure guardrails now enforce this remote-fetch-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
