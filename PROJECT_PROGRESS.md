@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Timeline And Search Preset Helper Extraction V1:
+  - `apps/api/app/api/routes/timeline_route_helpers.py` now owns effective-timestamp, date filtering, place extraction, and grouped timeline-day construction for the timeline API
+  - `apps/api/app/api/routes/search_preset_route_helpers.py` now owns search preset name normalization, filter normalization, and workspace-scoped preset lookup validation
+  - `apps/api/app/api/routes/timeline.py` and `apps/api/app/api/routes/search_presets.py` now delegate those route-adjacent responsibilities, which keeps two more frequently edited APIs easier to extend without changing their current behavior
 - Record Route Helper Extraction V1:
   - `apps/api/app/api/routes/record_route_helpers.py` now owns repeated record lookup and location-filter helper logic used by the records API
   - `apps/api/app/api/routes/records.py` now delegates location-query filtering, review-status filtering, coordinate checks, and workspace-scoped record lookup instead of carrying those details inline
