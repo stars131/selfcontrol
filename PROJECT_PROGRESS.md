@@ -3095,6 +3095,10 @@ Last updated: 2026-03-28
   - media-asset dimensions detail prop assembly now lives in `apps/web/components/media-asset-card-dimensions-detail-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps dimensions detail projection isolated from the timing and text detail leaves so the detail-grid orchestration stays easier to evolve safely
   - the media-asset-card structure guardrail now enforces this dimensions-detail props-builder boundary so future media metadata detail changes do not regrow mixed child-prop projection logic
+- Media Asset Text Detail Props Builder Extraction V1:
+  - media-asset text-char-count and text-line-count detail prop assembly now lives in `apps/web/components/media-asset-card-text-char-count-detail-props.ts` and `apps/web/components/media-asset-card-text-line-count-detail-props.ts`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps text detail projection isolated from dimensions and timing detail leaves so the detail-grid orchestration stays easier to evolve safely
+  - the media-asset-card structure guardrail now enforces these text-detail props-builder boundaries so future media metadata detail changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
