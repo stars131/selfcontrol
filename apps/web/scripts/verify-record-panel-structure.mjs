@@ -18789,7 +18789,7 @@ if (mediaAssetCardPreviewPropsTypesLines > maxMediaAssetCardPreviewPropsTypesLin
 for (const requiredMediaAssetCardPreviewMediaPreviewPropsUsage of [
   'import type { MediaPreviewProps } from "./media-preview.types";',
   'import type { BuildMediaAssetCardPreviewMediaPreviewPropsInput } from "./media-asset-card-preview-media-preview-props.types";',
-  "export function buildMediaAssetCardPreviewMediaPreviewProps({ asset, authToken, workspaceId }: BuildMediaAssetCardPreviewMediaPreviewPropsInput): MediaPreviewProps {",
+  "export function buildMediaAssetCardPreviewMediaPreviewProps(input: BuildMediaAssetCardPreviewMediaPreviewPropsInput): MediaPreviewProps { return { asset: input.asset, token: input.authToken, workspaceId: input.workspaceId }; }",
 ]) {
   if (!mediaAssetCardPreviewMediaPreviewPropsSource.includes(requiredMediaAssetCardPreviewMediaPreviewPropsUsage)) {
     throw new Error(
@@ -24756,9 +24756,7 @@ for (const requiredMediaAssetCardMetadataDetailsPropsUsage of [
   'import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   'import type { BuildMediaAssetCardMetadataDetailsPropsInput } from "./media-asset-card-metadata-details-props.types";',
-  "}: BuildMediaAssetCardMetadataDetailsPropsInput): MediaAssetCardMetadataDetailsProps {",
-  "readMediaAssetCardMetadataDetailTiming({ asset })",
-  "return { asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt };",
+  "export function buildMediaAssetCardMetadataDetailsProps(input: BuildMediaAssetCardMetadataDetailsPropsInput): MediaAssetCardMetadataDetailsProps { const { lastAttemptAt, nextRetryAt } = readMediaAssetCardMetadataDetailTiming({ asset: input.asset }); return { asset: input.asset, formatHistoryTimestampLabel: input.formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy: input.mediaIssueCopy, nextRetryAt }; }",
 ]) {
   if (
     !mediaAssetCardMetadataDetailsPropsSource.includes(
