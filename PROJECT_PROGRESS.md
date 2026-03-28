@@ -3228,6 +3228,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-shell-client.tsx` now forwards one flattened input object into `buildWorkspaceShellEffectsInput` instead of wrapping shell state under `{ router, state, workspaceId }`
   - `apps/web/components/workspace-shell-client-effects-input.types.ts` and `apps/web/components/workspace-shell-client-effects-input.ts` now share one combined shell-effects input contract so the effects input builder stays easier to evolve without nested wrapper churn
   - the workspace-shell and record-panel structure guardrails now enforce this flattened shell-effects input boundary so future shell effect edits do not regrow double-wrapped prop assembly
+- Workspace Shell Actions Input Flattening V1:
+  - `apps/web/components/workspace-shell-client.tsx` now forwards one flattened input object into `buildWorkspaceShellActionsInput` instead of wrapping shell state under `{ refreshers, state, workspaceId }`
+  - `apps/web/components/workspace-shell-client-actions-input.types.ts` and `apps/web/components/workspace-shell-client-actions-input.ts` now share one combined shell-actions input contract so the actions input builder stays easier to evolve without nested wrapper churn
+  - the workspace-shell and record-panel structure guardrails now enforce this flattened shell-actions input boundary so future shell action edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice

@@ -1,1 +1,1 @@
-import type { WorkspaceShellRefreshers, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellActionsInput = { refreshers: WorkspaceShellRefreshers; state: WorkspaceShellState; workspaceId: string };
+import type { WorkspaceShellRefreshers, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellActionsInput = WorkspaceShellState & { refreshers: WorkspaceShellRefreshers; workspaceId: string };

@@ -25,7 +25,7 @@ export function WorkspaceShellClient({ workspaceId }: WorkspaceShellClientProps)
 
   useWorkspaceShellEffects(buildWorkspaceShellEffectsInput({ ...state, router, workspaceId }));
   const actions = useWorkspaceShellActions(
-    buildWorkspaceShellActionsInput({ refreshers, state, workspaceId }),
+    buildWorkspaceShellActionsInput({ ...state, refreshers, workspaceId }),
   );
   const panelsProps = buildWorkspaceShellPanelsProps({ ...state, actions, workspaceId });
 
