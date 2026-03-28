@@ -29030,7 +29030,7 @@ for (const requiredRecentMediaIssuesPanelListUsage of [
   "export function RecentMediaIssuesPanelList(props: RecentMediaIssuesPanelListProps) {",
   '<div className="record-list compact-list" style={{ marginTop: 16 }}>',
   "props.mediaProcessingOverview.recent_issues.map((issue) => <RecentMediaIssueCard",
-  "{...buildRecentMediaIssueCardProps({ issue, props })}",
+  "{...buildRecentMediaIssueCardProps({ ...props, issue })}",
 ]) {
   if (!recentMediaIssuesPanelListSource.includes(requiredRecentMediaIssuesPanelListUsage)) {
     throw new Error(
@@ -29132,9 +29132,9 @@ for (const requiredRecentMediaIssuesListItemPropsUsage of [
   'import type { BuildRecentMediaIssueCardPropsInput } from "./recent-media-issues-list-item-props.types";',
   "export function buildRecentMediaIssueCardProps({",
   "}: BuildRecentMediaIssueCardPropsInput): RecentMediaIssueCardProps {",
-  "canWriteWorkspace: props.canWriteWorkspace,",
-  "onRetryMediaProcessing: props.onRetryMediaProcessing,",
-  "workspaceId: props.workspaceId,",
+  "canWriteWorkspace,",
+  "onRetryMediaProcessing,",
+  "workspaceId,",
 ]) {
   if (!recentMediaIssuesListItemPropsSource.includes(requiredRecentMediaIssuesListItemPropsUsage)) {
     throw new Error(
@@ -29163,7 +29163,7 @@ if (recentMediaIssuesListItemPropsLines > maxRecentMediaIssuesListItemPropsLines
 }
 
 for (const requiredRecentMediaIssuesListItemPropsTypesUsage of [
-  'import type { MediaProcessingIssue } from "../lib/types"; import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types"; export type BuildRecentMediaIssueCardPropsInput = { issue: MediaProcessingIssue; props: RecentMediaIssuesPanelListProps };',
+  'import type { MediaProcessingIssue } from "../lib/types"; import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types"; export type BuildRecentMediaIssueCardPropsInput = RecentMediaIssuesPanelListProps & { issue: MediaProcessingIssue };',
 ]) {
   if (!recentMediaIssuesListItemPropsTypesSource.includes(requiredRecentMediaIssuesListItemPropsTypesUsage)) {
     throw new Error(

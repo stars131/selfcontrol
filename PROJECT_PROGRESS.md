@@ -3272,6 +3272,10 @@ Last updated: 2026-03-28
   - `apps/web/components/use-workspace-export-jobs-controller.ts` now forwards one flattened input object into `createWorkspaceExportJobsActions` instead of wrapping controller state under `{ ..., state }`
   - `apps/web/components/workspace-export-jobs-actions.types.ts` and `apps/web/components/workspace-export-jobs-actions.ts` now share one flattened export-jobs action input contract so the export jobs action factory stays easier to evolve without nested wrapper churn
   - the workspace-export-jobs and record-panel structure guardrails now enforce this flattened export-jobs action boundary so future transfer job action edits do not regrow double-wrapped action assembly
+- Recent Media List Item Props Input Flattening V1:
+  - `apps/web/components/recent-media-issues-panel-list.tsx` now forwards one flattened input object into `buildRecentMediaIssueCardProps` instead of wrapping list props under `{ issue, props }`
+  - `apps/web/components/recent-media-issues-list-item-props.types.ts` and `apps/web/components/recent-media-issues-list-item-props.ts` now share one flattened recent-media item-card input contract so the item prop builder stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened recent-media item-card boundary so future recent-media list edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice
