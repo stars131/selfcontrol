@@ -2800,6 +2800,14 @@ const recentMediaIssueCardActionNoticePropsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-action-notice-props.types.ts",
 );
+const recentMediaIssueCardMetadataDetailsPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata-details-props.ts",
+);
+const recentMediaIssueCardMetadataDetailsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-metadata-details-props.types.ts",
+);
 const recentMediaIssueCardMetadataDetailsPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-metadata-details.tsx",
@@ -4971,6 +4979,14 @@ const recentMediaIssueCardActionNoticePropsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionNoticePropsTypesPath,
   "utf8",
 );
+const recentMediaIssueCardMetadataDetailsPropsSource = fs.readFileSync(
+  recentMediaIssueCardMetadataDetailsPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardMetadataDetailsPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardMetadataDetailsPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardMetadataDetailsSource = fs.readFileSync(
   recentMediaIssueCardMetadataDetailsPath,
   "utf8",
@@ -6851,6 +6867,10 @@ const recentMediaIssueCardActionNoticePropsLines =
   recentMediaIssueCardActionNoticePropsSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionNoticePropsTypesLines =
   recentMediaIssueCardActionNoticePropsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataDetailsPropsLines =
+  recentMediaIssueCardMetadataDetailsPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardMetadataDetailsPropsTypesLines =
+  recentMediaIssueCardMetadataDetailsPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataDetailsLines =
   recentMediaIssueCardMetadataDetailsSource.split(/\r?\n/).length;
 const recentMediaIssueCardLastFailureDetailLines =
@@ -27366,10 +27386,12 @@ if (recentMediaIssueCardErrorTypesLines > maxRecentMediaIssueCardErrorTypesLines
 
 for (const requiredRecentMediaIssueCardMetadataUsage of [
   'import { buildRecentMediaIssueCardActionNoticeProps } from "./recent-media-issue-card-action-notice-props";',
+  'import { buildRecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details-props";',
   'import { RecentMediaIssueCardMetadataDetails } from "./recent-media-issue-card-metadata-details";',
   'import { RecentMediaIssueCardActionNotice } from "./recent-media-issue-card-action-notice";',
   'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";',
   "}: RecentMediaIssueCardMetadataProps) {",
+  "buildRecentMediaIssueCardMetadataDetailsProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
   "<RecentMediaIssueCardMetadataDetails",
   "buildRecentMediaIssueCardActionNoticeProps({ action })",
   "<RecentMediaIssueCardActionNotice",
@@ -27391,6 +27413,7 @@ for (const forbiddenRecentMediaIssueCardMetadataToken of [
   '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
   '{action.label}{action.detail ? `: ${action.detail}` : ""}',
   '<div className="notice" style={{ marginTop: 10 }}>',
+  "<RecentMediaIssueCardMetadataDetails formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCardActionNotice action={action} />",
 ]) {
   if (recentMediaIssueCardMetadataSource.includes(forbiddenRecentMediaIssueCardMetadataToken)) {
@@ -27400,7 +27423,7 @@ for (const forbiddenRecentMediaIssueCardMetadataToken of [
   }
 }
 
-const maxRecentMediaIssueCardMetadataLines = 9;
+const maxRecentMediaIssueCardMetadataLines = 10;
 if (recentMediaIssueCardMetadataLines > maxRecentMediaIssueCardMetadataLines) {
   throw new Error(
     `recent-media-issue-card-metadata.tsx exceeded ${maxRecentMediaIssueCardMetadataLines} lines: ${recentMediaIssueCardMetadataLines}`,
@@ -27421,6 +27444,57 @@ const maxRecentMediaIssueCardMetadataTypesLines = 2;
 if (recentMediaIssueCardMetadataTypesLines > maxRecentMediaIssueCardMetadataTypesLines) {
   throw new Error(
     `recent-media-issue-card-metadata.types.ts exceeded ${maxRecentMediaIssueCardMetadataTypesLines} lines: ${recentMediaIssueCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataDetailsPropsUsage of [
+  'import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types";',
+  'import type { BuildRecentMediaIssueCardMetadataDetailsPropsInput } from "./recent-media-issue-card-metadata-details-props.types";',
+  "export function buildRecentMediaIssueCardMetadataDetailsProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy }: BuildRecentMediaIssueCardMetadataDetailsPropsInput): RecentMediaIssueCardMetadataDetailsProps {",
+]) {
+  if (!recentMediaIssueCardMetadataDetailsPropsSource.includes(requiredRecentMediaIssueCardMetadataDetailsPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details-props.ts must own metadata-details prop projection: ${requiredRecentMediaIssueCardMetadataDetailsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardMetadataDetailsPropsToken of [
+  "<RecentMediaIssueCardMetadataDetails",
+  "<RecentMediaIssueCardActionNotice",
+  "processing_last_attempt_at",
+]) {
+  if (recentMediaIssueCardMetadataDetailsPropsSource.includes(forbiddenRecentMediaIssueCardMetadataDetailsPropsToken)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details-props.ts must keep rendering and timing concerns delegated: ${forbiddenRecentMediaIssueCardMetadataDetailsPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataDetailsPropsLines = 5;
+if (recentMediaIssueCardMetadataDetailsPropsLines > maxRecentMediaIssueCardMetadataDetailsPropsLines) {
+  throw new Error(
+    `recent-media-issue-card-metadata-details-props.ts exceeded ${maxRecentMediaIssueCardMetadataDetailsPropsLines} lines: ${recentMediaIssueCardMetadataDetailsPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardMetadataDetailsPropsTypesUsage of [
+  'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types"; export type BuildRecentMediaIssueCardMetadataDetailsPropsInput = Pick<RecentMediaIssueCardMetadataProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy">;',
+]) {
+  if (!recentMediaIssueCardMetadataDetailsPropsTypesSource.includes(requiredRecentMediaIssueCardMetadataDetailsPropsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-metadata-details-props.types.ts must own metadata-details-props input typing: ${requiredRecentMediaIssueCardMetadataDetailsPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardMetadataDetailsPropsTypesLines = 2;
+if (
+  recentMediaIssueCardMetadataDetailsPropsTypesLines >
+  maxRecentMediaIssueCardMetadataDetailsPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-metadata-details-props.types.ts exceeded ${maxRecentMediaIssueCardMetadataDetailsPropsTypesLines} lines: ${recentMediaIssueCardMetadataDetailsPropsTypesLines}`,
   );
 }
 
