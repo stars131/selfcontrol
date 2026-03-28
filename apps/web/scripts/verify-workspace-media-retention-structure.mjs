@@ -789,11 +789,11 @@ for (const requiredActionHelpersImport of ['from "./workspace-media-retention-ac
 }
 
 for (const requiredActionHelpersUsage of [
-  "buildWorkspaceMediaRetentionActionMessage({",
-  "buildWorkspaceMediaRetentionActionsProps({",
+  "buildWorkspaceMediaRetentionActionMessage(",
+  "buildWorkspaceMediaRetentionActionsProps(",
   "onCleanupOrphans: () =>",
   "onCleanupSelected: () =>",
-  "selectedCount: selectedMediaIds.length",
+  "selectedCount: input.selectedMediaIds.length",
 ]) {
   if (!retentionCardActionHelpersSource.includes(requiredActionHelpersUsage)) {
     throw new Error(

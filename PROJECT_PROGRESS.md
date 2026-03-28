@@ -3480,6 +3480,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-results-shared-card-props.ts` now uses an explicit `input` parameter and passes shared-card props through unchanged
   - this keeps the results shared-card helper aligned with the broader helper-signature normalization work without changing results rendering behavior
   - the record-panel structure guardrail now enforces this normalized shared-card helper boundary so future results helper edits stay easier to review and extend
+- Workspace Media Retention Helper Naming Cleanup V1:
+  - `apps/web/components/workspace-media-retention-card-action-helpers.ts` now uses explicit `input` parameters for both message derivation and action prop assembly while keeping retention behavior unchanged
+  - this keeps the media-retention helper layer aligned with the broader helper-signature normalization work without changing retention actions or messaging
+  - the workspace-media-retention and record-panel structure guardrails now enforce this normalized helper boundary so future retention helper edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

@@ -22207,8 +22207,8 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
 for (const requiredWorkspaceMediaRetentionCardActionHelpersUsage of [
   'import type {',
   'from "./workspace-media-retention-card-action-helpers.types";',
-  "}: BuildWorkspaceMediaRetentionActionMessageInput) {",
-  "}: BuildWorkspaceMediaRetentionActionsPropsInput): WorkspaceMediaRetentionActionsProps {",
+  "input: BuildWorkspaceMediaRetentionActionMessageInput,",
+  "input: BuildWorkspaceMediaRetentionActionsPropsInput,",
 ]) {
   if (!workspaceMediaRetentionCardActionHelpersSource.includes(requiredWorkspaceMediaRetentionCardActionHelpersUsage)) {
     throw new Error(
