@@ -3376,6 +3376,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-editor-workspace-base-form-props.ts`, `record-panel-v2-editor-workspace-base-media-props.ts`, `record-panel-v2-editor-workspace-base-session-props.ts`, and `record-panel-v2-editor-workspace-base-state-props.ts` now use explicit `input` parameters and pass the base slice through unchanged
   - this keeps the editor workspace base-slice adapter layer aligned with the rest of the normalization work while removing redundant destructuring from four thin pass-through helpers
   - the record-panel structure guardrail now enforces this pass-through helper contract so future base-slice builders do not drift back to mixed boundary styles
+- Recent Media Detail Helper Naming Cleanup V1:
+  - `apps/web/components/recent-media-issue-card-metadata-details-props.ts`, `recent-media-issue-card-last-attempt-detail-props.ts`, `recent-media-issue-card-last-failure-detail-props.ts`, and `recent-media-issue-card-next-retry-detail-props.ts` now use explicit `input` parameters and pass their detail props through unchanged
+  - this keeps the recent-media detail helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the record-panel structure guardrail now enforces this pass-through helper contract so future recent-media detail helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice
