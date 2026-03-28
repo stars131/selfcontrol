@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- UI Guardrail Coverage Meta-Check V1:
+  - `apps/web/scripts/verify-guardrail-coverage.mjs` now verifies that every standalone `verify:*` UI script in `apps/web/package.json` is covered by `verify:ui-guardrails`, while preserving explicit exclusions for the umbrella script itself and the detail-copy alias
+  - `apps/web/package.json` now runs this coverage check inside `verify:ui-guardrails`, so future structure guardrails cannot quietly drift out of the main validation path
+  - this adds a maintainability backstop around the verification system itself, which is valuable for long-term enterprise-grade updateability
 - Expanded UI Guardrail Coverage V1:
   - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` and `verify-location-review-panel-structure.mjs` now match the current summary/header/list/detail component layering instead of older direct-render assumptions
   - `apps/web/package.json` now folds additional stable structure checks into `verify:ui-guardrails`, including dead-letter recovery, landing page, location review, record editor fields, record reminder panel, record results view, and record workspaces
