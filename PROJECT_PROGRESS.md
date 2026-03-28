@@ -3208,6 +3208,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issue-card-metadata.tsx` now forwards its full typed metadata props contract directly into the action-notice props builder instead of re-projecting `{ action }`
   - `apps/web/components/recent-media-issue-card-action-notice-props.types.ts` and `apps/web/components/dead-letter-recovery-item-card-action-notice-props.types.ts` now accept the full parent props contracts so both notice builders stay easier to evolve without regrowing narrow manual projections
   - the record-panel structure guardrail now enforces this full-props builder input reuse across both recent-media and dead-letter action-notice boundaries
+- Chat Panel Content Input Flattening V1:
+  - `apps/web/components/chat-panel.tsx` now forwards one flattened input object into `buildChatPanelContentProps` instead of wrapping the source state as `{ actions, props }`
+  - `apps/web/components/chat-panel-content-props.types.ts`, `apps/web/components/chat-panel-content-props.ts`, `apps/web/components/chat-panel-content-data-props.ts`, and `apps/web/components/chat-panel-content-action-props.ts` now share a single combined input contract so the content/data/action builders stay easier to evolve without regrowing nested input wrappers
+  - the chat-panel and record-panel structure guardrails now enforce this flattened content-builder input boundary so future chat panel edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice

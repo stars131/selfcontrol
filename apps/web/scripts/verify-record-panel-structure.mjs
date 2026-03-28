@@ -23879,9 +23879,9 @@ for (const requiredChatPanelContentPropsUsage of [
   'import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";',
   'import { buildChatPanelContentActionProps } from "./chat-panel-content-action-props";',
   'import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";',
-  "const input = { actions, props };",
-  "...buildChatPanelContentDataProps(input),",
-  "...buildChatPanelContentActionProps(input),",
+  "export function buildChatPanelContentProps(props: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
+  "...buildChatPanelContentDataProps(props),",
+  "...buildChatPanelContentActionProps(props),",
 ]) {
   if (!chatPanelContentPropsSource.includes(requiredChatPanelContentPropsUsage)) {
     throw new Error(
@@ -23909,9 +23909,9 @@ for (const forbiddenChatPanelContentPropsToken of [
 
 for (const requiredChatPanelContentActionPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "creatingShare: actions.creatingShare,",
-  "handleCreateShareLink: actions.handleCreateShareLink,",
-  "unreadCount: actions.unreadCount,",
+  "creatingShare: props.actions.creatingShare,",
+  "handleCreateShareLink: props.actions.handleCreateShareLink,",
+  "unreadCount: props.actions.unreadCount,",
 ]) {
   if (!chatPanelContentActionPropsSource.includes(requiredChatPanelContentActionPropsUsage)) {
     throw new Error(
@@ -23958,7 +23958,7 @@ for (const forbiddenChatPanelContentDataPropsToken of [
 }
 
 for (const requiredChatPanelContentPropsTypesUsage of [
-  'import type { ChatPanelActions } from "./chat-panel-actions-result.types"; import type { ChatPanelProps } from "./chat-panel.types"; export type BuildChatPanelContentPropsInput = { actions: ChatPanelActions; props: ChatPanelProps };',
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types"; import type { ChatPanelProps } from "./chat-panel.types"; export type BuildChatPanelContentPropsInput = ChatPanelProps & { actions: ChatPanelActions };',
 ]) {
   if (!chatPanelContentPropsTypesSource.includes(requiredChatPanelContentPropsTypesUsage)) {
     throw new Error(

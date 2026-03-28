@@ -219,7 +219,7 @@ if (!source.includes("<ChatPanelContent")) {
   throw new Error("chat-panel.tsx must delegate body rendering to ChatPanelContent");
 }
 
-if (!source.includes("buildChatPanelContentProps({ actions, props })")) {
+if (!source.includes("buildChatPanelContentProps({ ...props, actions })")) {
   throw new Error("chat-panel.tsx must delegate content prop shaping to buildChatPanelContentProps");
 }
 
@@ -656,10 +656,9 @@ if (lineCount > maxAllowedLines) {
 for (const requiredContentPropsUsage of [
   'import { buildChatPanelContentActionProps } from "./chat-panel-content-action-props";',
   'import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";',
-  "export function buildChatPanelContentProps({",
-  "const input = { actions, props };",
-  "...buildChatPanelContentDataProps(input),",
-  "...buildChatPanelContentActionProps(input),",
+  "export function buildChatPanelContentProps(props: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
+  "...buildChatPanelContentDataProps(props),",
+  "...buildChatPanelContentActionProps(props),",
 ]) {
   if (!chatPanelContentPropsSource.includes(requiredContentPropsUsage)) {
     throw new Error(
@@ -672,6 +671,7 @@ for (const forbiddenContentPropsToken of [
   "actions: ChatPanelActions;",
   "props: ChatPanelProps;",
   "type BuildChatPanelContentPropsInput = {",
+  "const input = { actions, props };",
 ]) {
   if (chatPanelContentPropsSource.includes(forbiddenContentPropsToken)) {
     throw new Error(
@@ -705,11 +705,11 @@ if (chatPanelContentPropsLineCount > maxContentPropsLines) {
 
 for (const requiredContentActionPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "export function buildChatPanelContentActionProps({",
-  "creatingShare: actions.creatingShare,",
-  "handleCreateShareLink: actions.handleCreateShareLink,",
-  "handleSend: actions.handleSend,",
-  "unreadCount: actions.unreadCount,",
+  "export function buildChatPanelContentActionProps(props: BuildChatPanelContentPropsInput) {",
+  "creatingShare: props.actions.creatingShare,",
+  "handleCreateShareLink: props.actions.handleCreateShareLink,",
+  "handleSend: props.actions.handleSend,",
+  "unreadCount: props.actions.unreadCount,",
 ]) {
   if (!chatPanelContentActionPropsSource.includes(requiredContentActionPropsUsage)) {
     throw new Error(
@@ -740,7 +740,7 @@ if (chatPanelContentActionPropsLineCount > maxContentActionPropsLines) {
 
 for (const requiredContentDataPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "export function buildChatPanelContentDataProps({",
+  "export function buildChatPanelContentDataProps(props: BuildChatPanelContentPropsInput) {",
   "activeConversationId: props.activeConversationId,",
   "auditLogs: props.auditLogs,",
   "messages: props.messages,",
@@ -774,7 +774,7 @@ if (chatPanelContentDataPropsLineCount > maxContentDataPropsLines) {
 }
 
 for (const requiredContentPropsTypesUsage of [
-  'import type { ChatPanelActions } from "./chat-panel-actions-result.types"; import type { ChatPanelProps } from "./chat-panel.types"; export type BuildChatPanelContentPropsInput = { actions: ChatPanelActions; props: ChatPanelProps };',
+  'import type { ChatPanelActions } from "./chat-panel-actions-result.types"; import type { ChatPanelProps } from "./chat-panel.types"; export type BuildChatPanelContentPropsInput = ChatPanelProps & { actions: ChatPanelActions };',
 ]) {
   if (!chatPanelContentPropsTypesSource.includes(requiredContentPropsTypesUsage)) {
     throw new Error(

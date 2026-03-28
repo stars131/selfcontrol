@@ -25,7 +25,7 @@ export function ChatPanel(props: ChatPanelProps) {
         workspaceId={props.workspaceId}
         workspaceRole={props.workspaceRole}
       />
-      <ChatPanelContent {...buildChatPanelContentProps({ actions, props })} />
+      <ChatPanelContent {...buildChatPanelContentProps({ ...props, actions })} />
     </section>
   );
 }

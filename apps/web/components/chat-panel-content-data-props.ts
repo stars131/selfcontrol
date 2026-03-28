@@ -2,9 +2,7 @@
 
 import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";
 
-export function buildChatPanelContentDataProps({
-  props,
-}: BuildChatPanelContentPropsInput) {
+export function buildChatPanelContentDataProps(props: BuildChatPanelContentPropsInput) {
   return {
     activeConversationId: props.activeConversationId,
     auditLogs: props.auditLogs,
