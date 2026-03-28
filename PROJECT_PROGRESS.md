@@ -2819,6 +2819,10 @@ Last updated: 2026-03-28
   - dead-letter item processing-status tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-processing-status-tag.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared composition while processing-status rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this processing-status-tag boundary so future dead-letter tag changes do not regrow a mixed composition-and-processing-status rendering module
+- Dead-Letter Storage Provider Tag Extraction V1:
+  - dead-letter item storage-provider tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-storage-provider-tag.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared composition while storage-provider rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this storage-provider-tag boundary so future dead-letter tag changes do not regrow a mixed composition-and-storage-provider rendering module
 
 ## Next
 - Continue the next product slice
