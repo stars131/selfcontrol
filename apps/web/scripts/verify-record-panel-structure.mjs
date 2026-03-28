@@ -3124,6 +3124,14 @@ const deadLetterRecoveryItemCardActionNoticeTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-action-notice.types.ts",
 );
+const deadLetterRecoveryItemCardActionNoticePropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-action-notice-props.ts",
+);
+const deadLetterRecoveryItemCardActionNoticePropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-action-notice-props.types.ts",
+);
 const deadLetterRecoveryItemCardMetadataPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-metadata.tsx",
@@ -5250,6 +5258,14 @@ const deadLetterRecoveryItemCardActionNoticeTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardActionNoticeTypesPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardActionNoticePropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardActionNoticePropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardActionNoticePropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardActionNoticePropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardMetadataSource = fs.readFileSync(
   deadLetterRecoveryItemCardMetadataPath,
   "utf8",
@@ -6942,6 +6958,10 @@ const deadLetterRecoveryItemCardActionNoticeLines =
   deadLetterRecoveryItemCardActionNoticeSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionNoticeTypesLines =
   deadLetterRecoveryItemCardActionNoticeTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardActionNoticePropsLines =
+  deadLetterRecoveryItemCardActionNoticePropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardActionNoticePropsTypesLines =
+  deadLetterRecoveryItemCardActionNoticePropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardMetadataLines =
   deadLetterRecoveryItemCardMetadataSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardMetadataTypesLines =
@@ -29223,7 +29243,8 @@ if (deadLetterRecoveryItemCardSelectionTypesLines > maxDeadLetterRecoveryItemCar
 for (const requiredDeadLetterRecoveryItemCardStatusUsage of [
   'import { DeadLetterRecoveryItemCardActionNotice } from "./dead-letter-recovery-item-card-action-notice";',
   'import { DeadLetterRecoveryItemCardMetadata } from "./dead-letter-recovery-item-card-metadata";',
-  'import { buildDeadLetterRecoveryItemCardActionNoticeProps, buildDeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-status-props";',
+  'import { buildDeadLetterRecoveryItemCardActionNoticeProps } from "./dead-letter-recovery-item-card-action-notice-props";',
+  'import { buildDeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-status-props";',
   'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";',
   "export function DeadLetterRecoveryItemCardStatus(props: DeadLetterRecoveryItemCardStatusProps) {",
   "buildDeadLetterRecoveryItemCardMetadataProps(props)",
@@ -29283,13 +29304,9 @@ if (deadLetterRecoveryItemCardStatusTypesLines > maxDeadLetterRecoveryItemCardSt
 }
 
 for (const requiredDeadLetterRecoveryItemCardStatusPropsUsage of [
-  'import { getMediaIssueAction } from "../lib/media-issue-display";',
-  'import type { DeadLetterRecoveryItemCardActionNoticeProps } from "./dead-letter-recovery-item-card-action-notice.types";',
   'import type { DeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata.types";',
   'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";',
   "export function buildDeadLetterRecoveryItemCardMetadataProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: DeadLetterRecoveryItemCardStatusProps): DeadLetterRecoveryItemCardMetadataProps {",
-  "export function buildDeadLetterRecoveryItemCardActionNoticeProps({ item, locale }: DeadLetterRecoveryItemCardStatusProps): DeadLetterRecoveryItemCardActionNoticeProps {",
-  "action: getMediaIssueAction(locale, item)",
 ]) {
   if (!deadLetterRecoveryItemCardStatusPropsSource.includes(requiredDeadLetterRecoveryItemCardStatusPropsUsage)) {
     throw new Error(
@@ -29302,6 +29319,8 @@ for (const forbiddenDeadLetterRecoveryItemCardStatusPropsToken of [
   "<DeadLetterRecoveryItemCardMetadata",
   "<DeadLetterRecoveryItemCardActionNotice",
   "<>",
+  "getMediaIssueAction(",
+  "DeadLetterRecoveryItemCardActionNoticeProps",
 ]) {
   if (deadLetterRecoveryItemCardStatusPropsSource.includes(forbiddenDeadLetterRecoveryItemCardStatusPropsToken)) {
     throw new Error(
@@ -29331,6 +29350,56 @@ const maxDeadLetterRecoveryItemCardStatusPropsTypesLines = 2;
 if (deadLetterRecoveryItemCardStatusPropsTypesLines > maxDeadLetterRecoveryItemCardStatusPropsTypesLines) {
   throw new Error(
     `dead-letter-recovery-item-card-status-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardStatusPropsTypesLines} lines: ${deadLetterRecoveryItemCardStatusPropsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardActionNoticePropsUsage of [
+  'import { getMediaIssueAction } from "../lib/media-issue-display";',
+  'import type { DeadLetterRecoveryItemCardActionNoticeProps } from "./dead-letter-recovery-item-card-action-notice.types";',
+  'import type { BuildDeadLetterRecoveryItemCardActionNoticePropsInput } from "./dead-letter-recovery-item-card-action-notice-props.types";',
+  "export function buildDeadLetterRecoveryItemCardActionNoticeProps({ item, locale }: BuildDeadLetterRecoveryItemCardActionNoticePropsInput): DeadLetterRecoveryItemCardActionNoticeProps {",
+  "action: getMediaIssueAction(locale, item)",
+]) {
+  if (!deadLetterRecoveryItemCardActionNoticePropsSource.includes(requiredDeadLetterRecoveryItemCardActionNoticePropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-action-notice-props.ts must own dead-letter action-notice prop projection: ${requiredDeadLetterRecoveryItemCardActionNoticePropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardActionNoticePropsToken of [
+  "<DeadLetterRecoveryItemCardActionNotice",
+  "<DeadLetterRecoveryItemCardMetadata",
+  "formatHistoryTimestampLabel",
+]) {
+  if (deadLetterRecoveryItemCardActionNoticePropsSource.includes(forbiddenDeadLetterRecoveryItemCardActionNoticePropsToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-action-notice-props.ts must keep non-action-notice concerns delegated: ${forbiddenDeadLetterRecoveryItemCardActionNoticePropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardActionNoticePropsLines = 6;
+if (deadLetterRecoveryItemCardActionNoticePropsLines > maxDeadLetterRecoveryItemCardActionNoticePropsLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-action-notice-props.ts exceeded ${maxDeadLetterRecoveryItemCardActionNoticePropsLines} lines: ${deadLetterRecoveryItemCardActionNoticePropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardActionNoticePropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types"; export type BuildDeadLetterRecoveryItemCardActionNoticePropsInput = Pick<DeadLetterRecoveryItemCardStatusProps, "item" | "locale">;',
+]) {
+  if (!deadLetterRecoveryItemCardActionNoticePropsTypesSource.includes(requiredDeadLetterRecoveryItemCardActionNoticePropsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-action-notice-props.types.ts must own dead-letter action-notice-props input typing: ${requiredDeadLetterRecoveryItemCardActionNoticePropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardActionNoticePropsTypesLines = 2;
+if (deadLetterRecoveryItemCardActionNoticePropsTypesLines > maxDeadLetterRecoveryItemCardActionNoticePropsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-action-notice-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardActionNoticePropsTypesLines} lines: ${deadLetterRecoveryItemCardActionNoticePropsTypesLines}`,
   );
 }
 
