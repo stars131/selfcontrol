@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Knowledge Route Helper And API Coverage V1:
+  - `apps/api/app/api/routes/knowledge_route_helpers.py` now owns workspace-scoped knowledge reindex record lookup and ordered knowledge-search record collection so the route no longer carries that low-level boundary logic inline
+  - `apps/api/app/api/routes/knowledge.py` now delegates those responsibilities, which keeps the knowledge API focused on permissions, orchestration, and response shaping
+  - `apps/api/tests/test_knowledge_api.py` now covers knowledge stats, workspace and single-record reindex, missing-record handling, and ordered search hit projection so the knowledge route contract has direct regression coverage
 - Share Link Route Helper And API Coverage V1:
   - `apps/api/app/api/routes/share_link_route_helpers.py` now owns share-link permission validation, workspace-scoped share-link lookup, active public-share lookup, preview serialization, share-link patch application, and accepted-workspace serialization for the share flows
   - `apps/api/app/api/routes/share_links.py` and `apps/api/app/api/routes/public_shares.py` now delegate those repeated boundary and serialization responsibilities instead of carrying them inline

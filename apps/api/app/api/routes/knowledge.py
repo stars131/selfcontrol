@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.routes.knowledge_route_helpers import collect_knowledge_search_records, get_workspace_record_or_404
 from app.db.session import get_db
-from app.models.record import Record
 from app.models.user import User
 from app.schemas.record import RecordRead
 from app.services.audit import log_audit_event
@@ -51,9 +51,7 @@ def reindex_workspace_knowledge(
     require_workspace_member(workspace_id, current_user, db)
 
     if payload.record_id:
-        record = db.get(Record, payload.record_id)
-        if not record or record.workspace_id != workspace_id:
-            raise HTTPException(status_code=404, detail="Record not found")
+        get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=payload.record_id)
         result = rebuild_record_knowledge(db, payload.record_id)
     else:
         result = rebuild_workspace_knowledge(db, workspace_id)
@@ -87,13 +85,7 @@ def search_workspace_knowledge(
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
     hits = search_knowledge(db, workspace_id, payload.query, payload.limit)
-    ordered_record_ids: list[str] = []
-    for hit in hits:
-        if hit.record_id not in ordered_record_ids:
-            ordered_record_ids.append(hit.record_id)
-
-    records = [db.get(Record, record_id) for record_id in ordered_record_ids]
-    records = [record for record in records if record is not None]
+    records = collect_knowledge_search_records(db, hits)
     return {
         "success": True,
         "data": {
