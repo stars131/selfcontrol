@@ -1,0 +1,1 @@
+import type { MediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag.types"; export type BuildMediaAssetCardRetryStateTagPropsInput = Pick<MediaAssetCardRetryStateTagProps, "locale" | "mediaIssueCopy" | "retryState">;

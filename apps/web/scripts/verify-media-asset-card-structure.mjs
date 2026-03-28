@@ -217,6 +217,18 @@ const remoteFetchTagTypesLineCount = remoteFetchTagTypesSource.split(/\r?\n/).le
 const retryStateTagPath = path.resolve(process.cwd(), "components/media-asset-card-retry-state-tag.tsx");
 const retryStateTagSource = fs.readFileSync(retryStateTagPath, "utf8");
 const retryStateTagLineCount = retryStateTagSource.split(/\r?\n/).length;
+const retryStateTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-state-tag-props.ts",
+);
+const retryStateTagPropsSource = fs.readFileSync(retryStateTagPropsPath, "utf8");
+const retryStateTagPropsLineCount = retryStateTagPropsSource.split(/\r?\n/).length;
+const retryStateTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-state-tag-props.types.ts",
+);
+const retryStateTagPropsTypesSource = fs.readFileSync(retryStateTagPropsTypesPath, "utf8");
+const retryStateTagPropsTypesLineCount = retryStateTagPropsTypesSource.split(/\r?\n/).length;
 const retryStateTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-retry-state-tag.types.ts");
 const retryStateTagTypesSource = fs.readFileSync(retryStateTagTypesPath, "utf8");
 const retryStateTagTypesLineCount = retryStateTagTypesSource.split(/\r?\n/).length;
@@ -825,6 +837,7 @@ for (const requiredMetadataTagsUsage of [
   'import { buildMediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag-props";',
   'import { buildMediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag-props";',
   'import { buildMediaAssetCardRemoteFetchTagProps } from "./media-asset-card-remote-fetch-tag-props";',
+  'import { buildMediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag-props";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
   'import { buildMediaAssetCardSizeTagProps } from "./media-asset-card-size-tag-props";',
   'import { buildMediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag-props";',
@@ -845,13 +858,14 @@ for (const requiredMetadataTagsUsage of [
   "buildMediaAssetCardFileExtensionTagProps({ asset })",
   "buildMediaAssetCardProcessingSourceTagProps({ processingSource })",
   "buildMediaAssetCardRemoteFetchTagProps({ locale, mediaIssueCopy, remoteFetchStatus })",
+  "buildMediaAssetCardRetryStateTagProps({ locale, mediaIssueCopy, retryState })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
   "buildMediaAssetCardSizeTagProps({ asset })",
   "buildMediaAssetCardStorageProviderTagProps({ asset, locale })",
   "<MediaAssetCardProcessingStatusTag",
   "<MediaAssetCardRemoteFetchTag",
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
-  "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
+  "<MediaAssetCardRetryStateTag",
   "<MediaAssetCardFileExtensionTag",
   "<MediaAssetCardExtractionModeTag",
   "<MediaAssetCardProcessingSourceTag",
@@ -867,6 +881,7 @@ for (const forbiddenMetadataTagsToken of [
   "{mediaIssueCopy.fetchPrefix} {getRemoteFetchStatusLabel(locale, remoteFetchStatus)}",
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
+  "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
   "<MediaAssetCardFileExtensionTag asset={asset} />",
@@ -1511,6 +1526,42 @@ for (const requiredRetryStateTagTypesUsage of [
 
 if (retryStateTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-retry-state-tag.types.ts exceeded 2 lines: ${retryStateTagTypesLineCount}`);
+}
+
+for (const requiredRetryStateTagPropsUsage of [
+  'import type { MediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag.types";',
+  'import type { BuildMediaAssetCardRetryStateTagPropsInput } from "./media-asset-card-retry-state-tag-props.types";',
+  "export function buildMediaAssetCardRetryStateTagProps({ locale, mediaIssueCopy, retryState }: BuildMediaAssetCardRetryStateTagPropsInput): MediaAssetCardRetryStateTagProps {",
+]) {
+  if (!retryStateTagPropsSource.includes(requiredRetryStateTagPropsUsage)) {
+    throw new Error(`media-asset-card-retry-state-tag-props.ts must own retry-state tag prop projection: ${requiredRetryStateTagPropsUsage}`);
+  }
+}
+
+for (const forbiddenRetryStateTagPropsToken of [
+  "<MediaAssetCardRetryStateTag",
+  "getRetryStateLabel(",
+  '<div className="tag-row">',
+]) {
+  if (retryStateTagPropsSource.includes(forbiddenRetryStateTagPropsToken)) {
+    throw new Error(`media-asset-card-retry-state-tag-props.ts must keep rendering and label rules delegated: ${forbiddenRetryStateTagPropsToken}`);
+  }
+}
+
+if (retryStateTagPropsLineCount > 5) {
+  throw new Error(`media-asset-card-retry-state-tag-props.ts exceeded 5 lines: ${retryStateTagPropsLineCount}`);
+}
+
+for (const requiredRetryStateTagPropsTypesUsage of [
+  'import type { MediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag.types"; export type BuildMediaAssetCardRetryStateTagPropsInput = Pick<MediaAssetCardRetryStateTagProps, "locale" | "mediaIssueCopy" | "retryState">;',
+]) {
+  if (!retryStateTagPropsTypesSource.includes(requiredRetryStateTagPropsTypesUsage)) {
+    throw new Error(`media-asset-card-retry-state-tag-props.types.ts must own retry-state-tag-props input typing: ${requiredRetryStateTagPropsTypesUsage}`);
+  }
+}
+
+if (retryStateTagPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-retry-state-tag-props.types.ts exceeded 2 lines: ${retryStateTagPropsTypesLineCount}`);
 }
 
 for (const requiredRetryCountTagUsage of [
