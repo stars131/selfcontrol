@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Automated Dependency Update Governance V1:
+  - `.github/dependabot.yml` now configures weekly update checks for `github-actions`, `npm` under `apps/web`, and `pip` under `apps/api`
+  - update PRs now get consistent dependency labels and scoped chore commit prefixes so routine maintenance stays easier to triage and review
+  - this adds a low-friction update pipeline that supports long-term maintainability and enterprise-grade dependency hygiene
 - CI Concurrency and Least-Privilege Hardening V1:
   - `.github/workflows/ci.yml` now sets `permissions: contents: read` explicitly so routine verification jobs run with the minimum repository token scope they need
   - the workflow now uses `concurrency` with `cancel-in-progress: true` to stop superseded pushes and pull-request runs instead of burning extra CI time on stale validation jobs
