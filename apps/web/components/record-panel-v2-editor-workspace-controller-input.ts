@@ -5,7 +5,7 @@ import { buildRecordEditorWorkspaceControllerActionInput } from "./record-panel-
 import { buildRecordEditorWorkspaceControllerDisplayInput } from "./record-panel-v2-editor-workspace-controller-display-input";
 import { buildRecordEditorWorkspaceControllerFormatterInput } from "./record-panel-v2-editor-workspace-controller-formatter-input";
 
-export function buildRecordEditorWorkspaceControllerInput({ ...input }: BuildRecordEditorWorkspaceControllerInputArgs) {
+export function buildRecordEditorWorkspaceControllerInput(input: BuildRecordEditorWorkspaceControllerInputArgs) {
   return {
     ...buildRecordEditorWorkspaceControllerActionInput(input),
     ...buildRecordEditorWorkspaceControllerDisplayInput(input),

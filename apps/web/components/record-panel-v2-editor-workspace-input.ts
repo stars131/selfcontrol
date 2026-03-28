@@ -9,6 +9,6 @@ export function buildRecordEditorWorkspaceInput({
 }: RecordPanelShellInput) {
   return {
     ...buildRecordEditorWorkspacePropInput(props),
-    ...buildRecordEditorWorkspaceControllerInput({ controller }),
+    ...buildRecordEditorWorkspaceControllerInput(controller),
   };
 }

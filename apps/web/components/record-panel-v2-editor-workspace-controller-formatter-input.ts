@@ -1,14 +1,14 @@
 "use client";
 import type { BuildRecordEditorWorkspaceControllerInputArgs } from "./record-panel-v2-editor-workspace-controller-input.types";
 
-export function buildRecordEditorWorkspaceControllerFormatterInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs) {
+export function buildRecordEditorWorkspaceControllerFormatterInput(input: BuildRecordEditorWorkspaceControllerInputArgs) {
   return {
-    formatFileCountLabel: controller.formatFileCountLabel,
-    formatHistoryTimestampLabel: controller.formatHistoryTimestampLabel,
-    formatReminderEnabledLabel: controller.formatReminderEnabledLabel,
-    formatReminderStatusLabel: controller.formatReminderStatusLabel,
-    formatReminderTimestampLabel: controller.formatReminderTimestampLabel,
-    formatReviewStatusLabel: controller.formatReviewStatusLabel,
-    summarizeHistoryActionLabel: controller.summarizeHistoryActionLabel,
+    formatFileCountLabel: input.formatFileCountLabel,
+    formatHistoryTimestampLabel: input.formatHistoryTimestampLabel,
+    formatReminderEnabledLabel: input.formatReminderEnabledLabel,
+    formatReminderStatusLabel: input.formatReminderStatusLabel,
+    formatReminderTimestampLabel: input.formatReminderTimestampLabel,
+    formatReviewStatusLabel: input.formatReviewStatusLabel,
+    summarizeHistoryActionLabel: input.summarizeHistoryActionLabel,
   };
 }

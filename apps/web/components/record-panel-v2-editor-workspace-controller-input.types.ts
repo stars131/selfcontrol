@@ -3,5 +3,5 @@ import type { BuildRecordEditorWorkspaceControllerActionInput } from "./record-p
 import type { BuildRecordEditorWorkspaceControllerDisplayInput } from "./record-panel-v2-editor-workspace-controller-display-input.types";
 import type { BuildRecordEditorWorkspaceControllerFormatterInput } from "./record-panel-v2-editor-workspace-controller-formatter-input.types";
 
-export type BuildRecordEditorWorkspaceControllerInputArgs = { controller: RecordPanelController };
 export type BuildRecordEditorWorkspaceControllerInput = BuildRecordEditorWorkspaceControllerActionInput & BuildRecordEditorWorkspaceControllerDisplayInput & BuildRecordEditorWorkspaceControllerFormatterInput;
+export type BuildRecordEditorWorkspaceControllerInputArgs = RecordPanelController;

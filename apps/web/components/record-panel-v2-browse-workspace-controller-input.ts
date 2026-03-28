@@ -1,21 +1,21 @@
 "use client";
 import type { BuildRecordBrowseWorkspaceControllerInputArgs } from "./record-panel-v2-browse-workspace-controller-input.types";
-export function buildRecordBrowseWorkspaceControllerInput({ controller }: BuildRecordBrowseWorkspaceControllerInputArgs) {
+export function buildRecordBrowseWorkspaceControllerInput(input: BuildRecordBrowseWorkspaceControllerInputArgs) {
   return {
-    avoidCount: controller.avoidCount,
-    detailCopy: controller.detailCopy,
-    filterDraft: controller.filterDraft, foodCount: controller.foodCount, form: controller.form,
-    formatAvoidCountLabel: controller.formatAvoidCountLabel,
-    formatRecordSourceLabel: controller.formatRecordSourceLabel, formatRecordStatusLabel: controller.formatRecordStatusLabel,
-    formatRecordTimestampLabel: controller.formatRecordTimestampLabel, formatRecordTypeLabel: controller.formatRecordTypeLabel,
-    formatReviewStatusLabel: controller.formatReviewStatusLabel,
-    formatTimelineCountLabel: controller.formatTimelineCountLabel,
-    formatTimelineDateLabel: controller.formatTimelineDateLabel, handleApplyFilter: controller.handleApplyFilter,
-    handleDeletePreset: controller.handleDeletePreset, handleSavePreset: controller.handleSavePreset, panelCopy: controller.panelCopy,
-    presetName: controller.presetName,
-    setFilterDraft: controller.setFilterDraft, setForm: controller.setForm,
-    setPresetName: controller.setPresetName, setViewMode: controller.setViewMode,
-    summarizeRecordFilterLabel: controller.summarizeRecordFilterLabel,
-    viewMode: controller.viewMode,
+    avoidCount: input.avoidCount,
+    detailCopy: input.detailCopy,
+    filterDraft: input.filterDraft, foodCount: input.foodCount, form: input.form,
+    formatAvoidCountLabel: input.formatAvoidCountLabel,
+    formatRecordSourceLabel: input.formatRecordSourceLabel, formatRecordStatusLabel: input.formatRecordStatusLabel,
+    formatRecordTimestampLabel: input.formatRecordTimestampLabel, formatRecordTypeLabel: input.formatRecordTypeLabel,
+    formatReviewStatusLabel: input.formatReviewStatusLabel,
+    formatTimelineCountLabel: input.formatTimelineCountLabel,
+    formatTimelineDateLabel: input.formatTimelineDateLabel, handleApplyFilter: input.handleApplyFilter,
+    handleDeletePreset: input.handleDeletePreset, handleSavePreset: input.handleSavePreset, panelCopy: input.panelCopy,
+    presetName: input.presetName,
+    setFilterDraft: input.setFilterDraft, setForm: input.setForm,
+    setPresetName: input.setPresetName, setViewMode: input.setViewMode,
+    summarizeRecordFilterLabel: input.summarizeRecordFilterLabel,
+    viewMode: input.viewMode,
   };
 }

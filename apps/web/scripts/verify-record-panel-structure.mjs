@@ -9226,11 +9226,11 @@ for (const requiredBrowseWorkspaceControllerInputTypesImport of [
 }
 
 for (const requiredBrowseWorkspaceControllerInputTypesUsage of [
-  "export type BuildRecordBrowseWorkspaceControllerInputArgs = { controller: RecordPanelController };",
   "export type BuildRecordBrowseWorkspaceControllerInput =",
   "RecordBrowseWorkspaceTypeSupport & {",
   "detailCopy: RecordPanelDetailCopy;",
   'summarizeRecordFilterLabel: (filter: RecordBrowseWorkspaceTypeSupport["filterDraft"]) => string;',
+  "export type BuildRecordBrowseWorkspaceControllerInputArgs = RecordPanelController;",
 ]) {
   if (!browseWorkspaceControllerInputTypesSource.includes(requiredBrowseWorkspaceControllerInputTypesUsage)) {
     throw new Error(
@@ -9321,11 +9321,11 @@ for (const requiredEditorWorkspaceControllerInputTypesImport of [
 }
 
 for (const requiredEditorWorkspaceControllerInputTypesUsage of [
-  "export type BuildRecordEditorWorkspaceControllerInputArgs = { controller: RecordPanelController };",
   "export type BuildRecordEditorWorkspaceControllerInput =",
   "BuildRecordEditorWorkspaceControllerActionInput &",
   "BuildRecordEditorWorkspaceControllerDisplayInput &",
   "BuildRecordEditorWorkspaceControllerFormatterInput;",
+  "export type BuildRecordEditorWorkspaceControllerInputArgs = RecordPanelController;",
 ]) {
   if (!editorWorkspaceControllerInputTypesSource.includes(requiredEditorWorkspaceControllerInputTypesUsage)) {
     throw new Error(
@@ -9997,7 +9997,7 @@ for (const requiredBrowseWorkspaceInputImport of [
 for (const requiredBrowseWorkspaceInputUsage of [
   "export function buildRecordBrowseWorkspaceInput({",
   "...buildRecordBrowseWorkspacePropInput(props)",
-  "...buildRecordBrowseWorkspaceControllerInput({ controller })",
+  "...buildRecordBrowseWorkspaceControllerInput(controller)",
 ]) {
   if (!browseWorkspaceInputSource.includes(requiredBrowseWorkspaceInputUsage)) {
     throw new Error(
@@ -10078,14 +10078,14 @@ for (const requiredBrowseWorkspaceControllerInputImport of [
 }
 
 for (const requiredBrowseWorkspaceControllerInputUsage of [
-  "export function buildRecordBrowseWorkspaceControllerInput({ controller }: BuildRecordBrowseWorkspaceControllerInputArgs) {",
-  "avoidCount: controller.avoidCount",
-  "formatRecordSourceLabel: controller.formatRecordSourceLabel",
-  "formatRecordStatusLabel: controller.formatRecordStatusLabel",
-  "formatRecordTypeLabel: controller.formatRecordTypeLabel",
-  "handleSavePreset: controller.handleSavePreset",
-  "summarizeRecordFilterLabel: controller.summarizeRecordFilterLabel",
-  "viewMode: controller.viewMode",
+  "export function buildRecordBrowseWorkspaceControllerInput(input: BuildRecordBrowseWorkspaceControllerInputArgs) {",
+  "avoidCount: input.avoidCount",
+  "formatRecordSourceLabel: input.formatRecordSourceLabel",
+  "formatRecordStatusLabel: input.formatRecordStatusLabel",
+  "formatRecordTypeLabel: input.formatRecordTypeLabel",
+  "handleSavePreset: input.handleSavePreset",
+  "summarizeRecordFilterLabel: input.summarizeRecordFilterLabel",
+  "viewMode: input.viewMode",
 ]) {
   if (!browseWorkspaceControllerInputSource.includes(requiredBrowseWorkspaceControllerInputUsage)) {
     throw new Error(
@@ -10840,7 +10840,7 @@ for (const requiredEditorWorkspaceInputImport of [
 for (const requiredEditorWorkspaceInputUsage of [
   "export function buildRecordEditorWorkspaceInput({",
   "...buildRecordEditorWorkspacePropInput(props)",
-  "...buildRecordEditorWorkspaceControllerInput({ controller })",
+  "...buildRecordEditorWorkspaceControllerInput(controller)",
 ]) {
   if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputUsage)) {
     throw new Error(
@@ -10924,7 +10924,7 @@ for (const requiredEditorWorkspaceControllerInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerInput({ ...input }: BuildRecordEditorWorkspaceControllerInputArgs) {",
+  "export function buildRecordEditorWorkspaceControllerInput(input: BuildRecordEditorWorkspaceControllerInputArgs) {",
   "buildRecordEditorWorkspaceControllerActionInput(input)",
   "buildRecordEditorWorkspaceControllerDisplayInput(input)",
   "buildRecordEditorWorkspaceControllerFormatterInput(input)",
@@ -10969,10 +10969,10 @@ for (const requiredEditorWorkspaceControllerActionInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerActionInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerActionInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
-  "handleBulkRetryDeadLetter: controller.handleBulkRetryDeadLetter",
-  "handleUpload: controller.handleUpload",
-  "setReminderForm: controller.setReminderForm",
+  "export function buildRecordEditorWorkspaceControllerActionInput(input: BuildRecordEditorWorkspaceControllerInputArgs)",
+  "handleBulkRetryDeadLetter: input.handleBulkRetryDeadLetter",
+  "handleUpload: input.handleUpload",
+  "setReminderForm: input.setReminderForm",
 ]) {
   if (!editorWorkspaceControllerActionInputSource.includes(requiredEditorWorkspaceControllerActionInputUsage)) {
     throw new Error(
@@ -11010,11 +11010,11 @@ for (const requiredEditorWorkspaceControllerDisplayInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerDisplayInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerDisplayInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
-  "bulkRetryingDeadLetter: controller.bulkRetryingDeadLetter",
-  "detailCopy: controller.detailCopy",
-  "selectedRecordMediaSizeLabel: controller.selectedRecordMediaSizeLabel",
-  "uploading: controller.uploading",
+  "export function buildRecordEditorWorkspaceControllerDisplayInput(input: BuildRecordEditorWorkspaceControllerInputArgs)",
+  "bulkRetryingDeadLetter: input.bulkRetryingDeadLetter",
+  "detailCopy: input.detailCopy",
+  "selectedRecordMediaSizeLabel: input.selectedRecordMediaSizeLabel",
+  "uploading: input.uploading",
 ]) {
   if (!editorWorkspaceControllerDisplayInputSource.includes(requiredEditorWorkspaceControllerDisplayInputUsage)) {
     throw new Error(
@@ -11052,10 +11052,10 @@ for (const requiredEditorWorkspaceControllerFormatterInputImport of [
 }
 
 for (const requiredEditorWorkspaceControllerFormatterInputUsage of [
-  "export function buildRecordEditorWorkspaceControllerFormatterInput({ controller }: BuildRecordEditorWorkspaceControllerInputArgs)",
-  "formatFileCountLabel: controller.formatFileCountLabel",
-  "formatReviewStatusLabel: controller.formatReviewStatusLabel",
-  "summarizeHistoryActionLabel: controller.summarizeHistoryActionLabel",
+  "export function buildRecordEditorWorkspaceControllerFormatterInput(input: BuildRecordEditorWorkspaceControllerInputArgs)",
+  "formatFileCountLabel: input.formatFileCountLabel",
+  "formatReviewStatusLabel: input.formatReviewStatusLabel",
+  "summarizeHistoryActionLabel: input.summarizeHistoryActionLabel",
 ]) {
   if (!editorWorkspaceControllerFormatterInputSource.includes(requiredEditorWorkspaceControllerFormatterInputUsage)) {
     throw new Error(
