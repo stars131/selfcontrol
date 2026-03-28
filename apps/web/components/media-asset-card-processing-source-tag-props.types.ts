@@ -1,0 +1,1 @@
+import type { MediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag.types"; export type BuildMediaAssetCardProcessingSourceTagPropsInput = Pick<MediaAssetCardProcessingSourceTagProps, "processingSource">;

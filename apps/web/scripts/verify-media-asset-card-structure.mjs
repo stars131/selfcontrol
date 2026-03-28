@@ -286,6 +286,19 @@ const storageProviderTagTypesLineCount = storageProviderTagTypesSource.split(/\r
 const processingSourceTagPath = path.resolve(process.cwd(), "components/media-asset-card-processing-source-tag.tsx");
 const processingSourceTagSource = fs.readFileSync(processingSourceTagPath, "utf8");
 const processingSourceTagLineCount = processingSourceTagSource.split(/\r?\n/).length;
+const processingSourceTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-source-tag-props.ts",
+);
+const processingSourceTagPropsSource = fs.readFileSync(processingSourceTagPropsPath, "utf8");
+const processingSourceTagPropsLineCount = processingSourceTagPropsSource.split(/\r?\n/).length;
+const processingSourceTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-processing-source-tag-props.types.ts",
+);
+const processingSourceTagPropsTypesSource = fs.readFileSync(processingSourceTagPropsTypesPath, "utf8");
+const processingSourceTagPropsTypesLineCount =
+  processingSourceTagPropsTypesSource.split(/\r?\n/).length;
 const processingSourceTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-processing-source-tag.types.ts");
 const processingSourceTagTypesSource = fs.readFileSync(processingSourceTagTypesPath, "utf8");
 const processingSourceTagTypesLineCount = processingSourceTagTypesSource.split(/\r?\n/).length;
@@ -784,6 +797,7 @@ if (metadataDetailsPropsTypesLineCount > 2) {
 
 for (const requiredMetadataTagsUsage of [
   'import { buildMediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag-props";',
+  'import { buildMediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag-props";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
   'import { buildMediaAssetCardSizeTagProps } from "./media-asset-card-size-tag-props";',
   'import { buildMediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag-props";',
@@ -801,6 +815,7 @@ for (const requiredMetadataTagsUsage of [
   "}: MediaAssetCardMetadataTagsProps) {",
   "readMediaAssetCardMetadataTagValues({ asset })",
   "buildMediaAssetCardFileExtensionTagProps({ asset })",
+  "buildMediaAssetCardProcessingSourceTagProps({ processingSource })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
   "buildMediaAssetCardSizeTagProps({ asset })",
   "buildMediaAssetCardStorageProviderTagProps({ asset, locale })",
@@ -810,7 +825,7 @@ for (const requiredMetadataTagsUsage of [
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
   "<MediaAssetCardFileExtensionTag",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
-  "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
+  "<MediaAssetCardProcessingSourceTag",
   "<MediaAssetCardSizeTag",
   "<MediaAssetCardStorageProviderTag",
 ]) {
@@ -825,6 +840,7 @@ for (const forbiddenMetadataTagsToken of [
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
   "<MediaAssetCardFileExtensionTag asset={asset} />",
+  "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
   "<MediaAssetCardSizeTag asset={asset} />",
   "<MediaAssetCardStorageProviderTag asset={asset} locale={locale} />",
@@ -1757,6 +1773,42 @@ for (const requiredProcessingSourceTagTypesUsage of [
 
 if (processingSourceTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-processing-source-tag.types.ts exceeded 2 lines: ${processingSourceTagTypesLineCount}`);
+}
+
+for (const requiredProcessingSourceTagPropsUsage of [
+  'import type { MediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag.types";',
+  'import type { BuildMediaAssetCardProcessingSourceTagPropsInput } from "./media-asset-card-processing-source-tag-props.types";',
+  "export function buildMediaAssetCardProcessingSourceTagProps({ processingSource }: BuildMediaAssetCardProcessingSourceTagPropsInput): MediaAssetCardProcessingSourceTagProps {",
+]) {
+  if (!processingSourceTagPropsSource.includes(requiredProcessingSourceTagPropsUsage)) {
+    throw new Error(`media-asset-card-processing-source-tag-props.ts must own processing-source tag prop projection: ${requiredProcessingSourceTagPropsUsage}`);
+  }
+}
+
+for (const forbiddenProcessingSourceTagPropsToken of [
+  "<MediaAssetCardProcessingSourceTag",
+  "processing_source",
+  '<div className="tag-row">',
+]) {
+  if (processingSourceTagPropsSource.includes(forbiddenProcessingSourceTagPropsToken)) {
+    throw new Error(`media-asset-card-processing-source-tag-props.ts must keep rendering and source-value rules delegated: ${forbiddenProcessingSourceTagPropsToken}`);
+  }
+}
+
+if (processingSourceTagPropsLineCount > 5) {
+  throw new Error(`media-asset-card-processing-source-tag-props.ts exceeded 5 lines: ${processingSourceTagPropsLineCount}`);
+}
+
+for (const requiredProcessingSourceTagPropsTypesUsage of [
+  'import type { MediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag.types"; export type BuildMediaAssetCardProcessingSourceTagPropsInput = Pick<MediaAssetCardProcessingSourceTagProps, "processingSource">;',
+]) {
+  if (!processingSourceTagPropsTypesSource.includes(requiredProcessingSourceTagPropsTypesUsage)) {
+    throw new Error(`media-asset-card-processing-source-tag-props.types.ts must own processing-source-tag-props input typing: ${requiredProcessingSourceTagPropsTypesUsage}`);
+  }
+}
+
+if (processingSourceTagPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-processing-source-tag-props.types.ts exceeded 2 lines: ${processingSourceTagPropsTypesLineCount}`);
 }
 
 for (const requiredExtractionModeTagUsage of [
