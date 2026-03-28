@@ -3364,6 +3364,10 @@ Last updated: 2026-03-28
   - `apps/web/components/chat-panel-content-props.ts`, `chat-panel-content-action-props.ts`, and `chat-panel-content-data-props.ts` now use a consistent `input` parameter name while preserving the same chat content prop assembly
   - this keeps the chat content adapter layer aligned with the broader builder-signature normalization work so the content composition path is easier to scan and maintain
   - the chat-panel structure guardrail now enforces this naming consistency so future content builders do not drift back to mixed `props` terminology
+- Record Editor Main Sections Builder Naming Cleanup V1:
+  - `apps/web/components/record-editor-workspace-main-sections-props.ts` now uses an explicit `input` parameter while preserving the same main-section prop projection
+  - this keeps the record-editor main-sections adapter aligned with the broader builder-signature normalization work and removes one stale destructuring boundary from the editor workspace path
+  - `apps/web/scripts/verify-record-workspaces.mjs` and `verify-record-panel-structure.mjs` now enforce the updated builder contract so the standalone workspace guardrail is usable again
 
 ## Next
 - Continue the next product slice

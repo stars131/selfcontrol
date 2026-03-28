@@ -17963,7 +17963,9 @@ if (recordMediaSelectedContentPropsLines > maxRecordMediaSelectedContentPropsLin
 
 for (const requiredRecordEditorWorkspaceMainSectionsPropsUsage of [
   'import type { BuildRecordEditorMainSectionsPropsInput } from "./record-editor-workspace-main-sections-props.types";',
-  "}: BuildRecordEditorMainSectionsPropsInput): RecordEditorMainSectionsProps {",
+  "export function buildRecordEditorMainSectionsProps(input: BuildRecordEditorMainSectionsPropsInput): RecordEditorMainSectionsProps {",
+  "formatHistoryTimestampLabel: input.formatHistoryTimestampLabel",
+  "summarizeHistoryActionLabel: input.summarizeHistoryActionLabel",
 ]) {
   if (!recordEditorWorkspaceMainSectionsPropsSource.includes(requiredRecordEditorWorkspaceMainSectionsPropsUsage)) {
     throw new Error(
@@ -17972,10 +17974,15 @@ for (const requiredRecordEditorWorkspaceMainSectionsPropsUsage of [
   }
 }
 
-if (recordEditorWorkspaceMainSectionsPropsSource.includes("}: {")) {
+for (const forbiddenRecordEditorWorkspaceMainSectionsPropsToken of [
+  "}: {",
+  "export function buildRecordEditorMainSectionsProps({",
+]) {
+  if (recordEditorWorkspaceMainSectionsPropsSource.includes(forbiddenRecordEditorWorkspaceMainSectionsPropsToken)) {
   throw new Error(
-    "record-editor-workspace-main-sections-props.ts must keep editor-main-sections input typing delegated",
+      `record-editor-workspace-main-sections-props.ts must keep editor-main-sections input typing delegated: ${forbiddenRecordEditorWorkspaceMainSectionsPropsToken}`,
   );
+  }
 }
 
 for (const requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage of [

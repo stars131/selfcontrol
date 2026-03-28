@@ -346,11 +346,11 @@ for (const requiredMainSectionsPropsImport of [
 }
 
 for (const requiredMainSectionsPropsUsage of [
-  "export function buildRecordEditorMainSectionsProps({",
-  "fieldBindings",
-  "locationReviewBindings",
-  "formatHistoryTimestampLabel: props.formatHistoryTimestampLabel",
-  "summarizeHistoryActionLabel: props.summarizeHistoryActionLabel",
+  "export function buildRecordEditorMainSectionsProps(input: BuildRecordEditorMainSectionsPropsInput): RecordEditorMainSectionsProps {",
+  "fieldBindings: input.fieldBindings",
+  "locationReviewBindings: input.locationReviewBindings",
+  "formatHistoryTimestampLabel: input.formatHistoryTimestampLabel",
+  "summarizeHistoryActionLabel: input.summarizeHistoryActionLabel",
 ]) {
   if (!editorWorkspaceMainSectionsPropsSource.includes(requiredMainSectionsPropsUsage)) {
     throw new Error(
@@ -787,12 +787,17 @@ if (!reminderToolsSource.includes('import { buildRecordReminderPanelProps } from
   throw new Error("record-reminder-tools.tsx must import buildRecordReminderPanelProps");
 }
 
-if (!reminderToolsSource.includes("createRecordReminderBindings({ onUpdateReminder, setReminderForm })")) {
-  throw new Error("record-reminder-tools.tsx must delegate reminder form bindings");
-}
-
-if (!reminderToolsSource.includes("buildRecordReminderPanelProps({ bindings, props })")) {
-  throw new Error("record-reminder-tools.tsx must delegate reminder panel prop assembly");
+for (const requiredReminderToolsUsage of [
+  "const bindings = createRecordReminderBindings({",
+  "onUpdateReminder: props.onUpdateReminder,",
+  "setReminderForm: props.setReminderForm,",
+  "buildRecordReminderPanelProps({ ...props, bindings })",
+]) {
+  if (!reminderToolsSource.includes(requiredReminderToolsUsage)) {
+    throw new Error(
+      `record-reminder-tools.tsx must delegate reminder bindings and panel prop assembly: ${requiredReminderToolsUsage}`,
+    );
+  }
 }
 
 for (const forbiddenToken of [
