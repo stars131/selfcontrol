@@ -3384,6 +3384,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-item-card-status-section-props.ts`, `dead-letter-recovery-item-card-metadata-props.ts`, `dead-letter-recovery-item-card-last-attempt-props.ts`, and `dead-letter-recovery-item-card-last-failure-props.ts` now use explicit `input` parameters and pass their detail props through unchanged
   - this keeps the dead-letter detail helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the record-panel structure guardrail now enforces this pass-through helper contract so future dead-letter detail helpers do not drift back to mixed boundary styles
+- Media Asset Detail Helper Naming Cleanup V1:
+  - `apps/web/components/media-asset-card-metadata-props.ts`, `media-asset-card-last-attempt-detail-props.ts`, `media-asset-card-next-retry-detail-props.ts`, `media-asset-card-dimensions-detail-props.ts`, `media-asset-card-text-char-count-detail-props.ts`, and `media-asset-card-text-line-count-detail-props.ts` now use explicit `input` parameters and pass their detail props through unchanged
+  - this keeps the media-asset detail helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the media-asset-card and record-panel structure guardrails now enforce this pass-through helper contract so future media-asset detail helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice

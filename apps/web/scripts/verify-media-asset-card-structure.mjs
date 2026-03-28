@@ -719,8 +719,8 @@ if (errorPropsTypesLineCount > 2) {
 for (const requiredMetadataPropsUsage of [
   'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
   'import type { BuildMediaAssetCardMetadataPropsInput } from "./media-asset-card-metadata-props.types";',
-  "}: BuildMediaAssetCardMetadataPropsInput): MediaAssetCardMetadataProps {",
-  "return { asset, formatHistoryTimestampLabel, mediaIssueCopy };",
+  "export function buildMediaAssetCardMetadataProps(input: BuildMediaAssetCardMetadataPropsInput): MediaAssetCardMetadataProps {",
+  "return input;",
 ]) {
   if (!metadataPropsSource.includes(requiredMetadataPropsUsage)) {
     throw new Error(
@@ -1210,7 +1210,8 @@ if (metadataTagValuesTypesLineCount > 2) {
 for (const requiredLastAttemptDetailPropsUsage of [
   'import type { MediaAssetCardLastAttemptDetailProps } from "./media-asset-card-last-attempt-detail.types";',
   'import type { BuildMediaAssetCardLastAttemptDetailPropsInput } from "./media-asset-card-last-attempt-detail-props.types";',
-  "export function buildMediaAssetCardLastAttemptDetailProps({ formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy }: BuildMediaAssetCardLastAttemptDetailPropsInput): MediaAssetCardLastAttemptDetailProps {",
+  "export function buildMediaAssetCardLastAttemptDetailProps(input: BuildMediaAssetCardLastAttemptDetailPropsInput): MediaAssetCardLastAttemptDetailProps {",
+  "return input;",
 ]) {
   if (!lastAttemptDetailPropsSource.includes(requiredLastAttemptDetailPropsUsage)) {
     throw new Error(`media-asset-card-last-attempt-detail-props.ts must own last-attempt detail prop projection: ${requiredLastAttemptDetailPropsUsage}`);
@@ -1283,7 +1284,8 @@ if (lastAttemptDetailTypesLineCount > 2) {
 for (const requiredDimensionsDetailPropsUsage of [
   'import type { MediaAssetCardDimensionsDetailProps } from "./media-asset-card-dimensions-detail.types";',
   'import type { BuildMediaAssetCardDimensionsDetailPropsInput } from "./media-asset-card-dimensions-detail-props.types";',
-  "export function buildMediaAssetCardDimensionsDetailProps({ asset, mediaIssueCopy }: BuildMediaAssetCardDimensionsDetailPropsInput): MediaAssetCardDimensionsDetailProps {",
+  "export function buildMediaAssetCardDimensionsDetailProps(input: BuildMediaAssetCardDimensionsDetailPropsInput): MediaAssetCardDimensionsDetailProps {",
+  "return input;",
 ]) {
   if (!dimensionsDetailPropsSource.includes(requiredDimensionsDetailPropsUsage)) {
     throw new Error(`media-asset-card-dimensions-detail-props.ts must own dimensions detail prop projection: ${requiredDimensionsDetailPropsUsage}`);
@@ -1357,7 +1359,8 @@ if (dimensionsDetailTypesLineCount > 2) {
 for (const requiredTextCharCountDetailPropsUsage of [
   'import type { MediaAssetCardTextCharCountDetailProps } from "./media-asset-card-text-char-count-detail.types";',
   'import type { BuildMediaAssetCardTextCharCountDetailPropsInput } from "./media-asset-card-text-char-count-detail-props.types";',
-  "export function buildMediaAssetCardTextCharCountDetailProps({ asset, mediaIssueCopy }: BuildMediaAssetCardTextCharCountDetailPropsInput): MediaAssetCardTextCharCountDetailProps {",
+  "export function buildMediaAssetCardTextCharCountDetailProps(input: BuildMediaAssetCardTextCharCountDetailPropsInput): MediaAssetCardTextCharCountDetailProps {",
+  "return input;",
 ]) {
   if (!textCharCountDetailPropsSource.includes(requiredTextCharCountDetailPropsUsage)) {
     throw new Error(`media-asset-card-text-char-count-detail-props.ts must own text-char-count detail prop projection: ${requiredTextCharCountDetailPropsUsage}`);
@@ -1431,7 +1434,8 @@ if (textCharCountDetailTypesLineCount > 2) {
 for (const requiredTextLineCountDetailPropsUsage of [
   'import type { MediaAssetCardTextLineCountDetailProps } from "./media-asset-card-text-line-count-detail.types";',
   'import type { BuildMediaAssetCardTextLineCountDetailPropsInput } from "./media-asset-card-text-line-count-detail-props.types";',
-  "export function buildMediaAssetCardTextLineCountDetailProps({ asset, mediaIssueCopy }: BuildMediaAssetCardTextLineCountDetailPropsInput): MediaAssetCardTextLineCountDetailProps {",
+  "export function buildMediaAssetCardTextLineCountDetailProps(input: BuildMediaAssetCardTextLineCountDetailPropsInput): MediaAssetCardTextLineCountDetailProps {",
+  "return input;",
 ]) {
   if (!textLineCountDetailPropsSource.includes(requiredTextLineCountDetailPropsUsage)) {
     throw new Error(`media-asset-card-text-line-count-detail-props.ts must own text-line-count detail prop projection: ${requiredTextLineCountDetailPropsUsage}`);
@@ -1505,7 +1509,8 @@ if (textLineCountDetailTypesLineCount > 2) {
 for (const requiredNextRetryDetailPropsUsage of [
   'import type { MediaAssetCardNextRetryDetailProps } from "./media-asset-card-next-retry-detail.types";',
   'import type { BuildMediaAssetCardNextRetryDetailPropsInput } from "./media-asset-card-next-retry-detail-props.types";',
-  "export function buildMediaAssetCardNextRetryDetailProps({ formatHistoryTimestampLabel, mediaIssueCopy, nextRetryAt }: BuildMediaAssetCardNextRetryDetailPropsInput): MediaAssetCardNextRetryDetailProps {",
+  "export function buildMediaAssetCardNextRetryDetailProps(input: BuildMediaAssetCardNextRetryDetailPropsInput): MediaAssetCardNextRetryDetailProps {",
+  "return input;",
 ]) {
   if (!nextRetryDetailPropsSource.includes(requiredNextRetryDetailPropsUsage)) {
     throw new Error(`media-asset-card-next-retry-detail-props.ts must own next-retry detail prop projection: ${requiredNextRetryDetailPropsUsage}`);
