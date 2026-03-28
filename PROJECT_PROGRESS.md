@@ -3188,6 +3188,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issue-card-action-buttons.tsx`, `apps/web/components/recent-media-issue-card-metadata-details.tsx`, and `apps/web/components/recent-media-issue-card-tags.tsx` now forward their full typed props contracts directly into child props builders instead of repeating inline child-prop projection
   - these recent-media layout layers now stay focused on section and tag-row composition while the leaf builders continue owning their narrowed child contracts
   - the record-panel structure guardrail now enforces this direct props reuse so future recent-media layout edits do not regrow duplicated child-prop assembly
+- Media Asset Metadata Details Props Reuse Simplification V1:
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now forwards its full typed props contract directly into the five detail props builders instead of repeating the same inline child-prop projection
+  - the metadata details layer now stays focused on detail-grid composition while the leaf detail builders continue owning the narrowed child contracts
+  - the media-asset-card and record-panel structure guardrails now enforce this direct props reuse so future metadata detail edits do not regrow duplicated child-prop assembly
 
 ## Next
 - Continue the next product slice

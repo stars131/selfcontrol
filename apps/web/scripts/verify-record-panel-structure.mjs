@@ -24818,17 +24818,17 @@ for (const requiredMediaAssetCardMetadataDetailsUsage of [
   'import { buildMediaAssetCardTextLineCountDetailProps } from "./media-asset-card-text-line-count-detail-props";',
   'import { MediaAssetCardTextLineCountDetail } from "./media-asset-card-text-line-count-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
-  "}: MediaAssetCardMetadataDetailsProps) {",
+  "export function MediaAssetCardMetadataDetails(props: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
-  "buildMediaAssetCardDimensionsDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardDimensionsDetailProps(props)",
   "<MediaAssetCardDimensionsDetail",
-  "buildMediaAssetCardTextCharCountDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardTextCharCountDetailProps(props)",
   "<MediaAssetCardTextCharCountDetail",
-  "buildMediaAssetCardTextLineCountDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardTextLineCountDetailProps(props)",
   "<MediaAssetCardTextLineCountDetail",
-  "buildMediaAssetCardLastAttemptDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardLastAttemptDetailProps(props)",
   "<MediaAssetCardLastAttemptDetail",
-  "buildMediaAssetCardNextRetryDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardNextRetryDetailProps(props)",
   "<MediaAssetCardNextRetryDetail",
 ]) {
   if (!mediaAssetCardMetadataDetailsSource.includes(requiredMediaAssetCardMetadataDetailsUsage)) {
@@ -24853,6 +24853,11 @@ for (const forbiddenMediaAssetCardMetadataDetailsToken of [
   "<MediaAssetCardTextLineCountDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
+  "buildMediaAssetCardDimensionsDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardTextCharCountDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardTextLineCountDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardLastAttemptDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "buildMediaAssetCardNextRetryDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
 ]) {
   if (mediaAssetCardMetadataDetailsSource.includes(forbiddenMediaAssetCardMetadataDetailsToken)) {
     throw new Error(
