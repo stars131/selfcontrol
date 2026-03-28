@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Project Spec Recovery V1:
+  - `PROJECT_SPEC.md` has been fully rewritten as a clean UTF-8 Chinese specification aligned with the current product shape instead of the stale and harder-to-maintain earlier version
+  - the restored spec now matches the actual chat-first UI model, settings placement, multimodal ingestion, provider-splitting strategy, reminder V1 boundary, share model, Linux deployment target, and enterprise-grade engineering expectations used across the repository
+  - this gives the repository a current root-level product and architecture reference that is easier to use for continued Linux-VM development and future multi-user expansion
 - API And Schema Doc Recovery V1:
   - `docs/API_AND_WORKFLOWS.md` has been fully rewritten as a clean UTF-8 Chinese document based on the current FastAPI route surface instead of the previous garbled content
   - `docs/ERD_AND_SCHEMA.md` has been fully rewritten as a clean UTF-8 Chinese document aligned with the current SQLAlchemy models, workspace isolation model, provider boundaries, media pipeline, and transfer-job schema
