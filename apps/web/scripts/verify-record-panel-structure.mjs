@@ -2744,13 +2744,13 @@ const recentMediaIssuesListItemPropsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issues-list-item-props.types.ts",
 );
-const recentMediaIssueCardChildPropsPath = path.resolve(
+const recentMediaIssueCardActionsPropsPath = path.resolve(
   process.cwd(),
-  "components/recent-media-issue-card-child-props.ts",
+  "components/recent-media-issue-card-actions-props.ts",
 );
-const recentMediaIssueCardChildPropsTypesPath = path.resolve(
+const recentMediaIssueCardActionsPropsTypesPath = path.resolve(
   process.cwd(),
-  "components/recent-media-issue-card-child-props.types.ts",
+  "components/recent-media-issue-card-actions-props.types.ts",
 );
 const recentMediaIssueCardMetadataPropsPath = path.resolve(
   process.cwd(),
@@ -4884,12 +4884,12 @@ const recentMediaIssuesListItemPropsTypesSource = fs.readFileSync(
   recentMediaIssuesListItemPropsTypesPath,
   "utf8",
 );
-const recentMediaIssueCardChildPropsSource = fs.readFileSync(
-  recentMediaIssueCardChildPropsPath,
+const recentMediaIssueCardActionsPropsSource = fs.readFileSync(
+  recentMediaIssueCardActionsPropsPath,
   "utf8",
 );
-const recentMediaIssueCardChildPropsTypesSource = fs.readFileSync(
-  recentMediaIssueCardChildPropsTypesPath,
+const recentMediaIssueCardActionsPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardActionsPropsTypesPath,
   "utf8",
 );
 const recentMediaIssueCardMetadataPropsSource = fs.readFileSync(
@@ -6746,10 +6746,10 @@ const recentMediaIssuesListItemPropsLines =
   recentMediaIssuesListItemPropsSource.split(/\r?\n/).length;
 const recentMediaIssuesListItemPropsTypesLines =
   recentMediaIssuesListItemPropsTypesSource.split(/\r?\n/).length;
-const recentMediaIssueCardChildPropsLines =
-  recentMediaIssueCardChildPropsSource.split(/\r?\n/).length;
-const recentMediaIssueCardChildPropsTypesLines =
-  recentMediaIssueCardChildPropsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionsPropsLines =
+  recentMediaIssueCardActionsPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionsPropsTypesLines =
+  recentMediaIssueCardActionsPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataPropsLines =
   recentMediaIssueCardMetadataPropsSource.split(/\r?\n/).length;
 const recentMediaIssueCardMetadataPropsTypesLines =
@@ -27029,7 +27029,7 @@ if (recentMediaIssuesListItemPropsTypesLines > maxRecentMediaIssuesListItemProps
 }
 
 for (const requiredRecentMediaIssueCardUsage of [
-  'import { buildRecentMediaIssueCardActionsProps } from "./recent-media-issue-card-child-props";',
+  'import { buildRecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions-props";',
   'import { RecentMediaIssueCardActions } from "./recent-media-issue-card-actions";',
   'import { RecentMediaIssueCardError } from "./recent-media-issue-card-error";',
   'import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";',
@@ -27081,14 +27081,14 @@ if (recentMediaIssueCardLines > maxRecentMediaIssueCardLines) {
 for (const requiredRecentMediaIssueCardChildPropsUsage of [
   'import { buildMediaIssueSettingsHref } from "../lib/record-panel-media";',
   'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
-  'import type { BuildRecentMediaIssueCardChildPropsInput } from "./recent-media-issue-card-child-props.types";',
+  'import type { BuildRecentMediaIssueCardActionsPropsInput } from "./recent-media-issue-card-actions-props.types";',
   "export function buildRecentMediaIssueCardActionsProps({",
-  "}: BuildRecentMediaIssueCardChildPropsInput): RecentMediaIssueCardActionsProps {",
+  "}: BuildRecentMediaIssueCardActionsPropsInput): RecentMediaIssueCardActionsProps {",
   "settingsHref: buildMediaIssueSettingsHref(workspaceId, issue)",
 ]) {
-  if (!recentMediaIssueCardChildPropsSource.includes(requiredRecentMediaIssueCardChildPropsUsage)) {
+  if (!recentMediaIssueCardActionsPropsSource.includes(requiredRecentMediaIssueCardChildPropsUsage)) {
     throw new Error(
-      `recent-media-issue-card-child-props.ts must own recent-media child prop projection: ${requiredRecentMediaIssueCardChildPropsUsage}`,
+      `recent-media-issue-card-actions-props.ts must own recent-media action prop projection: ${requiredRecentMediaIssueCardChildPropsUsage}`,
     );
   }
 }
@@ -27098,17 +27098,17 @@ for (const forbiddenRecentMediaIssueCardChildPropsToken of [
   "<RecentMediaIssueCardActions",
   "<article className=\"record-card\">",
 ]) {
-  if (recentMediaIssueCardChildPropsSource.includes(forbiddenRecentMediaIssueCardChildPropsToken)) {
+  if (recentMediaIssueCardActionsPropsSource.includes(forbiddenRecentMediaIssueCardChildPropsToken)) {
     throw new Error(
-      `recent-media-issue-card-child-props.ts must keep card rendering delegated: ${forbiddenRecentMediaIssueCardChildPropsToken}`,
+      `recent-media-issue-card-actions-props.ts must keep card rendering delegated: ${forbiddenRecentMediaIssueCardChildPropsToken}`,
     );
   }
 }
 
-const maxRecentMediaIssueCardChildPropsLines = 32;
-if (recentMediaIssueCardChildPropsLines > maxRecentMediaIssueCardChildPropsLines) {
+const maxRecentMediaIssueCardActionsPropsLines = 6;
+if (recentMediaIssueCardActionsPropsLines > maxRecentMediaIssueCardActionsPropsLines) {
   throw new Error(
-    `recent-media-issue-card-child-props.ts exceeded ${maxRecentMediaIssueCardChildPropsLines} lines: ${recentMediaIssueCardChildPropsLines}`,
+    `recent-media-issue-card-actions-props.ts exceeded ${maxRecentMediaIssueCardActionsPropsLines} lines: ${recentMediaIssueCardActionsPropsLines}`,
   );
 }
 
@@ -27163,20 +27163,20 @@ if (recentMediaIssueCardMetadataPropsTypesLines > maxRecentMediaIssueCardMetadat
   );
 }
 
-for (const requiredRecentMediaIssueCardChildPropsTypesUsage of [
-  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type BuildRecentMediaIssueCardChildPropsInput = RecentMediaIssueCardProps;',
+for (const requiredRecentMediaIssueCardActionsPropsTypesUsage of [
+  'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type BuildRecentMediaIssueCardActionsPropsInput = Pick<RecentMediaIssueCardProps, "canWriteWorkspace" | "issue" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId" | "workspaceId">;',
 ]) {
-  if (!recentMediaIssueCardChildPropsTypesSource.includes(requiredRecentMediaIssueCardChildPropsTypesUsage)) {
+  if (!recentMediaIssueCardActionsPropsTypesSource.includes(requiredRecentMediaIssueCardActionsPropsTypesUsage)) {
     throw new Error(
-      `recent-media-issue-card-child-props.types.ts must own recent-media child-props input typing: ${requiredRecentMediaIssueCardChildPropsTypesUsage}`,
+      `recent-media-issue-card-actions-props.types.ts must own recent-media action-props input typing: ${requiredRecentMediaIssueCardActionsPropsTypesUsage}`,
     );
   }
 }
 
-const maxRecentMediaIssueCardChildPropsTypesLines = 2;
-if (recentMediaIssueCardChildPropsTypesLines > maxRecentMediaIssueCardChildPropsTypesLines) {
+const maxRecentMediaIssueCardActionsPropsTypesLines = 2;
+if (recentMediaIssueCardActionsPropsTypesLines > maxRecentMediaIssueCardActionsPropsTypesLines) {
   throw new Error(
-    `recent-media-issue-card-child-props.types.ts exceeded ${maxRecentMediaIssueCardChildPropsTypesLines} lines: ${recentMediaIssueCardChildPropsTypesLines}`,
+    `recent-media-issue-card-actions-props.types.ts exceeded ${maxRecentMediaIssueCardActionsPropsTypesLines} lines: ${recentMediaIssueCardActionsPropsTypesLines}`,
   );
 }
 

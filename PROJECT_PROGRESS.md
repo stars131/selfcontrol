@@ -2931,6 +2931,10 @@ Last updated: 2026-03-28
   - recent-media metadata prop assembly now lives in `apps/web/components/recent-media-issue-card-metadata-props.ts` instead of remaining mixed inside `apps/web/components/recent-media-issue-card-child-props.ts`
   - `apps/web/components/recent-media-issue-card.tsx` now keeps metadata projection isolated from action projection so future issue-card changes stay easier to review and extend safely
   - the record-panel structure guardrail now enforces this metadata-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
+- Recent Media Actions Props Builder Extraction V1:
+  - recent-media action prop assembly now lives in `apps/web/components/recent-media-issue-card-actions-props.ts` and the transitional `recent-media-issue-card-child-props.ts` boundary is removed
+  - `apps/web/components/recent-media-issue-card.tsx` now wires metadata and actions through explicit dedicated builders so the issue-card orchestration layer stays easier to audit and extend safely
+  - the record-panel structure guardrail now enforces this action-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
