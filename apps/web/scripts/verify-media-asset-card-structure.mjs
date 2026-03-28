@@ -217,6 +217,19 @@ const retryCountTagTypesLineCount = retryCountTagTypesSource.split(/\r?\n/).leng
 const fileExtensionTagPath = path.resolve(process.cwd(), "components/media-asset-card-file-extension-tag.tsx");
 const fileExtensionTagSource = fs.readFileSync(fileExtensionTagPath, "utf8");
 const fileExtensionTagLineCount = fileExtensionTagSource.split(/\r?\n/).length;
+const fileExtensionTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-file-extension-tag-props.ts",
+);
+const fileExtensionTagPropsSource = fs.readFileSync(fileExtensionTagPropsPath, "utf8");
+const fileExtensionTagPropsLineCount = fileExtensionTagPropsSource.split(/\r?\n/).length;
+const fileExtensionTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-file-extension-tag-props.types.ts",
+);
+const fileExtensionTagPropsTypesSource = fs.readFileSync(fileExtensionTagPropsTypesPath, "utf8");
+const fileExtensionTagPropsTypesLineCount =
+  fileExtensionTagPropsTypesSource.split(/\r?\n/).length;
 const fileExtensionTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-file-extension-tag.types.ts");
 const fileExtensionTagTypesSource = fs.readFileSync(fileExtensionTagTypesPath, "utf8");
 const fileExtensionTagTypesLineCount = fileExtensionTagTypesSource.split(/\r?\n/).length;
@@ -770,6 +783,7 @@ if (metadataDetailsPropsTypesLineCount > 2) {
 }
 
 for (const requiredMetadataTagsUsage of [
+  'import { buildMediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag-props";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
   'import { buildMediaAssetCardSizeTagProps } from "./media-asset-card-size-tag-props";',
   'import { buildMediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag-props";',
@@ -786,6 +800,7 @@ for (const requiredMetadataTagsUsage of [
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   "readMediaAssetCardMetadataTagValues({ asset })",
+  "buildMediaAssetCardFileExtensionTagProps({ asset })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
   "buildMediaAssetCardSizeTagProps({ asset })",
   "buildMediaAssetCardStorageProviderTagProps({ asset, locale })",
@@ -793,7 +808,7 @@ for (const requiredMetadataTagsUsage of [
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
-  "<MediaAssetCardFileExtensionTag asset={asset} />",
+  "<MediaAssetCardFileExtensionTag",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
   "<MediaAssetCardSizeTag",
@@ -809,7 +824,7 @@ for (const forbiddenMetadataTagsToken of [
   '{mediaIssueCopy.retryStatePrefix} {getRetryStateLabel(locale, retryState)}',
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
-  "asset.metadata_json.file_extension",
+  "<MediaAssetCardFileExtensionTag asset={asset} />",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
   "<MediaAssetCardSizeTag asset={asset} />",
   "<MediaAssetCardStorageProviderTag asset={asset} locale={locale} />",
@@ -840,6 +855,42 @@ for (const requiredMetadataTagsTypesUsage of [
 
 if (metadataTagsTypesLineCount > 2) {
   throw new Error(`media-asset-card-metadata-tags.types.ts exceeded 2 lines: ${metadataTagsTypesLineCount}`);
+}
+
+for (const requiredFileExtensionTagPropsUsage of [
+  'import type { MediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag.types";',
+  'import type { BuildMediaAssetCardFileExtensionTagPropsInput } from "./media-asset-card-file-extension-tag-props.types";',
+  "export function buildMediaAssetCardFileExtensionTagProps({ asset }: BuildMediaAssetCardFileExtensionTagPropsInput): MediaAssetCardFileExtensionTagProps {",
+]) {
+  if (!fileExtensionTagPropsSource.includes(requiredFileExtensionTagPropsUsage)) {
+    throw new Error(`media-asset-card-file-extension-tag-props.ts must own file-extension tag prop projection: ${requiredFileExtensionTagPropsUsage}`);
+  }
+}
+
+for (const forbiddenFileExtensionTagPropsToken of [
+  "<MediaAssetCardFileExtensionTag",
+  "metadata_json.file_extension",
+  '<div className="tag-row">',
+]) {
+  if (fileExtensionTagPropsSource.includes(forbiddenFileExtensionTagPropsToken)) {
+    throw new Error(`media-asset-card-file-extension-tag-props.ts must keep rendering and read rules delegated: ${forbiddenFileExtensionTagPropsToken}`);
+  }
+}
+
+if (fileExtensionTagPropsLineCount > 5) {
+  throw new Error(`media-asset-card-file-extension-tag-props.ts exceeded 5 lines: ${fileExtensionTagPropsLineCount}`);
+}
+
+for (const requiredFileExtensionTagPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; export type BuildMediaAssetCardFileExtensionTagPropsInput = Pick<MediaAssetCardMetadataTagsProps, "asset">;',
+]) {
+  if (!fileExtensionTagPropsTypesSource.includes(requiredFileExtensionTagPropsTypesUsage)) {
+    throw new Error(`media-asset-card-file-extension-tag-props.types.ts must own file-extension-tag-props input typing: ${requiredFileExtensionTagPropsTypesUsage}`);
+  }
+}
+
+if (fileExtensionTagPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-file-extension-tag-props.types.ts exceeded 2 lines: ${fileExtensionTagPropsTypesLineCount}`);
 }
 
 for (const requiredMetadataTagValuesUsage of [

@@ -3111,6 +3111,10 @@ Last updated: 2026-03-28
   - media-asset size tag prop assembly now lives in `apps/web/components/media-asset-card-size-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps size tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
   - the media-asset-card and record-panel structure guardrails now enforce this size-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
+- Media Asset File Extension Tag Props Builder Extraction V1:
+  - media-asset file-extension tag prop assembly now lives in `apps/web/components/media-asset-card-file-extension-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps file-extension tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the media-asset-card and record-panel structure guardrails now enforce this file-extension-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
