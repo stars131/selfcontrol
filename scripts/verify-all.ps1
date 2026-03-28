@@ -23,4 +23,5 @@ finally {
   Pop-Location
 }
 
+Invoke-NativeStep "Running repository docs verification" { python (Join-Path $repoRoot "scripts/verify-repository-docs.py") }
 Invoke-NativeStep "Running API tests" { python -m pytest (Join-Path $repoRoot "apps/api/tests") -q }

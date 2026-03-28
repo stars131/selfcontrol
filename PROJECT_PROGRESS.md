@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Repository Documentation Guardrail V1:
+  - `scripts/verify-repository-docs.py` now verifies that the key root and `docs/` reference files still exist, are UTF-8 readable, are non-empty, and retain their baseline document headers
+  - both `scripts/verify-all.ps1` and `scripts/verify-all.sh` now execute this repository documentation guard so future workflow changes catch missing or broken core docs during the standard verification path
+  - `CONTRIBUTING.md` now documents that the root verification entrypoints enforce this documentation baseline, which strengthens long-term maintainability and updateability around the repository's operating knowledge
 - Project Spec Recovery V1:
   - `PROJECT_SPEC.md` has been fully rewritten as a clean UTF-8 Chinese specification aligned with the current product shape instead of the stale and harder-to-maintain earlier version
   - the restored spec now matches the actual chat-first UI model, settings placement, multimodal ingestion, provider-splitting strategy, reminder V1 boundary, share model, Linux deployment target, and enterprise-grade engineering expectations used across the repository

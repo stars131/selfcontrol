@@ -38,6 +38,8 @@ Preferred project-level verification:
 - Windows: `./scripts/verify-all.ps1`
 - Linux / macOS / VM: `sh ./scripts/verify-all.sh`
 
+The repository-level verification entrypoints also validate that key root and `docs/` documentation files still exist, remain UTF-8 readable, and keep their baseline headers.
+
 Direct commands:
 
 - frontend: `cd apps/web && npm run verify:ui-guardrails`

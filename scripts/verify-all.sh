@@ -29,4 +29,5 @@ run_step() {
 }
 
 run_step "Running web guardrails" sh -c "cd \"$repo_root/apps/web\" && npm run verify:ui-guardrails"
+run_step "Running repository docs verification" "$python_bin" "$repo_root/scripts/verify-repository-docs.py"
 run_step "Running API tests" "$python_bin" -m pytest "$repo_root/apps/api/tests" -q
