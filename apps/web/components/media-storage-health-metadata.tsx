@@ -2,6 +2,7 @@
 
 import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";
 import { MediaStorageHealthCheckedAtDetail } from "./media-storage-health-checked-at-detail";
+import { MediaStorageHealthEndpointRootDetail } from "./media-storage-health-endpoint-root-detail";
 import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";
 import { MediaStorageHealthResponseTimeTag } from "./media-storage-health-response-time-tag";
 import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";
@@ -24,11 +25,7 @@ export function MediaStorageHealthMetadata({
         <MediaStorageHealthResponseTimeTag mediaStorageHealth={mediaStorageHealth} />
       </div>
       <MediaStorageHealthCheckedAtDetail copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />
-      {mediaStorageHealth.api_base_url ? (
-        <div className="muted" style={{ wordBreak: "break-all" }}>
-          {copy.endpointRoot}: {mediaStorageHealth.api_base_url}
-        </div>
-      ) : null}
+      <MediaStorageHealthEndpointRootDetail copy={copy} mediaStorageHealth={mediaStorageHealth} />
       {mediaStorageHealth.warnings.length ? (
         <div className="notice">
           {mediaStorageHealth.warnings.join(" ")}

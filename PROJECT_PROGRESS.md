@@ -2855,6 +2855,10 @@ Last updated: 2026-03-28
   - media-storage health checked-at detail rendering now lives in `apps/web/components/media-storage-health-checked-at-detail.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
   - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while checked-at detail rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this checked-at-detail boundary so future health-metadata changes do not regrow a mixed composition-and-checked-at rendering module
+- Media Storage Health Endpoint Root Detail Extraction V1:
+  - media-storage health endpoint-root detail rendering now lives in `apps/web/components/media-storage-health-endpoint-root-detail.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
+  - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while endpoint-root detail rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this endpoint-root-detail boundary so future health-metadata changes do not regrow a mixed composition-and-endpoint-root rendering module
 
 ## Next
 - Continue the next product slice
