@@ -17435,6 +17435,9 @@ if (workspaceShellClientEffectsInputTypesLines > maxWorkspaceShellClientEffectsI
 for (const requiredWorkspaceShellClientPanelsPropsUsage of [
   'import type { BuildWorkspaceShellPanelsPropsInput } from "./workspace-shell-client-panels-props.types";',
   "}: BuildWorkspaceShellPanelsPropsInput): WorkspaceShellPanelsProps {",
+  "activeConversationId,",
+  "token,",
+  "visibleRecords,",
 ]) {
   if (!workspaceShellClientPanelsPropsSource.includes(requiredWorkspaceShellClientPanelsPropsUsage)) {
     throw new Error(
@@ -17456,7 +17459,7 @@ for (const forbiddenWorkspaceShellClientPanelsPropsToken of [
 }
 
 for (const requiredWorkspaceShellClientPanelsPropsTypesUsage of [
-  'import type { WorkspaceShellActions, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellPanelsPropsInput = { actions: WorkspaceShellActions; state: WorkspaceShellState; workspaceId: string };',
+  'import type { WorkspaceShellActions, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellPanelsPropsInput = WorkspaceShellState & { actions: WorkspaceShellActions; workspaceId: string };',
 ]) {
   if (!workspaceShellClientPanelsPropsTypesSource.includes(requiredWorkspaceShellClientPanelsPropsTypesUsage)) {
     throw new Error(

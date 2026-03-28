@@ -751,7 +751,7 @@ for (const requiredHelperUsage of [
   "buildWorkspaceShellRefreshersInput({ state, workspaceId })",
   "buildWorkspaceShellEffectsInput({ router, state, workspaceId })",
   "buildWorkspaceShellActionsInput({ refreshers, state, workspaceId })",
-  "buildWorkspaceShellPanelsProps({ actions, state, workspaceId })",
+  "buildWorkspaceShellPanelsProps({ ...state, actions, workspaceId })",
 ]) {
   if (!source.includes(requiredHelperUsage)) {
     throw new Error(`workspace-shell-client.tsx must delegate shell prop assembly: ${requiredHelperUsage}`);

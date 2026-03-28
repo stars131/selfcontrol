@@ -27,7 +27,7 @@ export function WorkspaceShellClient({ workspaceId }: WorkspaceShellClientProps)
   const actions = useWorkspaceShellActions(
     buildWorkspaceShellActionsInput({ refreshers, state, workspaceId }),
   );
-  const panelsProps = buildWorkspaceShellPanelsProps({ actions, state, workspaceId });
+  const panelsProps = buildWorkspaceShellPanelsProps({ ...state, actions, workspaceId });
 
   return (
     <WorkspaceShellFrame error={state.error} loading={state.loading}>

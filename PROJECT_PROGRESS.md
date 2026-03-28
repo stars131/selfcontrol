@@ -3216,6 +3216,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-reminder-tools.tsx` now keeps its full props contract intact and forwards a flattened input object into `buildRecordReminderPanelProps` instead of wrapping reminder source data under `{ bindings, props }`
   - `apps/web/components/record-reminder-tools-panel-props.types.ts` and `apps/web/components/record-reminder-tools-panel-props.ts` now share one combined reminder-panel input contract so the reminder panel props builder stays easier to extend without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened reminder-panel input boundary so future reminder tool edits do not regrow double-wrapped prop assembly
+- Workspace Shell Panels Input Flattening V1:
+  - `apps/web/components/workspace-shell-client.tsx` now forwards one flattened input object into `buildWorkspaceShellPanelsProps` instead of wrapping shell state under `{ actions, state, workspaceId }`
+  - `apps/web/components/workspace-shell-client-panels-props.types.ts` and `apps/web/components/workspace-shell-client-panels-props.ts` now share one combined shell-panels input contract so the panel props builder stays easier to evolve without nested wrapper churn
+  - the workspace-shell and record-panel structure guardrails now enforce this flattened shell-panels input boundary so future shell panel edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice
