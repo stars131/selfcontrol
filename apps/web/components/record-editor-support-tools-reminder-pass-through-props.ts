@@ -2,11 +2,8 @@
 
 import type { RecordEditorSupportToolsProps } from "./record-editor-support-tools.types";
 
-export function buildRecordReminderToolsPassThroughProps({
-  channelInAppLabel,
-  selectedRecord,
-  ...passThroughProps
-}: RecordEditorSupportToolsProps) {
+export function buildRecordReminderToolsPassThroughProps(input: RecordEditorSupportToolsProps) {
+  const { channelInAppLabel, selectedRecord, ...passThroughProps } = input;
   void channelInAppLabel;
   void selectedRecord;
   return passThroughProps;

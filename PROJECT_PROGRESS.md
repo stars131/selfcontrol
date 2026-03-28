@@ -3460,6 +3460,10 @@ Last updated: 2026-03-28
   - `apps/web/components/chat-panel-section-props.ts` and `chat-panel-management-content-props.ts` now use explicit `input` parameters while keeping conversation/management prop assembly unchanged
   - this keeps the chat-panel helper layer aligned with the broader helper-signature normalization work without changing chat or management behavior
   - the chat-panel structure guardrail now enforces this normalized helper boundary so future chat-panel helper edits stay easier to review and extend
+- Record Editor Support Tools Helper Naming Cleanup V1:
+  - `apps/web/components/record-editor-support-tools-media-copy-props.ts`, `record-editor-support-tools-media-pass-through-props.ts`, `record-editor-support-tools-reminder-derived-props.ts`, and `record-editor-support-tools-reminder-pass-through-props.ts` now use explicit `input` parameters while keeping copy, derived, and pass-through behavior unchanged
+  - this keeps the editor support-tools helper layer aligned with the broader helper-signature normalization work without changing media or reminder tool behavior
+  - the record-workspaces structure guardrail now enforces this normalized helper boundary so future support-tools edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

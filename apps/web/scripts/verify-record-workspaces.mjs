@@ -511,11 +511,11 @@ for (const forbiddenSupportToolsMediaCopyPropsToken of [
 }
 
 for (const requiredSupportToolsMediaCopyPropsUsage of [
-  "export function buildRecordMediaToolsCopyProps({",
-  "allTrackedFilesPresentLabel: panelCopy.allTrackedFilesPresent",
-  "deleteButtonLabel: deleting ? panelCopy.deleting : panelCopy.deleteRecord",
-  "saveButtonLabel: saving",
-  "workspaceStorageLabel: panelCopy.workspaceStorage",
+  "export function buildRecordMediaToolsCopyProps(input: BuildRecordMediaToolsCopyPropsInput)",
+  "allTrackedFilesPresentLabel: input.panelCopy.allTrackedFilesPresent",
+  "deleteButtonLabel: input.deleting ? input.panelCopy.deleting : input.panelCopy.deleteRecord",
+  "saveButtonLabel: input.saving",
+  "workspaceStorageLabel: input.panelCopy.workspaceStorage",
 ]) {
   if (!editorSupportToolsMediaCopyPropsSource.includes(requiredSupportToolsMediaCopyPropsUsage)) {
     throw new Error(
@@ -548,7 +548,8 @@ for (const requiredSupportToolsMediaPassThroughPropsImport of [
 }
 
 for (const requiredSupportToolsMediaPassThroughPropsUsage of [
-  "export function buildRecordMediaToolsPassThroughProps({",
+  "export function buildRecordMediaToolsPassThroughProps(input: RecordEditorSupportToolsProps)",
+  "const { selectedRecord, panelCopy, ...passThroughProps } = input;",
   "...passThroughProps",
   "void selectedRecord;",
   "void panelCopy;",
@@ -677,10 +678,10 @@ for (const forbiddenSupportToolsReminderDerivedPropsToken of [
 }
 
 for (const requiredSupportToolsReminderDerivedPropsUsage of [
-  "export function buildRecordReminderToolsDerivedProps({",
-  "channelInApp: channelInAppLabel",
-  "hasSelectedRecord: Boolean(selectedRecord)",
-  "selectedRecordTitle: selectedRecord?.title ?? null",
+  "export function buildRecordReminderToolsDerivedProps(input: BuildRecordReminderToolsDerivedPropsInput)",
+  "channelInApp: input.channelInAppLabel",
+  "hasSelectedRecord: Boolean(input.selectedRecord)",
+  "selectedRecordTitle: input.selectedRecord?.title ?? null",
 ]) {
   if (!editorSupportToolsReminderDerivedPropsSource.includes(requiredSupportToolsReminderDerivedPropsUsage)) {
     throw new Error(
@@ -713,7 +714,8 @@ for (const requiredSupportToolsReminderPassThroughPropsImport of [
 }
 
 for (const requiredSupportToolsReminderPassThroughPropsUsage of [
-  "export function buildRecordReminderToolsPassThroughProps({",
+  "export function buildRecordReminderToolsPassThroughProps(input: RecordEditorSupportToolsProps)",
+  "const { channelInAppLabel, selectedRecord, ...passThroughProps } = input;",
   "...passThroughProps",
   "void channelInAppLabel;",
   "void selectedRecord;",
