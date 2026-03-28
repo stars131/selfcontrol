@@ -2,6 +2,7 @@
 
 import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";
 import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";
+import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";
 import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
 
 export function MediaAssetCardActions({
@@ -31,16 +32,12 @@ export function MediaAssetCardActions({
         onRefreshMedia={onRefreshMedia}
         refreshingMediaId={refreshingMediaId}
       />
-      {asset.processing_status !== "completed" ? (
-        <button
-          className="button secondary"
-          type="button"
-          disabled={retryingMediaId === asset.id}
-          onClick={() => void onRetryMediaProcessing(asset.id)}
-        >
-          {retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}
-        </button>
-      ) : null}
+      <MediaAssetCardRetryButton
+        asset={asset}
+        mediaIssueCopy={mediaIssueCopy}
+        onRetryMediaProcessing={onRetryMediaProcessing}
+        retryingMediaId={retryingMediaId}
+      />
       <button
         className="button secondary"
         type="button"

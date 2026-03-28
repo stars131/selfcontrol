@@ -1162,6 +1162,14 @@ const mediaAssetCardRefreshButtonTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-refresh-button.types.ts",
 );
+const mediaAssetCardRetryButtonPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-button.tsx",
+);
+const mediaAssetCardRetryButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-button.types.ts",
+);
 const mediaStorageOverviewPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview.tsx",
@@ -3587,6 +3595,14 @@ const mediaAssetCardRefreshButtonSource = fs.readFileSync(
 );
 const mediaAssetCardRefreshButtonTypesSource = fs.readFileSync(
   mediaAssetCardRefreshButtonTypesPath,
+  "utf8",
+);
+const mediaAssetCardRetryButtonSource = fs.readFileSync(
+  mediaAssetCardRetryButtonPath,
+  "utf8",
+);
+const mediaAssetCardRetryButtonTypesSource = fs.readFileSync(
+  mediaAssetCardRetryButtonTypesPath,
   "utf8",
 );
 const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
@@ -6085,6 +6101,10 @@ const mediaAssetCardRefreshButtonLines =
   mediaAssetCardRefreshButtonSource.split(/\r?\n/).length;
 const mediaAssetCardRefreshButtonTypesLines =
   mediaAssetCardRefreshButtonTypesSource.split(/\r?\n/).length;
+const mediaAssetCardRetryButtonLines =
+  mediaAssetCardRetryButtonSource.split(/\r?\n/).length;
+const mediaAssetCardRetryButtonTypesLines =
+  mediaAssetCardRetryButtonTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewSummaryLines =
   mediaStorageOverviewSummarySource.split(/\r?\n/).length;
@@ -17343,10 +17363,12 @@ if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
 for (const requiredMediaAssetCardActionsUsage of [
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
+  'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   "}: MediaAssetCardActionsProps) {",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
+  "<MediaAssetCardRetryButton",
 ]) {
   if (!mediaAssetCardActionsSource.includes(requiredMediaAssetCardActionsUsage)) {
     throw new Error(
@@ -17363,6 +17385,9 @@ for (const forbiddenMediaAssetCardActionsToken of [
   "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
   "onClick={() => void onRefreshMedia(asset.id)}",
   "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
+  'asset.processing_status !== "completed"',
+  "onClick={() => void onRetryMediaProcessing(asset.id)}",
+  "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
 ]) {
   if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
     throw new Error(
@@ -17483,6 +17508,56 @@ const maxMediaAssetCardRefreshButtonTypesLines = 2;
 if (mediaAssetCardRefreshButtonTypesLines > maxMediaAssetCardRefreshButtonTypesLines) {
   throw new Error(
     `media-asset-card-refresh-button.types.ts exceeded ${maxMediaAssetCardRefreshButtonTypesLines} lines: ${mediaAssetCardRefreshButtonTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRetryButtonUsage of [
+  'import type { MediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button.types";',
+  "}: MediaAssetCardRetryButtonProps) {",
+  'asset.processing_status !== "completed"',
+  "onClick={() => void onRetryMediaProcessing(asset.id)}",
+  "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
+]) {
+  if (!mediaAssetCardRetryButtonSource.includes(requiredMediaAssetCardRetryButtonUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button.tsx must own media-asset retry button rendering: ${requiredMediaAssetCardRetryButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardRetryButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRefreshMedia(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (mediaAssetCardRetryButtonSource.includes(forbiddenMediaAssetCardRetryButtonToken)) {
+    throw new Error(
+      `media-asset-card-retry-button.tsx must keep non-retry actions delegated: ${forbiddenMediaAssetCardRetryButtonToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRetryButtonLines = 4;
+if (mediaAssetCardRetryButtonLines > maxMediaAssetCardRetryButtonLines) {
+  throw new Error(
+    `media-asset-card-retry-button.tsx exceeded ${maxMediaAssetCardRetryButtonLines} lines: ${mediaAssetCardRetryButtonLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRetryButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardRetryButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;',
+]) {
+  if (!mediaAssetCardRetryButtonTypesSource.includes(requiredMediaAssetCardRetryButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button.types.ts must own media-asset retry button prop typing: ${requiredMediaAssetCardRetryButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRetryButtonTypesLines = 2;
+if (mediaAssetCardRetryButtonTypesLines > maxMediaAssetCardRetryButtonTypesLines) {
+  throw new Error(
+    `media-asset-card-retry-button.types.ts exceeded ${maxMediaAssetCardRetryButtonTypesLines} lines: ${mediaAssetCardRetryButtonTypesLines}`,
   );
 }
 

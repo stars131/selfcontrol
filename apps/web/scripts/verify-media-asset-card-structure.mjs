@@ -175,6 +175,15 @@ const refreshButtonTypesPath = path.resolve(
 );
 const refreshButtonTypesSource = fs.readFileSync(refreshButtonTypesPath, "utf8");
 const refreshButtonTypesLineCount = refreshButtonTypesSource.split(/\r?\n/).length;
+const retryButtonPath = path.resolve(process.cwd(), "components/media-asset-card-retry-button.tsx");
+const retryButtonSource = fs.readFileSync(retryButtonPath, "utf8");
+const retryButtonLineCount = retryButtonSource.split(/\r?\n/).length;
+const retryButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-button.types.ts",
+);
+const retryButtonTypesSource = fs.readFileSync(retryButtonTypesPath, "utf8");
+const retryButtonTypesLineCount = retryButtonTypesSource.split(/\r?\n/).length;
 
 if (!cardSource.includes('import { MediaAssetCardMetadata } from "./media-asset-card-metadata";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardMetadata");
@@ -979,15 +988,13 @@ if (extractionModeTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-extraction-mode-tag.types.ts exceeded 2 lines: ${extractionModeTagTypesLineCount}`);
 }
 
-if (!actionsSource.includes('asset.processing_status !== "completed"')) {
-  throw new Error("media-asset-card-actions.tsx must keep retry button gating");
-}
-
 for (const requiredActionsUsage of [
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
+  'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
+  "<MediaAssetCardRetryButton",
 ]) {
   if (!actionsSource.includes(requiredActionsUsage)) {
     throw new Error(
@@ -1001,6 +1008,9 @@ for (const forbiddenActionsToken of [
   "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
   "onClick={() => void onRefreshMedia(asset.id)}",
   "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
+  'asset.processing_status !== "completed"',
+  "onClick={() => void onRetryMediaProcessing(asset.id)}",
+  "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
 ]) {
   if (actionsSource.includes(forbiddenActionsToken)) {
     throw new Error(
@@ -1100,6 +1110,52 @@ for (const requiredRefreshButtonTypesUsage of [
 if (refreshButtonTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-refresh-button.types.ts exceeded 2 lines: ${refreshButtonTypesLineCount}`,
+  );
+}
+
+for (const requiredRetryButtonUsage of [
+  'import type { MediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button.types";',
+  "}: MediaAssetCardRetryButtonProps) {",
+  'asset.processing_status !== "completed"',
+  "onClick={() => void onRetryMediaProcessing(asset.id)}",
+  "{retryingMediaId === asset.id ? mediaIssueCopy.retrying : mediaIssueCopy.retry}",
+]) {
+  if (!retryButtonSource.includes(requiredRetryButtonUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button.tsx must own retry button rendering: ${requiredRetryButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRetryButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRefreshMedia(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (retryButtonSource.includes(forbiddenRetryButtonToken)) {
+    throw new Error(
+      `media-asset-card-retry-button.tsx must keep non-retry actions delegated: ${forbiddenRetryButtonToken}`,
+    );
+  }
+}
+
+if (retryButtonLineCount > 4) {
+  throw new Error(`media-asset-card-retry-button.tsx exceeded 4 lines: ${retryButtonLineCount}`);
+}
+
+for (const requiredRetryButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardRetryButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;',
+]) {
+  if (!retryButtonTypesSource.includes(requiredRetryButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button.types.ts must own retry button prop typing: ${requiredRetryButtonTypesUsage}`,
+    );
+  }
+}
+
+if (retryButtonTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-retry-button.types.ts exceeded 2 lines: ${retryButtonTypesLineCount}`,
   );
 }
 

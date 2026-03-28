@@ -2907,6 +2907,10 @@ Last updated: 2026-03-28
   - media-asset refresh button rendering now lives in `apps/web/components/media-asset-card-refresh-button.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-actions.tsx`
   - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while refresh button rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this refresh-button boundary so future action-row changes do not regrow mixed action-layout-and-refresh rendering logic
+- Media Asset Retry Button Extraction V1:
+  - media-asset retry button rendering now lives in `apps/web/components/media-asset-card-retry-button.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-actions.tsx`
+  - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while retry button rendering and retry visibility rules remain centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this retry-button boundary so future action-row changes do not regrow mixed action-layout-and-retry rendering logic
 
 ## Next
 - Continue the next product slice
