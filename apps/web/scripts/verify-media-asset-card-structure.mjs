@@ -34,6 +34,19 @@ const metadataDetailTimingTypesPath = path.resolve(
 const metadataDetailTimingTypesSource = fs.readFileSync(metadataDetailTimingTypesPath, "utf8");
 const metadataDetailTimingTypesLineCount =
   metadataDetailTimingTypesSource.split(/\r?\n/).length;
+const metadataDetailsPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details-props.ts",
+);
+const metadataDetailsPropsSource = fs.readFileSync(metadataDetailsPropsPath, "utf8");
+const metadataDetailsPropsLineCount = metadataDetailsPropsSource.split(/\r?\n/).length;
+const metadataDetailsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details-props.types.ts",
+);
+const metadataDetailsPropsTypesSource = fs.readFileSync(metadataDetailsPropsTypesPath, "utf8");
+const metadataDetailsPropsTypesLineCount =
+  metadataDetailsPropsTypesSource.split(/\r?\n/).length;
 const metadataDetailsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-details.tsx");
 const metadataDetailsSource = fs.readFileSync(metadataDetailsPath, "utf8");
 const metadataDetailsLineCount = metadataDetailsSource.split(/\r?\n/).length;
@@ -173,21 +186,22 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
-if (!metadataSource.includes('import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";')) {
-  throw new Error("media-asset-card-metadata.tsx must import delegated metadata detail timing helper");
+if (!metadataSource.includes('import { buildMediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details-props";')) {
+  throw new Error("media-asset-card-metadata.tsx must import delegated metadata details props builder");
 }
 
-if (!metadataSource.includes("readMediaAssetCardMetadataDetailTiming({ asset })")) {
-  throw new Error("media-asset-card-metadata.tsx must delegate metadata detail timing extraction");
+if (!metadataSource.includes("buildMediaAssetCardMetadataDetailsProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })")) {
+  throw new Error("media-asset-card-metadata.tsx must delegate metadata details prop assembly");
 }
 
 for (const forbiddenMetadataToken of [
-  'readMetadataText(asset.metadata_json, "processing_last_attempt_at")',
-  'readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")',
+  'readMediaAssetCardMetadataDetailTiming({ asset })',
+  "lastAttemptAt",
+  "nextRetryAt",
 ]) {
   if (metadataSource.includes(forbiddenMetadataToken)) {
     throw new Error(
-      `media-asset-card-metadata.tsx must keep metadata detail timing extraction delegated: ${forbiddenMetadataToken}`,
+      `media-asset-card-metadata.tsx must keep metadata details prop assembly delegated: ${forbiddenMetadataToken}`,
     );
   }
 }
@@ -236,6 +250,54 @@ for (const requiredMetadataDetailTimingTypesUsage of [
 if (metadataDetailTimingTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-metadata-detail-timing.types.ts exceeded 2 lines: ${metadataDetailTimingTypesLineCount}`,
+  );
+}
+
+for (const requiredMetadataDetailsPropsUsage of [
+  'import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";',
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
+  'import type { BuildMediaAssetCardMetadataDetailsPropsInput } from "./media-asset-card-metadata-details-props.types";',
+  "}: BuildMediaAssetCardMetadataDetailsPropsInput): MediaAssetCardMetadataDetailsProps {",
+  "readMediaAssetCardMetadataDetailTiming({ asset })",
+  "return { asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt };",
+]) {
+  if (!metadataDetailsPropsSource.includes(requiredMetadataDetailsPropsUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.ts must own metadata details prop assembly: ${requiredMetadataDetailsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMetadataDetailsPropsToken of [
+  "<MediaAssetCardMetadataDetails",
+  "<MediaAssetCardMetadataTags",
+]) {
+  if (metadataDetailsPropsSource.includes(forbiddenMetadataDetailsPropsToken)) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.ts must keep render concerns delegated: ${forbiddenMetadataDetailsPropsToken}`,
+    );
+  }
+}
+
+if (metadataDetailsPropsLineCount > 5) {
+  throw new Error(
+    `media-asset-card-metadata-details-props.ts exceeded 5 lines: ${metadataDetailsPropsLineCount}`,
+  );
+}
+
+for (const requiredMetadataDetailsPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type BuildMediaAssetCardMetadataDetailsPropsInput = MediaAssetCardMetadataProps;',
+]) {
+  if (!metadataDetailsPropsTypesSource.includes(requiredMetadataDetailsPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.types.ts must own metadata details prop input typing: ${requiredMetadataDetailsPropsTypesUsage}`,
+    );
+  }
+}
+
+if (metadataDetailsPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-metadata-details-props.types.ts exceeded 2 lines: ${metadataDetailsPropsTypesLineCount}`,
   );
 }
 

@@ -2895,6 +2895,10 @@ Last updated: 2026-03-28
   - media-asset metadata detail timing reads now live in `apps/web/components/media-asset-card-metadata-detail-timing.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata.tsx`
   - `apps/web/components/media-asset-card-metadata.tsx` now stays focused on metadata tag/detail composition while timing extraction remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this metadata-detail-timing boundary so future detail-layout changes do not regrow mixed extraction-and-rendering logic
+- Media Asset Metadata Details Props Builder Extraction V1:
+  - media-asset metadata details prop assembly now lives in `apps/web/components/media-asset-card-metadata-details-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata.tsx`
+  - `apps/web/components/media-asset-card-metadata.tsx` now stays focused on metadata tag/detail composition while details prop assembly remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this metadata-details-props boundary so future detail composition changes do not regrow mixed prop-assembly-and-rendering logic
 
 ## Next
 - Continue the next product slice

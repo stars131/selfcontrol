@@ -2220,6 +2220,14 @@ const mediaAssetCardMetadataDetailTimingTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-detail-timing.types.ts",
 );
+const mediaAssetCardMetadataDetailsPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details-props.ts",
+);
+const mediaAssetCardMetadataDetailsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-details-props.types.ts",
+);
 const mediaAssetCardMetadataTagValuesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-tag-values.ts",
@@ -4338,6 +4346,14 @@ const mediaAssetCardMetadataDetailTimingTypesSource = fs.readFileSync(
   mediaAssetCardMetadataDetailTimingTypesPath,
   "utf8",
 );
+const mediaAssetCardMetadataDetailsPropsSource = fs.readFileSync(
+  mediaAssetCardMetadataDetailsPropsPath,
+  "utf8",
+);
+const mediaAssetCardMetadataDetailsPropsTypesSource = fs.readFileSync(
+  mediaAssetCardMetadataDetailsPropsTypesPath,
+  "utf8",
+);
 const mediaAssetCardMetadataDetailsSource = fs.readFileSync(
   mediaAssetCardMetadataDetailsPath,
   "utf8",
@@ -6402,6 +6418,10 @@ const mediaAssetCardMetadataDetailTimingLines =
   mediaAssetCardMetadataDetailTimingSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataDetailTimingTypesLines =
   mediaAssetCardMetadataDetailTimingTypesSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataDetailsPropsLines =
+  mediaAssetCardMetadataDetailsPropsSource.split(/\r?\n/).length;
+const mediaAssetCardMetadataDetailsPropsTypesLines =
+  mediaAssetCardMetadataDetailsPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagValuesLines =
   mediaAssetCardMetadataTagValuesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataTagValuesTypesLines =
@@ -22676,12 +22696,12 @@ if (authFormFrameTypesLines > maxAuthFormFrameTypesLines) {
 }
 
 for (const requiredMediaAssetCardMetadataUsage of [
-  'import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";',
+  'import { buildMediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details-props";',
   'import { MediaAssetCardMetadataDetails } from "./media-asset-card-metadata-details";',
   'import { MediaAssetCardMetadataTags } from "./media-asset-card-metadata-tags";',
   'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
   "}: MediaAssetCardMetadataProps) {",
-  "readMediaAssetCardMetadataDetailTiming({ asset })",
+  "buildMediaAssetCardMetadataDetailsProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })",
   "<MediaAssetCardMetadataDetails",
   "<MediaAssetCardMetadataTags",
 ]) {
@@ -22705,8 +22725,9 @@ for (const forbiddenMediaAssetCardMetadataToken of [
   "{mediaIssueCopy.dimensions}",
   "{mediaIssueCopy.textChars}",
   "{mediaIssueCopy.textLines}",
-  'readMetadataText(asset.metadata_json, "processing_last_attempt_at")',
-  'readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")',
+  'readMediaAssetCardMetadataDetailTiming({ asset })',
+  "lastAttemptAt",
+  "nextRetryAt",
 ]) {
   if (mediaAssetCardMetadataSource.includes(forbiddenMediaAssetCardMetadataToken)) {
     throw new Error(
@@ -22775,6 +22796,71 @@ if (
 ) {
   throw new Error(
     `media-asset-card-metadata-detail-timing.types.ts exceeded ${maxMediaAssetCardMetadataDetailTimingTypesLines} lines: ${mediaAssetCardMetadataDetailTimingTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataDetailsPropsUsage of [
+  'import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";',
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
+  'import type { BuildMediaAssetCardMetadataDetailsPropsInput } from "./media-asset-card-metadata-details-props.types";',
+  "}: BuildMediaAssetCardMetadataDetailsPropsInput): MediaAssetCardMetadataDetailsProps {",
+  "readMediaAssetCardMetadataDetailTiming({ asset })",
+  "return { asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt };",
+]) {
+  if (
+    !mediaAssetCardMetadataDetailsPropsSource.includes(
+      requiredMediaAssetCardMetadataDetailsPropsUsage,
+    )
+  ) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.ts must own metadata details prop assembly: ${requiredMediaAssetCardMetadataDetailsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardMetadataDetailsPropsToken of [
+  "<MediaAssetCardMetadataDetails",
+  "<MediaAssetCardMetadataTags",
+]) {
+  if (
+    mediaAssetCardMetadataDetailsPropsSource.includes(
+      forbiddenMediaAssetCardMetadataDetailsPropsToken,
+    )
+  ) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.ts must keep render concerns delegated: ${forbiddenMediaAssetCardMetadataDetailsPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataDetailsPropsLines = 5;
+if (mediaAssetCardMetadataDetailsPropsLines > maxMediaAssetCardMetadataDetailsPropsLines) {
+  throw new Error(
+    `media-asset-card-metadata-details-props.ts exceeded ${maxMediaAssetCardMetadataDetailsPropsLines} lines: ${mediaAssetCardMetadataDetailsPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardMetadataDetailsPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type BuildMediaAssetCardMetadataDetailsPropsInput = MediaAssetCardMetadataProps;',
+]) {
+  if (
+    !mediaAssetCardMetadataDetailsPropsTypesSource.includes(
+      requiredMediaAssetCardMetadataDetailsPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `media-asset-card-metadata-details-props.types.ts must own metadata details prop input typing: ${requiredMediaAssetCardMetadataDetailsPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardMetadataDetailsPropsTypesLines = 2;
+if (
+  mediaAssetCardMetadataDetailsPropsTypesLines >
+  maxMediaAssetCardMetadataDetailsPropsTypesLines
+) {
+  throw new Error(
+    `media-asset-card-metadata-details-props.types.ts exceeded ${maxMediaAssetCardMetadataDetailsPropsTypesLines} lines: ${mediaAssetCardMetadataDetailsPropsTypesLines}`,
   );
 }
 
