@@ -9668,10 +9668,10 @@ for (const requiredBrowseWorkspaceCopyPropsImport of [
 }
 
 for (const requiredBrowseWorkspaceCopyPropsUsage of [
-  "export function buildRecordBrowseWorkspaceCopyProps({ detailCopy, panelCopy }: RecordBrowseWorkspaceCopyPropsInput): RecordBrowseWorkspaceCopyProps {",
-  "applyPresetLabel: panelCopy.applyPreset",
-  "timelineViewLabel: detailCopy.timelineView",
-  "visibleRecordsLabel: panelCopy.visibleRecords",
+  "export function buildRecordBrowseWorkspaceCopyProps(input: RecordBrowseWorkspaceCopyPropsInput): RecordBrowseWorkspaceCopyProps {",
+  "applyPresetLabel: input.panelCopy.applyPreset",
+  "timelineViewLabel: input.detailCopy.timelineView",
+  "visibleRecordsLabel: input.panelCopy.visibleRecords",
 ]) {
   if (!browseWorkspaceCopyPropsSource.includes(requiredBrowseWorkspaceCopyPropsUsage)) {
     throw new Error(
@@ -9945,10 +9945,10 @@ for (const requiredBrowseWorkspaceDraftLocationPropsImport of [
 }
 
 for (const requiredBrowseWorkspaceDraftLocationPropsUsage of [
-  "export function buildRecordBrowseWorkspaceDraftLocationProps({",
-  "}: RecordBrowseWorkspaceDraftLocationPropsInput): RecordBrowseWorkspaceDraftLocationProps {",
-  "draftLocation: canWriteWorkspace ? form.location ?? null : null",
-  "setForm((prev) => ({",
+  "export function buildRecordBrowseWorkspaceDraftLocationProps(",
+  "input: RecordBrowseWorkspaceDraftLocationPropsInput,",
+  "draftLocation: input.canWriteWorkspace ? input.form.location ?? null : null",
+  "input.setForm((prev) => ({",
 ]) {
   if (!browseWorkspaceDraftLocationPropsSource.includes(requiredBrowseWorkspaceDraftLocationPropsUsage)) {
     throw new Error(

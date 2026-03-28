@@ -1,23 +1,23 @@
 import type { RecordBrowseWorkspaceCopyProps } from "./record-panel-v2-browse-workspace-output-props.types";
 import type { RecordBrowseWorkspaceCopyPropsInput } from "./record-panel-v2-browse-workspace-props-input.types";
-export function buildRecordBrowseWorkspaceCopyProps({ detailCopy, panelCopy }: RecordBrowseWorkspaceCopyPropsInput): RecordBrowseWorkspaceCopyProps {
+export function buildRecordBrowseWorkspaceCopyProps(input: RecordBrowseWorkspaceCopyPropsInput): RecordBrowseWorkspaceCopyProps {
   return {
-    applyPresetLabel: panelCopy.applyPreset,
-    avoidRecordLabel: detailCopy.avoidLabel,
-    avoidStatsLabel: panelCopy.avoid,
-    deletePresetLabel: panelCopy.deletePreset,
-    flatListViewLabel: detailCopy.flatListView,
-    foodLabel: panelCopy.food,
-    mapPrefixLabel: detailCopy.mapPrefix,
-    noContentLabel: detailCopy.noContent,
-    noRecordsLabel: detailCopy.noRecords,
-    noSavedFiltersLabel: panelCopy.noSavedFilters,
-    ratingPrefixLabel: detailCopy.ratingPrefix,
-    savedPresetLabel: panelCopy.savedPreset,
-    timelineDayLabel: detailCopy.timelineDayLabel,
-    timelineViewLabel: detailCopy.timelineView,
-    unknownPlaceLabel: detailCopy.unknownPlace,
-    untitledRecordLabel: detailCopy.untitledRecord,
-    visibleRecordsLabel: panelCopy.visibleRecords,
+    applyPresetLabel: input.panelCopy.applyPreset,
+    avoidRecordLabel: input.detailCopy.avoidLabel,
+    avoidStatsLabel: input.panelCopy.avoid,
+    deletePresetLabel: input.panelCopy.deletePreset,
+    flatListViewLabel: input.detailCopy.flatListView,
+    foodLabel: input.panelCopy.food,
+    mapPrefixLabel: input.detailCopy.mapPrefix,
+    noContentLabel: input.detailCopy.noContent,
+    noRecordsLabel: input.detailCopy.noRecords,
+    noSavedFiltersLabel: input.panelCopy.noSavedFilters,
+    ratingPrefixLabel: input.detailCopy.ratingPrefix,
+    savedPresetLabel: input.panelCopy.savedPreset,
+    timelineDayLabel: input.detailCopy.timelineDayLabel,
+    timelineViewLabel: input.detailCopy.timelineView,
+    unknownPlaceLabel: input.detailCopy.unknownPlace,
+    untitledRecordLabel: input.detailCopy.untitledRecord,
+    visibleRecordsLabel: input.panelCopy.visibleRecords,
   };
 }

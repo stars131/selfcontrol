@@ -1,16 +1,14 @@
 import type { RecordBrowseWorkspaceDraftLocationProps } from "./record-panel-v2-browse-workspace-output-props.types";
 import type { RecordBrowseWorkspaceDraftLocationPropsInput } from "./record-panel-v2-browse-workspace-props-input.types";
 
-export function buildRecordBrowseWorkspaceDraftLocationProps({
-  canWriteWorkspace,
-  form,
-  setForm,
-}: RecordBrowseWorkspaceDraftLocationPropsInput): RecordBrowseWorkspaceDraftLocationProps {
+export function buildRecordBrowseWorkspaceDraftLocationProps(
+  input: RecordBrowseWorkspaceDraftLocationPropsInput,
+): RecordBrowseWorkspaceDraftLocationProps {
   return {
-    draftLocation: canWriteWorkspace ? form.location ?? null : null,
-    onDraftLocationChange: canWriteWorkspace
-      ? (nextLocation: NonNullable<typeof form.location>) =>
-          setForm((prev) => ({
+    draftLocation: input.canWriteWorkspace ? input.form.location ?? null : null,
+    onDraftLocationChange: input.canWriteWorkspace
+      ? (nextLocation: NonNullable<typeof input.form.location>) =>
+          input.setForm((prev) => ({
             ...prev,
             location: nextLocation,
           }))

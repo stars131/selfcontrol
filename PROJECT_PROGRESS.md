@@ -3440,6 +3440,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-editor-workspace-channel-copy-props.ts`, `record-panel-v2-editor-workspace-media-copy-props.ts`, and `record-panel-v2-editor-workspace-reminder-copy-props.ts` now use explicit `input` parameters while keeping their detail-copy field mapping unchanged
   - this keeps the editor workspace copy helper layer aligned with the broader helper-signature normalization work without changing UI copy behavior
   - the record-panel structure guardrail now enforces this normalized copy-helper boundary so future workspace copy edits stay easier to review and extend
+- Browse Workspace Helper Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `record-panel-v2-browse-workspace-draft-location-props.ts` now use explicit `input` parameters while keeping their browse copy mapping and draft-location behavior unchanged
+  - this keeps the browse workspace helper layer aligned with the broader helper-signature normalization work without changing browse UX behavior
+  - the record-panel structure guardrail now enforces this normalized helper boundary so future browse workspace edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
