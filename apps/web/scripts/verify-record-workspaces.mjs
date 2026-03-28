@@ -458,8 +458,9 @@ for (const requiredSupportToolsMediaPropsImport of [
 }
 
 for (const requiredSupportToolsMediaPropsUsage of [
-  "buildRecordMediaToolsCopyProps(props)",
-  "buildRecordMediaToolsPassThroughProps(props)",
+  "export function buildRecordMediaToolsProps(input: RecordEditorSupportToolsProps)",
+  "buildRecordMediaToolsCopyProps(input)",
+  "buildRecordMediaToolsPassThroughProps(input)",
   "...copyProps",
   "...passThroughProps",
 ]) {
@@ -627,8 +628,9 @@ for (const requiredSupportToolsReminderPropsImport of [
 }
 
 for (const requiredSupportToolsReminderPropsUsage of [
-  "buildRecordReminderToolsDerivedProps(props)",
-  "buildRecordReminderToolsPassThroughProps(props)",
+  "export function buildRecordReminderToolsProps(input: RecordEditorSupportToolsProps)",
+  "buildRecordReminderToolsDerivedProps(input)",
+  "buildRecordReminderToolsPassThroughProps(input)",
   "...derivedProps",
   "...passThroughProps",
 ]) {

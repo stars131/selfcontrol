@@ -4,9 +4,9 @@ import type { RecordEditorSupportToolsProps } from "./record-editor-support-tool
 import { buildRecordMediaToolsCopyProps } from "./record-editor-support-tools-media-copy-props";
 import { buildRecordMediaToolsPassThroughProps } from "./record-editor-support-tools-media-pass-through-props";
 
-export function buildRecordMediaToolsProps(props: RecordEditorSupportToolsProps) {
-  const copyProps = buildRecordMediaToolsCopyProps(props);
-  const passThroughProps = buildRecordMediaToolsPassThroughProps(props);
+export function buildRecordMediaToolsProps(input: RecordEditorSupportToolsProps) {
+  const copyProps = buildRecordMediaToolsCopyProps(input);
+  const passThroughProps = buildRecordMediaToolsPassThroughProps(input);
 
   return {
     ...copyProps,

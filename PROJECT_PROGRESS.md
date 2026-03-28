@@ -3496,6 +3496,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-editor-workspace-props.ts` now uses an explicit `input` parameter while keeping its base/copy/action composition unchanged
   - this keeps the root editor-workspace helper aligned with the broader helper-signature normalization work without changing editor assembly behavior
   - the record-panel structure guardrail now enforces this normalized root-helper boundary so future editor workspace edits stay easier to review and extend
+- Record Editor Support Tools Root Helper Naming Cleanup V1:
+  - `apps/web/components/record-editor-support-tools-media-props.ts` and `record-editor-support-tools-reminder-props.ts` now use explicit `input` parameters while keeping their copy/derived/pass-through composition unchanged
+  - this keeps the support-tools root helper layer aligned with the broader helper-signature normalization work without changing support-tools behavior
+  - the record-workspaces structure guardrail now enforces this normalized root-helper boundary so future support-tools composition edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
