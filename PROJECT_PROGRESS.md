@@ -3404,6 +3404,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-item-card-tags-props.ts`, `dead-letter-recovery-item-card-issue-label-tag-props.ts`, `dead-letter-recovery-item-card-processing-status-tag-props.ts`, `dead-letter-recovery-item-card-retry-state-tag-props.ts`, and `dead-letter-recovery-item-card-storage-provider-tag-props.ts` now use explicit `input` parameters and pass their tag props through unchanged
   - this keeps the dead-letter tag helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the record-panel structure guardrail now enforces this pass-through helper contract so future dead-letter tag helpers do not drift back to mixed boundary styles
+- Dead Letter Header Leaf Helper Naming Cleanup V1:
+  - `apps/web/components/dead-letter-recovery-item-card-error-props.ts`, `dead-letter-recovery-item-card-identity-props.ts`, `dead-letter-recovery-item-card-selection-props.ts`, and `dead-letter-recovery-item-card-header-props.ts` now use explicit `input` parameters and pass their header/error props through unchanged
+  - this keeps the dead-letter header leaf helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the record-panel structure guardrail now enforces this pass-through helper contract so future dead-letter header leaf helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice
