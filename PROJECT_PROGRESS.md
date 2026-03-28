@@ -3200,6 +3200,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-preview.tsx` now reuses its full typed preview props contract and only narrows `authToken` after the existing auth gate instead of manually re-projecting all preview child inputs
   - `apps/web/components/media-asset-card-preview-media-preview-props.types.ts` now models the builder input as the full preview props contract plus a non-null `authToken`, which keeps the preview boundary easier to evolve safely
   - the record-panel structure guardrail now enforces this narrowed full-props reuse so future preview-layer edits do not regrow repeated child-prop projection
+- Record Panel Surface Props Reuse Simplification V1:
+  - `apps/web/components/recent-media-issues-panel.tsx`, `apps/web/components/recent-media-issues-panel-list.tsx`, `apps/web/components/dead-letter-recovery-panel-content.tsx`, and `apps/web/components/dead-letter-recovery-panel-list.tsx` now keep their full typed props contracts intact instead of rest-spreading and re-projecting panel/list inputs
+  - the dead-letter content layer now narrows `mediaDeadLetterOverview` only after the existing empty-state gate, while the recent-media panel layer now forwards its full props contract directly into the list props builder
+  - the record-panel structure guardrail now enforces this panel-surface props reuse so future top-level list/content edits do not regrow repeated child-prop assembly
 
 ## Next
 - Continue the next product slice

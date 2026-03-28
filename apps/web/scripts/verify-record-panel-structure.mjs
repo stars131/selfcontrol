@@ -28876,10 +28876,10 @@ for (const requiredRecentMediaIssuesPanelUsage of [
   'import { RecentMediaIssuesPanelList } from "./recent-media-issues-panel-list";',
   'import { buildRecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list-props";',
   'import type { RecentMediaIssuesPanelProps } from "./recent-media-issues-panel.types";',
-  "export function RecentMediaIssuesPanel({ mediaIssueCopy, ...props }: RecentMediaIssuesPanelProps) {",
-  "<RecentMediaIssuesPanelIntro mediaIssueCopy={mediaIssueCopy} />",
-  "<RecentMediaIssuesPanelEmpty mediaIssueCopy={mediaIssueCopy} />",
-  "...buildRecentMediaIssuesPanelListProps({ mediaIssueCopy, ...props })",
+  "export function RecentMediaIssuesPanel(props: RecentMediaIssuesPanelProps) {",
+  "<RecentMediaIssuesPanelIntro mediaIssueCopy={props.mediaIssueCopy} />",
+  "<RecentMediaIssuesPanelEmpty mediaIssueCopy={props.mediaIssueCopy} />",
+  "...buildRecentMediaIssuesPanelListProps(props)",
 ]) {
   if (!recentMediaIssuesPanelSource.includes(requiredRecentMediaIssuesPanelUsage)) {
     throw new Error(
@@ -28899,6 +28899,7 @@ for (const forbiddenRecentMediaIssuesPanelToken of [
   "canWriteWorkspace={",
   "retryingMediaId={",
   "workspaceId={",
+  "buildRecentMediaIssuesPanelListProps({ mediaIssueCopy, ...props })",
 ]) {
   if (recentMediaIssuesPanelSource.includes(forbiddenRecentMediaIssuesPanelToken)) {
     throw new Error(
@@ -29015,7 +29016,7 @@ for (const requiredRecentMediaIssuesPanelListUsage of [
   'import { buildRecentMediaIssueCardProps } from "./recent-media-issues-list-item-props";',
   'import { RecentMediaIssueCard } from "./recent-media-issue-card";',
   'import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types";',
-  "export function RecentMediaIssuesPanelList({ ...props }: RecentMediaIssuesPanelListProps) {",
+  "export function RecentMediaIssuesPanelList(props: RecentMediaIssuesPanelListProps) {",
   '<div className="record-list compact-list" style={{ marginTop: 16 }}>',
   "props.mediaProcessingOverview.recent_issues.map((issue) => <RecentMediaIssueCard",
   "{...buildRecentMediaIssueCardProps({ issue, props })}",
@@ -35375,9 +35376,10 @@ for (const requiredDeadLetterRecoveryPanelContentUsage of [
   'import { buildDeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list-props";',
   'import { DeadLetterRecoveryPanelList } from "./dead-letter-recovery-panel-list";',
   'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";',
-  "export function DeadLetterRecoveryPanelContent({ mediaDeadLetterOverview, ...props }: DeadLetterRecoveryPanelContentProps) {",
+  "export function DeadLetterRecoveryPanelContent(props: DeadLetterRecoveryPanelContentProps) {",
+  "const mediaDeadLetterOverview = props.mediaDeadLetterOverview;",
   "return !mediaDeadLetterOverview?.items.length ? <DeadLetterRecoveryPanelEmpty mediaIssueCopy={props.mediaIssueCopy} /> :",
-  '<DeadLetterRecoveryPanelList {...buildDeadLetterRecoveryPanelListProps({ mediaDeadLetterOverview, ...props })} />',
+  '<DeadLetterRecoveryPanelList {...buildDeadLetterRecoveryPanelListProps({ ...props, mediaDeadLetterOverview })} />',
 ]) {
   if (!deadLetterRecoveryPanelContentSource.includes(requiredDeadLetterRecoveryPanelContentUsage)) {
     throw new Error(
@@ -35394,6 +35396,7 @@ for (const forbiddenDeadLetterRecoveryPanelContentToken of [
   "bulkRetryingDeadLetter={",
   "selectedDeadLetterIds={",
   "workspaceId={",
+  "buildDeadLetterRecoveryPanelListProps({ mediaDeadLetterOverview, ...props })",
 ]) {
   if (deadLetterRecoveryPanelContentSource.includes(forbiddenDeadLetterRecoveryPanelContentToken)) {
     throw new Error(
@@ -35512,7 +35515,7 @@ for (const requiredDeadLetterRecoveryPanelListUsage of [
   'import { buildDeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-list-item-props";',
   'import { DeadLetterRecoveryItemCard } from "./dead-letter-recovery-item-card";',
   'import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types";',
-  "export function DeadLetterRecoveryPanelList({ ...props }: DeadLetterRecoveryPanelListProps) {",
+  "export function DeadLetterRecoveryPanelList(props: DeadLetterRecoveryPanelListProps) {",
   '<div className="record-list compact-list">',
   "props.mediaDeadLetterOverview.items.map((item) => <DeadLetterRecoveryItemCard",
   "{...buildDeadLetterRecoveryItemCardProps({ item, props })}",
@@ -35769,7 +35772,7 @@ for (const [componentName, componentSource, componentTypesSource, importLine, si
     deadLetterRecoveryPanelContentSource,
     deadLetterRecoveryPanelContentTypesSource,
     'import type { DeadLetterRecoveryPanelContentProps } from "./dead-letter-recovery-panel-content.types";',
-    "}: DeadLetterRecoveryPanelContentProps) {",
+    "export function DeadLetterRecoveryPanelContent(props: DeadLetterRecoveryPanelContentProps) {",
     "}: Pick<",
     'import type { DeadLetterRecoveryPanelProps } from "./dead-letter-recovery-panel.types"; export type DeadLetterRecoveryPanelContentProps = Pick<DeadLetterRecoveryPanelProps, "bulkRetryingDeadLetter" | "canWriteWorkspace" | "formatHistoryTimestampLabel" | "locale" | "mediaDeadLetterOverview" | "mediaIssueCopy" | "onRetryMediaProcessing" | "onToggleSelection" | "retryingMediaId" | "selectedDeadLetterIds" | "workspaceId">;',
     2,
