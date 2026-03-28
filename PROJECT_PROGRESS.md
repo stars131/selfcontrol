@@ -2863,6 +2863,10 @@ Last updated: 2026-03-28
   - media-storage health warnings notice rendering now lives in `apps/web/components/media-storage-health-warnings-notice.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
   - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while warnings notice rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this warnings-notice boundary so future health-metadata changes do not regrow a mixed composition-and-warnings rendering module
+- Media Storage Health Upload Capability Card Extraction V1:
+  - media-storage health upload-capability rendering now lives in `apps/web/components/media-storage-health-upload-capability-card.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-capabilities.tsx`
+  - `apps/web/components/media-storage-health-capabilities.tsx` now stays focused on capability-card layout while upload capability rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this upload-capability boundary so future health-capability changes do not regrow a mixed layout-and-upload rendering module
 
 ## Next
 - Continue the next product slice

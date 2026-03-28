@@ -1,6 +1,6 @@
 "use client";
 
-import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types";
+import { MediaStorageHealthUploadCapabilityCard } from "./media-storage-health-upload-capability-card";
 import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types";
 
 export function MediaStorageHealthCapabilities({
@@ -9,12 +9,7 @@ export function MediaStorageHealthCapabilities({
 }: MediaStorageHealthCapabilitiesProps) {
   return (
     <div className="detail-grid">
-      <div className="subtle-card">
-        <div className="eyebrow">{copy.upload}</div>
-        <div style={{ marginTop: 8, fontWeight: 600 }}>
-          {mediaStorageHealth.capabilities.upload ? copy.available : copy.unavailable}
-        </div>
-      </div>
+      <MediaStorageHealthUploadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />
       <div className="subtle-card">
         <div className="eyebrow">{copy.download}</div>
         <div style={{ marginTop: 8, fontWeight: 600 }}>

@@ -3148,6 +3148,14 @@ const mediaStorageHealthCapabilitiesTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-capabilities.types.ts",
 );
+const mediaStorageHealthUploadCapabilityCardPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-upload-capability-card.tsx",
+);
+const mediaStorageHealthUploadCapabilityCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-upload-capability-card.types.ts",
+);
 const mediaStorageHealthCardPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-card.tsx",
@@ -5120,6 +5128,14 @@ const mediaStorageHealthCapabilitiesTypesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesTypesPath,
   "utf8",
 );
+const mediaStorageHealthUploadCapabilityCardSource = fs.readFileSync(
+  mediaStorageHealthUploadCapabilityCardPath,
+  "utf8",
+);
+const mediaStorageHealthUploadCapabilityCardTypesSource = fs.readFileSync(
+  mediaStorageHealthUploadCapabilityCardTypesPath,
+  "utf8",
+);
 const mediaStorageHealthHeaderSource = fs.readFileSync(mediaStorageHealthHeaderPath, "utf8");
 const mediaStorageHealthHeaderTypesSource = fs.readFileSync(
   mediaStorageHealthHeaderTypesPath,
@@ -6646,6 +6662,10 @@ const deadLetterRecoveryListItemPropsLines =
 const deadLetterRecoveryListItemPropsTypesLines =
   deadLetterRecoveryListItemPropsTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCardLines = mediaStorageHealthCardSource.split(/\r?\n/).length;
+const mediaStorageHealthUploadCapabilityCardLines =
+  mediaStorageHealthUploadCapabilityCardSource.split(/\r?\n/).length;
+const mediaStorageHealthUploadCapabilityCardTypesLines =
+  mediaStorageHealthUploadCapabilityCardTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCapabilitiesTypesLines =
   mediaStorageHealthCapabilitiesTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthHeaderLines = mediaStorageHealthHeaderSource.split(/\r?\n/).length;
@@ -28850,6 +28870,103 @@ const maxMediaStorageHealthWarningsNoticeTypesLines = 2;
 if (mediaStorageHealthWarningsNoticeTypesLines > maxMediaStorageHealthWarningsNoticeTypesLines) {
   throw new Error(
     `media-storage-health-warnings-notice.types.ts exceeded ${maxMediaStorageHealthWarningsNoticeTypesLines} lines: ${mediaStorageHealthWarningsNoticeTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthCapabilitiesUsage of [
+  'import { MediaStorageHealthUploadCapabilityCard } from "./media-storage-health-upload-capability-card";',
+  "<MediaStorageHealthUploadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
+  "copy.download",
+  "copy.delete",
+  "mediaStorageHealth.capabilities.download ? copy.available : copy.unavailable",
+  "mediaStorageHealth.capabilities.delete ? copy.available : copy.unavailable",
+]) {
+  if (!mediaStorageHealthCapabilitiesSource.includes(requiredMediaStorageHealthCapabilitiesUsage)) {
+    throw new Error(
+      `media-storage-health-capabilities.tsx must keep capability layout composed from extracted upload and inline remaining cards: ${requiredMediaStorageHealthCapabilitiesUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaStorageHealthCapabilitiesToken of [
+  "copy.upload",
+  "mediaStorageHealth.capabilities.upload ? copy.available : copy.unavailable",
+]) {
+  if (mediaStorageHealthCapabilitiesSource.includes(forbiddenMediaStorageHealthCapabilitiesToken)) {
+    throw new Error(
+      `media-storage-health-capabilities.tsx must keep upload-capability rendering delegated: ${forbiddenMediaStorageHealthCapabilitiesToken}`,
+    );
+  }
+}
+
+for (const requiredMediaStorageHealthUploadCapabilityCardUsage of [
+  'import type { MediaStorageHealthUploadCapabilityCardProps } from "./media-storage-health-upload-capability-card.types";',
+  "}: MediaStorageHealthUploadCapabilityCardProps) {",
+  "copy.upload",
+  "mediaStorageHealth.capabilities.upload ? copy.available : copy.unavailable",
+]) {
+  if (!mediaStorageHealthUploadCapabilityCardSource.includes(requiredMediaStorageHealthUploadCapabilityCardUsage)) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.tsx must own upload-capability rendering: ${requiredMediaStorageHealthUploadCapabilityCardUsage}`,
+    );
+  }
+}
+
+if (
+  mediaStorageHealthUploadCapabilityCardSource.includes(
+    "type MediaStorageHealthUploadCapabilityCardProps =",
+  )
+) {
+  throw new Error(
+    "media-storage-health-upload-capability-card.tsx must keep upload-capability prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthUploadCapabilityCardToken of [
+  "copy.download",
+  "copy.delete",
+  "mediaStorageHealth.capabilities.download",
+  "mediaStorageHealth.capabilities.delete",
+]) {
+  if (
+    mediaStorageHealthUploadCapabilityCardSource.includes(
+      forbiddenMediaStorageHealthUploadCapabilityCardToken,
+    )
+  ) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.tsx must keep other capability concerns delegated: ${forbiddenMediaStorageHealthUploadCapabilityCardToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthUploadCapabilityCardLines = 4;
+if (mediaStorageHealthUploadCapabilityCardLines > maxMediaStorageHealthUploadCapabilityCardLines) {
+  throw new Error(
+    `media-storage-health-upload-capability-card.tsx exceeded ${maxMediaStorageHealthUploadCapabilityCardLines} lines: ${mediaStorageHealthUploadCapabilityCardLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthUploadCapabilityCardTypesUsage of [
+  'import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types"; export type MediaStorageHealthUploadCapabilityCardProps = Pick<MediaStorageHealthCapabilitiesProps, "copy" | "mediaStorageHealth">;',
+]) {
+  if (
+    !mediaStorageHealthUploadCapabilityCardTypesSource.includes(
+      requiredMediaStorageHealthUploadCapabilityCardTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.types.ts must own upload-capability prop typing: ${requiredMediaStorageHealthUploadCapabilityCardTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthUploadCapabilityCardTypesLines = 2;
+if (
+  mediaStorageHealthUploadCapabilityCardTypesLines >
+  maxMediaStorageHealthUploadCapabilityCardTypesLines
+) {
+  throw new Error(
+    `media-storage-health-upload-capability-card.types.ts exceeded ${maxMediaStorageHealthUploadCapabilityCardTypesLines} lines: ${mediaStorageHealthUploadCapabilityCardTypesLines}`,
   );
 }
 

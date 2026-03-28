@@ -146,12 +146,32 @@ const mediaStorageHealthCapabilitiesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-capabilities.tsx",
 );
+const mediaStorageHealthUploadCapabilityCardPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-upload-capability-card.tsx",
+);
+const mediaStorageHealthUploadCapabilityCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-upload-capability-card.types.ts",
+);
 const mediaStorageHealthCapabilitiesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesPath,
   "utf8",
 );
+const mediaStorageHealthUploadCapabilityCardSource = fs.readFileSync(
+  mediaStorageHealthUploadCapabilityCardPath,
+  "utf8",
+);
+const mediaStorageHealthUploadCapabilityCardTypesSource = fs.readFileSync(
+  mediaStorageHealthUploadCapabilityCardTypesPath,
+  "utf8",
+);
 const mediaStorageHealthCapabilitiesLineCount =
   mediaStorageHealthCapabilitiesSource.split(/\r?\n/).length;
+const mediaStorageHealthUploadCapabilityCardLineCount =
+  mediaStorageHealthUploadCapabilityCardSource.split(/\r?\n/).length;
+const mediaStorageHealthUploadCapabilityCardTypesLineCount =
+  mediaStorageHealthUploadCapabilityCardTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCardTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-card.types.ts",
@@ -486,21 +506,20 @@ if (mediaStorageHealthCardLineCount > maxMediaStorageHealthCardLines) {
 }
 
 for (const requiredHealthCapabilitiesImport of [
-  'import type { MediaStorageHealthCardProps } from "./media-storage-health-card.types";',
+  'import { MediaStorageHealthUploadCapabilityCard } from "./media-storage-health-upload-capability-card";',
 ]) {
   if (!mediaStorageHealthCapabilitiesSource.includes(requiredHealthCapabilitiesImport)) {
     throw new Error(
-      `media-storage-health-capabilities.tsx must import shared health-card props: ${requiredHealthCapabilitiesImport}`,
+      `media-storage-health-capabilities.tsx must import delegated upload capability rendering: ${requiredHealthCapabilitiesImport}`,
     );
   }
 }
 
 for (const requiredHealthCapabilitiesUsage of [
   "export function MediaStorageHealthCapabilities({",
-  "copy.upload",
+  "<MediaStorageHealthUploadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "copy.download",
   "copy.delete",
-  "mediaStorageHealth.capabilities.upload",
   "mediaStorageHealth.capabilities.download",
   "mediaStorageHealth.capabilities.delete",
 ]) {
@@ -515,6 +534,70 @@ const maxMediaStorageHealthCapabilitiesLines = 40;
 if (mediaStorageHealthCapabilitiesLineCount > maxMediaStorageHealthCapabilitiesLines) {
   throw new Error(
     `media-storage-health-capabilities.tsx exceeded ${maxMediaStorageHealthCapabilitiesLines} lines: ${mediaStorageHealthCapabilitiesLineCount}`,
+  );
+}
+
+for (const forbiddenHealthCapabilitiesToken of [
+  "copy.upload",
+  "mediaStorageHealth.capabilities.upload",
+]) {
+  if (mediaStorageHealthCapabilitiesSource.includes(forbiddenHealthCapabilitiesToken)) {
+    throw new Error(
+      `media-storage-health-capabilities.tsx must keep upload capability rendering delegated: ${forbiddenHealthCapabilitiesToken}`,
+    );
+  }
+}
+
+for (const requiredHealthUploadCapabilityUsage of [
+  'import type { MediaStorageHealthUploadCapabilityCardProps } from "./media-storage-health-upload-capability-card.types";',
+  "export function MediaStorageHealthUploadCapabilityCard({",
+  "copy.upload",
+  "mediaStorageHealth.capabilities.upload",
+]) {
+  if (!mediaStorageHealthUploadCapabilityCardSource.includes(requiredHealthUploadCapabilityUsage)) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.tsx must own upload capability rendering: ${requiredHealthUploadCapabilityUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHealthUploadCapabilityToken of [
+  "copy.download",
+  "copy.delete",
+  "mediaStorageHealth.capabilities.download",
+  "mediaStorageHealth.capabilities.delete",
+]) {
+  if (mediaStorageHealthUploadCapabilityCardSource.includes(forbiddenHealthUploadCapabilityToken)) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.tsx must keep non-upload capability rendering out: ${forbiddenHealthUploadCapabilityToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthUploadCapabilityCardLines = 6;
+if (mediaStorageHealthUploadCapabilityCardLineCount > maxMediaStorageHealthUploadCapabilityCardLines) {
+  throw new Error(
+    `media-storage-health-upload-capability-card.tsx exceeded ${maxMediaStorageHealthUploadCapabilityCardLines} lines: ${mediaStorageHealthUploadCapabilityCardLineCount}`,
+  );
+}
+
+for (const requiredHealthUploadCapabilityTypesUsage of [
+  'import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types"; export type MediaStorageHealthUploadCapabilityCardProps = Pick<MediaStorageHealthCapabilitiesProps, "copy" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthUploadCapabilityCardTypesSource.includes(requiredHealthUploadCapabilityTypesUsage)) {
+    throw new Error(
+      `media-storage-health-upload-capability-card.types.ts must own upload capability prop typing: ${requiredHealthUploadCapabilityTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthUploadCapabilityCardTypesLines = 2;
+if (
+  mediaStorageHealthUploadCapabilityCardTypesLineCount >
+  maxMediaStorageHealthUploadCapabilityCardTypesLines
+) {
+  throw new Error(
+    `media-storage-health-upload-capability-card.types.ts exceeded ${maxMediaStorageHealthUploadCapabilityCardTypesLines} lines: ${mediaStorageHealthUploadCapabilityCardTypesLineCount}`,
   );
 }
 
