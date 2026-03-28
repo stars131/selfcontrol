@@ -3,6 +3,7 @@
 import { MediaAssetCardActions } from "./media-asset-card-actions";
 import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";
 import { MediaAssetCardError } from "./media-asset-card-error";
+import { buildMediaAssetCardErrorProps } from "./media-asset-card-error-props";
 import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";
 import { buildMediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text-props";
 import { buildMediaAssetCardIntroProps } from "./media-asset-card-intro-props";
@@ -37,7 +38,7 @@ export function MediaAssetCard({
       />
       <MediaAssetCardPreview {...buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })} />
       <MediaAssetCardExtractedText {...buildMediaAssetCardExtractedTextProps({ asset })} />
-      <MediaAssetCardError asset={asset} />
+      <MediaAssetCardError {...buildMediaAssetCardErrorProps({ asset })} />
       <MediaAssetCardActions
         {...buildMediaAssetCardActionsProps({
           asset,
