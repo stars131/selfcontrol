@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types"; export type BuildDeadLetterRecoveryItemCardActionsPropsInput = Pick<DeadLetterRecoveryItemCardProps, "canWriteWorkspace" | "item" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId" | "workspaceId">;

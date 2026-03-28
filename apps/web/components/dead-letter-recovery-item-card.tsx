@@ -1,7 +1,7 @@
 "use client";
 
 import { DeadLetterRecoveryItemCardActions } from "./dead-letter-recovery-item-card-actions";
-import { buildDeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-child-props";
+import { buildDeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions-props";
 import { DeadLetterRecoveryItemCardError } from "./dead-letter-recovery-item-card-error";
 import { DeadLetterRecoveryItemCardHeader } from "./dead-letter-recovery-item-card-header";
 import { buildDeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header-props";
