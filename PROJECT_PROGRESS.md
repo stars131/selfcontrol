@@ -3240,6 +3240,10 @@ Last updated: 2026-03-28
   - `apps/web/components/use-chat-panel-actions.ts` now forwards a flattened input object into `buildChatPanelActionsResult` instead of wrapping source values under `{ derivedData, operatorHandlers, shareHandlers, state }`
   - `apps/web/components/chat-panel-action-handler-inputs.types.ts` and `apps/web/components/chat-panel-actions-result-builder.ts` now share one flattened action-result input contract so the result builder stays easier to evolve without nested wrapper churn
   - the chat-panel and record-panel structure guardrails now enforce this flattened action-result boundary so future chat result assembly does not regrow double-wrapped builder input
+- Workspace Settings Actions Input Flattening V1:
+  - `apps/web/components/use-workspace-settings-controller.ts` now forwards one flattened input object into `createWorkspaceSettingsActions` instead of wrapping controller state under `{ state, workspaceId }`
+  - `apps/web/components/workspace-settings-actions.types.ts`, `apps/web/components/workspace-settings-actions.ts`, `apps/web/components/workspace-settings-provider-actions.types.ts`, and `apps/web/components/workspace-settings-member-actions.types.ts` now share flattened settings action contracts so the top-level, provider, and member action assembly stays easier to evolve without nested wrapper churn
+  - the workspace-settings and record-panel structure guardrails now enforce this flattened settings-actions boundary so future settings action composition does not regrow double-wrapped input assembly
 
 ## Next
 - Continue the next product slice

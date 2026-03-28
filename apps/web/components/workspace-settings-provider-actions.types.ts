@@ -1,1 +1,1 @@
-import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsProviderActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };
+import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsProviderActionsInput = UseWorkspaceSettingsControllerState & { workspaceId: string };

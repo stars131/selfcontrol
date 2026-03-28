@@ -5,12 +5,10 @@ import { createWorkspaceSettingsProviderActions } from "./workspace-settings-pro
 import type { CreateWorkspaceSettingsActionsInput } from "./workspace-settings-actions.types";
 
 export function createWorkspaceSettingsActions({
-  state,
-  workspaceId,
+  ...props
 }: CreateWorkspaceSettingsActionsInput) {
-  const providerActions = createWorkspaceSettingsProviderActions({ state, workspaceId });
-  const memberActions = createWorkspaceSettingsMemberActions({ state, workspaceId });
-
+  const providerActions = createWorkspaceSettingsProviderActions(props);
+  const memberActions = createWorkspaceSettingsMemberActions(props);
   return {
     ...providerActions,
     ...memberActions,

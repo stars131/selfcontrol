@@ -820,7 +820,7 @@ for (const requiredControllerImport of [
 for (const requiredControllerUsage of [
   "useWorkspaceSettingsAnchor({",
   "useWorkspaceSettingsLoad({ router, state, workspaceId })",
-  "createWorkspaceSettingsActions({ state, workspaceId })",
+  "createWorkspaceSettingsActions({ ...state, workspaceId })",
   "...state",
   "...actions",
 ]) {
@@ -872,8 +872,8 @@ for (const requiredActionsImport of [
 }
 
 for (const requiredActionsUsage of [
-  "createWorkspaceSettingsProviderActions({ state, workspaceId })",
-  "createWorkspaceSettingsMemberActions({ state, workspaceId })",
+  "createWorkspaceSettingsProviderActions(props)",
+  "createWorkspaceSettingsMemberActions(props)",
   "...providerActions",
   "...memberActions",
 ]) {

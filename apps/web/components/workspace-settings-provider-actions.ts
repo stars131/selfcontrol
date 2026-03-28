@@ -1,27 +1,12 @@
 "use client";
-
 import { getMediaStorageProviderHealth, updateProviderConfig } from "../lib/api";
 import { getStoredLocale } from "../lib/locale";
-import type {
-  WorkspaceSettingsProviderConfigInput,
-} from "./workspace-settings-controller.types";
+import type { WorkspaceSettingsProviderConfigInput } from "./workspace-settings-controller.types";
 import { getWorkspaceSettingsActionErrorMessage } from "./workspace-settings-action-error";
 import { getWorkspaceSettingsCopy } from "./workspace-settings-copy";
 import type { CreateWorkspaceSettingsProviderActionsInput } from "./workspace-settings-provider-actions.types";
-
-export function createWorkspaceSettingsProviderActions({
-  state,
-  workspaceId,
-}: CreateWorkspaceSettingsProviderActionsInput) {
-  const {
-    token,
-    setError,
-    setMediaStorageHealth,
-    setProviderConfigs,
-    setRefreshingMediaStorageHealth,
-  } = state;
+export function createWorkspaceSettingsProviderActions({ setError, setMediaStorageHealth, setProviderConfigs, setRefreshingMediaStorageHealth, token, workspaceId }: CreateWorkspaceSettingsProviderActionsInput) {
   const copy = getWorkspaceSettingsCopy(getStoredLocale());
-
   async function refreshMediaStorageHealthState(activeToken: string) {
     setRefreshingMediaStorageHealth(true);
     try {
@@ -34,7 +19,6 @@ export function createWorkspaceSettingsProviderActions({
       setRefreshingMediaStorageHealth(false);
     }
   }
-
   async function handleSaveProviderConfig(
     featureCode: string,
     input: WorkspaceSettingsProviderConfigInput,
@@ -51,9 +35,5 @@ export function createWorkspaceSettingsProviderActions({
       await refreshMediaStorageHealthState(token);
     }
   }
-
-  return {
-    refreshMediaStorageHealthState,
-    handleSaveProviderConfig,
-  };
+  return { refreshMediaStorageHealthState, handleSaveProviderConfig };
 }

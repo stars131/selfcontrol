@@ -23407,7 +23407,7 @@ for (const forbiddenWorkspaceSettingsActionsToken of [
 }
 
 for (const requiredWorkspaceSettingsActionsTypesUsage of [
-  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsActionsInput = UseWorkspaceSettingsControllerState & { workspaceId: string };',
 ]) {
   if (!workspaceSettingsActionsTypesSource.includes(requiredWorkspaceSettingsActionsTypesUsage)) {
     throw new Error(
@@ -23452,7 +23452,7 @@ for (const forbiddenWorkspaceSettingsMemberActionsToken of [
 }
 
 for (const requiredWorkspaceSettingsMemberActionsTypesUsage of [
-  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsMemberActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsMemberActionsInput = UseWorkspaceSettingsControllerState & { workspaceId: string };',
 ]) {
   if (!workspaceSettingsMemberActionsTypesSource.includes(requiredWorkspaceSettingsMemberActionsTypesUsage)) {
     throw new Error(
@@ -23496,7 +23496,7 @@ for (const forbiddenWorkspaceSettingsProviderActionsToken of [
 }
 
 for (const requiredWorkspaceSettingsProviderActionsTypesUsage of [
-  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsProviderActionsInput = { state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+  'import type { UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type CreateWorkspaceSettingsProviderActionsInput = UseWorkspaceSettingsControllerState & { workspaceId: string };',
 ]) {
   if (!workspaceSettingsProviderActionsTypesSource.includes(requiredWorkspaceSettingsProviderActionsTypesUsage)) {
     throw new Error(

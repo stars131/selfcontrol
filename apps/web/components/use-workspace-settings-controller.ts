@@ -69,7 +69,7 @@ export function useWorkspaceSettingsController(router: RouterLike, workspaceId: 
     setHighlightedAnchor,
   });
   useWorkspaceSettingsLoad({ router, state, workspaceId });
-  const actions = createWorkspaceSettingsActions({ state, workspaceId });
+  const actions = createWorkspaceSettingsActions({ ...state, workspaceId });
 
   return {
     ...state,
