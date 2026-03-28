@@ -6,18 +6,11 @@ import { buildRecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue
 import { RecentMediaIssueCardSettingsLink } from "./recent-media-issue-card-settings-link";
 import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types";
 
-export function RecentMediaIssueCardActionButtons({
-  canWriteWorkspace,
-  issue,
-  mediaIssueCopy,
-  onRetryMediaProcessing,
-  retryingMediaId,
-  settingsHref,
-}: RecentMediaIssueCardActionButtonsProps) {
+export function RecentMediaIssueCardActionButtons(props: RecentMediaIssueCardActionButtonsProps) {
   return (
     <div className="action-row" style={{ marginTop: 10 }}>
-      <RecentMediaIssueCardRetryButton {...buildRecentMediaIssueCardRetryButtonProps({ canWriteWorkspace, issue, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
-      <RecentMediaIssueCardSettingsLink {...buildRecentMediaIssueCardSettingsLinkProps({ canWriteWorkspace, issue, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
+      <RecentMediaIssueCardRetryButton {...buildRecentMediaIssueCardRetryButtonProps(props)} />
+      <RecentMediaIssueCardSettingsLink {...buildRecentMediaIssueCardSettingsLinkProps(props)} />
     </div>
   );
 }

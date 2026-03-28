@@ -3184,6 +3184,11 @@ Last updated: 2026-03-28
   - the dead-letter tags layer now stays focused on tag-row composition while each tag builder continues owning its narrowed contract
   - the record-panel structure guardrail now enforces this direct props reuse so future dead-letter tag-row edits do not regrow duplicated builder input assembly
 
+- Recent Media Layout Props Reuse Simplification V1:
+  - `apps/web/components/recent-media-issue-card-action-buttons.tsx`, `apps/web/components/recent-media-issue-card-metadata-details.tsx`, and `apps/web/components/recent-media-issue-card-tags.tsx` now forward their full typed props contracts directly into child props builders instead of repeating inline child-prop projection
+  - these recent-media layout layers now stay focused on section and tag-row composition while the leaf builders continue owning their narrowed child contracts
+  - the record-panel structure guardrail now enforces this direct props reuse so future recent-media layout edits do not regrow duplicated child-prop assembly
+
 ## Next
 - Continue the next product slice
 - Continue simplifying remaining backend orchestration boundaries around media retention write-side execution, location review, and workspace transfer services where query logic and mutation logic still mix together

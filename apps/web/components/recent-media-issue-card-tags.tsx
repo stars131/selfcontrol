@@ -18,21 +18,17 @@ import { buildRecentMediaIssueCardStorageProviderTagProps } from "./recent-media
 import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";
 import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";
 
-export function RecentMediaIssueCardTags({
-  issue,
-  locale,
-  mediaIssueCopy,
-}: RecentMediaIssueCardTagsProps) {
+export function RecentMediaIssueCardTags(props: RecentMediaIssueCardTagsProps) {
   return (
     <div className="tag-row">
-      <RecentMediaIssueCardProcessingStatusTag {...buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale })} />
-      <RecentMediaIssueCardStorageProviderTag {...buildRecentMediaIssueCardStorageProviderTagProps({ issue, locale })} />
-      <RecentMediaIssueCardProcessingSourceTag {...buildRecentMediaIssueCardProcessingSourceTagProps({ issue })} />
-      <RecentMediaIssueCardRemoteFetchTag {...buildRecentMediaIssueCardRemoteFetchTagProps({ issue, locale, mediaIssueCopy })} />
-      <RecentMediaIssueCardExtractionModeTag {...buildRecentMediaIssueCardExtractionModeTagProps({ issue })} />
-      <RecentMediaIssueCardRetryStateTag {...buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy })} />
-      <RecentMediaIssueCardIssueLabelTag {...buildRecentMediaIssueCardIssueLabelTagProps({ issue, locale })} />
-      <RecentMediaIssueCardRetryCountTag {...buildRecentMediaIssueCardRetryCountTagProps({ issue, mediaIssueCopy })} />
+      <RecentMediaIssueCardProcessingStatusTag {...buildRecentMediaIssueCardProcessingStatusTagProps(props)} />
+      <RecentMediaIssueCardStorageProviderTag {...buildRecentMediaIssueCardStorageProviderTagProps(props)} />
+      <RecentMediaIssueCardProcessingSourceTag {...buildRecentMediaIssueCardProcessingSourceTagProps(props)} />
+      <RecentMediaIssueCardRemoteFetchTag {...buildRecentMediaIssueCardRemoteFetchTagProps(props)} />
+      <RecentMediaIssueCardExtractionModeTag {...buildRecentMediaIssueCardExtractionModeTagProps(props)} />
+      <RecentMediaIssueCardRetryStateTag {...buildRecentMediaIssueCardRetryStateTagProps(props)} />
+      <RecentMediaIssueCardIssueLabelTag {...buildRecentMediaIssueCardIssueLabelTagProps(props)} />
+      <RecentMediaIssueCardRetryCountTag {...buildRecentMediaIssueCardRetryCountTagProps(props)} />
     </div>
   );
 }

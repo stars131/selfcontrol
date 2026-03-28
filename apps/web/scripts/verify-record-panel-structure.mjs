@@ -29609,12 +29609,12 @@ for (const requiredRecentMediaIssueCardMetadataDetailsUsage of [
   'import { buildRecentMediaIssueCardNextRetryDetailProps } from "./recent-media-issue-card-next-retry-detail-props";',
   'import { RecentMediaIssueCardNextRetryDetail } from "./recent-media-issue-card-next-retry-detail";',
   'import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types";',
-  "}: RecentMediaIssueCardMetadataDetailsProps) {",
-  "buildRecentMediaIssueCardLastAttemptDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "export function RecentMediaIssueCardMetadataDetails(props: RecentMediaIssueCardMetadataDetailsProps) {",
+  "buildRecentMediaIssueCardLastAttemptDetailProps(props)",
   "<RecentMediaIssueCardLastAttemptDetail",
-  "buildRecentMediaIssueCardLastFailureDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "buildRecentMediaIssueCardLastFailureDetailProps(props)",
   "<RecentMediaIssueCardLastFailureDetail",
-  "buildRecentMediaIssueCardNextRetryDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "buildRecentMediaIssueCardNextRetryDetailProps(props)",
   "<RecentMediaIssueCardNextRetryDetail",
 ]) {
   if (!recentMediaIssueCardMetadataDetailsSource.includes(requiredRecentMediaIssueCardMetadataDetailsUsage)) {
@@ -29636,10 +29636,13 @@ for (const forbiddenRecentMediaIssueCardMetadataDetailsToken of [
   "action.label ? (",
   '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
   "<RecentMediaIssueCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
+  "buildRecentMediaIssueCardLastAttemptDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
   '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
   "<RecentMediaIssueCardLastFailureDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
+  "buildRecentMediaIssueCardLastFailureDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
   '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
   "<RecentMediaIssueCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
+  "buildRecentMediaIssueCardNextRetryDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
 ]) {
   if (recentMediaIssueCardMetadataDetailsSource.includes(forbiddenRecentMediaIssueCardMetadataDetailsToken)) {
     throw new Error(
@@ -30275,11 +30278,11 @@ for (const requiredRecentMediaIssueCardActionButtonsUsage of [
   'import { buildRecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue-card-settings-link-props";',
   'import { RecentMediaIssueCardSettingsLink } from "./recent-media-issue-card-settings-link";',
   'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types";',
-  "}: RecentMediaIssueCardActionButtonsProps) {",
+  "export function RecentMediaIssueCardActionButtons(props: RecentMediaIssueCardActionButtonsProps) {",
   '<div className="action-row" style={{ marginTop: 10 }}>',
-  "buildRecentMediaIssueCardRetryButtonProps({",
+  "buildRecentMediaIssueCardRetryButtonProps(props)",
   "<RecentMediaIssueCardRetryButton",
-  "buildRecentMediaIssueCardSettingsLinkProps({",
+  "buildRecentMediaIssueCardSettingsLinkProps(props)",
   "<RecentMediaIssueCardSettingsLink",
 ]) {
   if (!recentMediaIssueCardActionButtonsSource.includes(requiredRecentMediaIssueCardActionButtonsUsage)) {
@@ -30298,6 +30301,8 @@ for (const forbiddenRecentMediaIssueCardActionButtonsToken of [
   "retryingMediaId === issue.media_id",
   "onClick={() => void onRetryMediaProcessing(issue.media_id)}",
   "{mediaIssueCopy.openSettings}",
+  "buildRecentMediaIssueCardRetryButtonProps({",
+  "buildRecentMediaIssueCardSettingsLinkProps({",
 ]) {
   if (recentMediaIssueCardActionButtonsSource.includes(forbiddenRecentMediaIssueCardActionButtonsToken)) {
     throw new Error(
@@ -30549,22 +30554,22 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   'import { buildRecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag-props";',
   'import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
-  "}: RecentMediaIssueCardTagsProps) {",
-  "buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale })",
+  "export function RecentMediaIssueCardTags(props: RecentMediaIssueCardTagsProps) {",
+  "buildRecentMediaIssueCardProcessingStatusTagProps(props)",
   "<RecentMediaIssueCardProcessingStatusTag",
-  "buildRecentMediaIssueCardStorageProviderTagProps({ issue, locale })",
+  "buildRecentMediaIssueCardStorageProviderTagProps(props)",
   "<RecentMediaIssueCardStorageProviderTag",
-  "buildRecentMediaIssueCardProcessingSourceTagProps({ issue })",
+  "buildRecentMediaIssueCardProcessingSourceTagProps(props)",
   "<RecentMediaIssueCardProcessingSourceTag",
-  "buildRecentMediaIssueCardRemoteFetchTagProps({ issue, locale, mediaIssueCopy })",
+  "buildRecentMediaIssueCardRemoteFetchTagProps(props)",
   "<RecentMediaIssueCardRemoteFetchTag",
-  "buildRecentMediaIssueCardExtractionModeTagProps({ issue })",
+  "buildRecentMediaIssueCardExtractionModeTagProps(props)",
   "<RecentMediaIssueCardExtractionModeTag",
-  "buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy })",
+  "buildRecentMediaIssueCardRetryStateTagProps(props)",
   "<RecentMediaIssueCardRetryStateTag",
-  "buildRecentMediaIssueCardIssueLabelTagProps({ issue, locale })",
+  "buildRecentMediaIssueCardIssueLabelTagProps(props)",
   "<RecentMediaIssueCardIssueLabelTag",
-  "buildRecentMediaIssueCardRetryCountTagProps({ issue, mediaIssueCopy })",
+  "buildRecentMediaIssueCardRetryCountTagProps(props)",
   "<RecentMediaIssueCardRetryCountTag",
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
@@ -30599,6 +30604,14 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
   "getStorageProviderLabel(locale, issue.storage_provider)",
   "<RecentMediaIssueCardStorageProviderTag issue={issue} locale={locale} />",
+  "buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale })",
+  "buildRecentMediaIssueCardStorageProviderTagProps({ issue, locale })",
+  "buildRecentMediaIssueCardProcessingSourceTagProps({ issue })",
+  "buildRecentMediaIssueCardRemoteFetchTagProps({ issue, locale, mediaIssueCopy })",
+  "buildRecentMediaIssueCardExtractionModeTagProps({ issue })",
+  "buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy })",
+  "buildRecentMediaIssueCardIssueLabelTagProps({ issue, locale })",
+  "buildRecentMediaIssueCardRetryCountTagProps({ issue, mediaIssueCopy })",
 ]) {
   if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
     throw new Error(
