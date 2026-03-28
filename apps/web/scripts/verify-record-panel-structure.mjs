@@ -3320,6 +3320,14 @@ const deadLetterRecoveryItemCardIssueLabelTagPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-issue-label-tag.tsx",
 );
+const deadLetterRecoveryItemCardIssueLabelTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-issue-label-tag-props.ts",
+);
+const deadLetterRecoveryItemCardIssueLabelTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-issue-label-tag-props.types.ts",
+);
 const deadLetterRecoveryItemCardIssueLabelTagTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-issue-label-tag.types.ts",
@@ -5566,6 +5574,14 @@ const deadLetterRecoveryItemCardIssueLabelTagSource = fs.readFileSync(
   deadLetterRecoveryItemCardIssueLabelTagPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardIssueLabelTagPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardIssueLabelTagPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardIssueLabelTagPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardIssueLabelTagPropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardIssueLabelTagTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardIssueLabelTagTypesPath,
   "utf8",
@@ -7276,6 +7292,10 @@ const deadLetterRecoveryItemCardRetryStateTagTypesLines =
   deadLetterRecoveryItemCardRetryStateTagTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardIssueLabelTagLines =
   deadLetterRecoveryItemCardIssueLabelTagSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardIssueLabelTagPropsLines =
+  deadLetterRecoveryItemCardIssueLabelTagPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardIssueLabelTagPropsTypesLines =
+  deadLetterRecoveryItemCardIssueLabelTagPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardIssueLabelTagTypesLines =
   deadLetterRecoveryItemCardIssueLabelTagTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardTagsTypesLines =
@@ -28865,6 +28885,7 @@ if (recentMediaIssueCardRetryCountTagTypesLines > maxRecentMediaIssueCardRetryCo
 
 for (const requiredDeadLetterRecoveryItemCardTagsUsage of [
   'import { buildDeadLetterRecoveryItemCardProcessingStatusTagProps } from "./dead-letter-recovery-item-card-processing-status-tag-props";',
+  'import { buildDeadLetterRecoveryItemCardIssueLabelTagProps } from "./dead-letter-recovery-item-card-issue-label-tag-props";',
   'import { DeadLetterRecoveryItemCardProcessingStatusTag } from "./dead-letter-recovery-item-card-processing-status-tag";',
   'import { DeadLetterRecoveryItemCardIssueLabelTag } from "./dead-letter-recovery-item-card-issue-label-tag";',
   'import { buildDeadLetterRecoveryItemCardRetryStateTagProps } from "./dead-letter-recovery-item-card-retry-state-tag-props";',
@@ -28877,7 +28898,8 @@ for (const requiredDeadLetterRecoveryItemCardTagsUsage of [
   '<DeadLetterRecoveryItemCardStorageProviderTag',
   "buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy })",
   '<DeadLetterRecoveryItemCardRetryStateTag',
-  "<DeadLetterRecoveryItemCardIssueLabelTag item={item} locale={locale} />",
+  "buildDeadLetterRecoveryItemCardIssueLabelTagProps({ item, locale })",
+  '<DeadLetterRecoveryItemCardIssueLabelTag',
 ]) {
   if (!deadLetterRecoveryItemCardTagsSource.includes(requiredDeadLetterRecoveryItemCardTagsUsage)) {
     throw new Error(
@@ -28895,6 +28917,7 @@ for (const forbiddenDeadLetterRecoveryItemCardTagsToken of [
   '<DeadLetterRecoveryItemCardProcessingStatusTag item={item} locale={locale} />',
   '<DeadLetterRecoveryItemCardRetryStateTag item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />',
   '<DeadLetterRecoveryItemCardStorageProviderTag item={item} locale={locale} />',
+  '<DeadLetterRecoveryItemCardIssueLabelTag item={item} locale={locale} />',
 ]) {
   if (deadLetterRecoveryItemCardTagsSource.includes(forbiddenDeadLetterRecoveryItemCardTagsToken)) {
     throw new Error(
@@ -29279,6 +29302,68 @@ const maxDeadLetterRecoveryItemCardRetryStateTagTypesLines = 2;
 if (deadLetterRecoveryItemCardRetryStateTagTypesLines > maxDeadLetterRecoveryItemCardRetryStateTagTypesLines) {
   throw new Error(
     `dead-letter-recovery-item-card-retry-state-tag.types.ts exceeded ${maxDeadLetterRecoveryItemCardRetryStateTagTypesLines} lines: ${deadLetterRecoveryItemCardRetryStateTagTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardIssueLabelTagPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardIssueLabelTagProps } from "./dead-letter-recovery-item-card-issue-label-tag.types";',
+  'import type { BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput } from "./dead-letter-recovery-item-card-issue-label-tag-props.types";',
+  "export function buildDeadLetterRecoveryItemCardIssueLabelTagProps({ item, locale }: BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput): DeadLetterRecoveryItemCardIssueLabelTagProps {",
+]) {
+  if (!deadLetterRecoveryItemCardIssueLabelTagPropsSource.includes(requiredDeadLetterRecoveryItemCardIssueLabelTagPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-issue-label-tag-props.ts must own issue-label tag prop projection: ${requiredDeadLetterRecoveryItemCardIssueLabelTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardIssueLabelTagPropsToken of [
+  "<DeadLetterRecoveryItemCardIssueLabelTag",
+  "getMediaIssueLabel(",
+  '<div className="tag-row">',
+]) {
+  if (
+    deadLetterRecoveryItemCardIssueLabelTagPropsSource.includes(
+      forbiddenDeadLetterRecoveryItemCardIssueLabelTagPropsToken,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-issue-label-tag-props.ts must keep rendering and label rules delegated: ${forbiddenDeadLetterRecoveryItemCardIssueLabelTagPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardIssueLabelTagPropsLines = 5;
+if (
+  deadLetterRecoveryItemCardIssueLabelTagPropsLines >
+  maxDeadLetterRecoveryItemCardIssueLabelTagPropsLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-issue-label-tag-props.ts exceeded ${maxDeadLetterRecoveryItemCardIssueLabelTagPropsLines} lines: ${deadLetterRecoveryItemCardIssueLabelTagPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardIssueLabelTagPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types"; export type BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput = Pick<DeadLetterRecoveryItemCardTagsProps, "item" | "locale">;',
+]) {
+  if (
+    !deadLetterRecoveryItemCardIssueLabelTagPropsTypesSource.includes(
+      requiredDeadLetterRecoveryItemCardIssueLabelTagPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-issue-label-tag-props.types.ts must own issue-label-tag-props input typing: ${requiredDeadLetterRecoveryItemCardIssueLabelTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardIssueLabelTagPropsTypesLines = 2;
+if (
+  deadLetterRecoveryItemCardIssueLabelTagPropsTypesLines >
+  maxDeadLetterRecoveryItemCardIssueLabelTagPropsTypesLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-issue-label-tag-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardIssueLabelTagPropsTypesLines} lines: ${deadLetterRecoveryItemCardIssueLabelTagPropsTypesLines}`,
   );
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { buildDeadLetterRecoveryItemCardProcessingStatusTagProps } from "./dead-letter-recovery-item-card-processing-status-tag-props";
+import { buildDeadLetterRecoveryItemCardIssueLabelTagProps } from "./dead-letter-recovery-item-card-issue-label-tag-props";
 import { DeadLetterRecoveryItemCardProcessingStatusTag } from "./dead-letter-recovery-item-card-processing-status-tag";
 import { DeadLetterRecoveryItemCardIssueLabelTag } from "./dead-letter-recovery-item-card-issue-label-tag";
 import { buildDeadLetterRecoveryItemCardRetryStateTagProps } from "./dead-letter-recovery-item-card-retry-state-tag-props";
@@ -19,7 +20,7 @@ export function DeadLetterRecoveryItemCardTags({
       <DeadLetterRecoveryItemCardProcessingStatusTag {...buildDeadLetterRecoveryItemCardProcessingStatusTagProps({ item, locale })} />
       <DeadLetterRecoveryItemCardStorageProviderTag {...buildDeadLetterRecoveryItemCardStorageProviderTagProps({ item, locale })} />
       <DeadLetterRecoveryItemCardRetryStateTag {...buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy })} />
-      <DeadLetterRecoveryItemCardIssueLabelTag item={item} locale={locale} />
+      <DeadLetterRecoveryItemCardIssueLabelTag {...buildDeadLetterRecoveryItemCardIssueLabelTagProps({ item, locale })} />
     </div>
   );
 }
