@@ -29084,8 +29084,8 @@ if (recentMediaIssuesPanelListTypesLines > maxRecentMediaIssuesPanelListTypesLin
 for (const requiredRecentMediaIssuesPanelListPropsUsage of [
   'import type { RecentMediaIssuesPanelListProps } from "./recent-media-issues-panel-list.types";',
   'import type { BuildRecentMediaIssuesPanelListPropsInput } from "./recent-media-issues-panel-list-props.types";',
-  "export function buildRecentMediaIssuesPanelListProps(props: BuildRecentMediaIssuesPanelListPropsInput): RecentMediaIssuesPanelListProps {",
-  "return props;",
+  "export function buildRecentMediaIssuesPanelListProps(input: BuildRecentMediaIssuesPanelListPropsInput): RecentMediaIssuesPanelListProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssuesPanelListPropsSource.includes(requiredRecentMediaIssuesPanelListPropsUsage)) {
     throw new Error(
@@ -30106,8 +30106,8 @@ if (recentMediaIssueCardActionNoticeTypesLines > maxRecentMediaIssueCardActionNo
 for (const requiredRecentMediaIssueCardActionNoticePropsUsage of [
   'import type { RecentMediaIssueCardActionNoticeProps } from "./recent-media-issue-card-action-notice.types";',
   'import type { BuildRecentMediaIssueCardActionNoticePropsInput } from "./recent-media-issue-card-action-notice-props.types";',
-  "export function buildRecentMediaIssueCardActionNoticeProps(props: BuildRecentMediaIssueCardActionNoticePropsInput): RecentMediaIssueCardActionNoticeProps {",
-  "action: props.action",
+  "export function buildRecentMediaIssueCardActionNoticeProps(input: BuildRecentMediaIssueCardActionNoticePropsInput): RecentMediaIssueCardActionNoticeProps {",
+  "action: input.action",
 ]) {
   if (!recentMediaIssueCardActionNoticePropsSource.includes(requiredRecentMediaIssueCardActionNoticePropsUsage)) {
     throw new Error(
@@ -33459,8 +33459,8 @@ for (const requiredDeadLetterRecoveryItemCardActionNoticePropsUsage of [
   'import { getMediaIssueAction } from "../lib/media-issue-display";',
   'import type { DeadLetterRecoveryItemCardActionNoticeProps } from "./dead-letter-recovery-item-card-action-notice.types";',
   'import type { BuildDeadLetterRecoveryItemCardActionNoticePropsInput } from "./dead-letter-recovery-item-card-action-notice-props.types";',
-  "export function buildDeadLetterRecoveryItemCardActionNoticeProps(props: BuildDeadLetterRecoveryItemCardActionNoticePropsInput): DeadLetterRecoveryItemCardActionNoticeProps {",
-  "action: getMediaIssueAction(props.locale, props.item)",
+  "export function buildDeadLetterRecoveryItemCardActionNoticeProps(input: BuildDeadLetterRecoveryItemCardActionNoticePropsInput): DeadLetterRecoveryItemCardActionNoticeProps {",
+  "action: getMediaIssueAction(input.locale, input.item)",
 ]) {
   if (!deadLetterRecoveryItemCardActionNoticePropsSource.includes(requiredDeadLetterRecoveryItemCardActionNoticePropsUsage)) {
     throw new Error(
