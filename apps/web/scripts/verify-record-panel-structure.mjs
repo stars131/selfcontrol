@@ -17397,6 +17397,9 @@ if (workspaceShellClientRefreshersInputTypesLines > maxWorkspaceShellClientRefre
 for (const requiredWorkspaceShellClientEffectsInputUsage of [
   'import type { BuildWorkspaceShellEffectsInput } from "./workspace-shell-client-effects-input.types";',
   "}: BuildWorkspaceShellEffectsInput) {",
+  "selectedRecordId,",
+  "setLoading,",
+  "token,",
 ]) {
   if (!workspaceShellClientEffectsInputSource.includes(requiredWorkspaceShellClientEffectsInputUsage)) {
     throw new Error(
@@ -17418,7 +17421,7 @@ for (const forbiddenWorkspaceShellClientEffectsInputToken of [
 }
 
 for (const requiredWorkspaceShellClientEffectsInputTypesUsage of [
-  'import type { WorkspaceShellRouter, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellEffectsInput = { router: WorkspaceShellRouter; state: WorkspaceShellState; workspaceId: string };',
+  'import type { WorkspaceShellRouter, WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellEffectsInput = WorkspaceShellState & { router: WorkspaceShellRouter; workspaceId: string };',
 ]) {
   if (!workspaceShellClientEffectsInputTypesSource.includes(requiredWorkspaceShellClientEffectsInputTypesUsage)) {
     throw new Error(

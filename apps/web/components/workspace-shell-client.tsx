@@ -23,7 +23,7 @@ export function WorkspaceShellClient({ workspaceId }: WorkspaceShellClientProps)
     buildWorkspaceShellRefreshersInput({ ...state, workspaceId }),
   );
 
-  useWorkspaceShellEffects(buildWorkspaceShellEffectsInput({ router, state, workspaceId }));
+  useWorkspaceShellEffects(buildWorkspaceShellEffectsInput({ ...state, router, workspaceId }));
   const actions = useWorkspaceShellActions(
     buildWorkspaceShellActionsInput({ refreshers, state, workspaceId }),
   );
