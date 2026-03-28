@@ -586,6 +586,8 @@ for (const requiredActionsUsage of [
   "createChatPanelOperatorHandlers(",
   "createChatPanelShareHandlers(",
   "buildChatPanelActionsResult({",
+  "...derivedData,",
+  "...state,",
   "derivedData,",
   "operatorHandlers,",
   "shareHandlers,",
@@ -935,8 +937,8 @@ for (const requiredActionsResultBuilderUsage of [
   'import type { BuildChatPanelActionsResultInput } from "./chat-panel-action-handler-inputs.types";',
   "export function buildChatPanelActionsResult(",
   "}: BuildChatPanelActionsResultInput) {",
-  "draft: state.draft,",
-  "unreadCount: derivedData.unreadCount,",
+  "draft,",
+  "unreadCount,",
   "handleDisableShareLink: shareHandlers.handleDisableShareLink,",
 ]) {
   if (!chatPanelActionsResultBuilderSource.includes(requiredActionsResultBuilderUsage)) {
@@ -968,7 +970,7 @@ if (chatPanelActionsResultBuilderLineCount > maxActionsResultBuilderLines) {
 
 for (const requiredActionHandlerInputsTypesUsage of [
   'import type { NotificationItem } from "../lib/types"; import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types"; import type { ChatPanelActionState } from "./chat-panel-action-state-result.types"; export type UseChatPanelActionsProps = { latestSharePath: string; notifications: NotificationItem[]; onCreateShareLink: (input: { name?: string; permission_code: string; max_uses?: number | null }) => Promise<void>; onDisableShareLink: (shareLinkId: string) => Promise<void>; onRefreshAuditLogs: () => Promise<void>; onReindexKnowledge: () => Promise<void>; onSyncNotifications: () => Promise<void>; onSendMessage: (message: string) => Promise<void> };',
-  'export type BuildChatPanelOperatorHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelShareHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
+  'export type BuildChatPanelOperatorHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelShareHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelActionsResultInput = ChatPanelActionDerivedData & ChatPanelActionState & { operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> } };',
 ]) {
   if (!chatPanelActionHandlerInputsTypesSource.includes(requiredActionHandlerInputsTypesUsage)) {
     throw new Error(

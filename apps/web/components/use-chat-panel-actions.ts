@@ -25,9 +25,9 @@ export function useChatPanelActions(props: UseChatPanelActionsProps) {
   );
 
   return buildChatPanelActionsResult({
-    derivedData,
+    ...derivedData,
+    ...state,
     operatorHandlers,
     shareHandlers,
-    state,
   });
 }
