@@ -3444,6 +3444,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-browse-workspace-copy-props.ts` and `record-panel-v2-browse-workspace-draft-location-props.ts` now use explicit `input` parameters while keeping their browse copy mapping and draft-location behavior unchanged
   - this keeps the browse workspace helper layer aligned with the broader helper-signature normalization work without changing browse UX behavior
   - the record-panel structure guardrail now enforces this normalized helper boundary so future browse workspace edits stay easier to review and extend
+- Record Editor Workspace Action Helper Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` and `record-panel-v2-editor-workspace-dead-letter-action-props.ts` now use explicit `input` parameters while keeping their action mapping and dead-letter retry behavior unchanged
+  - this keeps the editor workspace action helper layer aligned with the broader helper-signature normalization work without changing editor behavior
+  - the record-panel structure guardrail now enforces this normalized action-helper boundary so future workspace action edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

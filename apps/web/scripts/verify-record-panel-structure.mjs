@@ -10428,11 +10428,11 @@ for (const forbiddenEditorWorkspaceDeadLetterActionPropsToken of [
 }
 
 for (const requiredEditorWorkspaceDeadLetterActionPropsUsage of [
-  "export function buildRecordEditorWorkspaceDeadLetterActionProps({",
-  "}: RecordEditorWorkspaceDeadLetterActionPropsInput): RecordEditorWorkspaceDeadLetterActionProps {",
-  "onBulkRetryAllDeadLetter: () => handleBulkRetryDeadLetter(\"all\")",
-  "onBulkRetrySelectedDeadLetter: () => handleBulkRetryDeadLetter(\"selected\")",
-  "onToggleDeadLetterSelection: handleToggleDeadLetterSelection",
+  "export function buildRecordEditorWorkspaceDeadLetterActionProps(",
+  "input: RecordEditorWorkspaceDeadLetterActionPropsInput,",
+  "onBulkRetryAllDeadLetter: () => input.handleBulkRetryDeadLetter(\"all\")",
+  "onBulkRetrySelectedDeadLetter: () => input.handleBulkRetryDeadLetter(\"selected\")",
+  "onToggleDeadLetterSelection: input.handleToggleDeadLetterSelection",
 ]) {
   if (!editorWorkspaceDeadLetterActionPropsSource.includes(requiredEditorWorkspaceDeadLetterActionPropsUsage)) {
     throw new Error(
@@ -10473,12 +10473,12 @@ for (const forbiddenEditorWorkspacePrimaryActionPropsToken of [
 }
 
 for (const requiredEditorWorkspacePrimaryActionPropsUsage of [
-  "export function buildRecordEditorWorkspacePrimaryActionProps({",
-  "}: RecordEditorWorkspacePrimaryActionPropsInput): RecordEditorWorkspacePrimaryActionProps {",
-  "onCreateReminder: handleCreateReminderSubmit",
-  "onDeleteMediaAsset: handleDeleteMediaAsset",
-  "onRefreshMedia: handleRefreshMedia",
-  "onUpload: handleUpload",
+  "export function buildRecordEditorWorkspacePrimaryActionProps(",
+  "input: RecordEditorWorkspacePrimaryActionPropsInput,",
+  "onCreateReminder: input.handleCreateReminderSubmit",
+  "onDeleteMediaAsset: input.handleDeleteMediaAsset",
+  "onRefreshMedia: input.handleRefreshMedia",
+  "onUpload: input.handleUpload",
 ]) {
   if (!editorWorkspacePrimaryActionPropsSource.includes(requiredEditorWorkspacePrimaryActionPropsUsage)) {
     throw new Error(
