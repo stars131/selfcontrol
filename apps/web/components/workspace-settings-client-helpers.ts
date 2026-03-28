@@ -30,7 +30,7 @@ export function buildWorkspaceSettingsProviderSectionProps(
 }
 
 export function buildWorkspaceSettingsManagedSectionsProps(
-  props: WorkspaceSettingsManagedSectionsProps,
+  input: WorkspaceSettingsManagedSectionsProps,
 ): WorkspaceSettingsManagedSectionsProps {
-  return props;
+  return input;
 }

@@ -7,6 +7,10 @@ const workspacePagePath = path.resolve(process.cwd(), "app/app/workspaces/[works
 const workspaceShellClientPath = path.resolve(process.cwd(), "components/workspace-shell-client.tsx");
 const workspaceShellPanelsPath = path.resolve(process.cwd(), "components/workspace-shell-panels.tsx");
 const workspaceSettingsClientPath = path.resolve(process.cwd(), "components/workspace-settings-client.tsx");
+const workspaceSettingsClientViewPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-client-view.ts",
+);
 const workspaceSettingsProviderSectionPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-provider-section.tsx",
@@ -18,6 +22,7 @@ const workspacePageSource = fs.readFileSync(workspacePagePath, "utf8");
 const workspaceShellClientSource = fs.readFileSync(workspaceShellClientPath, "utf8");
 const workspaceShellPanelsSource = fs.readFileSync(workspaceShellPanelsPath, "utf8");
 const workspaceSettingsClientSource = fs.readFileSync(workspaceSettingsClientPath, "utf8");
+const workspaceSettingsClientViewSource = fs.readFileSync(workspaceSettingsClientViewPath, "utf8");
 const workspaceSettingsProviderSectionSource = fs.readFileSync(
   workspaceSettingsProviderSectionPath,
   "utf8",
@@ -84,14 +89,25 @@ for (const forbiddenWorkspacePanelsToken of [
 
 for (const requiredSettingsClientToken of [
   'import { useWorkspaceSettingsController } from "./use-workspace-settings-controller";',
-  "providerConfigs,",
-  "mediaStorageHealth,",
-  "handleSaveProviderConfig,",
+  'import { buildWorkspaceSettingsClientViewProps } from "./workspace-settings-client-view";',
   "<WorkspaceSettingsMainContent",
-  "providerSectionProps={buildWorkspaceSettingsProviderSectionProps({",
+  "const view = buildWorkspaceSettingsClientViewProps({",
+  "<WorkspaceSettingsMainContent {...view.mainContentProps} />",
 ]) {
   if (!workspaceSettingsClientSource.includes(requiredSettingsClientToken)) {
     throw new Error(`workspace-settings-client.tsx must remain the provider settings entrypoint: ${requiredSettingsClientToken}`);
+  }
+}
+
+for (const requiredSettingsClientViewToken of [
+  'from "./workspace-settings-client-helpers";',
+  "providerConfigs: input.controller.providerConfigs,",
+  "mediaStorageHealth: input.controller.mediaStorageHealth,",
+  "onSaveProviderConfig: input.controller.handleSaveProviderConfig,",
+  "buildWorkspaceSettingsProviderSectionProps({",
+]) {
+  if (!workspaceSettingsClientViewSource.includes(requiredSettingsClientViewToken)) {
+    throw new Error(`workspace-settings-client-view.ts must keep provider settings inside the settings boundary: ${requiredSettingsClientViewToken}`);
   }
 }
 

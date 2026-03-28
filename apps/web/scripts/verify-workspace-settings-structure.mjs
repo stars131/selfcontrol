@@ -6,6 +6,14 @@ const workspaceSettingsClientHelpersPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-client-helpers.ts",
 );
+const workspaceSettingsClientViewPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-client-view.ts",
+);
+const workspaceSettingsClientViewTypesPath = path.resolve(
+  process.cwd(),
+  "components/workspace-settings-client-view.types.ts",
+);
 const workspaceSettingsClientTypesPath = path.resolve(
   process.cwd(),
   "components/workspace-settings-client.types.ts",
@@ -128,6 +136,8 @@ const workspaceSettingsMemberActionsPath = path.resolve(
 );
 const source = fs.readFileSync(workspaceSettingsPath, "utf8");
 const clientHelpersSource = fs.readFileSync(workspaceSettingsClientHelpersPath, "utf8");
+const clientViewSource = fs.readFileSync(workspaceSettingsClientViewPath, "utf8");
+const clientViewTypesSource = fs.readFileSync(workspaceSettingsClientViewTypesPath, "utf8");
 const clientTypesSource = fs.readFileSync(workspaceSettingsClientTypesPath, "utf8");
 const mainContentSource = fs.readFileSync(workspaceSettingsMainContentPath, "utf8");
 const mainContentTypesSource = fs.readFileSync(workspaceSettingsMainContentTypesPath, "utf8");
@@ -172,6 +182,8 @@ const providerActionsSource = fs.readFileSync(workspaceSettingsProviderActionsPa
 const memberActionsSource = fs.readFileSync(workspaceSettingsMemberActionsPath, "utf8");
 const lineCount = source.split(/\r?\n/).length;
 const clientHelpersLineCount = clientHelpersSource.split(/\r?\n/).length;
+const clientViewLineCount = clientViewSource.split(/\r?\n/).length;
+const clientViewTypesLineCount = clientViewTypesSource.split(/\r?\n/).length;
 const clientTypesLineCount = clientTypesSource.split(/\r?\n/).length;
 const mainContentLineCount = mainContentSource.split(/\r?\n/).length;
 const mainContentTypesLineCount = mainContentTypesSource.split(/\r?\n/).length;
@@ -221,7 +233,7 @@ if (!source.includes("getWorkspaceSettingsCopy(locale)")) {
 }
 
 for (const requiredImport of [
-  'from "./workspace-settings-client-helpers";',
+  'from "./workspace-settings-client-view";',
   'import type { WorkspaceSettingsClientProps } from "./workspace-settings-client.types";',
   'import { WorkspaceSettingsLoadingShell } from "./workspace-settings-loading-shell";',
   'import { WorkspaceSettingsHeader } from "./workspace-settings-header";',
@@ -233,12 +245,12 @@ for (const requiredImport of [
 }
 
 for (const requiredUsage of [
-  "readWorkspaceSettingsManagedRole(workspace)",
-  "<WorkspaceSettingsLoadingShell",
-  "buildWorkspaceSettingsProviderSectionProps({",
-  "buildWorkspaceSettingsManagedSectionsProps({",
-  "<WorkspaceSettingsHeader",
-  "<WorkspaceSettingsMainContent",
+  "const controller = useWorkspaceSettingsController(router, workspaceId);",
+  "const view = buildWorkspaceSettingsClientViewProps({",
+  "if (view.showLoadingShell) {",
+  "<WorkspaceSettingsLoadingShell {...view.loadingShellProps} />",
+  "<WorkspaceSettingsHeader {...view.headerProps} />",
+  "<WorkspaceSettingsMainContent {...view.mainContentProps} />",
 ]) {
   if (!source.includes(requiredUsage)) {
     throw new Error(`workspace-settings-client.tsx must compose delegated settings sections: ${requiredUsage}`);
@@ -412,11 +424,14 @@ for (const forbiddenToken of [
   'className="panel-header"',
   "workspace?.role === \"owner\" || workspace?.role === \"editor\"",
   'workspace && workspace.role !== "viewer" ? workspace.role : null',
+  'from "./workspace-settings-client-helpers";',
   'import { ProviderSettingsPanel } from "./provider-settings-panel";',
   'import { WorkspaceMembersSection } from "./workspace-members-section";',
   'import { WorkspaceExportCard } from "./workspace-export-card";',
   'import { WorkspaceExportJobsCard } from "./workspace-export-jobs-card";',
   'import { WorkspaceMediaRetentionCard } from "./workspace-media-retention-card";',
+  "buildWorkspaceSettingsProviderSectionProps({",
+  "buildWorkspaceSettingsManagedSectionsProps({",
   "token ? async () => refreshMediaStorageHealthState(token) : null",
   "<ProviderSettingsPanel",
   "<WorkspaceMembersSection",
@@ -435,7 +450,7 @@ for (const forbiddenToken of [
   }
 }
 
-const maxAllowedLines = 90;
+const maxAllowedLines = 45;
 if (lineCount > maxAllowedLines) {
   throw new Error(`workspace-settings-client.tsx exceeded ${maxAllowedLines} lines: ${lineCount}`);
 }
@@ -467,6 +482,67 @@ for (const requiredClientHelpersUsage of [
 
 if (clientHelpersLineCount > 45) {
   throw new Error(`workspace-settings-client-helpers.ts exceeded 45 lines: ${clientHelpersLineCount}`);
+}
+
+for (const requiredClientViewImport of [
+  'from "./workspace-settings-client-helpers";',
+  'from "./workspace-settings-client-view.types";',
+  'from "./workspace-settings-header.types";',
+  'from "./workspace-settings-loading-shell.types";',
+  'from "./workspace-settings-main-content.types";',
+]) {
+  if (!clientViewSource.includes(requiredClientViewImport)) {
+    throw new Error(`workspace-settings-client-view.ts must import shared client-view types: ${requiredClientViewImport}`);
+  }
+}
+
+for (const requiredClientViewUsage of [
+  "export function buildWorkspaceSettingsLoadingShellProps(",
+  "export function buildWorkspaceSettingsHeaderProps(",
+  "export function buildWorkspaceSettingsMainContentProps(",
+  "const managedRole = readWorkspaceSettingsManagedRole(input.controller.workspace);",
+  "buildWorkspaceSettingsManagedSectionsProps({",
+  "buildWorkspaceSettingsProviderSectionProps({",
+  "export function buildWorkspaceSettingsClientViewProps(",
+  "showLoadingShell: input.controller.loading,",
+]) {
+  if (!clientViewSource.includes(requiredClientViewUsage)) {
+    throw new Error(`workspace-settings-client-view.ts must own client view assembly: ${requiredClientViewUsage}`);
+  }
+}
+
+for (const forbiddenClientViewToken of [
+  'from "next/navigation";',
+  'from "../lib/locale";',
+  'from "./use-workspace-settings-controller";',
+  'from "./workspace-settings-copy";',
+  "<WorkspaceSettingsHeader",
+  "<WorkspaceSettingsMainContent",
+  "<WorkspaceSettingsLoadingShell",
+  "<main className=",
+]) {
+  if (clientViewSource.includes(forbiddenClientViewToken)) {
+    throw new Error(`workspace-settings-client-view.ts must stay as a pure prop builder: ${forbiddenClientViewToken}`);
+  }
+}
+
+if (clientViewLineCount > 80) {
+  throw new Error(`workspace-settings-client-view.ts exceeded 80 lines: ${clientViewLineCount}`);
+}
+
+for (const requiredClientViewTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import type { Workspace } from "../lib/types";',
+  "export type WorkspaceSettingsClientViewController = {",
+  "export type WorkspaceSettingsClientViewInput = {",
+  "export type WorkspaceSettingsClientViewProps = {",
+]) {
+  if (!clientViewTypesSource.includes(requiredClientViewTypesUsage)) {
+    throw new Error(`workspace-settings-client-view.types.ts must own client-view contracts: ${requiredClientViewTypesUsage}`);
+  }
+}
+
+if (clientViewTypesLineCount > 3) {
+  throw new Error(`workspace-settings-client-view.types.ts exceeded 3 lines: ${clientViewTypesLineCount}`);
 }
 
 for (const requiredClientTypesUsage of [

@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Settings Client View Boundary Cleanup V1:
+  - `apps/web/components/workspace-settings-client.tsx` now mirrors the thin entry pattern used by the workspace entry page and delegates settings-page view assembly to a dedicated client-view helper instead of projecting controller state into header and main-content props inline
+  - `apps/web/components/workspace-settings-client-view.ts` and `workspace-settings-client-view.types.ts` now own the loading-shell, header, and main-content view contracts while `workspace-settings-client-helpers.ts` stays focused on smaller provider and managed-section mapping helpers
+  - `apps/web/scripts/verify-workspace-settings-structure.mjs` and `verify-provider-settings-boundary.mjs` now enforce this thinner settings-entry boundary so provider configuration stays inside the settings domain without letting the page client grow back into a bulky orchestration layer
 - Workspace Entry Client View Props Cleanup V1:
   - `apps/web/components/workspace-entry-client.tsx` now delegates loading-shell and main-panel view assembly to a dedicated entry-client view helper instead of carrying the full controller-to-view prop projection inline
   - `apps/web/components/workspace-entry-client-helpers.ts` and `workspace-entry-client-helpers.types.ts` now own the entry loading-shell props, client view props, refresh-job wiring, and main-panel prop projection contracts together
