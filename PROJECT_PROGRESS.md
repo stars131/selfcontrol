@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Development Setup Doc UTF-8 Recovery V1:
+  - `docs/DEVELOPMENT_SETUP.md` has been rewritten as a clean UTF-8 Chinese guide instead of the previous garbled text
+  - the restored document now matches the current bootstrap, doctor, hooks, verify-all, and cross-platform Python command flow introduced in recent maintenance slices
+  - this improves developer onboarding and lowers setup ambiguity for both Windows-hosted and Linux-VM workflows
 - README UTF-8 Recovery V1:
   - root `README.md` has been rewritten as a clean UTF-8 Chinese document instead of the previous garbled text, with project overview, startup flow, verification commands, and documentation links restored
   - the new README now reflects the current root scripts, cross-platform verification entrypoints, and quality workflow expectations introduced during recent maintainability work
