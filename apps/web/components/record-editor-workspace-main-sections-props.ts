@@ -5,22 +5,31 @@ import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types
 import type { BuildRecordEditorMainSectionsPropsInput } from "./record-editor-workspace-main-sections-props.types";
 
 export function buildRecordEditorMainSectionsProps({
+  canWriteWorkspace,
   fieldBindings,
+  form,
+  formatHistoryTimestampLabel,
+  formatReviewStatusLabel,
   locationReviewBindings,
-  props,
+  locationReviewForm,
+  panelCopy,
+  selectedLocationHistory,
+  selectedLocationReview,
+  selectedRecord,
+  summarizeHistoryActionLabel,
 }: BuildRecordEditorMainSectionsPropsInput): RecordEditorMainSectionsProps {
   return {
-    canWriteWorkspace: props.canWriteWorkspace,
+    canWriteWorkspace,
     fieldBindings,
-    form: props.form,
-    formatHistoryTimestampLabel: props.formatHistoryTimestampLabel,
-    formatReviewStatusLabel: props.formatReviewStatusLabel,
+    form,
+    formatHistoryTimestampLabel,
+    formatReviewStatusLabel,
     locationReviewBindings,
-    locationReviewForm: props.locationReviewForm,
-    panelCopy: props.panelCopy,
-    selectedLocationHistory: props.selectedLocationHistory,
-    selectedLocationReview: props.selectedLocationReview,
-    selectedRecord: props.selectedRecord,
-    summarizeHistoryActionLabel: props.summarizeHistoryActionLabel,
+    locationReviewForm,
+    panelCopy,
+    selectedLocationHistory,
+    selectedLocationReview,
+    selectedRecord,
+    summarizeHistoryActionLabel,
   };
 }

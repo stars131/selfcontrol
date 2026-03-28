@@ -3284,6 +3284,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-reminder-list.tsx` now forwards one flattened input object into `buildRecordReminderItemCardProps` instead of wrapping list props under `{ props, reminder }`
   - `apps/web/components/record-reminder-list-item-props.types.ts` and `apps/web/components/record-reminder-list-item-props.ts` now share one flattened reminder item-card input contract so the item prop builder stays easier to evolve without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened reminder item-card boundary so future reminder list edits do not regrow double-wrapped prop assembly
+- Record Editor Main Sections Input Flattening V1:
+  - `apps/web/components/record-editor-workspace.tsx` now forwards one flattened input object into `buildRecordEditorMainSectionsProps` instead of wrapping editor workspace props under `{ fieldBindings, locationReviewBindings, props }`
+  - `apps/web/components/record-editor-workspace-main-sections-props.types.ts` and `apps/web/components/record-editor-workspace-main-sections-props.ts` now share one flattened editor-main-sections input contract so the section props builder stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened editor-main-sections boundary so future editor section edits do not regrow double-wrapped prop assembly
 
 ## Next
 - Continue the next product slice

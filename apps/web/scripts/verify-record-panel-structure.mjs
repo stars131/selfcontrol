@@ -17976,7 +17976,7 @@ if (recordEditorWorkspaceMainSectionsPropsSource.includes("}: {")) {
 }
 
 for (const requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage of [
-  'import type { RecordEditorMainSectionsProps } from "./record-editor-main-sections.types"; import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types"; export type BuildRecordEditorMainSectionsPropsInput = { fieldBindings: RecordEditorMainSectionsProps["fieldBindings"]; locationReviewBindings: RecordEditorMainSectionsProps["locationReviewBindings"]; props: RecordEditorWorkspaceProps };',
+  'import type { RecordEditorMainSectionsProps } from "./record-editor-main-sections.types"; import type { RecordEditorWorkspaceProps } from "./record-editor-workspace.types"; export type BuildRecordEditorMainSectionsPropsInput = RecordEditorWorkspaceProps & { fieldBindings: RecordEditorMainSectionsProps["fieldBindings"]; locationReviewBindings: RecordEditorMainSectionsProps["locationReviewBindings"] };',
 ]) {
   if (!recordEditorWorkspaceMainSectionsPropsTypesSource.includes(requiredRecordEditorWorkspaceMainSectionsPropsTypesUsage)) {
     throw new Error(

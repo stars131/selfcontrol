@@ -16,9 +16,9 @@ export function RecordEditorWorkspace(props: RecordEditorWorkspaceProps) {
   const fieldBindings = createRecordEditorFieldBindings(props.setForm);
   const locationReviewBindings = createLocationReviewBindings(props.setLocationReviewForm);
   const mainSectionsProps = buildRecordEditorMainSectionsProps({
+    ...props,
     fieldBindings,
     locationReviewBindings,
-    props,
   });
   const supportToolsProps = buildRecordEditorSupportToolsProps(props);
 
