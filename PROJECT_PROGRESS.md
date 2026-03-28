@@ -2935,6 +2935,10 @@ Last updated: 2026-03-28
   - recent-media action prop assembly now lives in `apps/web/components/recent-media-issue-card-actions-props.ts` and the transitional `recent-media-issue-card-child-props.ts` boundary is removed
   - `apps/web/components/recent-media-issue-card.tsx` now wires metadata and actions through explicit dedicated builders so the issue-card orchestration layer stays easier to audit and extend safely
   - the record-panel structure guardrail now enforces this action-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
+- Dead-Letter Status Props Builder Extraction V1:
+  - dead-letter item status-section prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-status-section-props.ts` instead of remaining mixed inside `apps/web/components/dead-letter-recovery-item-card-child-props.ts`
+  - `apps/web/components/dead-letter-recovery-item-card.tsx` now keeps status projection isolated from header and action projection so the dead-letter card orchestration layer stays easier to update safely
+  - the record-panel structure guardrail now enforces this status-props-builder boundary so future dead-letter card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
