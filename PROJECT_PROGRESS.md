@@ -2875,6 +2875,10 @@ Last updated: 2026-03-28
   - media-storage health delete-capability rendering now lives in `apps/web/components/media-storage-health-delete-capability-card.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-capabilities.tsx`
   - `apps/web/components/media-storage-health-capabilities.tsx` now stays focused on capability-card layout while delete capability rendering remains centralized and easier to evolve safely
   - the provider-settings and record-panel structure guardrails now enforce this delete-capability boundary so future health-capability changes do not regrow a mixed layout-and-delete rendering module
+- Media Storage Health Message Extraction V1:
+  - media-storage health header message rendering now lives in `apps/web/components/media-storage-health-message.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-header.tsx`
+  - `apps/web/components/media-storage-health-header.tsx` now stays focused on status summary and refresh controls while message rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this message boundary so future health-header changes do not regrow a mixed header-and-message rendering module
 
 ## Next
 - Continue the next product slice

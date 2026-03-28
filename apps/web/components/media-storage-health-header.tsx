@@ -1,6 +1,7 @@
 "use client";
 
 import { getMediaStorageHealthStatusLabel } from "../lib/media-storage-health-display";
+import { MediaStorageHealthMessage } from "./media-storage-health-message";
 import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";
 
 export function MediaStorageHealthHeader({
@@ -30,9 +31,7 @@ export function MediaStorageHealthHeader({
           </button>
         ) : null}
       </div>
-      <div className="muted" style={{ lineHeight: 1.6 }}>
-        {mediaStorageHealth.message}
-      </div>
+      <MediaStorageHealthMessage mediaStorageHealth={mediaStorageHealth} />
     </>
   );
 }
