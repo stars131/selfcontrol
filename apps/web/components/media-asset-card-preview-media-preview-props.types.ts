@@ -1,0 +1,1 @@
+import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types"; export type BuildMediaAssetCardPreviewMediaPreviewPropsInput = Pick<MediaAssetCardPreviewProps, "asset" | "workspaceId"> & { authToken: string };

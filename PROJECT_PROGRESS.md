@@ -3135,6 +3135,10 @@ Last updated: 2026-03-28
   - media-asset retry-count tag prop assembly now lives in `apps/web/components/media-asset-card-retry-count-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps retry-count tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
   - the media-asset-card and record-panel structure guardrails now enforce this retry-count-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
+- Media Asset Preview Media-Preview Props Builder Extraction V1:
+  - media-asset preview child prop assembly now lives in `apps/web/components/media-asset-card-preview-media-preview-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-preview.tsx`
+  - `apps/web/components/media-asset-card-preview.tsx` now keeps media-preview child projection isolated from its auth-gated render wrapper so the preview surface stays easier to evolve safely
+  - the media-asset-card and record-panel structure guardrails now enforce this media-preview-child-props boundary so future preview changes do not regrow mixed render and child-prop projection logic
 
 ## Next
 - Continue the next product slice

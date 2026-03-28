@@ -1138,6 +1138,14 @@ const mediaAssetCardPreviewPropsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-preview-props.types.ts",
 );
+const mediaAssetCardPreviewMediaPreviewPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-preview-media-preview-props.ts",
+);
+const mediaAssetCardPreviewMediaPreviewPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-preview-media-preview-props.types.ts",
+);
 const mediaAssetCardMetadataPropsPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-props.ts",
@@ -4052,6 +4060,14 @@ const mediaAssetCardPreviewPropsSource = fs.readFileSync(
 );
 const mediaAssetCardPreviewPropsTypesSource = fs.readFileSync(
   mediaAssetCardPreviewPropsTypesPath,
+  "utf8",
+);
+const mediaAssetCardPreviewMediaPreviewPropsSource = fs.readFileSync(
+  mediaAssetCardPreviewMediaPreviewPropsPath,
+  "utf8",
+);
+const mediaAssetCardPreviewMediaPreviewPropsTypesSource = fs.readFileSync(
+  mediaAssetCardPreviewMediaPreviewPropsTypesPath,
   "utf8",
 );
 const mediaAssetCardMetadataPropsSource = fs.readFileSync(
@@ -7037,6 +7053,10 @@ const mediaAssetCardPreviewPropsLines =
   mediaAssetCardPreviewPropsSource.split(/\r?\n/).length;
 const mediaAssetCardPreviewPropsTypesLines =
   mediaAssetCardPreviewPropsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardPreviewMediaPreviewPropsLines =
+  mediaAssetCardPreviewMediaPreviewPropsSource.split(/\r?\n/).length;
+const mediaAssetCardPreviewMediaPreviewPropsTypesLines =
+  mediaAssetCardPreviewMediaPreviewPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataPropsLines =
   mediaAssetCardMetadataPropsSource.split(/\r?\n/).length;
 const mediaAssetCardMetadataPropsTypesLines =
@@ -18478,10 +18498,12 @@ if (mediaAssetCardExtractedTextTypesLines > maxMediaAssetCardExtractedTextTypesL
 }
 
 for (const requiredMediaAssetCardPreviewUsage of [
+  'import { buildMediaAssetCardPreviewMediaPreviewProps } from "./media-asset-card-preview-media-preview-props";',
   'import { MediaPreview } from "./media-preview";',
   'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types";',
   "}: MediaAssetCardPreviewProps) {",
-  '<MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />',
+  "buildMediaAssetCardPreviewMediaPreviewProps({ asset, authToken, workspaceId })",
+  "<MediaPreview",
   'authToken ? <div style={{ marginTop: 12 }}>',
 ]) {
   if (!mediaAssetCardPreviewSource.includes(requiredMediaAssetCardPreviewUsage)) {
@@ -18493,6 +18515,10 @@ for (const requiredMediaAssetCardPreviewUsage of [
 
 if (mediaAssetCardPreviewSource.includes("type MediaAssetCardPreviewProps = Pick<")) {
   throw new Error("media-asset-card-preview.tsx must keep media-asset preview prop typing delegated");
+}
+
+if (mediaAssetCardPreviewSource.includes('<MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />')) {
+  throw new Error("media-asset-card-preview.tsx must keep media-preview child prop assembly delegated");
 }
 
 const maxMediaAssetCardPreviewLines = 9;
@@ -18565,6 +18591,60 @@ const maxMediaAssetCardPreviewPropsTypesLines = 2;
 if (mediaAssetCardPreviewPropsTypesLines > maxMediaAssetCardPreviewPropsTypesLines) {
   throw new Error(
     `media-asset-card-preview-props.types.ts exceeded ${maxMediaAssetCardPreviewPropsTypesLines} lines: ${mediaAssetCardPreviewPropsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardPreviewMediaPreviewPropsUsage of [
+  'import type { MediaPreviewProps } from "./media-preview.types";',
+  'import type { BuildMediaAssetCardPreviewMediaPreviewPropsInput } from "./media-asset-card-preview-media-preview-props.types";',
+  "export function buildMediaAssetCardPreviewMediaPreviewProps({ asset, authToken, workspaceId }: BuildMediaAssetCardPreviewMediaPreviewPropsInput): MediaPreviewProps {",
+]) {
+  if (!mediaAssetCardPreviewMediaPreviewPropsSource.includes(requiredMediaAssetCardPreviewMediaPreviewPropsUsage)) {
+    throw new Error(
+      `media-asset-card-preview-media-preview-props.ts must own media-preview child prop projection: ${requiredMediaAssetCardPreviewMediaPreviewPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardPreviewMediaPreviewPropsToken of [
+  "<MediaPreview",
+  "<MediaAssetCardPreview",
+  "useMediaPreview(",
+]) {
+  if (mediaAssetCardPreviewMediaPreviewPropsSource.includes(forbiddenMediaAssetCardPreviewMediaPreviewPropsToken)) {
+    throw new Error(
+      `media-asset-card-preview-media-preview-props.ts must keep render and controller concerns delegated: ${forbiddenMediaAssetCardPreviewMediaPreviewPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardPreviewMediaPreviewPropsLines = 5;
+if (
+  mediaAssetCardPreviewMediaPreviewPropsLines >
+  maxMediaAssetCardPreviewMediaPreviewPropsLines
+) {
+  throw new Error(
+    `media-asset-card-preview-media-preview-props.ts exceeded ${maxMediaAssetCardPreviewMediaPreviewPropsLines} lines: ${mediaAssetCardPreviewMediaPreviewPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardPreviewMediaPreviewPropsTypesUsage of [
+  'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types"; export type BuildMediaAssetCardPreviewMediaPreviewPropsInput = Pick<MediaAssetCardPreviewProps, "asset" | "workspaceId"> & { authToken: string };',
+]) {
+  if (!mediaAssetCardPreviewMediaPreviewPropsTypesSource.includes(requiredMediaAssetCardPreviewMediaPreviewPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-preview-media-preview-props.types.ts must own media-preview-child-props input typing: ${requiredMediaAssetCardPreviewMediaPreviewPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardPreviewMediaPreviewPropsTypesLines = 2;
+if (
+  mediaAssetCardPreviewMediaPreviewPropsTypesLines >
+  maxMediaAssetCardPreviewMediaPreviewPropsTypesLines
+) {
+  throw new Error(
+    `media-asset-card-preview-media-preview-props.types.ts exceeded ${maxMediaAssetCardPreviewMediaPreviewPropsTypesLines} lines: ${mediaAssetCardPreviewMediaPreviewPropsTypesLines}`,
   );
 }
 
