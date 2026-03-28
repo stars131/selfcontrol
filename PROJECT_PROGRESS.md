@@ -3312,6 +3312,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts` and `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts` now type their prop-input args directly from `RecordPanelV2Props` instead of indirectly through `RecordPanelShellInput["props"]`
   - this removes one shell-layer type dependency from the workspace prop builders so the browse/editor prop projection layer stays easier to maintain as shell composition evolves
   - the record-panel structure guardrail now enforces this direct prop-input typing boundary so future workspace prop-input typing does not drift back to shell-indexed indirection
+- Record Panel Workspace Input Flattening V1:
+  - `apps/web/components/record-panel-v2-shell-view-props.ts` now flattens `props` and `controller` once before delegating into browse/editor workspace input assembly
+  - `apps/web/components/record-panel-v2-browse-workspace-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-input.ts` now accept flattened workspace input contracts directly so the workspace input join layer no longer depends on `RecordPanelShellInput`
+  - the record-panel structure guardrail now enforces this flattened workspace-input boundary so future browse/editor workspace assembly does not regrow nested `{ controller, props }` handoff layers
 
 ## Next
 - Continue the next product slice

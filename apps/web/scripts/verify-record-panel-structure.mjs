@@ -8883,8 +8883,8 @@ for (const forbiddenToken of [
   "authToken: props.authToken,",
   "onCreateRecord={() => props.onSelectRecord(null)}",
   'from "./record-panel-v2-workspace-props";',
-  "buildRecordBrowseWorkspaceInput({ controller, props })",
-  "buildRecordEditorWorkspaceInput({ controller, props })",
+  "buildRecordBrowseWorkspaceInput({ ...props, ...controller })",
+  "buildRecordEditorWorkspaceInput({ ...props, ...controller })",
   "buildRecordBrowseWorkspaceProps(",
   "buildRecordEditorWorkspaceProps(",
   "buildRecordPanelHeaderProps({",
@@ -9977,8 +9977,9 @@ if (browseWorkspaceDraftLocationPropsLines > maxBrowseWorkspaceDraftLocationProp
 }
 
 for (const requiredBrowseWorkspaceInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-browse-workspace-controller-input.types";',
   'from "./record-panel-v2-browse-workspace-controller-input";',
+  'from "./record-panel-v2-browse-workspace-prop-input.types";',
   'from "./record-panel-v2-browse-workspace-prop-input";',
 ]) {
   if (!browseWorkspaceInputSource.includes(requiredBrowseWorkspaceInputImport)) {
@@ -9989,9 +9990,10 @@ for (const requiredBrowseWorkspaceInputImport of [
 }
 
 for (const requiredBrowseWorkspaceInputUsage of [
-  "export function buildRecordBrowseWorkspaceInput({",
-  "...buildRecordBrowseWorkspacePropInput(props)",
-  "...buildRecordBrowseWorkspaceControllerInput(controller)",
+  "export function buildRecordBrowseWorkspaceInput(",
+  "input: BuildRecordBrowseWorkspacePropInputArgs & BuildRecordBrowseWorkspaceControllerInputArgs,",
+  "...buildRecordBrowseWorkspacePropInput(input)",
+  "...buildRecordBrowseWorkspaceControllerInput(input)",
 ]) {
   if (!browseWorkspaceInputSource.includes(requiredBrowseWorkspaceInputUsage)) {
     throw new Error(
@@ -10820,8 +10822,9 @@ if (editorWorkspaceBaseMediaPropsTypesLines > maxEditorWorkspaceBaseMediaPropsTy
 }
 
 for (const requiredEditorWorkspaceInputImport of [
-  'from "./record-panel-v2-shell-props.types";',
+  'from "./record-panel-v2-editor-workspace-controller-input.types";',
   'from "./record-panel-v2-editor-workspace-controller-input";',
+  'from "./record-panel-v2-editor-workspace-prop-input.types";',
   'from "./record-panel-v2-editor-workspace-prop-input";',
 ]) {
   if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputImport)) {
@@ -10832,9 +10835,10 @@ for (const requiredEditorWorkspaceInputImport of [
 }
 
 for (const requiredEditorWorkspaceInputUsage of [
-  "export function buildRecordEditorWorkspaceInput({",
-  "...buildRecordEditorWorkspacePropInput(props)",
-  "...buildRecordEditorWorkspaceControllerInput(controller)",
+  "export function buildRecordEditorWorkspaceInput(",
+  "input: BuildRecordEditorWorkspacePropInputArgs & BuildRecordEditorWorkspaceControllerInputArgs,",
+  "...buildRecordEditorWorkspacePropInput(input)",
+  "...buildRecordEditorWorkspaceControllerInput(input)",
 ]) {
   if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputUsage)) {
     throw new Error(
@@ -11157,9 +11161,9 @@ for (const requiredShellViewPropsImport of [
 for (const requiredShellViewPropsUsage of [
   "export function buildRecordPanelShellViewProps({ controller, props }: RecordPanelShellInput)",
   "buildRecordBrowseWorkspaceProps(",
-  "buildRecordBrowseWorkspaceInput({ controller, props })",
+  "buildRecordBrowseWorkspaceInput({ ...props, ...controller })",
   "buildRecordEditorWorkspaceProps(",
-  "buildRecordEditorWorkspaceInput({ controller, props })",
+  "buildRecordEditorWorkspaceInput({ ...props, ...controller })",
   "buildRecordPanelHeaderProps({",
 ]) {
   if (!shellViewPropsSource.includes(requiredShellViewPropsUsage)) {

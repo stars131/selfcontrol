@@ -12,10 +12,10 @@ import {
 export function buildRecordPanelShellViewProps({ controller, props }: RecordPanelShellInput) {
   return {
     browseWorkspaceProps: buildRecordBrowseWorkspaceProps(
-      buildRecordBrowseWorkspaceInput({ controller, props }),
+      buildRecordBrowseWorkspaceInput({ ...props, ...controller }),
     ),
     editorWorkspaceProps: buildRecordEditorWorkspaceProps(
-      buildRecordEditorWorkspaceInput({ controller, props }),
+      buildRecordEditorWorkspaceInput({ ...props, ...controller }),
     ),
     headerProps: buildRecordPanelHeaderProps({
       canWriteWorkspace: props.canWriteWorkspace,
