@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Web Route Entrypoint Guard V1:
+  - `apps/web/scripts/verify-route-entrypoints.mjs` now enforces that the key Next.js page entrypoints stay as thin route shells and continue delegating real UI logic to dedicated client components
+  - the guarded routes now include landing, login, register, app entry, workspace shell, workspace settings, and public share preview pages
+  - this reduces long-term page-layer drift and keeps route concerns separate from the larger client-side orchestration modules
 - Provider Settings Boundary Guard V1:
   - `apps/web/scripts/verify-provider-settings-boundary.mjs` now enforces the product boundary that provider and model configuration UI stays on the workspace settings page instead of drifting back into the main workspace shell
   - `apps/web/package.json` now runs this check inside `verify:ui-guardrails`, so future frontend refactors cannot quietly reintroduce provider settings into the chat-first workspace page
