@@ -4,10 +4,10 @@ import { createRecordPanelControllerMediaRetryAction } from "./record-panel-cont
 import type { RecordPanelControllerMediaStatusActionInput } from "./record-panel-controller-media-status-action-input.types";
 
 export function createRecordPanelControllerMediaStatusActions({
-  ...props
+  ...input
 }: RecordPanelControllerMediaStatusActionInput) {
-  const mediaRefreshAction = createRecordPanelControllerMediaRefreshAction(props);
-  const mediaRetryAction = createRecordPanelControllerMediaRetryAction(props);
+  const mediaRefreshAction = createRecordPanelControllerMediaRefreshAction(input);
+  const mediaRetryAction = createRecordPanelControllerMediaRetryAction(input);
 
   return {
     ...mediaRefreshAction,

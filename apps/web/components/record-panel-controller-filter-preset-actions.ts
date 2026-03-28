@@ -4,10 +4,10 @@ import { createRecordPanelControllerFilterPresetSaveAction } from "./record-pane
 import type { RecordPanelControllerFilterPresetActionInput } from "./record-panel-controller-filter-preset-action-input.types";
 
 export function createRecordPanelControllerFilterPresetActions({
-  ...props
+  ...input
 }: RecordPanelControllerFilterPresetActionInput) {
-  const presetDeleteAction = createRecordPanelControllerFilterPresetDeleteAction(props);
-  const presetSaveAction = createRecordPanelControllerFilterPresetSaveAction(props);
+  const presetDeleteAction = createRecordPanelControllerFilterPresetDeleteAction(input);
+  const presetSaveAction = createRecordPanelControllerFilterPresetSaveAction(input);
 
   return {
     ...presetSaveAction,

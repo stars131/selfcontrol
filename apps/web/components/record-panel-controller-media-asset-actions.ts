@@ -5,10 +5,10 @@ import { createRecordPanelControllerMediaStatusActions } from "./record-panel-co
 import type { RecordPanelControllerMediaAssetActionInput } from "./record-panel-controller-media-asset-action-input.types";
 
 export function createRecordPanelControllerMediaAssetActions({
-  ...props
+  ...input
 }: RecordPanelControllerMediaAssetActionInput) {
-  const mediaFileActions = createRecordPanelControllerMediaFileActions(props);
-  const mediaStatusActions = createRecordPanelControllerMediaStatusActions(props);
+  const mediaFileActions = createRecordPanelControllerMediaFileActions(input);
+  const mediaStatusActions = createRecordPanelControllerMediaStatusActions(input);
 
   return {
     ...mediaFileActions,

@@ -4,10 +4,10 @@ import { createRecordPanelControllerMediaUploadAction } from "./record-panel-con
 import type { RecordPanelControllerMediaTransferActionInput } from "./record-panel-controller-media-transfer-action-input.types";
 
 export function createRecordPanelControllerMediaTransferActions({
-  ...props
+  ...input
 }: RecordPanelControllerMediaTransferActionInput) {
-  const mediaDownloadAction = createRecordPanelControllerMediaDownloadAction(props);
-  const mediaUploadAction = createRecordPanelControllerMediaUploadAction(props);
+  const mediaDownloadAction = createRecordPanelControllerMediaDownloadAction(input);
+  const mediaUploadAction = createRecordPanelControllerMediaUploadAction(input);
 
   return {
     ...mediaUploadAction,

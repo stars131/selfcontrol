@@ -4,11 +4,11 @@ import { createRecordPanelControllerDeadLetterSelectionActions } from "./record-
 import type { RecordPanelControllerDeadLetterActionInput } from "./record-panel-controller-dead-letter-action-input.types";
 
 export function createRecordPanelControllerDeadLetterActions({
-  ...props
+  ...input
 }: RecordPanelControllerDeadLetterActionInput) {
-  const deadLetterRetryAction = createRecordPanelControllerDeadLetterRetryAction(props);
+  const deadLetterRetryAction = createRecordPanelControllerDeadLetterRetryAction(input);
   const deadLetterSelectionActions =
-    createRecordPanelControllerDeadLetterSelectionActions(props);
+    createRecordPanelControllerDeadLetterSelectionActions(input);
 
   return {
     ...deadLetterSelectionActions,

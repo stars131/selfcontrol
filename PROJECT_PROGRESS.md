@@ -3324,6 +3324,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-controller-form-actions.ts`, `record-panel-controller-record-submit-actions.ts`, `record-panel-controller-record-handlers.ts`, and `record-panel-controller-media-handlers.ts` now forward a consistently named `input` object through their thin orchestration wrappers
   - `apps/web/components/record-panel-controller-reminder-actions.ts`, `record-panel-controller-record-save-actions.ts`, and `record-panel-controller-record-delete-actions.ts` now use the same `input` naming at their single-hop delegation boundary so the action wrapper layer reads consistently across the controller surface
   - the record-panel structure guardrail now enforces this wrapper-input naming consistency so future thin delegates do not drift back to ambiguous `props` forwarding
+- Record Panel Action Aggregator Input Naming Cleanup V1:
+  - `apps/web/components/record-panel-controller-dead-letter-actions.ts`, `record-panel-controller-filter-actions.ts`, and `record-panel-controller-filter-preset-actions.ts` now forward a consistently named `input` object through their aggregator wrappers
+  - `apps/web/components/record-panel-controller-media-asset-actions.ts`, `record-panel-controller-media-file-actions.ts`, `record-panel-controller-media-status-actions.ts`, and `record-panel-controller-media-transfer-actions.ts` now use the same `input` naming across the media action aggregation chain
+  - the record-panel structure guardrail now enforces this aggregator-input naming consistency so future action combiners do not drift back to ambiguous `props` forwarding
 
 ## Next
 - Continue the next product slice

@@ -13485,8 +13485,8 @@ for (const requiredFilterActionsImport of [
 }
 
 for (const requiredFilterActionsUsage of [
-  "createRecordPanelControllerFilterApplyAction(props)",
-  "createRecordPanelControllerFilterPresetActions(props)",
+  "createRecordPanelControllerFilterApplyAction(input)",
+  "createRecordPanelControllerFilterPresetActions(input)",
   "...applyAction",
   "...presetActions",
 ]) {
@@ -13620,8 +13620,8 @@ for (const requiredFilterPresetActionsImport of [
 
 for (const requiredFilterPresetActionsUsage of [
   "export function createRecordPanelControllerFilterPresetActions({",
-  "createRecordPanelControllerFilterPresetDeleteAction(props)",
-  "createRecordPanelControllerFilterPresetSaveAction(props)",
+  "createRecordPanelControllerFilterPresetDeleteAction(input)",
+  "createRecordPanelControllerFilterPresetSaveAction(input)",
   "...presetSaveAction",
   "...presetDeleteAction",
 ]) {
@@ -15176,8 +15176,8 @@ for (const requiredMediaStatusActionsImport of [
 }
 
 for (const requiredMediaStatusActionsUsage of [
-  "createRecordPanelControllerMediaRefreshAction(props)",
-  "createRecordPanelControllerMediaRetryAction(props)",
+  "createRecordPanelControllerMediaRefreshAction(input)",
+  "createRecordPanelControllerMediaRetryAction(input)",
   "...mediaRefreshAction",
   "...mediaRetryAction",
 ]) {
@@ -15498,8 +15498,8 @@ for (const requiredMediaFileActionsImport of [
 }
 
 for (const requiredMediaFileActionsUsage of [
-  "createRecordPanelControllerMediaTransferActions(props)",
-  "createRecordPanelControllerMediaDeleteAction(props)",
+  "createRecordPanelControllerMediaTransferActions(input)",
+  "createRecordPanelControllerMediaDeleteAction(input)",
   "...mediaTransferActions",
   "...mediaDeleteAction",
 ]) {
@@ -15593,8 +15593,8 @@ for (const requiredMediaTransferActionsImport of [
 }
 
 for (const requiredMediaTransferActionsUsage of [
-  "createRecordPanelControllerMediaDownloadAction(props)",
-  "createRecordPanelControllerMediaUploadAction(props)",
+  "createRecordPanelControllerMediaDownloadAction(input)",
+  "createRecordPanelControllerMediaUploadAction(input)",
   "...mediaUploadAction",
   "...mediaDownloadAction",
 ]) {
@@ -15937,8 +15937,8 @@ for (const requiredDeadLetterActionsImport of [
 }
 
 for (const requiredDeadLetterActionsUsage of [
-  "createRecordPanelControllerDeadLetterRetryAction(props)",
-  "createRecordPanelControllerDeadLetterSelectionActions(props)",
+  "createRecordPanelControllerDeadLetterRetryAction(input)",
+  "createRecordPanelControllerDeadLetterSelectionActions(input)",
   "...deadLetterSelectionActions",
   "...deadLetterRetryAction",
 ]) {
@@ -16282,8 +16282,8 @@ for (const requiredMediaAssetActionsImport of [
 }
 
 for (const requiredMediaAssetActionsUsage of [
-  "createRecordPanelControllerMediaFileActions(props)",
-  "createRecordPanelControllerMediaStatusActions(props)",
+  "createRecordPanelControllerMediaFileActions(input)",
+  "createRecordPanelControllerMediaStatusActions(input)",
   "...mediaFileActions",
   "...mediaStatusActions",
 ]) {
