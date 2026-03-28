@@ -1,0 +1,1 @@
+import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types"; export type BuildMediaAssetCardExtractionModeTagPropsInput = Pick<MediaAssetCardExtractionModeTagProps, "extractionMode">;

@@ -305,6 +305,19 @@ const processingSourceTagTypesLineCount = processingSourceTagTypesSource.split(/
 const extractionModeTagPath = path.resolve(process.cwd(), "components/media-asset-card-extraction-mode-tag.tsx");
 const extractionModeTagSource = fs.readFileSync(extractionModeTagPath, "utf8");
 const extractionModeTagLineCount = extractionModeTagSource.split(/\r?\n/).length;
+const extractionModeTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extraction-mode-tag-props.ts",
+);
+const extractionModeTagPropsSource = fs.readFileSync(extractionModeTagPropsPath, "utf8");
+const extractionModeTagPropsLineCount = extractionModeTagPropsSource.split(/\r?\n/).length;
+const extractionModeTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extraction-mode-tag-props.types.ts",
+);
+const extractionModeTagPropsTypesSource = fs.readFileSync(extractionModeTagPropsTypesPath, "utf8");
+const extractionModeTagPropsTypesLineCount =
+  extractionModeTagPropsTypesSource.split(/\r?\n/).length;
 const extractionModeTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-extraction-mode-tag.types.ts");
 const extractionModeTagTypesSource = fs.readFileSync(extractionModeTagTypesPath, "utf8");
 const extractionModeTagTypesLineCount = extractionModeTagTypesSource.split(/\r?\n/).length;
@@ -796,6 +809,7 @@ if (metadataDetailsPropsTypesLineCount > 2) {
 }
 
 for (const requiredMetadataTagsUsage of [
+  'import { buildMediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag-props";',
   'import { buildMediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag-props";',
   'import { buildMediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag-props";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
@@ -814,6 +828,7 @@ for (const requiredMetadataTagsUsage of [
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   "}: MediaAssetCardMetadataTagsProps) {",
   "readMediaAssetCardMetadataTagValues({ asset })",
+  "buildMediaAssetCardExtractionModeTagProps({ extractionMode })",
   "buildMediaAssetCardFileExtensionTagProps({ asset })",
   "buildMediaAssetCardProcessingSourceTagProps({ processingSource })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
@@ -824,7 +839,7 @@ for (const requiredMetadataTagsUsage of [
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
   "<MediaAssetCardFileExtensionTag",
-  "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
+  "<MediaAssetCardExtractionModeTag",
   "<MediaAssetCardProcessingSourceTag",
   "<MediaAssetCardSizeTag",
   "<MediaAssetCardStorageProviderTag",
@@ -840,6 +855,7 @@ for (const forbiddenMetadataTagsToken of [
   '{mediaIssueCopy.retries} {retryCount}',
   '`/${retryMaxAttempts}`',
   "<MediaAssetCardFileExtensionTag asset={asset} />",
+  "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
   "<MediaAssetCardSizeTag asset={asset} />",
@@ -1845,6 +1861,42 @@ for (const requiredExtractionModeTagTypesUsage of [
 
 if (extractionModeTagTypesLineCount > 2) {
   throw new Error(`media-asset-card-extraction-mode-tag.types.ts exceeded 2 lines: ${extractionModeTagTypesLineCount}`);
+}
+
+for (const requiredExtractionModeTagPropsUsage of [
+  'import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types";',
+  'import type { BuildMediaAssetCardExtractionModeTagPropsInput } from "./media-asset-card-extraction-mode-tag-props.types";',
+  "export function buildMediaAssetCardExtractionModeTagProps({ extractionMode }: BuildMediaAssetCardExtractionModeTagPropsInput): MediaAssetCardExtractionModeTagProps {",
+]) {
+  if (!extractionModeTagPropsSource.includes(requiredExtractionModeTagPropsUsage)) {
+    throw new Error(`media-asset-card-extraction-mode-tag-props.ts must own extraction-mode tag prop projection: ${requiredExtractionModeTagPropsUsage}`);
+  }
+}
+
+for (const forbiddenExtractionModeTagPropsToken of [
+  "<MediaAssetCardExtractionModeTag",
+  "extraction_mode",
+  '<div className="tag-row">',
+]) {
+  if (extractionModeTagPropsSource.includes(forbiddenExtractionModeTagPropsToken)) {
+    throw new Error(`media-asset-card-extraction-mode-tag-props.ts must keep rendering and mode-value rules delegated: ${forbiddenExtractionModeTagPropsToken}`);
+  }
+}
+
+if (extractionModeTagPropsLineCount > 5) {
+  throw new Error(`media-asset-card-extraction-mode-tag-props.ts exceeded 5 lines: ${extractionModeTagPropsLineCount}`);
+}
+
+for (const requiredExtractionModeTagPropsTypesUsage of [
+  'import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types"; export type BuildMediaAssetCardExtractionModeTagPropsInput = Pick<MediaAssetCardExtractionModeTagProps, "extractionMode">;',
+]) {
+  if (!extractionModeTagPropsTypesSource.includes(requiredExtractionModeTagPropsTypesUsage)) {
+    throw new Error(`media-asset-card-extraction-mode-tag-props.types.ts must own extraction-mode-tag-props input typing: ${requiredExtractionModeTagPropsTypesUsage}`);
+  }
+}
+
+if (extractionModeTagPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-extraction-mode-tag-props.types.ts exceeded 2 lines: ${extractionModeTagPropsTypesLineCount}`);
 }
 
 for (const requiredActionsUsage of [

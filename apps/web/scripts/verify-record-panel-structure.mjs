@@ -2440,6 +2440,14 @@ const mediaAssetCardExtractionModeTagPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-extraction-mode-tag.tsx",
 );
+const mediaAssetCardExtractionModeTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extraction-mode-tag-props.ts",
+);
+const mediaAssetCardExtractionModeTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extraction-mode-tag-props.types.ts",
+);
 const mediaAssetCardExtractionModeTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-extraction-mode-tag.types.ts",
@@ -5080,6 +5088,14 @@ const mediaAssetCardExtractionModeTagSource = fs.readFileSync(
   mediaAssetCardExtractionModeTagPath,
   "utf8",
 );
+const mediaAssetCardExtractionModeTagPropsSource = fs.readFileSync(
+  mediaAssetCardExtractionModeTagPropsPath,
+  "utf8",
+);
+const mediaAssetCardExtractionModeTagPropsTypesSource = fs.readFileSync(
+  mediaAssetCardExtractionModeTagPropsTypesPath,
+  "utf8",
+);
 const mediaAssetCardExtractionModeTagTypesSource = fs.readFileSync(
   mediaAssetCardExtractionModeTagTypesPath,
   "utf8",
@@ -7455,6 +7471,10 @@ const mediaAssetCardProcessingSourceTagTypesLines =
   mediaAssetCardProcessingSourceTagTypesSource.split(/\r?\n/).length;
 const mediaAssetCardExtractionModeTagLines =
   mediaAssetCardExtractionModeTagSource.split(/\r?\n/).length;
+const mediaAssetCardExtractionModeTagPropsLines =
+  mediaAssetCardExtractionModeTagPropsSource.split(/\r?\n/).length;
+const mediaAssetCardExtractionModeTagPropsTypesLines =
+  mediaAssetCardExtractionModeTagPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardExtractionModeTagTypesLines =
   mediaAssetCardExtractionModeTagTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
@@ -24990,6 +25010,7 @@ if (mediaAssetCardNextRetryDetailTypesLines > maxMediaAssetCardNextRetryDetailTy
 
 for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { useStoredLocale } from "../lib/locale";',
+  'import { buildMediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag-props";',
   'import { buildMediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag-props";',
   'import { buildMediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag-props";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
@@ -25009,13 +25030,14 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   "}: MediaAssetCardMetadataTagsProps) {",
   '<div className="tag-row">',
   "readMediaAssetCardMetadataTagValues({ asset })",
+  "buildMediaAssetCardExtractionModeTagProps({ extractionMode })",
   "buildMediaAssetCardFileExtensionTagProps({ asset })",
   "buildMediaAssetCardProcessingSourceTagProps({ processingSource })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
   "buildMediaAssetCardSizeTagProps({ asset })",
   "buildMediaAssetCardStorageProviderTagProps({ asset, locale })",
   "<MediaAssetCardProcessingStatusTag",
-  "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
+  "<MediaAssetCardExtractionModeTag",
   "<MediaAssetCardFileExtensionTag",
   "<MediaAssetCardProcessingSourceTag",
   "<MediaAssetCardRetryCountTag mediaIssueCopy={mediaIssueCopy} retryCount={retryCount} retryMaxAttempts={retryMaxAttempts} />",
@@ -25037,6 +25059,7 @@ if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsPr
 
 for (const forbiddenMediaAssetCardMetadataTagsToken of [
   "formatMediaSize(asset)",
+  "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardFileExtensionTag asset={asset} />",
   "<MediaAssetCardProcessingSourceTag processingSource={processingSource} />",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
@@ -25828,6 +25851,57 @@ const maxMediaAssetCardExtractionModeTagTypesLines = 2;
 if (mediaAssetCardExtractionModeTagTypesLines > maxMediaAssetCardExtractionModeTagTypesLines) {
   throw new Error(
     `media-asset-card-extraction-mode-tag.types.ts exceeded ${maxMediaAssetCardExtractionModeTagTypesLines} lines: ${mediaAssetCardExtractionModeTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardExtractionModeTagPropsUsage of [
+  'import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types";',
+  'import type { BuildMediaAssetCardExtractionModeTagPropsInput } from "./media-asset-card-extraction-mode-tag-props.types";',
+  "export function buildMediaAssetCardExtractionModeTagProps({ extractionMode }: BuildMediaAssetCardExtractionModeTagPropsInput): MediaAssetCardExtractionModeTagProps {",
+]) {
+  if (!mediaAssetCardExtractionModeTagPropsSource.includes(requiredMediaAssetCardExtractionModeTagPropsUsage)) {
+    throw new Error(
+      `media-asset-card-extraction-mode-tag-props.ts must own extraction-mode tag prop projection: ${requiredMediaAssetCardExtractionModeTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardExtractionModeTagPropsToken of [
+  "<MediaAssetCardExtractionModeTag",
+  "extraction_mode",
+  '<div className="tag-row">',
+]) {
+  if (mediaAssetCardExtractionModeTagPropsSource.includes(forbiddenMediaAssetCardExtractionModeTagPropsToken)) {
+    throw new Error(
+      `media-asset-card-extraction-mode-tag-props.ts must keep rendering and mode-value rules delegated: ${forbiddenMediaAssetCardExtractionModeTagPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardExtractionModeTagPropsLines = 5;
+if (mediaAssetCardExtractionModeTagPropsLines > maxMediaAssetCardExtractionModeTagPropsLines) {
+  throw new Error(
+    `media-asset-card-extraction-mode-tag-props.ts exceeded ${maxMediaAssetCardExtractionModeTagPropsLines} lines: ${mediaAssetCardExtractionModeTagPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardExtractionModeTagPropsTypesUsage of [
+  'import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types"; export type BuildMediaAssetCardExtractionModeTagPropsInput = Pick<MediaAssetCardExtractionModeTagProps, "extractionMode">;',
+]) {
+  if (!mediaAssetCardExtractionModeTagPropsTypesSource.includes(requiredMediaAssetCardExtractionModeTagPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-extraction-mode-tag-props.types.ts must own extraction-mode-tag-props input typing: ${requiredMediaAssetCardExtractionModeTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardExtractionModeTagPropsTypesLines = 2;
+if (
+  mediaAssetCardExtractionModeTagPropsTypesLines >
+  maxMediaAssetCardExtractionModeTagPropsTypesLines
+) {
+  throw new Error(
+    `media-asset-card-extraction-mode-tag-props.types.ts exceeded ${maxMediaAssetCardExtractionModeTagPropsTypesLines} lines: ${mediaAssetCardExtractionModeTagPropsTypesLines}`,
   );
 }
 
