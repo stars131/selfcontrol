@@ -5,5 +5,5 @@ import { buildRecentMediaIssueCardMetadataDetailsProps } from "./recent-media-is
 import { RecentMediaIssueCardMetadataDetails } from "./recent-media-issue-card-metadata-details";
 import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";
 export function RecentMediaIssueCardMetadata(props: RecentMediaIssueCardMetadataProps) {
-  return <><RecentMediaIssueCardMetadataDetails {...buildRecentMediaIssueCardMetadataDetailsProps(props)} /><RecentMediaIssueCardActionNotice {...buildRecentMediaIssueCardActionNoticeProps({ action: props.action })} /></>;
+  return <><RecentMediaIssueCardMetadataDetails {...buildRecentMediaIssueCardMetadataDetailsProps(props)} /><RecentMediaIssueCardActionNotice {...buildRecentMediaIssueCardActionNoticeProps(props)} /></>;
 }

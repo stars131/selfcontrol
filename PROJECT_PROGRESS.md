@@ -3204,6 +3204,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issues-panel.tsx`, `apps/web/components/recent-media-issues-panel-list.tsx`, `apps/web/components/dead-letter-recovery-panel-content.tsx`, and `apps/web/components/dead-letter-recovery-panel-list.tsx` now keep their full typed props contracts intact instead of rest-spreading and re-projecting panel/list inputs
   - the dead-letter content layer now narrows `mediaDeadLetterOverview` only after the existing empty-state gate, while the recent-media panel layer now forwards its full props contract directly into the list props builder
   - the record-panel structure guardrail now enforces this panel-surface props reuse so future top-level list/content edits do not regrow repeated child-prop assembly
+- Record Panel Action Notice Builder Input Simplification V1:
+  - `apps/web/components/recent-media-issue-card-metadata.tsx` now forwards its full typed metadata props contract directly into the action-notice props builder instead of re-projecting `{ action }`
+  - `apps/web/components/recent-media-issue-card-action-notice-props.types.ts` and `apps/web/components/dead-letter-recovery-item-card-action-notice-props.types.ts` now accept the full parent props contracts so both notice builders stay easier to evolve without regrowing narrow manual projections
+  - the record-panel structure guardrail now enforces this full-props builder input reuse across both recent-media and dead-letter action-notice boundaries
 
 ## Next
 - Continue the next product slice
