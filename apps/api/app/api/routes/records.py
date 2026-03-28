@@ -5,6 +5,10 @@ from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.routes.record_route_helpers import (
+    filter_records_by_location_fields,
+    get_workspace_record_or_404,
+)
 from app.db.session import get_db
 from app.models.record import Record
 from app.models.user import User
@@ -17,49 +21,6 @@ from app.services.media_storage import media_uses_local_storage, remove_storage_
 
 
 router = APIRouter()
-
-
-def _read_location(record: Record) -> dict[str, object]:
-    if not isinstance(record.extra_data, dict):
-        return {}
-    location = record.extra_data.get("location")
-    return location if isinstance(location, dict) else {}
-
-
-def _has_coordinates(record: Record) -> bool:
-    location = _read_location(record)
-    latitude = location.get("latitude")
-    longitude = location.get("longitude")
-    return isinstance(latitude, (int, float)) and isinstance(longitude, (int, float))
-
-
-def _matches_location_query(record: Record, location_query: str) -> bool:
-    query = location_query.strip().lower()
-    if not query:
-        return True
-
-    location = _read_location(record)
-    haystacks = [
-        location.get("place_name"),
-        location.get("address"),
-    ]
-    return any(isinstance(value, str) and query in value.lower() for value in haystacks)
-
-
-def _matches_review_status(record: Record, review_status: str) -> bool:
-    normalized = review_status.strip().lower()
-    if not normalized:
-        return True
-
-    if not isinstance(record.extra_data, dict):
-        return normalized == "pending"
-
-    review = record.extra_data.get("location_review")
-    if not isinstance(review, dict):
-        return normalized == "pending"
-
-    status = review.get("status")
-    return isinstance(status, str) and status.lower() == normalized
 
 
 @router.get("/{workspace_id}/records")
@@ -85,12 +46,12 @@ def list_records(
         query = query.filter(Record.is_avoid == is_avoid)
 
     records = query.order_by(Record.created_at.desc()).all()
-    if location_query:
-        records = [record for record in records if _matches_location_query(record, location_query)]
-    if review_status:
-        records = [record for record in records if _matches_review_status(record, review_status)]
-    if has_coordinates is not None:
-        records = [record for record in records if _has_coordinates(record) is has_coordinates]
+    records = filter_records_by_location_fields(
+        records,
+        location_query=location_query,
+        review_status=review_status,
+        has_coordinates=has_coordinates,
+    )
 
     return {
         "success": True,
@@ -155,9 +116,7 @@ def get_record(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    record = db.get(Record, record_id)
-    if not record or record.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Record not found")
+    record = get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=record_id)
     return {"success": True, "data": {"record": RecordRead.model_validate(record).model_dump()}}
 
 
@@ -170,9 +129,7 @@ def update_record(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_write_access(workspace_id, current_user, db)
-    record = db.get(Record, record_id)
-    if not record or record.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Record not found")
+    record = get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=record_id)
 
     payload_data = payload.model_dump(exclude_unset=True)
     location_changed = False
@@ -218,9 +175,7 @@ def delete_record(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_write_access(workspace_id, current_user, db)
-    record = db.get(Record, record_id)
-    if not record or record.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Record not found")
+    record = get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=record_id)
 
     media_assets = list(record.media_assets)
     db.delete(record)

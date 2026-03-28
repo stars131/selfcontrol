@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Record Route Helper Extraction V1:
+  - `apps/api/app/api/routes/record_route_helpers.py` now owns repeated record lookup and location-filter helper logic used by the records API
+  - `apps/api/app/api/routes/records.py` now delegates location-query filtering, review-status filtering, coordinate checks, and workspace-scoped record lookup instead of carrying those details inline
+  - this reduces another frequently touched route file and makes future record-filter and map-related changes easier to review without changing current API behavior
 - Workspace Route Helper Extraction V1:
   - `apps/api/app/api/routes/workspace_route_helpers.py` now owns workspace, member, and transfer-job serialization plus repeated transfer-job and membership validation helpers
   - `apps/api/app/api/routes/workspaces.py` now delegates those responsibilities instead of carrying all of that boundary logic inline, which shrinks another frequently touched route file without changing API behavior
