@@ -1,0 +1,1 @@
+import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types"; export type MediaStorageHealthRefreshButtonProps = Pick<MediaStorageHealthHeaderProps, "copy" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;

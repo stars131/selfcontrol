@@ -3200,6 +3200,14 @@ const mediaStorageHealthStatusSummaryTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-status-summary.types.ts",
 );
+const mediaStorageHealthRefreshButtonPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-refresh-button.tsx",
+);
+const mediaStorageHealthRefreshButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-refresh-button.types.ts",
+);
 const mediaStorageHealthMetadataPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-metadata.tsx",
@@ -5202,6 +5210,14 @@ const mediaStorageHealthStatusSummaryTypesSource = fs.readFileSync(
   mediaStorageHealthStatusSummaryTypesPath,
   "utf8",
 );
+const mediaStorageHealthRefreshButtonSource = fs.readFileSync(
+  mediaStorageHealthRefreshButtonPath,
+  "utf8",
+);
+const mediaStorageHealthRefreshButtonTypesSource = fs.readFileSync(
+  mediaStorageHealthRefreshButtonTypesPath,
+  "utf8",
+);
 const mediaStorageHealthMetadataSource = fs.readFileSync(mediaStorageHealthMetadataPath, "utf8");
 const mediaStorageHealthMetadataTypesSource = fs.readFileSync(
   mediaStorageHealthMetadataTypesPath,
@@ -6747,6 +6763,10 @@ const mediaStorageHealthStatusSummaryLines =
   mediaStorageHealthStatusSummarySource.split(/\r?\n/).length;
 const mediaStorageHealthStatusSummaryTypesLines =
   mediaStorageHealthStatusSummaryTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthRefreshButtonLines =
+  mediaStorageHealthRefreshButtonSource.split(/\r?\n/).length;
+const mediaStorageHealthRefreshButtonTypesLines =
+  mediaStorageHealthRefreshButtonTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
@@ -28661,12 +28681,13 @@ if (mediaStorageHealthCardLines > maxMediaStorageHealthCardLines) {
 
 for (const requiredMediaStorageHealthHeaderUsage of [
   'import { MediaStorageHealthMessage } from "./media-storage-health-message";',
+  'import { MediaStorageHealthRefreshButton } from "./media-storage-health-refresh-button";',
   'import { MediaStorageHealthStatusSummary } from "./media-storage-health-status-summary";',
   'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";',
   "}: MediaStorageHealthHeaderProps) {",
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
+  "<MediaStorageHealthRefreshButton",
   "<MediaStorageHealthStatusSummary copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
-  "onClick={() => void onRefreshMediaStorageHealth()}",
   "<MediaStorageHealthMessage mediaStorageHealth={mediaStorageHealth} />",
 ]) {
   if (!mediaStorageHealthHeaderSource.includes(requiredMediaStorageHealthHeaderUsage)) {
@@ -28684,6 +28705,8 @@ for (const forbiddenMediaStorageHealthHeaderToken of [
   "{mediaStorageHealth.message}",
   "getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)",
   "{copy.storageHealth}",
+  "onClick={() => void onRefreshMediaStorageHealth()}",
+  "{refreshingMediaStorageHealth ? copy.refreshing : copy.refreshHealth}",
 ]) {
   if (mediaStorageHealthHeaderSource.includes(forbiddenMediaStorageHealthHeaderToken)) {
     throw new Error(
@@ -28823,6 +28846,63 @@ const maxMediaStorageHealthStatusSummaryTypesLines = 2;
 if (mediaStorageHealthStatusSummaryTypesLines > maxMediaStorageHealthStatusSummaryTypesLines) {
   throw new Error(
     `media-storage-health-status-summary.types.ts exceeded ${maxMediaStorageHealthStatusSummaryTypesLines} lines: ${mediaStorageHealthStatusSummaryTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthRefreshButtonUsage of [
+  'import type { MediaStorageHealthRefreshButtonProps } from "./media-storage-health-refresh-button.types";',
+  "}: MediaStorageHealthRefreshButtonProps) {",
+  "onClick={() => void onRefreshMediaStorageHealth()}",
+  "{refreshingMediaStorageHealth ? copy.refreshing : copy.refreshHealth}",
+]) {
+  if (!mediaStorageHealthRefreshButtonSource.includes(requiredMediaStorageHealthRefreshButtonUsage)) {
+    throw new Error(
+      `media-storage-health-refresh-button.tsx must own health-refresh-button rendering: ${requiredMediaStorageHealthRefreshButtonUsage}`,
+    );
+  }
+}
+
+if (
+  mediaStorageHealthRefreshButtonSource.includes("type MediaStorageHealthRefreshButtonProps = Pick<")
+) {
+  throw new Error(
+    "media-storage-health-refresh-button.tsx must keep health-refresh-button prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthRefreshButtonToken of [
+  "getMediaStorageHealthStatusLabel(",
+  "mediaStorageHealth.status",
+  "mediaStorageHealth.message",
+]) {
+  if (mediaStorageHealthRefreshButtonSource.includes(forbiddenMediaStorageHealthRefreshButtonToken)) {
+    throw new Error(
+      `media-storage-health-refresh-button.tsx must keep non-refresh concerns delegated: ${forbiddenMediaStorageHealthRefreshButtonToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthRefreshButtonLines = 4;
+if (mediaStorageHealthRefreshButtonLines > maxMediaStorageHealthRefreshButtonLines) {
+  throw new Error(
+    `media-storage-health-refresh-button.tsx exceeded ${maxMediaStorageHealthRefreshButtonLines} lines: ${mediaStorageHealthRefreshButtonLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthRefreshButtonTypesUsage of [
+  'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types"; export type MediaStorageHealthRefreshButtonProps = Pick<MediaStorageHealthHeaderProps, "copy" | "onRefreshMediaStorageHealth" | "refreshingMediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthRefreshButtonTypesSource.includes(requiredMediaStorageHealthRefreshButtonTypesUsage)) {
+    throw new Error(
+      `media-storage-health-refresh-button.types.ts must own health-refresh-button prop typing: ${requiredMediaStorageHealthRefreshButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthRefreshButtonTypesLines = 2;
+if (mediaStorageHealthRefreshButtonTypesLines > maxMediaStorageHealthRefreshButtonTypesLines) {
+  throw new Error(
+    `media-storage-health-refresh-button.types.ts exceeded ${maxMediaStorageHealthRefreshButtonTypesLines} lines: ${mediaStorageHealthRefreshButtonTypesLines}`,
   );
 }
 

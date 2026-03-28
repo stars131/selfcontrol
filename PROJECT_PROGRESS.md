@@ -2883,6 +2883,10 @@ Last updated: 2026-03-28
   - media-storage health header status summary rendering now lives in `apps/web/components/media-storage-health-status-summary.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-header.tsx`
   - `apps/web/components/media-storage-health-header.tsx` now stays focused on refresh controls and child composition while status summary rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this status-summary boundary so future health-header changes do not regrow a mixed header-and-status-summary rendering module
+- Media Storage Health Refresh Button Extraction V1:
+  - media-storage health header refresh-button rendering now lives in `apps/web/components/media-storage-health-refresh-button.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-header.tsx`
+  - `apps/web/components/media-storage-health-header.tsx` now stays focused on top-level layout and child composition while refresh-button rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this refresh-button boundary so future health-header changes do not regrow a mixed header-and-refresh-button rendering module
 
 ## Next
 - Continue the next product slice
