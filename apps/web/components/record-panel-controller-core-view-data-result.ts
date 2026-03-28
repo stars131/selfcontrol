@@ -2,14 +2,14 @@
 
 import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
-export function buildRecordPanelControllerCoreViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput) {
+export function buildRecordPanelControllerCoreViewDataResult(input: BuildRecordPanelControllerViewDataResultInput) {
   return {
-    locale: viewData.locale,
-    avoidCount: viewData.avoidCount,
-    foodCount: viewData.foodCount,
-    selectedRecord: viewData.selectedRecord,
-    selectedLocationReview: viewData.selectedLocationReview,
-    selectedLocationHistory: viewData.selectedLocationHistory,
-    selectedRecordMediaSizeLabel: viewData.selectedRecordMediaSizeLabel,
+    locale: input.locale,
+    avoidCount: input.avoidCount,
+    foodCount: input.foodCount,
+    selectedRecord: input.selectedRecord,
+    selectedLocationReview: input.selectedLocationReview,
+    selectedLocationHistory: input.selectedLocationHistory,
+    selectedRecordMediaSizeLabel: input.selectedRecordMediaSizeLabel,
   };
 }

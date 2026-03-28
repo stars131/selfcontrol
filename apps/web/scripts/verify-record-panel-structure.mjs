@@ -13109,10 +13109,10 @@ for (const requiredControllerStateResultImport of [
 }
 
 for (const requiredControllerStateResultUsage of [
-  "export function buildRecordPanelControllerStateResult(state: BuildRecordPanelControllerStateResultInput)",
-  "form: state.form,",
-  "setViewMode: state.setViewMode,",
-  "error: state.error,",
+  "export function buildRecordPanelControllerStateResult(input: BuildRecordPanelControllerStateResultInput)",
+  "form: input.form,",
+  "setViewMode: input.setViewMode,",
+  "error: input.error,",
 ]) {
   if (!controllerStateResultSource.includes(requiredControllerStateResultUsage)) {
     throw new Error(
@@ -13251,10 +13251,10 @@ for (const requiredControllerCoreViewDataResultImport of [
 }
 
 for (const requiredControllerCoreViewDataResultUsage of [
-  "export function buildRecordPanelControllerCoreViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
-  "locale: viewData.locale,",
-  "selectedRecord: viewData.selectedRecord,",
-  "selectedRecordMediaSizeLabel: viewData.selectedRecordMediaSizeLabel,",
+  "export function buildRecordPanelControllerCoreViewDataResult(input: BuildRecordPanelControllerViewDataResultInput)",
+  "locale: input.locale,",
+  "selectedRecord: input.selectedRecord,",
+  "selectedRecordMediaSizeLabel: input.selectedRecordMediaSizeLabel,",
 ]) {
   if (!controllerCoreViewDataResultSource.includes(requiredControllerCoreViewDataResultUsage)) {
     throw new Error(
@@ -13292,13 +13292,13 @@ for (const requiredControllerLocalizedViewDataResultImport of [
 }
 
 for (const requiredControllerLocalizedViewDataResultUsage of [
-  "export function buildRecordPanelControllerLocalizedViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
-  "detailCopy: viewData.detailCopy,",
-  "formatRecordSourceLabel: viewData.formatRecordSourceLabel,",
-  "formatRecordStatusLabel: viewData.formatRecordStatusLabel,",
-  "formatRecordTypeLabel: viewData.formatRecordTypeLabel,",
-  "formatReminderStatusLabel: viewData.formatReminderStatusLabel,",
-  "summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,",
+  "export function buildRecordPanelControllerLocalizedViewDataResult(input: BuildRecordPanelControllerViewDataResultInput)",
+  "detailCopy: input.detailCopy,",
+  "formatRecordSourceLabel: input.formatRecordSourceLabel,",
+  "formatRecordStatusLabel: input.formatRecordStatusLabel,",
+  "formatRecordTypeLabel: input.formatRecordTypeLabel,",
+  "formatReminderStatusLabel: input.formatReminderStatusLabel,",
+  "summarizeRecordFilterLabel: input.summarizeRecordFilterLabel,",
 ]) {
   if (!controllerLocalizedViewDataResultSource.includes(requiredControllerLocalizedViewDataResultUsage)) {
     throw new Error(

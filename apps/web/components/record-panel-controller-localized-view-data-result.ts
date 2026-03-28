@@ -2,16 +2,16 @@
 
 import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
-export function buildRecordPanelControllerLocalizedViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput) {
+export function buildRecordPanelControllerLocalizedViewDataResult(input: BuildRecordPanelControllerViewDataResultInput) {
   return {
-    mediaIssueCopy: viewData.mediaIssueCopy, panelCopy: viewData.panelCopy, detailCopy: viewData.detailCopy,
-    formatAvoidCountLabel: viewData.formatAvoidCountLabel, formatFileCountLabel: viewData.formatFileCountLabel,
-    formatRecordSourceLabel: viewData.formatRecordSourceLabel, formatRecordStatusLabel: viewData.formatRecordStatusLabel,
-    formatHistoryTimestampLabel: viewData.formatHistoryTimestampLabel, formatRecordTimestampLabel: viewData.formatRecordTimestampLabel,
-    formatRecordTypeLabel: viewData.formatRecordTypeLabel, formatReminderEnabledLabel: viewData.formatReminderEnabledLabel,
-    formatReminderStatusLabel: viewData.formatReminderStatusLabel, formatReminderTimestampLabel: viewData.formatReminderTimestampLabel,
-    formatReviewStatusLabel: viewData.formatReviewStatusLabel, formatTimelineCountLabel: viewData.formatTimelineCountLabel,
-    formatTimelineDateLabel: viewData.formatTimelineDateLabel, summarizeHistoryActionLabel: viewData.summarizeHistoryActionLabel,
-    summarizeRecordFilterLabel: viewData.summarizeRecordFilterLabel,
+    mediaIssueCopy: input.mediaIssueCopy, panelCopy: input.panelCopy, detailCopy: input.detailCopy,
+    formatAvoidCountLabel: input.formatAvoidCountLabel, formatFileCountLabel: input.formatFileCountLabel,
+    formatRecordSourceLabel: input.formatRecordSourceLabel, formatRecordStatusLabel: input.formatRecordStatusLabel,
+    formatHistoryTimestampLabel: input.formatHistoryTimestampLabel, formatRecordTimestampLabel: input.formatRecordTimestampLabel,
+    formatRecordTypeLabel: input.formatRecordTypeLabel, formatReminderEnabledLabel: input.formatReminderEnabledLabel,
+    formatReminderStatusLabel: input.formatReminderStatusLabel, formatReminderTimestampLabel: input.formatReminderTimestampLabel,
+    formatReviewStatusLabel: input.formatReviewStatusLabel, formatTimelineCountLabel: input.formatTimelineCountLabel,
+    formatTimelineDateLabel: input.formatTimelineDateLabel, summarizeHistoryActionLabel: input.summarizeHistoryActionLabel,
+    summarizeRecordFilterLabel: input.summarizeRecordFilterLabel,
   };
 }
