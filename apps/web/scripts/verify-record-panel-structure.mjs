@@ -23368,7 +23368,7 @@ for (const forbiddenUseWorkspaceSettingsLoadToken of [
 }
 
 for (const requiredUseWorkspaceSettingsLoadTypesUsage of [
-  'import type { RouterLike, UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type UseWorkspaceSettingsLoadInput = { router: RouterLike; state: UseWorkspaceSettingsControllerState; workspaceId: string };',
+  'import type { RouterLike, UseWorkspaceSettingsControllerState } from "./workspace-settings-controller.types"; export type UseWorkspaceSettingsLoadInput = UseWorkspaceSettingsControllerState & { router: RouterLike; workspaceId: string };',
 ]) {
   if (!useWorkspaceSettingsLoadTypesSource.includes(requiredUseWorkspaceSettingsLoadTypesUsage)) {
     throw new Error(

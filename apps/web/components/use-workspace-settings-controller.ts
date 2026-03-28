@@ -68,7 +68,7 @@ export function useWorkspaceSettingsController(router: RouterLike, workspaceId: 
     healthCheckedAt: mediaStorageHealth?.checked_at,
     setHighlightedAnchor,
   });
-  useWorkspaceSettingsLoad({ router, state, workspaceId });
+  useWorkspaceSettingsLoad({ ...state, router, workspaceId });
   const actions = createWorkspaceSettingsActions({ ...state, workspaceId });
 
   return {

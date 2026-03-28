@@ -22,21 +22,17 @@ function getWorkspaceSettingsLoadErrorMessage(caught: unknown) {
 
 export function useWorkspaceSettingsLoad({
   router,
-  state,
+  setError,
+  setKnowledgeStats,
+  setLoading,
+  setMediaStorageHealth,
+  setMembers,
+  setProviderConfigs,
+  setToken,
+  setUser,
+  setWorkspace,
   workspaceId,
 }: UseWorkspaceSettingsLoadInput) {
-  const {
-    setError,
-    setKnowledgeStats,
-    setLoading,
-    setMediaStorageHealth,
-    setMembers,
-    setProviderConfigs,
-    setToken,
-    setUser,
-    setWorkspace,
-  } = state;
-
   useEffect(() => {
     const activeToken = getStoredToken();
     if (!activeToken) {

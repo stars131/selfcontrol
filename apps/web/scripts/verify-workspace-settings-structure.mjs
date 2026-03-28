@@ -819,7 +819,7 @@ for (const requiredControllerImport of [
 
 for (const requiredControllerUsage of [
   "useWorkspaceSettingsAnchor({",
-  "useWorkspaceSettingsLoad({ router, state, workspaceId })",
+  "useWorkspaceSettingsLoad({ ...state, router, workspaceId })",
   "createWorkspaceSettingsActions({ ...state, workspaceId })",
   "...state",
   "...actions",
