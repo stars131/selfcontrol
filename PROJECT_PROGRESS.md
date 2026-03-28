@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Repository Ownership Baseline V1:
+  - `.github/CODEOWNERS` now defines explicit default ownership for the repository and key areas including `apps/api`, `apps/web`, `infra`, `scripts`, `docs`, and repository governance files
+  - the initial owner mapping uses the current GitHub maintainer so future review rules and multi-contributor workflows have a concrete baseline instead of implicit tribal knowledge
+  - this improves long-term maintainability by making code ownership explicit before collaboration scale increases
 - Automated Dependency Update Governance V1:
   - `.github/dependabot.yml` now configures weekly update checks for `github-actions`, `npm` under `apps/web`, and `pip` under `apps/api`
   - update PRs now get consistent dependency labels and scoped chore commit prefixes so routine maintenance stays easier to triage and review

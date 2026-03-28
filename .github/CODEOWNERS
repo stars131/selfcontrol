@@ -1,0 +1,17 @@
+# Default ownership
+* @stars131
+
+# Backend
+/apps/api/ @stars131
+
+# Frontend
+/apps/web/ @stars131
+
+# Infrastructure and operations
+/infra/ @stars131
+/scripts/ @stars131
+/docs/ @stars131
+
+# Repository governance
+/.github/ @stars131
+/*.md @stars131
