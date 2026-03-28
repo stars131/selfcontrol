@@ -10,17 +10,13 @@ import { buildDeadLetterRecoveryItemCardStorageProviderTagProps } from "./dead-l
 import { DeadLetterRecoveryItemCardStorageProviderTag } from "./dead-letter-recovery-item-card-storage-provider-tag";
 import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types";
 
-export function DeadLetterRecoveryItemCardTags({
-  item,
-  locale,
-  mediaIssueCopy,
-}: DeadLetterRecoveryItemCardTagsProps) {
+export function DeadLetterRecoveryItemCardTags(props: DeadLetterRecoveryItemCardTagsProps) {
   return (
     <div className="tag-row">
-      <DeadLetterRecoveryItemCardProcessingStatusTag {...buildDeadLetterRecoveryItemCardProcessingStatusTagProps({ item, locale })} />
-      <DeadLetterRecoveryItemCardStorageProviderTag {...buildDeadLetterRecoveryItemCardStorageProviderTagProps({ item, locale })} />
-      <DeadLetterRecoveryItemCardRetryStateTag {...buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy })} />
-      <DeadLetterRecoveryItemCardIssueLabelTag {...buildDeadLetterRecoveryItemCardIssueLabelTagProps({ item, locale })} />
+      <DeadLetterRecoveryItemCardProcessingStatusTag {...buildDeadLetterRecoveryItemCardProcessingStatusTagProps(props)} />
+      <DeadLetterRecoveryItemCardStorageProviderTag {...buildDeadLetterRecoveryItemCardStorageProviderTagProps(props)} />
+      <DeadLetterRecoveryItemCardRetryStateTag {...buildDeadLetterRecoveryItemCardRetryStateTagProps(props)} />
+      <DeadLetterRecoveryItemCardIssueLabelTag {...buildDeadLetterRecoveryItemCardIssueLabelTagProps(props)} />
     </div>
   );
 }

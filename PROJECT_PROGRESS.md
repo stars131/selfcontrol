@@ -3179,6 +3179,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-item-card-header.tsx` and `apps/web/components/dead-letter-recovery-item-card-action-buttons.tsx` now forward their full typed props contracts directly into child props builders instead of repeating inline child-prop projection
   - the dead-letter header and action-buttons layers now stay focused on layout composition while leaf builders continue owning narrowed contracts
   - the record-panel structure guardrail now enforces this direct props reuse so future dead-letter header/action-button edits do not regrow duplicated builder input assembly
+- Dead-Letter Tags Props Reuse Simplification V1:
+  - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now forwards its full typed props contract directly into the four tag props builders instead of repeating inline child-prop projection
+  - the dead-letter tags layer now stays focused on tag-row composition while each tag builder continues owning its narrowed contract
+  - the record-panel structure guardrail now enforces this direct props reuse so future dead-letter tag-row edits do not regrow duplicated builder input assembly
 
 ## Next
 - Continue the next product slice
