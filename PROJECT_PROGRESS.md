@@ -2951,6 +2951,10 @@ Last updated: 2026-03-28
   - dead-letter status action-notice prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-action-notice-props.ts` instead of remaining mixed inside `apps/web/components/dead-letter-recovery-item-card-status-props.ts`
   - `apps/web/components/dead-letter-recovery-item-card-status.tsx` now keeps metadata projection isolated from action-notice projection so the status section stays easier to extend safely
   - the record-panel structure guardrail now enforces this action-notice-props-builder boundary so future dead-letter status changes do not regrow mixed child-prop projection logic
+- Dead-Letter Metadata Props Builder Extraction V1:
+  - dead-letter status metadata prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-metadata-props.ts` instead of remaining mixed inside `apps/web/components/dead-letter-recovery-item-card-status-props.ts`
+  - `apps/web/components/dead-letter-recovery-item-card-status.tsx` now keeps metadata projection isolated from action-notice projection through two dedicated builders
+  - the record-panel structure guardrail now enforces this metadata-props-builder boundary so future dead-letter status changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

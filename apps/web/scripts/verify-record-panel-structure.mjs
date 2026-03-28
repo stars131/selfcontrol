@@ -3108,13 +3108,13 @@ const deadLetterRecoveryItemCardHeaderTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-header.types.ts",
 );
-const deadLetterRecoveryItemCardStatusPropsPath = path.resolve(
+const deadLetterRecoveryItemCardMetadataPropsPath = path.resolve(
   process.cwd(),
-  "components/dead-letter-recovery-item-card-status-props.ts",
+  "components/dead-letter-recovery-item-card-metadata-props.ts",
 );
-const deadLetterRecoveryItemCardStatusPropsTypesPath = path.resolve(
+const deadLetterRecoveryItemCardMetadataPropsTypesPath = path.resolve(
   process.cwd(),
-  "components/dead-letter-recovery-item-card-status-props.types.ts",
+  "components/dead-letter-recovery-item-card-metadata-props.types.ts",
 );
 const deadLetterRecoveryItemCardActionNoticePath = path.resolve(
   process.cwd(),
@@ -5242,12 +5242,12 @@ const deadLetterRecoveryItemCardHeaderTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardHeaderTypesPath,
   "utf8",
 );
-const deadLetterRecoveryItemCardStatusPropsSource = fs.readFileSync(
-  deadLetterRecoveryItemCardStatusPropsPath,
+const deadLetterRecoveryItemCardMetadataPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardMetadataPropsPath,
   "utf8",
 );
-const deadLetterRecoveryItemCardStatusPropsTypesSource = fs.readFileSync(
-  deadLetterRecoveryItemCardStatusPropsTypesPath,
+const deadLetterRecoveryItemCardMetadataPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardMetadataPropsTypesPath,
   "utf8",
 );
 const deadLetterRecoveryItemCardActionNoticeSource = fs.readFileSync(
@@ -6950,10 +6950,10 @@ const deadLetterRecoveryItemCardHeaderLines =
   deadLetterRecoveryItemCardHeaderSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardHeaderTypesLines =
   deadLetterRecoveryItemCardHeaderTypesSource.split(/\r?\n/).length;
-const deadLetterRecoveryItemCardStatusPropsLines =
-  deadLetterRecoveryItemCardStatusPropsSource.split(/\r?\n/).length;
-const deadLetterRecoveryItemCardStatusPropsTypesLines =
-  deadLetterRecoveryItemCardStatusPropsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardMetadataPropsLines =
+  deadLetterRecoveryItemCardMetadataPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardMetadataPropsTypesLines =
+  deadLetterRecoveryItemCardMetadataPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionNoticeLines =
   deadLetterRecoveryItemCardActionNoticeSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionNoticeTypesLines =
@@ -29244,7 +29244,7 @@ for (const requiredDeadLetterRecoveryItemCardStatusUsage of [
   'import { DeadLetterRecoveryItemCardActionNotice } from "./dead-letter-recovery-item-card-action-notice";',
   'import { DeadLetterRecoveryItemCardMetadata } from "./dead-letter-recovery-item-card-metadata";',
   'import { buildDeadLetterRecoveryItemCardActionNoticeProps } from "./dead-letter-recovery-item-card-action-notice-props";',
-  'import { buildDeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-status-props";',
+  'import { buildDeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata-props";',
   'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";',
   "export function DeadLetterRecoveryItemCardStatus(props: DeadLetterRecoveryItemCardStatusProps) {",
   "buildDeadLetterRecoveryItemCardMetadataProps(props)",
@@ -29303,53 +29303,53 @@ if (deadLetterRecoveryItemCardStatusTypesLines > maxDeadLetterRecoveryItemCardSt
   );
 }
 
-for (const requiredDeadLetterRecoveryItemCardStatusPropsUsage of [
+for (const requiredDeadLetterRecoveryItemCardMetadataPropsUsage of [
   'import type { DeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata.types";',
-  'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";',
-  "export function buildDeadLetterRecoveryItemCardMetadataProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: DeadLetterRecoveryItemCardStatusProps): DeadLetterRecoveryItemCardMetadataProps {",
+  'import type { BuildDeadLetterRecoveryItemCardMetadataPropsInput } from "./dead-letter-recovery-item-card-metadata-props.types";',
+  "export function buildDeadLetterRecoveryItemCardMetadataProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardMetadataPropsInput): DeadLetterRecoveryItemCardMetadataProps {",
 ]) {
-  if (!deadLetterRecoveryItemCardStatusPropsSource.includes(requiredDeadLetterRecoveryItemCardStatusPropsUsage)) {
+  if (!deadLetterRecoveryItemCardMetadataPropsSource.includes(requiredDeadLetterRecoveryItemCardMetadataPropsUsage)) {
     throw new Error(
-      `dead-letter-recovery-item-card-status-props.ts must own dead-letter status child prop projection: ${requiredDeadLetterRecoveryItemCardStatusPropsUsage}`,
+      `dead-letter-recovery-item-card-metadata-props.ts must own dead-letter metadata prop projection: ${requiredDeadLetterRecoveryItemCardMetadataPropsUsage}`,
     );
   }
 }
 
-for (const forbiddenDeadLetterRecoveryItemCardStatusPropsToken of [
+for (const forbiddenDeadLetterRecoveryItemCardMetadataPropsToken of [
   "<DeadLetterRecoveryItemCardMetadata",
   "<DeadLetterRecoveryItemCardActionNotice",
   "<>",
   "getMediaIssueAction(",
   "DeadLetterRecoveryItemCardActionNoticeProps",
 ]) {
-  if (deadLetterRecoveryItemCardStatusPropsSource.includes(forbiddenDeadLetterRecoveryItemCardStatusPropsToken)) {
+  if (deadLetterRecoveryItemCardMetadataPropsSource.includes(forbiddenDeadLetterRecoveryItemCardMetadataPropsToken)) {
     throw new Error(
-      `dead-letter-recovery-item-card-status-props.ts must keep status rendering delegated: ${forbiddenDeadLetterRecoveryItemCardStatusPropsToken}`,
+      `dead-letter-recovery-item-card-metadata-props.ts must keep non-metadata concerns delegated: ${forbiddenDeadLetterRecoveryItemCardMetadataPropsToken}`,
     );
   }
 }
 
-const maxDeadLetterRecoveryItemCardStatusPropsLines = 14;
-if (deadLetterRecoveryItemCardStatusPropsLines > maxDeadLetterRecoveryItemCardStatusPropsLines) {
+const maxDeadLetterRecoveryItemCardMetadataPropsLines = 5;
+if (deadLetterRecoveryItemCardMetadataPropsLines > maxDeadLetterRecoveryItemCardMetadataPropsLines) {
   throw new Error(
-    `dead-letter-recovery-item-card-status-props.ts exceeded ${maxDeadLetterRecoveryItemCardStatusPropsLines} lines: ${deadLetterRecoveryItemCardStatusPropsLines}`,
+    `dead-letter-recovery-item-card-metadata-props.ts exceeded ${maxDeadLetterRecoveryItemCardMetadataPropsLines} lines: ${deadLetterRecoveryItemCardMetadataPropsLines}`,
   );
 }
 
-for (const requiredDeadLetterRecoveryItemCardStatusPropsTypesUsage of [
-  'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types"; export type BuildDeadLetterRecoveryItemCardStatusPropsInput = DeadLetterRecoveryItemCardStatusProps;',
+for (const requiredDeadLetterRecoveryItemCardMetadataPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types"; export type BuildDeadLetterRecoveryItemCardMetadataPropsInput = Pick<DeadLetterRecoveryItemCardStatusProps, "formatHistoryTimestampLabel" | "item" | "mediaIssueCopy">;',
 ]) {
-  if (!deadLetterRecoveryItemCardStatusPropsTypesSource.includes(requiredDeadLetterRecoveryItemCardStatusPropsTypesUsage)) {
+  if (!deadLetterRecoveryItemCardMetadataPropsTypesSource.includes(requiredDeadLetterRecoveryItemCardMetadataPropsTypesUsage)) {
     throw new Error(
-      `dead-letter-recovery-item-card-status-props.types.ts must own dead-letter status-props input typing: ${requiredDeadLetterRecoveryItemCardStatusPropsTypesUsage}`,
+      `dead-letter-recovery-item-card-metadata-props.types.ts must own dead-letter metadata-props input typing: ${requiredDeadLetterRecoveryItemCardMetadataPropsTypesUsage}`,
     );
   }
 }
 
-const maxDeadLetterRecoveryItemCardStatusPropsTypesLines = 2;
-if (deadLetterRecoveryItemCardStatusPropsTypesLines > maxDeadLetterRecoveryItemCardStatusPropsTypesLines) {
+const maxDeadLetterRecoveryItemCardMetadataPropsTypesLines = 2;
+if (deadLetterRecoveryItemCardMetadataPropsTypesLines > maxDeadLetterRecoveryItemCardMetadataPropsTypesLines) {
   throw new Error(
-    `dead-letter-recovery-item-card-status-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardStatusPropsTypesLines} lines: ${deadLetterRecoveryItemCardStatusPropsTypesLines}`,
+    `dead-letter-recovery-item-card-metadata-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardMetadataPropsTypesLines} lines: ${deadLetterRecoveryItemCardMetadataPropsTypesLines}`,
   );
 }
 
