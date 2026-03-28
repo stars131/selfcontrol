@@ -35531,7 +35531,7 @@ for (const requiredDeadLetterRecoveryPanelListUsage of [
   "export function DeadLetterRecoveryPanelList(props: DeadLetterRecoveryPanelListProps) {",
   '<div className="record-list compact-list">',
   "props.mediaDeadLetterOverview.items.map((item) => <DeadLetterRecoveryItemCard",
-  "{...buildDeadLetterRecoveryItemCardProps({ item, props })}",
+  "{...buildDeadLetterRecoveryItemCardProps({ ...props, item })}",
 ]) {
   if (!deadLetterRecoveryPanelListSource.includes(requiredDeadLetterRecoveryPanelListUsage)) {
     throw new Error(
@@ -35584,9 +35584,9 @@ for (const requiredDeadLetterRecoveryListItemPropsUsage of [
   'import type { BuildDeadLetterRecoveryItemCardPropsInput } from "./dead-letter-recovery-list-item-props.types";',
   "export function buildDeadLetterRecoveryItemCardProps({",
   "}: BuildDeadLetterRecoveryItemCardPropsInput): DeadLetterRecoveryItemCardProps {",
-  "bulkRetryingDeadLetter: props.bulkRetryingDeadLetter,",
-  "onRetryMediaProcessing: props.onRetryMediaProcessing,",
-  "workspaceId: props.workspaceId,",
+  "bulkRetryingDeadLetter,",
+  "onRetryMediaProcessing,",
+  "workspaceId,",
 ]) {
   if (!deadLetterRecoveryListItemPropsSource.includes(requiredDeadLetterRecoveryListItemPropsUsage)) {
     throw new Error(
@@ -35615,7 +35615,7 @@ if (deadLetterRecoveryListItemPropsLines > maxDeadLetterRecoveryListItemPropsLin
 }
 
 for (const requiredDeadLetterRecoveryListItemPropsTypesUsage of [
-  'import type { MediaProcessingIssue } from "../lib/types"; import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types"; export type BuildDeadLetterRecoveryItemCardPropsInput = { item: MediaProcessingIssue; props: DeadLetterRecoveryPanelListProps };',
+  'import type { MediaProcessingIssue } from "../lib/types"; import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types"; export type BuildDeadLetterRecoveryItemCardPropsInput = DeadLetterRecoveryPanelListProps & { item: MediaProcessingIssue };',
 ]) {
   if (!deadLetterRecoveryListItemPropsTypesSource.includes(requiredDeadLetterRecoveryListItemPropsTypesUsage)) {
     throw new Error(

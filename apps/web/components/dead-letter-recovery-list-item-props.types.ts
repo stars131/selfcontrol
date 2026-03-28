@@ -1,1 +1,1 @@
-import type { MediaProcessingIssue } from "../lib/types"; import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types"; export type BuildDeadLetterRecoveryItemCardPropsInput = { item: MediaProcessingIssue; props: DeadLetterRecoveryPanelListProps };
+import type { MediaProcessingIssue } from "../lib/types"; import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types"; export type BuildDeadLetterRecoveryItemCardPropsInput = DeadLetterRecoveryPanelListProps & { item: MediaProcessingIssue };
