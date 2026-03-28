@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Helper Input Naming Guardrail V1:
+  - `apps/web/scripts/verify-helper-input-naming.mjs` now scans `apps/web/components` and blocks exported `build*`, `create*`, and `use*` helpers from reintroducing generic `props` parameter names
+  - `apps/web/package.json` now runs this naming guard inside `verify:ui-guardrails`, so the helper-signature cleanup work is protected by the normal UI validation pipeline
+  - this turns the recent naming refactor into an enforced architectural rule instead of a one-time cleanup
 - UI Guardrail Coverage Meta-Check V1:
   - `apps/web/scripts/verify-guardrail-coverage.mjs` now verifies that every standalone `verify:*` UI script in `apps/web/package.json` is covered by `verify:ui-guardrails`, while preserving explicit exclusions for the umbrella script itself and the detail-copy alias
   - `apps/web/package.json` now runs this coverage check inside `verify:ui-guardrails`, so future structure guardrails cannot quietly drift out of the main validation path
