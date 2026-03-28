@@ -2,6 +2,7 @@
 
 import { DeadLetterRecoveryItemCardActions } from "./dead-letter-recovery-item-card-actions";
 import { buildDeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions-props";
+import { buildDeadLetterRecoveryItemCardErrorProps } from "./dead-letter-recovery-item-card-error-props";
 import { DeadLetterRecoveryItemCardError } from "./dead-letter-recovery-item-card-error";
 import { DeadLetterRecoveryItemCardHeader } from "./dead-letter-recovery-item-card-header";
 import { buildDeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header-props";
@@ -15,7 +16,7 @@ export function DeadLetterRecoveryItemCard(props: DeadLetterRecoveryItemCardProp
       <DeadLetterRecoveryItemCardHeader {...buildDeadLetterRecoveryItemCardHeaderProps(props)} />
       <DeadLetterRecoveryItemCardStatus {...buildDeadLetterRecoveryItemCardStatusSectionProps(props)} />
       <DeadLetterRecoveryItemCardActions {...buildDeadLetterRecoveryItemCardActionsProps(props)} />
-      <DeadLetterRecoveryItemCardError item={props.item} />
+      <DeadLetterRecoveryItemCardError {...buildDeadLetterRecoveryItemCardErrorProps(props)} />
     </article>
   );
 }

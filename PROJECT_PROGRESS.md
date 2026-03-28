@@ -2983,6 +2983,10 @@ Last updated: 2026-03-28
   - dead-letter action-button prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-action-buttons-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-actions.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-actions.tsx` now keeps write-access gating isolated from action-button projection so the actions section stays easier to evolve safely
   - the record-panel structure guardrail now enforces this action-buttons-props-builder boundary so future dead-letter action changes do not regrow mixed child-prop projection logic
+- Dead-Letter Error Props Builder Extraction V1:
+  - dead-letter error prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-error-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card.tsx` now keeps error projection isolated from header, status, and actions projection so the top-level card orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this error-props-builder boundary so future dead-letter card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
