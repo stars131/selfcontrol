@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types"; export type BuildRecentMediaIssueCardMetadataPropsInput = Pick<RecentMediaIssueCardProps, "formatHistoryTimestampLabel" | "issue" | "locale" | "mediaIssueCopy">;
