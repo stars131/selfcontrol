@@ -812,8 +812,7 @@ if (previewPropsTypesLineCount > 2) {
 for (const requiredActionsPropsUsage of [
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   'import type { BuildMediaAssetCardActionsPropsInput } from "./media-asset-card-actions-props.types";',
-  "}: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps {",
-  "return { asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId };",
+  "export function buildMediaAssetCardActionsProps(input: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps { return input; }",
 ]) {
   if (!actionsPropsSource.includes(requiredActionsPropsUsage)) {
     throw new Error(
@@ -2327,7 +2326,7 @@ for (const forbiddenActionsToken of [
 for (const requiredDeleteButtonPropsUsage of [
   'import type { MediaAssetCardDeleteButtonProps } from "./media-asset-card-delete-button.types";',
   'import type { BuildMediaAssetCardDeleteButtonPropsInput } from "./media-asset-card-delete-button-props.types";',
-  "export function buildMediaAssetCardDeleteButtonProps({ asset, canWriteWorkspace, deletingMediaId, mediaIssueCopy, onDeleteMediaAsset }: BuildMediaAssetCardDeleteButtonPropsInput): MediaAssetCardDeleteButtonProps {",
+  "export function buildMediaAssetCardDeleteButtonProps(input: BuildMediaAssetCardDeleteButtonPropsInput): MediaAssetCardDeleteButtonProps { return input; }",
 ]) {
   if (!deleteButtonPropsSource.includes(requiredDeleteButtonPropsUsage)) {
     throw new Error(
@@ -2416,7 +2415,7 @@ if (deleteButtonTypesLineCount > 2) {
 for (const requiredDownloadButtonPropsUsage of [
   'import type { MediaAssetCardDownloadButtonProps } from "./media-asset-card-download-button.types";',
   'import type { BuildMediaAssetCardDownloadButtonPropsInput } from "./media-asset-card-download-button-props.types";',
-  "export function buildMediaAssetCardDownloadButtonProps({ asset, downloadingMediaId, mediaIssueCopy, onDownloadMedia }: BuildMediaAssetCardDownloadButtonPropsInput): MediaAssetCardDownloadButtonProps {",
+  "export function buildMediaAssetCardDownloadButtonProps(input: BuildMediaAssetCardDownloadButtonPropsInput): MediaAssetCardDownloadButtonProps { return input; }",
 ]) {
   if (!downloadButtonPropsSource.includes(requiredDownloadButtonPropsUsage)) {
     throw new Error(
@@ -2506,7 +2505,7 @@ if (downloadButtonTypesLineCount > 2) {
 for (const requiredRefreshButtonPropsUsage of [
   'import type { MediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button.types";',
   'import type { BuildMediaAssetCardRefreshButtonPropsInput } from "./media-asset-card-refresh-button-props.types";',
-  "export function buildMediaAssetCardRefreshButtonProps({ asset, mediaIssueCopy, onRefreshMedia, refreshingMediaId }: BuildMediaAssetCardRefreshButtonPropsInput): MediaAssetCardRefreshButtonProps {",
+  "export function buildMediaAssetCardRefreshButtonProps(input: BuildMediaAssetCardRefreshButtonPropsInput): MediaAssetCardRefreshButtonProps { return input; }",
 ]) {
   if (!refreshButtonPropsSource.includes(requiredRefreshButtonPropsUsage)) {
     throw new Error(
@@ -2596,7 +2595,7 @@ if (refreshButtonTypesLineCount > 2) {
 for (const requiredRetryButtonPropsUsage of [
   'import type { MediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button.types";',
   'import type { BuildMediaAssetCardRetryButtonPropsInput } from "./media-asset-card-retry-button-props.types";',
-  "export function buildMediaAssetCardRetryButtonProps({ asset, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId }: BuildMediaAssetCardRetryButtonPropsInput): MediaAssetCardRetryButtonProps {",
+  "export function buildMediaAssetCardRetryButtonProps(input: BuildMediaAssetCardRetryButtonPropsInput): MediaAssetCardRetryButtonProps { return input; }",
 ]) {
   if (!retryButtonPropsSource.includes(requiredRetryButtonPropsUsage)) {
     throw new Error(

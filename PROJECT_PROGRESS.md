@@ -3416,6 +3416,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issue-card-action-buttons-props.ts`, `recent-media-issue-card-retry-button-props.ts`, `recent-media-issue-card-settings-link-props.ts`, `recent-media-issue-card-error-props.ts`, and `recent-media-issue-card-intro-props.ts` now use explicit `input` parameters and pass their recent-media leaf props through unchanged
   - this keeps the recent-media action and leaf helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the record-panel structure guardrail now enforces this pass-through helper contract so future recent-media leaf helpers do not drift back to mixed boundary styles
+- Media Asset Action Helper Naming Cleanup V1:
+  - `apps/web/components/media-asset-card-actions-props.ts`, `media-asset-card-delete-button-props.ts`, `media-asset-card-download-button-props.ts`, `media-asset-card-refresh-button-props.ts`, and `media-asset-card-retry-button-props.ts` now use explicit `input` parameters and pass their media-action props through unchanged
+  - this keeps the media-asset action helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the media-asset structure guardrail now enforces this pass-through helper contract so future media-action leaf helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice

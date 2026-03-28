@@ -18982,8 +18982,7 @@ if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
 for (const requiredMediaAssetCardActionsPropsUsage of [
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   'import type { BuildMediaAssetCardActionsPropsInput } from "./media-asset-card-actions-props.types";',
-  "}: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps {",
-  "return { asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId };",
+  "export function buildMediaAssetCardActionsProps(input: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps { return input; }",
 ]) {
   if (!mediaAssetCardActionsPropsSource.includes(requiredMediaAssetCardActionsPropsUsage)) {
     throw new Error(
