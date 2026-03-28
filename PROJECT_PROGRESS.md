@@ -3248,6 +3248,10 @@ Last updated: 2026-03-28
   - `apps/web/components/use-workspace-settings-controller.ts` now forwards one flattened input object into `useWorkspaceSettingsLoad` instead of wrapping controller state under `{ router, state, workspaceId }`
   - `apps/web/components/use-workspace-settings-load.types.ts` and `apps/web/components/use-workspace-settings-load.ts` now share one flattened settings-load input contract so the load hook stays easier to evolve without nested wrapper churn
   - the workspace-settings and record-panel structure guardrails now enforce this flattened settings-load boundary so future settings bootstrap edits do not regrow double-wrapped input assembly
+- Workspace Entry Share Actions Input Flattening V1:
+  - `apps/web/components/workspace-entry-controller-actions.ts` now forwards one flattened input object into `createWorkspaceEntryShareActions` instead of wrapping controller state under `{ router, state }`
+  - `apps/web/components/workspace-entry-share-actions.types.ts` and `apps/web/components/workspace-entry-share-actions.ts` now share one flattened share-actions input contract so the share action factory stays easier to evolve without nested wrapper churn
+  - the workspace-entry and record-panel structure guardrails now enforce this flattened share-actions boundary so future entry share flows do not regrow double-wrapped action assembly
 
 ## Next
 - Continue the next product slice

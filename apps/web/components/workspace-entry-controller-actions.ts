@@ -20,7 +20,7 @@ export function createWorkspaceEntryControllerActions({
     router,
     state,
   });
-  const shareActions = createWorkspaceEntryShareActions({ router, state });
+  const shareActions = createWorkspaceEntryShareActions({ ...state, router });
 
   return {
     ...jobActions,

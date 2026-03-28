@@ -762,7 +762,7 @@ for (const requiredActionsImport of [
 for (const requiredActionsUsage of [
   "createWorkspaceEntryJobActions({",
   "createWorkspaceEntryWorkspaceActions({",
-  "createWorkspaceEntryShareActions({ router, state })",
+  "createWorkspaceEntryShareActions({ ...state, router })",
   "...jobActions",
   "...workspaceActions",
   "...shareActions",

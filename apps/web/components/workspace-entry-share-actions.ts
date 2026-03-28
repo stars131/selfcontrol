@@ -12,16 +12,13 @@ import type { CreateWorkspaceEntryShareActionsInput } from "./workspace-entry-sh
 
 export function createWorkspaceEntryShareActions({
   router,
-  state,
+  setError,
+  setJoining,
+  setPreviewing,
+  setSharePreview,
+  setWorkspaces,
+  token,
 }: CreateWorkspaceEntryShareActionsInput) {
-  const {
-    setError,
-    setJoining,
-    setPreviewing,
-    setSharePreview,
-    setWorkspaces,
-    token,
-  } = state;
   const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const handlePreviewShare = async (shareTokenInput: string) => {
