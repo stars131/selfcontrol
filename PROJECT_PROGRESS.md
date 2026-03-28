@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Expanded UI Guardrail Coverage V1:
+  - `apps/web/scripts/verify-dead-letter-recovery-structure.mjs` and `verify-location-review-panel-structure.mjs` now match the current summary/header/list/detail component layering instead of older direct-render assumptions
+  - `apps/web/package.json` now folds additional stable structure checks into `verify:ui-guardrails`, including dead-letter recovery, landing page, location review, record editor fields, record reminder panel, record results view, and record workspaces
+  - this raises routine validation coverage and reduces the chance that future enterprise-grade refactors drift outside the main verification path unnoticed
 - Record Media Tools Guardrail Realignment V1:
   - `apps/web/scripts/verify-record-media-tools-structure.mjs` now matches the current panel/list/card layering for recent media issues instead of enforcing an outdated direct-card render path
   - `apps/web/package.json` now includes `verify:record-media-tools-structure` inside `verify:ui-guardrails`, so this guardrail is exercised by the normal full verification pipeline again
