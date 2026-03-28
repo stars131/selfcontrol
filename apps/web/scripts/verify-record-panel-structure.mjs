@@ -17438,10 +17438,10 @@ if (workspaceShellClientEffectsInputTypesLines > maxWorkspaceShellClientEffectsI
 
 for (const requiredWorkspaceShellClientPanelsPropsUsage of [
   'import type { BuildWorkspaceShellPanelsPropsInput } from "./workspace-shell-client-panels-props.types";',
-  "}: BuildWorkspaceShellPanelsPropsInput): WorkspaceShellPanelsProps {",
-  "activeConversationId,",
-  "token,",
-  "visibleRecords,",
+  "input: BuildWorkspaceShellPanelsPropsInput,",
+  "activeConversationId: input.activeConversationId,",
+  "authToken: input.token,",
+  "records: input.visibleRecords,",
 ]) {
   if (!workspaceShellClientPanelsPropsSource.includes(requiredWorkspaceShellClientPanelsPropsUsage)) {
     throw new Error(

@@ -3468,6 +3468,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-settings-client-helpers.ts` and `provider-settings-panel-helpers.ts` now use explicit `input` parameters for provider-section and provider-feature-card helper assembly while keeping settings behavior unchanged
   - this keeps the workspace-settings helper layer aligned with the broader helper-signature normalization work without changing provider settings UX behavior
   - the workspace-settings and provider-settings structure guardrails now enforce this normalized helper boundary so future settings helper edits stay easier to review and extend
+- Workspace Shell Panels Helper Naming Cleanup V1:
+  - `apps/web/components/workspace-shell-client-panels-props.ts` now uses an explicit `input` parameter while keeping shell panel prop assembly unchanged
+  - this keeps the workspace-shell helper layer aligned with the broader helper-signature normalization work without changing shell panel behavior
+  - the record-panel structure guardrail now enforces this normalized shell-panels helper boundary so future shell helper edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
