@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Settings Boundary Guard V1:
+  - `apps/web/scripts/verify-provider-settings-boundary.mjs` now enforces the product boundary that provider and model configuration UI stays on the workspace settings page instead of drifting back into the main workspace shell
+  - `apps/web/package.json` now runs this check inside `verify:ui-guardrails`, so future frontend refactors cannot quietly reintroduce provider settings into the chat-first workspace page
+  - this locks in one of the explicit product decisions for long-term maintainability and reduces regression risk in the main desktop/mobile working surface
 - API Route Coverage Baseline Guard V1:
   - `apps/api/tests/test_api_route_coverage_baseline.py` now asserts that every primary FastAPI route module under `apps/api/app/api/routes` is explicitly tracked by at least one direct API test file
   - the baseline currently covers auth, records, media, conversations, knowledge, search, share, reminders, notifications, timeline, provider configs, audit logs, and workspace routes
