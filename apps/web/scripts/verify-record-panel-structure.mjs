@@ -31774,7 +31774,8 @@ if (
 for (const requiredDeadLetterRecoveryItemCardProcessingStatusTagPropsUsage of [
   'import type { DeadLetterRecoveryItemCardProcessingStatusTagProps } from "./dead-letter-recovery-item-card-processing-status-tag.types";',
   'import type { BuildDeadLetterRecoveryItemCardProcessingStatusTagPropsInput } from "./dead-letter-recovery-item-card-processing-status-tag-props.types";',
-  "export function buildDeadLetterRecoveryItemCardProcessingStatusTagProps({ item, locale }: BuildDeadLetterRecoveryItemCardProcessingStatusTagPropsInput): DeadLetterRecoveryItemCardProcessingStatusTagProps {",
+  "export function buildDeadLetterRecoveryItemCardProcessingStatusTagProps(input: BuildDeadLetterRecoveryItemCardProcessingStatusTagPropsInput): DeadLetterRecoveryItemCardProcessingStatusTagProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardProcessingStatusTagPropsSource.includes(requiredDeadLetterRecoveryItemCardProcessingStatusTagPropsUsage)) {
     throw new Error(
@@ -31836,7 +31837,8 @@ if (
 for (const requiredDeadLetterRecoveryItemCardStorageProviderTagPropsUsage of [
   'import type { DeadLetterRecoveryItemCardStorageProviderTagProps } from "./dead-letter-recovery-item-card-storage-provider-tag.types";',
   'import type { BuildDeadLetterRecoveryItemCardStorageProviderTagPropsInput } from "./dead-letter-recovery-item-card-storage-provider-tag-props.types";',
-  "export function buildDeadLetterRecoveryItemCardStorageProviderTagProps({ item, locale }: BuildDeadLetterRecoveryItemCardStorageProviderTagPropsInput): DeadLetterRecoveryItemCardStorageProviderTagProps {",
+  "export function buildDeadLetterRecoveryItemCardStorageProviderTagProps(input: BuildDeadLetterRecoveryItemCardStorageProviderTagPropsInput): DeadLetterRecoveryItemCardStorageProviderTagProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardStorageProviderTagPropsSource.includes(requiredDeadLetterRecoveryItemCardStorageProviderTagPropsUsage)) {
     throw new Error(
@@ -31967,7 +31969,8 @@ if (
 for (const requiredDeadLetterRecoveryItemCardRetryStateTagPropsUsage of [
   'import type { DeadLetterRecoveryItemCardRetryStateTagProps } from "./dead-letter-recovery-item-card-retry-state-tag.types";',
   'import type { BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput } from "./dead-letter-recovery-item-card-retry-state-tag-props.types";',
-  "export function buildDeadLetterRecoveryItemCardRetryStateTagProps({ item, locale, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput): DeadLetterRecoveryItemCardRetryStateTagProps {",
+  "export function buildDeadLetterRecoveryItemCardRetryStateTagProps(input: BuildDeadLetterRecoveryItemCardRetryStateTagPropsInput): DeadLetterRecoveryItemCardRetryStateTagProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardRetryStateTagPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryStateTagPropsUsage)) {
     throw new Error(
@@ -32084,7 +32087,8 @@ if (deadLetterRecoveryItemCardRetryStateTagTypesLines > maxDeadLetterRecoveryIte
 for (const requiredDeadLetterRecoveryItemCardIssueLabelTagPropsUsage of [
   'import type { DeadLetterRecoveryItemCardIssueLabelTagProps } from "./dead-letter-recovery-item-card-issue-label-tag.types";',
   'import type { BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput } from "./dead-letter-recovery-item-card-issue-label-tag-props.types";',
-  "export function buildDeadLetterRecoveryItemCardIssueLabelTagProps({ item, locale }: BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput): DeadLetterRecoveryItemCardIssueLabelTagProps {",
+  "export function buildDeadLetterRecoveryItemCardIssueLabelTagProps(input: BuildDeadLetterRecoveryItemCardIssueLabelTagPropsInput): DeadLetterRecoveryItemCardIssueLabelTagProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardIssueLabelTagPropsSource.includes(requiredDeadLetterRecoveryItemCardIssueLabelTagPropsUsage)) {
     throw new Error(
@@ -33214,7 +33218,8 @@ if (
 for (const requiredDeadLetterRecoveryItemCardTagsPropsUsage of [
   'import type { DeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags.types";',
   'import type { BuildDeadLetterRecoveryItemCardTagsPropsInput } from "./dead-letter-recovery-item-card-tags-props.types";',
-  "export function buildDeadLetterRecoveryItemCardTagsProps({ item, locale, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardTagsPropsInput): DeadLetterRecoveryItemCardTagsProps {",
+  "export function buildDeadLetterRecoveryItemCardTagsProps(input: BuildDeadLetterRecoveryItemCardTagsPropsInput): DeadLetterRecoveryItemCardTagsProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardTagsPropsSource.includes(requiredDeadLetterRecoveryItemCardTagsPropsUsage)) {
     throw new Error(
