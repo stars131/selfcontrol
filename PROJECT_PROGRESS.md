@@ -3099,6 +3099,10 @@ Last updated: 2026-03-28
   - media-asset text-char-count and text-line-count detail prop assembly now lives in `apps/web/components/media-asset-card-text-char-count-detail-props.ts` and `apps/web/components/media-asset-card-text-line-count-detail-props.ts`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps text detail projection isolated from dimensions and timing detail leaves so the detail-grid orchestration stays easier to evolve safely
   - the media-asset-card structure guardrail now enforces these text-detail props-builder boundaries so future media metadata detail changes do not regrow mixed child-prop projection logic
+- Media Asset Processing Status Tag Props Builder Extraction V1:
+  - media-asset processing-status tag prop assembly now lives in `apps/web/components/media-asset-card-processing-status-tag-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now keeps processing-status tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the media-asset-card and record-panel structure guardrails now enforce this processing-status-tag props-builder boundary so future media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
