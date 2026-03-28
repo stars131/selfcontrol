@@ -32628,7 +32628,7 @@ if (deadLetterRecoveryItemCardActionsSource.split(/\r?\n/).length > maxDeadLette
 for (const requiredDeadLetterRecoveryItemCardActionButtonsPropsUsage of [
   'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types";',
   'import type { BuildDeadLetterRecoveryItemCardActionButtonsPropsInput } from "./dead-letter-recovery-item-card-action-buttons-props.types";',
-  "export function buildDeadLetterRecoveryItemCardActionButtonsProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref }: BuildDeadLetterRecoveryItemCardActionButtonsPropsInput): DeadLetterRecoveryItemCardActionButtonsProps {",
+  "export function buildDeadLetterRecoveryItemCardActionButtonsProps(input: BuildDeadLetterRecoveryItemCardActionButtonsPropsInput): DeadLetterRecoveryItemCardActionButtonsProps { return input; }",
 ]) {
   if (!deadLetterRecoveryItemCardActionButtonsPropsSource.includes(requiredDeadLetterRecoveryItemCardActionButtonsPropsUsage)) {
     throw new Error(
@@ -32742,8 +32742,7 @@ if (deadLetterRecoveryItemCardActionButtonsTypesLines > maxDeadLetterRecoveryIte
 for (const requiredDeadLetterRecoveryItemCardRetryButtonPropsUsage of [
   'import type { DeadLetterRecoveryItemCardRetryButtonProps } from "./dead-letter-recovery-item-card-retry-button.types";',
   'import type { BuildDeadLetterRecoveryItemCardRetryButtonPropsInput } from "./dead-letter-recovery-item-card-retry-button-props.types";',
-  "export function buildDeadLetterRecoveryItemCardRetryButtonProps({",
-  "}: BuildDeadLetterRecoveryItemCardRetryButtonPropsInput): DeadLetterRecoveryItemCardRetryButtonProps {",
+  "export function buildDeadLetterRecoveryItemCardRetryButtonProps(input: BuildDeadLetterRecoveryItemCardRetryButtonPropsInput): DeadLetterRecoveryItemCardRetryButtonProps { return input; }",
 ]) {
   if (!deadLetterRecoveryItemCardRetryButtonPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryButtonPropsUsage)) {
     throw new Error(
@@ -32844,7 +32843,7 @@ if (deadLetterRecoveryItemCardRetryButtonTypesLines > maxDeadLetterRecoveryItemC
 for (const requiredDeadLetterRecoveryItemCardSettingsLinkPropsUsage of [
   'import type { DeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-recovery-item-card-settings-link.types";',
   'import type { BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput } from "./dead-letter-recovery-item-card-settings-link-props.types";',
-  "export function buildDeadLetterRecoveryItemCardSettingsLinkProps({ mediaIssueCopy, settingsHref }: BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput): DeadLetterRecoveryItemCardSettingsLinkProps {",
+  "export function buildDeadLetterRecoveryItemCardSettingsLinkProps(input: BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput): DeadLetterRecoveryItemCardSettingsLinkProps { return input; }",
 ]) {
   if (!deadLetterRecoveryItemCardSettingsLinkPropsSource.includes(requiredDeadLetterRecoveryItemCardSettingsLinkPropsUsage)) {
     throw new Error(
@@ -33621,7 +33620,7 @@ if (deadLetterRecoveryItemCardMetadataTypesLines > maxDeadLetterRecoveryItemCard
 for (const requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsUsage of [
   'import type { DeadLetterRecoveryItemCardRetryBudgetUsedProps } from "./dead-letter-recovery-item-card-retry-budget-used.types";',
   'import type { BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput } from "./dead-letter-recovery-item-card-retry-budget-used-props.types";',
-  "export function buildDeadLetterRecoveryItemCardRetryBudgetUsedProps({ item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput): DeadLetterRecoveryItemCardRetryBudgetUsedProps {",
+  "export function buildDeadLetterRecoveryItemCardRetryBudgetUsedProps(input: BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput): DeadLetterRecoveryItemCardRetryBudgetUsedProps { return input; }",
 ]) {
   if (!deadLetterRecoveryItemCardRetryBudgetUsedPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsUsage)) {
     throw new Error(
