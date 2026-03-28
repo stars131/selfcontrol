@@ -624,7 +624,7 @@ for (const requiredControllerImport of [
 for (const requiredControllerUsage of [
   "useWorkspaceEntryControllerState()",
   "useWorkspaceEntryControllerDerivedData({",
-  "createWorkspaceEntryControllerActions({ router, state })",
+  "createWorkspaceEntryControllerActions({ ...state, router })",
   "useWorkspaceEntryLoad({",
   "...state",
 ]) {
@@ -762,7 +762,7 @@ for (const requiredActionsImport of [
 for (const requiredActionsUsage of [
   "createWorkspaceEntryJobActions({",
   "createWorkspaceEntryWorkspaceActions({",
-  "createWorkspaceEntryShareActions({ ...state, router })",
+  "createWorkspaceEntryShareActions({ ...stateProps, router })",
   "...jobActions",
   "...workspaceActions",
   "...shareActions",

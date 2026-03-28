@@ -26867,7 +26867,7 @@ for (const forbiddenWorkspaceEntryControllerActionsToken of [
 }
 
 for (const requiredWorkspaceEntryControllerActionsTypesUsage of [
-  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryControllerActionsInput = { router: RouterLike; state: WorkspaceEntryControllerState };',
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryControllerActionsInput = WorkspaceEntryControllerState & { router: RouterLike };',
 ]) {
   if (!workspaceEntryControllerActionsTypesSource.includes(requiredWorkspaceEntryControllerActionsTypesUsage)) {
     throw new Error(

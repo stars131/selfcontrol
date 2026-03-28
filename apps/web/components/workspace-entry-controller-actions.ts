@@ -7,20 +7,25 @@ import type { CreateWorkspaceEntryControllerActionsInput } from "./workspace-ent
 
 export function createWorkspaceEntryControllerActions({
   router,
-  state,
+  setError,
+  setJobsLoading,
+  setTransferJobs,
+  token,
+  ...state
 }: CreateWorkspaceEntryControllerActionsInput) {
+  const stateProps = { ...state, setError, setJobsLoading, setTransferJobs, token };
   const jobActions = createWorkspaceEntryJobActions({
-    setError: state.setError,
-    setJobsLoading: state.setJobsLoading,
-    setTransferJobs: state.setTransferJobs,
-    token: state.token,
+    setError,
+    setJobsLoading,
+    setTransferJobs,
+    token,
   });
   const workspaceActions = createWorkspaceEntryWorkspaceActions({
-    ...state,
+    ...stateProps,
     loadTransferJobs: jobActions.loadTransferJobs,
     router,
   });
-  const shareActions = createWorkspaceEntryShareActions({ ...state, router });
+  const shareActions = createWorkspaceEntryShareActions({ ...stateProps, router });
 
   return {
     ...jobActions,

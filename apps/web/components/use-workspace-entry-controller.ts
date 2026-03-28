@@ -14,7 +14,7 @@ export function useWorkspaceEntryController(router: RouterLike) {
     name: state.name,
     shareTokenInput: state.shareTokenInput,
   });
-  const actions = createWorkspaceEntryControllerActions({ router, state });
+  const actions = createWorkspaceEntryControllerActions({ ...state, router });
   useWorkspaceEntryLoad({
     loadTransferJobs: actions.loadTransferJobs,
     router,
