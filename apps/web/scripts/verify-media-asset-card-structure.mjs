@@ -611,7 +611,8 @@ if (cardSource.includes("<MediaAssetCardError asset={asset} />")) {
 for (const requiredIntroPropsUsage of [
   'import type { MediaAssetCardIntroProps } from "./media-asset-card-intro.types";',
   'import type { BuildMediaAssetCardIntroPropsInput } from "./media-asset-card-intro-props.types";',
-  "export function buildMediaAssetCardIntroProps({ asset }: BuildMediaAssetCardIntroPropsInput): MediaAssetCardIntroProps {",
+  "export function buildMediaAssetCardIntroProps(input: BuildMediaAssetCardIntroPropsInput): MediaAssetCardIntroProps {",
+  "return input;",
 ]) {
   if (!introPropsSource.includes(requiredIntroPropsUsage)) {
     throw new Error(`media-asset-card-intro-props.ts must own media intro prop assembly: ${requiredIntroPropsUsage}`);
@@ -647,7 +648,8 @@ if (introPropsTypesLineCount > 2) {
 for (const requiredExtractedTextPropsUsage of [
   'import type { MediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text.types";',
   'import type { BuildMediaAssetCardExtractedTextPropsInput } from "./media-asset-card-extracted-text-props.types";',
-  "export function buildMediaAssetCardExtractedTextProps({ asset }: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+  "export function buildMediaAssetCardExtractedTextProps(input: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+  "return input;",
 ]) {
   if (!extractedTextPropsSource.includes(requiredExtractedTextPropsUsage)) {
     throw new Error(`media-asset-card-extracted-text-props.ts must own media extracted-text prop assembly: ${requiredExtractedTextPropsUsage}`);
@@ -683,7 +685,8 @@ if (extractedTextPropsTypesLineCount > 2) {
 for (const requiredErrorPropsUsage of [
   'import type { MediaAssetCardErrorProps } from "./media-asset-card-error.types";',
   'import type { BuildMediaAssetCardErrorPropsInput } from "./media-asset-card-error-props.types";',
-  "export function buildMediaAssetCardErrorProps({ asset }: BuildMediaAssetCardErrorPropsInput): MediaAssetCardErrorProps {",
+  "export function buildMediaAssetCardErrorProps(input: BuildMediaAssetCardErrorPropsInput): MediaAssetCardErrorProps {",
+  "return input;",
 ]) {
   if (!errorPropsSource.includes(requiredErrorPropsUsage)) {
     throw new Error(`media-asset-card-error-props.ts must own media error prop assembly: ${requiredErrorPropsUsage}`);

@@ -18499,7 +18499,8 @@ if (mediaAssetCardLines > maxMediaAssetCardLines) {
 for (const requiredMediaAssetCardIntroPropsUsage of [
   'import type { MediaAssetCardIntroProps } from "./media-asset-card-intro.types";',
   'import type { BuildMediaAssetCardIntroPropsInput } from "./media-asset-card-intro-props.types";',
-  "export function buildMediaAssetCardIntroProps({ asset }: BuildMediaAssetCardIntroPropsInput): MediaAssetCardIntroProps {",
+  "export function buildMediaAssetCardIntroProps(input: BuildMediaAssetCardIntroPropsInput): MediaAssetCardIntroProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardIntroPropsSource.includes(requiredMediaAssetCardIntroPropsUsage)) {
     throw new Error(
@@ -18592,7 +18593,8 @@ if (mediaAssetCardIntroTypesLines > maxMediaAssetCardIntroTypesLines) {
 for (const requiredMediaAssetCardExtractedTextPropsUsage of [
   'import type { MediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text.types";',
   'import type { BuildMediaAssetCardExtractedTextPropsInput } from "./media-asset-card-extracted-text-props.types";',
-  "export function buildMediaAssetCardExtractedTextProps({ asset }: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+  "export function buildMediaAssetCardExtractedTextProps(input: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardExtractedTextPropsSource.includes(requiredMediaAssetCardExtractedTextPropsUsage)) {
     throw new Error(
@@ -18891,7 +18893,8 @@ if (mediaAssetCardMetadataPropsTypesLines > maxMediaAssetCardMetadataPropsTypesL
 for (const requiredMediaAssetCardErrorPropsUsage of [
   'import type { MediaAssetCardErrorProps } from "./media-asset-card-error.types";',
   'import type { BuildMediaAssetCardErrorPropsInput } from "./media-asset-card-error-props.types";',
-  "export function buildMediaAssetCardErrorProps({ asset }: BuildMediaAssetCardErrorPropsInput): MediaAssetCardErrorProps {",
+  "export function buildMediaAssetCardErrorProps(input: BuildMediaAssetCardErrorPropsInput): MediaAssetCardErrorProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardErrorPropsSource.includes(requiredMediaAssetCardErrorPropsUsage)) {
     throw new Error(

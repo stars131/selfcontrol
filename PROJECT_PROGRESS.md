@@ -3392,6 +3392,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-extraction-mode-tag-props.ts`, `media-asset-card-file-extension-tag-props.ts`, `media-asset-card-processing-source-tag-props.ts`, `media-asset-card-remote-fetch-tag-props.ts`, `media-asset-card-processing-status-tag-props.ts`, `media-asset-card-retry-state-tag-props.ts`, `media-asset-card-retry-count-tag-props.ts`, `media-asset-card-size-tag-props.ts`, and `media-asset-card-storage-provider-tag-props.ts` now use explicit `input` parameters and pass their tag props through unchanged
   - this keeps the media-asset tag helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the media-asset-card and record-panel structure guardrails now enforce this pass-through helper contract so future media-asset tag helpers do not drift back to mixed boundary styles
+- Media Asset Single-Field Helper Naming Cleanup V1:
+  - `apps/web/components/media-asset-card-intro-props.ts`, `media-asset-card-error-props.ts`, and `media-asset-card-extracted-text-props.ts` now use explicit `input` parameters and pass their single-field props through unchanged
+  - this keeps the simplest media-asset leaf helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the media-asset-card and record-panel structure guardrails now enforce this pass-through helper contract so future single-field media-asset helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice
