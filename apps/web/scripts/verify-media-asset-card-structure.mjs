@@ -155,6 +155,15 @@ const extractionModeTagLineCount = extractionModeTagSource.split(/\r?\n/).length
 const extractionModeTagTypesPath = path.resolve(process.cwd(), "components/media-asset-card-extraction-mode-tag.types.ts");
 const extractionModeTagTypesSource = fs.readFileSync(extractionModeTagTypesPath, "utf8");
 const extractionModeTagTypesLineCount = extractionModeTagTypesSource.split(/\r?\n/).length;
+const actionsPropsPath = path.resolve(process.cwd(), "components/media-asset-card-actions-props.ts");
+const actionsPropsSource = fs.readFileSync(actionsPropsPath, "utf8");
+const actionsPropsLineCount = actionsPropsSource.split(/\r?\n/).length;
+const actionsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-actions-props.types.ts",
+);
+const actionsPropsTypesSource = fs.readFileSync(actionsPropsTypesPath, "utf8");
+const actionsPropsTypesLineCount = actionsPropsTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
 const deleteButtonPath = path.resolve(process.cwd(), "components/media-asset-card-delete-button.tsx");
@@ -202,6 +211,10 @@ if (!cardSource.includes('import { MediaAssetCardActions } from "./media-asset-c
   throw new Error("media-asset-card.tsx must import MediaAssetCardActions");
 }
 
+if (!cardSource.includes('import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";')) {
+  throw new Error("media-asset-card.tsx must import delegated media action props builder");
+}
+
 if (!cardSource.includes('import { MediaAssetCardPreview } from "./media-asset-card-preview";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardPreview");
 }
@@ -218,8 +231,75 @@ if (!cardSource.includes("<MediaAssetCardActions")) {
   throw new Error("media-asset-card.tsx must delegate action rendering");
 }
 
+if (!cardSource.includes("buildMediaAssetCardActionsProps({")) {
+  throw new Error("media-asset-card.tsx must delegate media action prop assembly");
+}
+
 if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
+}
+
+for (const forbiddenCardActionPropsToken of [
+  "canWriteWorkspace={canWriteWorkspace}",
+  "deletingMediaId={deletingMediaId}",
+  "downloadingMediaId={downloadingMediaId}",
+  "onDeleteMediaAsset={onDeleteMediaAsset}",
+  "onDownloadMedia={onDownloadMedia}",
+  "onRefreshMedia={onRefreshMedia}",
+  "onRetryMediaProcessing={onRetryMediaProcessing}",
+  "refreshingMediaId={refreshingMediaId}",
+  "retryingMediaId={retryingMediaId}",
+]) {
+  if (cardSource.includes(forbiddenCardActionPropsToken)) {
+    throw new Error(
+      `media-asset-card.tsx must keep media action prop assembly delegated: ${forbiddenCardActionPropsToken}`,
+    );
+  }
+}
+
+for (const requiredActionsPropsUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
+  'import type { BuildMediaAssetCardActionsPropsInput } from "./media-asset-card-actions-props.types";',
+  "}: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps {",
+  "return { asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId };",
+]) {
+  if (!actionsPropsSource.includes(requiredActionsPropsUsage)) {
+    throw new Error(
+      `media-asset-card-actions-props.ts must own media action prop assembly: ${requiredActionsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenActionsPropsToken of [
+  "<MediaAssetCardActions",
+  "<MediaAssetCardPreview",
+  "<MediaAssetCardMetadata",
+]) {
+  if (actionsPropsSource.includes(forbiddenActionsPropsToken)) {
+    throw new Error(
+      `media-asset-card-actions-props.ts must keep render concerns delegated: ${forbiddenActionsPropsToken}`,
+    );
+  }
+}
+
+if (actionsPropsLineCount > 4) {
+  throw new Error(`media-asset-card-actions-props.ts exceeded 4 lines: ${actionsPropsLineCount}`);
+}
+
+for (const requiredActionsPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardActionsPropsInput = Pick<MediaAssetCardProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "downloadingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset" | "onDownloadMedia" | "onRefreshMedia" | "onRetryMediaProcessing" | "refreshingMediaId" | "retryingMediaId">;',
+]) {
+  if (!actionsPropsTypesSource.includes(requiredActionsPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-actions-props.types.ts must own media action prop input typing: ${requiredActionsPropsTypesUsage}`,
+    );
+  }
+}
+
+if (actionsPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-actions-props.types.ts exceeded 2 lines: ${actionsPropsTypesLineCount}`,
+  );
 }
 
 if (!metadataSource.includes('import { buildMediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details-props";')) {

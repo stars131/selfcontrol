@@ -2915,6 +2915,10 @@ Last updated: 2026-03-28
   - media-asset delete button rendering now lives in `apps/web/components/media-asset-card-delete-button.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-actions.tsx`
   - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while delete button rendering and write-permission gating remain centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this delete-button boundary so future action-row changes do not regrow mixed action-layout-and-delete rendering logic
+- Media Asset Actions Props Builder Extraction V1:
+  - media-asset action prop assembly now lives in `apps/web/components/media-asset-card-actions-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
+  - `apps/web/components/media-asset-card.tsx` now stays focused on section ordering while action wiring stays centralized and easier to update safely as the card grows
+  - the media-asset and record-panel structure guardrails now enforce this action-props-builder boundary so future card composition changes do not regrow mixed layout-and-action-wiring logic
 
 ## Next
 - Continue the next product slice

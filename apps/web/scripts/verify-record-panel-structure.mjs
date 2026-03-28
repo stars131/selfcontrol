@@ -1138,6 +1138,14 @@ const mediaAssetCardErrorTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-error.types.ts",
 );
+const mediaAssetCardActionsPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-actions-props.ts",
+);
+const mediaAssetCardActionsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-actions-props.types.ts",
+);
 const mediaAssetCardActionsPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-actions.tsx",
@@ -3584,6 +3592,14 @@ const mediaAssetCardPreviewTypesSource = fs.readFileSync(
 );
 const mediaAssetCardErrorSource = fs.readFileSync(mediaAssetCardErrorPath, "utf8");
 const mediaAssetCardErrorTypesSource = fs.readFileSync(mediaAssetCardErrorTypesPath, "utf8");
+const mediaAssetCardActionsPropsSource = fs.readFileSync(
+  mediaAssetCardActionsPropsPath,
+  "utf8",
+);
+const mediaAssetCardActionsPropsTypesSource = fs.readFileSync(
+  mediaAssetCardActionsPropsTypesPath,
+  "utf8",
+);
 const mediaAssetCardActionsSource = fs.readFileSync(mediaAssetCardActionsPath, "utf8");
 const mediaAssetCardActionsTypesSource = fs.readFileSync(
   mediaAssetCardActionsTypesPath,
@@ -6107,6 +6123,10 @@ const mediaAssetCardPreviewTypesLines =
   mediaAssetCardPreviewTypesSource.split(/\r?\n/).length;
 const mediaAssetCardErrorLines = mediaAssetCardErrorSource.split(/\r?\n/).length;
 const mediaAssetCardErrorTypesLines = mediaAssetCardErrorTypesSource.split(/\r?\n/).length;
+const mediaAssetCardActionsPropsLines =
+  mediaAssetCardActionsPropsSource.split(/\r?\n/).length;
+const mediaAssetCardActionsPropsTypesLines =
+  mediaAssetCardActionsPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardActionsTypesLines =
   mediaAssetCardActionsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardDeleteButtonLines =
@@ -17168,6 +17188,7 @@ if (mediaAssetSectionEmptyTypesLines > maxMediaAssetSectionEmptyTypesLines) {
 
 for (const requiredMediaAssetCardUsage of [
   'import { MediaAssetCardActions } from "./media-asset-card-actions";',
+  'import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";',
   'import { MediaAssetCardError } from "./media-asset-card-error";',
   'import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";',
   'import { MediaAssetCardIntro } from "./media-asset-card-intro";',
@@ -17181,6 +17202,7 @@ for (const requiredMediaAssetCardUsage of [
   "<MediaAssetCardExtractedText",
   "<MediaAssetCardError",
   "<MediaAssetCardActions",
+  "buildMediaAssetCardActionsProps({",
 ]) {
   if (!mediaAssetCardSource.includes(requiredMediaAssetCardUsage)) {
     throw new Error(
@@ -17198,6 +17220,15 @@ for (const forbiddenMediaAssetCardToken of [
   'asset.extracted_text.length > 280 ? `${asset.extracted_text.slice(0, 280)}...` : asset.extracted_text',
   'authToken ? (',
   '<MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />',
+  "canWriteWorkspace={canWriteWorkspace}",
+  "deletingMediaId={deletingMediaId}",
+  "downloadingMediaId={downloadingMediaId}",
+  "onDeleteMediaAsset={onDeleteMediaAsset}",
+  "onDownloadMedia={onDownloadMedia}",
+  "onRefreshMedia={onRefreshMedia}",
+  "onRetryMediaProcessing={onRetryMediaProcessing}",
+  "refreshingMediaId={refreshingMediaId}",
+  "retryingMediaId={retryingMediaId}",
 ]) {
   if (mediaAssetCardSource.includes(forbiddenMediaAssetCardToken)) {
     throw new Error(
@@ -17377,6 +17408,55 @@ const maxMediaAssetCardErrorTypesLines = 2;
 if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
   throw new Error(
     `media-asset-card-error.types.ts exceeded ${maxMediaAssetCardErrorTypesLines} lines: ${mediaAssetCardErrorTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardActionsPropsUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
+  'import type { BuildMediaAssetCardActionsPropsInput } from "./media-asset-card-actions-props.types";',
+  "}: BuildMediaAssetCardActionsPropsInput): MediaAssetCardActionsProps {",
+  "return { asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId };",
+]) {
+  if (!mediaAssetCardActionsPropsSource.includes(requiredMediaAssetCardActionsPropsUsage)) {
+    throw new Error(
+      `media-asset-card-actions-props.ts must own media-action prop assembly: ${requiredMediaAssetCardActionsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardActionsPropsToken of [
+  "<MediaAssetCardActions",
+  "<MediaAssetCardPreview",
+  "<MediaAssetCardMetadata",
+]) {
+  if (mediaAssetCardActionsPropsSource.includes(forbiddenMediaAssetCardActionsPropsToken)) {
+    throw new Error(
+      `media-asset-card-actions-props.ts must keep render concerns delegated: ${forbiddenMediaAssetCardActionsPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardActionsPropsLines = 4;
+if (mediaAssetCardActionsPropsLines > maxMediaAssetCardActionsPropsLines) {
+  throw new Error(
+    `media-asset-card-actions-props.ts exceeded ${maxMediaAssetCardActionsPropsLines} lines: ${mediaAssetCardActionsPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardActionsPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardActionsPropsInput = Pick<MediaAssetCardProps, "asset" | "canWriteWorkspace" | "deletingMediaId" | "downloadingMediaId" | "mediaIssueCopy" | "onDeleteMediaAsset" | "onDownloadMedia" | "onRefreshMedia" | "onRetryMediaProcessing" | "refreshingMediaId" | "retryingMediaId">;',
+]) {
+  if (!mediaAssetCardActionsPropsTypesSource.includes(requiredMediaAssetCardActionsPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-actions-props.types.ts must own media-action prop input typing: ${requiredMediaAssetCardActionsPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardActionsPropsTypesLines = 2;
+if (mediaAssetCardActionsPropsTypesLines > maxMediaAssetCardActionsPropsTypesLines) {
+  throw new Error(
+    `media-asset-card-actions-props.types.ts exceeded ${maxMediaAssetCardActionsPropsTypesLines} lines: ${mediaAssetCardActionsPropsTypesLines}`,
   );
 }
 

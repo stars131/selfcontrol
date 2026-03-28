@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCardActions } from "./media-asset-card-actions";
+import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";
 import { MediaAssetCardError } from "./media-asset-card-error";
 import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";
 import { MediaAssetCardIntro } from "./media-asset-card-intro";
@@ -36,17 +37,19 @@ export function MediaAssetCard({
       <MediaAssetCardExtractedText asset={asset} />
       <MediaAssetCardError asset={asset} />
       <MediaAssetCardActions
-        asset={asset}
-        canWriteWorkspace={canWriteWorkspace}
-        deletingMediaId={deletingMediaId}
-        downloadingMediaId={downloadingMediaId}
-        mediaIssueCopy={mediaIssueCopy}
-        onDeleteMediaAsset={onDeleteMediaAsset}
-        onDownloadMedia={onDownloadMedia}
-        onRefreshMedia={onRefreshMedia}
-        onRetryMediaProcessing={onRetryMediaProcessing}
-        refreshingMediaId={refreshingMediaId}
-        retryingMediaId={retryingMediaId}
+        {...buildMediaAssetCardActionsProps({
+          asset,
+          canWriteWorkspace,
+          deletingMediaId,
+          downloadingMediaId,
+          mediaIssueCopy,
+          onDeleteMediaAsset,
+          onDownloadMedia,
+          onRefreshMedia,
+          onRetryMediaProcessing,
+          refreshingMediaId,
+          retryingMediaId,
+        })}
       />
     </article>
   );
