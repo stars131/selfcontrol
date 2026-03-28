@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Shell Aggregator Helper Naming Cleanup V1:
+  - `apps/web/components/use-workspace-shell-refreshers.ts`, `workspace-shell-admin-actions.ts`, `workspace-shell-chat-actions.ts`, `workspace-shell-chat-record-actions.ts`, `workspace-shell-media-actions.ts`, `workspace-shell-media-filter-actions.ts`, `workspace-shell-record-actions.ts`, and `workspace-shell-record-filter-actions.ts` now use explicit `input` parameters across refresh and action aggregation boundaries while keeping aggregation behavior unchanged
+  - this keeps workspace-shell orchestration helpers aligned with the broader helper-signature normalization work without changing chat, record, media, reminder, sharing, or refresh behavior
+  - the cleanup reduces ambiguous orchestration signatures in a high-churn shell boundary so future workspace updates stay easier to trace, test, and extend under the enterprise engineering standard
 - Workspace Composition Helper Naming Cleanup V1:
   - `apps/web/components/workspace-shell-panels-props.ts` and `record-browse-workspace-props.ts` now use explicit `input` parameters across shell, browse, map, search, and results-view prop builders while keeping their prop projection behavior unchanged
   - this keeps top-level workspace composition helpers aligned with the broader helper-signature normalization work without changing shell or browse rendering behavior

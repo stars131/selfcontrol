@@ -4,9 +4,9 @@ import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.ty
 import { createWorkspaceShellRecordFilterApplyActions } from "./workspace-shell-record-filter-apply-actions";
 import { createWorkspaceShellSearchPresetActions } from "./workspace-shell-search-preset-actions";
 
-export function createWorkspaceShellRecordFilterActions(props: UseWorkspaceShellActionsProps) {
-  const filterApplyActions = createWorkspaceShellRecordFilterApplyActions(props);
-  const searchPresetActions = createWorkspaceShellSearchPresetActions(props);
+export function createWorkspaceShellRecordFilterActions(input: UseWorkspaceShellActionsProps) {
+  const filterApplyActions = createWorkspaceShellRecordFilterApplyActions(input);
+  const searchPresetActions = createWorkspaceShellSearchPresetActions(input);
 
   return {
     ...filterApplyActions,

@@ -4,9 +4,9 @@ import type { UseWorkspaceShellActionsProps } from "./workspace-shell-actions.ty
 import { createWorkspaceShellChatActions } from "./workspace-shell-chat-actions";
 import { createWorkspaceShellRecordActions } from "./workspace-shell-record-actions";
 
-export function createWorkspaceShellChatRecordActions(props: UseWorkspaceShellActionsProps) {
-  const chatActions = createWorkspaceShellChatActions(props);
-  const recordActions = createWorkspaceShellRecordActions(props);
+export function createWorkspaceShellChatRecordActions(input: UseWorkspaceShellActionsProps) {
+  const chatActions = createWorkspaceShellChatActions(input);
+  const recordActions = createWorkspaceShellRecordActions(input);
 
   return {
     ...chatActions,

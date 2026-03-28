@@ -5,10 +5,10 @@ import { createWorkspaceShellManagedRefreshers } from "./workspace-shell-managed
 import { createWorkspaceShellRecordMediaRefreshers } from "./workspace-shell-record-media-refreshers";
 import type { WorkspaceShellRefreshersParams } from "./workspace-shell-refreshers.types";
 
-export function createWorkspaceShellRefreshers(props: WorkspaceShellRefreshersParams) {
-  const conversationRefreshers = createWorkspaceShellConversationRefreshers(props);
-  const managedRefreshers = createWorkspaceShellManagedRefreshers(props);
-  const recordMediaRefreshers = createWorkspaceShellRecordMediaRefreshers(props);
+export function createWorkspaceShellRefreshers(input: WorkspaceShellRefreshersParams) {
+  const conversationRefreshers = createWorkspaceShellConversationRefreshers(input);
+  const managedRefreshers = createWorkspaceShellManagedRefreshers(input);
+  const recordMediaRefreshers = createWorkspaceShellRecordMediaRefreshers(input);
 
   return {
     ...conversationRefreshers,

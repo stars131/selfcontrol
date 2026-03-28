@@ -411,9 +411,9 @@ for (const requiredRefreshersImport of [
 }
 
 for (const requiredRefreshersUsage of [
-  "createWorkspaceShellConversationRefreshers(props)",
-  "createWorkspaceShellManagedRefreshers(props)",
-  "createWorkspaceShellRecordMediaRefreshers(props)",
+  "createWorkspaceShellConversationRefreshers(input)",
+  "createWorkspaceShellManagedRefreshers(input)",
+  "createWorkspaceShellRecordMediaRefreshers(input)",
   "...conversationRefreshers",
   "...managedRefreshers",
   "...recordMediaRefreshers",
@@ -1417,8 +1417,8 @@ for (const requiredMediaFilterImport of [
 }
 
 for (const requiredMediaFilterUsage of [
-  "createWorkspaceShellMediaActions(props)",
-  "createWorkspaceShellRecordFilterActions(props)",
+  "createWorkspaceShellMediaActions(input)",
+  "createWorkspaceShellRecordFilterActions(input)",
   "...mediaActions",
   "...recordFilterActions",
 ]) {
@@ -1462,8 +1462,8 @@ for (const requiredRecordFilterActionsImport of [
 }
 
 for (const requiredRecordFilterActionsUsage of [
-  "createWorkspaceShellRecordFilterApplyActions(props)",
-  "createWorkspaceShellSearchPresetActions(props)",
+  "createWorkspaceShellRecordFilterApplyActions(input)",
+  "createWorkspaceShellSearchPresetActions(input)",
   "...filterApplyActions",
   "...searchPresetActions",
 ]) {
@@ -1592,9 +1592,9 @@ for (const requiredMediaActionsImport of [
 }
 
 for (const requiredMediaActionsUsage of [
-  "createWorkspaceShellMediaUploadActions(props)",
-  "createWorkspaceShellMediaSelectedActions(props)",
-  "createWorkspaceShellMediaDeadLetterActions(props)",
+  "createWorkspaceShellMediaUploadActions(input)",
+  "createWorkspaceShellMediaSelectedActions(input)",
+  "createWorkspaceShellMediaDeadLetterActions(input)",
   "...mediaUploadActions",
   "...mediaSelectedActions",
   "...mediaDeadLetterActions",
@@ -1815,8 +1815,8 @@ for (const requiredChatRecordImport of [
 }
 
 for (const requiredChatRecordUsage of [
-  "createWorkspaceShellChatActions(props)",
-  "createWorkspaceShellRecordActions(props)",
+  "createWorkspaceShellChatActions(input)",
+  "createWorkspaceShellRecordActions(input)",
   "...chatActions",
   "...recordActions",
 ]) {
@@ -1866,8 +1866,8 @@ for (const requiredWorkspaceShellChatActionsImport of [
 }
 
 for (const requiredChatActionsPath of [
-  "createWorkspaceShellChatSendActions(props)",
-  "createWorkspaceShellChatConversationActions(props)",
+  "createWorkspaceShellChatSendActions(input)",
+  "createWorkspaceShellChatConversationActions(input)",
   "...chatSendActions",
   "...chatConversationActions",
 ]) {
@@ -2020,8 +2020,8 @@ for (const requiredRecordActionsImport of [
 }
 
 for (const requiredRecordActionsUsage of [
-  "createWorkspaceShellRecordSaveActions(props)",
-  "createWorkspaceShellRecordDeleteActions(props)",
+  "createWorkspaceShellRecordSaveActions(input)",
+  "createWorkspaceShellRecordDeleteActions(input)",
   "...recordSaveActions",
   "...recordDeleteActions",
 ]) {
@@ -2481,9 +2481,9 @@ for (const requiredAdminImport of [
 }
 
 for (const requiredAdminUsage of [
-  "createWorkspaceShellReminderNotificationActions(props)",
-  "createWorkspaceShellKnowledgeProviderActions(props)",
-  "createWorkspaceShellShareActions(props)",
+  "createWorkspaceShellReminderNotificationActions(input)",
+  "createWorkspaceShellKnowledgeProviderActions(input)",
+  "createWorkspaceShellShareActions(input)",
   "...reminderNotificationActions",
   "...knowledgeProviderActions",
   "...shareActions",

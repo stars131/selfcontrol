@@ -5,10 +5,10 @@ import { createWorkspaceShellKnowledgeProviderActions } from "./workspace-shell-
 import { createWorkspaceShellReminderNotificationActions } from "./workspace-shell-reminder-notification-actions";
 import { createWorkspaceShellShareActions } from "./workspace-shell-share-actions";
 
-export function createWorkspaceShellAdminActions(props: UseWorkspaceShellActionsProps) {
-  const reminderNotificationActions = createWorkspaceShellReminderNotificationActions(props);
-  const knowledgeProviderActions = createWorkspaceShellKnowledgeProviderActions(props);
-  const shareActions = createWorkspaceShellShareActions(props);
+export function createWorkspaceShellAdminActions(input: UseWorkspaceShellActionsProps) {
+  const reminderNotificationActions = createWorkspaceShellReminderNotificationActions(input);
+  const knowledgeProviderActions = createWorkspaceShellKnowledgeProviderActions(input);
+  const shareActions = createWorkspaceShellShareActions(input);
 
   return {
     ...reminderNotificationActions,
