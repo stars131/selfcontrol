@@ -8,6 +8,7 @@ import { buildRecentMediaIssueCardIntroProps } from "./recent-media-issue-card-i
 import { RecentMediaIssueCardIntro } from "./recent-media-issue-card-intro";
 import { RecentMediaIssueCardMetadata } from "./recent-media-issue-card-metadata";
 import { buildRecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata-props";
+import { buildRecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags-props";
 import { RecentMediaIssueCardTags } from "./recent-media-issue-card-tags";
 import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";
 
@@ -15,7 +16,7 @@ export function RecentMediaIssueCard({ issue, locale, canWriteWorkspace, workspa
   return (
     <article className="record-card">
       <RecentMediaIssueCardIntro {...buildRecentMediaIssueCardIntroProps({ issue })} />
-      <RecentMediaIssueCardTags issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />
+      <RecentMediaIssueCardTags {...buildRecentMediaIssueCardTagsProps({ issue, locale, mediaIssueCopy })} />
       <RecentMediaIssueCardMetadata {...buildRecentMediaIssueCardMetadataProps({ formatHistoryTimestampLabel, issue, locale, mediaIssueCopy })} />
       <RecentMediaIssueCardActions {...buildRecentMediaIssueCardActionsProps({ canWriteWorkspace, issue, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, workspaceId })} />
       <RecentMediaIssueCardError {...buildRecentMediaIssueCardErrorProps({ issue })} />

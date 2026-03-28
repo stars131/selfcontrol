@@ -2975,6 +2975,10 @@ Last updated: 2026-03-28
   - recent-media error prop assembly now lives in `apps/web/components/recent-media-issue-card-error-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card.tsx`
   - `apps/web/components/recent-media-issue-card.tsx` now keeps error projection isolated from intro, metadata, and action projection so the top-level card orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this error-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
+- Recent Media Tags Props Builder Extraction V1:
+  - recent-media tags prop assembly now lives in `apps/web/components/recent-media-issue-card-tags-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card.tsx`
+  - `apps/web/components/recent-media-issue-card.tsx` now keeps intro, tags, metadata, actions, and error projection fully separated so the top-level card orchestration stays easier to review and evolve safely
+  - the record-panel structure guardrail now enforces this tags-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
