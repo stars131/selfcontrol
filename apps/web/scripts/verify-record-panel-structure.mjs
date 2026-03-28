@@ -12110,9 +12110,9 @@ for (const forbiddenControllerHandlerGroupsPropsInputToken of [
 
 for (const requiredControllerHandlerGroupsPropsInputUsage of [
   "export function buildRecordPanelControllerHandlerGroupsPropsInput(",
-  "mediaDeadLetterOverview: props.mediaDeadLetterOverview,",
-  "onUploadMedia: props.onUploadMedia,",
-  "workspaceId: props.workspaceId,",
+  "mediaDeadLetterOverview: input.mediaDeadLetterOverview,",
+  "onUploadMedia: input.onUploadMedia,",
+  "workspaceId: input.workspaceId,",
 ]) {
   if (!controllerHandlerGroupsPropsInputSource.includes(requiredControllerHandlerGroupsPropsInputUsage)) {
     throw new Error(
@@ -12140,9 +12140,9 @@ for (const requiredControllerHandlerGroupsStateInputImport of [
 
 for (const requiredControllerHandlerGroupsStateInputUsage of [
   "export function buildRecordPanelControllerHandlerGroupsStateInput(",
-  "filterDraft: state.filterDraft,",
-  "setSavingReminder: state.setSavingReminder,",
-  "setUploading: state.setUploading,",
+  "filterDraft: input.filterDraft,",
+  "setSavingReminder: input.setSavingReminder,",
+  "setUploading: input.setUploading,",
 ]) {
   if (!controllerHandlerGroupsStateInputSource.includes(requiredControllerHandlerGroupsStateInputUsage)) {
     throw new Error(
@@ -12182,8 +12182,8 @@ for (const requiredControllerHandlerGroupsViewDataInputImport of [
 
 for (const requiredControllerHandlerGroupsViewDataInputUsage of [
   "export function buildRecordPanelControllerHandlerGroupsViewDataInput(",
-  "detailCopy: viewData.detailCopy,",
-  "selectedRecord: viewData.selectedRecord,",
+  "detailCopy: input.detailCopy,",
+  "selectedRecord: input.selectedRecord,",
 ]) {
   if (!controllerHandlerGroupsViewDataInputSource.includes(requiredControllerHandlerGroupsViewDataInputUsage)) {
     throw new Error(

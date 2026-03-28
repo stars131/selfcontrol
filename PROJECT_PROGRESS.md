@@ -3340,6 +3340,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-header-props.ts` now uses an explicit `input` parameter instead of destructuring at the function boundary while preserving the same header prop assembly
   - this keeps the header adapter aligned with the other record-panel builders so the shell-to-view adapter layer reads more uniformly
   - the record-panel structure guardrail now enforces this header-builder naming consistency so future header prop shaping does not drift back to mixed boundary styles
+- Record Panel Handler Group Helper Naming Cleanup V1:
+  - `apps/web/components/record-panel-controller-handler-groups-props-input.ts`, `record-panel-controller-handler-groups-state-input.ts`, and `record-panel-controller-handler-groups-view-data-input.ts` now use a consistent `input` parameter name while preserving the same handler-group field projection
+  - this keeps the handler-group helper layer aligned with the rest of the refactored controller adapters so helper signatures are easier to scan and maintain
+  - the record-panel structure guardrail now enforces this naming consistency so future handler-group helpers do not drift back to mixed `props/state/viewData` terminology
 
 ## Next
 - Continue the next product slice

@@ -2,10 +2,10 @@
 import type { RecordPanelControllerHandlerGroupViewDataInput } from "./record-panel-controller-handler-group-view-data-input.types";
 
 export function buildRecordPanelControllerHandlerGroupsViewDataInput(
-  viewData: RecordPanelControllerHandlerGroupViewDataInput,
+  input: RecordPanelControllerHandlerGroupViewDataInput,
 ) {
   return {
-    detailCopy: viewData.detailCopy,
-    selectedRecord: viewData.selectedRecord,
+    detailCopy: input.detailCopy,
+    selectedRecord: input.selectedRecord,
   };
 }
