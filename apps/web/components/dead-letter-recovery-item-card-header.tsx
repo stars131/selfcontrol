@@ -4,6 +4,7 @@ import { buildDeadLetterRecoveryItemCardIdentityProps } from "./dead-letter-reco
 import { DeadLetterRecoveryItemCardIdentity } from "./dead-letter-recovery-item-card-identity";
 import { buildDeadLetterRecoveryItemCardSelectionProps } from "./dead-letter-recovery-item-card-selection-props";
 import { DeadLetterRecoveryItemCardSelection } from "./dead-letter-recovery-item-card-selection";
+import { buildDeadLetterRecoveryItemCardTagsProps } from "./dead-letter-recovery-item-card-tags-props";
 import { DeadLetterRecoveryItemCardTags } from "./dead-letter-recovery-item-card-tags";
 import type { DeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header.types";
 
@@ -21,7 +22,7 @@ export function DeadLetterRecoveryItemCardHeader({
         <DeadLetterRecoveryItemCardSelection {...buildDeadLetterRecoveryItemCardSelectionProps({ bulkRetryingDeadLetter, item, onToggleSelection, selectedDeadLetterIds })} />
         <DeadLetterRecoveryItemCardIdentity {...buildDeadLetterRecoveryItemCardIdentityProps({ item, locale })} />
       </div>
-      <DeadLetterRecoveryItemCardTags item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />
+      <DeadLetterRecoveryItemCardTags {...buildDeadLetterRecoveryItemCardTagsProps({ item, locale, mediaIssueCopy })} />
     </label>
   );
 }

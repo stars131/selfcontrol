@@ -2995,6 +2995,10 @@ Last updated: 2026-03-28
   - dead-letter identity prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-identity-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-header.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-header.tsx` now keeps identity projection isolated from selection and tag projection so the header stays easier to evolve safely
   - the record-panel structure guardrail now enforces this identity-props-builder boundary so future dead-letter header changes do not regrow mixed child-prop projection logic
+- Dead-Letter Tags Props Builder Extraction V1:
+  - dead-letter tags prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-tags-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-header.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-header.tsx` now keeps selection, identity, and tags projection fully separated so the header orchestration stays easier to review and evolve safely
+  - the record-panel structure guardrail now enforces this tags-props-builder boundary so future dead-letter header changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
