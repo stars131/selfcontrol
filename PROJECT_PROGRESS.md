@@ -2987,6 +2987,10 @@ Last updated: 2026-03-28
   - dead-letter error prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-error-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card.tsx`
   - `apps/web/components/dead-letter-recovery-item-card.tsx` now keeps error projection isolated from header, status, and actions projection so the top-level card orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this error-props-builder boundary so future dead-letter card changes do not regrow mixed child-prop projection logic
+- Dead-Letter Selection Props Builder Extraction V1:
+  - dead-letter selection prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-selection-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-header.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-header.tsx` now keeps selection projection isolated from identity and tag projection so the header stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this selection-props-builder boundary so future dead-letter header changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
