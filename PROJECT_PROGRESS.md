@@ -3476,6 +3476,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issues-list-item-props.ts`, `dead-letter-recovery-list-item-props.ts`, and `record-reminder-list-item-props.ts` now use explicit `input` parameters and pass their card props through unchanged
   - this keeps the list-item card helper layer aligned with the broader helper-signature normalization work without changing list rendering behavior
   - the record-panel structure guardrail now enforces this normalized item-card helper boundary so future list-item edits stay easier to review and extend
+- Record Results Shared Card Helper Naming Cleanup V1:
+  - `apps/web/components/record-results-shared-card-props.ts` now uses an explicit `input` parameter and passes shared-card props through unchanged
+  - this keeps the results shared-card helper aligned with the broader helper-signature normalization work without changing results rendering behavior
+  - the record-panel structure guardrail now enforces this normalized shared-card helper boundary so future results helper edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
