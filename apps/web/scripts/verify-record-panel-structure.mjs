@@ -17983,7 +17983,7 @@ if (recordEditorWorkspaceMainSectionsPropsTypesLines > maxRecordEditorWorkspaceM
 
 for (const requiredRecordReminderToolsPanelPropsUsage of [
   'import type { BuildRecordReminderPanelPropsInput } from "./record-reminder-tools-panel-props.types";',
-  "}: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {",
+  "export function buildRecordReminderPanelProps(props: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {",
 ]) {
   if (!recordReminderToolsPanelPropsSource.includes(requiredRecordReminderToolsPanelPropsUsage)) {
     throw new Error(
@@ -18004,7 +18004,7 @@ for (const forbiddenRecordReminderToolsPanelPropsToken of [
 }
 
 for (const requiredRecordReminderToolsPanelPropsTypesUsage of [
-  'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; import type { RecordReminderToolsProps } from "./record-reminder-tools.types"; export type ReminderBindings = Pick<RecordReminderPanelProps, "onMarkReminderDone" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "onToggleReminderEnabled">; export type BuildRecordReminderPanelPropsInput = { bindings: ReminderBindings; props: RecordReminderToolsProps };',
+  'import type { RecordReminderPanelProps } from "./record-reminder-panel.types"; import type { RecordReminderToolsProps } from "./record-reminder-tools.types"; export type ReminderBindings = Pick<RecordReminderPanelProps, "onMarkReminderDone" | "onMessageChange" | "onRemindAtChange" | "onTitleChange" | "onToggleReminderEnabled">; export type BuildRecordReminderPanelPropsInput = RecordReminderToolsProps & { bindings: ReminderBindings };',
 ]) {
   if (!recordReminderToolsPanelPropsTypesSource.includes(requiredRecordReminderToolsPanelPropsTypesUsage)) {
     throw new Error(

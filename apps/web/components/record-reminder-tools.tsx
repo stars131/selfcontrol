@@ -5,19 +5,15 @@ import { buildRecordReminderPanelProps } from "./record-reminder-tools-panel-pro
 import { createRecordReminderBindings } from "./record-reminder-tools-bindings";
 import type { RecordReminderToolsProps } from "./record-reminder-tools.types";
 
-export function RecordReminderTools({
-  ...props
-}: RecordReminderToolsProps) {
-  const {
-    hasSelectedRecord,
-    onUpdateReminder,
-    setReminderForm,
-  } = props;
-  const bindings = createRecordReminderBindings({ onUpdateReminder, setReminderForm });
+export function RecordReminderTools(props: RecordReminderToolsProps) {
+  const bindings = createRecordReminderBindings({
+    onUpdateReminder: props.onUpdateReminder,
+    setReminderForm: props.setReminderForm,
+  });
 
-  if (!hasSelectedRecord) {
+  if (!props.hasSelectedRecord) {
     return null;
   }
 
-  return <RecordReminderPanel {...buildRecordReminderPanelProps({ bindings, props })} />;
+  return <RecordReminderPanel {...buildRecordReminderPanelProps({ ...props, bindings })} />;
 }

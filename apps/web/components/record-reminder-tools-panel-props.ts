@@ -1,13 +1,9 @@
 "use client";
 
 import type { RecordReminderPanelProps } from "./record-reminder-panel.types";
-import type { RecordReminderToolsProps } from "./record-reminder-tools.types";
 import type { BuildRecordReminderPanelPropsInput } from "./record-reminder-tools-panel-props.types";
 
-export function buildRecordReminderPanelProps({
-  bindings,
-  props,
-}: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {
+export function buildRecordReminderPanelProps(props: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {
   return {
     canWriteWorkspace: props.canWriteWorkspace,
     channelInApp: props.channelInApp,
@@ -22,11 +18,11 @@ export function buildRecordReminderPanelProps({
     noRemindersLabel: props.noRemindersLabel,
     onCreateReminder: props.onCreateReminder,
     onDeleteReminder: props.onDeleteReminder,
-    onMarkReminderDone: bindings.onMarkReminderDone,
-    onMessageChange: bindings.onMessageChange,
-    onRemindAtChange: bindings.onRemindAtChange,
-    onTitleChange: bindings.onTitleChange,
-    onToggleReminderEnabled: bindings.onToggleReminderEnabled,
+    onMarkReminderDone: props.bindings.onMarkReminderDone,
+    onMessageChange: props.bindings.onMessageChange,
+    onRemindAtChange: props.bindings.onRemindAtChange,
+    onTitleChange: props.bindings.onTitleChange,
+    onToggleReminderEnabled: props.bindings.onToggleReminderEnabled,
     pauseReminderLabel: props.pauseReminderLabel,
     reminderForm: props.reminderForm,
     reminderNoteLabel: props.reminderNoteLabel,
