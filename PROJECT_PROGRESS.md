@@ -3488,6 +3488,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-panel-list-props.ts` now uses an explicit `input` parameter and passes panel-list props through unchanged
   - this keeps the dead-letter panel-list helper aligned with the broader helper-signature normalization work without changing panel rendering behavior
   - the record-panel structure guardrail now enforces this normalized panel-list helper boundary so future dead-letter panel edits stay easier to review and extend
+- Record Media Tools Helper Naming Cleanup V1:
+  - `apps/web/components/record-media-tools-props.ts` now uses explicit `input` parameters while keeping media action and selected-content prop assembly unchanged
+  - this keeps the record-media helper layer aligned with the broader helper-signature normalization work without changing media tool behavior
+  - the record-media-tools structure verification and full guardrail suite now cover this normalized helper boundary
 
 ## Next
 - Continue the next product slice
