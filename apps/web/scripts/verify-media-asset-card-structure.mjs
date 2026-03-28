@@ -19,6 +19,15 @@ const previewContentLineCount = previewContentSource.split(/\r?\n/).length;
 const previewContentTypesPath = path.resolve(process.cwd(), "components/media-preview-content.types.ts");
 const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8");
 const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
+const metadataPropsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-props.ts");
+const metadataPropsSource = fs.readFileSync(metadataPropsPath, "utf8");
+const metadataPropsLineCount = metadataPropsSource.split(/\r?\n/).length;
+const metadataPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-props.types.ts",
+);
+const metadataPropsTypesSource = fs.readFileSync(metadataPropsTypesPath, "utf8");
+const metadataPropsTypesLineCount = metadataPropsTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
 const metadataDetailTimingPath = path.resolve(
@@ -207,6 +216,10 @@ if (!cardSource.includes('import { MediaAssetCardMetadata } from "./media-asset-
   throw new Error("media-asset-card.tsx must import MediaAssetCardMetadata");
 }
 
+if (!cardSource.includes('import { buildMediaAssetCardMetadataProps } from "./media-asset-card-metadata-props";')) {
+  throw new Error("media-asset-card.tsx must import delegated media metadata props builder");
+}
+
 if (!cardSource.includes('import { MediaAssetCardActions } from "./media-asset-card-actions";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardActions");
 }
@@ -225,6 +238,10 @@ if (!cardSource.includes('import type { MediaAssetCardProps } from "./media-asse
 
 if (!cardSource.includes("<MediaAssetCardMetadata")) {
   throw new Error("media-asset-card.tsx must delegate metadata rendering");
+}
+
+if (!cardSource.includes("buildMediaAssetCardMetadataProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })")) {
+  throw new Error("media-asset-card.tsx must delegate media metadata prop assembly");
 }
 
 if (!cardSource.includes("<MediaAssetCardActions")) {
@@ -255,6 +272,62 @@ for (const forbiddenCardActionPropsToken of [
       `media-asset-card.tsx must keep media action prop assembly delegated: ${forbiddenCardActionPropsToken}`,
     );
   }
+}
+
+for (const forbiddenCardMetadataPropsToken of [
+  "formatHistoryTimestampLabel={formatHistoryTimestampLabel}",
+  "mediaIssueCopy={mediaIssueCopy}",
+]) {
+  if (cardSource.includes(forbiddenCardMetadataPropsToken)) {
+    throw new Error(
+      `media-asset-card.tsx must keep media metadata prop assembly delegated: ${forbiddenCardMetadataPropsToken}`,
+    );
+  }
+}
+
+for (const requiredMetadataPropsUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
+  'import type { BuildMediaAssetCardMetadataPropsInput } from "./media-asset-card-metadata-props.types";',
+  "}: BuildMediaAssetCardMetadataPropsInput): MediaAssetCardMetadataProps {",
+  "return { asset, formatHistoryTimestampLabel, mediaIssueCopy };",
+]) {
+  if (!metadataPropsSource.includes(requiredMetadataPropsUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-props.ts must own media metadata prop assembly: ${requiredMetadataPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMetadataPropsToken of [
+  "<MediaAssetCardMetadata",
+  "<MediaAssetCardActions",
+  "<MediaAssetCardPreview",
+]) {
+  if (metadataPropsSource.includes(forbiddenMetadataPropsToken)) {
+    throw new Error(
+      `media-asset-card-metadata-props.ts must keep render concerns delegated: ${forbiddenMetadataPropsToken}`,
+    );
+  }
+}
+
+if (metadataPropsLineCount > 4) {
+  throw new Error(`media-asset-card-metadata-props.ts exceeded 4 lines: ${metadataPropsLineCount}`);
+}
+
+for (const requiredMetadataPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardMetadataPropsInput = Pick<MediaAssetCardProps, "asset" | "formatHistoryTimestampLabel" | "mediaIssueCopy">;',
+]) {
+  if (!metadataPropsTypesSource.includes(requiredMetadataPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-props.types.ts must own media metadata prop input typing: ${requiredMetadataPropsTypesUsage}`,
+    );
+  }
+}
+
+if (metadataPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-metadata-props.types.ts exceeded 2 lines: ${metadataPropsTypesLineCount}`,
+  );
 }
 
 for (const requiredActionsPropsUsage of [
