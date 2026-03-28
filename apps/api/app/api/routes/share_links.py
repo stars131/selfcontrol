@@ -1,9 +1,14 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_role
+from app.api.routes.share_link_route_helpers import (
+    apply_share_link_update,
+    get_workspace_share_link_or_404,
+    validate_share_link_permission_code,
+)
 from app.db.session import get_db
 from app.models.share_link import ShareLink
 from app.models.user import User
@@ -39,8 +44,7 @@ def create_workspace_share_link(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
-    if payload.permission_code not in {"viewer", "editor"}:
-        raise HTTPException(status_code=400, detail="Invalid permission code")
+    validate_share_link_permission_code(payload.permission_code)
 
     item, access_token = create_share_link(
         db,
@@ -80,12 +84,9 @@ def update_workspace_share_link(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
-    item = db.get(ShareLink, share_link_id)
-    if not item or item.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Share link not found")
+    item = get_workspace_share_link_or_404(db, workspace_id=workspace_id, share_link_id=share_link_id)
 
-    for field, value in payload.model_dump(exclude_unset=True).items():
-        setattr(item, field, value)
+    apply_share_link_update(item, payload.model_dump(exclude_unset=True))
     db.add(item)
     db.commit()
     db.refresh(item)

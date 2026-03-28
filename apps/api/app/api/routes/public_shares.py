@@ -4,12 +4,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
+from app.api.routes.share_link_route_helpers import (
+    get_active_share_link_and_workspace_or_404,
+    serialize_share_link_preview,
+    serialize_workspace_for_member,
+)
 from app.db.session import get_db
-from app.models.workspace import Workspace
 from app.models.user import User
 from app.schemas.workspace import WorkspaceRead
 from app.services.audit import log_audit_event
-from app.services.share_links import accept_share_link, get_share_link_by_token, is_share_link_active
+from app.services.share_links import accept_share_link
 
 
 router = APIRouter()
@@ -20,28 +24,12 @@ def preview_share_link(
     token: str,
     db: Session = Depends(get_db),
 ) -> dict:
-    item = get_share_link_by_token(db, token)
-    if not item or not is_share_link_active(item):
-        raise HTTPException(status_code=404, detail="Share link not found")
-
-    workspace = db.get(Workspace, item.workspace_id)
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
+    item, workspace = get_active_share_link_and_workspace_or_404(db, token=token)
 
     return {
         "success": True,
         "data": {
-            "preview": {
-                "name": item.name,
-                "workspace_id": workspace.id,
-                "workspace_name": workspace.name,
-                "workspace_slug": workspace.slug,
-                "permission_code": item.permission_code,
-                "is_enabled": item.is_enabled,
-                "expires_at": item.expires_at.isoformat() if item.expires_at else None,
-                "max_uses": item.max_uses,
-                "use_count": item.use_count,
-            }
+            "preview": serialize_share_link_preview(item, workspace)
         },
     }
 
@@ -67,4 +55,11 @@ def accept_workspace_share(
         message=f"Accepted share link into workspace {workspace.name}",
         metadata_json={"workspace_id": workspace.id},
     )
-    return {"success": True, "data": {"workspace": WorkspaceRead.model_validate(workspace).model_dump()}}
+    return {
+        "success": True,
+        "data": {
+            "workspace": WorkspaceRead.model_validate(
+                serialize_workspace_for_member(db, workspace=workspace, user_id=current_user.id)
+            ).model_dump()
+        },
+    }

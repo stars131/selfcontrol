@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Share Link Route Helper And API Coverage V1:
+  - `apps/api/app/api/routes/share_link_route_helpers.py` now owns share-link permission validation, workspace-scoped share-link lookup, active public-share lookup, preview serialization, share-link patch application, and accepted-workspace serialization for the share flows
+  - `apps/api/app/api/routes/share_links.py` and `apps/api/app/api/routes/public_shares.py` now delegate those repeated boundary and serialization responsibilities instead of carrying them inline
+  - `apps/api/tests/test_share_links_api.py` now covers share-link create/list/update plus public preview and accept flows, which also locks in the accepted-workspace `role` field that previously had no direct regression coverage
 - Reminder And Notification Route Helper Coverage V1:
   - `apps/api/app/api/routes/reminder_route_helpers.py` now owns workspace-scoped record, reminder, and notification lookup plus reminder and notification update application logic
   - `apps/api/app/api/routes/reminders.py` and `apps/api/app/api/routes/notifications.py` now delegate those repeated boundary checks and state transitions instead of carrying them inline
