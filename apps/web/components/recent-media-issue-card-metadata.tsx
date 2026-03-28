@@ -4,6 +4,6 @@ import { buildRecentMediaIssueCardActionNoticeProps } from "./recent-media-issue
 import { buildRecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details-props";
 import { RecentMediaIssueCardMetadataDetails } from "./recent-media-issue-card-metadata-details";
 import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";
-export function RecentMediaIssueCardMetadata({ action, formatHistoryTimestampLabel, issue, mediaIssueCopy }: RecentMediaIssueCardMetadataProps) {
-  return <><RecentMediaIssueCardMetadataDetails {...buildRecentMediaIssueCardMetadataDetailsProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })} /><RecentMediaIssueCardActionNotice {...buildRecentMediaIssueCardActionNoticeProps({ action })} /></>;
+export function RecentMediaIssueCardMetadata(props: RecentMediaIssueCardMetadataProps) {
+  return <><RecentMediaIssueCardMetadataDetails {...buildRecentMediaIssueCardMetadataDetailsProps(props)} /><RecentMediaIssueCardActionNotice {...buildRecentMediaIssueCardActionNoticeProps({ action: props.action })} /></>;
 }

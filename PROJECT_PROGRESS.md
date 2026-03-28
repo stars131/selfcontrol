@@ -3167,6 +3167,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issue-card.tsx` now forwards its full `RecentMediaIssueCardProps` contract directly into the tags, metadata, and actions props builders while only narrowing `issue` for the tiny intro and error builders
   - the recent-media issue card now stays focused on section composition instead of repeating broad child-prop projection across multiple sections
   - the record-panel structure guardrail now enforces direct recent-media card props reuse so future card edits do not regrow duplicated builder input assembly
+- Recent Media Metadata And Actions Props Reuse Simplification V1:
+  - `apps/web/components/recent-media-issue-card-metadata.tsx` and `apps/web/components/recent-media-issue-card-actions.tsx` now forward their full typed props contracts directly into their child props builders instead of repeating inline child-prop projection
+  - the recent-media metadata and actions layers now stay focused on section composition and gating while the child builders continue owning narrowed contracts
+  - the record-panel structure guardrail now enforces this direct props reuse so future recent-media section edits do not regrow duplicated builder input assembly
 
 ## Next
 - Continue the next product slice

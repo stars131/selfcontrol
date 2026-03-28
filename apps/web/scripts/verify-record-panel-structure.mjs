@@ -29491,10 +29491,10 @@ for (const requiredRecentMediaIssueCardMetadataUsage of [
   'import { RecentMediaIssueCardMetadataDetails } from "./recent-media-issue-card-metadata-details";',
   'import { RecentMediaIssueCardActionNotice } from "./recent-media-issue-card-action-notice";',
   'import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types";',
-  "}: RecentMediaIssueCardMetadataProps) {",
-  "buildRecentMediaIssueCardMetadataDetailsProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "export function RecentMediaIssueCardMetadata(props: RecentMediaIssueCardMetadataProps) {",
+  "buildRecentMediaIssueCardMetadataDetailsProps(props)",
   "<RecentMediaIssueCardMetadataDetails",
-  "buildRecentMediaIssueCardActionNoticeProps({ action })",
+  "buildRecentMediaIssueCardActionNoticeProps({ action: props.action })",
   "<RecentMediaIssueCardActionNotice",
 ]) {
   if (!recentMediaIssueCardMetadataSource.includes(requiredRecentMediaIssueCardMetadataUsage)) {
@@ -29509,6 +29509,8 @@ if (recentMediaIssueCardMetadataSource.includes("type RecentMediaIssueCardMetada
 }
 
 for (const forbiddenRecentMediaIssueCardMetadataToken of [
+  "buildRecentMediaIssueCardMetadataDetailsProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "buildRecentMediaIssueCardActionNoticeProps({ action })",
   '{mediaIssueCopy.lastAttempt}: {formatHistoryTimestampLabel(issue.processing_last_attempt_at)}',
   '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
   '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
@@ -30111,8 +30113,9 @@ for (const requiredRecentMediaIssueCardActionsUsage of [
   'import { buildRecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons-props";',
   'import { RecentMediaIssueCardActionButtons } from "./recent-media-issue-card-action-buttons";',
   'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
-  "}: RecentMediaIssueCardActionsProps) {",
-  "buildRecentMediaIssueCardActionButtonsProps({",
+  "export function RecentMediaIssueCardActions(props: RecentMediaIssueCardActionsProps) {",
+  "if (!props.canWriteWorkspace && !props.settingsHref)",
+  "buildRecentMediaIssueCardActionButtonsProps(props)",
   "return <RecentMediaIssueCardActionButtons",
 ]) {
   if (!recentMediaIssueCardActionsSource.includes(requiredRecentMediaIssueCardActionsUsage)) {
@@ -30131,6 +30134,7 @@ for (const forbiddenRecentMediaIssueCardActionsToken of [
   'import { canRetryMediaIssue } from "../lib/record-panel-media";',
   '<div className="action-row" style={{ marginTop: 10 }}>',
   "retryingMediaId === issue.media_id",
+  "buildRecentMediaIssueCardActionButtonsProps({",
   "canWriteWorkspace={canWriteWorkspace}",
   "settingsHref={settingsHref}",
 ]) {
