@@ -3484,6 +3484,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-media-retention-card-action-helpers.ts` now uses explicit `input` parameters for both message derivation and action prop assembly while keeping retention behavior unchanged
   - this keeps the media-retention helper layer aligned with the broader helper-signature normalization work without changing retention actions or messaging
   - the workspace-media-retention and record-panel structure guardrails now enforce this normalized helper boundary so future retention helper edits stay easier to review and extend
+- Dead Letter Panel List Helper Naming Cleanup V1:
+  - `apps/web/components/dead-letter-recovery-panel-list-props.ts` now uses an explicit `input` parameter and passes panel-list props through unchanged
+  - this keeps the dead-letter panel-list helper aligned with the broader helper-signature normalization work without changing panel rendering behavior
+  - the record-panel structure guardrail now enforces this normalized panel-list helper boundary so future dead-letter panel edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

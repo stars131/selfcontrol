@@ -35446,10 +35446,7 @@ if (deadLetterRecoveryPanelContentSource.split(/\r?\n/).length > maxDeadLetterRe
 for (const requiredDeadLetterRecoveryPanelListPropsUsage of [
   'import type { DeadLetterRecoveryPanelListProps } from "./dead-letter-recovery-panel-list.types";',
   'import type { BuildDeadLetterRecoveryPanelListPropsInput } from "./dead-letter-recovery-panel-list-props.types";',
-  "export function buildDeadLetterRecoveryPanelListProps({",
-  "}: BuildDeadLetterRecoveryPanelListPropsInput): DeadLetterRecoveryPanelListProps {",
-  "...props,",
-  "mediaDeadLetterOverview,",
+  "export function buildDeadLetterRecoveryPanelListProps(input: BuildDeadLetterRecoveryPanelListPropsInput): DeadLetterRecoveryPanelListProps { return input; }",
 ]) {
   if (!deadLetterRecoveryPanelListPropsSource.includes(requiredDeadLetterRecoveryPanelListPropsUsage)) {
     throw new Error(
