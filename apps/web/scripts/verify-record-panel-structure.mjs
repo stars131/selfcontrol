@@ -2848,6 +2848,14 @@ const recentMediaIssueCardNextRetryDetailPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-next-retry-detail.tsx",
 );
+const recentMediaIssueCardNextRetryDetailPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-next-retry-detail-props.ts",
+);
+const recentMediaIssueCardNextRetryDetailPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-next-retry-detail-props.types.ts",
+);
 const recentMediaIssueCardNextRetryDetailTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-next-retry-detail.types.ts",
@@ -5227,6 +5235,14 @@ const recentMediaIssueCardNextRetryDetailSource = fs.readFileSync(
   recentMediaIssueCardNextRetryDetailPath,
   "utf8",
 );
+const recentMediaIssueCardNextRetryDetailPropsSource = fs.readFileSync(
+  recentMediaIssueCardNextRetryDetailPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardNextRetryDetailPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardNextRetryDetailPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardNextRetryDetailTypesSource = fs.readFileSync(
   recentMediaIssueCardNextRetryDetailTypesPath,
   "utf8",
@@ -7291,6 +7307,10 @@ const recentMediaIssueCardLastFailureDetailTypesLines =
   recentMediaIssueCardLastFailureDetailTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardNextRetryDetailLines =
   recentMediaIssueCardNextRetryDetailSource.split(/\r?\n/).length;
+const recentMediaIssueCardNextRetryDetailPropsLines =
+  recentMediaIssueCardNextRetryDetailPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardNextRetryDetailPropsTypesLines =
+  recentMediaIssueCardNextRetryDetailPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardNextRetryDetailTypesLines =
   recentMediaIssueCardNextRetryDetailTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardLastAttemptDetailLines =
@@ -28108,6 +28128,7 @@ for (const requiredRecentMediaIssueCardMetadataDetailsUsage of [
   'import { RecentMediaIssueCardLastAttemptDetail } from "./recent-media-issue-card-last-attempt-detail";',
   'import { buildRecentMediaIssueCardLastFailureDetailProps } from "./recent-media-issue-card-last-failure-detail-props";',
   'import { RecentMediaIssueCardLastFailureDetail } from "./recent-media-issue-card-last-failure-detail";',
+  'import { buildRecentMediaIssueCardNextRetryDetailProps } from "./recent-media-issue-card-next-retry-detail-props";',
   'import { RecentMediaIssueCardNextRetryDetail } from "./recent-media-issue-card-next-retry-detail";',
   'import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types";',
   "}: RecentMediaIssueCardMetadataDetailsProps) {",
@@ -28115,7 +28136,8 @@ for (const requiredRecentMediaIssueCardMetadataDetailsUsage of [
   "<RecentMediaIssueCardLastAttemptDetail",
   "buildRecentMediaIssueCardLastFailureDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
   "<RecentMediaIssueCardLastFailureDetail",
-  "<RecentMediaIssueCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
+  "buildRecentMediaIssueCardNextRetryDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy })",
+  "<RecentMediaIssueCardNextRetryDetail",
 ]) {
   if (!recentMediaIssueCardMetadataDetailsSource.includes(requiredRecentMediaIssueCardMetadataDetailsUsage)) {
     throw new Error(
@@ -28139,6 +28161,7 @@ for (const forbiddenRecentMediaIssueCardMetadataDetailsToken of [
   '{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(issue.processing_last_failure_at)}',
   "<RecentMediaIssueCardLastFailureDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
   '{mediaIssueCopy.nextRetry}: {formatHistoryTimestampLabel(issue.processing_retry_next_attempt_at)}',
+  "<RecentMediaIssueCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} issue={issue} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (recentMediaIssueCardMetadataDetailsSource.includes(forbiddenRecentMediaIssueCardMetadataDetailsToken)) {
     throw new Error(
@@ -28147,7 +28170,7 @@ for (const forbiddenRecentMediaIssueCardMetadataDetailsToken of [
   }
 }
 
-const maxRecentMediaIssueCardMetadataDetailsLines = 11;
+const maxRecentMediaIssueCardMetadataDetailsLines = 12;
 if (recentMediaIssueCardMetadataDetailsLines > maxRecentMediaIssueCardMetadataDetailsLines) {
   throw new Error(
     `recent-media-issue-card-metadata-details.tsx exceeded ${maxRecentMediaIssueCardMetadataDetailsLines} lines: ${recentMediaIssueCardMetadataDetailsLines}`,
@@ -28330,6 +28353,68 @@ if (
 ) {
   throw new Error(
     `recent-media-issue-card-next-retry-detail.types.ts exceeded ${maxRecentMediaIssueCardNextRetryDetailTypesLines} lines: ${recentMediaIssueCardNextRetryDetailTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardNextRetryDetailPropsUsage of [
+  'import type { RecentMediaIssueCardNextRetryDetailProps } from "./recent-media-issue-card-next-retry-detail.types";',
+  'import type { BuildRecentMediaIssueCardNextRetryDetailPropsInput } from "./recent-media-issue-card-next-retry-detail-props.types";',
+  "export function buildRecentMediaIssueCardNextRetryDetailProps({ formatHistoryTimestampLabel, issue, mediaIssueCopy }: BuildRecentMediaIssueCardNextRetryDetailPropsInput): RecentMediaIssueCardNextRetryDetailProps {",
+]) {
+  if (!recentMediaIssueCardNextRetryDetailPropsSource.includes(requiredRecentMediaIssueCardNextRetryDetailPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-next-retry-detail-props.ts must own next-retry detail prop projection: ${requiredRecentMediaIssueCardNextRetryDetailPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardNextRetryDetailPropsToken of [
+  "<RecentMediaIssueCardNextRetryDetail",
+  "processing_retry_next_attempt_at",
+  '<div className="muted"',
+]) {
+  if (
+    recentMediaIssueCardNextRetryDetailPropsSource.includes(
+      forbiddenRecentMediaIssueCardNextRetryDetailPropsToken,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-next-retry-detail-props.ts must keep rendering and timestamp rules delegated: ${forbiddenRecentMediaIssueCardNextRetryDetailPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardNextRetryDetailPropsLines = 5;
+if (
+  recentMediaIssueCardNextRetryDetailPropsLines >
+  maxRecentMediaIssueCardNextRetryDetailPropsLines
+) {
+  throw new Error(
+    `recent-media-issue-card-next-retry-detail-props.ts exceeded ${maxRecentMediaIssueCardNextRetryDetailPropsLines} lines: ${recentMediaIssueCardNextRetryDetailPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardNextRetryDetailPropsTypesUsage of [
+  'import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types"; export type BuildRecentMediaIssueCardNextRetryDetailPropsInput = Pick<RecentMediaIssueCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy">;',
+]) {
+  if (
+    !recentMediaIssueCardNextRetryDetailPropsTypesSource.includes(
+      requiredRecentMediaIssueCardNextRetryDetailPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-next-retry-detail-props.types.ts must own next-retry-detail-props input typing: ${requiredRecentMediaIssueCardNextRetryDetailPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardNextRetryDetailPropsTypesLines = 2;
+if (
+  recentMediaIssueCardNextRetryDetailPropsTypesLines >
+  maxRecentMediaIssueCardNextRetryDetailPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-next-retry-detail-props.types.ts exceeded ${maxRecentMediaIssueCardNextRetryDetailPropsTypesLines} lines: ${recentMediaIssueCardNextRetryDetailPropsTypesLines}`,
   );
 }
 

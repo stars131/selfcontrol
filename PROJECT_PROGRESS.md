@@ -3067,6 +3067,10 @@ Last updated: 2026-03-28
   - recent-media last-failure detail prop assembly now lives in `apps/web/components/recent-media-issue-card-last-failure-detail-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
   - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now keeps last-failure detail projection isolated from the other metadata detail leaves so the details section stays easier to evolve safely
   - the record-panel structure guardrail now enforces this last-failure-detail-props-builder boundary so future recent-media metadata detail changes do not regrow mixed child-prop projection logic
+- Recent Media Next Retry Detail Props Builder Extraction V1:
+  - recent-media next-retry detail prop assembly now lives in `apps/web/components/recent-media-issue-card-next-retry-detail-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
+  - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now keeps next-retry detail projection isolated from the other metadata detail leaves so the details section stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this next-retry-detail-props-builder boundary so future recent-media metadata detail changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
