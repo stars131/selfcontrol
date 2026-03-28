@@ -3,44 +3,31 @@ import type { RecordReminderItemCardActionsProps } from "./record-reminder-item-
 import type { RecordReminderItemCardSummaryProps } from "./record-reminder-item-card-summary.types";
 import type { BuildRecordReminderItemCardChildPropsInput } from "./record-reminder-item-card-child-props.types";
 
-export function buildRecordReminderItemCardSummaryProps({
-  formatReminderEnabledLabel,
-  formatReminderStatusLabel,
-  formatReminderTimestampLabel,
-  reminder,
-  selectedRecordTitle,
-  untitledReminderLabel,
-}: BuildRecordReminderItemCardChildPropsInput): RecordReminderItemCardSummaryProps {
+export function buildRecordReminderItemCardSummaryProps(
+  input: BuildRecordReminderItemCardChildPropsInput,
+): RecordReminderItemCardSummaryProps {
   return {
-    formatReminderEnabledLabel,
-    formatReminderStatusLabel,
-    formatReminderTimestampLabel,
-    reminder,
-    selectedRecordTitle,
-    untitledReminderLabel,
+    formatReminderEnabledLabel: input.formatReminderEnabledLabel,
+    formatReminderStatusLabel: input.formatReminderStatusLabel,
+    formatReminderTimestampLabel: input.formatReminderTimestampLabel,
+    reminder: input.reminder,
+    selectedRecordTitle: input.selectedRecordTitle,
+    untitledReminderLabel: input.untitledReminderLabel,
   };
 }
 
-export function buildRecordReminderItemCardActionsProps({
-  canWriteWorkspace,
-  deleteReminderLabel,
-  enableReminderLabel,
-  markReminderDoneLabel,
-  onDeleteReminder,
-  onMarkReminderDone,
-  onToggleReminderEnabled,
-  pauseReminderLabel,
-  reminder,
-}: BuildRecordReminderItemCardChildPropsInput): RecordReminderItemCardActionsProps {
+export function buildRecordReminderItemCardActionsProps(
+  input: BuildRecordReminderItemCardChildPropsInput,
+): RecordReminderItemCardActionsProps {
   return {
-    canWriteWorkspace,
-    deleteReminderLabel,
-    enableReminderLabel,
-    markReminderDoneLabel,
-    onDeleteReminder,
-    onMarkReminderDone,
-    onToggleReminderEnabled,
-    pauseReminderLabel,
-    reminder,
+    canWriteWorkspace: input.canWriteWorkspace,
+    deleteReminderLabel: input.deleteReminderLabel,
+    enableReminderLabel: input.enableReminderLabel,
+    markReminderDoneLabel: input.markReminderDoneLabel,
+    onDeleteReminder: input.onDeleteReminder,
+    onMarkReminderDone: input.onMarkReminderDone,
+    onToggleReminderEnabled: input.onToggleReminderEnabled,
+    pauseReminderLabel: input.pauseReminderLabel,
+    reminder: input.reminder,
   };
 }

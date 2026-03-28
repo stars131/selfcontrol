@@ -35092,13 +35092,12 @@ for (const requiredRecordReminderPanelChildPropsUsage of [
   'import type { RecordReminderFormProps } from "./record-reminder-form.types";',
   'import type { RecordReminderListProps } from "./record-reminder-list.types";',
   'import type { BuildRecordReminderPanelChildPropsInput } from "./record-reminder-panel-child-props.types";',
-  "export function buildRecordReminderFormProps({",
-  "}: BuildRecordReminderPanelChildPropsInput): RecordReminderFormProps {",
-  "export function buildRecordReminderListProps({",
-  "}: BuildRecordReminderPanelChildPropsInput): RecordReminderListProps {",
-  "onCreateReminder,",
-  "formatReminderEnabledLabel,",
-  "selectedRecordTitle,",
+  "export function buildRecordReminderFormProps(",
+  "input: BuildRecordReminderPanelChildPropsInput,",
+  "export function buildRecordReminderListProps(",
+  "onCreateReminder: input.onCreateReminder,",
+  "formatReminderEnabledLabel: input.formatReminderEnabledLabel,",
+  "selectedRecordTitle: input.selectedRecordTitle,",
 ]) {
   if (!recordReminderPanelChildPropsSource.includes(requiredRecordReminderPanelChildPropsUsage)) {
     throw new Error(
@@ -35189,13 +35188,12 @@ for (const requiredRecordReminderItemCardChildPropsUsage of [
   'import type { RecordReminderItemCardActionsProps } from "./record-reminder-item-card-actions.types";',
   'import type { RecordReminderItemCardSummaryProps } from "./record-reminder-item-card-summary.types";',
   'import type { BuildRecordReminderItemCardChildPropsInput } from "./record-reminder-item-card-child-props.types";',
-  "export function buildRecordReminderItemCardSummaryProps({",
-  "}: BuildRecordReminderItemCardChildPropsInput): RecordReminderItemCardSummaryProps {",
-  "export function buildRecordReminderItemCardActionsProps({",
-  "}: BuildRecordReminderItemCardChildPropsInput): RecordReminderItemCardActionsProps {",
-  "formatReminderEnabledLabel,",
-  "onToggleReminderEnabled,",
-  "selectedRecordTitle,",
+  "export function buildRecordReminderItemCardSummaryProps(",
+  "input: BuildRecordReminderItemCardChildPropsInput,",
+  "export function buildRecordReminderItemCardActionsProps(",
+  "formatReminderEnabledLabel: input.formatReminderEnabledLabel,",
+  "onToggleReminderEnabled: input.onToggleReminderEnabled,",
+  "selectedRecordTitle: input.selectedRecordTitle,",
 ]) {
   if (!recordReminderItemCardChildPropsSource.includes(requiredRecordReminderItemCardChildPropsUsage)) {
     throw new Error(
