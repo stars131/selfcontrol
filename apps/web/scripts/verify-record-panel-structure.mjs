@@ -10121,6 +10121,9 @@ for (const requiredEditorWorkspacePropsImport of [
 }
 
 for (const requiredEditorWorkspacePropsUsage of [
+  "export function buildRecordEditorWorkspaceProps(",
+  "input: BuildRecordEditorWorkspacePropsInput,",
+  "const { detailCopy } = input;",
   "buildRecordEditorWorkspaceBaseProps(buildRecordEditorWorkspaceBasePropsInput(input))",
   "buildRecordEditorWorkspaceCopyProps({ detailCopy })",
   "buildRecordEditorWorkspaceActionProps(buildRecordEditorWorkspaceActionPropsInput(input))",

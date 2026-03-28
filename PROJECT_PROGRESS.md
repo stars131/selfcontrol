@@ -3492,6 +3492,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-media-tools-props.ts` now uses explicit `input` parameters while keeping media action and selected-content prop assembly unchanged
   - this keeps the record-media helper layer aligned with the broader helper-signature normalization work without changing media tool behavior
   - the record-media-tools structure verification and full guardrail suite now cover this normalized helper boundary
+- Record Editor Workspace Root Helper Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-editor-workspace-props.ts` now uses an explicit `input` parameter while keeping its base/copy/action composition unchanged
+  - this keeps the root editor-workspace helper aligned with the broader helper-signature normalization work without changing editor assembly behavior
+  - the record-panel structure guardrail now enforces this normalized root-helper boundary so future editor workspace edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

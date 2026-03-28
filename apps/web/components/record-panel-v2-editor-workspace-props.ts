@@ -10,10 +10,10 @@ import {
   buildRecordEditorWorkspaceBasePropsInput,
 } from "./record-panel-v2-editor-workspace-props-inputs";
 
-export function buildRecordEditorWorkspaceProps({
-  detailCopy,
-  ...input
-}: BuildRecordEditorWorkspacePropsInput): RecordEditorWorkspaceProps {
+export function buildRecordEditorWorkspaceProps(
+  input: BuildRecordEditorWorkspacePropsInput,
+): RecordEditorWorkspaceProps {
+  const { detailCopy } = input;
   const copyProps = buildRecordEditorWorkspaceCopyProps({ detailCopy });
   const baseProps = buildRecordEditorWorkspaceBaseProps(buildRecordEditorWorkspaceBasePropsInput(input));
   const actionProps = buildRecordEditorWorkspaceActionProps(buildRecordEditorWorkspaceActionPropsInput(input));
