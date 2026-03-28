@@ -20,11 +20,15 @@ REQUIRED_DOCS: dict[str, tuple[str, ...]] = {
 }
 
 
-def main() -> int:
-    repo_root = Path(__file__).resolve().parent.parent
+def verify_repository_docs(
+    repo_root: Path,
+    *,
+    required_docs: dict[str, tuple[str, ...]] | None = None,
+) -> list[str]:
+    required = required_docs or REQUIRED_DOCS
     errors: list[str] = []
 
-    for relative_path, required_markers in REQUIRED_DOCS.items():
+    for relative_path, required_markers in required.items():
         path = repo_root / relative_path
         if not path.exists():
             errors.append(f"Missing required documentation file: {relative_path}")
@@ -46,6 +50,13 @@ def main() -> int:
         for marker in required_markers:
             if marker not in content:
                 errors.append(f"Documentation file is missing required marker '{marker}': {relative_path}")
+
+    return errors
+
+
+def main() -> int:
+    repo_root = Path(__file__).resolve().parent.parent
+    errors = verify_repository_docs(repo_root)
 
     if errors:
         for error in errors:

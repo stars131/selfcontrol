@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Repository Documentation Guardrail Test Coverage V1:
+  - `scripts/verify-repository-docs.py` now exposes a reusable `verify_repository_docs` function instead of keeping all verification logic embedded inside the CLI entrypoint
+  - `apps/api/tests/test_repository_docs_verification.py` now covers the repository documentation guard against the main failure modes: missing files, invalid UTF-8 content, and replacement-character corruption
+  - this turns the new repository documentation baseline check into a tested contract rather than an unverified utility script, which strengthens long-term maintainability
 - Linux Root CI Verification Coverage V1:
   - `.github/workflows/ci.yml` now adds a dedicated `linux-verify-all` job that installs API and web dependencies on `ubuntu-latest` and executes `sh ./scripts/verify-all.sh`
   - this complements the existing Windows root verification job so both maintained root entrypoints are now exercised in hosted CI instead of relying only on split API/web jobs plus local checks
