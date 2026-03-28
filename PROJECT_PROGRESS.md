@@ -3027,6 +3027,10 @@ Last updated: 2026-03-28
   - dead-letter retry-budget prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-retry-budget-used-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now keeps retry-budget projection isolated from the other metadata leaves so the metadata section stays easier to evolve safely
   - the record-panel structure guardrail now enforces this retry-budget-props-builder boundary so future dead-letter metadata changes do not regrow mixed child-prop projection logic
+- Recent Media Processing Status Tag Props Builder Extraction V1:
+  - recent-media processing-status tag prop assembly now lives in `apps/web/components/recent-media-issue-card-processing-status-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
+  - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps processing-status tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this processing-status-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

@@ -2904,6 +2904,14 @@ const recentMediaIssueCardProcessingStatusTagPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-processing-status-tag.tsx",
 );
+const recentMediaIssueCardProcessingStatusTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-processing-status-tag-props.ts",
+);
+const recentMediaIssueCardProcessingStatusTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-processing-status-tag-props.types.ts",
+);
 const recentMediaIssueCardProcessingStatusTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-processing-status-tag.types.ts",
@@ -5197,6 +5205,14 @@ const recentMediaIssueCardProcessingStatusTagSource = fs.readFileSync(
   recentMediaIssueCardProcessingStatusTagPath,
   "utf8",
 );
+const recentMediaIssueCardProcessingStatusTagPropsSource = fs.readFileSync(
+  recentMediaIssueCardProcessingStatusTagPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardProcessingStatusTagPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardProcessingStatusTagPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardProcessingStatusTagTypesSource = fs.readFileSync(
   recentMediaIssueCardProcessingStatusTagTypesPath,
   "utf8",
@@ -7153,6 +7169,10 @@ const recentMediaIssueCardTagsPropsTypesLines =
   recentMediaIssueCardTagsPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardProcessingStatusTagLines =
   recentMediaIssueCardProcessingStatusTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardProcessingStatusTagPropsLines =
+  recentMediaIssueCardProcessingStatusTagPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardProcessingStatusTagPropsTypesLines =
+  recentMediaIssueCardProcessingStatusTagPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardProcessingStatusTagTypesLines =
   recentMediaIssueCardProcessingStatusTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardStorageProviderTagLines =
@@ -28430,6 +28450,7 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 for (const requiredRecentMediaIssueCardTagsUsage of [
   'import { RecentMediaIssueCardExtractionModeTag } from "./recent-media-issue-card-extraction-mode-tag";',
   'import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";',
+  'import { buildRecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag-props";',
   'import { RecentMediaIssueCardProcessingStatusTag } from "./recent-media-issue-card-processing-status-tag";',
   'import { RecentMediaIssueCardProcessingSourceTag } from "./recent-media-issue-card-processing-source-tag";',
   'import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";',
@@ -28438,7 +28459,8 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   'import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
   "}: RecentMediaIssueCardTagsProps) {",
-  "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
+  "buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale })",
+  "<RecentMediaIssueCardProcessingStatusTag",
   "<RecentMediaIssueCardStorageProviderTag issue={issue} locale={locale} />",
   "<RecentMediaIssueCardExtractionModeTag issue={issue} />",
   "<RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />",
@@ -28470,6 +28492,7 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "{issue.processing_source}",
   "{issue.extraction_mode}",
   "getProcessingStatusLabel(locale, issue.processing_status)",
+  "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
   "getStorageProviderLabel(locale, issue.storage_provider)",
 ]) {
   if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
@@ -28535,6 +28558,68 @@ const maxRecentMediaIssueCardProcessingStatusTagTypesLines = 2;
 if (recentMediaIssueCardProcessingStatusTagTypesLines > maxRecentMediaIssueCardProcessingStatusTagTypesLines) {
   throw new Error(
     `recent-media-issue-card-processing-status-tag.types.ts exceeded ${maxRecentMediaIssueCardProcessingStatusTagTypesLines} lines: ${recentMediaIssueCardProcessingStatusTagTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardProcessingStatusTagPropsUsage of [
+  'import type { RecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag.types";',
+  'import type { BuildRecentMediaIssueCardProcessingStatusTagPropsInput } from "./recent-media-issue-card-processing-status-tag-props.types";',
+  "export function buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale }: BuildRecentMediaIssueCardProcessingStatusTagPropsInput): RecentMediaIssueCardProcessingStatusTagProps {",
+]) {
+  if (!recentMediaIssueCardProcessingStatusTagPropsSource.includes(requiredRecentMediaIssueCardProcessingStatusTagPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-processing-status-tag-props.ts must own processing-status tag prop projection: ${requiredRecentMediaIssueCardProcessingStatusTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardProcessingStatusTagPropsToken of [
+  "<RecentMediaIssueCardProcessingStatusTag",
+  "getProcessingStatusLabel(",
+  '<div className="tag-row">',
+]) {
+  if (
+    recentMediaIssueCardProcessingStatusTagPropsSource.includes(
+      forbiddenRecentMediaIssueCardProcessingStatusTagPropsToken,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-processing-status-tag-props.ts must keep rendering and label rules delegated: ${forbiddenRecentMediaIssueCardProcessingStatusTagPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardProcessingStatusTagPropsLines = 5;
+if (
+  recentMediaIssueCardProcessingStatusTagPropsLines >
+  maxRecentMediaIssueCardProcessingStatusTagPropsLines
+) {
+  throw new Error(
+    `recent-media-issue-card-processing-status-tag-props.ts exceeded ${maxRecentMediaIssueCardProcessingStatusTagPropsLines} lines: ${recentMediaIssueCardProcessingStatusTagPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardProcessingStatusTagPropsTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type BuildRecentMediaIssueCardProcessingStatusTagPropsInput = Pick<RecentMediaIssueCardTagsProps, "issue" | "locale">;',
+]) {
+  if (
+    !recentMediaIssueCardProcessingStatusTagPropsTypesSource.includes(
+      requiredRecentMediaIssueCardProcessingStatusTagPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-processing-status-tag-props.types.ts must own processing-status-tag-props input typing: ${requiredRecentMediaIssueCardProcessingStatusTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardProcessingStatusTagPropsTypesLines = 2;
+if (
+  recentMediaIssueCardProcessingStatusTagPropsTypesLines >
+  maxRecentMediaIssueCardProcessingStatusTagPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-processing-status-tag-props.types.ts exceeded ${maxRecentMediaIssueCardProcessingStatusTagPropsTypesLines} lines: ${recentMediaIssueCardProcessingStatusTagPropsTypesLines}`,
   );
 }
 
