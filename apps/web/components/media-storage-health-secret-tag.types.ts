@@ -1,0 +1,1 @@
+import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthSecretTagProps = Pick<MediaStorageHealthMetadataProps, "copy" | "formatSecretStatus" | "mediaStorageHealth">;
