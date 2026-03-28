@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- API Warning Noise Reduction V1:
+  - a new root-level `pytest.ini` now filters the known FastAPI `asyncio.iscoroutinefunction` deprecation warning that currently originates from third-party internals under Python 3.14
+  - this keeps `scripts/verify-all.ps1` and routine pytest output focused on actionable warnings from the project instead of repeating the same external noise hundreds of times
+  - the change is intentionally narrow so it improves signal without muting unrelated future warnings
 - Helper Input Naming Guardrail V1:
   - `apps/web/scripts/verify-helper-input-naming.mjs` now scans `apps/web/components` and blocks exported `build*`, `create*`, and `use*` helpers from reintroducing generic `props` parameter names
   - `apps/web/package.json` now runs this naming guard inside `verify:ui-guardrails`, so the helper-signature cleanup work is protected by the normal UI validation pipeline
