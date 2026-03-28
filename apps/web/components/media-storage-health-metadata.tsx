@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";
+import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";
 import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";
 import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";
 
@@ -15,11 +16,7 @@ export function MediaStorageHealthMetadata({
       <div className="tag-row">
         <MediaStorageHealthProviderTag copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />
         <MediaStorageHealthSecretTag copy={copy} formatSecretStatus={formatSecretStatus} mediaStorageHealth={mediaStorageHealth} />
-        {typeof mediaStorageHealth.reachable === "boolean" ? (
-          <span className="tag">
-            {mediaStorageHealth.reachable ? copy.reachable : copy.unreachable}
-          </span>
-        ) : null}
+        <MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />
         {mediaStorageHealth.service_name ? (
           <span className="tag">
             {mediaStorageHealth.service_name}

@@ -3184,6 +3184,14 @@ const mediaStorageHealthSecretTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-secret-tag.types.ts",
 );
+const mediaStorageHealthReachabilityTagPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-reachability-tag.tsx",
+);
+const mediaStorageHealthReachabilityTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-reachability-tag.types.ts",
+);
 const recordResultsListViewPath = path.resolve(
   process.cwd(),
   "components/record-results-list-view.tsx",
@@ -5092,6 +5100,14 @@ const mediaStorageHealthSecretTagTypesSource = fs.readFileSync(
   mediaStorageHealthSecretTagTypesPath,
   "utf8",
 );
+const mediaStorageHealthReachabilityTagSource = fs.readFileSync(
+  mediaStorageHealthReachabilityTagPath,
+  "utf8",
+);
+const mediaStorageHealthReachabilityTagTypesSource = fs.readFileSync(
+  mediaStorageHealthReachabilityTagTypesPath,
+  "utf8",
+);
 const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
 const recordResultsListViewTypesSource = fs.readFileSync(
   recordResultsListViewTypesPath,
@@ -6567,6 +6583,10 @@ const mediaStorageHealthProviderTagTypesLines =
 const mediaStorageHealthSecretTagLines = mediaStorageHealthSecretTagSource.split(/\r?\n/).length;
 const mediaStorageHealthSecretTagTypesLines =
   mediaStorageHealthSecretTagTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthReachabilityTagLines =
+  mediaStorageHealthReachabilityTagSource.split(/\r?\n/).length;
+const mediaStorageHealthReachabilityTagTypesLines =
+  mediaStorageHealthReachabilityTagTypesSource.split(/\r?\n/).length;
 const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
 const recordResultsSharedLines = recordResultsSharedSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsLines =
@@ -28493,12 +28513,14 @@ if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) 
 
 for (const requiredMediaStorageHealthMetadataUsage of [
   'import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";',
+  'import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";',
   'import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
   "<MediaStorageHealthProviderTag copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthSecretTag copy={copy} formatSecretStatus={formatSecretStatus} mediaStorageHealth={mediaStorageHealth} />",
+  "<MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {
@@ -28520,6 +28542,7 @@ for (const forbiddenMediaStorageHealthMetadataToken of [
   "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
   "copy.secret",
   "formatSecretStatus(mediaStorageHealth.secret_status)",
+  "mediaStorageHealth.reachable ? copy.reachable : copy.unreachable",
 ]) {
   if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
     throw new Error(
@@ -28660,6 +28683,61 @@ const maxMediaStorageHealthSecretTagTypesLines = 2;
 if (mediaStorageHealthSecretTagTypesLines > maxMediaStorageHealthSecretTagTypesLines) {
   throw new Error(
     `media-storage-health-secret-tag.types.ts exceeded ${maxMediaStorageHealthSecretTagTypesLines} lines: ${mediaStorageHealthSecretTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthReachabilityTagUsage of [
+  'import type { MediaStorageHealthReachabilityTagProps } from "./media-storage-health-reachability-tag.types";',
+  "}: MediaStorageHealthReachabilityTagProps) {",
+  'typeof mediaStorageHealth.reachable === "boolean"',
+  "mediaStorageHealth.reachable ? copy.reachable : copy.unreachable",
+]) {
+  if (!mediaStorageHealthReachabilityTagSource.includes(requiredMediaStorageHealthReachabilityTagUsage)) {
+    throw new Error(
+      `media-storage-health-reachability-tag.tsx must own reachability tag rendering: ${requiredMediaStorageHealthReachabilityTagUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthReachabilityTagSource.includes("type MediaStorageHealthReachabilityTagProps =")) {
+  throw new Error(
+    "media-storage-health-reachability-tag.tsx must keep reachability-tag prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthReachabilityTagToken of [
+  "getStorageProviderLabel(",
+  "formatSecretStatus(",
+  "mediaStorageHealth.service_name",
+]) {
+  if (mediaStorageHealthReachabilityTagSource.includes(forbiddenMediaStorageHealthReachabilityTagToken)) {
+    throw new Error(
+      `media-storage-health-reachability-tag.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthReachabilityTagToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthReachabilityTagLines = 5;
+if (mediaStorageHealthReachabilityTagLines > maxMediaStorageHealthReachabilityTagLines) {
+  throw new Error(
+    `media-storage-health-reachability-tag.tsx exceeded ${maxMediaStorageHealthReachabilityTagLines} lines: ${mediaStorageHealthReachabilityTagLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthReachabilityTagTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthReachabilityTagProps = Pick<MediaStorageHealthMetadataProps, "copy" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthReachabilityTagTypesSource.includes(requiredMediaStorageHealthReachabilityTagTypesUsage)) {
+    throw new Error(
+      `media-storage-health-reachability-tag.types.ts must own reachability-tag prop typing: ${requiredMediaStorageHealthReachabilityTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthReachabilityTagTypesLines = 2;
+if (mediaStorageHealthReachabilityTagTypesLines > maxMediaStorageHealthReachabilityTagTypesLines) {
+  throw new Error(
+    `media-storage-health-reachability-tag.types.ts exceeded ${maxMediaStorageHealthReachabilityTagTypesLines} lines: ${mediaStorageHealthReachabilityTagTypesLines}`,
   );
 }
 
