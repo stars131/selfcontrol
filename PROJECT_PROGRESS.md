@@ -2799,6 +2799,10 @@ Last updated: 2026-03-28
   - media-asset metadata text-line-count detail rendering now lives in `apps/web/components/media-asset-card-text-line-count-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while text-line-count rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this text-line-count-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-text-line-count rendering module
+- Media Asset Metadata Timing Read Cleanup V1:
+  - `apps/web/components/media-asset-card-metadata.tsx` now only reads the timing metadata fields it actually passes into `apps/web/components/media-asset-card-metadata-details.tsx`
+  - unused metadata reads for tag concerns were removed so the metadata wrapper stays focused on tag/detail composition instead of duplicating downstream extraction work
+  - the media-asset and record-panel structure guardrails now enforce this tighter timing-read boundary so future metadata wrapper changes do not regrow redundant extraction logic
 
 ## Next
 - Continue the next product slice

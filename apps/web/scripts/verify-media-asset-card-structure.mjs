@@ -148,12 +148,12 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
-if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_source")')) {
-  throw new Error("media-asset-card-metadata.tsx must keep metadata extraction logic");
+if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_last_attempt_at")')) {
+  throw new Error("media-asset-card-metadata.tsx must keep metadata detail timing extraction logic");
 }
 
-if (!metadataSource.includes('readMetadataNumber(asset.metadata_json, "processing_retry_count")')) {
-  throw new Error("media-asset-card-metadata.tsx must keep retry-count extraction logic");
+if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")')) {
+  throw new Error("media-asset-card-metadata.tsx must keep next-retry extraction logic");
 }
 
 for (const requiredMetadataTagsUsage of [
