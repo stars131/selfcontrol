@@ -2811,6 +2811,10 @@ Last updated: 2026-03-28
   - recent-media issue last-failure detail rendering now lives in `apps/web/components/recent-media-issue-card-last-failure-detail.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
   - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now stays focused on detail ordering while last-failure rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this last-failure-detail boundary so future recent-media metadata-detail changes do not regrow a mixed composition-and-last-failure rendering module
+- Recent Media Next Retry Detail Extraction V1:
+  - recent-media issue next-retry detail rendering now lives in `apps/web/components/recent-media-issue-card-next-retry-detail.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
+  - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now stays focused on detail ordering while next-retry rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this next-retry-detail boundary so future recent-media metadata-detail changes do not regrow a mixed composition-and-next-retry rendering module
 
 ## Next
 - Continue the next product slice
