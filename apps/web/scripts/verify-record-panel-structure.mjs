@@ -3232,6 +3232,14 @@ const deadLetterRecoveryItemCardRetryBudgetUsedPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-retry-budget-used.tsx",
 );
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-budget-used-props.ts",
+);
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-budget-used-props.types.ts",
+);
 const deadLetterRecoveryItemCardRetryBudgetUsedTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-retry-budget-used.types.ts",
@@ -5502,6 +5510,14 @@ const deadLetterRecoveryItemCardRetryBudgetUsedSource = fs.readFileSync(
   deadLetterRecoveryItemCardRetryBudgetUsedPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardRetryBudgetUsedTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardRetryBudgetUsedTypesPath,
   "utf8",
@@ -7284,6 +7300,10 @@ const deadLetterRecoveryItemCardMetadataTypesLines =
   deadLetterRecoveryItemCardMetadataTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardRetryBudgetUsedLines =
   deadLetterRecoveryItemCardRetryBudgetUsedSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsLines =
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines =
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardRetryBudgetUsedTypesLines =
   deadLetterRecoveryItemCardRetryBudgetUsedTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardLastFailureLines =
@@ -30591,6 +30611,7 @@ for (const requiredDeadLetterRecoveryItemCardMetadataUsage of [
   'import { buildDeadLetterRecoveryItemCardLastAttemptProps } from "./dead-letter-recovery-item-card-last-attempt-props";',
   'import { DeadLetterRecoveryItemCardLastFailure } from "./dead-letter-recovery-item-card-last-failure";',
   'import { buildDeadLetterRecoveryItemCardLastFailureProps } from "./dead-letter-recovery-item-card-last-failure-props";',
+  'import { buildDeadLetterRecoveryItemCardRetryBudgetUsedProps } from "./dead-letter-recovery-item-card-retry-budget-used-props";',
   'import { DeadLetterRecoveryItemCardRetryBudgetUsed } from "./dead-letter-recovery-item-card-retry-budget-used";',
   'import type { DeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata.types";',
   "}: DeadLetterRecoveryItemCardMetadataProps) {",
@@ -30598,7 +30619,8 @@ for (const requiredDeadLetterRecoveryItemCardMetadataUsage of [
   "<DeadLetterRecoveryItemCardLastAttempt",
   "buildDeadLetterRecoveryItemCardLastFailureProps({ formatHistoryTimestampLabel, item, mediaIssueCopy })",
   "<DeadLetterRecoveryItemCardLastFailure",
-  "<DeadLetterRecoveryItemCardRetryBudgetUsed item={item} mediaIssueCopy={mediaIssueCopy} />",
+  "buildDeadLetterRecoveryItemCardRetryBudgetUsedProps({ item, mediaIssueCopy })",
+  "<DeadLetterRecoveryItemCardRetryBudgetUsed",
 ]) {
   if (!deadLetterRecoveryItemCardMetadataSource.includes(requiredDeadLetterRecoveryItemCardMetadataUsage)) {
     throw new Error(
@@ -30622,6 +30644,7 @@ for (const forbiddenDeadLetterRecoveryItemCardMetadataToken of [
   "{mediaIssueCopy.lastFailure}: {formatHistoryTimestampLabel(item.processing_last_failure_at)}",
   "<DeadLetterRecoveryItemCardLastFailure formatHistoryTimestampLabel={formatHistoryTimestampLabel} item={item} mediaIssueCopy={mediaIssueCopy} />",
   "{mediaIssueCopy.retryBudgetUsed}: {item.processing_retry_count}",
+  "<DeadLetterRecoveryItemCardRetryBudgetUsed item={item} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (deadLetterRecoveryItemCardMetadataSource.includes(forbiddenDeadLetterRecoveryItemCardMetadataToken)) {
     throw new Error(
@@ -30651,6 +30674,68 @@ const maxDeadLetterRecoveryItemCardMetadataTypesLines = 2;
 if (deadLetterRecoveryItemCardMetadataTypesLines > maxDeadLetterRecoveryItemCardMetadataTypesLines) {
   throw new Error(
     `dead-letter-recovery-item-card-metadata.types.ts exceeded ${maxDeadLetterRecoveryItemCardMetadataTypesLines} lines: ${deadLetterRecoveryItemCardMetadataTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardRetryBudgetUsedProps } from "./dead-letter-recovery-item-card-retry-budget-used.types";',
+  'import type { BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput } from "./dead-letter-recovery-item-card-retry-budget-used-props.types";',
+  "export function buildDeadLetterRecoveryItemCardRetryBudgetUsedProps({ item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput): DeadLetterRecoveryItemCardRetryBudgetUsedProps {",
+]) {
+  if (!deadLetterRecoveryItemCardRetryBudgetUsedPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-budget-used-props.ts must own retry-budget prop projection: ${requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardRetryBudgetUsedPropsToken of [
+  "<DeadLetterRecoveryItemCardRetryBudgetUsed",
+  "processing_retry_count",
+  '<div className="muted"',
+]) {
+  if (
+    deadLetterRecoveryItemCardRetryBudgetUsedPropsSource.includes(
+      forbiddenDeadLetterRecoveryItemCardRetryBudgetUsedPropsToken,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-budget-used-props.ts must keep rendering and retry-budget rules delegated: ${forbiddenDeadLetterRecoveryItemCardRetryBudgetUsedPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsLines = 5;
+if (
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsLines >
+  maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-budget-used-props.ts exceeded ${maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsLines} lines: ${deadLetterRecoveryItemCardRetryBudgetUsedPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata.types"; export type BuildDeadLetterRecoveryItemCardRetryBudgetUsedPropsInput = Pick<DeadLetterRecoveryItemCardMetadataProps, "item" | "mediaIssueCopy">;',
+]) {
+  if (
+    !deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesSource.includes(
+      requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-budget-used-props.types.ts must own retry-budget-props input typing: ${requiredDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines = 2;
+if (
+  deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines >
+  maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-budget-used-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines} lines: ${deadLetterRecoveryItemCardRetryBudgetUsedPropsTypesLines}`,
   );
 }
 

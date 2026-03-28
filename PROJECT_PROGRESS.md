@@ -3023,6 +3023,10 @@ Last updated: 2026-03-28
   - dead-letter last-failure prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-last-failure-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now keeps last-failure projection isolated from the other metadata leaves so the metadata section stays easier to evolve safely
   - the record-panel structure guardrail now enforces this last-failure-props-builder boundary so future dead-letter metadata changes do not regrow mixed child-prop projection logic
+- Dead-Letter Retry Budget Props Builder Extraction V1:
+  - dead-letter retry-budget prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-retry-budget-used-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now keeps retry-budget projection isolated from the other metadata leaves so the metadata section stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-budget-props-builder boundary so future dead-letter metadata changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
