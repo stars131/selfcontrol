@@ -3151,6 +3151,10 @@ Last updated: 2026-03-28
   - media-asset error prop assembly now lives in `apps/web/components/media-asset-card-error-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
   - `apps/web/components/media-asset-card.tsx` now keeps error projection isolated from intro, metadata, preview, extracted-text, and action composition so the card orchestration stays easier to evolve safely
   - the media-asset-card and record-panel structure guardrails now enforce this error-props boundary so future card changes do not regrow mixed child-prop projection logic
+- Media Asset Actions Props Reuse Simplification V1:
+  - `apps/web/components/media-asset-card-actions.tsx` now forwards its full `MediaAssetCardActionsProps` contract directly into the four button props builders instead of repeating the same inline projection four times
+  - the action-row component now stays focused on layout and child composition while each button builder continues owning the narrowed child contract
+  - the media-asset-card and record-panel structure guardrails now enforce direct props reuse so future action-row edits do not regrow duplicated child-prop assembly
 
 ## Next
 - Continue the next product slice

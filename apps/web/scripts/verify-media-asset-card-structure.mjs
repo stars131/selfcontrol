@@ -2235,10 +2235,12 @@ for (const requiredActionsUsage of [
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   'import { buildMediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button-props";',
   'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
-  "buildMediaAssetCardDeleteButtonProps({",
-  "buildMediaAssetCardDownloadButtonProps({",
-  "buildMediaAssetCardRefreshButtonProps({",
-  "buildMediaAssetCardRetryButtonProps({",
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
+  "export function MediaAssetCardActions(props: MediaAssetCardActionsProps) {",
+  "buildMediaAssetCardDeleteButtonProps(props)",
+  "buildMediaAssetCardDownloadButtonProps(props)",
+  "buildMediaAssetCardRefreshButtonProps(props)",
+  "buildMediaAssetCardRetryButtonProps(props)",
   "<MediaAssetCardDeleteButton",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
@@ -2273,6 +2275,10 @@ for (const forbiddenActionsToken of [
   "onClick={() => void onDeleteMediaAsset(asset.id)}",
   "deletingMediaId === asset.id || !canWriteWorkspace",
   "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
+  "buildMediaAssetCardDeleteButtonProps({",
+  "buildMediaAssetCardDownloadButtonProps({",
+  "buildMediaAssetCardRefreshButtonProps({",
+  "buildMediaAssetCardRetryButtonProps({",
 ]) {
   if (actionsSource.includes(forbiddenActionsToken)) {
     throw new Error(

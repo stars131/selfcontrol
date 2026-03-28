@@ -19001,11 +19001,15 @@ for (const requiredMediaAssetCardActionsUsage of [
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
-  "}: MediaAssetCardActionsProps) {",
+  "export function MediaAssetCardActions(props: MediaAssetCardActionsProps) {",
   "<MediaAssetCardDeleteButton",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
   "<MediaAssetCardRetryButton",
+  "buildMediaAssetCardDeleteButtonProps(props)",
+  "buildMediaAssetCardDownloadButtonProps(props)",
+  "buildMediaAssetCardRefreshButtonProps(props)",
+  "buildMediaAssetCardRetryButtonProps(props)",
 ]) {
   if (!mediaAssetCardActionsSource.includes(requiredMediaAssetCardActionsUsage)) {
     throw new Error(
@@ -19028,6 +19032,10 @@ for (const forbiddenMediaAssetCardActionsToken of [
   "onClick={() => void onDeleteMediaAsset(asset.id)}",
   "deletingMediaId === asset.id || !canWriteWorkspace",
   "{deletingMediaId === asset.id ? mediaIssueCopy.deleting : mediaIssueCopy.deleteMedia}",
+  "buildMediaAssetCardDeleteButtonProps({",
+  "buildMediaAssetCardDownloadButtonProps({",
+  "buildMediaAssetCardRefreshButtonProps({",
+  "buildMediaAssetCardRetryButtonProps({",
 ]) {
   if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
     throw new Error(

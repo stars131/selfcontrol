@@ -10,25 +10,13 @@ import { buildMediaAssetCardRetryButtonProps } from "./media-asset-card-retry-bu
 import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";
 import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
 
-export function MediaAssetCardActions({
-  asset,
-  canWriteWorkspace,
-  mediaIssueCopy,
-  downloadingMediaId,
-  refreshingMediaId,
-  retryingMediaId,
-  deletingMediaId,
-  onDownloadMedia,
-  onRefreshMedia,
-  onRetryMediaProcessing,
-  onDeleteMediaAsset,
-}: MediaAssetCardActionsProps) {
+export function MediaAssetCardActions(props: MediaAssetCardActionsProps) {
   return (
     <div className="action-row" style={{ marginTop: 12 }}>
-      <MediaAssetCardDownloadButton {...buildMediaAssetCardDownloadButtonProps({ asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId })} />
-      <MediaAssetCardRefreshButton {...buildMediaAssetCardRefreshButtonProps({ asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId })} />
-      <MediaAssetCardRetryButton {...buildMediaAssetCardRetryButtonProps({ asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId })} />
-      <MediaAssetCardDeleteButton {...buildMediaAssetCardDeleteButtonProps({ asset, canWriteWorkspace, deletingMediaId, downloadingMediaId, mediaIssueCopy, onDeleteMediaAsset, onDownloadMedia, onRefreshMedia, onRetryMediaProcessing, refreshingMediaId, retryingMediaId })} />
+      <MediaAssetCardDownloadButton {...buildMediaAssetCardDownloadButtonProps(props)} />
+      <MediaAssetCardRefreshButton {...buildMediaAssetCardRefreshButtonProps(props)} />
+      <MediaAssetCardRetryButton {...buildMediaAssetCardRetryButtonProps(props)} />
+      <MediaAssetCardDeleteButton {...buildMediaAssetCardDeleteButtonProps(props)} />
     </div>
   );
 }
