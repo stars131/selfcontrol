@@ -4,9 +4,9 @@ import { buildRecordPanelControllerCoreViewDataResult } from "./record-panel-con
 import { buildRecordPanelControllerLocalizedViewDataResult } from "./record-panel-controller-localized-view-data-result";
 import type { BuildRecordPanelControllerViewDataResultInput } from "./record-panel-controller-view-data-result.types";
 
-export function buildRecordPanelControllerViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput) {
+export function buildRecordPanelControllerViewDataResult(input: BuildRecordPanelControllerViewDataResultInput) {
   return {
-    ...buildRecordPanelControllerCoreViewDataResult(viewData),
-    ...buildRecordPanelControllerLocalizedViewDataResult(viewData),
+    ...buildRecordPanelControllerCoreViewDataResult(input),
+    ...buildRecordPanelControllerLocalizedViewDataResult(input),
   };
 }

@@ -3348,6 +3348,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-controller-state-result.ts`, `record-panel-controller-core-view-data-result.ts`, and `record-panel-controller-localized-view-data-result.ts` now use a consistent `input` parameter name while preserving the same result field projection
   - this keeps the controller result-helper layer aligned with the rest of the refactored adapter chain so result builders are easier to scan and maintain
   - the record-panel structure guardrail now enforces this naming consistency so future result helpers do not drift back to mixed `state/viewData` terminology
+- Record Panel View Data Result Naming Cleanup V1:
+  - `apps/web/components/record-panel-controller-view-data-result.ts` now uses a consistent `input` parameter name while preserving the same delegation into the core and localized result helpers
+  - this keeps the top-level view-data result builder aligned with the recently normalized result-helper layer so the controller result path reads uniformly
+  - the record-panel structure guardrail now enforces this naming consistency so future view-data result assembly does not drift back to mixed `viewData` terminology
 
 ## Next
 - Continue the next product slice

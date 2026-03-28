@@ -13179,9 +13179,9 @@ for (const requiredControllerViewDataResultImport of [
 }
 
 for (const requiredControllerViewDataResultUsage of [
-  "export function buildRecordPanelControllerViewDataResult(viewData: BuildRecordPanelControllerViewDataResultInput)",
-  "buildRecordPanelControllerCoreViewDataResult(viewData)",
-  "buildRecordPanelControllerLocalizedViewDataResult(viewData)",
+  "export function buildRecordPanelControllerViewDataResult(input: BuildRecordPanelControllerViewDataResultInput)",
+  "buildRecordPanelControllerCoreViewDataResult(input)",
+  "buildRecordPanelControllerLocalizedViewDataResult(input)",
 ]) {
   if (!controllerViewDataResultSource.includes(requiredControllerViewDataResultUsage)) {
     throw new Error(
