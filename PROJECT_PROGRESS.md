@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- API And Schema Doc Recovery V1:
+  - `docs/API_AND_WORKFLOWS.md` has been fully rewritten as a clean UTF-8 Chinese document based on the current FastAPI route surface instead of the previous garbled content
+  - `docs/ERD_AND_SCHEMA.md` has been fully rewritten as a clean UTF-8 Chinese document aligned with the current SQLAlchemy models, workspace isolation model, provider boundaries, media pipeline, and transfer-job schema
+  - the restored documents now describe the real V1 API modules, permission boundaries, knowledge indexing flow, media lifecycle, reminder flow, share flow, and database relationships in a maintainable form for future enterprise-grade changes
 - Development Setup Doc UTF-8 Recovery V1:
   - `docs/DEVELOPMENT_SETUP.md` has been rewritten as a clean UTF-8 Chinese guide instead of the previous garbled text
   - the restored document now matches the current bootstrap, doctor, hooks, verify-all, and cross-platform Python command flow introduced in recent maintenance slices
