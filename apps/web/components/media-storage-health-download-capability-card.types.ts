@@ -1,0 +1,1 @@
+import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types"; export type MediaStorageHealthDownloadCapabilityCardProps = Pick<MediaStorageHealthCapabilitiesProps, "copy" | "mediaStorageHealth">;

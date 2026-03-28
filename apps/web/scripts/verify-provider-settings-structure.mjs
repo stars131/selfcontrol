@@ -154,6 +154,14 @@ const mediaStorageHealthUploadCapabilityCardTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-upload-capability-card.types.ts",
 );
+const mediaStorageHealthDownloadCapabilityCardPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-download-capability-card.tsx",
+);
+const mediaStorageHealthDownloadCapabilityCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-download-capability-card.types.ts",
+);
 const mediaStorageHealthCapabilitiesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesPath,
   "utf8",
@@ -166,12 +174,24 @@ const mediaStorageHealthUploadCapabilityCardTypesSource = fs.readFileSync(
   mediaStorageHealthUploadCapabilityCardTypesPath,
   "utf8",
 );
+const mediaStorageHealthDownloadCapabilityCardSource = fs.readFileSync(
+  mediaStorageHealthDownloadCapabilityCardPath,
+  "utf8",
+);
+const mediaStorageHealthDownloadCapabilityCardTypesSource = fs.readFileSync(
+  mediaStorageHealthDownloadCapabilityCardTypesPath,
+  "utf8",
+);
 const mediaStorageHealthCapabilitiesLineCount =
   mediaStorageHealthCapabilitiesSource.split(/\r?\n/).length;
 const mediaStorageHealthUploadCapabilityCardLineCount =
   mediaStorageHealthUploadCapabilityCardSource.split(/\r?\n/).length;
 const mediaStorageHealthUploadCapabilityCardTypesLineCount =
   mediaStorageHealthUploadCapabilityCardTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthDownloadCapabilityCardLineCount =
+  mediaStorageHealthDownloadCapabilityCardSource.split(/\r?\n/).length;
+const mediaStorageHealthDownloadCapabilityCardTypesLineCount =
+  mediaStorageHealthDownloadCapabilityCardTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCardTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-card.types.ts",
@@ -506,6 +526,7 @@ if (mediaStorageHealthCardLineCount > maxMediaStorageHealthCardLines) {
 }
 
 for (const requiredHealthCapabilitiesImport of [
+  'import { MediaStorageHealthDownloadCapabilityCard } from "./media-storage-health-download-capability-card";',
   'import { MediaStorageHealthUploadCapabilityCard } from "./media-storage-health-upload-capability-card";',
 ]) {
   if (!mediaStorageHealthCapabilitiesSource.includes(requiredHealthCapabilitiesImport)) {
@@ -517,10 +538,9 @@ for (const requiredHealthCapabilitiesImport of [
 
 for (const requiredHealthCapabilitiesUsage of [
   "export function MediaStorageHealthCapabilities({",
+  "<MediaStorageHealthDownloadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthUploadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
-  "copy.download",
   "copy.delete",
-  "mediaStorageHealth.capabilities.download",
   "mediaStorageHealth.capabilities.delete",
 ]) {
   if (!mediaStorageHealthCapabilitiesSource.includes(requiredHealthCapabilitiesUsage)) {
@@ -539,7 +559,9 @@ if (mediaStorageHealthCapabilitiesLineCount > maxMediaStorageHealthCapabilitiesL
 
 for (const forbiddenHealthCapabilitiesToken of [
   "copy.upload",
+  "copy.download",
   "mediaStorageHealth.capabilities.upload",
+  "mediaStorageHealth.capabilities.download",
 ]) {
   if (mediaStorageHealthCapabilitiesSource.includes(forbiddenHealthCapabilitiesToken)) {
     throw new Error(
@@ -598,6 +620,62 @@ if (
 ) {
   throw new Error(
     `media-storage-health-upload-capability-card.types.ts exceeded ${maxMediaStorageHealthUploadCapabilityCardTypesLines} lines: ${mediaStorageHealthUploadCapabilityCardTypesLineCount}`,
+  );
+}
+
+for (const requiredHealthDownloadCapabilityUsage of [
+  'import type { MediaStorageHealthDownloadCapabilityCardProps } from "./media-storage-health-download-capability-card.types";',
+  "export function MediaStorageHealthDownloadCapabilityCard({",
+  "copy.download",
+  "mediaStorageHealth.capabilities.download",
+]) {
+  if (!mediaStorageHealthDownloadCapabilityCardSource.includes(requiredHealthDownloadCapabilityUsage)) {
+    throw new Error(
+      `media-storage-health-download-capability-card.tsx must own download capability rendering: ${requiredHealthDownloadCapabilityUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHealthDownloadCapabilityToken of [
+  "copy.upload",
+  "copy.delete",
+  "mediaStorageHealth.capabilities.upload",
+  "mediaStorageHealth.capabilities.delete",
+]) {
+  if (mediaStorageHealthDownloadCapabilityCardSource.includes(forbiddenHealthDownloadCapabilityToken)) {
+    throw new Error(
+      `media-storage-health-download-capability-card.tsx must keep non-download capability rendering out: ${forbiddenHealthDownloadCapabilityToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthDownloadCapabilityCardLines = 6;
+if (
+  mediaStorageHealthDownloadCapabilityCardLineCount >
+  maxMediaStorageHealthDownloadCapabilityCardLines
+) {
+  throw new Error(
+    `media-storage-health-download-capability-card.tsx exceeded ${maxMediaStorageHealthDownloadCapabilityCardLines} lines: ${mediaStorageHealthDownloadCapabilityCardLineCount}`,
+  );
+}
+
+for (const requiredHealthDownloadCapabilityTypesUsage of [
+  'import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types"; export type MediaStorageHealthDownloadCapabilityCardProps = Pick<MediaStorageHealthCapabilitiesProps, "copy" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthDownloadCapabilityCardTypesSource.includes(requiredHealthDownloadCapabilityTypesUsage)) {
+    throw new Error(
+      `media-storage-health-download-capability-card.types.ts must own download capability prop typing: ${requiredHealthDownloadCapabilityTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthDownloadCapabilityCardTypesLines = 2;
+if (
+  mediaStorageHealthDownloadCapabilityCardTypesLineCount >
+  maxMediaStorageHealthDownloadCapabilityCardTypesLines
+) {
+  throw new Error(
+    `media-storage-health-download-capability-card.types.ts exceeded ${maxMediaStorageHealthDownloadCapabilityCardTypesLines} lines: ${mediaStorageHealthDownloadCapabilityCardTypesLineCount}`,
   );
 }
 

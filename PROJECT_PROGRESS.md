@@ -2867,6 +2867,10 @@ Last updated: 2026-03-28
   - media-storage health upload-capability rendering now lives in `apps/web/components/media-storage-health-upload-capability-card.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-capabilities.tsx`
   - `apps/web/components/media-storage-health-capabilities.tsx` now stays focused on capability-card layout while upload capability rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this upload-capability boundary so future health-capability changes do not regrow a mixed layout-and-upload rendering module
+- Media Storage Health Download Capability Card Extraction V1:
+  - media-storage health download-capability rendering now lives in `apps/web/components/media-storage-health-download-capability-card.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-capabilities.tsx`
+  - `apps/web/components/media-storage-health-capabilities.tsx` now stays focused on capability-card layout while download capability rendering remains centralized and easier to evolve safely
+  - the provider-settings and record-panel structure guardrails now enforce this download-capability boundary so future health-capability changes do not regrow a mixed layout-and-download rendering module
 
 ## Next
 - Continue the next product slice
