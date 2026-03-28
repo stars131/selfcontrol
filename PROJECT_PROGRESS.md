@@ -3079,6 +3079,10 @@ Last updated: 2026-03-28
   - dead-letter action-button row orchestration now delegates retry rendering and settings-link rendering into `apps/web/components/dead-letter-recovery-item-card-retry-button.tsx` and `apps/web/components/dead-letter-recovery-item-card-settings-link.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-action-buttons.tsx` now stays focused on button-row composition while each leaf owns its own render rules and tiny props-builder boundary
   - the record-panel structure guardrail now enforces these retry-button and settings-link boundaries so future dead-letter action changes do not regrow mixed rendering and child-prop projection logic
+- Media Asset Action Button Props Builder Extraction V1:
+  - media-asset action row prop assembly now delegates download, refresh, retry, and delete child projection into dedicated `*-button-props.ts` builders
+  - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while each button receives its own thin projected contract
+  - the media-asset-card structure guardrail now enforces these button-props boundaries so future media-card action changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

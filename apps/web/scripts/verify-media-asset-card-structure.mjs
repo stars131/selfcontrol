@@ -184,6 +184,15 @@ const actionsPropsTypesSource = fs.readFileSync(actionsPropsTypesPath, "utf8");
 const actionsPropsTypesLineCount = actionsPropsTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
+const deleteButtonPropsPath = path.resolve(process.cwd(), "components/media-asset-card-delete-button-props.ts");
+const deleteButtonPropsSource = fs.readFileSync(deleteButtonPropsPath, "utf8");
+const deleteButtonPropsLineCount = deleteButtonPropsSource.split(/\r?\n/).length;
+const deleteButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-delete-button-props.types.ts",
+);
+const deleteButtonPropsTypesSource = fs.readFileSync(deleteButtonPropsTypesPath, "utf8");
+const deleteButtonPropsTypesLineCount = deleteButtonPropsTypesSource.split(/\r?\n/).length;
 const deleteButtonPath = path.resolve(process.cwd(), "components/media-asset-card-delete-button.tsx");
 const deleteButtonSource = fs.readFileSync(deleteButtonPath, "utf8");
 const deleteButtonLineCount = deleteButtonSource.split(/\r?\n/).length;
@@ -193,6 +202,18 @@ const deleteButtonTypesPath = path.resolve(
 );
 const deleteButtonTypesSource = fs.readFileSync(deleteButtonTypesPath, "utf8");
 const deleteButtonTypesLineCount = deleteButtonTypesSource.split(/\r?\n/).length;
+const downloadButtonPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-download-button-props.ts",
+);
+const downloadButtonPropsSource = fs.readFileSync(downloadButtonPropsPath, "utf8");
+const downloadButtonPropsLineCount = downloadButtonPropsSource.split(/\r?\n/).length;
+const downloadButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-download-button-props.types.ts",
+);
+const downloadButtonPropsTypesSource = fs.readFileSync(downloadButtonPropsTypesPath, "utf8");
+const downloadButtonPropsTypesLineCount = downloadButtonPropsTypesSource.split(/\r?\n/).length;
 const downloadButtonPath = path.resolve(process.cwd(), "components/media-asset-card-download-button.tsx");
 const downloadButtonSource = fs.readFileSync(downloadButtonPath, "utf8");
 const downloadButtonLineCount = downloadButtonSource.split(/\r?\n/).length;
@@ -202,6 +223,18 @@ const downloadButtonTypesPath = path.resolve(
 );
 const downloadButtonTypesSource = fs.readFileSync(downloadButtonTypesPath, "utf8");
 const downloadButtonTypesLineCount = downloadButtonTypesSource.split(/\r?\n/).length;
+const refreshButtonPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-refresh-button-props.ts",
+);
+const refreshButtonPropsSource = fs.readFileSync(refreshButtonPropsPath, "utf8");
+const refreshButtonPropsLineCount = refreshButtonPropsSource.split(/\r?\n/).length;
+const refreshButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-refresh-button-props.types.ts",
+);
+const refreshButtonPropsTypesSource = fs.readFileSync(refreshButtonPropsTypesPath, "utf8");
+const refreshButtonPropsTypesLineCount = refreshButtonPropsTypesSource.split(/\r?\n/).length;
 const refreshButtonPath = path.resolve(process.cwd(), "components/media-asset-card-refresh-button.tsx");
 const refreshButtonSource = fs.readFileSync(refreshButtonPath, "utf8");
 const refreshButtonLineCount = refreshButtonSource.split(/\r?\n/).length;
@@ -211,6 +244,15 @@ const refreshButtonTypesPath = path.resolve(
 );
 const refreshButtonTypesSource = fs.readFileSync(refreshButtonTypesPath, "utf8");
 const refreshButtonTypesLineCount = refreshButtonTypesSource.split(/\r?\n/).length;
+const retryButtonPropsPath = path.resolve(process.cwd(), "components/media-asset-card-retry-button-props.ts");
+const retryButtonPropsSource = fs.readFileSync(retryButtonPropsPath, "utf8");
+const retryButtonPropsLineCount = retryButtonPropsSource.split(/\r?\n/).length;
+const retryButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-retry-button-props.types.ts",
+);
+const retryButtonPropsTypesSource = fs.readFileSync(retryButtonPropsTypesPath, "utf8");
+const retryButtonPropsTypesLineCount = retryButtonPropsTypesSource.split(/\r?\n/).length;
 const retryButtonPath = path.resolve(process.cwd(), "components/media-asset-card-retry-button.tsx");
 const retryButtonSource = fs.readFileSync(retryButtonPath, "utf8");
 const retryButtonLineCount = retryButtonSource.split(/\r?\n/).length;
@@ -1224,10 +1266,18 @@ if (extractionModeTagTypesLineCount > 2) {
 }
 
 for (const requiredActionsUsage of [
+  'import { buildMediaAssetCardDeleteButtonProps } from "./media-asset-card-delete-button-props";',
   'import { MediaAssetCardDeleteButton } from "./media-asset-card-delete-button";',
+  'import { buildMediaAssetCardDownloadButtonProps } from "./media-asset-card-download-button-props";',
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
+  'import { buildMediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button-props";',
   'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
+  'import { buildMediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button-props";',
   'import { MediaAssetCardRetryButton } from "./media-asset-card-retry-button";',
+  "buildMediaAssetCardDeleteButtonProps({",
+  "buildMediaAssetCardDownloadButtonProps({",
+  "buildMediaAssetCardRefreshButtonProps({",
+  "buildMediaAssetCardRetryButtonProps({",
   "<MediaAssetCardDeleteButton",
   "<MediaAssetCardDownloadButton",
   "<MediaAssetCardRefreshButton",
@@ -1241,6 +1291,17 @@ for (const requiredActionsUsage of [
 }
 
 for (const forbiddenActionsToken of [
+  "asset={asset}",
+  "canWriteWorkspace={canWriteWorkspace}",
+  "deletingMediaId={deletingMediaId}",
+  "downloadingMediaId={downloadingMediaId}",
+  "mediaIssueCopy={mediaIssueCopy}",
+  "onDeleteMediaAsset={onDeleteMediaAsset}",
+  "onDownloadMedia={onDownloadMedia}",
+  "onRefreshMedia={onRefreshMedia}",
+  "onRetryMediaProcessing={onRetryMediaProcessing}",
+  "refreshingMediaId={refreshingMediaId}",
+  "retryingMediaId={retryingMediaId}",
   "onClick={() => void onDownloadMedia(asset)}",
   "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
   "onClick={() => void onRefreshMedia(asset.id)}",
@@ -1257,6 +1318,49 @@ for (const forbiddenActionsToken of [
       `media-asset-card-actions.tsx must keep download button rendering delegated: ${forbiddenActionsToken}`,
     );
   }
+}
+
+for (const requiredDeleteButtonPropsUsage of [
+  'import type { MediaAssetCardDeleteButtonProps } from "./media-asset-card-delete-button.types";',
+  'import type { BuildMediaAssetCardDeleteButtonPropsInput } from "./media-asset-card-delete-button-props.types";',
+  "export function buildMediaAssetCardDeleteButtonProps({ asset, canWriteWorkspace, deletingMediaId, mediaIssueCopy, onDeleteMediaAsset }: BuildMediaAssetCardDeleteButtonPropsInput): MediaAssetCardDeleteButtonProps {",
+]) {
+  if (!deleteButtonPropsSource.includes(requiredDeleteButtonPropsUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button-props.ts must own delete button prop projection: ${requiredDeleteButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeleteButtonPropsToken of [
+  "<MediaAssetCardDeleteButton",
+  "onClick={() => void onDeleteMediaAsset(asset.id)}",
+]) {
+  if (deleteButtonPropsSource.includes(forbiddenDeleteButtonPropsToken)) {
+    throw new Error(
+      `media-asset-card-delete-button-props.ts must keep delete button rendering delegated: ${forbiddenDeleteButtonPropsToken}`,
+    );
+  }
+}
+
+if (deleteButtonPropsLineCount > 5) {
+  throw new Error(`media-asset-card-delete-button-props.ts exceeded 5 lines: ${deleteButtonPropsLineCount}`);
+}
+
+for (const requiredDeleteButtonPropsTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type BuildMediaAssetCardDeleteButtonPropsInput = MediaAssetCardActionsProps;',
+]) {
+  if (!deleteButtonPropsTypesSource.includes(requiredDeleteButtonPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-delete-button-props.types.ts must own delete button props input typing: ${requiredDeleteButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+if (deleteButtonPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-delete-button-props.types.ts exceeded 2 lines: ${deleteButtonPropsTypesLineCount}`,
+  );
 }
 
 for (const requiredDeleteButtonUsage of [
@@ -1302,6 +1406,49 @@ for (const requiredDeleteButtonTypesUsage of [
 if (deleteButtonTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-delete-button.types.ts exceeded 2 lines: ${deleteButtonTypesLineCount}`,
+  );
+}
+
+for (const requiredDownloadButtonPropsUsage of [
+  'import type { MediaAssetCardDownloadButtonProps } from "./media-asset-card-download-button.types";',
+  'import type { BuildMediaAssetCardDownloadButtonPropsInput } from "./media-asset-card-download-button-props.types";',
+  "export function buildMediaAssetCardDownloadButtonProps({ asset, downloadingMediaId, mediaIssueCopy, onDownloadMedia }: BuildMediaAssetCardDownloadButtonPropsInput): MediaAssetCardDownloadButtonProps {",
+]) {
+  if (!downloadButtonPropsSource.includes(requiredDownloadButtonPropsUsage)) {
+    throw new Error(
+      `media-asset-card-download-button-props.ts must own download button prop projection: ${requiredDownloadButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDownloadButtonPropsToken of [
+  "<MediaAssetCardDownloadButton",
+  "onClick={() => void onDownloadMedia(asset)}",
+]) {
+  if (downloadButtonPropsSource.includes(forbiddenDownloadButtonPropsToken)) {
+    throw new Error(
+      `media-asset-card-download-button-props.ts must keep download button rendering delegated: ${forbiddenDownloadButtonPropsToken}`,
+    );
+  }
+}
+
+if (downloadButtonPropsLineCount > 5) {
+  throw new Error(`media-asset-card-download-button-props.ts exceeded 5 lines: ${downloadButtonPropsLineCount}`);
+}
+
+for (const requiredDownloadButtonPropsTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type BuildMediaAssetCardDownloadButtonPropsInput = MediaAssetCardActionsProps;',
+]) {
+  if (!downloadButtonPropsTypesSource.includes(requiredDownloadButtonPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-download-button-props.types.ts must own download button props input typing: ${requiredDownloadButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+if (downloadButtonPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-download-button-props.types.ts exceeded 2 lines: ${downloadButtonPropsTypesLineCount}`,
   );
 }
 
@@ -1352,6 +1499,49 @@ if (downloadButtonTypesLineCount > 2) {
   );
 }
 
+for (const requiredRefreshButtonPropsUsage of [
+  'import type { MediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button.types";',
+  'import type { BuildMediaAssetCardRefreshButtonPropsInput } from "./media-asset-card-refresh-button-props.types";',
+  "export function buildMediaAssetCardRefreshButtonProps({ asset, mediaIssueCopy, onRefreshMedia, refreshingMediaId }: BuildMediaAssetCardRefreshButtonPropsInput): MediaAssetCardRefreshButtonProps {",
+]) {
+  if (!refreshButtonPropsSource.includes(requiredRefreshButtonPropsUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button-props.ts must own refresh button prop projection: ${requiredRefreshButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRefreshButtonPropsToken of [
+  "<MediaAssetCardRefreshButton",
+  "onClick={() => void onRefreshMedia(asset.id)}",
+]) {
+  if (refreshButtonPropsSource.includes(forbiddenRefreshButtonPropsToken)) {
+    throw new Error(
+      `media-asset-card-refresh-button-props.ts must keep refresh button rendering delegated: ${forbiddenRefreshButtonPropsToken}`,
+    );
+  }
+}
+
+if (refreshButtonPropsLineCount > 5) {
+  throw new Error(`media-asset-card-refresh-button-props.ts exceeded 5 lines: ${refreshButtonPropsLineCount}`);
+}
+
+for (const requiredRefreshButtonPropsTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type BuildMediaAssetCardRefreshButtonPropsInput = MediaAssetCardActionsProps;',
+]) {
+  if (!refreshButtonPropsTypesSource.includes(requiredRefreshButtonPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button-props.types.ts must own refresh button props input typing: ${requiredRefreshButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+if (refreshButtonPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-refresh-button-props.types.ts exceeded 2 lines: ${refreshButtonPropsTypesLineCount}`,
+  );
+}
+
 for (const requiredRefreshButtonUsage of [
   'import type { MediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button.types";',
   "}: MediaAssetCardRefreshButtonProps) {",
@@ -1396,6 +1586,49 @@ for (const requiredRefreshButtonTypesUsage of [
 if (refreshButtonTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-refresh-button.types.ts exceeded 2 lines: ${refreshButtonTypesLineCount}`,
+  );
+}
+
+for (const requiredRetryButtonPropsUsage of [
+  'import type { MediaAssetCardRetryButtonProps } from "./media-asset-card-retry-button.types";',
+  'import type { BuildMediaAssetCardRetryButtonPropsInput } from "./media-asset-card-retry-button-props.types";',
+  "export function buildMediaAssetCardRetryButtonProps({ asset, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId }: BuildMediaAssetCardRetryButtonPropsInput): MediaAssetCardRetryButtonProps {",
+]) {
+  if (!retryButtonPropsSource.includes(requiredRetryButtonPropsUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button-props.ts must own retry button prop projection: ${requiredRetryButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRetryButtonPropsToken of [
+  "<MediaAssetCardRetryButton",
+  "onClick={() => void onRetryMediaProcessing(asset.id)}",
+]) {
+  if (retryButtonPropsSource.includes(forbiddenRetryButtonPropsToken)) {
+    throw new Error(
+      `media-asset-card-retry-button-props.ts must keep retry button rendering delegated: ${forbiddenRetryButtonPropsToken}`,
+    );
+  }
+}
+
+if (retryButtonPropsLineCount > 5) {
+  throw new Error(`media-asset-card-retry-button-props.ts exceeded 5 lines: ${retryButtonPropsLineCount}`);
+}
+
+for (const requiredRetryButtonPropsTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type BuildMediaAssetCardRetryButtonPropsInput = MediaAssetCardActionsProps;',
+]) {
+  if (!retryButtonPropsTypesSource.includes(requiredRetryButtonPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-retry-button-props.types.ts must own retry button props input typing: ${requiredRetryButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+if (retryButtonPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-retry-button-props.types.ts exceeded 2 lines: ${retryButtonPropsTypesLineCount}`,
   );
 }
 
