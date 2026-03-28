@@ -4,17 +4,10 @@ import { buildDeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter
 import { DeadLetterRecoveryItemCardActionButtons } from "./dead-letter-recovery-item-card-action-buttons";
 import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types";
 
-export function DeadLetterRecoveryItemCardActions({
-  item,
-  canWriteWorkspace,
-  mediaIssueCopy,
-  onRetryMediaProcessing,
-  retryingMediaId,
-  settingsHref,
-}: DeadLetterRecoveryItemCardActionsProps) {
-  if (!canWriteWorkspace && !settingsHref) {
+export function DeadLetterRecoveryItemCardActions(props: DeadLetterRecoveryItemCardActionsProps) {
+  if (!props.canWriteWorkspace && !props.settingsHref) {
     return null;
   }
 
-  return <DeadLetterRecoveryItemCardActionButtons {...buildDeadLetterRecoveryItemCardActionButtonsProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />;
+  return <DeadLetterRecoveryItemCardActionButtons {...buildDeadLetterRecoveryItemCardActionButtonsProps(props)} />;
 }
