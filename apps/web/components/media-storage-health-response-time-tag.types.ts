@@ -1,0 +1,1 @@
+import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthResponseTimeTagProps = Pick<MediaStorageHealthMetadataProps, "mediaStorageHealth">;

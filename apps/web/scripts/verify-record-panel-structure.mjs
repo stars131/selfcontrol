@@ -3200,6 +3200,14 @@ const mediaStorageHealthServiceTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-service-tag.types.ts",
 );
+const mediaStorageHealthResponseTimeTagPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-response-time-tag.tsx",
+);
+const mediaStorageHealthResponseTimeTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-response-time-tag.types.ts",
+);
 const recordResultsListViewPath = path.resolve(
   process.cwd(),
   "components/record-results-list-view.tsx",
@@ -5121,6 +5129,14 @@ const mediaStorageHealthServiceTagTypesSource = fs.readFileSync(
   mediaStorageHealthServiceTagTypesPath,
   "utf8",
 );
+const mediaStorageHealthResponseTimeTagSource = fs.readFileSync(
+  mediaStorageHealthResponseTimeTagPath,
+  "utf8",
+);
+const mediaStorageHealthResponseTimeTagTypesSource = fs.readFileSync(
+  mediaStorageHealthResponseTimeTagTypesPath,
+  "utf8",
+);
 const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
 const recordResultsListViewTypesSource = fs.readFileSync(
   recordResultsListViewTypesPath,
@@ -6603,6 +6619,10 @@ const mediaStorageHealthReachabilityTagTypesLines =
 const mediaStorageHealthServiceTagLines = mediaStorageHealthServiceTagSource.split(/\r?\n/).length;
 const mediaStorageHealthServiceTagTypesLines =
   mediaStorageHealthServiceTagTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthResponseTimeTagLines =
+  mediaStorageHealthResponseTimeTagSource.split(/\r?\n/).length;
+const mediaStorageHealthResponseTimeTagTypesLines =
+  mediaStorageHealthResponseTimeTagTypesSource.split(/\r?\n/).length;
 const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
 const recordResultsSharedLines = recordResultsSharedSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsLines =
@@ -28530,6 +28550,7 @@ if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) 
 for (const requiredMediaStorageHealthMetadataUsage of [
   'import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";',
   'import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";',
+  'import { MediaStorageHealthResponseTimeTag } from "./media-storage-health-response-time-tag";',
   'import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";',
   'import { MediaStorageHealthServiceTag } from "./media-storage-health-service-tag";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
@@ -28539,6 +28560,7 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   "<MediaStorageHealthSecretTag copy={copy} formatSecretStatus={formatSecretStatus} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthServiceTag mediaStorageHealth={mediaStorageHealth} />",
+  "<MediaStorageHealthResponseTimeTag mediaStorageHealth={mediaStorageHealth} />",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {
@@ -28563,6 +28585,7 @@ for (const forbiddenMediaStorageHealthMetadataToken of [
   "mediaStorageHealth.reachable ? copy.reachable : copy.unreachable",
   "mediaStorageHealth.service_name",
   "mediaStorageHealth.service_version",
+  "mediaStorageHealth.response_time_ms",
 ]) {
   if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
     throw new Error(
@@ -28813,6 +28836,61 @@ const maxMediaStorageHealthServiceTagTypesLines = 2;
 if (mediaStorageHealthServiceTagTypesLines > maxMediaStorageHealthServiceTagTypesLines) {
   throw new Error(
     `media-storage-health-service-tag.types.ts exceeded ${maxMediaStorageHealthServiceTagTypesLines} lines: ${mediaStorageHealthServiceTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthResponseTimeTagUsage of [
+  'import type { MediaStorageHealthResponseTimeTagProps } from "./media-storage-health-response-time-tag.types";',
+  "}: MediaStorageHealthResponseTimeTagProps) {",
+  'typeof mediaStorageHealth.response_time_ms === "number"',
+  "mediaStorageHealth.response_time_ms",
+]) {
+  if (!mediaStorageHealthResponseTimeTagSource.includes(requiredMediaStorageHealthResponseTimeTagUsage)) {
+    throw new Error(
+      `media-storage-health-response-time-tag.tsx must own response-time tag rendering: ${requiredMediaStorageHealthResponseTimeTagUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthResponseTimeTagSource.includes("type MediaStorageHealthResponseTimeTagProps =")) {
+  throw new Error(
+    "media-storage-health-response-time-tag.tsx must keep response-time-tag prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthResponseTimeTagToken of [
+  "getStorageProviderLabel(",
+  "formatSecretStatus(",
+  "mediaStorageHealth.service_name",
+]) {
+  if (mediaStorageHealthResponseTimeTagSource.includes(forbiddenMediaStorageHealthResponseTimeTagToken)) {
+    throw new Error(
+      `media-storage-health-response-time-tag.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthResponseTimeTagToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthResponseTimeTagLines = 5;
+if (mediaStorageHealthResponseTimeTagLines > maxMediaStorageHealthResponseTimeTagLines) {
+  throw new Error(
+    `media-storage-health-response-time-tag.tsx exceeded ${maxMediaStorageHealthResponseTimeTagLines} lines: ${mediaStorageHealthResponseTimeTagLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthResponseTimeTagTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthResponseTimeTagProps = Pick<MediaStorageHealthMetadataProps, "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthResponseTimeTagTypesSource.includes(requiredMediaStorageHealthResponseTimeTagTypesUsage)) {
+    throw new Error(
+      `media-storage-health-response-time-tag.types.ts must own response-time-tag prop typing: ${requiredMediaStorageHealthResponseTimeTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthResponseTimeTagTypesLines = 2;
+if (mediaStorageHealthResponseTimeTagTypesLines > maxMediaStorageHealthResponseTimeTagTypesLines) {
+  throw new Error(
+    `media-storage-health-response-time-tag.types.ts exceeded ${maxMediaStorageHealthResponseTimeTagTypesLines} lines: ${mediaStorageHealthResponseTimeTagTypesLines}`,
   );
 }
 
