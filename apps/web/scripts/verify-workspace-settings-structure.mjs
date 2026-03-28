@@ -453,8 +453,11 @@ for (const requiredClientHelpersImport of [
 for (const requiredClientHelpersUsage of [
   "export function readWorkspaceSettingsManagedRole(workspace: Workspace | null)",
   'workspace && workspace.role !== "viewer" ? workspace.role : null',
-  "export function buildWorkspaceSettingsProviderSectionProps({",
-  "onRefreshMediaStorageHealth: token ? async () => refreshMediaStorageHealthState(token) : null",
+  "export function buildWorkspaceSettingsProviderSectionProps(",
+  "input: WorkspaceSettingsProviderSectionBuilderInput,",
+  "const refreshToken = input.token;",
+  "onRefreshMediaStorageHealth: refreshToken",
+  "input.refreshMediaStorageHealthState(refreshToken)",
   "export function buildWorkspaceSettingsManagedSectionsProps(",
 ]) {
   if (!clientHelpersSource.includes(requiredClientHelpersUsage)) {

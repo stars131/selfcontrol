@@ -906,7 +906,9 @@ for (const requiredPanelHelpersImport of [
 for (const requiredPanelHelpersUsage of [
   "export function readProviderSettingsAnchorHighlightClass(",
   "export function buildProviderSettingsSecretStatusFormatter(copy: ProviderSettingsCopy)",
-  "export function buildProviderFeatureCardProps({",
+  "export function buildProviderFeatureCardProps(",
+  "input: BuildProviderFeatureCardPropsInput,",
+  "return input;",
   "return highlightedAnchor === targetId ? \" anchor-highlight\" : \"\";",
   "return copy.notRequired;",
 ]) {

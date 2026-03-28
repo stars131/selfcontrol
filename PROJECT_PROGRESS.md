@@ -3464,6 +3464,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-editor-support-tools-media-copy-props.ts`, `record-editor-support-tools-media-pass-through-props.ts`, `record-editor-support-tools-reminder-derived-props.ts`, and `record-editor-support-tools-reminder-pass-through-props.ts` now use explicit `input` parameters while keeping copy, derived, and pass-through behavior unchanged
   - this keeps the editor support-tools helper layer aligned with the broader helper-signature normalization work without changing media or reminder tool behavior
   - the record-workspaces structure guardrail now enforces this normalized helper boundary so future support-tools edits stay easier to review and extend
+- Workspace Settings Helper Naming Cleanup V1:
+  - `apps/web/components/workspace-settings-client-helpers.ts` and `provider-settings-panel-helpers.ts` now use explicit `input` parameters for provider-section and provider-feature-card helper assembly while keeping settings behavior unchanged
+  - this keeps the workspace-settings helper layer aligned with the broader helper-signature normalization work without changing provider settings UX behavior
+  - the workspace-settings and provider-settings structure guardrails now enforce this normalized helper boundary so future settings helper edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

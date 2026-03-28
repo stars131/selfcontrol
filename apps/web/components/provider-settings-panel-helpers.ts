@@ -24,36 +24,8 @@ export function buildProviderSettingsSecretStatusFormatter(copy: ProviderSetting
   };
 }
 
-export function buildProviderFeatureCardProps({
-  copy,
-  draftItem,
-  formatSecretStatus,
-  highlightedAnchor,
-  isDirty,
-  item,
-  locale,
-  mediaStorageHealth,
-  onProviderDraftChange,
-  onRefreshMediaStorageHealth,
-  onReset,
-  onSave,
-  providerSavingCode,
-  refreshingMediaStorageHealth,
-}: BuildProviderFeatureCardPropsInput): ProviderFeatureCardProps {
-  return {
-    copy,
-    draftItem,
-    formatSecretStatus,
-    highlightedAnchor,
-    isDirty,
-    item,
-    locale,
-    mediaStorageHealth,
-    onProviderDraftChange,
-    onRefreshMediaStorageHealth,
-    onReset,
-    onSave,
-    providerSavingCode,
-    refreshingMediaStorageHealth,
-  };
+export function buildProviderFeatureCardProps(
+  input: BuildProviderFeatureCardPropsInput,
+): ProviderFeatureCardProps {
+  return input;
 }

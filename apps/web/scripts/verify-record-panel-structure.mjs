@@ -20003,7 +20003,8 @@ for (const requiredUseMapPanelAmapInitUsage of [
 
 for (const requiredProviderSettingsPanelHelpersUsage of [
   'import type { BuildProviderFeatureCardPropsInput } from "./provider-settings-panel-helpers.types";',
-  "}: BuildProviderFeatureCardPropsInput): ProviderFeatureCardProps {",
+  "export function buildProviderFeatureCardProps(",
+  "input: BuildProviderFeatureCardPropsInput,",
 ]) {
   if (!providerSettingsPanelHelpersSource.includes(requiredProviderSettingsPanelHelpersUsage)) {
     throw new Error(

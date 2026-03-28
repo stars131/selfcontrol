@@ -9,29 +9,23 @@ export function readWorkspaceSettingsManagedRole(workspace: Workspace | null) {
   return workspace && workspace.role !== "viewer" ? workspace.role : null;
 }
 
-export function buildWorkspaceSettingsProviderSectionProps({
-  copy,
-  highlightedAnchor,
-  locale,
-  managedRole,
-  mediaStorageHealth,
-  providerConfigs,
-  refreshingMediaStorageHealth,
-  refreshMediaStorageHealthState,
-  token,
-  onSaveProviderConfig,
-}: WorkspaceSettingsProviderSectionBuilderInput): WorkspaceSettingsProviderSectionProps {
+export function buildWorkspaceSettingsProviderSectionProps(
+  input: WorkspaceSettingsProviderSectionBuilderInput,
+): WorkspaceSettingsProviderSectionProps {
+  const refreshToken = input.token;
   return {
-    highlightedAnchor,
-    locale,
-    managedRole,
-    mediaStorageHealth,
-    onRefreshMediaStorageHealth: token ? async () => refreshMediaStorageHealthState(token) : null,
-    onSaveProviderConfig,
-    providerConfigs,
-    refreshingMediaStorageHealth,
-    providerTitle: copy.providerTitle,
-    viewerNotice: copy.viewerNotice,
+    highlightedAnchor: input.highlightedAnchor,
+    locale: input.locale,
+    managedRole: input.managedRole,
+    mediaStorageHealth: input.mediaStorageHealth,
+    onRefreshMediaStorageHealth: refreshToken
+      ? async () => input.refreshMediaStorageHealthState(refreshToken)
+      : null,
+    onSaveProviderConfig: input.onSaveProviderConfig,
+    providerConfigs: input.providerConfigs,
+    refreshingMediaStorageHealth: input.refreshingMediaStorageHealth,
+    providerTitle: input.copy.providerTitle,
+    viewerNotice: input.copy.viewerNotice,
   };
 }
 
