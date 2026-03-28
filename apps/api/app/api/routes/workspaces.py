@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.api.deps import (
@@ -11,6 +8,18 @@ from app.api.deps import (
     get_workspace_membership,
     require_workspace_member,
     require_workspace_role,
+)
+from app.api.routes.workspace_route_helpers import (
+    build_workspace_transfer_job_download_response,
+    cleanup_export_archive,
+    get_workspace_member_or_404,
+    get_workspace_transfer_job_for_user_or_404,
+    resolve_workspace_role_for_user,
+    serialize_workspace,
+    serialize_workspace_member,
+    serialize_workspace_transfer_job,
+    validate_workspace_member_removal,
+    validate_workspace_member_role_change,
 )
 from app.db.session import get_db
 from app.models.user import User
@@ -37,55 +46,6 @@ from app.services.workspace_transfer_jobs import (
 router = APIRouter()
 
 
-def serialize_workspace(workspace: Workspace, role: str) -> dict:
-    return {
-        "id": workspace.id,
-        "name": workspace.name,
-        "slug": workspace.slug,
-        "owner_id": workspace.owner_id,
-        "visibility": workspace.visibility,
-        "role": role,
-        "created_at": workspace.created_at,
-    }
-
-
-def serialize_workspace_member(member: WorkspaceMember) -> dict:
-    return {
-        "id": member.id,
-        "workspace_id": member.workspace_id,
-        "user_id": member.user_id,
-        "role": member.role,
-        "username": member.user.username,
-        "email": member.user.email,
-        "display_name": member.user.display_name,
-        "created_at": member.created_at,
-    }
-
-
-def _cleanup_export_archive(path: Path) -> None:
-    try:
-        path.unlink(missing_ok=True)
-    except Exception:  # noqa: BLE001
-        return
-
-
-def serialize_workspace_transfer_job(job: WorkspaceTransferJob) -> dict:
-    return {
-        "id": job.id,
-        "workspace_id": job.workspace_id,
-        "created_by": job.created_by,
-        "job_type": job.job_type,
-        "status": job.status,
-        "payload_json": job.payload_json,
-        "result_json": job.result_json,
-        "artifact_filename": job.artifact_filename,
-        "error_message": job.error_message,
-        "created_at": job.created_at,
-        "updated_at": job.updated_at,
-        "completed_at": job.completed_at,
-    }
-
-
 @router.get("")
 def list_workspaces(
     current_user: User = Depends(get_current_user),
@@ -105,14 +65,7 @@ def list_workspaces(
                 WorkspaceRead.model_validate(
                     serialize_workspace(
                         workspace,
-                        next(
-                            (
-                                membership.role
-                                for membership in workspace.members
-                                if membership.user_id == current_user.id
-                            ),
-                            "viewer",
-                        ),
+                        resolve_workspace_role_for_user(workspace, current_user.id),
                     )
                 ).model_dump()
                 for workspace in workspaces
@@ -258,7 +211,7 @@ def export_workspace_archive(
         workspace_id,
         exported_by_user_id=current_user.id,
     )
-    background_tasks.add_task(_cleanup_export_archive, archive_path)
+    background_tasks.add_task(cleanup_export_archive, archive_path)
     log_audit_event(
         db,
         workspace_id=workspace_id,
@@ -270,7 +223,19 @@ def export_workspace_archive(
         metadata_json=counts,
     )
     filename = f"{workspace.slug or workspace.id}-export.zip"
-    return FileResponse(path=archive_path, media_type="application/zip", filename=filename)
+    return build_workspace_transfer_job_download_response(
+        WorkspaceTransferJob(
+            id=workspace.id,
+            workspace_id=workspace_id,
+            created_by=current_user.id,
+            job_type="export",
+            status="completed",
+            artifact_path=str(archive_path),
+            artifact_filename=filename,
+            payload_json={},
+            result_json={},
+        )
+    )
 
 
 @router.post("/{workspace_id}/export-jobs")
@@ -317,9 +282,11 @@ def get_workspace_transfer_job(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    job = db.get(WorkspaceTransferJob, job_id)
-    if not job or job.created_by != current_user.id:
-        raise HTTPException(status_code=404, detail="Workspace transfer job not found")
+    job = get_workspace_transfer_job_for_user_or_404(
+        db,
+        job_id=job_id,
+        current_user_id=current_user.id,
+    )
     return {
         "success": True,
         "data": {"job": WorkspaceTransferJobRead.model_validate(serialize_workspace_transfer_job(job)).model_dump()},
@@ -332,17 +299,12 @@ def download_workspace_transfer_job_artifact(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    job = db.get(WorkspaceTransferJob, job_id)
-    if not job or job.created_by != current_user.id:
-        raise HTTPException(status_code=404, detail="Workspace transfer job not found")
-    if job.job_type != "export" or job.status != "completed" or not job.artifact_path:
-        raise HTTPException(status_code=400, detail="Job artifact is not available")
-
-    artifact_path = Path(job.artifact_path)
-    if not artifact_path.exists():
-        raise HTTPException(status_code=404, detail="Job artifact file not found")
-    filename = job.artifact_filename or f"workspace-transfer-{job.id}.zip"
-    return FileResponse(path=artifact_path, media_type="application/zip", filename=filename)
+    job = get_workspace_transfer_job_for_user_or_404(
+        db,
+        job_id=job_id,
+        current_user_id=current_user.id,
+    )
+    return build_workspace_transfer_job_download_response(job)
 
 
 @router.get("/{workspace_id}/members")
@@ -376,16 +338,12 @@ def update_workspace_member(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
-    if payload.role not in {"viewer", "editor"}:
-        raise HTTPException(status_code=400, detail="Invalid workspace role")
-
-    member = db.get(WorkspaceMember, member_id)
-    if not member or member.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Workspace member not found")
-    if member.role == "owner":
-        raise HTTPException(status_code=400, detail="Owner membership cannot be changed")
-    if member.user_id == current_user.id:
-        raise HTTPException(status_code=400, detail="You cannot change your own workspace membership")
+    member = get_workspace_member_or_404(db, workspace_id=workspace_id, member_id=member_id)
+    validate_workspace_member_role_change(
+        member,
+        actor_user_id=current_user.id,
+        next_role=payload.role,
+    )
 
     previous_role = member.role
     member.role = payload.role
@@ -417,13 +375,8 @@ def delete_workspace_member(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_role(workspace_id, current_user, db, allowed_roles={"owner"})
-    member = db.get(WorkspaceMember, member_id)
-    if not member or member.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Workspace member not found")
-    if member.role == "owner":
-        raise HTTPException(status_code=400, detail="Owner membership cannot be removed")
-    if member.user_id == current_user.id:
-        raise HTTPException(status_code=400, detail="You cannot remove yourself from the workspace")
+    member = get_workspace_member_or_404(db, workspace_id=workspace_id, member_id=member_id)
+    validate_workspace_member_removal(member, actor_user_id=current_user.id)
 
     removed_user_id = member.user_id
     removed_username = member.user.username

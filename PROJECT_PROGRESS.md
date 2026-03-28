@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Route Helper Extraction V1:
+  - `apps/api/app/api/routes/workspace_route_helpers.py` now owns workspace, member, and transfer-job serialization plus repeated transfer-job and membership validation helpers
+  - `apps/api/app/api/routes/workspaces.py` now delegates those responsibilities instead of carrying all of that boundary logic inline, which shrinks another frequently touched route file without changing API behavior
+  - this makes export/import, transfer-job download, and member-management paths easier to review and lowers future change risk in a critical enterprise-facing API surface
 - Media Route Helper Extraction V1:
   - `apps/api/app/api/routes/media_route_helpers.py` now owns the repeated dead-letter retry normalization, workspace media and record lookups, media content response construction, upload-media asset construction, and bulk retry execution helpers
   - `apps/api/app/api/routes/media.py` now delegates those responsibilities instead of carrying all branches inline, which shrinks a high-churn enterprise-critical route file without changing endpoint behavior
