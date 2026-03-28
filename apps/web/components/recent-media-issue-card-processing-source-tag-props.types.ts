@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type BuildRecentMediaIssueCardProcessingSourceTagPropsInput = Pick<RecentMediaIssueCardTagsProps, "issue">;
