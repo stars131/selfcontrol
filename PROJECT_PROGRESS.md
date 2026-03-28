@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- API Route Coverage Baseline Guard V1:
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now asserts that every primary FastAPI route module under `apps/api/app/api/routes` is explicitly tracked by at least one direct API test file
+  - the baseline currently covers auth, records, media, conversations, knowledge, search, share, reminders, notifications, timeline, provider configs, audit logs, and workspace routes
+  - this turns the recent route-level coverage expansion into an enforced maintainability guard so future route additions or removals cannot drift silently
 - Record CRUD API Coverage V1:
   - `apps/api/app/api/routes/record_route_helpers.py` now additionally owns generic record field mutation and record-delete media cleanup execution so the records route carries less low-level write-side branching inline
   - `apps/api/tests/test_records_api.py` now covers record create/list/detail/update plus delete cleanup for mixed local and remote media attachments
