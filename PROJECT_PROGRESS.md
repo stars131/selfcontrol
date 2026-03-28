@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Search And Audit Log API Coverage V1:
+  - `apps/api/app/api/routes/audit_log_route_helpers.py` now owns audit-log item serialization so the audit route no longer carries its response-shaping details inline
+  - `apps/api/tests/test_search_audit_api.py` now covers search summary mode switching between hybrid and keyword retrieval plus audit-log limit and action-code filtering behavior
+  - this locks down two small but user-facing API contracts that previously had no direct route-level regression coverage
 - Knowledge Route Helper And API Coverage V1:
   - `apps/api/app/api/routes/knowledge_route_helpers.py` now owns workspace-scoped knowledge reindex record lookup and ordered knowledge-search record collection so the route no longer carries that low-level boundary logic inline
   - `apps/api/app/api/routes/knowledge.py` now delegates those responsibilities, which keeps the knowledge API focused on permissions, orchestration, and response shaping

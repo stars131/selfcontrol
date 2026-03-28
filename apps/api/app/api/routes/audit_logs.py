@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member
+from app.api.routes.audit_log_route_helpers import serialize_audit_log
 from app.db.session import get_db
 from app.models.audit_log import AuditLog
 from app.models.user import User
@@ -29,20 +30,6 @@ def list_audit_logs(
     return {
         "success": True,
         "data": {
-            "items": [
-                {
-                    "id": item.id,
-                    "workspace_id": item.workspace_id,
-                    "actor_user_id": item.actor_user_id,
-                    "action_code": item.action_code,
-                    "resource_type": item.resource_type,
-                    "resource_id": item.resource_id,
-                    "status": item.status,
-                    "message": item.message,
-                    "metadata_json": item.metadata_json,
-                    "created_at": item.created_at.isoformat() if item.created_at else None,
-                }
-                for item in items
-            ]
+            "items": [serialize_audit_log(item) for item in items]
         },
     }
