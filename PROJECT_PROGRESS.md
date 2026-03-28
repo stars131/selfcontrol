@@ -3015,6 +3015,10 @@ Last updated: 2026-03-28
   - dead-letter issue-label tag prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-issue-label-tag-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
   - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now keeps issue-label tag projection isolated from the other tag leaves so the tag-row orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this issue-label-tag-props-builder boundary so future dead-letter tag-row changes do not regrow mixed child-prop projection logic
+- Dead-Letter Last Attempt Props Builder Extraction V1:
+  - dead-letter last-attempt prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-last-attempt-props.ts` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-metadata.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-metadata.tsx` now keeps last-attempt projection isolated from the other metadata leaves so the metadata section stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this last-attempt-props-builder boundary so future dead-letter metadata changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
