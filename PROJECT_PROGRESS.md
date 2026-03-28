@@ -3087,6 +3087,10 @@ Last updated: 2026-03-28
   - media-asset metadata tags prop assembly now lives in `apps/web/components/media-asset-card-metadata-tags-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata.tsx`
   - `apps/web/components/media-asset-card-metadata.tsx` now keeps tags projection isolated from metadata details projection so the metadata section stays easier to evolve safely
   - the media-asset-card structure guardrail now enforces this metadata-tags-props boundary so future media metadata changes do not regrow mixed child-prop projection logic
+- Media Asset Timing Detail Props Builder Extraction V1:
+  - media-asset last-attempt and next-retry detail prop assembly now lives in `apps/web/components/media-asset-card-last-attempt-detail-props.ts` and `apps/web/components/media-asset-card-next-retry-detail-props.ts`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps timing detail projection isolated from the rest of the detail-grid leaves so the metadata-details section stays easier to evolve safely
+  - the media-asset-card structure guardrail now enforces these timing-detail props-builder boundaries so future media metadata detail changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
