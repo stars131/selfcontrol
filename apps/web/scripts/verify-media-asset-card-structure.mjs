@@ -521,7 +521,7 @@ if (!cardSource.includes("<MediaAssetCardMetadata")) {
   throw new Error("media-asset-card.tsx must delegate metadata rendering");
 }
 
-if (!cardSource.includes("buildMediaAssetCardMetadataProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })")) {
+if (!cardSource.includes("buildMediaAssetCardMetadataProps(props)")) {
   throw new Error("media-asset-card.tsx must delegate media metadata prop assembly");
 }
 
@@ -529,7 +529,7 @@ if (!cardSource.includes("<MediaAssetCardActions")) {
   throw new Error("media-asset-card.tsx must delegate action rendering");
 }
 
-if (!cardSource.includes("buildMediaAssetCardActionsProps({")) {
+if (!cardSource.includes("buildMediaAssetCardActionsProps(props)")) {
   throw new Error("media-asset-card.tsx must delegate media action prop assembly");
 }
 
@@ -537,19 +537,19 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
-if (!cardSource.includes("buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })")) {
+if (!cardSource.includes("buildMediaAssetCardPreviewProps(props)")) {
   throw new Error("media-asset-card.tsx must delegate media preview prop assembly");
 }
 
-if (!cardSource.includes("buildMediaAssetCardIntroProps({ asset })")) {
+if (!cardSource.includes("buildMediaAssetCardIntroProps({ asset: props.asset })")) {
   throw new Error("media-asset-card.tsx must delegate media intro prop assembly");
 }
 
-if (!cardSource.includes("buildMediaAssetCardExtractedTextProps({ asset })")) {
+if (!cardSource.includes("buildMediaAssetCardExtractedTextProps({ asset: props.asset })")) {
   throw new Error("media-asset-card.tsx must delegate media extracted-text prop assembly");
 }
 
-if (!cardSource.includes("buildMediaAssetCardErrorProps({ asset })")) {
+if (!cardSource.includes("buildMediaAssetCardErrorProps({ asset: props.asset })")) {
   throw new Error("media-asset-card.tsx must delegate media error prop assembly");
 }
 
@@ -557,6 +557,7 @@ for (const forbiddenCardActionPropsToken of [
   "canWriteWorkspace={canWriteWorkspace}",
   "deletingMediaId={deletingMediaId}",
   "downloadingMediaId={downloadingMediaId}",
+  "buildMediaAssetCardActionsProps({",
   "onDeleteMediaAsset={onDeleteMediaAsset}",
   "onDownloadMedia={onDownloadMedia}",
   "onRefreshMedia={onRefreshMedia}",
@@ -574,6 +575,7 @@ for (const forbiddenCardActionPropsToken of [
 for (const forbiddenCardPreviewPropsToken of [
   "authToken={authToken}",
   "workspaceId={workspaceId}",
+  "buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })",
 ]) {
   if (cardSource.includes(forbiddenCardPreviewPropsToken)) {
     throw new Error(
@@ -585,6 +587,7 @@ for (const forbiddenCardPreviewPropsToken of [
 for (const forbiddenCardMetadataPropsToken of [
   "formatHistoryTimestampLabel={formatHistoryTimestampLabel}",
   "mediaIssueCopy={mediaIssueCopy}",
+  "buildMediaAssetCardMetadataProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })",
 ]) {
   if (cardSource.includes(forbiddenCardMetadataPropsToken)) {
     throw new Error(

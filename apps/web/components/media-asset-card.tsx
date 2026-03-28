@@ -14,46 +14,15 @@ import { buildMediaAssetCardPreviewProps } from "./media-asset-card-preview-prop
 import { MediaAssetCardPreview } from "./media-asset-card-preview";
 import type { MediaAssetCardProps } from "./media-asset-card.types";
 
-export function MediaAssetCard({
-  asset,
-  authToken,
-  workspaceId,
-  canWriteWorkspace,
-  mediaIssueCopy,
-  downloadingMediaId,
-  refreshingMediaId,
-  retryingMediaId,
-  deletingMediaId,
-  formatHistoryTimestampLabel,
-  onDownloadMedia,
-  onRefreshMedia,
-  onRetryMediaProcessing,
-  onDeleteMediaAsset,
-}: MediaAssetCardProps) {
+export function MediaAssetCard(props: MediaAssetCardProps) {
   return (
     <article className="record-card">
-      <MediaAssetCardIntro {...buildMediaAssetCardIntroProps({ asset })} />
-      <MediaAssetCardMetadata
-        {...buildMediaAssetCardMetadataProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })}
-      />
-      <MediaAssetCardPreview {...buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })} />
-      <MediaAssetCardExtractedText {...buildMediaAssetCardExtractedTextProps({ asset })} />
-      <MediaAssetCardError {...buildMediaAssetCardErrorProps({ asset })} />
-      <MediaAssetCardActions
-        {...buildMediaAssetCardActionsProps({
-          asset,
-          canWriteWorkspace,
-          deletingMediaId,
-          downloadingMediaId,
-          mediaIssueCopy,
-          onDeleteMediaAsset,
-          onDownloadMedia,
-          onRefreshMedia,
-          onRetryMediaProcessing,
-          refreshingMediaId,
-          retryingMediaId,
-        })}
-      />
+      <MediaAssetCardIntro {...buildMediaAssetCardIntroProps({ asset: props.asset })} />
+      <MediaAssetCardMetadata {...buildMediaAssetCardMetadataProps(props)} />
+      <MediaAssetCardPreview {...buildMediaAssetCardPreviewProps(props)} />
+      <MediaAssetCardExtractedText {...buildMediaAssetCardExtractedTextProps({ asset: props.asset })} />
+      <MediaAssetCardError {...buildMediaAssetCardErrorProps({ asset: props.asset })} />
+      <MediaAssetCardActions {...buildMediaAssetCardActionsProps(props)} />
     </article>
   );
 }
