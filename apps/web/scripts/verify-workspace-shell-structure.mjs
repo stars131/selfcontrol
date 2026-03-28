@@ -824,9 +824,9 @@ for (const requiredActionsImport of [
 }
 
 for (const requiredActionsUsage of [
-  "createWorkspaceShellChatRecordActions(props)",
-  "createWorkspaceShellMediaFilterActions(props)",
-  "createWorkspaceShellAdminActions(props)",
+  "createWorkspaceShellChatRecordActions(input)",
+  "createWorkspaceShellMediaFilterActions(input)",
+  "createWorkspaceShellAdminActions(input)",
   "...chatRecordActions",
   "...mediaFilterActions",
   "...adminActions",
@@ -954,9 +954,9 @@ for (const requiredEffectsImport of [
 }
 
 for (const requiredEffectsUsage of [
-  "useWorkspaceShellInitialLoad(props)",
-  "useWorkspaceShellSelectionEffects(props)",
-  "useWorkspaceShellNotificationEffect(props)",
+  "useWorkspaceShellInitialLoad(input)",
+  "useWorkspaceShellSelectionEffects(input)",
+  "useWorkspaceShellNotificationEffect(input)",
 ]) {
   if (!effectsSource.includes(requiredEffectsUsage)) {
     throw new Error(`use-workspace-shell-effects.ts must delegate effect orchestration: ${requiredEffectsUsage}`);

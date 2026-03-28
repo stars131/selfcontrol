@@ -6,7 +6,7 @@ import type { WorkspaceShellInitialLoadProps } from "./workspace-shell-effects.t
 import { readWorkspaceShellInitialToken } from "./workspace-shell-initial-load-auth";
 import { runWorkspaceShellInitialLoad } from "./workspace-shell-initial-load-runner";
 
-export function useWorkspaceShellInitialLoad(props: WorkspaceShellInitialLoadProps) {
+export function useWorkspaceShellInitialLoad(input: WorkspaceShellInitialLoadProps) {
   const lastLoadKeyRef = useRef<string | null>(null);
   const {
     router,
@@ -31,7 +31,7 @@ export function useWorkspaceShellInitialLoad(props: WorkspaceShellInitialLoadPro
     setToken,
     setVisibleRecords,
     setWorkspace,
-  } = props;
+  } = input;
 
   useEffect(() => {
     const activeToken = readWorkspaceShellInitialToken(router);
