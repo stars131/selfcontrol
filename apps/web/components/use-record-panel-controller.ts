@@ -9,17 +9,17 @@ import { useRecordPanelControllerSync } from "./use-record-panel-controller-sync
 import { useRecordPanelControllerState } from "./use-record-panel-controller-state";
 import { useRecordPanelControllerViewData } from "./use-record-panel-controller-view-data";
 
-export function useRecordPanelController(props: ControllerProps) {
+export function useRecordPanelController(input: ControllerProps) {
   const viewData = useRecordPanelControllerViewData({
-    mediaAssets: props.mediaAssets,
-    mediaDeadLetterOverview: props.mediaDeadLetterOverview,
-    records: props.records,
-    selectedRecordId: props.selectedRecordId,
+    mediaAssets: input.mediaAssets,
+    mediaDeadLetterOverview: input.mediaDeadLetterOverview,
+    records: input.records,
+    selectedRecordId: input.selectedRecordId,
   });
-  const state = useRecordPanelControllerState(props.recordFilter);
-  useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...props, ...state, ...viewData }));
+  const state = useRecordPanelControllerState(input.recordFilter);
+  useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...input, ...state, ...viewData }));
   const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(
-    buildRecordPanelControllerHandlerGroupsInput({ ...props, ...state, ...viewData }),
+    buildRecordPanelControllerHandlerGroupsInput({ ...input, ...state, ...viewData }),
   );
   return buildRecordPanelControllerResult({ ...state, ...viewData, mediaHandlers, recordHandlers });
 }

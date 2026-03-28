@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Cross-Panel Hook Naming Cleanup V1:
+  - `apps/web/components/use-chat-panel-actions.ts`, `use-map-panel-amap.ts`, and `use-record-panel-controller.ts` now use explicit `input` parameters while keeping chat action wiring, AMap orchestration, and record-panel controller composition unchanged
+  - this keeps cross-panel high-frequency hook boundaries aligned with the broader helper-signature normalization work without changing chat, map, or record interaction behavior
+  - the chat-panel, map-panel, and record-panel structure guardrails now enforce this normalized hook boundary so future orchestration changes stay easier to review, test, and extend under the enterprise engineering standard
 - Workspace Shell Hook Naming Cleanup V1:
   - `apps/web/components/use-workspace-shell-actions.ts`, `use-workspace-shell-effects.ts`, and `use-workspace-shell-initial-load.ts` now use explicit `input` parameters while keeping action wiring, lifecycle orchestration, and initial bootstrap behavior unchanged
   - this keeps the workspace-shell hook layer aligned with the broader helper-signature normalization work without changing loading, notification, selection, or mutation behavior

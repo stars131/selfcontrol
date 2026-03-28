@@ -11276,10 +11276,10 @@ for (const requiredHandlerGroupsImport of [
 }
 
 for (const requiredControllerUsage of [
-  "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...props, ...state, ...viewData }))",
+  "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...input, ...state, ...viewData }))",
   "useRecordPanelControllerViewData({",
-  "useRecordPanelControllerState(props.recordFilter)",
-  "buildRecordPanelControllerHandlerGroupsInput({ ...props, ...state, ...viewData })",
+  "useRecordPanelControllerState(input.recordFilter)",
+  "buildRecordPanelControllerHandlerGroupsInput({ ...input, ...state, ...viewData })",
   "createRecordPanelControllerHandlerGroups(",
   "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(",
   "buildRecordPanelControllerResult({ ...state, ...viewData, mediaHandlers, recordHandlers })",
@@ -23832,7 +23832,7 @@ if (chatPanelOperatorHandlersTypesLines > maxChatPanelOperatorHandlersTypesLines
 
 for (const requiredUseChatPanelActionsUsage of [
   'import type { UseChatPanelActionsProps } from "./chat-panel-action-handler-inputs.types";',
-  "export function useChatPanelActions(props: UseChatPanelActionsProps) {",
+  "export function useChatPanelActions(input: UseChatPanelActionsProps) {",
 ]) {
   if (!useChatPanelActionsSource.includes(requiredUseChatPanelActionsUsage)) {
     throw new Error(

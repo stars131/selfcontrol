@@ -11,17 +11,17 @@ import { createChatPanelShareHandlers } from "./chat-panel-share-handlers";
 import { useChatPanelActionDerivedData } from "./use-chat-panel-action-derived-data";
 import { useChatPanelActionState } from "./use-chat-panel-action-state";
 
-export function useChatPanelActions(props: UseChatPanelActionsProps) {
+export function useChatPanelActions(input: UseChatPanelActionsProps) {
   const state = useChatPanelActionState();
   const derivedData = useChatPanelActionDerivedData({
-    latestSharePath: props.latestSharePath,
-    notifications: props.notifications,
+    latestSharePath: input.latestSharePath,
+    notifications: input.notifications,
   });
   const operatorHandlers = createChatPanelOperatorHandlers(
-    buildChatPanelOperatorHandlerInput({ ...props, ...state }),
+    buildChatPanelOperatorHandlerInput({ ...input, ...state }),
   );
   const shareHandlers = createChatPanelShareHandlers(
-    buildChatPanelShareHandlerInput({ ...props, ...state }),
+    buildChatPanelShareHandlerInput({ ...input, ...state }),
   );
 
   return buildChatPanelActionsResult({

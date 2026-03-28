@@ -580,8 +580,8 @@ for (const requiredActionsImport of [
 for (const requiredActionsUsage of [
   "useChatPanelActionState()",
   "useChatPanelActionDerivedData({",
-  "buildChatPanelOperatorHandlerInput({ ...props, ...state })",
-  "buildChatPanelShareHandlerInput({ ...props, ...state })",
+  "buildChatPanelOperatorHandlerInput({ ...input, ...state })",
+  "buildChatPanelShareHandlerInput({ ...input, ...state })",
   "createChatPanelOperatorHandlers(",
   "createChatPanelShareHandlers(",
   "buildChatPanelActionsResult({",

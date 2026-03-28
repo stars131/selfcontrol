@@ -266,10 +266,10 @@ for (const requiredAmapImport of [
 }
 
 for (const requiredAmapUsage of [
-  "useMapPanelAmapInit(props)",
-  "useMapPanelAmapMarkers(props)",
-  "props.mapRef.current?.destroy?.()",
-  "props.geocoderRef.current = null",
+  "useMapPanelAmapInit(input)",
+  "useMapPanelAmapMarkers(input)",
+  "input.mapRef.current?.destroy?.()",
+  "input.geocoderRef.current = null",
 ]) {
   if (!mapPanelAmapSource.includes(requiredAmapUsage)) {
     throw new Error(`use-map-panel-amap.ts must delegate AMap orchestration: ${requiredAmapUsage}`);
