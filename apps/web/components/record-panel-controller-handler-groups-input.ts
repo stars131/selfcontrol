@@ -4,14 +4,12 @@ import { buildRecordPanelControllerHandlerGroupsStateInput } from "./record-pane
 import { buildRecordPanelControllerHandlerGroupsViewDataInput } from "./record-panel-controller-handler-groups-view-data-input";
 import type { RecordPanelControllerHandlerGroupsInputArgs } from "./record-panel-controller-handler-groups-input.types";
 
-export function buildRecordPanelControllerHandlerGroupsInput({
-  props,
-  state,
-  viewData,
-}: RecordPanelControllerHandlerGroupsInputArgs) {
+export function buildRecordPanelControllerHandlerGroupsInput(
+  input: RecordPanelControllerHandlerGroupsInputArgs,
+) {
   return {
-    ...buildRecordPanelControllerHandlerGroupsPropsInput(props),
-    ...buildRecordPanelControllerHandlerGroupsStateInput(state),
-    ...buildRecordPanelControllerHandlerGroupsViewDataInput(viewData),
+    ...buildRecordPanelControllerHandlerGroupsPropsInput(input),
+    ...buildRecordPanelControllerHandlerGroupsStateInput(input),
+    ...buildRecordPanelControllerHandlerGroupsViewDataInput(input),
   };
 }

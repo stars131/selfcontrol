@@ -11284,7 +11284,7 @@ for (const requiredControllerUsage of [
   "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...props, ...state, ...viewData }))",
   "useRecordPanelControllerViewData({",
   "useRecordPanelControllerState(props.recordFilter)",
-  "buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData })",
+  "buildRecordPanelControllerHandlerGroupsInput({ ...props, ...state, ...viewData })",
   "createRecordPanelControllerHandlerGroups(",
   "const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(",
   "buildRecordPanelControllerResult({ mediaHandlers, recordHandlers, state, viewData })",
@@ -12019,10 +12019,12 @@ for (const requiredControllerHandlerGroupsInputTypesImport of [
 }
 
 for (const requiredControllerHandlerGroupsInputTypesUsage of [
-  "export type RecordPanelControllerHandlerGroupsInputArgs = {",
-  "props: RecordPanelControllerHandlerGroupPropsInput;",
-  "state: RecordPanelControllerHandlerGroupStateInput;",
-  "viewData: RecordPanelControllerHandlerGroupViewDataInput;",
+  "export type RecordPanelControllerHandlerGroupsInput =",
+  "RecordPanelControllerHandlerGroupPropsInput &",
+  "RecordPanelControllerHandlerGroupStateInput &",
+  "RecordPanelControllerHandlerGroupViewDataInput;",
+  "export type RecordPanelControllerHandlerGroupsInputArgs =",
+  "RecordPanelControllerHandlerGroupsInput;",
 ]) {
   if (!controllerHandlerGroupsInputTypesSource.includes(requiredControllerHandlerGroupsInputTypesUsage)) {
     throw new Error(
@@ -12052,10 +12054,11 @@ for (const requiredControllerHandlerGroupsInputImport of [
 }
 
 for (const requiredControllerHandlerGroupsInputUsage of [
-  "export function buildRecordPanelControllerHandlerGroupsInput({",
-  "buildRecordPanelControllerHandlerGroupsPropsInput(props)",
-  "buildRecordPanelControllerHandlerGroupsStateInput(state)",
-  "buildRecordPanelControllerHandlerGroupsViewDataInput(viewData)",
+  "export function buildRecordPanelControllerHandlerGroupsInput(",
+  "input: RecordPanelControllerHandlerGroupsInputArgs,",
+  "buildRecordPanelControllerHandlerGroupsPropsInput(input)",
+  "buildRecordPanelControllerHandlerGroupsStateInput(input)",
+  "buildRecordPanelControllerHandlerGroupsViewDataInput(input)",
 ]) {
   if (!controllerHandlerGroupsInputSource.includes(requiredControllerHandlerGroupsInputUsage)) {
     throw new Error(

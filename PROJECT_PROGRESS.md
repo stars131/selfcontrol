@@ -3296,6 +3296,10 @@ Last updated: 2026-03-28
   - `apps/web/components/use-record-panel-controller.ts` now forwards one flattened input object into `buildRecordPanelControllerSyncInput` instead of wrapping controller sources under `{ props, state, viewData }`
   - `apps/web/components/use-record-panel-controller-sync.types.ts` and `apps/web/components/record-panel-controller-sync-input.ts` now reuse the flattened `RecordPanelControllerSyncInput` contract directly so the sync-input builder stays easier to evolve without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened controller-sync boundary so future controller sync assembly does not regrow wrapped input assembly
+- Record Panel Handler Groups Input Flattening V1:
+  - `apps/web/components/use-record-panel-controller.ts` now forwards one flattened input object into `buildRecordPanelControllerHandlerGroupsInput` instead of wrapping controller sources under `{ props, state, viewData }`
+  - `apps/web/components/record-panel-controller-handler-groups-input.types.ts` and `apps/web/components/record-panel-controller-handler-groups-input.ts` now reuse a flattened handler-groups input contract directly so the handler-group assembly layer stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened handler-groups boundary so future controller handler assembly does not regrow wrapped input assembly
 
 ## Next
 - Continue the next product slice
