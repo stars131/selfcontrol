@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Shell Initial Load Boundary Cleanup V1:
+  - `apps/web/components/use-workspace-shell-initial-load.ts` now delegates initial load-key construction and duplicate-load gating instead of carrying that boundary logic inline together with the runner invocation
+  - `apps/web/components/workspace-shell-initial-load-key.ts` now owns the reusable workspace-shell initial load key and replay guard helpers
+  - `apps/web/scripts/verify-workspace-shell-structure.mjs` now enforces that this load-key boundary stays extracted, which keeps the workspace shell bootstrap hook thinner and easier to extend safely
 - Web Route Entrypoint Guard V1:
   - `apps/web/scripts/verify-route-entrypoints.mjs` now enforces that the key Next.js page entrypoints stay as thin route shells and continue delegating real UI logic to dedicated client components
   - the guarded routes now include landing, login, register, app entry, workspace shell, workspace settings, and public share preview pages
