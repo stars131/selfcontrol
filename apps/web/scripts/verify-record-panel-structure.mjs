@@ -9815,9 +9815,9 @@ for (const requiredEditorWorkspaceChannelCopyPropsImport of [
 }
 
 for (const requiredEditorWorkspaceChannelCopyPropsUsage of [
-  "export function buildRecordEditorWorkspaceChannelCopyProps({ detailCopy }",
-  "channelInAppLabel: detailCopy.channelInApp",
-  "channelLabel: detailCopy.channelLabel",
+  "export function buildRecordEditorWorkspaceChannelCopyProps(input: RecordEditorWorkspaceCopyPropsInput)",
+  "channelInAppLabel: input.detailCopy.channelInApp",
+  "channelLabel: input.detailCopy.channelLabel",
 ]) {
   if (!editorWorkspaceChannelCopyPropsSource.includes(requiredEditorWorkspaceChannelCopyPropsUsage)) {
     throw new Error(
@@ -9858,9 +9858,9 @@ for (const requiredEditorWorkspaceMediaCopyPropsImport of [
 }
 
 for (const requiredEditorWorkspaceMediaCopyPropsUsage of [
-  "export function buildRecordEditorWorkspaceMediaCopyProps({ detailCopy }",
-  "largestFilePrefixLabel: detailCopy.largestFilePrefix",
-  "noMediaLabel: detailCopy.noMedia",
+  "export function buildRecordEditorWorkspaceMediaCopyProps(input: RecordEditorWorkspaceCopyPropsInput)",
+  "largestFilePrefixLabel: input.detailCopy.largestFilePrefix",
+  "noMediaLabel: input.detailCopy.noMedia",
 ]) {
   if (!editorWorkspaceMediaCopyPropsSource.includes(requiredEditorWorkspaceMediaCopyPropsUsage)) {
     throw new Error(
@@ -9901,10 +9901,10 @@ for (const requiredEditorWorkspaceReminderCopyPropsImport of [
 }
 
 for (const requiredEditorWorkspaceReminderCopyPropsUsage of [
-  "export function buildRecordEditorWorkspaceReminderCopyProps({ detailCopy }",
-  "createReminderLabel: detailCopy.createReminder",
-  "reminderSectionDescription: detailCopy.reminderSectionDescription",
-  "untitledReminderLabel: detailCopy.untitledReminder",
+  "export function buildRecordEditorWorkspaceReminderCopyProps(input: RecordEditorWorkspaceCopyPropsInput)",
+  "createReminderLabel: input.detailCopy.createReminder",
+  "reminderSectionDescription: input.detailCopy.reminderSectionDescription",
+  "untitledReminderLabel: input.detailCopy.untitledReminder",
 ]) {
   if (!editorWorkspaceReminderCopyPropsSource.includes(requiredEditorWorkspaceReminderCopyPropsUsage)) {
     throw new Error(
