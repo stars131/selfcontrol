@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";
+import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";
 import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
 
 export function MediaAssetCardActions({
@@ -24,14 +25,12 @@ export function MediaAssetCardActions({
         mediaIssueCopy={mediaIssueCopy}
         onDownloadMedia={onDownloadMedia}
       />
-      <button
-        className="button secondary"
-        type="button"
-        disabled={refreshingMediaId === asset.id}
-        onClick={() => void onRefreshMedia(asset.id)}
-      >
-        {refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}
-      </button>
+      <MediaAssetCardRefreshButton
+        asset={asset}
+        mediaIssueCopy={mediaIssueCopy}
+        onRefreshMedia={onRefreshMedia}
+        refreshingMediaId={refreshingMediaId}
+      />
       {asset.processing_status !== "completed" ? (
         <button
           className="button secondary"

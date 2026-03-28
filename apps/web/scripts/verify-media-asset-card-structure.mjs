@@ -166,6 +166,15 @@ const downloadButtonTypesPath = path.resolve(
 );
 const downloadButtonTypesSource = fs.readFileSync(downloadButtonTypesPath, "utf8");
 const downloadButtonTypesLineCount = downloadButtonTypesSource.split(/\r?\n/).length;
+const refreshButtonPath = path.resolve(process.cwd(), "components/media-asset-card-refresh-button.tsx");
+const refreshButtonSource = fs.readFileSync(refreshButtonPath, "utf8");
+const refreshButtonLineCount = refreshButtonSource.split(/\r?\n/).length;
+const refreshButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-refresh-button.types.ts",
+);
+const refreshButtonTypesSource = fs.readFileSync(refreshButtonTypesPath, "utf8");
+const refreshButtonTypesLineCount = refreshButtonTypesSource.split(/\r?\n/).length;
 
 if (!cardSource.includes('import { MediaAssetCardMetadata } from "./media-asset-card-metadata";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardMetadata");
@@ -976,7 +985,9 @@ if (!actionsSource.includes('asset.processing_status !== "completed"')) {
 
 for (const requiredActionsUsage of [
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
+  'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   "<MediaAssetCardDownloadButton",
+  "<MediaAssetCardRefreshButton",
 ]) {
   if (!actionsSource.includes(requiredActionsUsage)) {
     throw new Error(
@@ -988,6 +999,8 @@ for (const requiredActionsUsage of [
 for (const forbiddenActionsToken of [
   "onClick={() => void onDownloadMedia(asset)}",
   "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
+  "onClick={() => void onRefreshMedia(asset.id)}",
+  "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
 ]) {
   if (actionsSource.includes(forbiddenActionsToken)) {
     throw new Error(
@@ -1040,6 +1053,53 @@ for (const requiredDownloadButtonTypesUsage of [
 if (downloadButtonTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-download-button.types.ts exceeded 2 lines: ${downloadButtonTypesLineCount}`,
+  );
+}
+
+for (const requiredRefreshButtonUsage of [
+  'import type { MediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button.types";',
+  "}: MediaAssetCardRefreshButtonProps) {",
+  "onClick={() => void onRefreshMedia(asset.id)}",
+  "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
+]) {
+  if (!refreshButtonSource.includes(requiredRefreshButtonUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button.tsx must own refresh button rendering: ${requiredRefreshButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRefreshButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRetryMediaProcessing(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (refreshButtonSource.includes(forbiddenRefreshButtonToken)) {
+    throw new Error(
+      `media-asset-card-refresh-button.tsx must keep non-refresh actions delegated: ${forbiddenRefreshButtonToken}`,
+    );
+  }
+}
+
+if (refreshButtonLineCount > 4) {
+  throw new Error(
+    `media-asset-card-refresh-button.tsx exceeded 4 lines: ${refreshButtonLineCount}`,
+  );
+}
+
+for (const requiredRefreshButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardRefreshButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "mediaIssueCopy" | "onRefreshMedia" | "refreshingMediaId">;',
+]) {
+  if (!refreshButtonTypesSource.includes(requiredRefreshButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button.types.ts must own refresh button prop typing: ${requiredRefreshButtonTypesUsage}`,
+    );
+  }
+}
+
+if (refreshButtonTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-refresh-button.types.ts exceeded 2 lines: ${refreshButtonTypesLineCount}`,
   );
 }
 

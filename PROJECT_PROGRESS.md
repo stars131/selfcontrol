@@ -2903,6 +2903,10 @@ Last updated: 2026-03-28
   - media-asset download button rendering now lives in `apps/web/components/media-asset-card-download-button.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-actions.tsx`
   - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while download button rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this download-button boundary so future action-row changes do not regrow mixed action-layout-and-download rendering logic
+- Media Asset Refresh Button Extraction V1:
+  - media-asset refresh button rendering now lives in `apps/web/components/media-asset-card-refresh-button.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-actions.tsx`
+  - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while refresh button rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this refresh-button boundary so future action-row changes do not regrow mixed action-layout-and-refresh rendering logic
 
 ## Next
 - Continue the next product slice

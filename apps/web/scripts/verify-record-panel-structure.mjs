@@ -1154,6 +1154,14 @@ const mediaAssetCardDownloadButtonTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-download-button.types.ts",
 );
+const mediaAssetCardRefreshButtonPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-refresh-button.tsx",
+);
+const mediaAssetCardRefreshButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-refresh-button.types.ts",
+);
 const mediaStorageOverviewPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview.tsx",
@@ -3571,6 +3579,14 @@ const mediaAssetCardDownloadButtonSource = fs.readFileSync(
 );
 const mediaAssetCardDownloadButtonTypesSource = fs.readFileSync(
   mediaAssetCardDownloadButtonTypesPath,
+  "utf8",
+);
+const mediaAssetCardRefreshButtonSource = fs.readFileSync(
+  mediaAssetCardRefreshButtonPath,
+  "utf8",
+);
+const mediaAssetCardRefreshButtonTypesSource = fs.readFileSync(
+  mediaAssetCardRefreshButtonTypesPath,
   "utf8",
 );
 const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
@@ -6065,6 +6081,10 @@ const mediaAssetCardDownloadButtonLines =
   mediaAssetCardDownloadButtonSource.split(/\r?\n/).length;
 const mediaAssetCardDownloadButtonTypesLines =
   mediaAssetCardDownloadButtonTypesSource.split(/\r?\n/).length;
+const mediaAssetCardRefreshButtonLines =
+  mediaAssetCardRefreshButtonSource.split(/\r?\n/).length;
+const mediaAssetCardRefreshButtonTypesLines =
+  mediaAssetCardRefreshButtonTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewSummaryLines =
   mediaStorageOverviewSummarySource.split(/\r?\n/).length;
@@ -17322,9 +17342,11 @@ if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
 
 for (const requiredMediaAssetCardActionsUsage of [
   'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
+  'import { MediaAssetCardRefreshButton } from "./media-asset-card-refresh-button";',
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   "}: MediaAssetCardActionsProps) {",
   "<MediaAssetCardDownloadButton",
+  "<MediaAssetCardRefreshButton",
 ]) {
   if (!mediaAssetCardActionsSource.includes(requiredMediaAssetCardActionsUsage)) {
     throw new Error(
@@ -17339,6 +17361,8 @@ for (const forbiddenMediaAssetCardActionsToken of [
   "type MediaAssetCardActionsProps = {",
   "onClick={() => void onDownloadMedia(asset)}",
   "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
+  "onClick={() => void onRefreshMedia(asset.id)}",
+  "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
 ]) {
   if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
     throw new Error(
@@ -17410,6 +17434,55 @@ const maxMediaAssetCardDownloadButtonTypesLines = 2;
 if (mediaAssetCardDownloadButtonTypesLines > maxMediaAssetCardDownloadButtonTypesLines) {
   throw new Error(
     `media-asset-card-download-button.types.ts exceeded ${maxMediaAssetCardDownloadButtonTypesLines} lines: ${mediaAssetCardDownloadButtonTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRefreshButtonUsage of [
+  'import type { MediaAssetCardRefreshButtonProps } from "./media-asset-card-refresh-button.types";',
+  "}: MediaAssetCardRefreshButtonProps) {",
+  "onClick={() => void onRefreshMedia(asset.id)}",
+  "{refreshingMediaId === asset.id ? mediaIssueCopy.refreshing : mediaIssueCopy.refreshStatus}",
+]) {
+  if (!mediaAssetCardRefreshButtonSource.includes(requiredMediaAssetCardRefreshButtonUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button.tsx must own media-asset refresh button rendering: ${requiredMediaAssetCardRefreshButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardRefreshButtonToken of [
+  "onDownloadMedia(asset)",
+  "onRetryMediaProcessing(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (mediaAssetCardRefreshButtonSource.includes(forbiddenMediaAssetCardRefreshButtonToken)) {
+    throw new Error(
+      `media-asset-card-refresh-button.tsx must keep non-refresh actions delegated: ${forbiddenMediaAssetCardRefreshButtonToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRefreshButtonLines = 4;
+if (mediaAssetCardRefreshButtonLines > maxMediaAssetCardRefreshButtonLines) {
+  throw new Error(
+    `media-asset-card-refresh-button.tsx exceeded ${maxMediaAssetCardRefreshButtonLines} lines: ${mediaAssetCardRefreshButtonLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardRefreshButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardRefreshButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "mediaIssueCopy" | "onRefreshMedia" | "refreshingMediaId">;',
+]) {
+  if (!mediaAssetCardRefreshButtonTypesSource.includes(requiredMediaAssetCardRefreshButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-refresh-button.types.ts must own media-asset refresh button prop typing: ${requiredMediaAssetCardRefreshButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardRefreshButtonTypesLines = 2;
+if (mediaAssetCardRefreshButtonTypesLines > maxMediaAssetCardRefreshButtonTypesLines) {
+  throw new Error(
+    `media-asset-card-refresh-button.types.ts exceeded ${maxMediaAssetCardRefreshButtonTypesLines} lines: ${mediaAssetCardRefreshButtonTypesLines}`,
   );
 }
 
