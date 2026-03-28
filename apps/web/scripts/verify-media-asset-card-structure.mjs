@@ -157,6 +157,15 @@ const extractionModeTagTypesSource = fs.readFileSync(extractionModeTagTypesPath,
 const extractionModeTagTypesLineCount = extractionModeTagTypesSource.split(/\r?\n/).length;
 const actionsPath = path.resolve(process.cwd(), "components/media-asset-card-actions.tsx");
 const actionsSource = fs.readFileSync(actionsPath, "utf8");
+const downloadButtonPath = path.resolve(process.cwd(), "components/media-asset-card-download-button.tsx");
+const downloadButtonSource = fs.readFileSync(downloadButtonPath, "utf8");
+const downloadButtonLineCount = downloadButtonSource.split(/\r?\n/).length;
+const downloadButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-download-button.types.ts",
+);
+const downloadButtonTypesSource = fs.readFileSync(downloadButtonTypesPath, "utf8");
+const downloadButtonTypesLineCount = downloadButtonTypesSource.split(/\r?\n/).length;
 
 if (!cardSource.includes('import { MediaAssetCardMetadata } from "./media-asset-card-metadata";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardMetadata");
@@ -963,6 +972,75 @@ if (extractionModeTagTypesLineCount > 2) {
 
 if (!actionsSource.includes('asset.processing_status !== "completed"')) {
   throw new Error("media-asset-card-actions.tsx must keep retry button gating");
+}
+
+for (const requiredActionsUsage of [
+  'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
+  "<MediaAssetCardDownloadButton",
+]) {
+  if (!actionsSource.includes(requiredActionsUsage)) {
+    throw new Error(
+      `media-asset-card-actions.tsx must delegate download button rendering: ${requiredActionsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenActionsToken of [
+  "onClick={() => void onDownloadMedia(asset)}",
+  "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
+]) {
+  if (actionsSource.includes(forbiddenActionsToken)) {
+    throw new Error(
+      `media-asset-card-actions.tsx must keep download button rendering delegated: ${forbiddenActionsToken}`,
+    );
+  }
+}
+
+for (const requiredDownloadButtonUsage of [
+  'import type { MediaAssetCardDownloadButtonProps } from "./media-asset-card-download-button.types";',
+  "}: MediaAssetCardDownloadButtonProps) {",
+  "onClick={() => void onDownloadMedia(asset)}",
+  "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
+]) {
+  if (!downloadButtonSource.includes(requiredDownloadButtonUsage)) {
+    throw new Error(
+      `media-asset-card-download-button.tsx must own download button rendering: ${requiredDownloadButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDownloadButtonToken of [
+  "onRefreshMedia(asset.id)",
+  "onRetryMediaProcessing(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (downloadButtonSource.includes(forbiddenDownloadButtonToken)) {
+    throw new Error(
+      `media-asset-card-download-button.tsx must keep non-download actions delegated: ${forbiddenDownloadButtonToken}`,
+    );
+  }
+}
+
+if (downloadButtonLineCount > 4) {
+  throw new Error(
+    `media-asset-card-download-button.tsx exceeded 4 lines: ${downloadButtonLineCount}`,
+  );
+}
+
+for (const requiredDownloadButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardDownloadButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "downloadingMediaId" | "mediaIssueCopy" | "onDownloadMedia">;',
+]) {
+  if (!downloadButtonTypesSource.includes(requiredDownloadButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-download-button.types.ts must own download button prop typing: ${requiredDownloadButtonTypesUsage}`,
+    );
+  }
+}
+
+if (downloadButtonTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-download-button.types.ts exceeded 2 lines: ${downloadButtonTypesLineCount}`,
+  );
 }
 
 for (const forbiddenToken of [

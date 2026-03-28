@@ -1,5 +1,6 @@
 "use client";
 
+import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";
 import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";
 
 export function MediaAssetCardActions({
@@ -17,14 +18,12 @@ export function MediaAssetCardActions({
 }: MediaAssetCardActionsProps) {
   return (
     <div className="action-row" style={{ marginTop: 12 }}>
-      <button
-        className="button secondary"
-        type="button"
-        disabled={downloadingMediaId === asset.id}
-        onClick={() => void onDownloadMedia(asset)}
-      >
-        {downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}
-      </button>
+      <MediaAssetCardDownloadButton
+        asset={asset}
+        downloadingMediaId={downloadingMediaId}
+        mediaIssueCopy={mediaIssueCopy}
+        onDownloadMedia={onDownloadMedia}
+      />
       <button
         className="button secondary"
         type="button"

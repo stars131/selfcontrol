@@ -1146,6 +1146,14 @@ const mediaAssetCardActionsTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-actions.types.ts",
 );
+const mediaAssetCardDownloadButtonPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-download-button.tsx",
+);
+const mediaAssetCardDownloadButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-download-button.types.ts",
+);
 const mediaStorageOverviewPath = path.resolve(
   process.cwd(),
   "components/media-storage-overview.tsx",
@@ -3555,6 +3563,14 @@ const mediaAssetCardErrorTypesSource = fs.readFileSync(mediaAssetCardErrorTypesP
 const mediaAssetCardActionsSource = fs.readFileSync(mediaAssetCardActionsPath, "utf8");
 const mediaAssetCardActionsTypesSource = fs.readFileSync(
   mediaAssetCardActionsTypesPath,
+  "utf8",
+);
+const mediaAssetCardDownloadButtonSource = fs.readFileSync(
+  mediaAssetCardDownloadButtonPath,
+  "utf8",
+);
+const mediaAssetCardDownloadButtonTypesSource = fs.readFileSync(
+  mediaAssetCardDownloadButtonTypesPath,
   "utf8",
 );
 const mediaStorageOverviewSource = fs.readFileSync(mediaStorageOverviewPath, "utf8");
@@ -6045,6 +6061,10 @@ const mediaAssetCardErrorLines = mediaAssetCardErrorSource.split(/\r?\n/).length
 const mediaAssetCardErrorTypesLines = mediaAssetCardErrorTypesSource.split(/\r?\n/).length;
 const mediaAssetCardActionsTypesLines =
   mediaAssetCardActionsTypesSource.split(/\r?\n/).length;
+const mediaAssetCardDownloadButtonLines =
+  mediaAssetCardDownloadButtonSource.split(/\r?\n/).length;
+const mediaAssetCardDownloadButtonTypesLines =
+  mediaAssetCardDownloadButtonTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewTypesLines = mediaStorageOverviewTypesSource.split(/\r?\n/).length;
 const mediaStorageOverviewSummaryLines =
   mediaStorageOverviewSummarySource.split(/\r?\n/).length;
@@ -17301,8 +17321,10 @@ if (mediaAssetCardErrorTypesLines > maxMediaAssetCardErrorTypesLines) {
 }
 
 for (const requiredMediaAssetCardActionsUsage of [
+  'import { MediaAssetCardDownloadButton } from "./media-asset-card-download-button";',
   'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types";',
   "}: MediaAssetCardActionsProps) {",
+  "<MediaAssetCardDownloadButton",
 ]) {
   if (!mediaAssetCardActionsSource.includes(requiredMediaAssetCardActionsUsage)) {
     throw new Error(
@@ -17315,6 +17337,8 @@ for (const forbiddenMediaAssetCardActionsToken of [
   'import type { MediaIssueCopy } from "../lib/record-panel-ui";',
   'import type { MediaAsset } from "../lib/types";',
   "type MediaAssetCardActionsProps = {",
+  "onClick={() => void onDownloadMedia(asset)}",
+  "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
 ]) {
   if (mediaAssetCardActionsSource.includes(forbiddenMediaAssetCardActionsToken)) {
     throw new Error(
@@ -17337,6 +17361,55 @@ const maxMediaAssetCardActionsTypesLines = 2;
 if (mediaAssetCardActionsTypesLines > maxMediaAssetCardActionsTypesLines) {
   throw new Error(
     `media-asset-card-actions.types.ts exceeded ${maxMediaAssetCardActionsTypesLines} lines: ${mediaAssetCardActionsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDownloadButtonUsage of [
+  'import type { MediaAssetCardDownloadButtonProps } from "./media-asset-card-download-button.types";',
+  "}: MediaAssetCardDownloadButtonProps) {",
+  "onClick={() => void onDownloadMedia(asset)}",
+  "{downloadingMediaId === asset.id ? mediaIssueCopy.downloading : mediaIssueCopy.download}",
+]) {
+  if (!mediaAssetCardDownloadButtonSource.includes(requiredMediaAssetCardDownloadButtonUsage)) {
+    throw new Error(
+      `media-asset-card-download-button.tsx must own media-asset download button rendering: ${requiredMediaAssetCardDownloadButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardDownloadButtonToken of [
+  "onRefreshMedia(asset.id)",
+  "onRetryMediaProcessing(asset.id)",
+  "onDeleteMediaAsset(asset.id)",
+]) {
+  if (mediaAssetCardDownloadButtonSource.includes(forbiddenMediaAssetCardDownloadButtonToken)) {
+    throw new Error(
+      `media-asset-card-download-button.tsx must keep non-download actions delegated: ${forbiddenMediaAssetCardDownloadButtonToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDownloadButtonLines = 4;
+if (mediaAssetCardDownloadButtonLines > maxMediaAssetCardDownloadButtonLines) {
+  throw new Error(
+    `media-asset-card-download-button.tsx exceeded ${maxMediaAssetCardDownloadButtonLines} lines: ${mediaAssetCardDownloadButtonLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardDownloadButtonTypesUsage of [
+  'import type { MediaAssetCardActionsProps } from "./media-asset-card-actions.types"; export type MediaAssetCardDownloadButtonProps = Pick<MediaAssetCardActionsProps, "asset" | "downloadingMediaId" | "mediaIssueCopy" | "onDownloadMedia">;',
+]) {
+  if (!mediaAssetCardDownloadButtonTypesSource.includes(requiredMediaAssetCardDownloadButtonTypesUsage)) {
+    throw new Error(
+      `media-asset-card-download-button.types.ts must own media-asset download button prop typing: ${requiredMediaAssetCardDownloadButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardDownloadButtonTypesLines = 2;
+if (mediaAssetCardDownloadButtonTypesLines > maxMediaAssetCardDownloadButtonTypesLines) {
+  throw new Error(
+    `media-asset-card-download-button.types.ts exceeded ${maxMediaAssetCardDownloadButtonTypesLines} lines: ${mediaAssetCardDownloadButtonTypesLines}`,
   );
 }
 
