@@ -3168,6 +3168,14 @@ const mediaStorageHealthMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-metadata.types.ts",
 );
+const mediaStorageHealthProviderTagPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-provider-tag.tsx",
+);
+const mediaStorageHealthProviderTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-provider-tag.types.ts",
+);
 const recordResultsListViewPath = path.resolve(
   process.cwd(),
   "components/record-results-list-view.tsx",
@@ -5066,6 +5074,11 @@ const mediaStorageHealthMetadataTypesSource = fs.readFileSync(
   mediaStorageHealthMetadataTypesPath,
   "utf8",
 );
+const mediaStorageHealthProviderTagSource = fs.readFileSync(mediaStorageHealthProviderTagPath, "utf8");
+const mediaStorageHealthProviderTagTypesSource = fs.readFileSync(
+  mediaStorageHealthProviderTagTypesPath,
+  "utf8",
+);
 const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
 const recordResultsListViewTypesSource = fs.readFileSync(
   recordResultsListViewTypesPath,
@@ -6535,6 +6548,9 @@ const mediaStorageHealthHeaderTypesLines =
 const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthProviderTagLines = mediaStorageHealthProviderTagSource.split(/\r?\n/).length;
+const mediaStorageHealthProviderTagTypesLines =
+  mediaStorageHealthProviderTagTypesSource.split(/\r?\n/).length;
 const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
 const recordResultsSharedLines = recordResultsSharedSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsLines =
@@ -28460,12 +28476,11 @@ if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) 
 }
 
 for (const requiredMediaStorageHealthMetadataUsage of [
-  'import { getStorageProviderLabel } from "../lib/storage-provider-display";',
+  'import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
-  "copy.provider",
-  "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
+  "<MediaStorageHealthProviderTag copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {
@@ -28480,6 +28495,17 @@ if (mediaStorageHealthMetadataSource.includes("type MediaStorageHealthMetadataPr
   throw new Error(
     "media-storage-health-metadata.tsx must keep health-metadata prop typing delegated",
   );
+}
+
+for (const forbiddenMediaStorageHealthMetadataToken of [
+  "copy.provider",
+  "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
+]) {
+  if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
+    throw new Error(
+      `media-storage-health-metadata.tsx must keep provider tag rendering delegated: ${forbiddenMediaStorageHealthMetadataToken}`,
+    );
+  }
 }
 
 const maxMediaStorageHealthMetadataLines = 50;
@@ -28503,6 +28529,62 @@ const maxMediaStorageHealthMetadataTypesLines = 2;
 if (mediaStorageHealthMetadataTypesLines > maxMediaStorageHealthMetadataTypesLines) {
   throw new Error(
     `media-storage-health-metadata.types.ts exceeded ${maxMediaStorageHealthMetadataTypesLines} lines: ${mediaStorageHealthMetadataTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthProviderTagUsage of [
+  'import { getStorageProviderLabel } from "../lib/storage-provider-display";',
+  'import type { MediaStorageHealthProviderTagProps } from "./media-storage-health-provider-tag.types";',
+  "}: MediaStorageHealthProviderTagProps) {",
+  "copy.provider",
+  "getStorageProviderLabel(locale, mediaStorageHealth.provider_code)",
+]) {
+  if (!mediaStorageHealthProviderTagSource.includes(requiredMediaStorageHealthProviderTagUsage)) {
+    throw new Error(
+      `media-storage-health-provider-tag.tsx must own provider tag rendering: ${requiredMediaStorageHealthProviderTagUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthProviderTagSource.includes("type MediaStorageHealthProviderTagProps =")) {
+  throw new Error(
+    "media-storage-health-provider-tag.tsx must keep provider-tag prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthProviderTagToken of [
+  "formatSecretStatus(",
+  "mediaStorageHealth.reachable",
+  "mediaStorageHealth.warnings",
+]) {
+  if (mediaStorageHealthProviderTagSource.includes(forbiddenMediaStorageHealthProviderTagToken)) {
+    throw new Error(
+      `media-storage-health-provider-tag.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthProviderTagToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthProviderTagLines = 6;
+if (mediaStorageHealthProviderTagLines > maxMediaStorageHealthProviderTagLines) {
+  throw new Error(
+    `media-storage-health-provider-tag.tsx exceeded ${maxMediaStorageHealthProviderTagLines} lines: ${mediaStorageHealthProviderTagLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthProviderTagTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthProviderTagProps = Pick<MediaStorageHealthMetadataProps, "copy" | "locale" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthProviderTagTypesSource.includes(requiredMediaStorageHealthProviderTagTypesUsage)) {
+    throw new Error(
+      `media-storage-health-provider-tag.types.ts must own provider-tag prop typing: ${requiredMediaStorageHealthProviderTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthProviderTagTypesLines = 2;
+if (mediaStorageHealthProviderTagTypesLines > maxMediaStorageHealthProviderTagTypesLines) {
+  throw new Error(
+    `media-storage-health-provider-tag.types.ts exceeded ${maxMediaStorageHealthProviderTagTypesLines} lines: ${mediaStorageHealthProviderTagTypesLines}`,
   );
 }
 

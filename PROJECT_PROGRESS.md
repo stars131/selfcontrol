@@ -2831,6 +2831,10 @@ Last updated: 2026-03-28
   - recent-media issue storage-provider tag rendering now lives in `apps/web/components/recent-media-issue-card-storage-provider-tag.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now stays focused on tag ordering and shared composition while storage-provider rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this storage-provider-tag boundary so future recent-media tag changes do not regrow a mixed composition-and-storage-provider rendering module
+- Media Storage Health Provider Tag Extraction V1:
+  - media-storage health provider tag rendering now lives in `apps/web/components/media-storage-health-provider-tag.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
+  - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while provider-tag rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this provider-tag boundary so future health-metadata changes do not regrow a mixed composition-and-provider rendering module
 
 ## Next
 - Continue the next product slice
