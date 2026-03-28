@@ -1,5 +1,6 @@
 "use client";
 
+import { buildDeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons-props";
 import { DeadLetterRecoveryItemCardActionButtons } from "./dead-letter-recovery-item-card-action-buttons";
 import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types";
 
@@ -15,5 +16,5 @@ export function DeadLetterRecoveryItemCardActions({
     return null;
   }
 
-  return <DeadLetterRecoveryItemCardActionButtons item={item} canWriteWorkspace={canWriteWorkspace} mediaIssueCopy={mediaIssueCopy} onRetryMediaProcessing={onRetryMediaProcessing} retryingMediaId={retryingMediaId} settingsHref={settingsHref} />;
+  return <DeadLetterRecoveryItemCardActionButtons {...buildDeadLetterRecoveryItemCardActionButtonsProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />;
 }

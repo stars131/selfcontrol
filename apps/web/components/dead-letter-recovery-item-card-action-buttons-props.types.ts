@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardActionsProps } from "./dead-letter-recovery-item-card-actions.types"; export type BuildDeadLetterRecoveryItemCardActionButtonsPropsInput = DeadLetterRecoveryItemCardActionsProps;
