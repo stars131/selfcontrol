@@ -2815,6 +2815,10 @@ Last updated: 2026-03-28
   - recent-media issue next-retry detail rendering now lives in `apps/web/components/recent-media-issue-card-next-retry-detail.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
   - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now stays focused on detail ordering while next-retry rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this next-retry-detail boundary so future recent-media metadata-detail changes do not regrow a mixed composition-and-next-retry rendering module
+- Dead-Letter Processing Status Tag Extraction V1:
+  - dead-letter item processing-status tag rendering now lives in `apps/web/components/dead-letter-recovery-item-card-processing-status-tag.tsx` instead of remaining inline inside `apps/web/components/dead-letter-recovery-item-card-tags.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-tags.tsx` now stays focused on tag ordering and shared composition while processing-status rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this processing-status-tag boundary so future dead-letter tag changes do not regrow a mixed composition-and-processing-status rendering module
 
 ## Next
 - Continue the next product slice
