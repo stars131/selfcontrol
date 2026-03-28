@@ -2967,6 +2967,10 @@ Last updated: 2026-03-28
   - recent-media metadata-details prop assembly now lives in `apps/web/components/recent-media-issue-card-metadata-details-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata.tsx`
   - `apps/web/components/recent-media-issue-card-metadata.tsx` now keeps details projection isolated from action-notice projection through two dedicated builders
   - the record-panel structure guardrail now enforces this metadata-details-props-builder boundary so future recent-media metadata changes do not regrow mixed child-prop projection logic
+- Recent Media Intro Props Builder Extraction V1:
+  - recent-media intro prop assembly now lives in `apps/web/components/recent-media-issue-card-intro-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card.tsx`
+  - `apps/web/components/recent-media-issue-card.tsx` now keeps intro projection isolated from metadata and action projection so the top-level card orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this intro-props-builder boundary so future recent-media card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
