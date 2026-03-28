@@ -3,7 +3,7 @@ import { createRecordPanelControllerRecordDeleteRunAction } from "./record-panel
 import type { RecordPanelControllerRecordDeleteActionInput } from "./record-panel-controller-record-delete-action-input.types";
 
 export function createRecordPanelControllerRecordDeleteActions(
-  props: RecordPanelControllerRecordDeleteActionInput,
+  input: RecordPanelControllerRecordDeleteActionInput,
 ) {
-  return createRecordPanelControllerRecordDeleteRunAction(props);
+  return createRecordPanelControllerRecordDeleteRunAction(input);
 }

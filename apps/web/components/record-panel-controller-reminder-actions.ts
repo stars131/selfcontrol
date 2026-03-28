@@ -3,7 +3,7 @@ import type { RecordPanelControllerReminderActionInput } from "./record-panel-co
 import { createRecordPanelControllerReminderSubmitAction } from "./record-panel-controller-reminder-submit-action";
 
 export function createRecordPanelControllerReminderActions(
-  props: RecordPanelControllerReminderActionInput,
+  input: RecordPanelControllerReminderActionInput,
 ) {
-  return createRecordPanelControllerReminderSubmitAction(props);
+  return createRecordPanelControllerReminderSubmitAction(input);
 }

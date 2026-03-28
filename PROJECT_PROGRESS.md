@@ -3320,6 +3320,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2.tsx` now forwards one flattened shell input object into `buildRecordPanelShellViewProps` instead of wrapping `props` under a nested `props` key
   - `apps/web/components/record-panel-v2-shell-props.types.ts` and `apps/web/components/record-panel-v2-shell-view-props.ts` now treat shell input as `RecordPanelV2Props & { controller }` so the shell-view boundary stays easier to evolve without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened shell-input boundary so future shell view assembly does not regrow `{ controller, props }` wrappers
+- Record Panel Thin Wrapper Input Naming Cleanup V1:
+  - `apps/web/components/record-panel-controller-form-actions.ts`, `record-panel-controller-record-submit-actions.ts`, `record-panel-controller-record-handlers.ts`, and `record-panel-controller-media-handlers.ts` now forward a consistently named `input` object through their thin orchestration wrappers
+  - `apps/web/components/record-panel-controller-reminder-actions.ts`, `record-panel-controller-record-save-actions.ts`, and `record-panel-controller-record-delete-actions.ts` now use the same `input` naming at their single-hop delegation boundary so the action wrapper layer reads consistently across the controller surface
+  - the record-panel structure guardrail now enforces this wrapper-input naming consistency so future thin delegates do not drift back to ambiguous `props` forwarding
 
 ## Next
 - Continue the next product slice

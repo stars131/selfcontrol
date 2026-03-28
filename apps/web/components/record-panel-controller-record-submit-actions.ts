@@ -5,10 +5,10 @@ import { createRecordPanelControllerRecordSaveActions } from "./record-panel-con
 import type { RecordPanelControllerRecordSubmitActionInput } from "./record-panel-controller-record-submit-action-input.types";
 
 export function createRecordPanelControllerRecordSubmitActions({
-  ...props
+  ...input
 }: RecordPanelControllerRecordSubmitActionInput) {
-  const recordSaveActions = createRecordPanelControllerRecordSaveActions(props);
-  const recordDeleteActions = createRecordPanelControllerRecordDeleteActions(props);
+  const recordSaveActions = createRecordPanelControllerRecordSaveActions(input);
+  const recordDeleteActions = createRecordPanelControllerRecordDeleteActions(input);
 
   return {
     ...recordSaveActions,

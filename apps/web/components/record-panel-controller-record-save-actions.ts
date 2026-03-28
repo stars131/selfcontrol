@@ -3,7 +3,7 @@ import { createRecordPanelControllerRecordSaveSubmitAction } from "./record-pane
 import type { RecordPanelControllerRecordSaveActionInput } from "./record-panel-controller-record-save-action-input.types";
 
 export function createRecordPanelControllerRecordSaveActions(
-  props: RecordPanelControllerRecordSaveActionInput,
+  input: RecordPanelControllerRecordSaveActionInput,
 ) {
-  return createRecordPanelControllerRecordSaveSubmitAction(props);
+  return createRecordPanelControllerRecordSaveSubmitAction(input);
 }

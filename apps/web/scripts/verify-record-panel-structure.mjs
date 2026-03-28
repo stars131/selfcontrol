@@ -13335,8 +13335,8 @@ for (const requiredRecordHandlersImport of [
 }
 
 for (const requiredRecordHandlersUsage of [
-  "createRecordPanelControllerFormActions(props)",
-  "createRecordPanelControllerFilterActions(props)",
+  "createRecordPanelControllerFormActions(input)",
+  "createRecordPanelControllerFilterActions(input)",
   "...formActions",
   "...filterActions",
 ]) {
@@ -13408,8 +13408,8 @@ for (const requiredFormActionsImport of [
 }
 
 for (const requiredFormActionsUsage of [
-  "createRecordPanelControllerRecordSubmitActions(props)",
-  "createRecordPanelControllerReminderActions(props)",
+  "createRecordPanelControllerRecordSubmitActions(input)",
+  "createRecordPanelControllerReminderActions(input)",
   "...recordSubmitActions",
   "...reminderActions",
 ]) {
@@ -13976,8 +13976,8 @@ for (const requiredRecordSubmitActionsImport of [
 }
 
 for (const requiredRecordSubmitActionsUsage of [
-  "createRecordPanelControllerRecordSaveActions(props)",
-  "createRecordPanelControllerRecordDeleteActions(props)",
+  "createRecordPanelControllerRecordSaveActions(input)",
+  "createRecordPanelControllerRecordDeleteActions(input)",
   "...recordSaveActions",
   "...recordDeleteActions",
 ]) {
@@ -14067,7 +14067,7 @@ for (const requiredRecordDeleteActionsImport of [
 
 for (const requiredRecordDeleteActionsUsage of [
   "export function createRecordPanelControllerRecordDeleteActions(",
-  "createRecordPanelControllerRecordDeleteRunAction(props)",
+  "createRecordPanelControllerRecordDeleteRunAction(input)",
 ]) {
   if (!recordDeleteActionsSource.includes(requiredRecordDeleteActionsUsage)) {
     throw new Error(
@@ -14201,7 +14201,7 @@ for (const requiredRecordSaveActionsImport of [
 }
 
 for (const requiredRecordSaveActionsUsage of [
-  "createRecordPanelControllerRecordSaveSubmitAction(props)",
+  "createRecordPanelControllerRecordSaveSubmitAction(input)",
 ]) {
   if (!recordSaveActionsSource.includes(requiredRecordSaveActionsUsage)) {
     throw new Error(
@@ -14738,8 +14738,8 @@ for (const requiredReminderActionsImport of [
 }
 
 for (const requiredReminderActionsUsage of [
-  "props: RecordPanelControllerReminderActionInput,",
-  "return createRecordPanelControllerReminderSubmitAction(props);",
+  "input: RecordPanelControllerReminderActionInput,",
+  "return createRecordPanelControllerReminderSubmitAction(input);",
 ]) {
   if (!reminderActionsSource.includes(requiredReminderActionsUsage)) {
     throw new Error(
@@ -16329,8 +16329,8 @@ for (const requiredMediaHandlersImport of [
 }
 
 for (const requiredMediaHandlersUsage of [
-  "createRecordPanelControllerMediaAssetActions(props)",
-  "createRecordPanelControllerDeadLetterActions(props)",
+  "createRecordPanelControllerMediaAssetActions(input)",
+  "createRecordPanelControllerDeadLetterActions(input)",
   "...mediaAssetActions",
   "...deadLetterActions",
 ]) {
