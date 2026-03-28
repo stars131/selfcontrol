@@ -10,7 +10,7 @@ export function createWorkspaceEntryWorkspaceActions({
   state,
 }: CreateWorkspaceEntryWorkspaceActionsInput) {
   const createActions = createWorkspaceEntryCreateActions({ ...state, router });
-  const importActions = createWorkspaceEntryImportActions({ loadTransferJobs, router, state });
+  const importActions = createWorkspaceEntryImportActions({ ...state, loadTransferJobs, router });
 
   return {
     ...createActions,

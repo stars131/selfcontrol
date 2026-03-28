@@ -16,22 +16,19 @@ import type { CreateWorkspaceEntryImportActionsInput } from "./workspace-entry-i
 export function createWorkspaceEntryImportActions({
   loadTransferJobs,
   router,
-  state,
+  fileInputRef,
+  importFile,
+  importName,
+  importSlug,
+  setError,
+  setImportFile,
+  setImportName,
+  setImportSlug,
+  setImporting,
+  setQueueingImportJob,
+  setWorkspaces,
+  token,
 }: CreateWorkspaceEntryImportActionsInput) {
-  const {
-    fileInputRef,
-    importFile,
-    importName,
-    importSlug,
-    setError,
-    setImportFile,
-    setImportName,
-    setImportSlug,
-    setImporting,
-    setQueueingImportJob,
-    setWorkspaces,
-    token,
-  } = state;
   const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const resetImportForm = () => {

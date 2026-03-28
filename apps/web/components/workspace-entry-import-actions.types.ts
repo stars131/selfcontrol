@@ -1,1 +1,1 @@
-import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryImportActionsInput = { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike; state: WorkspaceEntryControllerState };
+import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryImportActionsInput = WorkspaceEntryControllerState & { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike };

@@ -810,7 +810,7 @@ for (const requiredWorkspaceActionsImport of [
 
 for (const requiredWorkspaceActionsUsage of [
   "createWorkspaceEntryCreateActions({ ...state, router })",
-  "createWorkspaceEntryImportActions({ loadTransferJobs, router, state })",
+  "createWorkspaceEntryImportActions({ ...state, loadTransferJobs, router })",
   "...createActions",
   "...importActions",
 ]) {
