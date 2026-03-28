@@ -3192,6 +3192,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-metadata-details.tsx` now forwards its full typed props contract directly into the five detail props builders instead of repeating the same inline child-prop projection
   - the metadata details layer now stays focused on detail-grid composition while the leaf detail builders continue owning the narrowed child contracts
   - the media-asset-card and record-panel structure guardrails now enforce this direct props reuse so future metadata detail edits do not regrow duplicated child-prop assembly
+- Media Asset Metadata Tags Builder Props Reuse Simplification V1:
+  - `apps/web/components/media-asset-card-metadata-tags.tsx` now builds one shared `builderProps` object from its typed props, locale, and derived tag values and reuses it across all nine tag props builders instead of repeating inline child-prop projection
+  - the metadata tags layer now stays focused on tag-row composition while the leaf tag builders continue owning the narrowed child contracts they need
+  - the media-asset-card and record-panel structure guardrails now enforce this shared builder-props reuse so future metadata tag edits do not regrow duplicated child-prop assembly
 
 ## Next
 - Continue the next product slice
