@@ -3196,6 +3196,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now builds one shared `builderProps` object from its typed props, locale, and derived tag values and reuses it across all nine tag props builders instead of repeating inline child-prop projection
   - the metadata tags layer now stays focused on tag-row composition while the leaf tag builders continue owning the narrowed child contracts they need
   - the media-asset-card and record-panel structure guardrails now enforce this shared builder-props reuse so future metadata tag edits do not regrow duplicated child-prop assembly
+- Media Asset Preview Props Reuse Simplification V1:
+  - `apps/web/components/media-asset-card-preview.tsx` now reuses its full typed preview props contract and only narrows `authToken` after the existing auth gate instead of manually re-projecting all preview child inputs
+  - `apps/web/components/media-asset-card-preview-media-preview-props.types.ts` now models the builder input as the full preview props contract plus a non-null `authToken`, which keeps the preview boundary easier to evolve safely
+  - the record-panel structure guardrail now enforces this narrowed full-props reuse so future preview-layer edits do not regrow repeated child-prop projection
 
 ## Next
 - Continue the next product slice

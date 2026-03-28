@@ -18665,8 +18665,9 @@ for (const requiredMediaAssetCardPreviewUsage of [
   'import { buildMediaAssetCardPreviewMediaPreviewProps } from "./media-asset-card-preview-media-preview-props";',
   'import { MediaPreview } from "./media-preview";',
   'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types";',
-  "}: MediaAssetCardPreviewProps) {",
-  "buildMediaAssetCardPreviewMediaPreviewProps({ asset, authToken, workspaceId })",
+  "export function MediaAssetCardPreview(props: MediaAssetCardPreviewProps) {",
+  "const authToken = props.authToken;",
+  "buildMediaAssetCardPreviewMediaPreviewProps({ ...props, authToken })",
   "<MediaPreview",
   'authToken ? <div style={{ marginTop: 12 }}>',
 ]) {
@@ -18683,6 +18684,16 @@ if (mediaAssetCardPreviewSource.includes("type MediaAssetCardPreviewProps = Pick
 
 if (mediaAssetCardPreviewSource.includes('<MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />')) {
   throw new Error("media-asset-card-preview.tsx must keep media-preview child prop assembly delegated");
+}
+
+for (const forbiddenMediaAssetCardPreviewToken of [
+  "buildMediaAssetCardPreviewMediaPreviewProps({ asset, authToken, workspaceId })",
+]) {
+  if (mediaAssetCardPreviewSource.includes(forbiddenMediaAssetCardPreviewToken)) {
+    throw new Error(
+      `media-asset-card-preview.tsx must keep narrowed preview props reuse consistent: ${forbiddenMediaAssetCardPreviewToken}`,
+    );
+  }
 }
 
 const maxMediaAssetCardPreviewLines = 9;
@@ -18793,7 +18804,7 @@ if (
 }
 
 for (const requiredMediaAssetCardPreviewMediaPreviewPropsTypesUsage of [
-  'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types"; export type BuildMediaAssetCardPreviewMediaPreviewPropsInput = Pick<MediaAssetCardPreviewProps, "asset" | "workspaceId"> & { authToken: string };',
+  'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types"; export type BuildMediaAssetCardPreviewMediaPreviewPropsInput = MediaAssetCardPreviewProps & { authToken: string };',
 ]) {
   if (!mediaAssetCardPreviewMediaPreviewPropsTypesSource.includes(requiredMediaAssetCardPreviewMediaPreviewPropsTypesUsage)) {
     throw new Error(
