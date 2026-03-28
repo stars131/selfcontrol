@@ -10592,10 +10592,8 @@ for (const requiredEditorWorkspaceBaseSessionPropsImport of [
 }
 
 for (const requiredEditorWorkspaceBaseSessionPropsUsage of [
-  "export function buildRecordEditorWorkspaceBaseSessionProps({",
-  "authToken,",
-  "panelCopy,",
-  "workspaceId",
+  "export function buildRecordEditorWorkspaceBaseSessionProps(input: BuildRecordEditorWorkspaceBaseSessionPropsInput): RecordEditorWorkspaceBaseSessionProps {",
+  "return input;",
 ]) {
   if (!editorWorkspaceBaseSessionPropsSource.includes(requiredEditorWorkspaceBaseSessionPropsUsage)) {
     throw new Error(
@@ -10622,10 +10620,8 @@ for (const requiredEditorWorkspaceBaseStatePropsImport of [
 }
 
 for (const requiredEditorWorkspaceBaseStatePropsUsage of [
-  "export function buildRecordEditorWorkspaceBaseStateProps({",
-  "bulkRetryingDeadLetter,",
-  "retryingMediaId,",
-  "uploading",
+  "export function buildRecordEditorWorkspaceBaseStateProps(input: BuildRecordEditorWorkspaceBaseStatePropsInput): RecordEditorWorkspaceBaseStateProps {",
+  "return input;",
 ]) {
   if (!editorWorkspaceBaseStatePropsSource.includes(requiredEditorWorkspaceBaseStatePropsUsage)) {
     throw new Error(
@@ -10652,10 +10648,8 @@ for (const requiredEditorWorkspaceBaseFormPropsImport of [
 }
 
 for (const requiredEditorWorkspaceBaseFormPropsUsage of [
-  "export function buildRecordEditorWorkspaceBaseFormProps({",
-  "form,",
-  "selectedRecord,",
-  "setReminderForm",
+  "export function buildRecordEditorWorkspaceBaseFormProps(input: BuildRecordEditorWorkspaceBaseFormPropsInput): RecordEditorWorkspaceBaseFormProps {",
+  "return input;",
 ]) {
   if (!editorWorkspaceBaseFormPropsSource.includes(requiredEditorWorkspaceBaseFormPropsUsage)) {
     throw new Error(
@@ -10682,10 +10676,8 @@ for (const requiredEditorWorkspaceBaseMediaPropsImport of [
 }
 
 for (const requiredEditorWorkspaceBaseMediaPropsUsage of [
-  "export function buildRecordEditorWorkspaceBaseMediaProps({",
-  "formatFileCountLabel,",
-  "mediaAssets,",
-  "summarizeHistoryActionLabel",
+  "export function buildRecordEditorWorkspaceBaseMediaProps(input: BuildRecordEditorWorkspaceBaseMediaPropsInput): RecordEditorWorkspaceBaseMediaProps {",
+  "return input;",
 ]) {
   if (!editorWorkspaceBaseMediaPropsSource.includes(requiredEditorWorkspaceBaseMediaPropsUsage)) {
     throw new Error(

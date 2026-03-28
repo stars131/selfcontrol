@@ -1,5 +1,5 @@
 import type { BuildRecordEditorWorkspaceBaseMediaPropsInput, RecordEditorWorkspaceBaseMediaProps } from "./record-panel-v2-editor-workspace-base-media-props.types";
 
-export function buildRecordEditorWorkspaceBaseMediaProps({ formatFileCountLabel, formatHistoryTimestampLabel, formatReminderEnabledLabel, formatReminderStatusLabel, formatReminderTimestampLabel, formatReviewStatusLabel, mediaAssets, mediaDeadLetterOverview, mediaIssueCopy, mediaProcessingOverview, mediaStorageSummary, reminders, selectedDeadLetterIds, selectedRecordMediaSizeLabel, summarizeHistoryActionLabel }: BuildRecordEditorWorkspaceBaseMediaPropsInput): RecordEditorWorkspaceBaseMediaProps {
-  return { formatFileCountLabel, formatHistoryTimestampLabel, formatReminderEnabledLabel, formatReminderStatusLabel, formatReminderTimestampLabel, formatReviewStatusLabel, mediaAssets, mediaDeadLetterOverview, mediaIssueCopy, mediaProcessingOverview, mediaStorageSummary, reminders, selectedDeadLetterIds, selectedRecordMediaSizeLabel, summarizeHistoryActionLabel };
+export function buildRecordEditorWorkspaceBaseMediaProps(input: BuildRecordEditorWorkspaceBaseMediaPropsInput): RecordEditorWorkspaceBaseMediaProps {
+  return input;
 }
