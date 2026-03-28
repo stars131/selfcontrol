@@ -1,5 +1,6 @@
 "use client";
 
+import { buildDeadLetterRecoveryItemCardIdentityProps } from "./dead-letter-recovery-item-card-identity-props";
 import { DeadLetterRecoveryItemCardIdentity } from "./dead-letter-recovery-item-card-identity";
 import { buildDeadLetterRecoveryItemCardSelectionProps } from "./dead-letter-recovery-item-card-selection-props";
 import { DeadLetterRecoveryItemCardSelection } from "./dead-letter-recovery-item-card-selection";
@@ -18,7 +19,7 @@ export function DeadLetterRecoveryItemCardHeader({
     <label className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
       <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
         <DeadLetterRecoveryItemCardSelection {...buildDeadLetterRecoveryItemCardSelectionProps({ bulkRetryingDeadLetter, item, onToggleSelection, selectedDeadLetterIds })} />
-        <DeadLetterRecoveryItemCardIdentity item={item} locale={locale} />
+        <DeadLetterRecoveryItemCardIdentity {...buildDeadLetterRecoveryItemCardIdentityProps({ item, locale })} />
       </div>
       <DeadLetterRecoveryItemCardTags item={item} locale={locale} mediaIssueCopy={mediaIssueCopy} />
     </label>

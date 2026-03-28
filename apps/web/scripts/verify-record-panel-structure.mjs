@@ -3152,6 +3152,14 @@ const deadLetterRecoveryItemCardSelectionPropsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-selection-props.types.ts",
 );
+const deadLetterRecoveryItemCardIdentityPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-identity-props.ts",
+);
+const deadLetterRecoveryItemCardIdentityPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-identity-props.types.ts",
+);
 const deadLetterRecoveryItemCardIdentityPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-identity.tsx",
@@ -5361,6 +5369,14 @@ const deadLetterRecoveryItemCardSelectionPropsTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardSelectionPropsTypesPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardIdentityPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardIdentityPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardIdentityPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardIdentityPropsTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardIdentitySource = fs.readFileSync(
   deadLetterRecoveryItemCardIdentityPath,
   "utf8",
@@ -7118,6 +7134,10 @@ const deadLetterRecoveryItemCardSelectionPropsLines =
   deadLetterRecoveryItemCardSelectionPropsSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardSelectionPropsTypesLines =
   deadLetterRecoveryItemCardSelectionPropsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardIdentityPropsLines =
+  deadLetterRecoveryItemCardIdentityPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardIdentityPropsTypesLines =
+  deadLetterRecoveryItemCardIdentityPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardIdentityLines =
   deadLetterRecoveryItemCardIdentitySource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardIdentityTypesLines =
@@ -29720,6 +29740,7 @@ if (deadLetterRecoveryItemCardErrorTypesLines > maxDeadLetterRecoveryItemCardErr
 }
 
 for (const requiredDeadLetterRecoveryItemCardHeaderUsage of [
+  'import { buildDeadLetterRecoveryItemCardIdentityProps } from "./dead-letter-recovery-item-card-identity-props";',
   'import { DeadLetterRecoveryItemCardIdentity } from "./dead-letter-recovery-item-card-identity";',
   'import { buildDeadLetterRecoveryItemCardSelectionProps } from "./dead-letter-recovery-item-card-selection-props";',
   'import { DeadLetterRecoveryItemCardSelection } from "./dead-letter-recovery-item-card-selection";',
@@ -29729,7 +29750,8 @@ for (const requiredDeadLetterRecoveryItemCardHeaderUsage of [
   '<label className="action-row"',
   "buildDeadLetterRecoveryItemCardSelectionProps({ bulkRetryingDeadLetter, item, onToggleSelection, selectedDeadLetterIds })",
   "<DeadLetterRecoveryItemCardSelection",
-  "<DeadLetterRecoveryItemCardIdentity item={item} locale={locale} />",
+  "buildDeadLetterRecoveryItemCardIdentityProps({ item, locale })",
+  "<DeadLetterRecoveryItemCardIdentity",
 ]) {
   if (!deadLetterRecoveryItemCardHeaderSource.includes(requiredDeadLetterRecoveryItemCardHeaderUsage)) {
     throw new Error(
@@ -29751,6 +29773,7 @@ for (const forbiddenDeadLetterRecoveryItemCardHeaderToken of [
   "onChange={(event) => onToggleSelection(item.media_id, event.target.checked)}",
   "canRetryMediaIssue(item)",
   "bulkRetryingDeadLetter={bulkRetryingDeadLetter}",
+  "<DeadLetterRecoveryItemCardIdentity item={item} locale={locale} />",
 ]) {
   if (deadLetterRecoveryItemCardHeaderSource.includes(forbiddenDeadLetterRecoveryItemCardHeaderToken)) {
     throw new Error(
@@ -29780,6 +29803,57 @@ const maxDeadLetterRecoveryItemCardHeaderTypesLines = 2;
 if (deadLetterRecoveryItemCardHeaderTypesLines > maxDeadLetterRecoveryItemCardHeaderTypesLines) {
   throw new Error(
     `dead-letter-recovery-item-card-header.types.ts exceeded ${maxDeadLetterRecoveryItemCardHeaderTypesLines} lines: ${deadLetterRecoveryItemCardHeaderTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardIdentityPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardIdentityProps } from "./dead-letter-recovery-item-card-identity.types";',
+  'import type { BuildDeadLetterRecoveryItemCardIdentityPropsInput } from "./dead-letter-recovery-item-card-identity-props.types";',
+  "export function buildDeadLetterRecoveryItemCardIdentityProps({ item, locale }: BuildDeadLetterRecoveryItemCardIdentityPropsInput): DeadLetterRecoveryItemCardIdentityProps {",
+]) {
+  if (!deadLetterRecoveryItemCardIdentityPropsSource.includes(requiredDeadLetterRecoveryItemCardIdentityPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-identity-props.ts must own item-identity prop projection: ${requiredDeadLetterRecoveryItemCardIdentityPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardIdentityPropsToken of [
+  "<DeadLetterRecoveryItemCardIdentity",
+  "getMediaTypeLabel(",
+  "<label className=\"action-row\"",
+]) {
+  if (deadLetterRecoveryItemCardIdentityPropsSource.includes(forbiddenDeadLetterRecoveryItemCardIdentityPropsToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-identity-props.ts must keep rendering and label rules delegated: ${forbiddenDeadLetterRecoveryItemCardIdentityPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardIdentityPropsLines = 5;
+if (deadLetterRecoveryItemCardIdentityPropsLines > maxDeadLetterRecoveryItemCardIdentityPropsLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-identity-props.ts exceeded ${maxDeadLetterRecoveryItemCardIdentityPropsLines} lines: ${deadLetterRecoveryItemCardIdentityPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardIdentityPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardHeaderProps } from "./dead-letter-recovery-item-card-header.types"; export type BuildDeadLetterRecoveryItemCardIdentityPropsInput = Pick<DeadLetterRecoveryItemCardHeaderProps, "item" | "locale">;',
+]) {
+  if (!deadLetterRecoveryItemCardIdentityPropsTypesSource.includes(requiredDeadLetterRecoveryItemCardIdentityPropsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-identity-props.types.ts must own item-identity-props input typing: ${requiredDeadLetterRecoveryItemCardIdentityPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardIdentityPropsTypesLines = 2;
+if (
+  deadLetterRecoveryItemCardIdentityPropsTypesLines >
+  maxDeadLetterRecoveryItemCardIdentityPropsTypesLines
+) {
+  throw new Error(
+    `dead-letter-recovery-item-card-identity-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardIdentityPropsTypesLines} lines: ${deadLetterRecoveryItemCardIdentityPropsTypesLines}`,
   );
 }
 
