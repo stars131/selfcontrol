@@ -13,6 +13,15 @@ const previewTypesLineCount = previewTypesSource.split(/\r?\n/).length;
 const previewHookPath = path.resolve(process.cwd(), "components/use-media-preview.ts");
 const previewHookSource = fs.readFileSync(previewHookPath, "utf8");
 const previewHookLineCount = previewHookSource.split(/\r?\n/).length;
+const previewPropsPath = path.resolve(process.cwd(), "components/media-asset-card-preview-props.ts");
+const previewPropsSource = fs.readFileSync(previewPropsPath, "utf8");
+const previewPropsLineCount = previewPropsSource.split(/\r?\n/).length;
+const previewPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-preview-props.types.ts",
+);
+const previewPropsTypesSource = fs.readFileSync(previewPropsTypesPath, "utf8");
+const previewPropsTypesLineCount = previewPropsTypesSource.split(/\r?\n/).length;
 const previewContentPath = path.resolve(process.cwd(), "components/media-preview-content.tsx");
 const previewContentSource = fs.readFileSync(previewContentPath, "utf8");
 const previewContentLineCount = previewContentSource.split(/\r?\n/).length;
@@ -232,6 +241,10 @@ if (!cardSource.includes('import { MediaAssetCardPreview } from "./media-asset-c
   throw new Error("media-asset-card.tsx must import MediaAssetCardPreview");
 }
 
+if (!cardSource.includes('import { buildMediaAssetCardPreviewProps } from "./media-asset-card-preview-props";')) {
+  throw new Error("media-asset-card.tsx must import delegated media preview props builder");
+}
+
 if (!cardSource.includes('import type { MediaAssetCardProps } from "./media-asset-card.types";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardProps");
 }
@@ -256,6 +269,10 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
+if (!cardSource.includes("buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })")) {
+  throw new Error("media-asset-card.tsx must delegate media preview prop assembly");
+}
+
 for (const forbiddenCardActionPropsToken of [
   "canWriteWorkspace={canWriteWorkspace}",
   "deletingMediaId={deletingMediaId}",
@@ -270,6 +287,17 @@ for (const forbiddenCardActionPropsToken of [
   if (cardSource.includes(forbiddenCardActionPropsToken)) {
     throw new Error(
       `media-asset-card.tsx must keep media action prop assembly delegated: ${forbiddenCardActionPropsToken}`,
+    );
+  }
+}
+
+for (const forbiddenCardPreviewPropsToken of [
+  "authToken={authToken}",
+  "workspaceId={workspaceId}",
+]) {
+  if (cardSource.includes(forbiddenCardPreviewPropsToken)) {
+    throw new Error(
+      `media-asset-card.tsx must keep media preview prop assembly delegated: ${forbiddenCardPreviewPropsToken}`,
     );
   }
 }
@@ -327,6 +355,51 @@ for (const requiredMetadataPropsTypesUsage of [
 if (metadataPropsTypesLineCount > 2) {
   throw new Error(
     `media-asset-card-metadata-props.types.ts exceeded 2 lines: ${metadataPropsTypesLineCount}`,
+  );
+}
+
+for (const requiredPreviewPropsUsage of [
+  'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types";',
+  'import type { BuildMediaAssetCardPreviewPropsInput } from "./media-asset-card-preview-props.types";',
+  "}: BuildMediaAssetCardPreviewPropsInput): MediaAssetCardPreviewProps {",
+  "return { asset, authToken, workspaceId };",
+]) {
+  if (!previewPropsSource.includes(requiredPreviewPropsUsage)) {
+    throw new Error(
+      `media-asset-card-preview-props.ts must own media preview prop assembly: ${requiredPreviewPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenPreviewPropsToken of [
+  "<MediaAssetCardPreview",
+  "<MediaAssetCardMetadata",
+  "<MediaAssetCardActions",
+]) {
+  if (previewPropsSource.includes(forbiddenPreviewPropsToken)) {
+    throw new Error(
+      `media-asset-card-preview-props.ts must keep render concerns delegated: ${forbiddenPreviewPropsToken}`,
+    );
+  }
+}
+
+if (previewPropsLineCount > 4) {
+  throw new Error(`media-asset-card-preview-props.ts exceeded 4 lines: ${previewPropsLineCount}`);
+}
+
+for (const requiredPreviewPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardPreviewPropsInput = Pick<MediaAssetCardProps, "asset" | "authToken" | "workspaceId">;',
+]) {
+  if (!previewPropsTypesSource.includes(requiredPreviewPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-preview-props.types.ts must own media preview prop input typing: ${requiredPreviewPropsTypesUsage}`,
+    );
+  }
+}
+
+if (previewPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-preview-props.types.ts exceeded 2 lines: ${previewPropsTypesLineCount}`,
   );
 }
 

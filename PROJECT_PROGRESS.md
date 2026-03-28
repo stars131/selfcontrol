@@ -2923,6 +2923,10 @@ Last updated: 2026-03-28
   - media-asset metadata prop assembly now lives in `apps/web/components/media-asset-card-metadata-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
   - `apps/web/components/media-asset-card.tsx` now stays focused on section ordering while metadata wiring stays centralized and easier to update safely as the card grows
   - the media-asset and record-panel structure guardrails now enforce this metadata-props-builder boundary so future card composition changes do not regrow mixed layout-and-metadata-wiring logic
+- Media Asset Preview Props Builder Extraction V1:
+  - media-asset preview prop assembly now lives in `apps/web/components/media-asset-card-preview-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
+  - `apps/web/components/media-asset-card.tsx` now stays focused on section ordering while preview wiring stays centralized and easier to update safely as the card grows
+  - the media-asset and record-panel structure guardrails now enforce this preview-props-builder boundary so future card composition changes do not regrow mixed layout-and-preview-wiring logic
 
 ## Next
 - Continue the next product slice
