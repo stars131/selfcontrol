@@ -32490,9 +32490,8 @@ if (deadLetterRecoveryItemCardHeaderPropsTypesLines > maxDeadLetterRecoveryItemC
 for (const requiredDeadLetterRecoveryItemCardStatusSectionPropsUsage of [
   'import type { DeadLetterRecoveryItemCardStatusProps } from "./dead-letter-recovery-item-card-status.types";',
   'import type { BuildDeadLetterRecoveryItemCardStatusSectionPropsInput } from "./dead-letter-recovery-item-card-status-section-props.types";',
-  "export function buildDeadLetterRecoveryItemCardStatusSectionProps({",
-  "}: BuildDeadLetterRecoveryItemCardStatusSectionPropsInput): DeadLetterRecoveryItemCardStatusProps {",
-  "return { formatHistoryTimestampLabel, item, locale, mediaIssueCopy };",
+  "export function buildDeadLetterRecoveryItemCardStatusSectionProps(input: BuildDeadLetterRecoveryItemCardStatusSectionPropsInput): DeadLetterRecoveryItemCardStatusProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardStatusSectionPropsSource.includes(requiredDeadLetterRecoveryItemCardStatusSectionPropsUsage)) {
     throw new Error(
@@ -33414,7 +33413,8 @@ if (deadLetterRecoveryItemCardStatusTypesLines > maxDeadLetterRecoveryItemCardSt
 for (const requiredDeadLetterRecoveryItemCardMetadataPropsUsage of [
   'import type { DeadLetterRecoveryItemCardMetadataProps } from "./dead-letter-recovery-item-card-metadata.types";',
   'import type { BuildDeadLetterRecoveryItemCardMetadataPropsInput } from "./dead-letter-recovery-item-card-metadata-props.types";',
-  "export function buildDeadLetterRecoveryItemCardMetadataProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardMetadataPropsInput): DeadLetterRecoveryItemCardMetadataProps {",
+  "export function buildDeadLetterRecoveryItemCardMetadataProps(input: BuildDeadLetterRecoveryItemCardMetadataPropsInput): DeadLetterRecoveryItemCardMetadataProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardMetadataPropsSource.includes(requiredDeadLetterRecoveryItemCardMetadataPropsUsage)) {
     throw new Error(
@@ -33705,7 +33705,8 @@ if (deadLetterRecoveryItemCardRetryBudgetUsedTypesLines > maxDeadLetterRecoveryI
 for (const requiredDeadLetterRecoveryItemCardLastFailurePropsUsage of [
   'import type { DeadLetterRecoveryItemCardLastFailureProps } from "./dead-letter-recovery-item-card-last-failure.types";',
   'import type { BuildDeadLetterRecoveryItemCardLastFailurePropsInput } from "./dead-letter-recovery-item-card-last-failure-props.types";',
-  "export function buildDeadLetterRecoveryItemCardLastFailureProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardLastFailurePropsInput): DeadLetterRecoveryItemCardLastFailureProps {",
+  "export function buildDeadLetterRecoveryItemCardLastFailureProps(input: BuildDeadLetterRecoveryItemCardLastFailurePropsInput): DeadLetterRecoveryItemCardLastFailureProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardLastFailurePropsSource.includes(requiredDeadLetterRecoveryItemCardLastFailurePropsUsage)) {
     throw new Error(
@@ -33821,7 +33822,8 @@ if (deadLetterRecoveryItemCardLastFailureTypesLines > maxDeadLetterRecoveryItemC
 for (const requiredDeadLetterRecoveryItemCardLastAttemptPropsUsage of [
   'import type { DeadLetterRecoveryItemCardLastAttemptProps } from "./dead-letter-recovery-item-card-last-attempt.types";',
   'import type { BuildDeadLetterRecoveryItemCardLastAttemptPropsInput } from "./dead-letter-recovery-item-card-last-attempt-props.types";',
-  "export function buildDeadLetterRecoveryItemCardLastAttemptProps({ formatHistoryTimestampLabel, item, mediaIssueCopy }: BuildDeadLetterRecoveryItemCardLastAttemptPropsInput): DeadLetterRecoveryItemCardLastAttemptProps {",
+  "export function buildDeadLetterRecoveryItemCardLastAttemptProps(input: BuildDeadLetterRecoveryItemCardLastAttemptPropsInput): DeadLetterRecoveryItemCardLastAttemptProps {",
+  "return input;",
 ]) {
   if (!deadLetterRecoveryItemCardLastAttemptPropsSource.includes(requiredDeadLetterRecoveryItemCardLastAttemptPropsUsage)) {
     throw new Error(
