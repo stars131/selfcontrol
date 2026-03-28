@@ -8,7 +8,7 @@ export function buildRecordBrowseWorkspaceInput({
   props,
 }: RecordPanelShellInput) {
   return {
-    ...buildRecordBrowseWorkspacePropInput({ props }),
+    ...buildRecordBrowseWorkspacePropInput(props),
     ...buildRecordBrowseWorkspaceControllerInput({ controller }),
   };
 }

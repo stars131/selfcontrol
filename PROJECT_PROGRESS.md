@@ -3288,6 +3288,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-editor-workspace.tsx` now forwards one flattened input object into `buildRecordEditorMainSectionsProps` instead of wrapping editor workspace props under `{ fieldBindings, locationReviewBindings, props }`
   - `apps/web/components/record-editor-workspace-main-sections-props.types.ts` and `apps/web/components/record-editor-workspace-main-sections-props.ts` now share one flattened editor-main-sections input contract so the section props builder stays easier to evolve without nested wrapper churn
   - the record-panel structure guardrail now enforces this flattened editor-main-sections boundary so future editor section edits do not regrow double-wrapped prop assembly
+- Record Panel Workspace Prop Input Flattening V1:
+  - `apps/web/components/record-panel-v2-browse-workspace-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-input.ts` now forward flattened shell props into their prop-input builders instead of wrapping them under `{ props }`
+  - `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts`, `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts`, and `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now share flattened prop-input contracts so the browse/editor workspace prop builders stay easier to evolve without wrapper churn
+  - the record-panel structure guardrail now enforces this flattened workspace prop-input boundary so future shell-to-workspace prop projection does not regrow wrapped input assembly
 
 ## Next
 - Continue the next product slice

@@ -1,7 +1,7 @@
 "use client";
 import type { BuildRecordBrowseWorkspacePropInputArgs } from "./record-panel-v2-browse-workspace-prop-input.types";
 
-export function buildRecordBrowseWorkspacePropInput({ props }: BuildRecordBrowseWorkspacePropInputArgs) {
+export function buildRecordBrowseWorkspacePropInput(props: BuildRecordBrowseWorkspacePropInputArgs) {
   return {
     canWriteWorkspace: props.canWriteWorkspace,
     records: props.records,

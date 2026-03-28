@@ -9195,7 +9195,7 @@ for (const requiredBrowseWorkspacePropInputTypesImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputTypesUsage of [
-  'export type BuildRecordBrowseWorkspacePropInputArgs = { props: RecordPanelShellInput["props"] };',
+  'export type BuildRecordBrowseWorkspacePropInputArgs = RecordPanelShellInput["props"];',
   "export type BuildRecordBrowseWorkspacePropInput = Pick<",
   '"onApplyLocationFilter"',
   '"onSelectRecord"',
@@ -9288,7 +9288,7 @@ for (const requiredEditorWorkspacePropInputTypesImport of [
 }
 
 for (const requiredEditorWorkspacePropInputTypesUsage of [
-  'export type BuildRecordEditorWorkspacePropInputArgs = { props: RecordPanelShellInput["props"] };',
+  'export type BuildRecordEditorWorkspacePropInputArgs = RecordPanelShellInput["props"];',
   "export type BuildRecordEditorWorkspacePropInput = Pick<",
   '"mediaProcessingOverview"',
   '"onUpdateReminder"',
@@ -9996,7 +9996,7 @@ for (const requiredBrowseWorkspaceInputImport of [
 
 for (const requiredBrowseWorkspaceInputUsage of [
   "export function buildRecordBrowseWorkspaceInput({",
-  "...buildRecordBrowseWorkspacePropInput({ props })",
+  "...buildRecordBrowseWorkspacePropInput(props)",
   "...buildRecordBrowseWorkspaceControllerInput({ controller })",
 ]) {
   if (!browseWorkspaceInputSource.includes(requiredBrowseWorkspaceInputUsage)) {
@@ -10037,7 +10037,7 @@ for (const requiredBrowseWorkspacePropInputImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputUsage of [
-  'export function buildRecordBrowseWorkspacePropInput({ props }: BuildRecordBrowseWorkspacePropInputArgs)',
+  'export function buildRecordBrowseWorkspacePropInput(props: BuildRecordBrowseWorkspacePropInputArgs)',
   "canWriteWorkspace: props.canWriteWorkspace",
   "searchPresets: props.searchPresets",
   "savingSearchPreset: props.savingSearchPreset",
@@ -10839,7 +10839,7 @@ for (const requiredEditorWorkspaceInputImport of [
 
 for (const requiredEditorWorkspaceInputUsage of [
   "export function buildRecordEditorWorkspaceInput({",
-  "...buildRecordEditorWorkspacePropInput({ props })",
+  "...buildRecordEditorWorkspacePropInput(props)",
   "...buildRecordEditorWorkspaceControllerInput({ controller })",
 ]) {
   if (!editorWorkspaceInputSource.includes(requiredEditorWorkspaceInputUsage)) {
@@ -10880,7 +10880,7 @@ for (const requiredEditorWorkspacePropInputImport of [
 }
 
 for (const requiredEditorWorkspacePropInputUsage of [
-  'export function buildRecordEditorWorkspacePropInput({ props }: BuildRecordEditorWorkspacePropInputArgs)',
+  'export function buildRecordEditorWorkspacePropInput(props: BuildRecordEditorWorkspacePropInputArgs)',
   "authToken: props.authToken",
   "mediaStorageSummary: props.mediaStorageSummary",
   "onUpdateReminder: props.onUpdateReminder",

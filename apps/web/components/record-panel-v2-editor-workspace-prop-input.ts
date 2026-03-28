@@ -2,7 +2,7 @@
 
 import type { BuildRecordEditorWorkspacePropInputArgs } from "./record-panel-v2-editor-workspace-prop-input.types";
 
-export function buildRecordEditorWorkspacePropInput({ props }: BuildRecordEditorWorkspacePropInputArgs) {
+export function buildRecordEditorWorkspacePropInput(props: BuildRecordEditorWorkspacePropInputArgs) {
   return {
     authToken: props.authToken,
     canWriteWorkspace: props.canWriteWorkspace,
