@@ -3368,6 +3368,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-editor-workspace-main-sections-props.ts` now uses an explicit `input` parameter while preserving the same main-section prop projection
   - this keeps the record-editor main-sections adapter aligned with the broader builder-signature normalization work and removes one stale destructuring boundary from the editor workspace path
   - `apps/web/scripts/verify-record-workspaces.mjs` and `verify-record-panel-structure.mjs` now enforce the updated builder contract so the standalone workspace guardrail is usable again
+- Record Reminder Panel Builder Naming Cleanup V1:
+  - `apps/web/components/record-reminder-tools-panel-props.ts` now uses an explicit `input` parameter while preserving the same reminder panel prop projection and reminder binding wiring
+  - this keeps the reminder panel helper aligned with the broader builder-signature normalization work so the reminder tool path is easier to scan and maintain
+  - the record-panel structure guardrail now enforces this naming consistency so future reminder panel helpers do not drift back to mixed `props` terminology
 
 ## Next
 - Continue the next product slice

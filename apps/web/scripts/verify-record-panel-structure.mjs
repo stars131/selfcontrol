@@ -18004,7 +18004,9 @@ if (recordEditorWorkspaceMainSectionsPropsTypesLines > maxRecordEditorWorkspaceM
 
 for (const requiredRecordReminderToolsPanelPropsUsage of [
   'import type { BuildRecordReminderPanelPropsInput } from "./record-reminder-tools-panel-props.types";',
-  "export function buildRecordReminderPanelProps(props: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {",
+  "export function buildRecordReminderPanelProps(input: BuildRecordReminderPanelPropsInput): RecordReminderPanelProps {",
+  "onMarkReminderDone: input.bindings.onMarkReminderDone",
+  "onMessageChange: input.bindings.onMessageChange",
 ]) {
   if (!recordReminderToolsPanelPropsSource.includes(requiredRecordReminderToolsPanelPropsUsage)) {
     throw new Error(
@@ -18016,6 +18018,7 @@ for (const requiredRecordReminderToolsPanelPropsUsage of [
 for (const forbiddenRecordReminderToolsPanelPropsToken of [
   "type ReminderBindings = Pick<",
   "}: {",
+  "export function buildRecordReminderPanelProps(props:",
 ]) {
   if (recordReminderToolsPanelPropsSource.includes(forbiddenRecordReminderToolsPanelPropsToken)) {
     throw new Error(
