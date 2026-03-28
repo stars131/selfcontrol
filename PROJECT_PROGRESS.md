@@ -3448,6 +3448,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-editor-workspace-primary-action-props.ts` and `record-panel-v2-editor-workspace-dead-letter-action-props.ts` now use explicit `input` parameters while keeping their action mapping and dead-letter retry behavior unchanged
   - this keeps the editor workspace action helper layer aligned with the broader helper-signature normalization work without changing editor behavior
   - the record-panel structure guardrail now enforces this normalized action-helper boundary so future workspace action edits stay easier to review and extend
+- Record Panel Shell Helper Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-shell-view-props.ts` now uses an explicit `input` parameter while keeping its shell-view composition behavior unchanged
+  - this keeps the shell-view helper aligned with the broader helper-signature normalization work without changing browse/editor/header assembly behavior
+  - the record-panel structure guardrail now enforces this normalized shell-helper boundary so future shell-view edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

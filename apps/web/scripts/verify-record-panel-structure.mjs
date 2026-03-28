@@ -11151,7 +11151,8 @@ for (const requiredShellViewPropsImport of [
 }
 
 for (const requiredShellViewPropsUsage of [
-  "export function buildRecordPanelShellViewProps({ controller, ...props }: RecordPanelShellInput)",
+  "export function buildRecordPanelShellViewProps(input: RecordPanelShellInput)",
+  "const { controller, ...props } = input;",
   "buildRecordBrowseWorkspaceProps(",
   "buildRecordBrowseWorkspaceInput({ ...props, ...controller })",
   "buildRecordEditorWorkspaceProps(",
