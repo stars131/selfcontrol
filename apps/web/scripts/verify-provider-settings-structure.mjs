@@ -162,6 +162,14 @@ const mediaStorageHealthDownloadCapabilityCardTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-download-capability-card.types.ts",
 );
+const mediaStorageHealthDeleteCapabilityCardPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-delete-capability-card.tsx",
+);
+const mediaStorageHealthDeleteCapabilityCardTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-delete-capability-card.types.ts",
+);
 const mediaStorageHealthCapabilitiesSource = fs.readFileSync(
   mediaStorageHealthCapabilitiesPath,
   "utf8",
@@ -182,6 +190,14 @@ const mediaStorageHealthDownloadCapabilityCardTypesSource = fs.readFileSync(
   mediaStorageHealthDownloadCapabilityCardTypesPath,
   "utf8",
 );
+const mediaStorageHealthDeleteCapabilityCardSource = fs.readFileSync(
+  mediaStorageHealthDeleteCapabilityCardPath,
+  "utf8",
+);
+const mediaStorageHealthDeleteCapabilityCardTypesSource = fs.readFileSync(
+  mediaStorageHealthDeleteCapabilityCardTypesPath,
+  "utf8",
+);
 const mediaStorageHealthCapabilitiesLineCount =
   mediaStorageHealthCapabilitiesSource.split(/\r?\n/).length;
 const mediaStorageHealthUploadCapabilityCardLineCount =
@@ -192,6 +208,10 @@ const mediaStorageHealthDownloadCapabilityCardLineCount =
   mediaStorageHealthDownloadCapabilityCardSource.split(/\r?\n/).length;
 const mediaStorageHealthDownloadCapabilityCardTypesLineCount =
   mediaStorageHealthDownloadCapabilityCardTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthDeleteCapabilityCardLineCount =
+  mediaStorageHealthDeleteCapabilityCardSource.split(/\r?\n/).length;
+const mediaStorageHealthDeleteCapabilityCardTypesLineCount =
+  mediaStorageHealthDeleteCapabilityCardTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthCardTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-card.types.ts",
@@ -526,6 +546,7 @@ if (mediaStorageHealthCardLineCount > maxMediaStorageHealthCardLines) {
 }
 
 for (const requiredHealthCapabilitiesImport of [
+  'import { MediaStorageHealthDeleteCapabilityCard } from "./media-storage-health-delete-capability-card";',
   'import { MediaStorageHealthDownloadCapabilityCard } from "./media-storage-health-download-capability-card";',
   'import { MediaStorageHealthUploadCapabilityCard } from "./media-storage-health-upload-capability-card";',
 ]) {
@@ -538,10 +559,9 @@ for (const requiredHealthCapabilitiesImport of [
 
 for (const requiredHealthCapabilitiesUsage of [
   "export function MediaStorageHealthCapabilities({",
+  "<MediaStorageHealthDeleteCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthDownloadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthUploadCapabilityCard copy={copy} mediaStorageHealth={mediaStorageHealth} />",
-  "copy.delete",
-  "mediaStorageHealth.capabilities.delete",
 ]) {
   if (!mediaStorageHealthCapabilitiesSource.includes(requiredHealthCapabilitiesUsage)) {
     throw new Error(
@@ -560,8 +580,10 @@ if (mediaStorageHealthCapabilitiesLineCount > maxMediaStorageHealthCapabilitiesL
 for (const forbiddenHealthCapabilitiesToken of [
   "copy.upload",
   "copy.download",
+  "copy.delete",
   "mediaStorageHealth.capabilities.upload",
   "mediaStorageHealth.capabilities.download",
+  "mediaStorageHealth.capabilities.delete",
 ]) {
   if (mediaStorageHealthCapabilitiesSource.includes(forbiddenHealthCapabilitiesToken)) {
     throw new Error(
@@ -676,6 +698,59 @@ if (
 ) {
   throw new Error(
     `media-storage-health-download-capability-card.types.ts exceeded ${maxMediaStorageHealthDownloadCapabilityCardTypesLines} lines: ${mediaStorageHealthDownloadCapabilityCardTypesLineCount}`,
+  );
+}
+
+for (const requiredHealthDeleteCapabilityUsage of [
+  'import type { MediaStorageHealthDeleteCapabilityCardProps } from "./media-storage-health-delete-capability-card.types";',
+  "export function MediaStorageHealthDeleteCapabilityCard({",
+  "copy.delete",
+  "mediaStorageHealth.capabilities.delete",
+]) {
+  if (!mediaStorageHealthDeleteCapabilityCardSource.includes(requiredHealthDeleteCapabilityUsage)) {
+    throw new Error(
+      `media-storage-health-delete-capability-card.tsx must own delete capability rendering: ${requiredHealthDeleteCapabilityUsage}`,
+    );
+  }
+}
+
+for (const forbiddenHealthDeleteCapabilityToken of [
+  "copy.upload",
+  "copy.download",
+  "mediaStorageHealth.capabilities.upload",
+  "mediaStorageHealth.capabilities.download",
+]) {
+  if (mediaStorageHealthDeleteCapabilityCardSource.includes(forbiddenHealthDeleteCapabilityToken)) {
+    throw new Error(
+      `media-storage-health-delete-capability-card.tsx must keep non-delete capability rendering out: ${forbiddenHealthDeleteCapabilityToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthDeleteCapabilityCardLines = 6;
+if (mediaStorageHealthDeleteCapabilityCardLineCount > maxMediaStorageHealthDeleteCapabilityCardLines) {
+  throw new Error(
+    `media-storage-health-delete-capability-card.tsx exceeded ${maxMediaStorageHealthDeleteCapabilityCardLines} lines: ${mediaStorageHealthDeleteCapabilityCardLineCount}`,
+  );
+}
+
+for (const requiredHealthDeleteCapabilityTypesUsage of [
+  'import type { MediaStorageHealthCapabilitiesProps } from "./media-storage-health-capabilities.types"; export type MediaStorageHealthDeleteCapabilityCardProps = Pick<MediaStorageHealthCapabilitiesProps, "copy" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthDeleteCapabilityCardTypesSource.includes(requiredHealthDeleteCapabilityTypesUsage)) {
+    throw new Error(
+      `media-storage-health-delete-capability-card.types.ts must own delete capability prop typing: ${requiredHealthDeleteCapabilityTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthDeleteCapabilityCardTypesLines = 2;
+if (
+  mediaStorageHealthDeleteCapabilityCardTypesLineCount >
+  maxMediaStorageHealthDeleteCapabilityCardTypesLines
+) {
+  throw new Error(
+    `media-storage-health-delete-capability-card.types.ts exceeded ${maxMediaStorageHealthDeleteCapabilityCardTypesLines} lines: ${mediaStorageHealthDeleteCapabilityCardTypesLineCount}`,
   );
 }
 
