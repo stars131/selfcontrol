@@ -3055,6 +3055,10 @@ Last updated: 2026-03-28
   - recent-media issue-label tag prop assembly now lives in `apps/web/components/recent-media-issue-card-issue-label-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps issue-label tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this issue-label-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
+- Recent Media Retry Count Tag Props Builder Extraction V1:
+  - recent-media retry-count tag prop assembly now lives in `apps/web/components/recent-media-issue-card-retry-count-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
+  - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps retry-count tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this retry-count-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
