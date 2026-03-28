@@ -658,9 +658,9 @@ if (lineCount > maxAllowedLines) {
 for (const requiredContentPropsUsage of [
   'import { buildChatPanelContentActionProps } from "./chat-panel-content-action-props";',
   'import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";',
-  "export function buildChatPanelContentProps(props: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
-  "...buildChatPanelContentDataProps(props),",
-  "...buildChatPanelContentActionProps(props),",
+  "export function buildChatPanelContentProps(input: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
+  "...buildChatPanelContentDataProps(input),",
+  "...buildChatPanelContentActionProps(input),",
 ]) {
   if (!chatPanelContentPropsSource.includes(requiredContentPropsUsage)) {
     throw new Error(
@@ -707,11 +707,11 @@ if (chatPanelContentPropsLineCount > maxContentPropsLines) {
 
 for (const requiredContentActionPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "export function buildChatPanelContentActionProps(props: BuildChatPanelContentPropsInput) {",
-  "creatingShare: props.actions.creatingShare,",
-  "handleCreateShareLink: props.actions.handleCreateShareLink,",
-  "handleSend: props.actions.handleSend,",
-  "unreadCount: props.actions.unreadCount,",
+  "export function buildChatPanelContentActionProps(input: BuildChatPanelContentPropsInput) {",
+  "creatingShare: input.actions.creatingShare,",
+  "handleCreateShareLink: input.actions.handleCreateShareLink,",
+  "handleSend: input.actions.handleSend,",
+  "unreadCount: input.actions.unreadCount,",
 ]) {
   if (!chatPanelContentActionPropsSource.includes(requiredContentActionPropsUsage)) {
     throw new Error(
@@ -742,11 +742,11 @@ if (chatPanelContentActionPropsLineCount > maxContentActionPropsLines) {
 
 for (const requiredContentDataPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "export function buildChatPanelContentDataProps(props: BuildChatPanelContentPropsInput) {",
-  "activeConversationId: props.activeConversationId,",
-  "auditLogs: props.auditLogs,",
-  "messages: props.messages,",
-  "shareLinks: props.shareLinks,",
+  "export function buildChatPanelContentDataProps(input: BuildChatPanelContentPropsInput) {",
+  "activeConversationId: input.activeConversationId,",
+  "auditLogs: input.auditLogs,",
+  "messages: input.messages,",
+  "shareLinks: input.shareLinks,",
 ]) {
   if (!chatPanelContentDataPropsSource.includes(requiredContentDataPropsUsage)) {
     throw new Error(

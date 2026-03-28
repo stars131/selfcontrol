@@ -2,27 +2,27 @@
 
 import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";
 
-export function buildChatPanelContentDataProps(props: BuildChatPanelContentPropsInput) {
+export function buildChatPanelContentDataProps(input: BuildChatPanelContentPropsInput) {
   return {
-    activeConversationId: props.activeConversationId,
-    auditLogs: props.auditLogs,
-    canManageSharing: props.canManageSharing,
-    canManageWorkspace: props.canManageWorkspace,
-    canWriteWorkspace: props.canWriteWorkspace,
-    conversations: props.conversations,
-    knowledgeStats: props.knowledgeStats,
-    latestSharePath: props.latestSharePath,
-    messages: props.messages,
-    notifications: props.notifications,
-    onCreateConversation: props.onCreateConversation,
-    onCreateShareLink: props.onCreateShareLink,
-    onDisableShareLink: props.onDisableShareLink,
-    onMarkNotificationRead: props.onMarkNotificationRead,
-    onRefreshAuditLogs: props.onRefreshAuditLogs,
-    onReindexKnowledge: props.onReindexKnowledge,
-    onSelectConversation: props.onSelectConversation,
-    onSendMessage: props.onSendMessage,
-    onSyncNotifications: props.onSyncNotifications,
-    shareLinks: props.shareLinks,
+    activeConversationId: input.activeConversationId,
+    auditLogs: input.auditLogs,
+    canManageSharing: input.canManageSharing,
+    canManageWorkspace: input.canManageWorkspace,
+    canWriteWorkspace: input.canWriteWorkspace,
+    conversations: input.conversations,
+    knowledgeStats: input.knowledgeStats,
+    latestSharePath: input.latestSharePath,
+    messages: input.messages,
+    notifications: input.notifications,
+    onCreateConversation: input.onCreateConversation,
+    onCreateShareLink: input.onCreateShareLink,
+    onDisableShareLink: input.onDisableShareLink,
+    onMarkNotificationRead: input.onMarkNotificationRead,
+    onRefreshAuditLogs: input.onRefreshAuditLogs,
+    onReindexKnowledge: input.onReindexKnowledge,
+    onSelectConversation: input.onSelectConversation,
+    onSendMessage: input.onSendMessage,
+    onSyncNotifications: input.onSyncNotifications,
+    shareLinks: input.shareLinks,
   };
 }

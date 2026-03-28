@@ -5,9 +5,9 @@ import { buildChatPanelContentActionProps } from "./chat-panel-content-action-pr
 import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";
 import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";
 
-export function buildChatPanelContentProps(props: BuildChatPanelContentPropsInput): ChatPanelContentProps {
+export function buildChatPanelContentProps(input: BuildChatPanelContentPropsInput): ChatPanelContentProps {
   return {
-    ...buildChatPanelContentDataProps(props),
-    ...buildChatPanelContentActionProps(props),
+    ...buildChatPanelContentDataProps(input),
+    ...buildChatPanelContentActionProps(input),
   };
 }

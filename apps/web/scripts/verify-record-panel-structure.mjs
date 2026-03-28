@@ -23893,9 +23893,9 @@ for (const requiredChatPanelContentPropsUsage of [
   'import type { BuildChatPanelContentPropsInput } from "./chat-panel-content-props.types";',
   'import { buildChatPanelContentActionProps } from "./chat-panel-content-action-props";',
   'import { buildChatPanelContentDataProps } from "./chat-panel-content-data-props";',
-  "export function buildChatPanelContentProps(props: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
-  "...buildChatPanelContentDataProps(props),",
-  "...buildChatPanelContentActionProps(props),",
+  "export function buildChatPanelContentProps(input: BuildChatPanelContentPropsInput): ChatPanelContentProps {",
+  "...buildChatPanelContentDataProps(input),",
+  "...buildChatPanelContentActionProps(input),",
 ]) {
   if (!chatPanelContentPropsSource.includes(requiredChatPanelContentPropsUsage)) {
     throw new Error(
@@ -23923,9 +23923,9 @@ for (const forbiddenChatPanelContentPropsToken of [
 
 for (const requiredChatPanelContentActionPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "creatingShare: props.actions.creatingShare,",
-  "handleCreateShareLink: props.actions.handleCreateShareLink,",
-  "unreadCount: props.actions.unreadCount,",
+  "creatingShare: input.actions.creatingShare,",
+  "handleCreateShareLink: input.actions.handleCreateShareLink,",
+  "unreadCount: input.actions.unreadCount,",
 ]) {
   if (!chatPanelContentActionPropsSource.includes(requiredChatPanelContentActionPropsUsage)) {
     throw new Error(
@@ -23948,9 +23948,9 @@ for (const forbiddenChatPanelContentActionPropsToken of [
 
 for (const requiredChatPanelContentDataPropsUsage of [
   'from "./chat-panel-content-props.types";',
-  "activeConversationId: props.activeConversationId,",
-  "auditLogs: props.auditLogs,",
-  "messages: props.messages,",
+  "activeConversationId: input.activeConversationId,",
+  "auditLogs: input.auditLogs,",
+  "messages: input.messages,",
 ]) {
   if (!chatPanelContentDataPropsSource.includes(requiredChatPanelContentDataPropsUsage)) {
     throw new Error(

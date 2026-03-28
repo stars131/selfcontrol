@@ -3360,6 +3360,10 @@ Last updated: 2026-03-28
   - `apps/web/components/recent-media-issues-panel-list-props.ts`, `recent-media-issue-card-action-notice-props.ts`, and `dead-letter-recovery-item-card-action-notice-props.ts` now use a consistent `input` parameter name while preserving the same recent-media and dead-letter prop projection behavior
   - this keeps the small media notice/list helper layer aligned with the rest of the normalized record-panel adapter chain so helper signatures are easier to scan and maintain
   - the record-panel structure guardrail now enforces this naming consistency so future media notice/list helpers do not drift back to mixed `props` terminology
+- Chat Panel Content Builder Naming Cleanup V1:
+  - `apps/web/components/chat-panel-content-props.ts`, `chat-panel-content-action-props.ts`, and `chat-panel-content-data-props.ts` now use a consistent `input` parameter name while preserving the same chat content prop assembly
+  - this keeps the chat content adapter layer aligned with the broader builder-signature normalization work so the content composition path is easier to scan and maintain
+  - the chat-panel structure guardrail now enforces this naming consistency so future content builders do not drift back to mixed `props` terminology
 
 ## Next
 - Continue the next product slice
