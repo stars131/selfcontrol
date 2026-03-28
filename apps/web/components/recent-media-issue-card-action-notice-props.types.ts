@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardMetadataProps } from "./recent-media-issue-card-metadata.types"; export type BuildRecentMediaIssueCardActionNoticePropsInput = Pick<RecentMediaIssueCardMetadataProps, "action">;
