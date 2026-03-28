@@ -11192,8 +11192,9 @@ for (const requiredHeaderPropsImport of [
 }
 
 for (const requiredHeaderPropsUsage of [
-  "export function buildRecordPanelHeaderProps({ canWriteWorkspace, onSelectRecord, panelCopy, workspaceId }: BuildRecordPanelHeaderPropsInput): RecordPanelHeaderProps",
-  "onCreateRecord: () => onSelectRecord(null)",
+  "export function buildRecordPanelHeaderProps(input: BuildRecordPanelHeaderPropsInput): RecordPanelHeaderProps",
+  "canWriteWorkspace: input.canWriteWorkspace",
+  "onCreateRecord: () => input.onSelectRecord(null)",
 ]) {
   if (!headerPropsSource.includes(requiredHeaderPropsUsage)) {
     throw new Error(

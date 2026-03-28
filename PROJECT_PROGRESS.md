@@ -3336,6 +3336,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now use a consistent `input` parameter name while preserving the same workspace prop projection behavior
   - this keeps the workspace prop-input layer aligned with the rest of the refactored record-panel adapter chain so builder signatures are easier to scan and maintain
   - the record-panel structure guardrail now enforces this naming consistency so future workspace prop builders do not drift back to mixed wrapper terminology
+- Record Panel Header Builder Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-header-props.ts` now uses an explicit `input` parameter instead of destructuring at the function boundary while preserving the same header prop assembly
+  - this keeps the header adapter aligned with the other record-panel builders so the shell-to-view adapter layer reads more uniformly
+  - the record-panel structure guardrail now enforces this header-builder naming consistency so future header prop shaping does not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice
