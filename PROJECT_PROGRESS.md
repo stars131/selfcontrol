@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Conversation Route Helper And API Coverage V1:
+  - `apps/api/app/api/routes/conversation_route_helpers.py` now owns workspace-scoped conversation lookup, user-message persistence, and post-chat record side effects for the conversation routes
+  - `apps/api/app/api/routes/conversations.py` now delegates those responsibilities, which keeps the route focused on permission checks, orchestration, and response shaping
+  - `apps/api/tests/test_conversations_api.py` now covers conversation listing, message history retrieval, and chat-message persistence plus create-mode record side effects, adding missing regression coverage for a core chat surface
 - Timeline And Search Preset Helper Extraction V1:
   - `apps/api/app/api/routes/timeline_route_helpers.py` now owns effective-timestamp, date filtering, place extraction, and grouped timeline-day construction for the timeline API
   - `apps/api/app/api/routes/search_preset_route_helpers.py` now owns search preset name normalization, filter normalization, and workspace-scoped preset lookup validation

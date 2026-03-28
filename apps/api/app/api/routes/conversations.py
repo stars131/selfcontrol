@@ -1,9 +1,14 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.routes.conversation_route_helpers import (
+    finalize_chat_record_side_effects,
+    get_user_workspace_conversation_or_404,
+    persist_chat_messages,
+)
 from app.db.session import get_db
 from app.models.conversation import Conversation, Message
 from app.models.user import User
@@ -14,9 +19,7 @@ from app.schemas.conversation import (
     MessageRead,
 )
 from app.schemas.record import RecordRead
-from app.services.audit import log_audit_event
 from app.services.chat import process_chat_message
-from app.services.knowledge import rebuild_record_knowledge
 
 
 router = APIRouter()
@@ -64,9 +67,12 @@ def list_messages(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    conversation = db.get(Conversation, conversation_id)
-    if not conversation or conversation.workspace_id != workspace_id or conversation.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Conversation not found")
+    conversation = get_user_workspace_conversation_or_404(
+        db,
+        workspace_id=workspace_id,
+        conversation_id=conversation_id,
+        user_id=current_user.id,
+    )
 
     items = (
         db.query(Message)
@@ -86,38 +92,30 @@ def send_message(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    conversation = db.get(Conversation, conversation_id)
-    if not conversation or conversation.workspace_id != workspace_id or conversation.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Conversation not found")
-
-    user_message = Message(
+    conversation = get_user_workspace_conversation_or_404(
+        db,
+        workspace_id=workspace_id,
         conversation_id=conversation_id,
-        role="user",
-        content=payload.content,
-        metadata_json={},
+        user_id=current_user.id,
     )
-    db.add(user_message)
-    db.flush()
 
     assistant_message, records = process_chat_message(db, workspace_id, current_user.id, payload.content)
-    assistant_message.conversation_id = conversation_id
-    db.add(assistant_message)
+    user_message = persist_chat_messages(
+        db,
+        conversation_id=conversation_id,
+        assistant_message=assistant_message,
+        user_content=payload.content,
+    )
     db.add(conversation)
     db.commit()
     db.refresh(assistant_message)
-    for record in records:
-        rebuild_record_knowledge(db, record.id)
-        if str(assistant_message.metadata_json.get("mode", "")) == "create":
-            log_audit_event(
-                db,
-                workspace_id=workspace_id,
-                actor_user_id=current_user.id,
-                action_code="record.create_from_chat",
-                resource_type="record",
-                resource_id=record.id,
-                message=f"Created record from chat: {record.title or record.id}",
-                metadata_json={"type_code": record.type_code},
-            )
+    finalize_chat_record_side_effects(
+        db,
+        workspace_id=workspace_id,
+        actor_user_id=current_user.id,
+        assistant_message=assistant_message,
+        records=records,
+    )
 
     return {
         "success": True,
