@@ -17356,6 +17356,8 @@ if (workspaceShellClientActionsInputTypesLines > maxWorkspaceShellClientActionsI
 for (const requiredWorkspaceShellClientRefreshersInputUsage of [
   'import type { BuildWorkspaceShellRefreshersInput } from "./workspace-shell-client-refreshers-input.types";',
   "}: BuildWorkspaceShellRefreshersInput) {",
+  "setAuditLogs,",
+  "setVisibleRecords,",
 ]) {
   if (!workspaceShellClientRefreshersInputSource.includes(requiredWorkspaceShellClientRefreshersInputUsage)) {
     throw new Error(
@@ -17376,7 +17378,7 @@ for (const forbiddenWorkspaceShellClientRefreshersInputToken of [
 }
 
 for (const requiredWorkspaceShellClientRefreshersInputTypesUsage of [
-  'import type { WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellRefreshersInput = { state: WorkspaceShellState; workspaceId: string };',
+  'import type { WorkspaceShellState } from "./workspace-shell-client-props.types"; export type BuildWorkspaceShellRefreshersInput = WorkspaceShellState & { workspaceId: string };',
 ]) {
   if (!workspaceShellClientRefreshersInputTypesSource.includes(requiredWorkspaceShellClientRefreshersInputTypesUsage)) {
     throw new Error(

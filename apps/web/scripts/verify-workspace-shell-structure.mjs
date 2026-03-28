@@ -748,7 +748,7 @@ if (!source.includes("<WorkspaceShellFrame")) {
 }
 
 for (const requiredHelperUsage of [
-  "buildWorkspaceShellRefreshersInput({ state, workspaceId })",
+  "buildWorkspaceShellRefreshersInput({ ...state, workspaceId })",
   "buildWorkspaceShellEffectsInput({ router, state, workspaceId })",
   "buildWorkspaceShellActionsInput({ refreshers, state, workspaceId })",
   "buildWorkspaceShellPanelsProps({ ...state, actions, workspaceId })",
