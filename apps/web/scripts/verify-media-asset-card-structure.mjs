@@ -21,6 +21,19 @@ const previewContentTypesSource = fs.readFileSync(previewContentTypesPath, "utf8
 const previewContentTypesLineCount = previewContentTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
+const metadataDetailTimingPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-detail-timing.ts",
+);
+const metadataDetailTimingSource = fs.readFileSync(metadataDetailTimingPath, "utf8");
+const metadataDetailTimingLineCount = metadataDetailTimingSource.split(/\r?\n/).length;
+const metadataDetailTimingTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-detail-timing.types.ts",
+);
+const metadataDetailTimingTypesSource = fs.readFileSync(metadataDetailTimingTypesPath, "utf8");
+const metadataDetailTimingTypesLineCount =
+  metadataDetailTimingTypesSource.split(/\r?\n/).length;
 const metadataDetailsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-details.tsx");
 const metadataDetailsSource = fs.readFileSync(metadataDetailsPath, "utf8");
 const metadataDetailsLineCount = metadataDetailsSource.split(/\r?\n/).length;
@@ -160,12 +173,70 @@ if (!cardSource.includes("<MediaAssetCardPreview")) {
   throw new Error("media-asset-card.tsx must delegate preview rendering");
 }
 
-if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_last_attempt_at")')) {
-  throw new Error("media-asset-card-metadata.tsx must keep metadata detail timing extraction logic");
+if (!metadataSource.includes('import { readMediaAssetCardMetadataDetailTiming } from "./media-asset-card-metadata-detail-timing";')) {
+  throw new Error("media-asset-card-metadata.tsx must import delegated metadata detail timing helper");
 }
 
-if (!metadataSource.includes('readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")')) {
-  throw new Error("media-asset-card-metadata.tsx must keep next-retry extraction logic");
+if (!metadataSource.includes("readMediaAssetCardMetadataDetailTiming({ asset })")) {
+  throw new Error("media-asset-card-metadata.tsx must delegate metadata detail timing extraction");
+}
+
+for (const forbiddenMetadataToken of [
+  'readMetadataText(asset.metadata_json, "processing_last_attempt_at")',
+  'readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")',
+]) {
+  if (metadataSource.includes(forbiddenMetadataToken)) {
+    throw new Error(
+      `media-asset-card-metadata.tsx must keep metadata detail timing extraction delegated: ${forbiddenMetadataToken}`,
+    );
+  }
+}
+
+for (const requiredMetadataDetailTimingUsage of [
+  'import { readMetadataText } from "../lib/record-panel-media";',
+  'import type { ReadMediaAssetCardMetadataDetailTimingInput } from "./media-asset-card-metadata-detail-timing.types";',
+  "}: ReadMediaAssetCardMetadataDetailTimingInput) {",
+  'readMetadataText(asset.metadata_json, "processing_last_attempt_at")',
+  'readMetadataText(asset.metadata_json, "processing_retry_next_attempt_at")',
+]) {
+  if (!metadataDetailTimingSource.includes(requiredMetadataDetailTimingUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-detail-timing.ts must own metadata detail timing extraction: ${requiredMetadataDetailTimingUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMetadataDetailTimingToken of [
+  "<MediaAssetCardMetadataDetails",
+  "<MediaAssetCardMetadataTags",
+]) {
+  if (metadataDetailTimingSource.includes(forbiddenMetadataDetailTimingToken)) {
+    throw new Error(
+      `media-asset-card-metadata-detail-timing.ts must keep render concerns delegated: ${forbiddenMetadataDetailTimingToken}`,
+    );
+  }
+}
+
+if (metadataDetailTimingLineCount > 4) {
+  throw new Error(
+    `media-asset-card-metadata-detail-timing.ts exceeded 4 lines: ${metadataDetailTimingLineCount}`,
+  );
+}
+
+for (const requiredMetadataDetailTimingTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type ReadMediaAssetCardMetadataDetailTimingInput = Pick<MediaAssetCardMetadataProps, "asset">;',
+]) {
+  if (!metadataDetailTimingTypesSource.includes(requiredMetadataDetailTimingTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-detail-timing.types.ts must own metadata detail timing input typing: ${requiredMetadataDetailTimingTypesUsage}`,
+    );
+  }
+}
+
+if (metadataDetailTimingTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-metadata-detail-timing.types.ts exceeded 2 lines: ${metadataDetailTimingTypesLineCount}`,
+  );
 }
 
 for (const requiredMetadataTagsUsage of [

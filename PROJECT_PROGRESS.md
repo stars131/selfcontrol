@@ -2891,6 +2891,10 @@ Last updated: 2026-03-28
   - media-asset metadata tag value reads now live in `apps/web/components/media-asset-card-metadata-tag-values.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-tags.tsx`
   - `apps/web/components/media-asset-card-metadata-tags.tsx` now stays focused on locale lookup and tag layout while metadata field extraction remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this metadata-tag-values boundary so future tag-layout changes do not regrow mixed extraction-and-rendering logic
+- Media Asset Metadata Detail Timing Helper Extraction V1:
+  - media-asset metadata detail timing reads now live in `apps/web/components/media-asset-card-metadata-detail-timing.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata.tsx`
+  - `apps/web/components/media-asset-card-metadata.tsx` now stays focused on metadata tag/detail composition while timing extraction remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this metadata-detail-timing boundary so future detail-layout changes do not regrow mixed extraction-and-rendering logic
 
 ## Next
 - Continue the next product slice
