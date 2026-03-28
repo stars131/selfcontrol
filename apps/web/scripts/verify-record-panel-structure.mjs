@@ -1126,6 +1126,14 @@ const mediaAssetCardExtractedTextPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-extracted-text.tsx",
 );
+const mediaAssetCardExtractedTextPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extracted-text-props.ts",
+);
+const mediaAssetCardExtractedTextPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extracted-text-props.types.ts",
+);
 const mediaAssetCardExtractedTextTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-extracted-text.types.ts",
@@ -4059,6 +4067,14 @@ const mediaAssetCardIntroSource = fs.readFileSync(mediaAssetCardIntroPath, "utf8
 const mediaAssetCardIntroTypesSource = fs.readFileSync(mediaAssetCardIntroTypesPath, "utf8");
 const mediaAssetCardExtractedTextSource = fs.readFileSync(
   mediaAssetCardExtractedTextPath,
+  "utf8",
+);
+const mediaAssetCardExtractedTextPropsSource = fs.readFileSync(
+  mediaAssetCardExtractedTextPropsPath,
+  "utf8",
+);
+const mediaAssetCardExtractedTextPropsTypesSource = fs.readFileSync(
+  mediaAssetCardExtractedTextPropsTypesPath,
   "utf8",
 );
 const mediaAssetCardExtractedTextTypesSource = fs.readFileSync(
@@ -7063,6 +7079,10 @@ const mediaAssetCardIntroLines = mediaAssetCardIntroSource.split(/\r?\n/).length
 const mediaAssetCardIntroTypesLines = mediaAssetCardIntroTypesSource.split(/\r?\n/).length;
 const mediaAssetCardExtractedTextLines =
   mediaAssetCardExtractedTextSource.split(/\r?\n/).length;
+const mediaAssetCardExtractedTextPropsLines =
+  mediaAssetCardExtractedTextPropsSource.split(/\r?\n/).length;
+const mediaAssetCardExtractedTextPropsTypesLines =
+  mediaAssetCardExtractedTextPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardExtractedTextTypesLines =
   mediaAssetCardExtractedTextTypesSource.split(/\r?\n/).length;
 const mediaAssetCardPreviewLines = mediaAssetCardPreviewSource.split(/\r?\n/).length;
@@ -18370,6 +18390,7 @@ for (const requiredMediaAssetCardUsage of [
   'import { buildMediaAssetCardActionsProps } from "./media-asset-card-actions-props";',
   'import { MediaAssetCardError } from "./media-asset-card-error";',
   'import { MediaAssetCardExtractedText } from "./media-asset-card-extracted-text";',
+  'import { buildMediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text-props";',
   'import { buildMediaAssetCardIntroProps } from "./media-asset-card-intro-props";',
   'import { MediaAssetCardIntro } from "./media-asset-card-intro";',
   'import { buildMediaAssetCardMetadataProps } from "./media-asset-card-metadata-props";',
@@ -18385,6 +18406,7 @@ for (const requiredMediaAssetCardUsage of [
   "<MediaAssetCardPreview",
   "buildMediaAssetCardPreviewProps({ asset, authToken, workspaceId })",
   "<MediaAssetCardExtractedText",
+  "buildMediaAssetCardExtractedTextProps({ asset })",
   "<MediaAssetCardError",
   "<MediaAssetCardActions",
   "buildMediaAssetCardActionsProps({",
@@ -18404,6 +18426,7 @@ for (const forbiddenMediaAssetCardToken of [
   'asset.extracted_text ? (',
   'asset.extracted_text.length > 280 ? `${asset.extracted_text.slice(0, 280)}...` : asset.extracted_text',
   '<MediaAssetCardIntro asset={asset} />',
+  '<MediaAssetCardExtractedText asset={asset} />',
   'authToken ? (',
   '<MediaPreview asset={asset} token={authToken} workspaceId={workspaceId} />',
   "canWriteWorkspace={canWriteWorkspace}",
@@ -18524,6 +18547,54 @@ const maxMediaAssetCardIntroTypesLines = 2;
 if (mediaAssetCardIntroTypesLines > maxMediaAssetCardIntroTypesLines) {
   throw new Error(
     `media-asset-card-intro.types.ts exceeded ${maxMediaAssetCardIntroTypesLines} lines: ${mediaAssetCardIntroTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardExtractedTextPropsUsage of [
+  'import type { MediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text.types";',
+  'import type { BuildMediaAssetCardExtractedTextPropsInput } from "./media-asset-card-extracted-text-props.types";',
+  "export function buildMediaAssetCardExtractedTextProps({ asset }: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+]) {
+  if (!mediaAssetCardExtractedTextPropsSource.includes(requiredMediaAssetCardExtractedTextPropsUsage)) {
+    throw new Error(
+      `media-asset-card-extracted-text-props.ts must own extracted-text prop projection: ${requiredMediaAssetCardExtractedTextPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardExtractedTextPropsToken of [
+  "<MediaAssetCardExtractedText",
+  "<MediaAssetCardMetadata",
+  "<MediaAssetCardActions",
+]) {
+  if (mediaAssetCardExtractedTextPropsSource.includes(forbiddenMediaAssetCardExtractedTextPropsToken)) {
+    throw new Error(
+      `media-asset-card-extracted-text-props.ts must keep rendering and non-extracted-text concerns delegated: ${forbiddenMediaAssetCardExtractedTextPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardExtractedTextPropsLines = 5;
+if (mediaAssetCardExtractedTextPropsLines > maxMediaAssetCardExtractedTextPropsLines) {
+  throw new Error(
+    `media-asset-card-extracted-text-props.ts exceeded ${maxMediaAssetCardExtractedTextPropsLines} lines: ${mediaAssetCardExtractedTextPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardExtractedTextPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardExtractedTextPropsInput = Pick<MediaAssetCardProps, "asset">;',
+]) {
+  if (!mediaAssetCardExtractedTextPropsTypesSource.includes(requiredMediaAssetCardExtractedTextPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-extracted-text-props.types.ts must own extracted-text-props input typing: ${requiredMediaAssetCardExtractedTextPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardExtractedTextPropsTypesLines = 2;
+if (mediaAssetCardExtractedTextPropsTypesLines > maxMediaAssetCardExtractedTextPropsTypesLines) {
+  throw new Error(
+    `media-asset-card-extracted-text-props.types.ts exceeded ${maxMediaAssetCardExtractedTextPropsTypesLines} lines: ${mediaAssetCardExtractedTextPropsTypesLines}`,
   );
 }
 

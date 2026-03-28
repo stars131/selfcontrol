@@ -37,6 +37,18 @@ const introPropsTypesPath = path.resolve(
 );
 const introPropsTypesSource = fs.readFileSync(introPropsTypesPath, "utf8");
 const introPropsTypesLineCount = introPropsTypesSource.split(/\r?\n/).length;
+const extractedTextPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extracted-text-props.ts",
+);
+const extractedTextPropsSource = fs.readFileSync(extractedTextPropsPath, "utf8");
+const extractedTextPropsLineCount = extractedTextPropsSource.split(/\r?\n/).length;
+const extractedTextPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-extracted-text-props.types.ts",
+);
+const extractedTextPropsTypesSource = fs.readFileSync(extractedTextPropsTypesPath, "utf8");
+const extractedTextPropsTypesLineCount = extractedTextPropsTypesSource.split(/\r?\n/).length;
 const metadataPropsPath = path.resolve(process.cwd(), "components/media-asset-card-metadata-props.ts");
 const metadataPropsSource = fs.readFileSync(metadataPropsPath, "utf8");
 const metadataPropsLineCount = metadataPropsSource.split(/\r?\n/).length;
@@ -484,6 +496,10 @@ if (!cardSource.includes('import { buildMediaAssetCardIntroProps } from "./media
   throw new Error("media-asset-card.tsx must import delegated media intro props builder");
 }
 
+if (!cardSource.includes('import { buildMediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text-props";')) {
+  throw new Error("media-asset-card.tsx must import delegated media extracted-text props builder");
+}
+
 if (!cardSource.includes('import type { MediaAssetCardProps } from "./media-asset-card.types";')) {
   throw new Error("media-asset-card.tsx must import MediaAssetCardProps");
 }
@@ -514,6 +530,10 @@ if (!cardSource.includes("buildMediaAssetCardPreviewProps({ asset, authToken, wo
 
 if (!cardSource.includes("buildMediaAssetCardIntroProps({ asset })")) {
   throw new Error("media-asset-card.tsx must delegate media intro prop assembly");
+}
+
+if (!cardSource.includes("buildMediaAssetCardExtractedTextProps({ asset })")) {
+  throw new Error("media-asset-card.tsx must delegate media extracted-text prop assembly");
 }
 
 for (const forbiddenCardActionPropsToken of [
@@ -560,6 +580,10 @@ if (cardSource.includes("<MediaAssetCardIntro asset={asset} />")) {
   throw new Error("media-asset-card.tsx must keep media intro prop assembly delegated");
 }
 
+if (cardSource.includes("<MediaAssetCardExtractedText asset={asset} />")) {
+  throw new Error("media-asset-card.tsx must keep media extracted-text prop assembly delegated");
+}
+
 for (const requiredIntroPropsUsage of [
   'import type { MediaAssetCardIntroProps } from "./media-asset-card-intro.types";',
   'import type { BuildMediaAssetCardIntroPropsInput } from "./media-asset-card-intro-props.types";',
@@ -594,6 +618,42 @@ for (const requiredIntroPropsTypesUsage of [
 
 if (introPropsTypesLineCount > 2) {
   throw new Error(`media-asset-card-intro-props.types.ts exceeded 2 lines: ${introPropsTypesLineCount}`);
+}
+
+for (const requiredExtractedTextPropsUsage of [
+  'import type { MediaAssetCardExtractedTextProps } from "./media-asset-card-extracted-text.types";',
+  'import type { BuildMediaAssetCardExtractedTextPropsInput } from "./media-asset-card-extracted-text-props.types";',
+  "export function buildMediaAssetCardExtractedTextProps({ asset }: BuildMediaAssetCardExtractedTextPropsInput): MediaAssetCardExtractedTextProps {",
+]) {
+  if (!extractedTextPropsSource.includes(requiredExtractedTextPropsUsage)) {
+    throw new Error(`media-asset-card-extracted-text-props.ts must own media extracted-text prop assembly: ${requiredExtractedTextPropsUsage}`);
+  }
+}
+
+for (const forbiddenExtractedTextPropsToken of [
+  "<MediaAssetCardExtractedText",
+  "<MediaAssetCardMetadata",
+  "<MediaAssetCardActions",
+]) {
+  if (extractedTextPropsSource.includes(forbiddenExtractedTextPropsToken)) {
+    throw new Error(`media-asset-card-extracted-text-props.ts must keep render concerns delegated: ${forbiddenExtractedTextPropsToken}`);
+  }
+}
+
+if (extractedTextPropsLineCount > 5) {
+  throw new Error(`media-asset-card-extracted-text-props.ts exceeded 5 lines: ${extractedTextPropsLineCount}`);
+}
+
+for (const requiredExtractedTextPropsTypesUsage of [
+  'import type { MediaAssetCardProps } from "./media-asset-card.types"; export type BuildMediaAssetCardExtractedTextPropsInput = Pick<MediaAssetCardProps, "asset">;',
+]) {
+  if (!extractedTextPropsTypesSource.includes(requiredExtractedTextPropsTypesUsage)) {
+    throw new Error(`media-asset-card-extracted-text-props.types.ts must own media extracted-text prop input typing: ${requiredExtractedTextPropsTypesUsage}`);
+  }
+}
+
+if (extractedTextPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-extracted-text-props.types.ts exceeded 2 lines: ${extractedTextPropsTypesLineCount}`);
 }
 
 for (const requiredMetadataPropsUsage of [

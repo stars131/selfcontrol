@@ -3143,6 +3143,10 @@ Last updated: 2026-03-28
   - media-asset intro prop assembly now lives in `apps/web/components/media-asset-card-intro-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
   - `apps/web/components/media-asset-card.tsx` now keeps intro projection isolated from metadata, preview, and action composition so the card orchestration stays easier to evolve safely
   - the media-asset-card and record-panel structure guardrails now enforce this intro-props boundary so future card changes do not regrow mixed child-prop projection logic
+- Media Asset Extracted Text Props Builder Extraction V1:
+  - media-asset extracted-text prop assembly now lives in `apps/web/components/media-asset-card-extracted-text-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card.tsx`
+  - `apps/web/components/media-asset-card.tsx` now keeps extracted-text projection isolated from intro, metadata, preview, error, and action composition so the card orchestration stays easier to evolve safely
+  - the media-asset-card and record-panel structure guardrails now enforce this extracted-text-props boundary so future card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
