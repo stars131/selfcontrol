@@ -3168,6 +3168,14 @@ const mediaStorageHealthMetadataTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-metadata.types.ts",
 );
+const mediaStorageHealthCheckedAtDetailPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-checked-at-detail.tsx",
+);
+const mediaStorageHealthCheckedAtDetailTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-checked-at-detail.types.ts",
+);
 const mediaStorageHealthProviderTagPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-provider-tag.tsx",
@@ -5106,6 +5114,14 @@ const mediaStorageHealthMetadataTypesSource = fs.readFileSync(
   mediaStorageHealthMetadataTypesPath,
   "utf8",
 );
+const mediaStorageHealthCheckedAtDetailSource = fs.readFileSync(
+  mediaStorageHealthCheckedAtDetailPath,
+  "utf8",
+);
+const mediaStorageHealthCheckedAtDetailTypesSource = fs.readFileSync(
+  mediaStorageHealthCheckedAtDetailTypesPath,
+  "utf8",
+);
 const mediaStorageHealthProviderTagSource = fs.readFileSync(mediaStorageHealthProviderTagPath, "utf8");
 const mediaStorageHealthProviderTagTypesSource = fs.readFileSync(
   mediaStorageHealthProviderTagTypesPath,
@@ -6606,6 +6622,10 @@ const mediaStorageHealthHeaderTypesLines =
 const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthCheckedAtDetailLines =
+  mediaStorageHealthCheckedAtDetailSource.split(/\r?\n/).length;
+const mediaStorageHealthCheckedAtDetailTypesLines =
+  mediaStorageHealthCheckedAtDetailTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthProviderTagLines = mediaStorageHealthProviderTagSource.split(/\r?\n/).length;
 const mediaStorageHealthProviderTagTypesLines =
   mediaStorageHealthProviderTagTypesSource.split(/\r?\n/).length;
@@ -28548,6 +28568,7 @@ if (mediaStorageHealthHeaderTypesLines > maxMediaStorageHealthHeaderTypesLines) 
 }
 
 for (const requiredMediaStorageHealthMetadataUsage of [
+  'import { MediaStorageHealthCheckedAtDetail } from "./media-storage-health-checked-at-detail";',
   'import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";',
   'import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";',
   'import { MediaStorageHealthResponseTimeTag } from "./media-storage-health-response-time-tag";',
@@ -28561,7 +28582,7 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   "<MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthServiceTag mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthResponseTimeTag mediaStorageHealth={mediaStorageHealth} />",
-  "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
+  "<MediaStorageHealthCheckedAtDetail copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {
   if (!mediaStorageHealthMetadataSource.includes(requiredMediaStorageHealthMetadataUsage)) {
@@ -28586,6 +28607,8 @@ for (const forbiddenMediaStorageHealthMetadataToken of [
   "mediaStorageHealth.service_name",
   "mediaStorageHealth.service_version",
   "mediaStorageHealth.response_time_ms",
+  "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
+  "copy.checkedAt",
 ]) {
   if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
     throw new Error(
@@ -28615,6 +28638,61 @@ const maxMediaStorageHealthMetadataTypesLines = 2;
 if (mediaStorageHealthMetadataTypesLines > maxMediaStorageHealthMetadataTypesLines) {
   throw new Error(
     `media-storage-health-metadata.types.ts exceeded ${maxMediaStorageHealthMetadataTypesLines} lines: ${mediaStorageHealthMetadataTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthCheckedAtDetailUsage of [
+  'import type { MediaStorageHealthCheckedAtDetailProps } from "./media-storage-health-checked-at-detail.types";',
+  "}: MediaStorageHealthCheckedAtDetailProps) {",
+  "copy.checkedAt",
+  "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
+]) {
+  if (!mediaStorageHealthCheckedAtDetailSource.includes(requiredMediaStorageHealthCheckedAtDetailUsage)) {
+    throw new Error(
+      `media-storage-health-checked-at-detail.tsx must own checked-at detail rendering: ${requiredMediaStorageHealthCheckedAtDetailUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthCheckedAtDetailSource.includes("type MediaStorageHealthCheckedAtDetailProps =")) {
+  throw new Error(
+    "media-storage-health-checked-at-detail.tsx must keep checked-at-detail prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthCheckedAtDetailToken of [
+  "getStorageProviderLabel(",
+  "formatSecretStatus(",
+  "mediaStorageHealth.api_base_url",
+]) {
+  if (mediaStorageHealthCheckedAtDetailSource.includes(forbiddenMediaStorageHealthCheckedAtDetailToken)) {
+    throw new Error(
+      `media-storage-health-checked-at-detail.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthCheckedAtDetailToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthCheckedAtDetailLines = 5;
+if (mediaStorageHealthCheckedAtDetailLines > maxMediaStorageHealthCheckedAtDetailLines) {
+  throw new Error(
+    `media-storage-health-checked-at-detail.tsx exceeded ${maxMediaStorageHealthCheckedAtDetailLines} lines: ${mediaStorageHealthCheckedAtDetailLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthCheckedAtDetailTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthCheckedAtDetailProps = Pick<MediaStorageHealthMetadataProps, "copy" | "locale" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthCheckedAtDetailTypesSource.includes(requiredMediaStorageHealthCheckedAtDetailTypesUsage)) {
+    throw new Error(
+      `media-storage-health-checked-at-detail.types.ts must own checked-at-detail prop typing: ${requiredMediaStorageHealthCheckedAtDetailTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthCheckedAtDetailTypesLines = 2;
+if (mediaStorageHealthCheckedAtDetailTypesLines > maxMediaStorageHealthCheckedAtDetailTypesLines) {
+  throw new Error(
+    `media-storage-health-checked-at-detail.types.ts exceeded ${maxMediaStorageHealthCheckedAtDetailTypesLines} lines: ${mediaStorageHealthCheckedAtDetailTypesLines}`,
   );
 }
 

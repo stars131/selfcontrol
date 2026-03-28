@@ -2851,6 +2851,10 @@ Last updated: 2026-03-28
   - media-storage health response-time tag rendering now lives in `apps/web/components/media-storage-health-response-time-tag.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
   - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while response-time-tag rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this response-time-tag boundary so future health-metadata changes do not regrow a mixed composition-and-response-time rendering module
+- Media Storage Health Checked-At Detail Extraction V1:
+  - media-storage health checked-at detail rendering now lives in `apps/web/components/media-storage-health-checked-at-detail.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
+  - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while checked-at detail rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this checked-at-detail boundary so future health-metadata changes do not regrow a mixed composition-and-checked-at rendering module
 
 ## Next
 - Continue the next product slice

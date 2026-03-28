@@ -1,0 +1,1 @@
+import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthCheckedAtDetailProps = Pick<MediaStorageHealthMetadataProps, "copy" | "locale" | "mediaStorageHealth">;
