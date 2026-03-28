@@ -2879,6 +2879,10 @@ Last updated: 2026-03-28
   - media-storage health header message rendering now lives in `apps/web/components/media-storage-health-message.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-header.tsx`
   - `apps/web/components/media-storage-health-header.tsx` now stays focused on status summary and refresh controls while message rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this message boundary so future health-header changes do not regrow a mixed header-and-message rendering module
+- Media Storage Health Status Summary Extraction V1:
+  - media-storage health header status summary rendering now lives in `apps/web/components/media-storage-health-status-summary.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-header.tsx`
+  - `apps/web/components/media-storage-health-header.tsx` now stays focused on refresh controls and child composition while status summary rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this status-summary boundary so future health-header changes do not regrow a mixed header-and-status-summary rendering module
 
 ## Next
 - Continue the next product slice

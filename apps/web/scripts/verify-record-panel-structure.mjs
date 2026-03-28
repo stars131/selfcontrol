@@ -3192,6 +3192,14 @@ const mediaStorageHealthMessageTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-message.types.ts",
 );
+const mediaStorageHealthStatusSummaryPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-status-summary.tsx",
+);
+const mediaStorageHealthStatusSummaryTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-status-summary.types.ts",
+);
 const mediaStorageHealthMetadataPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-metadata.tsx",
@@ -5186,6 +5194,14 @@ const mediaStorageHealthMessageTypesSource = fs.readFileSync(
   mediaStorageHealthMessageTypesPath,
   "utf8",
 );
+const mediaStorageHealthStatusSummarySource = fs.readFileSync(
+  mediaStorageHealthStatusSummaryPath,
+  "utf8",
+);
+const mediaStorageHealthStatusSummaryTypesSource = fs.readFileSync(
+  mediaStorageHealthStatusSummaryTypesPath,
+  "utf8",
+);
 const mediaStorageHealthMetadataSource = fs.readFileSync(mediaStorageHealthMetadataPath, "utf8");
 const mediaStorageHealthMetadataTypesSource = fs.readFileSync(
   mediaStorageHealthMetadataTypesPath,
@@ -6727,6 +6743,10 @@ const mediaStorageHealthHeaderTypesLines =
 const mediaStorageHealthMessageLines = mediaStorageHealthMessageSource.split(/\r?\n/).length;
 const mediaStorageHealthMessageTypesLines =
   mediaStorageHealthMessageTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthStatusSummaryLines =
+  mediaStorageHealthStatusSummarySource.split(/\r?\n/).length;
+const mediaStorageHealthStatusSummaryTypesLines =
+  mediaStorageHealthStatusSummaryTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataLines = mediaStorageHealthMetadataSource.split(/\r?\n/).length;
 const mediaStorageHealthMetadataTypesLines =
   mediaStorageHealthMetadataTypesSource.split(/\r?\n/).length;
@@ -28640,12 +28660,12 @@ if (mediaStorageHealthCardLines > maxMediaStorageHealthCardLines) {
 }
 
 for (const requiredMediaStorageHealthHeaderUsage of [
-  'import { getMediaStorageHealthStatusLabel } from "../lib/media-storage-health-display";',
   'import { MediaStorageHealthMessage } from "./media-storage-health-message";',
+  'import { MediaStorageHealthStatusSummary } from "./media-storage-health-status-summary";',
   'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types";',
   "}: MediaStorageHealthHeaderProps) {",
   '<div className="action-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>',
-  "getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)",
+  "<MediaStorageHealthStatusSummary copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   "onClick={() => void onRefreshMediaStorageHealth()}",
   "<MediaStorageHealthMessage mediaStorageHealth={mediaStorageHealth} />",
 ]) {
@@ -28662,6 +28682,8 @@ if (mediaStorageHealthHeaderSource.includes("type MediaStorageHealthHeaderProps 
 
 for (const forbiddenMediaStorageHealthHeaderToken of [
   "{mediaStorageHealth.message}",
+  "getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)",
+  "{copy.storageHealth}",
 ]) {
   if (mediaStorageHealthHeaderSource.includes(forbiddenMediaStorageHealthHeaderToken)) {
     throw new Error(
@@ -28743,6 +28765,64 @@ const maxMediaStorageHealthMessageTypesLines = 2;
 if (mediaStorageHealthMessageTypesLines > maxMediaStorageHealthMessageTypesLines) {
   throw new Error(
     `media-storage-health-message.types.ts exceeded ${maxMediaStorageHealthMessageTypesLines} lines: ${mediaStorageHealthMessageTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthStatusSummaryUsage of [
+  'import { getMediaStorageHealthStatusLabel } from "../lib/media-storage-health-display";',
+  'import type { MediaStorageHealthStatusSummaryProps } from "./media-storage-health-status-summary.types";',
+  "}: MediaStorageHealthStatusSummaryProps) {",
+  "{copy.storageHealth}",
+  "getMediaStorageHealthStatusLabel(locale, mediaStorageHealth.status)",
+]) {
+  if (!mediaStorageHealthStatusSummarySource.includes(requiredMediaStorageHealthStatusSummaryUsage)) {
+    throw new Error(
+      `media-storage-health-status-summary.tsx must own health-status-summary rendering: ${requiredMediaStorageHealthStatusSummaryUsage}`,
+    );
+  }
+}
+
+if (
+  mediaStorageHealthStatusSummarySource.includes("type MediaStorageHealthStatusSummaryProps = Pick<")
+) {
+  throw new Error(
+    "media-storage-health-status-summary.tsx must keep health-status-summary prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthStatusSummaryToken of [
+  "onRefreshMediaStorageHealth",
+  "copy.refreshHealth",
+  "mediaStorageHealth.message",
+]) {
+  if (mediaStorageHealthStatusSummarySource.includes(forbiddenMediaStorageHealthStatusSummaryToken)) {
+    throw new Error(
+      `media-storage-health-status-summary.tsx must keep header control concerns delegated: ${forbiddenMediaStorageHealthStatusSummaryToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthStatusSummaryLines = 5;
+if (mediaStorageHealthStatusSummaryLines > maxMediaStorageHealthStatusSummaryLines) {
+  throw new Error(
+    `media-storage-health-status-summary.tsx exceeded ${maxMediaStorageHealthStatusSummaryLines} lines: ${mediaStorageHealthStatusSummaryLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthStatusSummaryTypesUsage of [
+  'import type { MediaStorageHealthHeaderProps } from "./media-storage-health-header.types"; export type MediaStorageHealthStatusSummaryProps = Pick<MediaStorageHealthHeaderProps, "copy" | "locale" | "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthStatusSummaryTypesSource.includes(requiredMediaStorageHealthStatusSummaryTypesUsage)) {
+    throw new Error(
+      `media-storage-health-status-summary.types.ts must own health-status-summary prop typing: ${requiredMediaStorageHealthStatusSummaryTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthStatusSummaryTypesLines = 2;
+if (mediaStorageHealthStatusSummaryTypesLines > maxMediaStorageHealthStatusSummaryTypesLines) {
+  throw new Error(
+    `media-storage-health-status-summary.types.ts exceeded ${maxMediaStorageHealthStatusSummaryTypesLines} lines: ${mediaStorageHealthStatusSummaryTypesLines}`,
   );
 }
 
