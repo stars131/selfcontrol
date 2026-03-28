@@ -2980,6 +2980,14 @@ const recentMediaIssueCardExtractionModeTagPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-extraction-mode-tag.tsx",
 );
+const recentMediaIssueCardExtractionModeTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-extraction-mode-tag-props.ts",
+);
+const recentMediaIssueCardExtractionModeTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-extraction-mode-tag-props.types.ts",
+);
 const recentMediaIssueCardExtractionModeTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-extraction-mode-tag.types.ts",
@@ -5297,6 +5305,14 @@ const recentMediaIssueCardExtractionModeTagSource = fs.readFileSync(
   recentMediaIssueCardExtractionModeTagPath,
   "utf8",
 );
+const recentMediaIssueCardExtractionModeTagPropsSource = fs.readFileSync(
+  recentMediaIssueCardExtractionModeTagPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardExtractionModeTagPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardExtractionModeTagPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardExtractionModeTagTypesSource = fs.readFileSync(
   recentMediaIssueCardExtractionModeTagTypesPath,
   "utf8",
@@ -7239,6 +7255,10 @@ const recentMediaIssueCardProcessingSourceTagTypesLines =
   recentMediaIssueCardProcessingSourceTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardExtractionModeTagLines =
   recentMediaIssueCardExtractionModeTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardExtractionModeTagPropsLines =
+  recentMediaIssueCardExtractionModeTagPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardExtractionModeTagPropsTypesLines =
+  recentMediaIssueCardExtractionModeTagPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardExtractionModeTagTypesLines =
   recentMediaIssueCardExtractionModeTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardRetryCountTagTypesLines =
@@ -28488,6 +28508,7 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 }
 
 for (const requiredRecentMediaIssueCardTagsUsage of [
+  'import { buildRecentMediaIssueCardExtractionModeTagProps } from "./recent-media-issue-card-extraction-mode-tag-props";',
   'import { RecentMediaIssueCardExtractionModeTag } from "./recent-media-issue-card-extraction-mode-tag";',
   'import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";',
   'import { buildRecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag-props";',
@@ -28507,7 +28528,8 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   "<RecentMediaIssueCardStorageProviderTag",
   "buildRecentMediaIssueCardProcessingSourceTagProps({ issue })",
   "<RecentMediaIssueCardProcessingSourceTag",
-  "<RecentMediaIssueCardExtractionModeTag issue={issue} />",
+  "buildRecentMediaIssueCardExtractionModeTagProps({ issue })",
+  "<RecentMediaIssueCardExtractionModeTag",
   "<RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />",
   "<RecentMediaIssueCardRemoteFetchTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCardRetryStateTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
@@ -28536,6 +28558,7 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "{issue.processing_source}",
   "<RecentMediaIssueCardProcessingSourceTag issue={issue} />",
   "{issue.extraction_mode}",
+  "<RecentMediaIssueCardExtractionModeTag issue={issue} />",
   "getProcessingStatusLabel(locale, issue.processing_status)",
   "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
   "getStorageProviderLabel(locale, issue.storage_provider)",
@@ -29140,6 +29163,68 @@ const maxRecentMediaIssueCardExtractionModeTagTypesLines = 2;
 if (recentMediaIssueCardExtractionModeTagTypesLines > maxRecentMediaIssueCardExtractionModeTagTypesLines) {
   throw new Error(
     `recent-media-issue-card-extraction-mode-tag.types.ts exceeded ${maxRecentMediaIssueCardExtractionModeTagTypesLines} lines: ${recentMediaIssueCardExtractionModeTagTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardExtractionModeTagPropsUsage of [
+  'import type { RecentMediaIssueCardExtractionModeTagProps } from "./recent-media-issue-card-extraction-mode-tag.types";',
+  'import type { BuildRecentMediaIssueCardExtractionModeTagPropsInput } from "./recent-media-issue-card-extraction-mode-tag-props.types";',
+  "export function buildRecentMediaIssueCardExtractionModeTagProps({ issue }: BuildRecentMediaIssueCardExtractionModeTagPropsInput): RecentMediaIssueCardExtractionModeTagProps {",
+]) {
+  if (!recentMediaIssueCardExtractionModeTagPropsSource.includes(requiredRecentMediaIssueCardExtractionModeTagPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-extraction-mode-tag-props.ts must own extraction-mode tag prop projection: ${requiredRecentMediaIssueCardExtractionModeTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardExtractionModeTagPropsToken of [
+  "<RecentMediaIssueCardExtractionModeTag",
+  "extraction_mode",
+  '<div className="tag-row">',
+]) {
+  if (
+    recentMediaIssueCardExtractionModeTagPropsSource.includes(
+      forbiddenRecentMediaIssueCardExtractionModeTagPropsToken,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-extraction-mode-tag-props.ts must keep rendering and extraction-mode rules delegated: ${forbiddenRecentMediaIssueCardExtractionModeTagPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardExtractionModeTagPropsLines = 5;
+if (
+  recentMediaIssueCardExtractionModeTagPropsLines >
+  maxRecentMediaIssueCardExtractionModeTagPropsLines
+) {
+  throw new Error(
+    `recent-media-issue-card-extraction-mode-tag-props.ts exceeded ${maxRecentMediaIssueCardExtractionModeTagPropsLines} lines: ${recentMediaIssueCardExtractionModeTagPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardExtractionModeTagPropsTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type BuildRecentMediaIssueCardExtractionModeTagPropsInput = Pick<RecentMediaIssueCardTagsProps, "issue">;',
+]) {
+  if (
+    !recentMediaIssueCardExtractionModeTagPropsTypesSource.includes(
+      requiredRecentMediaIssueCardExtractionModeTagPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-extraction-mode-tag-props.types.ts must own extraction-mode-tag-props input typing: ${requiredRecentMediaIssueCardExtractionModeTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardExtractionModeTagPropsTypesLines = 2;
+if (
+  recentMediaIssueCardExtractionModeTagPropsTypesLines >
+  maxRecentMediaIssueCardExtractionModeTagPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-extraction-mode-tag-props.types.ts exceeded ${maxRecentMediaIssueCardExtractionModeTagPropsTypesLines} lines: ${recentMediaIssueCardExtractionModeTagPropsTypesLines}`,
   );
 }
 
