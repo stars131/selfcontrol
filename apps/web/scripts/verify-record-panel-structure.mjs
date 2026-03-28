@@ -2956,6 +2956,14 @@ const recentMediaIssueCardRetryStateTagPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-retry-state-tag.tsx",
 );
+const recentMediaIssueCardRetryStateTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-state-tag-props.ts",
+);
+const recentMediaIssueCardRetryStateTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-state-tag-props.types.ts",
+);
 const recentMediaIssueCardRetryStateTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-retry-state-tag.types.ts",
@@ -5289,6 +5297,14 @@ const recentMediaIssueCardRetryStateTagSource = fs.readFileSync(
   recentMediaIssueCardRetryStateTagPath,
   "utf8",
 );
+const recentMediaIssueCardRetryStateTagPropsSource = fs.readFileSync(
+  recentMediaIssueCardRetryStateTagPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardRetryStateTagPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardRetryStateTagPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardRetryStateTagTypesSource = fs.readFileSync(
   recentMediaIssueCardRetryStateTagTypesPath,
   "utf8",
@@ -7259,6 +7275,10 @@ const recentMediaIssueCardRemoteFetchTagTypesLines =
   recentMediaIssueCardRemoteFetchTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardRetryStateTagLines =
   recentMediaIssueCardRetryStateTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryStateTagPropsLines =
+  recentMediaIssueCardRetryStateTagPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryStateTagPropsTypesLines =
+  recentMediaIssueCardRetryStateTagPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardRetryStateTagTypesLines =
   recentMediaIssueCardRetryStateTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardIssueLabelTagLines =
@@ -28538,6 +28558,7 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   'import { buildRecentMediaIssueCardRemoteFetchTagProps } from "./recent-media-issue-card-remote-fetch-tag-props";',
   'import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";',
   'import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";',
+  'import { buildRecentMediaIssueCardRetryStateTagProps } from "./recent-media-issue-card-retry-state-tag-props";',
   'import { RecentMediaIssueCardRetryStateTag } from "./recent-media-issue-card-retry-state-tag";',
   'import { buildRecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag-props";',
   'import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";',
@@ -28553,8 +28574,9 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   "<RecentMediaIssueCardRemoteFetchTag",
   "buildRecentMediaIssueCardExtractionModeTagProps({ issue })",
   "<RecentMediaIssueCardExtractionModeTag",
+  "buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy })",
+  "<RecentMediaIssueCardRetryStateTag",
   "<RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />",
-  "<RecentMediaIssueCardRetryStateTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "<RecentMediaIssueCardRetryCountTag issue={issue} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!recentMediaIssueCardTagsSource.includes(requiredRecentMediaIssueCardTagsUsage)) {
@@ -28582,6 +28604,7 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "<RecentMediaIssueCardRemoteFetchTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "{issue.extraction_mode}",
   "<RecentMediaIssueCardExtractionModeTag issue={issue} />",
+  "<RecentMediaIssueCardRetryStateTag issue={issue} locale={locale} mediaIssueCopy={mediaIssueCopy} />",
   "getProcessingStatusLabel(locale, issue.processing_status)",
   "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
   "getStorageProviderLabel(locale, issue.storage_provider)",
@@ -29022,6 +29045,68 @@ const maxRecentMediaIssueCardRetryStateTagTypesLines = 2;
 if (recentMediaIssueCardRetryStateTagTypesLines > maxRecentMediaIssueCardRetryStateTagTypesLines) {
   throw new Error(
     `recent-media-issue-card-retry-state-tag.types.ts exceeded ${maxRecentMediaIssueCardRetryStateTagTypesLines} lines: ${recentMediaIssueCardRetryStateTagTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryStateTagPropsUsage of [
+  'import type { RecentMediaIssueCardRetryStateTagProps } from "./recent-media-issue-card-retry-state-tag.types";',
+  'import type { BuildRecentMediaIssueCardRetryStateTagPropsInput } from "./recent-media-issue-card-retry-state-tag-props.types";',
+  "export function buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy }: BuildRecentMediaIssueCardRetryStateTagPropsInput): RecentMediaIssueCardRetryStateTagProps {",
+]) {
+  if (!recentMediaIssueCardRetryStateTagPropsSource.includes(requiredRecentMediaIssueCardRetryStateTagPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-state-tag-props.ts must own retry-state tag prop projection: ${requiredRecentMediaIssueCardRetryStateTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardRetryStateTagPropsToken of [
+  "<RecentMediaIssueCardRetryStateTag",
+  "getRetryStateLabel(",
+  '<div className="tag-row">',
+]) {
+  if (
+    recentMediaIssueCardRetryStateTagPropsSource.includes(
+      forbiddenRecentMediaIssueCardRetryStateTagPropsToken,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-retry-state-tag-props.ts must keep rendering and label rules delegated: ${forbiddenRecentMediaIssueCardRetryStateTagPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryStateTagPropsLines = 5;
+if (
+  recentMediaIssueCardRetryStateTagPropsLines >
+  maxRecentMediaIssueCardRetryStateTagPropsLines
+) {
+  throw new Error(
+    `recent-media-issue-card-retry-state-tag-props.ts exceeded ${maxRecentMediaIssueCardRetryStateTagPropsLines} lines: ${recentMediaIssueCardRetryStateTagPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryStateTagPropsTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type BuildRecentMediaIssueCardRetryStateTagPropsInput = Pick<RecentMediaIssueCardTagsProps, "issue" | "locale" | "mediaIssueCopy">;',
+]) {
+  if (
+    !recentMediaIssueCardRetryStateTagPropsTypesSource.includes(
+      requiredRecentMediaIssueCardRetryStateTagPropsTypesUsage,
+    )
+  ) {
+    throw new Error(
+      `recent-media-issue-card-retry-state-tag-props.types.ts must own retry-state-tag-props input typing: ${requiredRecentMediaIssueCardRetryStateTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryStateTagPropsTypesLines = 2;
+if (
+  recentMediaIssueCardRetryStateTagPropsTypesLines >
+  maxRecentMediaIssueCardRetryStateTagPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-retry-state-tag-props.types.ts exceeded ${maxRecentMediaIssueCardRetryStateTagPropsTypesLines} lines: ${recentMediaIssueCardRetryStateTagPropsTypesLines}`,
   );
 }
 
