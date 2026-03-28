@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_write_access
+from app.api.routes.provider_config_route_helpers import upsert_provider_config_or_400
 from app.db.session import get_db
 from app.models.user import User
 from app.services.audit import log_audit_event
 from app.services.media_remote_storage_health import get_media_storage_provider_health
-from app.services.provider_configs import list_provider_configs, upsert_provider_config
+from app.services.provider_configs import list_provider_configs
 
 
 router = APIRouter()
@@ -55,20 +56,17 @@ def put_provider_config(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_write_access(workspace_id, current_user, db)
-    try:
-        item = upsert_provider_config(
-            db,
-            workspace_id,
-            feature_code,
-            provider_code=payload.provider_code,
-            model_name=payload.model_name,
-            is_enabled=payload.is_enabled,
-            api_base_url=payload.api_base_url,
-            api_key_env_name=payload.api_key_env_name,
-            options_json=payload.options_json,
-        )
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    item = upsert_provider_config_or_400(
+        db,
+        workspace_id=workspace_id,
+        feature_code=feature_code,
+        provider_code=payload.provider_code,
+        model_name=payload.model_name,
+        is_enabled=payload.is_enabled,
+        api_base_url=payload.api_base_url,
+        api_key_env_name=payload.api_key_env_name,
+        options_json=payload.options_json,
+    )
 
     log_audit_event(
         db,

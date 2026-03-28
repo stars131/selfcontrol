@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Auth And Provider Config Helper Extraction V1:
+  - `apps/api/app/api/routes/auth_route_helpers.py` now owns registration duplicate lookup, user construction, login account lookup, and login authentication response building for the auth routes
+  - `apps/api/app/api/routes/provider_config_route_helpers.py` now owns the provider-config upsert wrapper that translates validation errors into stable HTTP `400` responses without bloating the route body
+  - `apps/api/tests/test_auth_api.py` now covers register, duplicate-register, login, invalid-login, and `/me` behavior so the auth API finally has direct route-level regression coverage
 - Conversation Route Helper And API Coverage V1:
   - `apps/api/app/api/routes/conversation_route_helpers.py` now owns workspace-scoped conversation lookup, user-message persistence, and post-chat record side effects for the conversation routes
   - `apps/api/app/api/routes/conversations.py` now delegates those responsibilities, which keeps the route focused on permission checks, orchestration, and response shaping
