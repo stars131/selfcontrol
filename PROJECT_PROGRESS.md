@@ -3420,6 +3420,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-actions-props.ts`, `media-asset-card-delete-button-props.ts`, `media-asset-card-download-button-props.ts`, `media-asset-card-refresh-button-props.ts`, and `media-asset-card-retry-button-props.ts` now use explicit `input` parameters and pass their media-action props through unchanged
   - this keeps the media-asset action helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the media-asset structure guardrail now enforces this pass-through helper contract so future media-action leaf helpers do not drift back to mixed boundary styles
+- Media Asset Preview And Tag Helper Naming Cleanup V1:
+  - `apps/web/components/media-asset-card-preview-props.ts` and `media-asset-card-metadata-tags-props.ts` now use explicit `input` parameters and pass their preview/tag props through unchanged
+  - this keeps the media-asset preview and tag helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the media-asset and record-panel structure guardrails now enforce this pass-through helper contract so future preview/tag helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice

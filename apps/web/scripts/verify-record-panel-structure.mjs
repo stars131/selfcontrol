@@ -18741,8 +18741,7 @@ if (mediaAssetCardPreviewTypesLines > maxMediaAssetCardPreviewTypesLines) {
 for (const requiredMediaAssetCardPreviewPropsUsage of [
   'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types";',
   'import type { BuildMediaAssetCardPreviewPropsInput } from "./media-asset-card-preview-props.types";',
-  "}: BuildMediaAssetCardPreviewPropsInput): MediaAssetCardPreviewProps {",
-  "return { asset, authToken, workspaceId };",
+  "export function buildMediaAssetCardPreviewProps(input: BuildMediaAssetCardPreviewPropsInput): MediaAssetCardPreviewProps { return input; }",
 ]) {
   if (!mediaAssetCardPreviewPropsSource.includes(requiredMediaAssetCardPreviewPropsUsage)) {
     throw new Error(

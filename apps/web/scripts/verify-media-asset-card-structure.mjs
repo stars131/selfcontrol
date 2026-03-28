@@ -767,8 +767,7 @@ if (metadataPropsTypesLineCount > 2) {
 for (const requiredPreviewPropsUsage of [
   'import type { MediaAssetCardPreviewProps } from "./media-asset-card-preview.types";',
   'import type { BuildMediaAssetCardPreviewPropsInput } from "./media-asset-card-preview-props.types";',
-  "}: BuildMediaAssetCardPreviewPropsInput): MediaAssetCardPreviewProps {",
-  "return { asset, authToken, workspaceId };",
+  "export function buildMediaAssetCardPreviewProps(input: BuildMediaAssetCardPreviewPropsInput): MediaAssetCardPreviewProps { return input; }",
 ]) {
   if (!previewPropsSource.includes(requiredPreviewPropsUsage)) {
     throw new Error(
@@ -887,7 +886,7 @@ for (const forbiddenMetadataToken of [
 for (const requiredMetadataTagsPropsUsage of [
   'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
   'import type { BuildMediaAssetCardMetadataTagsPropsInput } from "./media-asset-card-metadata-tags-props.types";',
-  "export function buildMediaAssetCardMetadataTagsProps({ asset, mediaIssueCopy }: BuildMediaAssetCardMetadataTagsPropsInput): MediaAssetCardMetadataTagsProps {",
+  "export function buildMediaAssetCardMetadataTagsProps(input: BuildMediaAssetCardMetadataTagsPropsInput): MediaAssetCardMetadataTagsProps { return input; }",
 ]) {
   if (!metadataTagsPropsSource.includes(requiredMetadataTagsPropsUsage)) {
     throw new Error(
