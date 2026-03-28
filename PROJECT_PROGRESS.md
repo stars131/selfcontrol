@@ -2803,6 +2803,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-metadata.tsx` now only reads the timing metadata fields it actually passes into `apps/web/components/media-asset-card-metadata-details.tsx`
   - unused metadata reads for tag concerns were removed so the metadata wrapper stays focused on tag/detail composition instead of duplicating downstream extraction work
   - the media-asset and record-panel structure guardrails now enforce this tighter timing-read boundary so future metadata wrapper changes do not regrow redundant extraction logic
+- Recent Media Last Attempt Detail Extraction V1:
+  - recent-media issue last-attempt detail rendering now lives in `apps/web/components/recent-media-issue-card-last-attempt-detail.tsx` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
+  - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now stays focused on detail ordering while last-attempt rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this last-attempt-detail boundary so future recent-media metadata-detail changes do not regrow a mixed composition-and-last-attempt rendering module
 
 ## Next
 - Continue the next product slice
