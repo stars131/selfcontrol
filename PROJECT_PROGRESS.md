@@ -3091,6 +3091,10 @@ Last updated: 2026-03-28
   - media-asset last-attempt and next-retry detail prop assembly now lives in `apps/web/components/media-asset-card-last-attempt-detail-props.ts` and `apps/web/components/media-asset-card-next-retry-detail-props.ts`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps timing detail projection isolated from the rest of the detail-grid leaves so the metadata-details section stays easier to evolve safely
   - the media-asset-card structure guardrail now enforces these timing-detail props-builder boundaries so future media metadata detail changes do not regrow mixed child-prop projection logic
+- Media Asset Dimensions Detail Props Builder Extraction V1:
+  - media-asset dimensions detail prop assembly now lives in `apps/web/components/media-asset-card-dimensions-detail-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now keeps dimensions detail projection isolated from the timing and text detail leaves so the detail-grid orchestration stays easier to evolve safely
+  - the media-asset-card structure guardrail now enforces this dimensions-detail props-builder boundary so future media metadata detail changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

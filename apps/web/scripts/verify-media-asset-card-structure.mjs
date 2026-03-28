@@ -123,6 +123,19 @@ const lastAttemptDetailTypesLineCount = lastAttemptDetailTypesSource.split(/\r?\
 const dimensionsDetailPath = path.resolve(process.cwd(), "components/media-asset-card-dimensions-detail.tsx");
 const dimensionsDetailSource = fs.readFileSync(dimensionsDetailPath, "utf8");
 const dimensionsDetailLineCount = dimensionsDetailSource.split(/\r?\n/).length;
+const dimensionsDetailPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-dimensions-detail-props.ts",
+);
+const dimensionsDetailPropsSource = fs.readFileSync(dimensionsDetailPropsPath, "utf8");
+const dimensionsDetailPropsLineCount = dimensionsDetailPropsSource.split(/\r?\n/).length;
+const dimensionsDetailPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-dimensions-detail-props.types.ts",
+);
+const dimensionsDetailPropsTypesSource = fs.readFileSync(dimensionsDetailPropsTypesPath, "utf8");
+const dimensionsDetailPropsTypesLineCount =
+  dimensionsDetailPropsTypesSource.split(/\r?\n/).length;
 const dimensionsDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-dimensions-detail.types.ts");
 const dimensionsDetailTypesSource = fs.readFileSync(dimensionsDetailTypesPath, "utf8");
 const dimensionsDetailTypesLineCount = dimensionsDetailTypesSource.split(/\r?\n/).length;
@@ -883,6 +896,43 @@ if (lastAttemptDetailTypesLineCount > 2) {
   throw new Error(`media-asset-card-last-attempt-detail.types.ts exceeded 2 lines: ${lastAttemptDetailTypesLineCount}`);
 }
 
+for (const requiredDimensionsDetailPropsUsage of [
+  'import type { MediaAssetCardDimensionsDetailProps } from "./media-asset-card-dimensions-detail.types";',
+  'import type { BuildMediaAssetCardDimensionsDetailPropsInput } from "./media-asset-card-dimensions-detail-props.types";',
+  "export function buildMediaAssetCardDimensionsDetailProps({ asset, mediaIssueCopy }: BuildMediaAssetCardDimensionsDetailPropsInput): MediaAssetCardDimensionsDetailProps {",
+]) {
+  if (!dimensionsDetailPropsSource.includes(requiredDimensionsDetailPropsUsage)) {
+    throw new Error(`media-asset-card-dimensions-detail-props.ts must own dimensions detail prop projection: ${requiredDimensionsDetailPropsUsage}`);
+  }
+}
+
+for (const forbiddenDimensionsDetailPropsToken of [
+  "<MediaAssetCardDimensionsDetail",
+  "formatHistoryTimestampLabel",
+  "lastAttemptAt",
+  "nextRetryAt",
+]) {
+  if (dimensionsDetailPropsSource.includes(forbiddenDimensionsDetailPropsToken)) {
+    throw new Error(`media-asset-card-dimensions-detail-props.ts must keep rendering and unrelated detail concerns delegated: ${forbiddenDimensionsDetailPropsToken}`);
+  }
+}
+
+if (dimensionsDetailPropsLineCount > 5) {
+  throw new Error(`media-asset-card-dimensions-detail-props.ts exceeded 5 lines: ${dimensionsDetailPropsLineCount}`);
+}
+
+for (const requiredDimensionsDetailPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type BuildMediaAssetCardDimensionsDetailPropsInput = MediaAssetCardMetadataDetailsProps;',
+]) {
+  if (!dimensionsDetailPropsTypesSource.includes(requiredDimensionsDetailPropsTypesUsage)) {
+    throw new Error(`media-asset-card-dimensions-detail-props.types.ts must own dimensions detail props input typing: ${requiredDimensionsDetailPropsTypesUsage}`);
+  }
+}
+
+if (dimensionsDetailPropsTypesLineCount > 2) {
+  throw new Error(`media-asset-card-dimensions-detail-props.types.ts exceeded 2 lines: ${dimensionsDetailPropsTypesLineCount}`);
+}
+
 for (const requiredDimensionsDetailUsage of [
   'import type { MediaAssetCardDimensionsDetailProps } from "./media-asset-card-dimensions-detail.types";',
   "}: MediaAssetCardDimensionsDetailProps) {",
@@ -1068,6 +1118,7 @@ if (nextRetryDetailTypesLineCount > 2) {
 }
 
 for (const requiredMetadataDetailsUsage of [
+  'import { buildMediaAssetCardDimensionsDetailProps } from "./media-asset-card-dimensions-detail-props";',
   'import { MediaAssetCardDimensionsDetail } from "./media-asset-card-dimensions-detail";',
   'import { buildMediaAssetCardLastAttemptDetailProps } from "./media-asset-card-last-attempt-detail-props";',
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
@@ -1078,7 +1129,8 @@ for (const requiredMetadataDetailsUsage of [
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
-  "<MediaAssetCardDimensionsDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
+  "buildMediaAssetCardDimensionsDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
+  "<MediaAssetCardDimensionsDetail",
   "buildMediaAssetCardLastAttemptDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
   "<MediaAssetCardLastAttemptDetail",
   "buildMediaAssetCardNextRetryDetailProps({ asset, formatHistoryTimestampLabel, lastAttemptAt, mediaIssueCopy, nextRetryAt })",
@@ -1097,6 +1149,7 @@ for (const forbiddenMetadataDetailsToken of [
   '{typeof asset.metadata_json.text_line_count === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.textLines}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.text_line_count}</div></div> : null}',
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
   '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
+  "<MediaAssetCardDimensionsDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
 ]) {
