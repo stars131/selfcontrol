@@ -2843,6 +2843,10 @@ Last updated: 2026-03-28
   - media-storage health reachability tag rendering now lives in `apps/web/components/media-storage-health-reachability-tag.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
   - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while reachability-tag rendering remains centralized and easier to evolve safely
   - the record-panel structure guardrail now enforces this reachability-tag boundary so future health-metadata changes do not regrow a mixed composition-and-reachability rendering module
+- Media Storage Health Service Tag Extraction V1:
+  - media-storage health service tag rendering now lives in `apps/web/components/media-storage-health-service-tag.tsx` instead of remaining inline inside `apps/web/components/media-storage-health-metadata.tsx`
+  - `apps/web/components/media-storage-health-metadata.tsx` now stays focused on metadata composition while service-tag rendering remains centralized and easier to evolve safely
+  - the record-panel structure guardrail now enforces this service-tag boundary so future health-metadata changes do not regrow a mixed composition-and-service rendering module
 
 ## Next
 - Continue the next product slice

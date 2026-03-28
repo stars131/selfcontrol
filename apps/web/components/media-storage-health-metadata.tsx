@@ -3,6 +3,7 @@
 import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";
 import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";
 import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";
+import { MediaStorageHealthServiceTag } from "./media-storage-health-service-tag";
 import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";
 
 export function MediaStorageHealthMetadata({
@@ -17,12 +18,7 @@ export function MediaStorageHealthMetadata({
         <MediaStorageHealthProviderTag copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />
         <MediaStorageHealthSecretTag copy={copy} formatSecretStatus={formatSecretStatus} mediaStorageHealth={mediaStorageHealth} />
         <MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />
-        {mediaStorageHealth.service_name ? (
-          <span className="tag">
-            {mediaStorageHealth.service_name}
-            {mediaStorageHealth.service_version ? ` ${mediaStorageHealth.service_version}` : ""}
-          </span>
-        ) : null}
+        <MediaStorageHealthServiceTag mediaStorageHealth={mediaStorageHealth} />
         {typeof mediaStorageHealth.response_time_ms === "number" ? (
           <span className="tag">{mediaStorageHealth.response_time_ms} ms</span>
         ) : null}

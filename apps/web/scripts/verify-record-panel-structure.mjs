@@ -3192,6 +3192,14 @@ const mediaStorageHealthReachabilityTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-reachability-tag.types.ts",
 );
+const mediaStorageHealthServiceTagPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-service-tag.tsx",
+);
+const mediaStorageHealthServiceTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-service-tag.types.ts",
+);
 const recordResultsListViewPath = path.resolve(
   process.cwd(),
   "components/record-results-list-view.tsx",
@@ -5108,6 +5116,11 @@ const mediaStorageHealthReachabilityTagTypesSource = fs.readFileSync(
   mediaStorageHealthReachabilityTagTypesPath,
   "utf8",
 );
+const mediaStorageHealthServiceTagSource = fs.readFileSync(mediaStorageHealthServiceTagPath, "utf8");
+const mediaStorageHealthServiceTagTypesSource = fs.readFileSync(
+  mediaStorageHealthServiceTagTypesPath,
+  "utf8",
+);
 const recordResultsListViewSource = fs.readFileSync(recordResultsListViewPath, "utf8");
 const recordResultsListViewTypesSource = fs.readFileSync(
   recordResultsListViewTypesPath,
@@ -6587,6 +6600,9 @@ const mediaStorageHealthReachabilityTagLines =
   mediaStorageHealthReachabilityTagSource.split(/\r?\n/).length;
 const mediaStorageHealthReachabilityTagTypesLines =
   mediaStorageHealthReachabilityTagTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthServiceTagLines = mediaStorageHealthServiceTagSource.split(/\r?\n/).length;
+const mediaStorageHealthServiceTagTypesLines =
+  mediaStorageHealthServiceTagTypesSource.split(/\r?\n/).length;
 const recordResultsViewLines = recordResultsViewSource.split(/\r?\n/).length;
 const recordResultsSharedLines = recordResultsSharedSource.split(/\r?\n/).length;
 const recordResultsSharedCardPropsLines =
@@ -28515,12 +28531,14 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   'import { MediaStorageHealthProviderTag } from "./media-storage-health-provider-tag";',
   'import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reachability-tag";',
   'import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";',
+  'import { MediaStorageHealthServiceTag } from "./media-storage-health-service-tag";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
   "<MediaStorageHealthProviderTag copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthSecretTag copy={copy} formatSecretStatus={formatSecretStatus} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthReachabilityTag copy={copy} mediaStorageHealth={mediaStorageHealth} />",
+  "<MediaStorageHealthServiceTag mediaStorageHealth={mediaStorageHealth} />",
   "new Date(mediaStorageHealth.checked_at).toLocaleString(locale)",
   'mediaStorageHealth.warnings.join(" ")',
 ]) {
@@ -28543,6 +28561,8 @@ for (const forbiddenMediaStorageHealthMetadataToken of [
   "copy.secret",
   "formatSecretStatus(mediaStorageHealth.secret_status)",
   "mediaStorageHealth.reachable ? copy.reachable : copy.unreachable",
+  "mediaStorageHealth.service_name",
+  "mediaStorageHealth.service_version",
 ]) {
   if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
     throw new Error(
@@ -28738,6 +28758,61 @@ const maxMediaStorageHealthReachabilityTagTypesLines = 2;
 if (mediaStorageHealthReachabilityTagTypesLines > maxMediaStorageHealthReachabilityTagTypesLines) {
   throw new Error(
     `media-storage-health-reachability-tag.types.ts exceeded ${maxMediaStorageHealthReachabilityTagTypesLines} lines: ${mediaStorageHealthReachabilityTagTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthServiceTagUsage of [
+  'import type { MediaStorageHealthServiceTagProps } from "./media-storage-health-service-tag.types";',
+  "}: MediaStorageHealthServiceTagProps) {",
+  "mediaStorageHealth.service_name",
+  "mediaStorageHealth.service_version",
+]) {
+  if (!mediaStorageHealthServiceTagSource.includes(requiredMediaStorageHealthServiceTagUsage)) {
+    throw new Error(
+      `media-storage-health-service-tag.tsx must own service tag rendering: ${requiredMediaStorageHealthServiceTagUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthServiceTagSource.includes("type MediaStorageHealthServiceTagProps =")) {
+  throw new Error(
+    "media-storage-health-service-tag.tsx must keep service-tag prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthServiceTagToken of [
+  "getStorageProviderLabel(",
+  "formatSecretStatus(",
+  "mediaStorageHealth.reachable",
+]) {
+  if (mediaStorageHealthServiceTagSource.includes(forbiddenMediaStorageHealthServiceTagToken)) {
+    throw new Error(
+      `media-storage-health-service-tag.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthServiceTagToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthServiceTagLines = 5;
+if (mediaStorageHealthServiceTagLines > maxMediaStorageHealthServiceTagLines) {
+  throw new Error(
+    `media-storage-health-service-tag.tsx exceeded ${maxMediaStorageHealthServiceTagLines} lines: ${mediaStorageHealthServiceTagLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthServiceTagTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthServiceTagProps = Pick<MediaStorageHealthMetadataProps, "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthServiceTagTypesSource.includes(requiredMediaStorageHealthServiceTagTypesUsage)) {
+    throw new Error(
+      `media-storage-health-service-tag.types.ts must own service-tag prop typing: ${requiredMediaStorageHealthServiceTagTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthServiceTagTypesLines = 2;
+if (mediaStorageHealthServiceTagTypesLines > maxMediaStorageHealthServiceTagTypesLines) {
+  throw new Error(
+    `media-storage-health-service-tag.types.ts exceeded ${maxMediaStorageHealthServiceTagTypesLines} lines: ${mediaStorageHealthServiceTagTypesLines}`,
   );
 }
 
