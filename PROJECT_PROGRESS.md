@@ -3396,6 +3396,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-intro-props.ts`, `media-asset-card-error-props.ts`, and `media-asset-card-extracted-text-props.ts` now use explicit `input` parameters and pass their single-field props through unchanged
   - this keeps the simplest media-asset leaf helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the media-asset-card and record-panel structure guardrails now enforce this pass-through helper contract so future single-field media-asset helpers do not drift back to mixed boundary styles
+- Recent Media Tag Helper Naming Cleanup V1:
+  - `apps/web/components/recent-media-issue-card-tags-props.ts`, `recent-media-issue-card-extraction-mode-tag-props.ts`, `recent-media-issue-card-issue-label-tag-props.ts`, `recent-media-issue-card-processing-source-tag-props.ts`, `recent-media-issue-card-remote-fetch-tag-props.ts`, `recent-media-issue-card-processing-status-tag-props.ts`, `recent-media-issue-card-retry-state-tag-props.ts`, `recent-media-issue-card-retry-count-tag-props.ts`, and `recent-media-issue-card-storage-provider-tag-props.ts` now use explicit `input` parameters and pass their tag props through unchanged
+  - this keeps the recent-media tag helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the record-panel structure guardrail now enforces this pass-through helper contract so future recent-media tag helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice

@@ -1,4 +1,4 @@
 "use client";
 import type { RecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag.types";
 import type { BuildRecentMediaIssueCardProcessingStatusTagPropsInput } from "./recent-media-issue-card-processing-status-tag-props.types";
-export function buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale }: BuildRecentMediaIssueCardProcessingStatusTagPropsInput): RecentMediaIssueCardProcessingStatusTagProps { return { issue, locale }; }
+export function buildRecentMediaIssueCardProcessingStatusTagProps(input: BuildRecentMediaIssueCardProcessingStatusTagPropsInput): RecentMediaIssueCardProcessingStatusTagProps { return input; }

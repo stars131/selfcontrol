@@ -30241,7 +30241,8 @@ if (recentMediaIssueCardActionsTypesLines > maxRecentMediaIssueCardActionsTypesL
 for (const requiredRecentMediaIssueCardTagsPropsUsage of [
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
   'import type { BuildRecentMediaIssueCardTagsPropsInput } from "./recent-media-issue-card-tags-props.types";',
-  "export function buildRecentMediaIssueCardTagsProps({ issue, locale, mediaIssueCopy }: BuildRecentMediaIssueCardTagsPropsInput): RecentMediaIssueCardTagsProps {",
+  "export function buildRecentMediaIssueCardTagsProps(input: BuildRecentMediaIssueCardTagsPropsInput): RecentMediaIssueCardTagsProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardTagsPropsSource.includes(requiredRecentMediaIssueCardTagsPropsUsage)) {
     throw new Error(
@@ -30748,7 +30749,8 @@ if (recentMediaIssueCardProcessingStatusTagTypesLines > maxRecentMediaIssueCardP
 for (const requiredRecentMediaIssueCardProcessingStatusTagPropsUsage of [
   'import type { RecentMediaIssueCardProcessingStatusTagProps } from "./recent-media-issue-card-processing-status-tag.types";',
   'import type { BuildRecentMediaIssueCardProcessingStatusTagPropsInput } from "./recent-media-issue-card-processing-status-tag-props.types";',
-  "export function buildRecentMediaIssueCardProcessingStatusTagProps({ issue, locale }: BuildRecentMediaIssueCardProcessingStatusTagPropsInput): RecentMediaIssueCardProcessingStatusTagProps {",
+  "export function buildRecentMediaIssueCardProcessingStatusTagProps(input: BuildRecentMediaIssueCardProcessingStatusTagPropsInput): RecentMediaIssueCardProcessingStatusTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardProcessingStatusTagPropsSource.includes(requiredRecentMediaIssueCardProcessingStatusTagPropsUsage)) {
     throw new Error(
@@ -30869,7 +30871,8 @@ if (recentMediaIssueCardStorageProviderTagTypesLines > maxRecentMediaIssueCardSt
 for (const requiredRecentMediaIssueCardStorageProviderTagPropsUsage of [
   'import type { RecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag.types";',
   'import type { BuildRecentMediaIssueCardStorageProviderTagPropsInput } from "./recent-media-issue-card-storage-provider-tag-props.types";',
-  "export function buildRecentMediaIssueCardStorageProviderTagProps({ issue, locale }: BuildRecentMediaIssueCardStorageProviderTagPropsInput): RecentMediaIssueCardStorageProviderTagProps {",
+  "export function buildRecentMediaIssueCardStorageProviderTagProps(input: BuildRecentMediaIssueCardStorageProviderTagPropsInput): RecentMediaIssueCardStorageProviderTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardStorageProviderTagPropsSource.includes(requiredRecentMediaIssueCardStorageProviderTagPropsUsage)) {
     throw new Error(
@@ -31003,7 +31006,8 @@ if (recentMediaIssueCardRemoteFetchTagTypesLines > maxRecentMediaIssueCardRemote
 for (const requiredRecentMediaIssueCardRemoteFetchTagPropsUsage of [
   'import type { RecentMediaIssueCardRemoteFetchTagProps } from "./recent-media-issue-card-remote-fetch-tag.types";',
   'import type { BuildRecentMediaIssueCardRemoteFetchTagPropsInput } from "./recent-media-issue-card-remote-fetch-tag-props.types";',
-  "export function buildRecentMediaIssueCardRemoteFetchTagProps({ issue, locale, mediaIssueCopy }: BuildRecentMediaIssueCardRemoteFetchTagPropsInput): RecentMediaIssueCardRemoteFetchTagProps {",
+  "export function buildRecentMediaIssueCardRemoteFetchTagProps(input: BuildRecentMediaIssueCardRemoteFetchTagPropsInput): RecentMediaIssueCardRemoteFetchTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardRemoteFetchTagPropsSource.includes(requiredRecentMediaIssueCardRemoteFetchTagPropsUsage)) {
     throw new Error(
@@ -31120,7 +31124,8 @@ if (recentMediaIssueCardRetryStateTagTypesLines > maxRecentMediaIssueCardRetrySt
 for (const requiredRecentMediaIssueCardRetryStateTagPropsUsage of [
   'import type { RecentMediaIssueCardRetryStateTagProps } from "./recent-media-issue-card-retry-state-tag.types";',
   'import type { BuildRecentMediaIssueCardRetryStateTagPropsInput } from "./recent-media-issue-card-retry-state-tag-props.types";',
-  "export function buildRecentMediaIssueCardRetryStateTagProps({ issue, locale, mediaIssueCopy }: BuildRecentMediaIssueCardRetryStateTagPropsInput): RecentMediaIssueCardRetryStateTagProps {",
+  "export function buildRecentMediaIssueCardRetryStateTagProps(input: BuildRecentMediaIssueCardRetryStateTagPropsInput): RecentMediaIssueCardRetryStateTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardRetryStateTagPropsSource.includes(requiredRecentMediaIssueCardRetryStateTagPropsUsage)) {
     throw new Error(
@@ -31238,7 +31243,8 @@ if (recentMediaIssueCardIssueLabelTagTypesLines > maxRecentMediaIssueCardIssueLa
 for (const requiredRecentMediaIssueCardIssueLabelTagPropsUsage of [
   'import type { RecentMediaIssueCardIssueLabelTagProps } from "./recent-media-issue-card-issue-label-tag.types";',
   'import type { BuildRecentMediaIssueCardIssueLabelTagPropsInput } from "./recent-media-issue-card-issue-label-tag-props.types";',
-  "export function buildRecentMediaIssueCardIssueLabelTagProps({ issue, locale }: BuildRecentMediaIssueCardIssueLabelTagPropsInput): RecentMediaIssueCardIssueLabelTagProps {",
+  "export function buildRecentMediaIssueCardIssueLabelTagProps(input: BuildRecentMediaIssueCardIssueLabelTagPropsInput): RecentMediaIssueCardIssueLabelTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardIssueLabelTagPropsSource.includes(requiredRecentMediaIssueCardIssueLabelTagPropsUsage)) {
     throw new Error(
@@ -31354,7 +31360,8 @@ if (recentMediaIssueCardProcessingSourceTagTypesLines > maxRecentMediaIssueCardP
 for (const requiredRecentMediaIssueCardProcessingSourceTagPropsUsage of [
   'import type { RecentMediaIssueCardProcessingSourceTagProps } from "./recent-media-issue-card-processing-source-tag.types";',
   'import type { BuildRecentMediaIssueCardProcessingSourceTagPropsInput } from "./recent-media-issue-card-processing-source-tag-props.types";',
-  "export function buildRecentMediaIssueCardProcessingSourceTagProps({ issue }: BuildRecentMediaIssueCardProcessingSourceTagPropsInput): RecentMediaIssueCardProcessingSourceTagProps {",
+  "export function buildRecentMediaIssueCardProcessingSourceTagProps(input: BuildRecentMediaIssueCardProcessingSourceTagPropsInput): RecentMediaIssueCardProcessingSourceTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardProcessingSourceTagPropsSource.includes(requiredRecentMediaIssueCardProcessingSourceTagPropsUsage)) {
     throw new Error(
@@ -31470,7 +31477,8 @@ if (recentMediaIssueCardExtractionModeTagTypesLines > maxRecentMediaIssueCardExt
 for (const requiredRecentMediaIssueCardExtractionModeTagPropsUsage of [
   'import type { RecentMediaIssueCardExtractionModeTagProps } from "./recent-media-issue-card-extraction-mode-tag.types";',
   'import type { BuildRecentMediaIssueCardExtractionModeTagPropsInput } from "./recent-media-issue-card-extraction-mode-tag-props.types";',
-  "export function buildRecentMediaIssueCardExtractionModeTagProps({ issue }: BuildRecentMediaIssueCardExtractionModeTagPropsInput): RecentMediaIssueCardExtractionModeTagProps {",
+  "export function buildRecentMediaIssueCardExtractionModeTagProps(input: BuildRecentMediaIssueCardExtractionModeTagPropsInput): RecentMediaIssueCardExtractionModeTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardExtractionModeTagPropsSource.includes(requiredRecentMediaIssueCardExtractionModeTagPropsUsage)) {
     throw new Error(
@@ -31587,7 +31595,8 @@ if (recentMediaIssueCardRetryCountTagTypesLines > maxRecentMediaIssueCardRetryCo
 for (const requiredRecentMediaIssueCardRetryCountTagPropsUsage of [
   'import type { RecentMediaIssueCardRetryCountTagProps } from "./recent-media-issue-card-retry-count-tag.types";',
   'import type { BuildRecentMediaIssueCardRetryCountTagPropsInput } from "./recent-media-issue-card-retry-count-tag-props.types";',
-  "export function buildRecentMediaIssueCardRetryCountTagProps({ issue, mediaIssueCopy }: BuildRecentMediaIssueCardRetryCountTagPropsInput): RecentMediaIssueCardRetryCountTagProps {",
+  "export function buildRecentMediaIssueCardRetryCountTagProps(input: BuildRecentMediaIssueCardRetryCountTagPropsInput): RecentMediaIssueCardRetryCountTagProps {",
+  "return input;",
 ]) {
   if (!recentMediaIssueCardRetryCountTagPropsSource.includes(requiredRecentMediaIssueCardRetryCountTagPropsUsage)) {
     throw new Error(
