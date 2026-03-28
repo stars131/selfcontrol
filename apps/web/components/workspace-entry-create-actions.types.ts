@@ -1,1 +1,1 @@
-import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryCreateActionsInput = { router: RouterLike; state: WorkspaceEntryControllerState };
+import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryCreateActionsInput = WorkspaceEntryControllerState & { router: RouterLike };

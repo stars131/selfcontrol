@@ -3252,6 +3252,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-entry-controller-actions.ts` now forwards one flattened input object into `createWorkspaceEntryShareActions` instead of wrapping controller state under `{ router, state }`
   - `apps/web/components/workspace-entry-share-actions.types.ts` and `apps/web/components/workspace-entry-share-actions.ts` now share one flattened share-actions input contract so the share action factory stays easier to evolve without nested wrapper churn
   - the workspace-entry and record-panel structure guardrails now enforce this flattened share-actions boundary so future entry share flows do not regrow double-wrapped action assembly
+- Workspace Entry Create Actions Input Flattening V1:
+  - `apps/web/components/workspace-entry-workspace-actions.ts` now forwards one flattened input object into `createWorkspaceEntryCreateActions` instead of wrapping controller state under `{ router, state }`
+  - `apps/web/components/workspace-entry-create-actions.types.ts` and `apps/web/components/workspace-entry-create-actions.ts` now share one flattened create-actions input contract so the workspace-create action factory stays easier to evolve without nested wrapper churn
+  - the workspace-entry and record-panel structure guardrails now enforce this flattened create-actions boundary so future entry workspace-create flows do not regrow double-wrapped action assembly
 
 ## Next
 - Continue the next product slice

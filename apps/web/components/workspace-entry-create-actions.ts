@@ -10,9 +10,13 @@ import type { CreateWorkspaceEntryCreateActionsInput } from "./workspace-entry-c
 
 export function createWorkspaceEntryCreateActions({
   router,
-  state,
+  name,
+  setCreating,
+  setError,
+  setName,
+  setWorkspaces,
+  token,
 }: CreateWorkspaceEntryCreateActionsInput) {
-  const { name, setCreating, setError, setName, setWorkspaces, token } = state;
   const copy = getWorkspaceEntryCopy(getStoredLocale());
 
   const handleCreate = async (
