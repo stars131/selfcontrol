@@ -26996,7 +26996,7 @@ for (const forbiddenWorkspaceEntryWorkspaceActionsToken of [
 }
 
 for (const requiredWorkspaceEntryWorkspaceActionsTypesUsage of [
-  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryWorkspaceActionsInput = { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike; state: WorkspaceEntryControllerState };',
+  'import type { RouterLike, WorkspaceEntryControllerState } from "./workspace-entry-controller.types"; export type CreateWorkspaceEntryWorkspaceActionsInput = WorkspaceEntryControllerState & { loadTransferJobs: (activeToken: string) => Promise<void>; router: RouterLike };',
 ]) {
   if (!workspaceEntryWorkspaceActionsTypesSource.includes(requiredWorkspaceEntryWorkspaceActionsTypesUsage)) {
     throw new Error(

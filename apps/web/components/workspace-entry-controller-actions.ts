@@ -16,9 +16,9 @@ export function createWorkspaceEntryControllerActions({
     token: state.token,
   });
   const workspaceActions = createWorkspaceEntryWorkspaceActions({
+    ...state,
     loadTransferJobs: jobActions.loadTransferJobs,
     router,
-    state,
   });
   const shareActions = createWorkspaceEntryShareActions({ ...state, router });
 

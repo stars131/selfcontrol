@@ -7,7 +7,7 @@ import type { CreateWorkspaceEntryWorkspaceActionsInput } from "./workspace-entr
 export function createWorkspaceEntryWorkspaceActions({
   loadTransferJobs,
   router,
-  state,
+  ...state
 }: CreateWorkspaceEntryWorkspaceActionsInput) {
   const createActions = createWorkspaceEntryCreateActions({ ...state, router });
   const importActions = createWorkspaceEntryImportActions({ ...state, loadTransferJobs, router });
