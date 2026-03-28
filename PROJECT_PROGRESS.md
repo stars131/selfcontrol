@@ -1,8 +1,12 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-28
+Last updated: 2026-03-29
 
 ## Completed
+- Workspace Composition Helper Naming Cleanup V1:
+  - `apps/web/components/workspace-shell-panels-props.ts` and `record-browse-workspace-props.ts` now use explicit `input` parameters across shell, browse, map, search, and results-view prop builders while keeping their prop projection behavior unchanged
+  - this keeps top-level workspace composition helpers aligned with the broader helper-signature normalization work without changing shell or browse rendering behavior
+  - the cleanup reduces ambiguous helper signatures in high-traffic composition boundaries so future UI changes remain easier to review, test, and extend under the enterprise engineering standard
 - Foundation: Next.js + FastAPI + Alembic + Docker Compose
 - Auth and workspace: register, login, workspace create/list, membership checks
 - Records: CRUD, ratings, avoid flag, occurred time, location fields
