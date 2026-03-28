@@ -23637,9 +23637,9 @@ for (const forbiddenChatPanelActionHandlerInputsToken of [
 for (const requiredChatPanelOperatorHandlerInputUsage of [
   'from "./chat-panel-action-handler-inputs.types";',
   "}: BuildChatPanelOperatorHandlerInput) {",
-  "draft: state.draft,",
-  "onSendMessage: props.onSendMessage,",
-  "setSyncing: state.setSyncing,",
+  "draft,",
+  "onSendMessage,",
+  "setSyncing,",
 ]) {
   if (!chatPanelOperatorHandlerInputSource.includes(requiredChatPanelOperatorHandlerInputUsage)) {
     throw new Error(
@@ -23649,10 +23649,10 @@ for (const requiredChatPanelOperatorHandlerInputUsage of [
 }
 
 for (const forbiddenChatPanelOperatorHandlerInputToken of [
-  "onCreateShareLink: props.onCreateShareLink,",
-  "onDisableShareLink: props.onDisableShareLink,",
-  "setCreatingShare: state.setCreatingShare,",
-  "setShareName: state.setShareName,",
+  "onCreateShareLink,",
+  "onDisableShareLink,",
+  "setCreatingShare,",
+  "setShareName,",
 ]) {
   if (chatPanelOperatorHandlerInputSource.includes(forbiddenChatPanelOperatorHandlerInputToken)) {
     throw new Error(
@@ -23664,9 +23664,9 @@ for (const forbiddenChatPanelOperatorHandlerInputToken of [
 for (const requiredChatPanelShareHandlerInputUsage of [
   'from "./chat-panel-action-handler-inputs.types";',
   "}: BuildChatPanelShareHandlerInput) {",
-  "onCreateShareLink: props.onCreateShareLink,",
-  "onDisableShareLink: props.onDisableShareLink,",
-  "sharePermission: state.sharePermission,",
+  "onCreateShareLink,",
+  "onDisableShareLink,",
+  "sharePermission,",
 ]) {
   if (!chatPanelShareHandlerInputSource.includes(requiredChatPanelShareHandlerInputUsage)) {
     throw new Error(
@@ -23676,10 +23676,10 @@ for (const requiredChatPanelShareHandlerInputUsage of [
 }
 
 for (const forbiddenChatPanelShareHandlerInputToken of [
-  "draft: state.draft,",
-  "onSendMessage: props.onSendMessage,",
-  "setLoading: state.setLoading,",
-  "setSyncing: state.setSyncing,",
+  "draft,",
+  "onSendMessage,",
+  "setLoading,",
+  "setSyncing,",
 ]) {
   if (chatPanelShareHandlerInputSource.includes(forbiddenChatPanelShareHandlerInputToken)) {
     throw new Error(
@@ -23716,7 +23716,7 @@ for (const forbiddenChatPanelActionsResultBuilderToken of [
 
 for (const requiredChatPanelActionHandlerInputsTypesUsage of [
   'import type { NotificationItem } from "../lib/types"; import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types"; import type { ChatPanelActionState } from "./chat-panel-action-state-result.types"; export type UseChatPanelActionsProps = { latestSharePath: string; notifications: NotificationItem[]; onCreateShareLink: (input: { name?: string; permission_code: string; max_uses?: number | null }) => Promise<void>; onDisableShareLink: (shareLinkId: string) => Promise<void>; onRefreshAuditLogs: () => Promise<void>; onReindexKnowledge: () => Promise<void>; onSyncNotifications: () => Promise<void>; onSendMessage: (message: string) => Promise<void> };',
-  'export type BuildChatPanelOperatorHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelShareHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
+  'export type BuildChatPanelOperatorHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelShareHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
 ]) {
   if (!chatPanelActionHandlerInputsTypesSource.includes(requiredChatPanelActionHandlerInputsTypesUsage)) {
     throw new Error(

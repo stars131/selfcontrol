@@ -18,10 +18,10 @@ export function useChatPanelActions(props: UseChatPanelActionsProps) {
     notifications: props.notifications,
   });
   const operatorHandlers = createChatPanelOperatorHandlers(
-    buildChatPanelOperatorHandlerInput({ props, state }),
+    buildChatPanelOperatorHandlerInput({ ...props, ...state }),
   );
   const shareHandlers = createChatPanelShareHandlers(
-    buildChatPanelShareHandlerInput({ props, state }),
+    buildChatPanelShareHandlerInput({ ...props, ...state }),
   );
 
   return buildChatPanelActionsResult({

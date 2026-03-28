@@ -581,8 +581,8 @@ for (const requiredActionsImport of [
 for (const requiredActionsUsage of [
   "useChatPanelActionState()",
   "useChatPanelActionDerivedData({",
-  "buildChatPanelOperatorHandlerInput({ props, state })",
-  "buildChatPanelShareHandlerInput({ props, state })",
+  "buildChatPanelOperatorHandlerInput({ ...props, ...state })",
+  "buildChatPanelShareHandlerInput({ ...props, ...state })",
   "createChatPanelOperatorHandlers(",
   "createChatPanelShareHandlers(",
   "buildChatPanelActionsResult({",
@@ -865,9 +865,9 @@ for (const requiredOperatorHandlerInputUsage of [
   'from "./chat-panel-action-handler-inputs.types";',
   "export function buildChatPanelOperatorHandlerInput(",
   "}: BuildChatPanelOperatorHandlerInput) {",
-  "draft: state.draft,",
-  "onSendMessage: props.onSendMessage,",
-  "setSyncing: state.setSyncing,",
+  "draft,",
+  "onSendMessage,",
+  "setSyncing,",
 ]) {
   if (!chatPanelOperatorHandlerInputSource.includes(requiredOperatorHandlerInputUsage)) {
     throw new Error(
@@ -877,10 +877,10 @@ for (const requiredOperatorHandlerInputUsage of [
 }
 
 for (const forbiddenOperatorHandlerInputToken of [
-  "onCreateShareLink: props.onCreateShareLink,",
-  "onDisableShareLink: props.onDisableShareLink,",
-  "setCreatingShare: state.setCreatingShare,",
-  "setShareName: state.setShareName,",
+  "onCreateShareLink,",
+  "onDisableShareLink,",
+  "setCreatingShare,",
+  "setShareName,",
 ]) {
   if (chatPanelOperatorHandlerInputSource.includes(forbiddenOperatorHandlerInputToken)) {
     throw new Error(
@@ -900,9 +900,9 @@ for (const requiredShareHandlerInputUsage of [
   'from "./chat-panel-action-handler-inputs.types";',
   "export function buildChatPanelShareHandlerInput(",
   "}: BuildChatPanelShareHandlerInput) {",
-  "onCreateShareLink: props.onCreateShareLink,",
-  "onDisableShareLink: props.onDisableShareLink,",
-  "sharePermission: state.sharePermission,",
+  "onCreateShareLink,",
+  "onDisableShareLink,",
+  "sharePermission,",
 ]) {
   if (!chatPanelShareHandlerInputSource.includes(requiredShareHandlerInputUsage)) {
     throw new Error(
@@ -912,10 +912,10 @@ for (const requiredShareHandlerInputUsage of [
 }
 
 for (const forbiddenShareHandlerInputToken of [
-  "draft: state.draft,",
-  "onSendMessage: props.onSendMessage,",
-  "setLoading: state.setLoading,",
-  "setSyncing: state.setSyncing,",
+  "draft,",
+  "onSendMessage,",
+  "setLoading,",
+  "setSyncing,",
 ]) {
   if (chatPanelShareHandlerInputSource.includes(forbiddenShareHandlerInputToken)) {
     throw new Error(
@@ -968,7 +968,7 @@ if (chatPanelActionsResultBuilderLineCount > maxActionsResultBuilderLines) {
 
 for (const requiredActionHandlerInputsTypesUsage of [
   'import type { NotificationItem } from "../lib/types"; import type { ChatPanelActionDerivedData } from "./chat-panel-action-derived-data-result.types"; import type { ChatPanelActionState } from "./chat-panel-action-state-result.types"; export type UseChatPanelActionsProps = { latestSharePath: string; notifications: NotificationItem[]; onCreateShareLink: (input: { name?: string; permission_code: string; max_uses?: number | null }) => Promise<void>; onDisableShareLink: (shareLinkId: string) => Promise<void>; onRefreshAuditLogs: () => Promise<void>; onReindexKnowledge: () => Promise<void>; onSyncNotifications: () => Promise<void>; onSendMessage: (message: string) => Promise<void> };',
-  'export type BuildChatPanelOperatorHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelShareHandlerInput = { props: UseChatPanelActionsProps; state: ChatPanelActionState }; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
+  'export type BuildChatPanelOperatorHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelShareHandlerInput = UseChatPanelActionsProps & ChatPanelActionState; export type BuildChatPanelActionsResultInput = { derivedData: ChatPanelActionDerivedData; operatorHandlers: { handleRefreshAuditLogs: () => Promise<void>; handleReindexKnowledge: () => Promise<void>; handleSend: () => Promise<void>; handleSyncNotifications: () => Promise<void> }; shareHandlers: { handleCreateShareLink: () => Promise<void>; handleDisableShareLink: (shareLinkId: string) => Promise<void> }; state: ChatPanelActionState };',
 ]) {
   if (!chatPanelActionHandlerInputsTypesSource.includes(requiredActionHandlerInputsTypesUsage)) {
     throw new Error(

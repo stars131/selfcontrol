@@ -3232,6 +3232,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-shell-client.tsx` now forwards one flattened input object into `buildWorkspaceShellActionsInput` instead of wrapping shell state under `{ refreshers, state, workspaceId }`
   - `apps/web/components/workspace-shell-client-actions-input.types.ts` and `apps/web/components/workspace-shell-client-actions-input.ts` now share one combined shell-actions input contract so the actions input builder stays easier to evolve without nested wrapper churn
   - the workspace-shell and record-panel structure guardrails now enforce this flattened shell-actions input boundary so future shell action edits do not regrow double-wrapped prop assembly
+- Chat Panel Handler Inputs Flattening V1:
+  - `apps/web/components/use-chat-panel-actions.ts` now forwards flattened handler inputs into `buildChatPanelOperatorHandlerInput` and `buildChatPanelShareHandlerInput` instead of wrapping source values under `{ props, state }`
+  - `apps/web/components/chat-panel-action-handler-inputs.types.ts`, `apps/web/components/chat-panel-operator-handler-input.ts`, and `apps/web/components/chat-panel-share-handler-input.ts` now share flattened handler input contracts so the operator/share input builders stay easier to evolve without nested wrapper churn
+  - the chat-panel and record-panel structure guardrails now enforce this flattened handler-input boundary so future chat action edits do not regrow double-wrapped handler assembly
 
 ## Next
 - Continue the next product slice
