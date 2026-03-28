@@ -2795,6 +2795,10 @@ Last updated: 2026-03-28
   - media-asset metadata text-char-count detail rendering now lives in `apps/web/components/media-asset-card-text-char-count-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
   - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while text-char-count rendering remains centralized and easier to evolve safely
   - the media-asset and record-panel structure guardrails now enforce this text-char-count-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-text-char-count rendering module
+- Media Asset Text Line Count Detail Extraction V1:
+  - media-asset metadata text-line-count detail rendering now lives in `apps/web/components/media-asset-card-text-line-count-detail.tsx` instead of remaining inline inside `apps/web/components/media-asset-card-metadata-details.tsx`
+  - `apps/web/components/media-asset-card-metadata-details.tsx` now stays focused on detail-card ordering while text-line-count rendering remains centralized and easier to evolve safely
+  - the media-asset and record-panel structure guardrails now enforce this text-line-count-detail boundary so future media-asset metadata detail changes do not regrow a mixed composition-and-text-line-count rendering module
 
 ## Next
 - Continue the next product slice

@@ -2188,6 +2188,14 @@ const mediaAssetCardTextCharCountDetailTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-text-char-count-detail.types.ts",
 );
+const mediaAssetCardTextLineCountDetailPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-text-line-count-detail.tsx",
+);
+const mediaAssetCardTextLineCountDetailTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-text-line-count-detail.types.ts",
+);
 const mediaAssetCardNextRetryDetailPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-next-retry-detail.tsx",
@@ -4170,6 +4178,14 @@ const mediaAssetCardTextCharCountDetailTypesSource = fs.readFileSync(
   mediaAssetCardTextCharCountDetailTypesPath,
   "utf8",
 );
+const mediaAssetCardTextLineCountDetailSource = fs.readFileSync(
+  mediaAssetCardTextLineCountDetailPath,
+  "utf8",
+);
+const mediaAssetCardTextLineCountDetailTypesSource = fs.readFileSync(
+  mediaAssetCardTextLineCountDetailTypesPath,
+  "utf8",
+);
 const mediaAssetCardNextRetryDetailSource = fs.readFileSync(
   mediaAssetCardNextRetryDetailPath,
   "utf8",
@@ -6015,6 +6031,10 @@ const mediaAssetCardTextCharCountDetailLines =
   mediaAssetCardTextCharCountDetailSource.split(/\r?\n/).length;
 const mediaAssetCardTextCharCountDetailTypesLines =
   mediaAssetCardTextCharCountDetailTypesSource.split(/\r?\n/).length;
+const mediaAssetCardTextLineCountDetailLines =
+  mediaAssetCardTextLineCountDetailSource.split(/\r?\n/).length;
+const mediaAssetCardTextLineCountDetailTypesLines =
+  mediaAssetCardTextLineCountDetailTypesSource.split(/\r?\n/).length;
 const mediaAssetCardNextRetryDetailLines =
   mediaAssetCardNextRetryDetailSource.split(/\r?\n/).length;
 const mediaAssetCardNextRetryDetailTypesLines =
@@ -22276,14 +22296,15 @@ for (const requiredMediaAssetCardMetadataDetailsUsage of [
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
   'import { MediaAssetCardNextRetryDetail } from "./media-asset-card-next-retry-detail";',
   'import { MediaAssetCardTextCharCountDetail } from "./media-asset-card-text-char-count-detail";',
+  'import { MediaAssetCardTextLineCountDetail } from "./media-asset-card-text-line-count-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
-  "{mediaIssueCopy.textLines}",
   "<MediaAssetCardDimensionsDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
   "<MediaAssetCardTextCharCountDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
+  "<MediaAssetCardTextLineCountDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!mediaAssetCardMetadataDetailsSource.includes(requiredMediaAssetCardMetadataDetailsUsage)) {
     throw new Error(
@@ -22299,6 +22320,7 @@ if (mediaAssetCardMetadataDetailsSource.includes("type MediaAssetCardMetadataDet
 for (const forbiddenMediaAssetCardMetadataDetailsToken of [
   '{typeof asset.metadata_json.width === "number" && typeof asset.metadata_json.height === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.dimensions}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.width} x {asset.metadata_json.height}</div></div> : null}',
   '{typeof asset.metadata_json.text_char_count === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.textChars}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.text_char_count}</div></div> : null}',
+  '{typeof asset.metadata_json.text_line_count === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.textLines}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.text_line_count}</div></div> : null}',
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
   '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
 ]) {
@@ -22477,6 +22499,55 @@ const maxMediaAssetCardTextCharCountDetailTypesLines = 2;
 if (mediaAssetCardTextCharCountDetailTypesLines > maxMediaAssetCardTextCharCountDetailTypesLines) {
   throw new Error(
     `media-asset-card-text-char-count-detail.types.ts exceeded ${maxMediaAssetCardTextCharCountDetailTypesLines} lines: ${mediaAssetCardTextCharCountDetailTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardTextLineCountDetailUsage of [
+  'import type { MediaAssetCardTextLineCountDetailProps } from "./media-asset-card-text-line-count-detail.types";',
+  "}: MediaAssetCardTextLineCountDetailProps) {",
+  "{mediaIssueCopy.textLines}",
+  "{asset.metadata_json.text_line_count}",
+]) {
+  if (!mediaAssetCardTextLineCountDetailSource.includes(requiredMediaAssetCardTextLineCountDetailUsage)) {
+    throw new Error(
+      `media-asset-card-text-line-count-detail.tsx must own text-line-count detail rendering: ${requiredMediaAssetCardTextLineCountDetailUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardTextLineCountDetailToken of [
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+  "{mediaIssueCopy.nextRetry}",
+]) {
+  if (mediaAssetCardTextLineCountDetailSource.includes(forbiddenMediaAssetCardTextLineCountDetailToken)) {
+    throw new Error(
+      `media-asset-card-text-line-count-detail.tsx must keep other detail concerns delegated: ${forbiddenMediaAssetCardTextLineCountDetailToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardTextLineCountDetailLines = 6;
+if (mediaAssetCardTextLineCountDetailLines > maxMediaAssetCardTextLineCountDetailLines) {
+  throw new Error(
+    `media-asset-card-text-line-count-detail.tsx exceeded ${maxMediaAssetCardTextLineCountDetailLines} lines: ${mediaAssetCardTextLineCountDetailLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardTextLineCountDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardTextLineCountDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "asset" | "mediaIssueCopy">;',
+]) {
+  if (!mediaAssetCardTextLineCountDetailTypesSource.includes(requiredMediaAssetCardTextLineCountDetailTypesUsage)) {
+    throw new Error(
+      `media-asset-card-text-line-count-detail.types.ts must own text-line-count detail prop typing: ${requiredMediaAssetCardTextLineCountDetailTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardTextLineCountDetailTypesLines = 2;
+if (mediaAssetCardTextLineCountDetailTypesLines > maxMediaAssetCardTextLineCountDetailTypesLines) {
+  throw new Error(
+    `media-asset-card-text-line-count-detail.types.ts exceeded ${maxMediaAssetCardTextLineCountDetailTypesLines} lines: ${mediaAssetCardTextLineCountDetailTypesLines}`,
   );
 }
 

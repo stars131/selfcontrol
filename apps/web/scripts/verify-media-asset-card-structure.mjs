@@ -51,6 +51,12 @@ const textCharCountDetailLineCount = textCharCountDetailSource.split(/\r?\n/).le
 const textCharCountDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-text-char-count-detail.types.ts");
 const textCharCountDetailTypesSource = fs.readFileSync(textCharCountDetailTypesPath, "utf8");
 const textCharCountDetailTypesLineCount = textCharCountDetailTypesSource.split(/\r?\n/).length;
+const textLineCountDetailPath = path.resolve(process.cwd(), "components/media-asset-card-text-line-count-detail.tsx");
+const textLineCountDetailSource = fs.readFileSync(textLineCountDetailPath, "utf8");
+const textLineCountDetailLineCount = textLineCountDetailSource.split(/\r?\n/).length;
+const textLineCountDetailTypesPath = path.resolve(process.cwd(), "components/media-asset-card-text-line-count-detail.types.ts");
+const textLineCountDetailTypesSource = fs.readFileSync(textLineCountDetailTypesPath, "utf8");
+const textLineCountDetailTypesLineCount = textLineCountDetailTypesSource.split(/\r?\n/).length;
 const nextRetryDetailPath = path.resolve(process.cwd(), "components/media-asset-card-next-retry-detail.tsx");
 const nextRetryDetailSource = fs.readFileSync(nextRetryDetailPath, "utf8");
 const nextRetryDetailLineCount = nextRetryDetailSource.split(/\r?\n/).length;
@@ -322,6 +328,43 @@ if (textCharCountDetailTypesLineCount > 2) {
   throw new Error(`media-asset-card-text-char-count-detail.types.ts exceeded 2 lines: ${textCharCountDetailTypesLineCount}`);
 }
 
+for (const requiredTextLineCountDetailUsage of [
+  'import type { MediaAssetCardTextLineCountDetailProps } from "./media-asset-card-text-line-count-detail.types";',
+  "}: MediaAssetCardTextLineCountDetailProps) {",
+  "{mediaIssueCopy.textLines}",
+  "{asset.metadata_json.text_line_count}",
+]) {
+  if (!textLineCountDetailSource.includes(requiredTextLineCountDetailUsage)) {
+    throw new Error(`media-asset-card-text-line-count-detail.tsx must own text-line-count detail rendering: ${requiredTextLineCountDetailUsage}`);
+  }
+}
+
+for (const forbiddenTextLineCountDetailToken of [
+  "{mediaIssueCopy.textChars}",
+  "{mediaIssueCopy.dimensions}",
+  "{mediaIssueCopy.nextRetry}",
+]) {
+  if (textLineCountDetailSource.includes(forbiddenTextLineCountDetailToken)) {
+    throw new Error(`media-asset-card-text-line-count-detail.tsx must keep other detail concerns delegated: ${forbiddenTextLineCountDetailToken}`);
+  }
+}
+
+if (textLineCountDetailLineCount > 6) {
+  throw new Error(`media-asset-card-text-line-count-detail.tsx exceeded 6 lines: ${textLineCountDetailLineCount}`);
+}
+
+for (const requiredTextLineCountDetailTypesUsage of [
+  'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types"; export type MediaAssetCardTextLineCountDetailProps = Pick<MediaAssetCardMetadataDetailsProps, "asset" | "mediaIssueCopy">;',
+]) {
+  if (!textLineCountDetailTypesSource.includes(requiredTextLineCountDetailTypesUsage)) {
+    throw new Error(`media-asset-card-text-line-count-detail.types.ts must own text-line-count detail props: ${requiredTextLineCountDetailTypesUsage}`);
+  }
+}
+
+if (textLineCountDetailTypesLineCount > 2) {
+  throw new Error(`media-asset-card-text-line-count-detail.types.ts exceeded 2 lines: ${textLineCountDetailTypesLineCount}`);
+}
+
 for (const requiredNextRetryDetailUsage of [
   'import type { MediaAssetCardNextRetryDetailProps } from "./media-asset-card-next-retry-detail.types";',
   "}: MediaAssetCardNextRetryDetailProps) {",
@@ -364,14 +407,15 @@ for (const requiredMetadataDetailsUsage of [
   'import { MediaAssetCardLastAttemptDetail } from "./media-asset-card-last-attempt-detail";',
   'import { MediaAssetCardNextRetryDetail } from "./media-asset-card-next-retry-detail";',
   'import { MediaAssetCardTextCharCountDetail } from "./media-asset-card-text-char-count-detail";',
+  'import { MediaAssetCardTextLineCountDetail } from "./media-asset-card-text-line-count-detail";',
   'import type { MediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details.types";',
   "}: MediaAssetCardMetadataDetailsProps) {",
   '<div className="detail-grid" style={{ marginTop: 12 }}>',
-  "{mediaIssueCopy.textLines}",
   "<MediaAssetCardDimensionsDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardLastAttemptDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} lastAttemptAt={lastAttemptAt} mediaIssueCopy={mediaIssueCopy} />",
   "<MediaAssetCardNextRetryDetail formatHistoryTimestampLabel={formatHistoryTimestampLabel} mediaIssueCopy={mediaIssueCopy} nextRetryAt={nextRetryAt} />",
   "<MediaAssetCardTextCharCountDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
+  "<MediaAssetCardTextLineCountDetail asset={asset} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (!metadataDetailsSource.includes(requiredMetadataDetailsUsage)) {
     throw new Error(`media-asset-card-metadata-details.tsx must reuse the extracted metadata-details props type: ${requiredMetadataDetailsUsage}`);
@@ -381,6 +425,7 @@ for (const requiredMetadataDetailsUsage of [
 for (const forbiddenMetadataDetailsToken of [
   '{typeof asset.metadata_json.width === "number" && typeof asset.metadata_json.height === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.dimensions}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.width} x {asset.metadata_json.height}</div></div> : null}',
   '{typeof asset.metadata_json.text_char_count === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.textChars}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.text_char_count}</div></div> : null}',
+  '{typeof asset.metadata_json.text_line_count === "number" ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.textLines}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{asset.metadata_json.text_line_count}</div></div> : null}',
   '{lastAttemptAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.lastAttempt}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(lastAttemptAt)}</div></div> : null}',
   '{nextRetryAt ? <div className="subtle-card"><div className="eyebrow">{mediaIssueCopy.nextRetry}</div><div style={{ marginTop: 8, fontWeight: 600 }}>{formatHistoryTimestampLabel(nextRetryAt)}</div></div> : null}',
 ]) {
