@@ -3184,6 +3184,14 @@ const mediaStorageHealthEndpointRootDetailTypesPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-endpoint-root-detail.types.ts",
 );
+const mediaStorageHealthWarningsNoticePath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-warnings-notice.tsx",
+);
+const mediaStorageHealthWarningsNoticeTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-storage-health-warnings-notice.types.ts",
+);
 const mediaStorageHealthProviderTagPath = path.resolve(
   process.cwd(),
   "components/media-storage-health-provider-tag.tsx",
@@ -5138,6 +5146,14 @@ const mediaStorageHealthEndpointRootDetailTypesSource = fs.readFileSync(
   mediaStorageHealthEndpointRootDetailTypesPath,
   "utf8",
 );
+const mediaStorageHealthWarningsNoticeSource = fs.readFileSync(
+  mediaStorageHealthWarningsNoticePath,
+  "utf8",
+);
+const mediaStorageHealthWarningsNoticeTypesSource = fs.readFileSync(
+  mediaStorageHealthWarningsNoticeTypesPath,
+  "utf8",
+);
 const mediaStorageHealthProviderTagSource = fs.readFileSync(mediaStorageHealthProviderTagPath, "utf8");
 const mediaStorageHealthProviderTagTypesSource = fs.readFileSync(
   mediaStorageHealthProviderTagTypesPath,
@@ -6646,6 +6662,10 @@ const mediaStorageHealthEndpointRootDetailLines =
   mediaStorageHealthEndpointRootDetailSource.split(/\r?\n/).length;
 const mediaStorageHealthEndpointRootDetailTypesLines =
   mediaStorageHealthEndpointRootDetailTypesSource.split(/\r?\n/).length;
+const mediaStorageHealthWarningsNoticeLines =
+  mediaStorageHealthWarningsNoticeSource.split(/\r?\n/).length;
+const mediaStorageHealthWarningsNoticeTypesLines =
+  mediaStorageHealthWarningsNoticeTypesSource.split(/\r?\n/).length;
 const mediaStorageHealthProviderTagLines = mediaStorageHealthProviderTagSource.split(/\r?\n/).length;
 const mediaStorageHealthProviderTagTypesLines =
   mediaStorageHealthProviderTagTypesSource.split(/\r?\n/).length;
@@ -28595,6 +28615,7 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   'import { MediaStorageHealthResponseTimeTag } from "./media-storage-health-response-time-tag";',
   'import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";',
   'import { MediaStorageHealthServiceTag } from "./media-storage-health-service-tag";',
+  'import { MediaStorageHealthWarningsNotice } from "./media-storage-health-warnings-notice";',
   'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";',
   "}: MediaStorageHealthMetadataProps) {",
   '<div className="tag-row">',
@@ -28605,7 +28626,7 @@ for (const requiredMediaStorageHealthMetadataUsage of [
   "<MediaStorageHealthResponseTimeTag mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthCheckedAtDetail copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />",
   "<MediaStorageHealthEndpointRootDetail copy={copy} mediaStorageHealth={mediaStorageHealth} />",
-  'mediaStorageHealth.warnings.join(" ")',
+  "<MediaStorageHealthWarningsNotice mediaStorageHealth={mediaStorageHealth} />",
 ]) {
   if (!mediaStorageHealthMetadataSource.includes(requiredMediaStorageHealthMetadataUsage)) {
     throw new Error(
@@ -28633,6 +28654,7 @@ for (const forbiddenMediaStorageHealthMetadataToken of [
   "copy.checkedAt",
   "copy.endpointRoot",
   "mediaStorageHealth.api_base_url",
+  'mediaStorageHealth.warnings.join(" ")',
 ]) {
   if (mediaStorageHealthMetadataSource.includes(forbiddenMediaStorageHealthMetadataToken)) {
     throw new Error(
@@ -28773,6 +28795,61 @@ const maxMediaStorageHealthEndpointRootDetailTypesLines = 2;
 if (mediaStorageHealthEndpointRootDetailTypesLines > maxMediaStorageHealthEndpointRootDetailTypesLines) {
   throw new Error(
     `media-storage-health-endpoint-root-detail.types.ts exceeded ${maxMediaStorageHealthEndpointRootDetailTypesLines} lines: ${mediaStorageHealthEndpointRootDetailTypesLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthWarningsNoticeUsage of [
+  'import type { MediaStorageHealthWarningsNoticeProps } from "./media-storage-health-warnings-notice.types";',
+  "}: MediaStorageHealthWarningsNoticeProps) {",
+  "mediaStorageHealth.warnings.length",
+  'mediaStorageHealth.warnings.join(" ")',
+]) {
+  if (!mediaStorageHealthWarningsNoticeSource.includes(requiredMediaStorageHealthWarningsNoticeUsage)) {
+    throw new Error(
+      `media-storage-health-warnings-notice.tsx must own warnings notice rendering: ${requiredMediaStorageHealthWarningsNoticeUsage}`,
+    );
+  }
+}
+
+if (mediaStorageHealthWarningsNoticeSource.includes("type MediaStorageHealthWarningsNoticeProps =")) {
+  throw new Error(
+    "media-storage-health-warnings-notice.tsx must keep warnings-notice prop typing delegated",
+  );
+}
+
+for (const forbiddenMediaStorageHealthWarningsNoticeToken of [
+  "getStorageProviderLabel(",
+  "formatSecretStatus(",
+  "mediaStorageHealth.api_base_url",
+]) {
+  if (mediaStorageHealthWarningsNoticeSource.includes(forbiddenMediaStorageHealthWarningsNoticeToken)) {
+    throw new Error(
+      `media-storage-health-warnings-notice.tsx must keep other metadata concerns delegated: ${forbiddenMediaStorageHealthWarningsNoticeToken}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthWarningsNoticeLines = 5;
+if (mediaStorageHealthWarningsNoticeLines > maxMediaStorageHealthWarningsNoticeLines) {
+  throw new Error(
+    `media-storage-health-warnings-notice.tsx exceeded ${maxMediaStorageHealthWarningsNoticeLines} lines: ${mediaStorageHealthWarningsNoticeLines}`,
+  );
+}
+
+for (const requiredMediaStorageHealthWarningsNoticeTypesUsage of [
+  'import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types"; export type MediaStorageHealthWarningsNoticeProps = Pick<MediaStorageHealthMetadataProps, "mediaStorageHealth">;',
+]) {
+  if (!mediaStorageHealthWarningsNoticeTypesSource.includes(requiredMediaStorageHealthWarningsNoticeTypesUsage)) {
+    throw new Error(
+      `media-storage-health-warnings-notice.types.ts must own warnings-notice prop typing: ${requiredMediaStorageHealthWarningsNoticeTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaStorageHealthWarningsNoticeTypesLines = 2;
+if (mediaStorageHealthWarningsNoticeTypesLines > maxMediaStorageHealthWarningsNoticeTypesLines) {
+  throw new Error(
+    `media-storage-health-warnings-notice.types.ts exceeded ${maxMediaStorageHealthWarningsNoticeTypesLines} lines: ${mediaStorageHealthWarningsNoticeTypesLines}`,
   );
 }
 

@@ -7,6 +7,7 @@ import { MediaStorageHealthReachabilityTag } from "./media-storage-health-reacha
 import { MediaStorageHealthResponseTimeTag } from "./media-storage-health-response-time-tag";
 import { MediaStorageHealthSecretTag } from "./media-storage-health-secret-tag";
 import { MediaStorageHealthServiceTag } from "./media-storage-health-service-tag";
+import { MediaStorageHealthWarningsNotice } from "./media-storage-health-warnings-notice";
 import type { MediaStorageHealthMetadataProps } from "./media-storage-health-metadata.types";
 
 export function MediaStorageHealthMetadata({
@@ -26,11 +27,7 @@ export function MediaStorageHealthMetadata({
       </div>
       <MediaStorageHealthCheckedAtDetail copy={copy} locale={locale} mediaStorageHealth={mediaStorageHealth} />
       <MediaStorageHealthEndpointRootDetail copy={copy} mediaStorageHealth={mediaStorageHealth} />
-      {mediaStorageHealth.warnings.length ? (
-        <div className="notice">
-          {mediaStorageHealth.warnings.join(" ")}
-        </div>
-      ) : null}
+      <MediaStorageHealthWarningsNotice mediaStorageHealth={mediaStorageHealth} />
     </>
   );
 }
