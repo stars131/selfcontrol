@@ -2939,6 +2939,10 @@ Last updated: 2026-03-28
   - dead-letter item status-section prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-status-section-props.ts` instead of remaining mixed inside `apps/web/components/dead-letter-recovery-item-card-child-props.ts`
   - `apps/web/components/dead-letter-recovery-item-card.tsx` now keeps status projection isolated from header and action projection so the dead-letter card orchestration layer stays easier to update safely
   - the record-panel structure guardrail now enforces this status-props-builder boundary so future dead-letter card changes do not regrow mixed child-prop projection logic
+- Dead-Letter Header Props Builder Extraction V1:
+  - dead-letter item header prop assembly now lives in `apps/web/components/dead-letter-recovery-item-card-header-props.ts` instead of remaining mixed inside `apps/web/components/dead-letter-recovery-item-card-child-props.ts`
+  - `apps/web/components/dead-letter-recovery-item-card.tsx` now keeps header projection isolated from status and action projection so the dead-letter card orchestration layer stays easier to update safely
+  - the record-panel structure guardrail now enforces this header-props-builder boundary so future dead-letter card changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
