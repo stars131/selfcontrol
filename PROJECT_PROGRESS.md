@@ -3332,6 +3332,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-controller-input.ts` now treats controller input as an explicit `ControllerProps` boundary and returns that input directly instead of re-mapping each controller field one by one
   - this keeps the controller-input adapter stable for callers while removing duplicated field projection that would otherwise need parallel maintenance when controller props evolve
   - the record-panel structure guardrail and type checks continue to protect the controller boundary so future controller-input changes stay explicit without redundant mapping churn
+- Record Panel Workspace Prop Builder Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now use a consistent `input` parameter name while preserving the same workspace prop projection behavior
+  - this keeps the workspace prop-input layer aligned with the rest of the refactored record-panel adapter chain so builder signatures are easier to scan and maintain
+  - the record-panel structure guardrail now enforces this naming consistency so future workspace prop builders do not drift back to mixed wrapper terminology
 
 ## Next
 - Continue the next product slice

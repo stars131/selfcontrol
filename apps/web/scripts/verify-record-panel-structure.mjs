@@ -10033,10 +10033,10 @@ for (const requiredBrowseWorkspacePropInputImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputUsage of [
-  'export function buildRecordBrowseWorkspacePropInput(props: BuildRecordBrowseWorkspacePropInputArgs)',
-  "canWriteWorkspace: props.canWriteWorkspace",
-  "searchPresets: props.searchPresets",
-  "savingSearchPreset: props.savingSearchPreset",
+  'export function buildRecordBrowseWorkspacePropInput(input: BuildRecordBrowseWorkspacePropInputArgs)',
+  "canWriteWorkspace: input.canWriteWorkspace",
+  "searchPresets: input.searchPresets",
+  "savingSearchPreset: input.savingSearchPreset",
 ]) {
   if (!browseWorkspacePropInputSource.includes(requiredBrowseWorkspacePropInputUsage)) {
     throw new Error(
@@ -10878,10 +10878,10 @@ for (const requiredEditorWorkspacePropInputImport of [
 }
 
 for (const requiredEditorWorkspacePropInputUsage of [
-  'export function buildRecordEditorWorkspacePropInput(props: BuildRecordEditorWorkspacePropInputArgs)',
-  "authToken: props.authToken",
-  "mediaStorageSummary: props.mediaStorageSummary",
-  "onUpdateReminder: props.onUpdateReminder",
+  'export function buildRecordEditorWorkspacePropInput(input: BuildRecordEditorWorkspacePropInputArgs)',
+  "authToken: input.authToken",
+  "mediaStorageSummary: input.mediaStorageSummary",
+  "onUpdateReminder: input.onUpdateReminder",
 ]) {
   if (!editorWorkspacePropInputSource.includes(requiredEditorWorkspacePropInputUsage)) {
     throw new Error(

@@ -1,19 +1,19 @@
 "use client";
 import type { BuildRecordBrowseWorkspacePropInputArgs } from "./record-panel-v2-browse-workspace-prop-input.types";
 
-export function buildRecordBrowseWorkspacePropInput(props: BuildRecordBrowseWorkspacePropInputArgs) {
+export function buildRecordBrowseWorkspacePropInput(input: BuildRecordBrowseWorkspacePropInputArgs) {
   return {
-    canWriteWorkspace: props.canWriteWorkspace,
-    records: props.records,
-    timelineDays: props.timelineDays,
-    selectedRecordId: props.selectedRecordId,
-    recordFilter: props.recordFilter,
-    searchPresets: props.searchPresets,
-    onApplyLocationFilter: props.onApplyLocationFilter,
-    onApplyRecordFilter: props.onApplyRecordFilter,
-    onResetFilter: props.onResetFilter,
-    onSelectRecord: props.onSelectRecord,
-    filteringRecords: props.filteringRecords,
-    savingSearchPreset: props.savingSearchPreset,
+    canWriteWorkspace: input.canWriteWorkspace,
+    records: input.records,
+    timelineDays: input.timelineDays,
+    selectedRecordId: input.selectedRecordId,
+    recordFilter: input.recordFilter,
+    searchPresets: input.searchPresets,
+    onApplyLocationFilter: input.onApplyLocationFilter,
+    onApplyRecordFilter: input.onApplyRecordFilter,
+    onResetFilter: input.onResetFilter,
+    onSelectRecord: input.onSelectRecord,
+    filteringRecords: input.filteringRecords,
+    savingSearchPreset: input.savingSearchPreset,
   };
 }
