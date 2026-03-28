@@ -9183,10 +9183,7 @@ if (browseWorkspacePropsTypesLines > maxBrowseWorkspacePropsTypesLines) {
   );
 }
 
-for (const requiredBrowseWorkspacePropInputTypesImport of [
-  'from "./record-panel-v2-shell-props.types";',
-  'from "./record-panel-v2.types";',
-]) {
+for (const requiredBrowseWorkspacePropInputTypesImport of ['from "./record-panel-v2.types";']) {
   if (!browseWorkspacePropInputTypesSource.includes(requiredBrowseWorkspacePropInputTypesImport)) {
     throw new Error(
       `record-panel-v2-browse-workspace-prop-input.types.ts must import browse workspace prop-input type dependencies: ${requiredBrowseWorkspacePropInputTypesImport}`,
@@ -9195,7 +9192,7 @@ for (const requiredBrowseWorkspacePropInputTypesImport of [
 }
 
 for (const requiredBrowseWorkspacePropInputTypesUsage of [
-  'export type BuildRecordBrowseWorkspacePropInputArgs = RecordPanelShellInput["props"];',
+  'export type BuildRecordBrowseWorkspacePropInputArgs = RecordPanelV2Props;',
   "export type BuildRecordBrowseWorkspacePropInput = Pick<",
   '"onApplyLocationFilter"',
   '"onSelectRecord"',
@@ -9276,10 +9273,7 @@ if (editorWorkspacePropsTypesLines > maxEditorWorkspacePropsTypesLines) {
   );
 }
 
-for (const requiredEditorWorkspacePropInputTypesImport of [
-  'from "./record-panel-v2-shell-props.types";',
-  'from "./record-panel-v2.types";',
-]) {
+for (const requiredEditorWorkspacePropInputTypesImport of ['from "./record-panel-v2.types";']) {
   if (!editorWorkspacePropInputTypesSource.includes(requiredEditorWorkspacePropInputTypesImport)) {
     throw new Error(
       `record-panel-v2-editor-workspace-prop-input.types.ts must import editor workspace prop-input type dependencies: ${requiredEditorWorkspacePropInputTypesImport}`,
@@ -9288,7 +9282,7 @@ for (const requiredEditorWorkspacePropInputTypesImport of [
 }
 
 for (const requiredEditorWorkspacePropInputTypesUsage of [
-  'export type BuildRecordEditorWorkspacePropInputArgs = RecordPanelShellInput["props"];',
+  'export type BuildRecordEditorWorkspacePropInputArgs = RecordPanelV2Props;',
   "export type BuildRecordEditorWorkspacePropInput = Pick<",
   '"mediaProcessingOverview"',
   '"onUpdateReminder"',

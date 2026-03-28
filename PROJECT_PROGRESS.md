@@ -3308,6 +3308,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-browse-workspace-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-input.ts` now pass the controller object directly into their controller-input builders instead of wrapping it under `{ controller }`
   - the browse/editor workspace controller-input builders and editor action/display/formatter controller slices now accept flattened controller contracts directly so that controller field projection stays easier to evolve without wrapper churn
   - the record-panel structure guardrail now enforces this flattened workspace-controller boundary so future workspace controller assembly does not regrow `{ controller }` wrappers
+- Record Panel Workspace Prop Input Decoupling V1:
+  - `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts` and `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts` now type their prop-input args directly from `RecordPanelV2Props` instead of indirectly through `RecordPanelShellInput["props"]`
+  - this removes one shell-layer type dependency from the workspace prop builders so the browse/editor prop projection layer stays easier to maintain as shell composition evolves
+  - the record-panel structure guardrail now enforces this direct prop-input typing boundary so future workspace prop-input typing does not drift back to shell-indexed indirection
 
 ## Next
 - Continue the next product slice
