@@ -1,0 +1,1 @@
+import type { MediaAssetCardRetryCountTagProps } from "./media-asset-card-retry-count-tag.types"; export type BuildMediaAssetCardRetryCountTagPropsInput = Pick<MediaAssetCardRetryCountTagProps, "mediaIssueCopy" | "retryCount" | "retryMaxAttempts">;
