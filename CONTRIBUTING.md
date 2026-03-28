@@ -41,7 +41,9 @@ Preferred project-level verification:
 Direct commands:
 
 - frontend: `cd apps/web && npm run verify:ui-guardrails`
-- backend: `python -m pytest apps/api/tests -q`
+- backend:
+  - Windows: `python -m pytest apps/api/tests -q`
+  - Linux / macOS / VM: `python3 -m pytest apps/api/tests -q`
 
 ## Change Expectations
 

@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Linux Root Verification Parity V1:
+  - `scripts/verify-all.sh` now auto-detects a usable `python3` or `python`, verifies that the chosen interpreter can import `pytest`, fails clearly when no suitable Python is available, and uses the same step-style output pattern as the PowerShell root verification entrypoint
+  - `CONTRIBUTING.md` now makes the backend verification command explicit for both Windows and Linux-style environments so cross-platform setup guidance matches the actual scripts
+  - this reduces Linux-vs-Windows drift in daily verification workflows and makes the root validation path easier to support long term
 - Repository Ownership Baseline V1:
   - `.github/CODEOWNERS` now defines explicit default ownership for the repository and key areas including `apps/api`, `apps/web`, `infra`, `scripts`, `docs`, and repository governance files
   - the initial owner mapping uses the current GitHub maintainer so future review rules and multi-contributor workflows have a concrete baseline instead of implicit tribal knowledge
