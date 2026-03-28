@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Entry Client View Props Cleanup V1:
+  - `apps/web/components/workspace-entry-client.tsx` now delegates loading-shell and main-panel view assembly to a dedicated entry-client view helper instead of carrying the full controller-to-view prop projection inline
+  - `apps/web/components/workspace-entry-client-helpers.ts` and `workspace-entry-client-helpers.types.ts` now own the entry loading-shell props, client view props, refresh-job wiring, and main-panel prop projection contracts together
+  - `apps/web/scripts/verify-workspace-entry-structure.mjs` now enforces this thinner entry-client boundary so the workspace entry page stays easier to extend without reintroducing bulky inline prop wiring
 - Workspace Shell Initial Load Boundary Cleanup V1:
   - `apps/web/components/use-workspace-shell-initial-load.ts` now delegates initial load-key construction and duplicate-load gating instead of carrying that boundary logic inline together with the runner invocation
   - `apps/web/components/workspace-shell-initial-load-key.ts` now owns the reusable workspace-shell initial load key and replay guard helpers

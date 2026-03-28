@@ -181,9 +181,11 @@ if (!source.includes("getWorkspaceEntryCopy(locale)")) {
 }
 
 for (const requiredClientUsage of [
-  "<WorkspaceEntryLoadingShell",
-  "buildWorkspaceEntryMainPanelProps({",
-  "buildWorkspaceEntryRefreshJobs(token, loadTransferJobs)",
+  "const controller = useWorkspaceEntryController(router);",
+  "const view = buildWorkspaceEntryClientViewProps({",
+  "<WorkspaceEntryLoadingShell {...view.loadingShellProps} />",
+  "<WorkspaceEntryMainPanel {...view.mainPanelProps} />",
+  "if (view.showLoadingShell) {",
 ]) {
   if (!source.includes(requiredClientUsage)) {
     throw new Error(`workspace-entry-client.tsx must delegate client shell and prop mapping: ${requiredClientUsage}`);
@@ -357,18 +359,12 @@ for (const forbiddenToken of [
   "useState(",
   "function slugify",
   "function extractShareToken",
-  "const loadTransferJobs =",
   "const handleCreate =",
-  "const handleImportWorkspace =",
-  "const handleQueueImportJob =",
-  "const handlePreviewShare =",
-  "const handleAcceptShare =",
-  "const handleLogout =",
-  "const handleDownloadTransferJob =",
   "const COPY:",
   "const DISPLAY_COPY:",
   'className="panel auth-panel"',
-  "token ? loadTransferJobs(token) : Promise.resolve()",
+  "buildWorkspaceEntryMainPanelProps({",
+  "buildWorkspaceEntryRefreshJobs(token, loadTransferJobs)",
 ]) {
   if (source.includes(forbiddenToken)) {
     throw new Error(`workspace-entry-client.tsx must keep controller logic delegated: ${forbiddenToken}`);
@@ -381,6 +377,7 @@ if (lineCount > maxAllowedLines) {
 }
 
 for (const requiredClientHelpersImport of [
+  'from "./workspace-entry-loading-shell.types";',
   'from "./workspace-entry-main-panel.types";',
   'from "./workspace-entry-client-helpers.types";',
 ]) {
@@ -393,6 +390,13 @@ for (const requiredClientHelpersUsage of [
   "export function buildWorkspaceEntryMainPanelProps(",
   "return props;",
   "export function buildWorkspaceEntryRefreshJobs(",
+  "export function buildWorkspaceEntryLoadingShellProps(",
+  "return { loadingLabel };",
+  "export function buildWorkspaceEntryClientViewProps(",
+  "showLoadingShell: input.controller.loading",
+  "loadingShellProps: buildWorkspaceEntryLoadingShellProps(input.copy.loading)",
+  "mainPanelProps: buildWorkspaceEntryMainPanelProps({",
+  "const onRefreshJobs = buildWorkspaceEntryRefreshJobs(",
   "return () => (token ? loadTransferJobs(token) : Promise.resolve())",
   "): WorkspaceEntryMainPanelProps {",
 ]) {
@@ -411,12 +415,14 @@ for (const forbiddenClientHelpersToken of [
   }
 }
 
-if (clientHelpersLineCount > 25) {
-  throw new Error(`workspace-entry-client-helpers.ts exceeded 25 lines: ${clientHelpersLineCount}`);
+if (clientHelpersLineCount > 80) {
+  throw new Error(`workspace-entry-client-helpers.ts exceeded 80 lines: ${clientHelpersLineCount}`);
 }
 
 for (const requiredClientHelpersTypesUsage of [
-  'import type { LocaleCode } from "../lib/locale"; import type { WorkspaceEntryMainPanelProps } from "./workspace-entry-main-panel.types"; export type WorkspaceEntryClientHelperInput = Pick<WorkspaceEntryMainPanelProps, "copy" | "creating" | "error" | "fileInputRef" | "importFile" | "importName" | "importSlug" | "importing" | "jobsLoading" | "joining" | "name" | "onAcceptShare" | "onCreate" | "onDownloadTransferJob" | "onImportFileChange" | "onImportNameChange" | "onImportSlugChange" | "onImportWorkspace" | "onLogout" | "onNameChange" | "onPreviewShare" | "onQueueImportJob" | "onShareTokenInputChange" | "previewing" | "queueingImportJob" | "sharePreview" | "shareTokenInput" | "suggestedSlug" | "token" | "transferJobs" | "username" | "workspaces"> & { locale: LocaleCode; onLocaleChange: WorkspaceEntryMainPanelProps["onLocaleChange"]; onRefreshJobs: WorkspaceEntryMainPanelProps["onRefreshJobs"] };',
+  'export type WorkspaceEntryClientHelperInput = Pick<WorkspaceEntryMainPanelProps,',
+  'export type WorkspaceEntryClientViewInput = { copy: WorkspaceEntryMainPanelProps["copy"];',
+  'export type WorkspaceEntryClientViewProps = { loadingShellProps: WorkspaceEntryLoadingShellProps; mainPanelProps: WorkspaceEntryMainPanelProps; showLoadingShell: boolean };',
 ]) {
   if (!clientHelpersTypesSource.includes(requiredClientHelpersTypesUsage)) {
     throw new Error(`workspace-entry-client-helpers.types.ts must own helper input typing: ${requiredClientHelpersTypesUsage}`);

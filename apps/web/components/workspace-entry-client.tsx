@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useStoredLocale } from "../lib/locale";
 import {
-  buildWorkspaceEntryMainPanelProps,
-  buildWorkspaceEntryRefreshJobs,
+  buildWorkspaceEntryClientViewProps,
 } from "./workspace-entry-client-helpers";
 import type { WorkspaceEntryClientProps } from "./workspace-entry-client.types";
 import { getWorkspaceEntryCopy } from "./workspace-entry-copy";
@@ -16,85 +15,17 @@ export function WorkspaceEntryClient(_: WorkspaceEntryClientProps) {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
   const copy = getWorkspaceEntryCopy(locale);
-  const {
-    fileInputRef,
-    token,
-    user,
-    workspaces,
-    name,
-    shareTokenInput,
-    importName,
-    importSlug,
-    importFile,
-    transferJobs,
-    sharePreview,
-    loading,
-    error,
-    creating,
-    importing,
-    queueingImportJob,
-    joining,
-    previewing,
-    jobsLoading,
-    suggestedSlug,
-    setName,
-    setShareTokenInput,
-    setImportName,
-    setImportSlug,
-    setImportFile,
-    handleCreate,
-    handleImportWorkspace,
-    handleQueueImportJob,
-    handlePreviewShare,
-    handleAcceptShare,
-    handleLogout,
-    handleDownloadTransferJob,
-    loadTransferJobs,
-  } = useWorkspaceEntryController(router);
+  const controller = useWorkspaceEntryController(router);
+  const view = buildWorkspaceEntryClientViewProps({
+    copy,
+    locale,
+    onLocaleChange: setLocale,
+    controller,
+  });
 
-  if (loading) {
-    return <WorkspaceEntryLoadingShell loadingLabel={copy.loading} />;
+  if (view.showLoadingShell) {
+    return <WorkspaceEntryLoadingShell {...view.loadingShellProps} />;
   }
 
-  return (
-    <WorkspaceEntryMainPanel
-      {...buildWorkspaceEntryMainPanelProps({
-        copy,
-        creating,
-        error,
-        fileInputRef,
-        importFile,
-        importName,
-        importSlug,
-        importing,
-        jobsLoading,
-        joining,
-        locale,
-        name,
-        onAcceptShare: handleAcceptShare,
-        onCreate: handleCreate,
-        onDownloadTransferJob: handleDownloadTransferJob,
-        onImportFileChange: setImportFile,
-        onImportNameChange: setImportName,
-        onImportSlugChange: setImportSlug,
-        onImportWorkspace: handleImportWorkspace,
-        onLocaleChange: setLocale,
-        onLogout: handleLogout,
-        onNameChange: setName,
-        onPreviewShare: handlePreviewShare,
-        onQueueImportJob: handleQueueImportJob,
-        onRefreshJobs: buildWorkspaceEntryRefreshJobs(token, loadTransferJobs),
-        onShareTokenInputChange: setShareTokenInput,
-        previewing,
-        queueingImportJob,
-        sharePreview,
-        shareTokenInput,
-        suggestedSlug,
-        token,
-        transferJobs,
-        username: user?.username,
-        workspaces,
-      })}
-    />
-  );
+  return <WorkspaceEntryMainPanel {...view.mainPanelProps} />;
 }
