@@ -2844,6 +2844,14 @@ const recentMediaIssueCardActionButtonsPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-action-buttons.tsx",
 );
+const recentMediaIssueCardActionButtonsPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-action-buttons-props.ts",
+);
+const recentMediaIssueCardActionButtonsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-action-buttons-props.types.ts",
+);
 const recentMediaIssueCardActionButtonsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-action-buttons.types.ts",
@@ -5004,6 +5012,14 @@ const recentMediaIssueCardActionButtonsSource = fs.readFileSync(
   recentMediaIssueCardActionButtonsPath,
   "utf8",
 );
+const recentMediaIssueCardActionButtonsPropsSource = fs.readFileSync(
+  recentMediaIssueCardActionButtonsPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardActionButtonsPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardActionButtonsPropsTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardActionButtonsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionButtonsTypesPath,
   "utf8",
@@ -6855,6 +6871,10 @@ const recentMediaIssueCardMetadataTypesLines =
   recentMediaIssueCardMetadataTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionButtonsLines =
   recentMediaIssueCardActionButtonsSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionButtonsPropsLines =
+  recentMediaIssueCardActionButtonsPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardActionButtonsPropsTypesLines =
+  recentMediaIssueCardActionButtonsPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionButtonsTypesLines =
   recentMediaIssueCardActionButtonsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionsTypesLines =
@@ -27718,9 +27738,11 @@ if (
 }
 
 for (const requiredRecentMediaIssueCardActionsUsage of [
+  'import { buildRecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons-props";',
   'import { RecentMediaIssueCardActionButtons } from "./recent-media-issue-card-action-buttons";',
   'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types";',
   "}: RecentMediaIssueCardActionsProps) {",
+  "buildRecentMediaIssueCardActionButtonsProps({",
   "return <RecentMediaIssueCardActionButtons",
 ]) {
   if (!recentMediaIssueCardActionsSource.includes(requiredRecentMediaIssueCardActionsUsage)) {
@@ -27739,6 +27761,8 @@ for (const forbiddenRecentMediaIssueCardActionsToken of [
   'import { canRetryMediaIssue } from "../lib/record-panel-media";',
   '<div className="action-row" style={{ marginTop: 10 }}>',
   "retryingMediaId === issue.media_id",
+  "canWriteWorkspace={canWriteWorkspace}",
+  "settingsHref={settingsHref}",
 ]) {
   if (recentMediaIssueCardActionsSource.includes(forbiddenRecentMediaIssueCardActionsToken)) {
     throw new Error(
@@ -27747,7 +27771,7 @@ for (const forbiddenRecentMediaIssueCardActionsToken of [
   }
 }
 
-const maxRecentMediaIssueCardActionsLines = 20;
+const maxRecentMediaIssueCardActionsLines = 21;
 if (recentMediaIssueCardActionsSource.split(/\r?\n/).length > maxRecentMediaIssueCardActionsLines) {
   throw new Error(
     `recent-media-issue-card-actions.tsx exceeded ${maxRecentMediaIssueCardActionsLines} lines: ${recentMediaIssueCardActionsSource.split(/\r?\n/).length}`,
@@ -27768,6 +27792,58 @@ const maxRecentMediaIssueCardActionsTypesLines = 2;
 if (recentMediaIssueCardActionsTypesLines > maxRecentMediaIssueCardActionsTypesLines) {
   throw new Error(
     `recent-media-issue-card-actions.types.ts exceeded ${maxRecentMediaIssueCardActionsTypesLines} lines: ${recentMediaIssueCardActionsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardActionButtonsPropsUsage of [
+  'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types";',
+  'import type { BuildRecentMediaIssueCardActionButtonsPropsInput } from "./recent-media-issue-card-action-buttons-props.types";',
+  "export function buildRecentMediaIssueCardActionButtonsProps({",
+  "}: BuildRecentMediaIssueCardActionButtonsPropsInput): RecentMediaIssueCardActionButtonsProps {",
+]) {
+  if (!recentMediaIssueCardActionButtonsPropsSource.includes(requiredRecentMediaIssueCardActionButtonsPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-action-buttons-props.ts must own action-button prop projection: ${requiredRecentMediaIssueCardActionButtonsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardActionButtonsPropsToken of [
+  "<RecentMediaIssueCardActionButtons",
+  'import Link from "next/link";',
+  "canRetryMediaIssue(",
+]) {
+  if (recentMediaIssueCardActionButtonsPropsSource.includes(forbiddenRecentMediaIssueCardActionButtonsPropsToken)) {
+    throw new Error(
+      `recent-media-issue-card-action-buttons-props.ts must keep rendering and retry rules delegated: ${forbiddenRecentMediaIssueCardActionButtonsPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardActionButtonsPropsLines = 5;
+if (recentMediaIssueCardActionButtonsPropsLines > maxRecentMediaIssueCardActionButtonsPropsLines) {
+  throw new Error(
+    `recent-media-issue-card-action-buttons-props.ts exceeded ${maxRecentMediaIssueCardActionButtonsPropsLines} lines: ${recentMediaIssueCardActionButtonsPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardActionButtonsPropsTypesUsage of [
+  'import type { RecentMediaIssueCardActionsProps } from "./recent-media-issue-card-actions.types"; export type BuildRecentMediaIssueCardActionButtonsPropsInput = RecentMediaIssueCardActionsProps;',
+]) {
+  if (!recentMediaIssueCardActionButtonsPropsTypesSource.includes(requiredRecentMediaIssueCardActionButtonsPropsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-action-buttons-props.types.ts must own action-buttons-props input typing: ${requiredRecentMediaIssueCardActionButtonsPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardActionButtonsPropsTypesLines = 2;
+if (
+  recentMediaIssueCardActionButtonsPropsTypesLines >
+  maxRecentMediaIssueCardActionButtonsPropsTypesLines
+) {
+  throw new Error(
+    `recent-media-issue-card-action-buttons-props.types.ts exceeded ${maxRecentMediaIssueCardActionButtonsPropsTypesLines} lines: ${recentMediaIssueCardActionButtonsPropsTypesLines}`,
   );
 }
 
