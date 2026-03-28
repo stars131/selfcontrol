@@ -40,6 +40,8 @@ Preferred project-level verification:
 
 The repository-level verification entrypoints also validate that key root and `docs/` documentation files still exist, remain UTF-8 readable, and keep their baseline headers.
 
+GitHub Actions also runs the root verification entrypoint on both Linux and Windows so shell drift and cross-platform workflow drift are caught before merge.
+
 Direct commands:
 
 - frontend: `cd apps/web && npm run verify:ui-guardrails`

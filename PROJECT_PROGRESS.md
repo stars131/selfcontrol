@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Linux Root CI Verification Coverage V1:
+  - `.github/workflows/ci.yml` now adds a dedicated `linux-verify-all` job that installs API and web dependencies on `ubuntu-latest` and executes `sh ./scripts/verify-all.sh`
+  - this complements the existing Windows root verification job so both maintained root entrypoints are now exercised in hosted CI instead of relying only on split API/web jobs plus local checks
+  - `CONTRIBUTING.md` now documents that GitHub Actions validates the root verification flow on both Linux and Windows, which reduces long-term cross-platform workflow drift
 - Repository Documentation Guardrail V1:
   - `scripts/verify-repository-docs.py` now verifies that the key root and `docs/` reference files still exist, are UTF-8 readable, are non-empty, and retain their baseline document headers
   - both `scripts/verify-all.ps1` and `scripts/verify-all.sh` now execute this repository documentation guard so future workflow changes catch missing or broken core docs during the standard verification path
