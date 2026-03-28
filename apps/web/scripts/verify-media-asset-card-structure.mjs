@@ -39,6 +39,18 @@ const metadataPropsTypesSource = fs.readFileSync(metadataPropsTypesPath, "utf8")
 const metadataPropsTypesLineCount = metadataPropsTypesSource.split(/\r?\n/).length;
 const metadataPath = path.resolve(process.cwd(), "components/media-asset-card-metadata.tsx");
 const metadataSource = fs.readFileSync(metadataPath, "utf8");
+const metadataTagsPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tags-props.ts",
+);
+const metadataTagsPropsSource = fs.readFileSync(metadataTagsPropsPath, "utf8");
+const metadataTagsPropsLineCount = metadataTagsPropsSource.split(/\r?\n/).length;
+const metadataTagsPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-metadata-tags-props.types.ts",
+);
+const metadataTagsPropsTypesSource = fs.readFileSync(metadataTagsPropsTypesPath, "utf8");
+const metadataTagsPropsTypesLineCount = metadataTagsPropsTypesSource.split(/\r?\n/).length;
 const metadataDetailTimingPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-metadata-detail-timing.ts",
@@ -490,8 +502,16 @@ if (actionsPropsTypesLineCount > 2) {
   );
 }
 
+if (!metadataSource.includes('import { buildMediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags-props";')) {
+  throw new Error("media-asset-card-metadata.tsx must import delegated metadata tags props builder");
+}
+
 if (!metadataSource.includes('import { buildMediaAssetCardMetadataDetailsProps } from "./media-asset-card-metadata-details-props";')) {
   throw new Error("media-asset-card-metadata.tsx must import delegated metadata details props builder");
+}
+
+if (!metadataSource.includes("buildMediaAssetCardMetadataTagsProps({ asset, mediaIssueCopy, formatHistoryTimestampLabel })")) {
+  throw new Error("media-asset-card-metadata.tsx must delegate metadata tags prop assembly");
 }
 
 if (!metadataSource.includes("buildMediaAssetCardMetadataDetailsProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })")) {
@@ -502,12 +522,59 @@ for (const forbiddenMetadataToken of [
   'readMediaAssetCardMetadataDetailTiming({ asset })',
   "lastAttemptAt",
   "nextRetryAt",
+  "<MediaAssetCardMetadataTags asset={asset} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (metadataSource.includes(forbiddenMetadataToken)) {
     throw new Error(
       `media-asset-card-metadata.tsx must keep metadata details prop assembly delegated: ${forbiddenMetadataToken}`,
     );
   }
+}
+
+for (const requiredMetadataTagsPropsUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types";',
+  'import type { BuildMediaAssetCardMetadataTagsPropsInput } from "./media-asset-card-metadata-tags-props.types";',
+  "export function buildMediaAssetCardMetadataTagsProps({ asset, mediaIssueCopy }: BuildMediaAssetCardMetadataTagsPropsInput): MediaAssetCardMetadataTagsProps {",
+]) {
+  if (!metadataTagsPropsSource.includes(requiredMetadataTagsPropsUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-tags-props.ts must own metadata tags prop assembly: ${requiredMetadataTagsPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMetadataTagsPropsToken of [
+  "<MediaAssetCardMetadataTags",
+  "formatHistoryTimestampLabel",
+  "<MediaAssetCardMetadataDetails",
+]) {
+  if (metadataTagsPropsSource.includes(forbiddenMetadataTagsPropsToken)) {
+    throw new Error(
+      `media-asset-card-metadata-tags-props.ts must keep render and detail concerns delegated: ${forbiddenMetadataTagsPropsToken}`,
+    );
+  }
+}
+
+if (metadataTagsPropsLineCount > 5) {
+  throw new Error(
+    `media-asset-card-metadata-tags-props.ts exceeded 5 lines: ${metadataTagsPropsLineCount}`,
+  );
+}
+
+for (const requiredMetadataTagsPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types"; export type BuildMediaAssetCardMetadataTagsPropsInput = MediaAssetCardMetadataProps;',
+]) {
+  if (!metadataTagsPropsTypesSource.includes(requiredMetadataTagsPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-metadata-tags-props.types.ts must own metadata tags props input typing: ${requiredMetadataTagsPropsTypesUsage}`,
+    );
+  }
+}
+
+if (metadataTagsPropsTypesLineCount > 2) {
+  throw new Error(
+    `media-asset-card-metadata-tags-props.types.ts exceeded 2 lines: ${metadataTagsPropsTypesLineCount}`,
+  );
 }
 
 for (const requiredMetadataDetailTimingUsage of [

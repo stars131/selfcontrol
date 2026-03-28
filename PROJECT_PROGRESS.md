@@ -3083,6 +3083,10 @@ Last updated: 2026-03-28
   - media-asset action row prop assembly now delegates download, refresh, retry, and delete child projection into dedicated `*-button-props.ts` builders
   - `apps/web/components/media-asset-card-actions.tsx` now stays focused on action-row composition while each button receives its own thin projected contract
   - the media-asset-card structure guardrail now enforces these button-props boundaries so future media-card action changes do not regrow mixed child-prop projection logic
+- Media Asset Metadata Tags Props Builder Extraction V1:
+  - media-asset metadata tags prop assembly now lives in `apps/web/components/media-asset-card-metadata-tags-props.ts` instead of remaining inline inside `apps/web/components/media-asset-card-metadata.tsx`
+  - `apps/web/components/media-asset-card-metadata.tsx` now keeps tags projection isolated from metadata details projection so the metadata section stays easier to evolve safely
+  - the media-asset-card structure guardrail now enforces this metadata-tags-props boundary so future media metadata changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice
