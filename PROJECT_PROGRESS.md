@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- CI Concurrency and Least-Privilege Hardening V1:
+  - `.github/workflows/ci.yml` now sets `permissions: contents: read` explicitly so routine verification jobs run with the minimum repository token scope they need
+  - the workflow now uses `concurrency` with `cancel-in-progress: true` to stop superseded pushes and pull-request runs instead of burning extra CI time on stale validation jobs
+  - each CI job now has an explicit timeout so stuck dependency or verification steps fail predictably instead of hanging indefinitely
 - Windows CI Root Verification V1:
   - `.github/workflows/ci.yml` now supports `workflow_dispatch` and adds a `windows-verify-all` job that installs both API and web dependencies on `windows-latest`
   - the new CI job executes the root `scripts/verify-all.ps1`, so the same full verification entrypoint used in local Windows development is now covered automatically on GitHub
