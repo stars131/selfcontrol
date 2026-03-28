@@ -24619,8 +24619,9 @@ for (const requiredMediaAssetCardMetadataUsage of [
   'import { MediaAssetCardMetadataDetails } from "./media-asset-card-metadata-details";',
   'import { MediaAssetCardMetadataTags } from "./media-asset-card-metadata-tags";',
   'import type { MediaAssetCardMetadataProps } from "./media-asset-card-metadata.types";',
-  "}: MediaAssetCardMetadataProps) {",
-  "buildMediaAssetCardMetadataDetailsProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })",
+  "export function MediaAssetCardMetadata(props: MediaAssetCardMetadataProps) {",
+  "buildMediaAssetCardMetadataDetailsProps(props)",
+  "buildMediaAssetCardMetadataTagsProps(props)",
   "<MediaAssetCardMetadataDetails",
   "<MediaAssetCardMetadataTags",
 ]) {
@@ -24647,6 +24648,8 @@ for (const forbiddenMediaAssetCardMetadataToken of [
   'readMediaAssetCardMetadataDetailTiming({ asset })',
   "lastAttemptAt",
   "nextRetryAt",
+  "buildMediaAssetCardMetadataDetailsProps({",
+  "buildMediaAssetCardMetadataTagsProps({",
 ]) {
   if (mediaAssetCardMetadataSource.includes(forbiddenMediaAssetCardMetadataToken)) {
     throw new Error(

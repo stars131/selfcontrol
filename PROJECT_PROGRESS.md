@@ -3155,6 +3155,10 @@ Last updated: 2026-03-28
   - `apps/web/components/media-asset-card-actions.tsx` now forwards its full `MediaAssetCardActionsProps` contract directly into the four button props builders instead of repeating the same inline projection four times
   - the action-row component now stays focused on layout and child composition while each button builder continues owning the narrowed child contract
   - the media-asset-card and record-panel structure guardrails now enforce direct props reuse so future action-row edits do not regrow duplicated child-prop assembly
+- Media Asset Metadata Props Reuse Simplification V1:
+  - `apps/web/components/media-asset-card-metadata.tsx` now forwards its full `MediaAssetCardMetadataProps` contract directly into the tags and details props builders instead of repeating inline child-prop projection
+  - the metadata section now stays focused on section composition while the tags/details builders continue owning their specialized derived contracts
+  - the media-asset-card and record-panel structure guardrails now enforce direct metadata props reuse so future metadata edits do not regrow duplicated child-prop assembly
 
 ## Next
 - Continue the next product slice

@@ -856,11 +856,11 @@ if (!metadataSource.includes('import { buildMediaAssetCardMetadataDetailsProps }
   throw new Error("media-asset-card-metadata.tsx must import delegated metadata details props builder");
 }
 
-if (!metadataSource.includes("buildMediaAssetCardMetadataTagsProps({ asset, mediaIssueCopy, formatHistoryTimestampLabel })")) {
+if (!metadataSource.includes("buildMediaAssetCardMetadataTagsProps(props)")) {
   throw new Error("media-asset-card-metadata.tsx must delegate metadata tags prop assembly");
 }
 
-if (!metadataSource.includes("buildMediaAssetCardMetadataDetailsProps({ asset, formatHistoryTimestampLabel, mediaIssueCopy })")) {
+if (!metadataSource.includes("buildMediaAssetCardMetadataDetailsProps(props)")) {
   throw new Error("media-asset-card-metadata.tsx must delegate metadata details prop assembly");
 }
 
@@ -868,6 +868,8 @@ for (const forbiddenMetadataToken of [
   'readMediaAssetCardMetadataDetailTiming({ asset })',
   "lastAttemptAt",
   "nextRetryAt",
+  "buildMediaAssetCardMetadataTagsProps({",
+  "buildMediaAssetCardMetadataDetailsProps({",
   "<MediaAssetCardMetadataTags asset={asset} mediaIssueCopy={mediaIssueCopy} />",
 ]) {
   if (metadataSource.includes(forbiddenMetadataToken)) {
