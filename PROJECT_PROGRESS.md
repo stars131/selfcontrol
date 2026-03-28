@@ -3059,6 +3059,10 @@ Last updated: 2026-03-28
   - recent-media retry-count tag prop assembly now lives in `apps/web/components/recent-media-issue-card-retry-count-tag-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-tags.tsx`
   - `apps/web/components/recent-media-issue-card-tags.tsx` now keeps retry-count tag projection isolated from the other recent-media tag leaves so the tag-row orchestration stays easier to evolve safely
   - the record-panel structure guardrail now enforces this retry-count-tag-props-builder boundary so future recent-media tag-row changes do not regrow mixed child-prop projection logic
+- Recent Media Last Attempt Detail Props Builder Extraction V1:
+  - recent-media last-attempt detail prop assembly now lives in `apps/web/components/recent-media-issue-card-last-attempt-detail-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
+  - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now keeps last-attempt detail projection isolated from the other metadata detail leaves so the details section stays easier to evolve safely
+  - the record-panel structure guardrail now enforces this last-attempt-detail-props-builder boundary so future recent-media metadata detail changes do not regrow mixed child-prop projection logic
 
 ## Next
 - Continue the next product slice

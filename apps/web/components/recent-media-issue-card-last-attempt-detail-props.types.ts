@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardMetadataDetailsProps } from "./recent-media-issue-card-metadata-details.types"; export type BuildRecentMediaIssueCardLastAttemptDetailPropsInput = Pick<RecentMediaIssueCardMetadataDetailsProps, "formatHistoryTimestampLabel" | "issue" | "mediaIssueCopy">;
