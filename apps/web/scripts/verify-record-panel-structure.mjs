@@ -2388,6 +2388,14 @@ const mediaAssetCardProcessingStatusTagTypesPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-processing-status-tag.types.ts",
 );
+const mediaAssetCardStorageProviderTagPropsPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-storage-provider-tag-props.ts",
+);
+const mediaAssetCardStorageProviderTagPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/media-asset-card-storage-provider-tag-props.types.ts",
+);
 const mediaAssetCardStorageProviderTagPath = path.resolve(
   process.cwd(),
   "components/media-asset-card-storage-provider-tag.tsx",
@@ -4996,6 +5004,14 @@ const mediaAssetCardProcessingStatusTagTypesSource = fs.readFileSync(
   mediaAssetCardProcessingStatusTagTypesPath,
   "utf8",
 );
+const mediaAssetCardStorageProviderTagPropsSource = fs.readFileSync(
+  mediaAssetCardStorageProviderTagPropsPath,
+  "utf8",
+);
+const mediaAssetCardStorageProviderTagPropsTypesSource = fs.readFileSync(
+  mediaAssetCardStorageProviderTagPropsTypesPath,
+  "utf8",
+);
 const mediaAssetCardStorageProviderTagSource = fs.readFileSync(
   mediaAssetCardStorageProviderTagPath,
   "utf8",
@@ -7365,6 +7381,10 @@ const mediaAssetCardProcessingStatusTagPropsTypesLines =
   mediaAssetCardProcessingStatusTagPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardProcessingStatusTagTypesLines =
   mediaAssetCardProcessingStatusTagTypesSource.split(/\r?\n/).length;
+const mediaAssetCardStorageProviderTagPropsLines =
+  mediaAssetCardStorageProviderTagPropsSource.split(/\r?\n/).length;
+const mediaAssetCardStorageProviderTagPropsTypesLines =
+  mediaAssetCardStorageProviderTagPropsTypesSource.split(/\r?\n/).length;
 const mediaAssetCardStorageProviderTagLines =
   mediaAssetCardStorageProviderTagSource.split(/\r?\n/).length;
 const mediaAssetCardStorageProviderTagTypesLines =
@@ -24911,6 +24931,7 @@ if (mediaAssetCardNextRetryDetailTypesLines > maxMediaAssetCardNextRetryDetailTy
 for (const requiredMediaAssetCardMetadataTagsUsage of [
   'import { useStoredLocale } from "../lib/locale";',
   'import { buildMediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag-props";',
+  'import { buildMediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag-props";',
   'import { MediaAssetCardExtractionModeTag } from "./media-asset-card-extraction-mode-tag";',
   'import { MediaAssetCardFileExtensionTag } from "./media-asset-card-file-extension-tag";',
   'import { readMediaAssetCardMetadataTagValues } from "./media-asset-card-metadata-tag-values";',
@@ -24926,6 +24947,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   '<div className="tag-row">',
   "readMediaAssetCardMetadataTagValues({ asset })",
   "buildMediaAssetCardProcessingStatusTagProps({ asset, locale })",
+  "buildMediaAssetCardStorageProviderTagProps({ asset, locale })",
   "<MediaAssetCardProcessingStatusTag",
   "<MediaAssetCardExtractionModeTag extractionMode={extractionMode} />",
   "<MediaAssetCardFileExtensionTag asset={asset} />",
@@ -24934,7 +24956,7 @@ for (const requiredMediaAssetCardMetadataTagsUsage of [
   "<MediaAssetCardRemoteFetchTag locale={locale} mediaIssueCopy={mediaIssueCopy} remoteFetchStatus={remoteFetchStatus} />",
   "<MediaAssetCardRetryStateTag locale={locale} mediaIssueCopy={mediaIssueCopy} retryState={retryState} />",
   "<MediaAssetCardSizeTag asset={asset} />",
-  "<MediaAssetCardStorageProviderTag asset={asset} locale={locale} />",
+  "<MediaAssetCardStorageProviderTag",
 ]) {
   if (!mediaAssetCardMetadataTagsSource.includes(requiredMediaAssetCardMetadataTagsUsage)) {
     throw new Error(
@@ -24950,6 +24972,7 @@ if (mediaAssetCardMetadataTagsSource.includes("type MediaAssetCardMetadataTagsPr
 for (const forbiddenMediaAssetCardMetadataTagsToken of [
   "formatMediaSize(asset)",
   "<MediaAssetCardProcessingStatusTag asset={asset} locale={locale} />",
+  "<MediaAssetCardStorageProviderTag asset={asset} locale={locale} />",
   "getProcessingStatusLabel(locale, asset.processing_status)",
   "getStorageProviderLabel(locale, asset.storage_provider)",
   "getRemoteFetchStatusLabel(locale, remoteFetchStatus)",
@@ -25390,6 +25413,57 @@ if (
 ) {
   throw new Error(
     `media-asset-card-processing-status-tag-props.types.ts exceeded ${maxMediaAssetCardProcessingStatusTagPropsTypesLines} lines: ${mediaAssetCardProcessingStatusTagPropsTypesLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardStorageProviderTagPropsUsage of [
+  'import type { MediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag.types";',
+  'import type { BuildMediaAssetCardStorageProviderTagPropsInput } from "./media-asset-card-storage-provider-tag-props.types";',
+  "export function buildMediaAssetCardStorageProviderTagProps({ asset, locale }: BuildMediaAssetCardStorageProviderTagPropsInput): MediaAssetCardStorageProviderTagProps {",
+]) {
+  if (!mediaAssetCardStorageProviderTagPropsSource.includes(requiredMediaAssetCardStorageProviderTagPropsUsage)) {
+    throw new Error(
+      `media-asset-card-storage-provider-tag-props.ts must own storage-provider tag prop projection: ${requiredMediaAssetCardStorageProviderTagPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenMediaAssetCardStorageProviderTagPropsToken of [
+  "<MediaAssetCardStorageProviderTag",
+  "getStorageProviderLabel(",
+  '<div className="tag-row">',
+]) {
+  if (mediaAssetCardStorageProviderTagPropsSource.includes(forbiddenMediaAssetCardStorageProviderTagPropsToken)) {
+    throw new Error(
+      `media-asset-card-storage-provider-tag-props.ts must keep rendering and label rules delegated: ${forbiddenMediaAssetCardStorageProviderTagPropsToken}`,
+    );
+  }
+}
+
+const maxMediaAssetCardStorageProviderTagPropsLines = 5;
+if (mediaAssetCardStorageProviderTagPropsLines > maxMediaAssetCardStorageProviderTagPropsLines) {
+  throw new Error(
+    `media-asset-card-storage-provider-tag-props.ts exceeded ${maxMediaAssetCardStorageProviderTagPropsLines} lines: ${mediaAssetCardStorageProviderTagPropsLines}`,
+  );
+}
+
+for (const requiredMediaAssetCardStorageProviderTagPropsTypesUsage of [
+  'import type { MediaAssetCardMetadataTagsProps } from "./media-asset-card-metadata-tags.types"; import type { LocaleCode } from "../lib/locale"; export type BuildMediaAssetCardStorageProviderTagPropsInput = Pick<MediaAssetCardMetadataTagsProps, "asset"> & { locale: LocaleCode };',
+]) {
+  if (!mediaAssetCardStorageProviderTagPropsTypesSource.includes(requiredMediaAssetCardStorageProviderTagPropsTypesUsage)) {
+    throw new Error(
+      `media-asset-card-storage-provider-tag-props.types.ts must own storage-provider-tag-props input typing: ${requiredMediaAssetCardStorageProviderTagPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxMediaAssetCardStorageProviderTagPropsTypesLines = 2;
+if (
+  mediaAssetCardStorageProviderTagPropsTypesLines >
+  maxMediaAssetCardStorageProviderTagPropsTypesLines
+) {
+  throw new Error(
+    `media-asset-card-storage-provider-tag-props.types.ts exceeded ${maxMediaAssetCardStorageProviderTagPropsTypesLines} lines: ${mediaAssetCardStorageProviderTagPropsTypesLines}`,
   );
 }
 
