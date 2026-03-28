@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- README UTF-8 Recovery V1:
+  - root `README.md` has been rewritten as a clean UTF-8 Chinese document instead of the previous garbled text, with project overview, startup flow, verification commands, and documentation links restored
+  - the new README now reflects the current root scripts, cross-platform verification entrypoints, and quality workflow expectations introduced during recent maintainability work
+  - this improves onboarding, operator clarity, and long-term repository maintainability without changing runtime behavior
 - Linux Root Verification Parity V1:
   - `scripts/verify-all.sh` now auto-detects a usable `python3` or `python`, verifies that the chosen interpreter can import `pytest`, fails clearly when no suitable Python is available, and uses the same step-style output pattern as the PowerShell root verification entrypoint
   - `CONTRIBUTING.md` now makes the backend verification command explicit for both Windows and Linux-style environments so cross-platform setup guidance matches the actual scripts
