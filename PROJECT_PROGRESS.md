@@ -3328,6 +3328,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-controller-dead-letter-actions.ts`, `record-panel-controller-filter-actions.ts`, and `record-panel-controller-filter-preset-actions.ts` now forward a consistently named `input` object through their aggregator wrappers
   - `apps/web/components/record-panel-controller-media-asset-actions.ts`, `record-panel-controller-media-file-actions.ts`, `record-panel-controller-media-status-actions.ts`, and `record-panel-controller-media-transfer-actions.ts` now use the same `input` naming across the media action aggregation chain
   - the record-panel structure guardrail now enforces this aggregator-input naming consistency so future action combiners do not drift back to ambiguous `props` forwarding
+- Record Panel Controller Input Alias Cleanup V1:
+  - `apps/web/components/record-panel-v2-controller-input.ts` now treats controller input as an explicit `ControllerProps` boundary and returns that input directly instead of re-mapping each controller field one by one
+  - this keeps the controller-input adapter stable for callers while removing duplicated field projection that would otherwise need parallel maintenance when controller props evolve
+  - the record-panel structure guardrail and type checks continue to protect the controller boundary so future controller-input changes stay explicit without redundant mapping churn
 
 ## Next
 - Continue the next product slice
