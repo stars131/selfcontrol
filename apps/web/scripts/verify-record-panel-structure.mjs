@@ -2772,6 +2772,14 @@ const recentMediaIssueCardProcessingStatusTagTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-processing-status-tag.types.ts",
 );
+const recentMediaIssueCardStorageProviderTagPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-storage-provider-tag.tsx",
+);
+const recentMediaIssueCardStorageProviderTagTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-storage-provider-tag.types.ts",
+);
 const recentMediaIssueCardRetryCountTagPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-retry-count-tag.tsx",
@@ -4689,6 +4697,14 @@ const recentMediaIssueCardProcessingStatusTagTypesSource = fs.readFileSync(
   recentMediaIssueCardProcessingStatusTagTypesPath,
   "utf8",
 );
+const recentMediaIssueCardStorageProviderTagSource = fs.readFileSync(
+  recentMediaIssueCardStorageProviderTagPath,
+  "utf8",
+);
+const recentMediaIssueCardStorageProviderTagTypesSource = fs.readFileSync(
+  recentMediaIssueCardStorageProviderTagTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardRetryCountTagSource = fs.readFileSync(
   recentMediaIssueCardRetryCountTagPath,
   "utf8",
@@ -6347,6 +6363,10 @@ const recentMediaIssueCardProcessingStatusTagLines =
   recentMediaIssueCardProcessingStatusTagSource.split(/\r?\n/).length;
 const recentMediaIssueCardProcessingStatusTagTypesLines =
   recentMediaIssueCardProcessingStatusTagTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardStorageProviderTagLines =
+  recentMediaIssueCardStorageProviderTagSource.split(/\r?\n/).length;
+const recentMediaIssueCardStorageProviderTagTypesLines =
+  recentMediaIssueCardStorageProviderTagTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardRetryCountTagLines =
   recentMediaIssueCardRetryCountTagSource.split(/\r?\n/).length;
 const recentMediaIssueCardRemoteFetchTagLines =
@@ -26575,7 +26595,6 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 }
 
 for (const requiredRecentMediaIssueCardTagsUsage of [
-  'from "../lib/storage-provider-display";',
   'import { RecentMediaIssueCardExtractionModeTag } from "./recent-media-issue-card-extraction-mode-tag";',
   'import { RecentMediaIssueCardIssueLabelTag } from "./recent-media-issue-card-issue-label-tag";',
   'import { RecentMediaIssueCardProcessingStatusTag } from "./recent-media-issue-card-processing-status-tag";',
@@ -26583,10 +26602,11 @@ for (const requiredRecentMediaIssueCardTagsUsage of [
   'import { RecentMediaIssueCardRemoteFetchTag } from "./recent-media-issue-card-remote-fetch-tag";',
   'import { RecentMediaIssueCardRetryCountTag } from "./recent-media-issue-card-retry-count-tag";',
   'import { RecentMediaIssueCardRetryStateTag } from "./recent-media-issue-card-retry-state-tag";',
+  'import { RecentMediaIssueCardStorageProviderTag } from "./recent-media-issue-card-storage-provider-tag";',
   'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types";',
   "}: RecentMediaIssueCardTagsProps) {",
   "<RecentMediaIssueCardProcessingStatusTag issue={issue} locale={locale} />",
-  "getStorageProviderLabel(locale, issue.storage_provider)",
+  "<RecentMediaIssueCardStorageProviderTag issue={issue} locale={locale} />",
   "<RecentMediaIssueCardExtractionModeTag issue={issue} />",
   "<RecentMediaIssueCardIssueLabelTag issue={issue} locale={locale} />",
   "<RecentMediaIssueCardProcessingSourceTag issue={issue} />",
@@ -26617,6 +26637,7 @@ for (const forbiddenRecentMediaIssueCardTagsToken of [
   "{issue.processing_source}",
   "{issue.extraction_mode}",
   "getProcessingStatusLabel(locale, issue.processing_status)",
+  "getStorageProviderLabel(locale, issue.storage_provider)",
 ]) {
   if (recentMediaIssueCardTagsSource.includes(forbiddenRecentMediaIssueCardTagsToken)) {
     throw new Error(
@@ -26681,6 +26702,65 @@ const maxRecentMediaIssueCardProcessingStatusTagTypesLines = 2;
 if (recentMediaIssueCardProcessingStatusTagTypesLines > maxRecentMediaIssueCardProcessingStatusTagTypesLines) {
   throw new Error(
     `recent-media-issue-card-processing-status-tag.types.ts exceeded ${maxRecentMediaIssueCardProcessingStatusTagTypesLines} lines: ${recentMediaIssueCardProcessingStatusTagTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardStorageProviderTagUsage of [
+  'import { getStorageProviderLabel } from "../lib/storage-provider-display";',
+  'import type { RecentMediaIssueCardStorageProviderTagProps } from "./recent-media-issue-card-storage-provider-tag.types";',
+  "}: RecentMediaIssueCardStorageProviderTagProps) {",
+  "getStorageProviderLabel(locale, issue.storage_provider)",
+]) {
+  if (!recentMediaIssueCardStorageProviderTagSource.includes(requiredRecentMediaIssueCardStorageProviderTagUsage)) {
+    throw new Error(
+      `recent-media-issue-card-storage-provider-tag.tsx must own storage-provider tag rendering: ${requiredRecentMediaIssueCardStorageProviderTagUsage}`,
+    );
+  }
+}
+
+if (
+  recentMediaIssueCardStorageProviderTagSource.includes(
+    "type RecentMediaIssueCardStorageProviderTagProps =",
+  )
+) {
+  throw new Error(
+    "recent-media-issue-card-storage-provider-tag.tsx must keep storage-provider tag prop typing delegated",
+  );
+}
+
+for (const forbiddenRecentMediaIssueCardStorageProviderTagToken of [
+  "getProcessingStatusLabel(locale, issue.processing_status)",
+  "getRetryStateLabel(locale, issue.processing_retry_state)",
+  "{mediaIssueCopy.retries} {issue.processing_retry_count}",
+]) {
+  if (recentMediaIssueCardStorageProviderTagSource.includes(forbiddenRecentMediaIssueCardStorageProviderTagToken)) {
+    throw new Error(
+      `recent-media-issue-card-storage-provider-tag.tsx must keep other tag concerns delegated: ${forbiddenRecentMediaIssueCardStorageProviderTagToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardStorageProviderTagLines = 6;
+if (recentMediaIssueCardStorageProviderTagLines > maxRecentMediaIssueCardStorageProviderTagLines) {
+  throw new Error(
+    `recent-media-issue-card-storage-provider-tag.tsx exceeded ${maxRecentMediaIssueCardStorageProviderTagLines} lines: ${recentMediaIssueCardStorageProviderTagLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardStorageProviderTagTypesUsage of [
+  'import type { RecentMediaIssueCardTagsProps } from "./recent-media-issue-card-tags.types"; export type RecentMediaIssueCardStorageProviderTagProps = Pick<RecentMediaIssueCardTagsProps, "issue" | "locale">;',
+]) {
+  if (!recentMediaIssueCardStorageProviderTagTypesSource.includes(requiredRecentMediaIssueCardStorageProviderTagTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-storage-provider-tag.types.ts must own storage-provider tag prop typing: ${requiredRecentMediaIssueCardStorageProviderTagTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardStorageProviderTagTypesLines = 2;
+if (recentMediaIssueCardStorageProviderTagTypesLines > maxRecentMediaIssueCardStorageProviderTagTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-storage-provider-tag.types.ts exceeded ${maxRecentMediaIssueCardStorageProviderTagTypesLines} lines: ${recentMediaIssueCardStorageProviderTagTypesLines}`,
   );
 }
 
