@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member
+from app.api.routes.reminder_route_helpers import apply_notification_update, get_user_workspace_notification_or_404
 from app.db.session import get_db
 from app.models.notification import NotificationEvent
 from app.models.user import User
@@ -61,17 +60,15 @@ def update_notification(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    notification = db.get(NotificationEvent, notification_id)
-    if not notification or notification.workspace_id != workspace_id or notification.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Notification not found")
+    notification = get_user_workspace_notification_or_404(
+        db,
+        workspace_id=workspace_id,
+        notification_id=notification_id,
+        user_id=current_user.id,
+    )
 
     changes = payload.model_dump(exclude_unset=True)
-    if "is_read" in changes:
-        notification.is_read = changes["is_read"]
-        notification.status = "read" if changes["is_read"] else "unread"
-        notification.read_at = datetime.now(timezone.utc) if changes["is_read"] else None
-    if "status" in changes:
-        notification.status = changes["status"]
+    apply_notification_update(notification, changes)
 
     db.add(notification)
     db.commit()

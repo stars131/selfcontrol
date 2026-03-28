@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Reminder And Notification Route Helper Coverage V1:
+  - `apps/api/app/api/routes/reminder_route_helpers.py` now owns workspace-scoped record, reminder, and notification lookup plus reminder and notification update application logic
+  - `apps/api/app/api/routes/reminders.py` and `apps/api/app/api/routes/notifications.py` now delegate those repeated boundary checks and state transitions instead of carrying them inline
+  - `apps/api/tests/test_reminders_notifications_api.py` now covers reminder CRUD, reminder filtering, due-notification sync, notification listing, and read-state updates so the reminder/notification loop has direct regression coverage
 - Auth And Provider Config Helper Extraction V1:
   - `apps/api/app/api/routes/auth_route_helpers.py` now owns registration duplicate lookup, user construction, login account lookup, and login authentication response building for the auth routes
   - `apps/api/app/api/routes/provider_config_route_helpers.py` now owns the provider-config upsert wrapper that translates validation errors into stable HTTP `400` responses without bloating the route body

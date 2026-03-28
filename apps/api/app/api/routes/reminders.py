@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.routes.reminder_route_helpers import (
+    apply_reminder_update,
+    get_workspace_record_or_404,
+    get_workspace_reminder_or_404,
+)
 from app.db.session import get_db
-from app.models.record import Record
 from app.models.reminder import Reminder
 from app.models.user import User
 from app.schemas.reminder import ReminderCreate, ReminderRead, ReminderUpdate
@@ -51,9 +53,7 @@ def create_reminder(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_write_access(workspace_id, current_user, db)
-    record = db.get(Record, record_id)
-    if not record or record.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Record not found")
+    get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=record_id)
 
     reminder = Reminder(
         workspace_id=workspace_id,
@@ -82,16 +82,10 @@ def update_reminder(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_write_access(workspace_id, current_user, db)
-    reminder = db.get(Reminder, reminder_id)
-    if not reminder or reminder.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Reminder not found")
+    reminder = get_workspace_reminder_or_404(db, workspace_id=workspace_id, reminder_id=reminder_id)
 
     changes = payload.model_dump(exclude_unset=True)
-    if "status" in changes and changes["status"] == "cancelled" and "cancelled_at" not in changes:
-        changes["cancelled_at"] = datetime.now(timezone.utc)
-
-    for field, value in changes.items():
-        setattr(reminder, field, value)
+    apply_reminder_update(reminder, changes)
 
     db.add(reminder)
     db.commit()
@@ -107,9 +101,7 @@ def delete_reminder(
     db: Session = Depends(get_db),
 ) -> dict:
     require_workspace_member(workspace_id, current_user, db)
-    reminder = db.get(Reminder, reminder_id)
-    if not reminder or reminder.workspace_id != workspace_id:
-        raise HTTPException(status_code=404, detail="Reminder not found")
+    reminder = get_workspace_reminder_or_404(db, workspace_id=workspace_id, reminder_id=reminder_id)
 
     db.delete(reminder)
     db.commit()
