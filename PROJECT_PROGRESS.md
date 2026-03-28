@@ -3071,6 +3071,10 @@ Last updated: 2026-03-28
   - recent-media next-retry detail prop assembly now lives in `apps/web/components/recent-media-issue-card-next-retry-detail-props.ts` instead of remaining inline inside `apps/web/components/recent-media-issue-card-metadata-details.tsx`
   - `apps/web/components/recent-media-issue-card-metadata-details.tsx` now keeps next-retry detail projection isolated from the other metadata detail leaves so the details section stays easier to evolve safely
   - the record-panel structure guardrail now enforces this next-retry-detail-props-builder boundary so future recent-media metadata detail changes do not regrow mixed child-prop projection logic
+- Recent Media Action Button Leaf Extraction V1:
+  - recent-media action-button row orchestration now delegates retry rendering and settings-link rendering into `apps/web/components/recent-media-issue-card-retry-button.tsx` and `apps/web/components/recent-media-issue-card-settings-link.tsx`
+  - `apps/web/components/recent-media-issue-card-action-buttons.tsx` now stays focused on button-row composition while each leaf owns its own render rules and tiny props-builder boundary
+  - the record-panel structure guardrail now enforces these retry-button and settings-link boundaries so future recent-media action changes do not regrow mixed rendering and child-prop projection logic
 
 ## Next
 - Continue the next product slice

@@ -2904,6 +2904,38 @@ const recentMediaIssueCardActionButtonsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-action-buttons.types.ts",
 );
+const recentMediaIssueCardRetryButtonPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-button.tsx",
+);
+const recentMediaIssueCardRetryButtonPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-button-props.ts",
+);
+const recentMediaIssueCardRetryButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-button-props.types.ts",
+);
+const recentMediaIssueCardRetryButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-retry-button.types.ts",
+);
+const recentMediaIssueCardSettingsLinkPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-settings-link.tsx",
+);
+const recentMediaIssueCardSettingsLinkPropsPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-settings-link-props.ts",
+);
+const recentMediaIssueCardSettingsLinkPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-settings-link-props.types.ts",
+);
+const recentMediaIssueCardSettingsLinkTypesPath = path.resolve(
+  process.cwd(),
+  "components/recent-media-issue-card-settings-link.types.ts",
+);
 const recentMediaIssueCardActionsTypesPath = path.resolve(
   process.cwd(),
   "components/recent-media-issue-card-actions.types.ts",
@@ -5288,6 +5320,38 @@ const recentMediaIssueCardActionButtonsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionButtonsTypesPath,
   "utf8",
 );
+const recentMediaIssueCardRetryButtonSource = fs.readFileSync(
+  recentMediaIssueCardRetryButtonPath,
+  "utf8",
+);
+const recentMediaIssueCardRetryButtonPropsSource = fs.readFileSync(
+  recentMediaIssueCardRetryButtonPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardRetryButtonPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardRetryButtonPropsTypesPath,
+  "utf8",
+);
+const recentMediaIssueCardRetryButtonTypesSource = fs.readFileSync(
+  recentMediaIssueCardRetryButtonTypesPath,
+  "utf8",
+);
+const recentMediaIssueCardSettingsLinkSource = fs.readFileSync(
+  recentMediaIssueCardSettingsLinkPath,
+  "utf8",
+);
+const recentMediaIssueCardSettingsLinkPropsSource = fs.readFileSync(
+  recentMediaIssueCardSettingsLinkPropsPath,
+  "utf8",
+);
+const recentMediaIssueCardSettingsLinkPropsTypesSource = fs.readFileSync(
+  recentMediaIssueCardSettingsLinkPropsTypesPath,
+  "utf8",
+);
+const recentMediaIssueCardSettingsLinkTypesSource = fs.readFileSync(
+  recentMediaIssueCardSettingsLinkTypesPath,
+  "utf8",
+);
 const recentMediaIssueCardActionsTypesSource = fs.readFileSync(
   recentMediaIssueCardActionsTypesPath,
   "utf8",
@@ -7333,6 +7397,22 @@ const recentMediaIssueCardActionButtonsPropsTypesLines =
   recentMediaIssueCardActionButtonsPropsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionButtonsTypesLines =
   recentMediaIssueCardActionButtonsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryButtonLines =
+  recentMediaIssueCardRetryButtonSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryButtonPropsLines =
+  recentMediaIssueCardRetryButtonPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryButtonPropsTypesLines =
+  recentMediaIssueCardRetryButtonPropsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardRetryButtonTypesLines =
+  recentMediaIssueCardRetryButtonTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardSettingsLinkLines =
+  recentMediaIssueCardSettingsLinkSource.split(/\r?\n/).length;
+const recentMediaIssueCardSettingsLinkPropsLines =
+  recentMediaIssueCardSettingsLinkPropsSource.split(/\r?\n/).length;
+const recentMediaIssueCardSettingsLinkPropsTypesLines =
+  recentMediaIssueCardSettingsLinkPropsTypesSource.split(/\r?\n/).length;
+const recentMediaIssueCardSettingsLinkTypesLines =
+  recentMediaIssueCardSettingsLinkTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardActionsTypesLines =
   recentMediaIssueCardActionsTypesSource.split(/\r?\n/).length;
 const recentMediaIssueCardTagsPropsLines =
@@ -28790,14 +28870,17 @@ if (
 }
 
 for (const requiredRecentMediaIssueCardActionButtonsUsage of [
-  'import Link from "next/link";',
-  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  'import { buildRecentMediaIssueCardRetryButtonProps } from "./recent-media-issue-card-retry-button-props";',
+  'import { RecentMediaIssueCardRetryButton } from "./recent-media-issue-card-retry-button";',
+  'import { buildRecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue-card-settings-link-props";',
+  'import { RecentMediaIssueCardSettingsLink } from "./recent-media-issue-card-settings-link";',
   'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types";',
   "}: RecentMediaIssueCardActionButtonsProps) {",
-  "retryingMediaId === issue.media_id",
   '<div className="action-row" style={{ marginTop: 10 }}>',
-  'className="button secondary"',
-  "{mediaIssueCopy.openSettings}",
+  "buildRecentMediaIssueCardRetryButtonProps({",
+  "<RecentMediaIssueCardRetryButton",
+  "buildRecentMediaIssueCardSettingsLinkProps({",
+  "<RecentMediaIssueCardSettingsLink",
 ]) {
   if (!recentMediaIssueCardActionButtonsSource.includes(requiredRecentMediaIssueCardActionButtonsUsage)) {
     throw new Error(
@@ -28810,6 +28893,11 @@ for (const forbiddenRecentMediaIssueCardActionButtonsToken of [
   "if (!canWriteWorkspace && !settingsHref)",
   "return null",
   "RecentMediaIssueCardActionsProps",
+  'import Link from "next/link";',
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  "retryingMediaId === issue.media_id",
+  "onClick={() => void onRetryMediaProcessing(issue.media_id)}",
+  "{mediaIssueCopy.openSettings}",
 ]) {
   if (recentMediaIssueCardActionButtonsSource.includes(forbiddenRecentMediaIssueCardActionButtonsToken)) {
     throw new Error(
@@ -28818,7 +28906,7 @@ for (const forbiddenRecentMediaIssueCardActionButtonsToken of [
   }
 }
 
-const maxRecentMediaIssueCardActionButtonsLines = 40;
+const maxRecentMediaIssueCardActionButtonsLines = 24;
 if (recentMediaIssueCardActionButtonsLines > maxRecentMediaIssueCardActionButtonsLines) {
   throw new Error(
     `recent-media-issue-card-action-buttons.tsx exceeded ${maxRecentMediaIssueCardActionButtonsLines} lines: ${recentMediaIssueCardActionButtonsLines}`,
@@ -28839,6 +28927,207 @@ const maxRecentMediaIssueCardActionButtonsTypesLines = 2;
 if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionButtonsTypesLines) {
   throw new Error(
     `recent-media-issue-card-action-buttons.types.ts exceeded ${maxRecentMediaIssueCardActionButtonsTypesLines} lines: ${recentMediaIssueCardActionButtonsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryButtonPropsUsage of [
+  'import type { RecentMediaIssueCardRetryButtonProps } from "./recent-media-issue-card-retry-button.types";',
+  'import type { BuildRecentMediaIssueCardRetryButtonPropsInput } from "./recent-media-issue-card-retry-button-props.types";',
+  "export function buildRecentMediaIssueCardRetryButtonProps({",
+  "}: BuildRecentMediaIssueCardRetryButtonPropsInput): RecentMediaIssueCardRetryButtonProps {",
+]) {
+  if (!recentMediaIssueCardRetryButtonPropsSource.includes(requiredRecentMediaIssueCardRetryButtonPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button-props.ts must own retry-button prop projection: ${requiredRecentMediaIssueCardRetryButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardRetryButtonPropsToken of [
+  "<RecentMediaIssueCardRetryButton",
+  "canRetryMediaIssue(",
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+]) {
+  if (recentMediaIssueCardRetryButtonPropsSource.includes(forbiddenRecentMediaIssueCardRetryButtonPropsToken)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button-props.ts must keep rendering and retry eligibility delegated: ${forbiddenRecentMediaIssueCardRetryButtonPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryButtonPropsLines = 5;
+if (recentMediaIssueCardRetryButtonPropsLines > maxRecentMediaIssueCardRetryButtonPropsLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-button-props.ts exceeded ${maxRecentMediaIssueCardRetryButtonPropsLines} lines: ${recentMediaIssueCardRetryButtonPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryButtonPropsTypesUsage of [
+  'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types"; export type BuildRecentMediaIssueCardRetryButtonPropsInput = RecentMediaIssueCardActionButtonsProps;',
+]) {
+  if (!recentMediaIssueCardRetryButtonPropsTypesSource.includes(requiredRecentMediaIssueCardRetryButtonPropsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button-props.types.ts must own retry-button props input typing: ${requiredRecentMediaIssueCardRetryButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryButtonPropsTypesLines = 2;
+if (recentMediaIssueCardRetryButtonPropsTypesLines > maxRecentMediaIssueCardRetryButtonPropsTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-button-props.types.ts exceeded ${maxRecentMediaIssueCardRetryButtonPropsTypesLines} lines: ${recentMediaIssueCardRetryButtonPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryButtonUsage of [
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  'import type { RecentMediaIssueCardRetryButtonProps } from "./recent-media-issue-card-retry-button.types";',
+  "}: RecentMediaIssueCardRetryButtonProps) {",
+  "retryingMediaId === issue.media_id",
+  "canWriteWorkspace && canRetryMediaIssue(issue)",
+  'className="button secondary"',
+  "onClick={() => void onRetryMediaProcessing(issue.media_id)}",
+  "mediaIssueCopy.retryNow",
+]) {
+  if (!recentMediaIssueCardRetryButtonSource.includes(requiredRecentMediaIssueCardRetryButtonUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button.tsx must own retry-button rendering: ${requiredRecentMediaIssueCardRetryButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardRetryButtonToken of [
+  'import Link from "next/link";',
+  "settingsHref",
+  "openSettings",
+]) {
+  if (recentMediaIssueCardRetryButtonSource.includes(forbiddenRecentMediaIssueCardRetryButtonToken)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button.tsx must keep settings-link rendering delegated: ${forbiddenRecentMediaIssueCardRetryButtonToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryButtonLines = 21;
+if (recentMediaIssueCardRetryButtonLines > maxRecentMediaIssueCardRetryButtonLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-button.tsx exceeded ${maxRecentMediaIssueCardRetryButtonLines} lines: ${recentMediaIssueCardRetryButtonLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardRetryButtonTypesUsage of [
+  'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types"; export type RecentMediaIssueCardRetryButtonProps = Pick<RecentMediaIssueCardActionButtonsProps, "canWriteWorkspace" | "issue" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;',
+]) {
+  if (!recentMediaIssueCardRetryButtonTypesSource.includes(requiredRecentMediaIssueCardRetryButtonTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-retry-button.types.ts must own retry-button prop typing: ${requiredRecentMediaIssueCardRetryButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardRetryButtonTypesLines = 2;
+if (recentMediaIssueCardRetryButtonTypesLines > maxRecentMediaIssueCardRetryButtonTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-retry-button.types.ts exceeded ${maxRecentMediaIssueCardRetryButtonTypesLines} lines: ${recentMediaIssueCardRetryButtonTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardSettingsLinkPropsUsage of [
+  'import type { RecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue-card-settings-link.types";',
+  'import type { BuildRecentMediaIssueCardSettingsLinkPropsInput } from "./recent-media-issue-card-settings-link-props.types";',
+  "export function buildRecentMediaIssueCardSettingsLinkProps({ mediaIssueCopy, settingsHref }: BuildRecentMediaIssueCardSettingsLinkPropsInput): RecentMediaIssueCardSettingsLinkProps {",
+]) {
+  if (!recentMediaIssueCardSettingsLinkPropsSource.includes(requiredRecentMediaIssueCardSettingsLinkPropsUsage)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link-props.ts must own settings-link prop projection: ${requiredRecentMediaIssueCardSettingsLinkPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardSettingsLinkPropsToken of [
+  "<RecentMediaIssueCardSettingsLink",
+  'import Link from "next/link";',
+  "canRetryMediaIssue(",
+]) {
+  if (recentMediaIssueCardSettingsLinkPropsSource.includes(forbiddenRecentMediaIssueCardSettingsLinkPropsToken)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link-props.ts must keep rendering and retry eligibility delegated: ${forbiddenRecentMediaIssueCardSettingsLinkPropsToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardSettingsLinkPropsLines = 5;
+if (recentMediaIssueCardSettingsLinkPropsLines > maxRecentMediaIssueCardSettingsLinkPropsLines) {
+  throw new Error(
+    `recent-media-issue-card-settings-link-props.ts exceeded ${maxRecentMediaIssueCardSettingsLinkPropsLines} lines: ${recentMediaIssueCardSettingsLinkPropsLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardSettingsLinkPropsTypesUsage of [
+  'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types"; export type BuildRecentMediaIssueCardSettingsLinkPropsInput = RecentMediaIssueCardActionButtonsProps;',
+]) {
+  if (!recentMediaIssueCardSettingsLinkPropsTypesSource.includes(requiredRecentMediaIssueCardSettingsLinkPropsTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link-props.types.ts must own settings-link props input typing: ${requiredRecentMediaIssueCardSettingsLinkPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardSettingsLinkPropsTypesLines = 2;
+if (recentMediaIssueCardSettingsLinkPropsTypesLines > maxRecentMediaIssueCardSettingsLinkPropsTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-settings-link-props.types.ts exceeded ${maxRecentMediaIssueCardSettingsLinkPropsTypesLines} lines: ${recentMediaIssueCardSettingsLinkPropsTypesLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardSettingsLinkUsage of [
+  'import Link from "next/link";',
+  'import type { RecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue-card-settings-link.types";',
+  "}: RecentMediaIssueCardSettingsLinkProps) {",
+  "settingsHref ? (",
+  'className="button secondary"',
+  "{mediaIssueCopy.openSettings}",
+]) {
+  if (!recentMediaIssueCardSettingsLinkSource.includes(requiredRecentMediaIssueCardSettingsLinkUsage)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link.tsx must own settings-link rendering: ${requiredRecentMediaIssueCardSettingsLinkUsage}`,
+    );
+  }
+}
+
+for (const forbiddenRecentMediaIssueCardSettingsLinkToken of [
+  "canRetryMediaIssue(",
+  "retryingMediaId",
+  "onRetryMediaProcessing",
+]) {
+  if (recentMediaIssueCardSettingsLinkSource.includes(forbiddenRecentMediaIssueCardSettingsLinkToken)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link.tsx must keep retry-button rendering delegated: ${forbiddenRecentMediaIssueCardSettingsLinkToken}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardSettingsLinkLines = 14;
+if (recentMediaIssueCardSettingsLinkLines > maxRecentMediaIssueCardSettingsLinkLines) {
+  throw new Error(
+    `recent-media-issue-card-settings-link.tsx exceeded ${maxRecentMediaIssueCardSettingsLinkLines} lines: ${recentMediaIssueCardSettingsLinkLines}`,
+  );
+}
+
+for (const requiredRecentMediaIssueCardSettingsLinkTypesUsage of [
+  'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types"; export type RecentMediaIssueCardSettingsLinkProps = Pick<RecentMediaIssueCardActionButtonsProps, "mediaIssueCopy" | "settingsHref">;',
+]) {
+  if (!recentMediaIssueCardSettingsLinkTypesSource.includes(requiredRecentMediaIssueCardSettingsLinkTypesUsage)) {
+    throw new Error(
+      `recent-media-issue-card-settings-link.types.ts must own settings-link prop typing: ${requiredRecentMediaIssueCardSettingsLinkTypesUsage}`,
+    );
+  }
+}
+
+const maxRecentMediaIssueCardSettingsLinkTypesLines = 2;
+if (recentMediaIssueCardSettingsLinkTypesLines > maxRecentMediaIssueCardSettingsLinkTypesLines) {
+  throw new Error(
+    `recent-media-issue-card-settings-link.types.ts exceeded ${maxRecentMediaIssueCardSettingsLinkTypesLines} lines: ${recentMediaIssueCardSettingsLinkTypesLines}`,
   );
 }
 

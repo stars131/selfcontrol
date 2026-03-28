@@ -1,0 +1,1 @@
+import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types"; export type RecentMediaIssueCardRetryButtonProps = Pick<RecentMediaIssueCardActionButtonsProps, "canWriteWorkspace" | "issue" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;
