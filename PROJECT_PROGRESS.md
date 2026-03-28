@@ -3292,6 +3292,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-v2-browse-workspace-input.ts` and `apps/web/components/record-panel-v2-editor-workspace-input.ts` now forward flattened shell props into their prop-input builders instead of wrapping them under `{ props }`
   - `apps/web/components/record-panel-v2-browse-workspace-prop-input.types.ts`, `apps/web/components/record-panel-v2-browse-workspace-prop-input.ts`, `apps/web/components/record-panel-v2-editor-workspace-prop-input.types.ts`, and `apps/web/components/record-panel-v2-editor-workspace-prop-input.ts` now share flattened prop-input contracts so the browse/editor workspace prop builders stay easier to evolve without wrapper churn
   - the record-panel structure guardrail now enforces this flattened workspace prop-input boundary so future shell-to-workspace prop projection does not regrow wrapped input assembly
+- Record Panel Sync Input Flattening V1:
+  - `apps/web/components/use-record-panel-controller.ts` now forwards one flattened input object into `buildRecordPanelControllerSyncInput` instead of wrapping controller sources under `{ props, state, viewData }`
+  - `apps/web/components/use-record-panel-controller-sync.types.ts` and `apps/web/components/record-panel-controller-sync-input.ts` now reuse the flattened `RecordPanelControllerSyncInput` contract directly so the sync-input builder stays easier to evolve without nested wrapper churn
+  - the record-panel structure guardrail now enforces this flattened controller-sync boundary so future controller sync assembly does not regrow wrapped input assembly
 
 ## Next
 - Continue the next product slice

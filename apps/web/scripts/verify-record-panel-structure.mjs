@@ -11281,7 +11281,7 @@ for (const requiredHandlerGroupsImport of [
 }
 
 for (const requiredControllerUsage of [
-  "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ props, state, viewData }))",
+  "useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...props, ...state, ...viewData }))",
   "useRecordPanelControllerViewData({",
   "useRecordPanelControllerState(props.recordFilter)",
   "buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData })",
@@ -11341,8 +11341,8 @@ for (const requiredControllerSyncInputImport of [
 for (const requiredControllerSyncInputUsage of [
   "export function buildRecordPanelControllerSyncInput({",
   "}: BuildRecordPanelControllerSyncInputArgs) {",
-  "actionableDeadLetterIds: viewData.actionableDeadLetterIds,",
-  "setSelectedDeadLetterIds: state.setSelectedDeadLetterIds,",
+  "actionableDeadLetterIds,",
+  "setSelectedDeadLetterIds,",
 ]) {
   if (!controllerSyncInputSource.includes(requiredControllerSyncInputUsage)) {
     throw new Error(
@@ -11441,8 +11441,8 @@ for (const requiredControllerSyncTypesImport of [
 }
 
 for (const requiredControllerSyncTypesUsage of [
-  'export type BuildRecordPanelControllerSyncInputArgs = { props: Pick<ControllerProps, "recordFilter">; state: Pick<BuildRecordPanelControllerStateResultInput, "setFilterDraft" | "setForm" | "setLocationReviewForm" | "setReminderForm" | "setSelectedDeadLetterIds">; viewData: Pick<BuildRecordPanelControllerViewDataResultInput, "actionableDeadLetterIds" | "selectedRecord">; };',
   'export type RecordPanelControllerSyncInput = { recordFilter: ControllerProps["recordFilter"] } &',
+  'export type BuildRecordPanelControllerSyncInputArgs = RecordPanelControllerSyncInput;',
   'BuildRecordPanelControllerViewDataResultInput',
   'BuildRecordPanelControllerStateResultInput',
   '"actionableDeadLetterIds" | "selectedRecord"',

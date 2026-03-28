@@ -17,7 +17,7 @@ export function useRecordPanelController(props: ControllerProps) {
     selectedRecordId: props.selectedRecordId,
   });
   const state = useRecordPanelControllerState(props.recordFilter);
-  useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ props, state, viewData }));
+  useRecordPanelControllerSync(buildRecordPanelControllerSyncInput({ ...props, ...state, ...viewData }));
   const { recordHandlers, mediaHandlers } = createRecordPanelControllerHandlerGroups(
     buildRecordPanelControllerHandlerGroupsInput({ props, state, viewData }),
   );
