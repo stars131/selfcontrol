@@ -25531,7 +25531,8 @@ if (mediaAssetCardMetadataTagsTypesLines > maxMediaAssetCardMetadataTagsTypesLin
 for (const requiredMediaAssetCardFileExtensionTagPropsUsage of [
   'import type { MediaAssetCardFileExtensionTagProps } from "./media-asset-card-file-extension-tag.types";',
   'import type { BuildMediaAssetCardFileExtensionTagPropsInput } from "./media-asset-card-file-extension-tag-props.types";',
-  "export function buildMediaAssetCardFileExtensionTagProps({ asset }: BuildMediaAssetCardFileExtensionTagPropsInput): MediaAssetCardFileExtensionTagProps {",
+  "export function buildMediaAssetCardFileExtensionTagProps(input: BuildMediaAssetCardFileExtensionTagPropsInput): MediaAssetCardFileExtensionTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardFileExtensionTagPropsSource.includes(requiredMediaAssetCardFileExtensionTagPropsUsage)) {
     throw new Error(
@@ -25685,7 +25686,8 @@ if (mediaAssetCardRemoteFetchTagTypesLines > maxMediaAssetCardRemoteFetchTagType
 for (const requiredMediaAssetCardRemoteFetchTagPropsUsage of [
   'import type { MediaAssetCardRemoteFetchTagProps } from "./media-asset-card-remote-fetch-tag.types";',
   'import type { BuildMediaAssetCardRemoteFetchTagPropsInput } from "./media-asset-card-remote-fetch-tag-props.types";',
-  "export function buildMediaAssetCardRemoteFetchTagProps({ locale, mediaIssueCopy, remoteFetchStatus }: BuildMediaAssetCardRemoteFetchTagPropsInput): MediaAssetCardRemoteFetchTagProps {",
+  "export function buildMediaAssetCardRemoteFetchTagProps(input: BuildMediaAssetCardRemoteFetchTagPropsInput): MediaAssetCardRemoteFetchTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardRemoteFetchTagPropsSource.includes(requiredMediaAssetCardRemoteFetchTagPropsUsage)) {
     throw new Error(
@@ -25782,7 +25784,8 @@ if (mediaAssetCardRetryStateTagTypesLines > maxMediaAssetCardRetryStateTagTypesL
 for (const requiredMediaAssetCardRetryStateTagPropsUsage of [
   'import type { MediaAssetCardRetryStateTagProps } from "./media-asset-card-retry-state-tag.types";',
   'import type { BuildMediaAssetCardRetryStateTagPropsInput } from "./media-asset-card-retry-state-tag-props.types";',
-  "export function buildMediaAssetCardRetryStateTagProps({ locale, mediaIssueCopy, retryState }: BuildMediaAssetCardRetryStateTagPropsInput): MediaAssetCardRetryStateTagProps {",
+  "export function buildMediaAssetCardRetryStateTagProps(input: BuildMediaAssetCardRetryStateTagPropsInput): MediaAssetCardRetryStateTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardRetryStateTagPropsSource.includes(requiredMediaAssetCardRetryStateTagPropsUsage)) {
     throw new Error(
@@ -25879,7 +25882,8 @@ if (mediaAssetCardRetryCountTagTypesLines > maxMediaAssetCardRetryCountTagTypesL
 for (const requiredMediaAssetCardRetryCountTagPropsUsage of [
   'import type { MediaAssetCardRetryCountTagProps } from "./media-asset-card-retry-count-tag.types";',
   'import type { BuildMediaAssetCardRetryCountTagPropsInput } from "./media-asset-card-retry-count-tag-props.types";',
-  "export function buildMediaAssetCardRetryCountTagProps({ mediaIssueCopy, retryCount, retryMaxAttempts }: BuildMediaAssetCardRetryCountTagPropsInput): MediaAssetCardRetryCountTagProps {",
+  "export function buildMediaAssetCardRetryCountTagProps(input: BuildMediaAssetCardRetryCountTagPropsInput): MediaAssetCardRetryCountTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardRetryCountTagPropsSource.includes(requiredMediaAssetCardRetryCountTagPropsUsage)) {
     throw new Error(
@@ -26074,7 +26078,8 @@ if (mediaAssetCardProcessingStatusTagTypesLines > maxMediaAssetCardProcessingSta
 for (const requiredMediaAssetCardProcessingStatusTagPropsUsage of [
   'import type { MediaAssetCardProcessingStatusTagProps } from "./media-asset-card-processing-status-tag.types";',
   'import type { BuildMediaAssetCardProcessingStatusTagPropsInput } from "./media-asset-card-processing-status-tag-props.types";',
-  "export function buildMediaAssetCardProcessingStatusTagProps({ asset, locale }: BuildMediaAssetCardProcessingStatusTagPropsInput): MediaAssetCardProcessingStatusTagProps {",
+  "export function buildMediaAssetCardProcessingStatusTagProps(input: BuildMediaAssetCardProcessingStatusTagPropsInput): MediaAssetCardProcessingStatusTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardProcessingStatusTagPropsSource.includes(requiredMediaAssetCardProcessingStatusTagPropsUsage)) {
     throw new Error(
@@ -26125,7 +26130,8 @@ if (
 for (const requiredMediaAssetCardSizeTagPropsUsage of [
   'import type { MediaAssetCardSizeTagProps } from "./media-asset-card-size-tag.types";',
   'import type { BuildMediaAssetCardSizeTagPropsInput } from "./media-asset-card-size-tag-props.types";',
-  "export function buildMediaAssetCardSizeTagProps({ asset }: BuildMediaAssetCardSizeTagPropsInput): MediaAssetCardSizeTagProps {",
+  "export function buildMediaAssetCardSizeTagProps(input: BuildMediaAssetCardSizeTagPropsInput): MediaAssetCardSizeTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardSizeTagPropsSource.includes(requiredMediaAssetCardSizeTagPropsUsage)) {
     throw new Error(
@@ -26173,7 +26179,8 @@ if (mediaAssetCardSizeTagPropsTypesLines > maxMediaAssetCardSizeTagPropsTypesLin
 for (const requiredMediaAssetCardStorageProviderTagPropsUsage of [
   'import type { MediaAssetCardStorageProviderTagProps } from "./media-asset-card-storage-provider-tag.types";',
   'import type { BuildMediaAssetCardStorageProviderTagPropsInput } from "./media-asset-card-storage-provider-tag-props.types";',
-  "export function buildMediaAssetCardStorageProviderTagProps({ asset, locale }: BuildMediaAssetCardStorageProviderTagPropsInput): MediaAssetCardStorageProviderTagProps {",
+  "export function buildMediaAssetCardStorageProviderTagProps(input: BuildMediaAssetCardStorageProviderTagPropsInput): MediaAssetCardStorageProviderTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardStorageProviderTagPropsSource.includes(requiredMediaAssetCardStorageProviderTagPropsUsage)) {
     throw new Error(
@@ -26321,7 +26328,8 @@ if (mediaAssetCardProcessingSourceTagTypesLines > maxMediaAssetCardProcessingSou
 for (const requiredMediaAssetCardProcessingSourceTagPropsUsage of [
   'import type { MediaAssetCardProcessingSourceTagProps } from "./media-asset-card-processing-source-tag.types";',
   'import type { BuildMediaAssetCardProcessingSourceTagPropsInput } from "./media-asset-card-processing-source-tag-props.types";',
-  "export function buildMediaAssetCardProcessingSourceTagProps({ processingSource }: BuildMediaAssetCardProcessingSourceTagPropsInput): MediaAssetCardProcessingSourceTagProps {",
+  "export function buildMediaAssetCardProcessingSourceTagProps(input: BuildMediaAssetCardProcessingSourceTagPropsInput): MediaAssetCardProcessingSourceTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardProcessingSourceTagPropsSource.includes(requiredMediaAssetCardProcessingSourceTagPropsUsage)) {
     throw new Error(
@@ -26420,7 +26428,8 @@ if (mediaAssetCardExtractionModeTagTypesLines > maxMediaAssetCardExtractionModeT
 for (const requiredMediaAssetCardExtractionModeTagPropsUsage of [
   'import type { MediaAssetCardExtractionModeTagProps } from "./media-asset-card-extraction-mode-tag.types";',
   'import type { BuildMediaAssetCardExtractionModeTagPropsInput } from "./media-asset-card-extraction-mode-tag-props.types";',
-  "export function buildMediaAssetCardExtractionModeTagProps({ extractionMode }: BuildMediaAssetCardExtractionModeTagPropsInput): MediaAssetCardExtractionModeTagProps {",
+  "export function buildMediaAssetCardExtractionModeTagProps(input: BuildMediaAssetCardExtractionModeTagPropsInput): MediaAssetCardExtractionModeTagProps {",
+  "return input;",
 ]) {
   if (!mediaAssetCardExtractionModeTagPropsSource.includes(requiredMediaAssetCardExtractionModeTagPropsUsage)) {
     throw new Error(
