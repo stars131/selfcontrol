@@ -29412,7 +29412,7 @@ if (recentMediaIssueCardIntroTypesLines > maxRecentMediaIssueCardIntroTypesLines
 for (const requiredRecentMediaIssueCardIntroPropsUsage of [
   'import type { RecentMediaIssueCardIntroProps } from "./recent-media-issue-card-intro.types";',
   'import type { BuildRecentMediaIssueCardIntroPropsInput } from "./recent-media-issue-card-intro-props.types";',
-  "export function buildRecentMediaIssueCardIntroProps({ issue }: BuildRecentMediaIssueCardIntroPropsInput): RecentMediaIssueCardIntroProps {",
+  "export function buildRecentMediaIssueCardIntroProps(input: BuildRecentMediaIssueCardIntroPropsInput): RecentMediaIssueCardIntroProps { return input; }",
 ]) {
   if (!recentMediaIssueCardIntroPropsSource.includes(requiredRecentMediaIssueCardIntroPropsUsage)) {
     throw new Error(
@@ -29500,7 +29500,7 @@ if (recentMediaIssueCardErrorTypesLines > maxRecentMediaIssueCardErrorTypesLines
 for (const requiredRecentMediaIssueCardErrorPropsUsage of [
   'import type { RecentMediaIssueCardErrorProps } from "./recent-media-issue-card-error.types";',
   'import type { BuildRecentMediaIssueCardErrorPropsInput } from "./recent-media-issue-card-error-props.types";',
-  "export function buildRecentMediaIssueCardErrorProps({ issue }: BuildRecentMediaIssueCardErrorPropsInput): RecentMediaIssueCardErrorProps {",
+  "export function buildRecentMediaIssueCardErrorProps(input: BuildRecentMediaIssueCardErrorPropsInput): RecentMediaIssueCardErrorProps { return input; }",
 ]) {
   if (!recentMediaIssueCardErrorPropsSource.includes(requiredRecentMediaIssueCardErrorPropsUsage)) {
     throw new Error(
@@ -30290,8 +30290,7 @@ if (recentMediaIssueCardTagsPropsTypesLines > maxRecentMediaIssueCardTagsPropsTy
 for (const requiredRecentMediaIssueCardActionButtonsPropsUsage of [
   'import type { RecentMediaIssueCardActionButtonsProps } from "./recent-media-issue-card-action-buttons.types";',
   'import type { BuildRecentMediaIssueCardActionButtonsPropsInput } from "./recent-media-issue-card-action-buttons-props.types";',
-  "export function buildRecentMediaIssueCardActionButtonsProps({",
-  "}: BuildRecentMediaIssueCardActionButtonsPropsInput): RecentMediaIssueCardActionButtonsProps {",
+  "export function buildRecentMediaIssueCardActionButtonsProps(input: BuildRecentMediaIssueCardActionButtonsPropsInput): RecentMediaIssueCardActionButtonsProps { return input; }",
 ]) {
   if (!recentMediaIssueCardActionButtonsPropsSource.includes(requiredRecentMediaIssueCardActionButtonsPropsUsage)) {
     throw new Error(
@@ -30405,8 +30404,7 @@ if (recentMediaIssueCardActionButtonsTypesLines > maxRecentMediaIssueCardActionB
 for (const requiredRecentMediaIssueCardRetryButtonPropsUsage of [
   'import type { RecentMediaIssueCardRetryButtonProps } from "./recent-media-issue-card-retry-button.types";',
   'import type { BuildRecentMediaIssueCardRetryButtonPropsInput } from "./recent-media-issue-card-retry-button-props.types";',
-  "export function buildRecentMediaIssueCardRetryButtonProps({",
-  "}: BuildRecentMediaIssueCardRetryButtonPropsInput): RecentMediaIssueCardRetryButtonProps {",
+  "export function buildRecentMediaIssueCardRetryButtonProps(input: BuildRecentMediaIssueCardRetryButtonPropsInput): RecentMediaIssueCardRetryButtonProps { return input; }",
 ]) {
   if (!recentMediaIssueCardRetryButtonPropsSource.includes(requiredRecentMediaIssueCardRetryButtonPropsUsage)) {
     throw new Error(
@@ -30507,7 +30505,7 @@ if (recentMediaIssueCardRetryButtonTypesLines > maxRecentMediaIssueCardRetryButt
 for (const requiredRecentMediaIssueCardSettingsLinkPropsUsage of [
   'import type { RecentMediaIssueCardSettingsLinkProps } from "./recent-media-issue-card-settings-link.types";',
   'import type { BuildRecentMediaIssueCardSettingsLinkPropsInput } from "./recent-media-issue-card-settings-link-props.types";',
-  "export function buildRecentMediaIssueCardSettingsLinkProps({ mediaIssueCopy, settingsHref }: BuildRecentMediaIssueCardSettingsLinkPropsInput): RecentMediaIssueCardSettingsLinkProps {",
+  "export function buildRecentMediaIssueCardSettingsLinkProps(input: BuildRecentMediaIssueCardSettingsLinkPropsInput): RecentMediaIssueCardSettingsLinkProps { return input; }",
 ]) {
   if (!recentMediaIssueCardSettingsLinkPropsSource.includes(requiredRecentMediaIssueCardSettingsLinkPropsUsage)) {
     throw new Error(

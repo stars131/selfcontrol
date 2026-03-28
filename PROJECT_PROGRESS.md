@@ -3412,6 +3412,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-item-card-action-buttons-props.ts`, `dead-letter-recovery-item-card-retry-button-props.ts`, `dead-letter-recovery-item-card-settings-link-props.ts`, and `dead-letter-recovery-item-card-retry-budget-used-props.ts` now use explicit `input` parameters and pass their action leaf props through unchanged
   - this keeps the dead-letter action helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
   - the record-panel structure guardrail now enforces this pass-through helper contract so future dead-letter action leaf helpers do not drift back to mixed boundary styles
+- Recent Media Action Leaf Helper Naming Cleanup V1:
+  - `apps/web/components/recent-media-issue-card-action-buttons-props.ts`, `recent-media-issue-card-retry-button-props.ts`, `recent-media-issue-card-settings-link-props.ts`, `recent-media-issue-card-error-props.ts`, and `recent-media-issue-card-intro-props.ts` now use explicit `input` parameters and pass their recent-media leaf props through unchanged
+  - this keeps the recent-media action and leaf helper layer aligned with the broader builder-signature normalization work while removing redundant destructuring from these thin projection helpers
+  - the record-panel structure guardrail now enforces this pass-through helper contract so future recent-media leaf helpers do not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice
