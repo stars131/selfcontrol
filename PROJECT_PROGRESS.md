@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Windows CI Root Verification V1:
+  - `.github/workflows/ci.yml` now supports `workflow_dispatch` and adds a `windows-verify-all` job that installs both API and web dependencies on `windows-latest`
+  - the new CI job executes the root `scripts/verify-all.ps1`, so the same full verification entrypoint used in local Windows development is now covered automatically on GitHub
+  - this reduces platform drift between local development and hosted validation while strengthening long-term enterprise-grade maintainability
 - API Warning Noise Reduction V1:
   - a new root-level `pytest.ini` now filters the known FastAPI `asyncio.iscoroutinefunction` deprecation warning that currently originates from third-party internals under Python 3.14
   - this keeps `scripts/verify-all.ps1` and routine pytest output focused on actionable warnings from the project instead of repeating the same external noise hundreds of times
