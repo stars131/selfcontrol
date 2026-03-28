@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
-
-import { canRetryMediaIssue } from "../lib/record-panel-media";
+import { buildDeadLetterRecoveryItemCardRetryButtonProps } from "./dead-letter-recovery-item-card-retry-button-props";
+import { DeadLetterRecoveryItemCardRetryButton } from "./dead-letter-recovery-item-card-retry-button";
+import { buildDeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-recovery-item-card-settings-link-props";
+import { DeadLetterRecoveryItemCardSettingsLink } from "./dead-letter-recovery-item-card-settings-link";
 import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types";
 
 export function DeadLetterRecoveryItemCardActionButtons({
@@ -13,25 +14,10 @@ export function DeadLetterRecoveryItemCardActionButtons({
   retryingMediaId,
   settingsHref,
 }: DeadLetterRecoveryItemCardActionButtonsProps) {
-  const retrying = retryingMediaId === item.media_id;
-
   return (
     <div className="action-row" style={{ marginTop: 10 }}>
-      {canWriteWorkspace && canRetryMediaIssue(item) ? (
-        <button
-          className="button secondary"
-          disabled={retrying}
-          type="button"
-          onClick={() => void onRetryMediaProcessing(item.media_id)}
-        >
-          {retrying ? mediaIssueCopy.retrying : mediaIssueCopy.retryNow}
-        </button>
-      ) : null}
-      {settingsHref ? (
-        <Link className="button secondary" href={settingsHref}>
-          {mediaIssueCopy.openSettings}
-        </Link>
-      ) : null}
+      <DeadLetterRecoveryItemCardRetryButton {...buildDeadLetterRecoveryItemCardRetryButtonProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
+      <DeadLetterRecoveryItemCardSettingsLink {...buildDeadLetterRecoveryItemCardSettingsLinkProps({ item, canWriteWorkspace, mediaIssueCopy, onRetryMediaProcessing, retryingMediaId, settingsHref })} />
     </div>
   );
 }

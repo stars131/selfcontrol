@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type DeadLetterRecoveryItemCardRetryButtonProps = Pick<DeadLetterRecoveryItemCardActionButtonsProps, "item" | "canWriteWorkspace" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;

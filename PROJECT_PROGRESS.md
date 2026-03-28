@@ -3075,6 +3075,10 @@ Last updated: 2026-03-28
   - recent-media action-button row orchestration now delegates retry rendering and settings-link rendering into `apps/web/components/recent-media-issue-card-retry-button.tsx` and `apps/web/components/recent-media-issue-card-settings-link.tsx`
   - `apps/web/components/recent-media-issue-card-action-buttons.tsx` now stays focused on button-row composition while each leaf owns its own render rules and tiny props-builder boundary
   - the record-panel structure guardrail now enforces these retry-button and settings-link boundaries so future recent-media action changes do not regrow mixed rendering and child-prop projection logic
+- Dead-Letter Action Button Leaf Extraction V1:
+  - dead-letter action-button row orchestration now delegates retry rendering and settings-link rendering into `apps/web/components/dead-letter-recovery-item-card-retry-button.tsx` and `apps/web/components/dead-letter-recovery-item-card-settings-link.tsx`
+  - `apps/web/components/dead-letter-recovery-item-card-action-buttons.tsx` now stays focused on button-row composition while each leaf owns its own render rules and tiny props-builder boundary
+  - the record-panel structure guardrail now enforces these retry-button and settings-link boundaries so future dead-letter action changes do not regrow mixed rendering and child-prop projection logic
 
 ## Next
 - Continue the next product slice

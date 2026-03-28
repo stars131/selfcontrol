@@ -1,0 +1,1 @@
+import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type DeadLetterRecoveryItemCardSettingsLinkProps = Pick<DeadLetterRecoveryItemCardActionButtonsProps, "mediaIssueCopy" | "settingsHref">;

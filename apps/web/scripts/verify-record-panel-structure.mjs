@@ -3224,6 +3224,38 @@ const deadLetterRecoveryItemCardActionButtonsTypesPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-action-buttons.types.ts",
 );
+const deadLetterRecoveryItemCardRetryButtonPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-button.tsx",
+);
+const deadLetterRecoveryItemCardRetryButtonPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-button-props.ts",
+);
+const deadLetterRecoveryItemCardRetryButtonPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-button-props.types.ts",
+);
+const deadLetterRecoveryItemCardRetryButtonTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-retry-button.types.ts",
+);
+const deadLetterRecoveryItemCardSettingsLinkPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-settings-link.tsx",
+);
+const deadLetterRecoveryItemCardSettingsLinkPropsPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-settings-link-props.ts",
+);
+const deadLetterRecoveryItemCardSettingsLinkPropsTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-settings-link-props.types.ts",
+);
+const deadLetterRecoveryItemCardSettingsLinkTypesPath = path.resolve(
+  process.cwd(),
+  "components/dead-letter-recovery-item-card-settings-link.types.ts",
+);
 const deadLetterRecoveryItemCardActionsPropsPath = path.resolve(
   process.cwd(),
   "components/dead-letter-recovery-item-card-actions-props.ts",
@@ -5625,6 +5657,38 @@ const deadLetterRecoveryItemCardActionButtonsTypesSource = fs.readFileSync(
   deadLetterRecoveryItemCardActionButtonsTypesPath,
   "utf8",
 );
+const deadLetterRecoveryItemCardRetryButtonSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryButtonPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardRetryButtonPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryButtonPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardRetryButtonPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryButtonPropsTypesPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardRetryButtonTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardRetryButtonTypesPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardSettingsLinkSource = fs.readFileSync(
+  deadLetterRecoveryItemCardSettingsLinkPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardSettingsLinkPropsSource = fs.readFileSync(
+  deadLetterRecoveryItemCardSettingsLinkPropsPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardSettingsLinkPropsTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardSettingsLinkPropsTypesPath,
+  "utf8",
+);
+const deadLetterRecoveryItemCardSettingsLinkTypesSource = fs.readFileSync(
+  deadLetterRecoveryItemCardSettingsLinkTypesPath,
+  "utf8",
+);
 const deadLetterRecoveryItemCardActionsPropsSource = fs.readFileSync(
   deadLetterRecoveryItemCardActionsPropsPath,
   "utf8",
@@ -7538,6 +7602,22 @@ const deadLetterRecoveryItemCardActionButtonsPropsTypesLines =
   deadLetterRecoveryItemCardActionButtonsPropsTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionButtonsTypesLines =
   deadLetterRecoveryItemCardActionButtonsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryButtonLines =
+  deadLetterRecoveryItemCardRetryButtonSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryButtonPropsLines =
+  deadLetterRecoveryItemCardRetryButtonPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryButtonPropsTypesLines =
+  deadLetterRecoveryItemCardRetryButtonPropsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardRetryButtonTypesLines =
+  deadLetterRecoveryItemCardRetryButtonTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardSettingsLinkLines =
+  deadLetterRecoveryItemCardSettingsLinkSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardSettingsLinkPropsLines =
+  deadLetterRecoveryItemCardSettingsLinkPropsSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardSettingsLinkPropsTypesLines =
+  deadLetterRecoveryItemCardSettingsLinkPropsTypesSource.split(/\r?\n/).length;
+const deadLetterRecoveryItemCardSettingsLinkTypesLines =
+  deadLetterRecoveryItemCardSettingsLinkTypesSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsPropsLines =
   deadLetterRecoveryItemCardActionsPropsSource.split(/\r?\n/).length;
 const deadLetterRecoveryItemCardActionsPropsTypesLines =
@@ -31182,14 +31262,17 @@ if (
 }
 
 for (const requiredDeadLetterRecoveryItemCardActionButtonsUsage of [
-  'import Link from "next/link";',
-  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  'import { buildDeadLetterRecoveryItemCardRetryButtonProps } from "./dead-letter-recovery-item-card-retry-button-props";',
+  'import { DeadLetterRecoveryItemCardRetryButton } from "./dead-letter-recovery-item-card-retry-button";',
+  'import { buildDeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-recovery-item-card-settings-link-props";',
+  'import { DeadLetterRecoveryItemCardSettingsLink } from "./dead-letter-recovery-item-card-settings-link";',
   'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types";',
   "}: DeadLetterRecoveryItemCardActionButtonsProps) {",
-  "retryingMediaId === item.media_id",
   '<div className="action-row" style={{ marginTop: 10 }}>',
-  'className="button secondary"',
-  "{mediaIssueCopy.openSettings}",
+  "buildDeadLetterRecoveryItemCardRetryButtonProps({",
+  "<DeadLetterRecoveryItemCardRetryButton",
+  "buildDeadLetterRecoveryItemCardSettingsLinkProps({",
+  "<DeadLetterRecoveryItemCardSettingsLink",
 ]) {
   if (!deadLetterRecoveryItemCardActionButtonsSource.includes(requiredDeadLetterRecoveryItemCardActionButtonsUsage)) {
     throw new Error(
@@ -31202,6 +31285,11 @@ for (const forbiddenDeadLetterRecoveryItemCardActionButtonsToken of [
   "if (!canWriteWorkspace && !settingsHref)",
   "return null",
   "DeadLetterRecoveryItemCardActionsProps",
+  'import Link from "next/link";',
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  "retryingMediaId === item.media_id",
+  "onClick={() => void onRetryMediaProcessing(item.media_id)}",
+  "{mediaIssueCopy.openSettings}",
 ]) {
   if (deadLetterRecoveryItemCardActionButtonsSource.includes(forbiddenDeadLetterRecoveryItemCardActionButtonsToken)) {
     throw new Error(
@@ -31210,7 +31298,7 @@ for (const forbiddenDeadLetterRecoveryItemCardActionButtonsToken of [
   }
 }
 
-const maxDeadLetterRecoveryItemCardActionButtonsLines = 40;
+const maxDeadLetterRecoveryItemCardActionButtonsLines = 24;
 if (deadLetterRecoveryItemCardActionButtonsLines > maxDeadLetterRecoveryItemCardActionButtonsLines) {
   throw new Error(
     `dead-letter-recovery-item-card-action-buttons.tsx exceeded ${maxDeadLetterRecoveryItemCardActionButtonsLines} lines: ${deadLetterRecoveryItemCardActionButtonsLines}`,
@@ -31231,6 +31319,207 @@ const maxDeadLetterRecoveryItemCardActionButtonsTypesLines = 2;
 if (deadLetterRecoveryItemCardActionButtonsTypesLines > maxDeadLetterRecoveryItemCardActionButtonsTypesLines) {
   throw new Error(
     `dead-letter-recovery-item-card-action-buttons.types.ts exceeded ${maxDeadLetterRecoveryItemCardActionButtonsTypesLines} lines: ${deadLetterRecoveryItemCardActionButtonsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryButtonPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardRetryButtonProps } from "./dead-letter-recovery-item-card-retry-button.types";',
+  'import type { BuildDeadLetterRecoveryItemCardRetryButtonPropsInput } from "./dead-letter-recovery-item-card-retry-button-props.types";',
+  "export function buildDeadLetterRecoveryItemCardRetryButtonProps({",
+  "}: BuildDeadLetterRecoveryItemCardRetryButtonPropsInput): DeadLetterRecoveryItemCardRetryButtonProps {",
+]) {
+  if (!deadLetterRecoveryItemCardRetryButtonPropsSource.includes(requiredDeadLetterRecoveryItemCardRetryButtonPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button-props.ts must own retry-button prop projection: ${requiredDeadLetterRecoveryItemCardRetryButtonPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardRetryButtonPropsToken of [
+  "<DeadLetterRecoveryItemCardRetryButton",
+  "canRetryMediaIssue(",
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+]) {
+  if (deadLetterRecoveryItemCardRetryButtonPropsSource.includes(forbiddenDeadLetterRecoveryItemCardRetryButtonPropsToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button-props.ts must keep rendering and retry eligibility delegated: ${forbiddenDeadLetterRecoveryItemCardRetryButtonPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryButtonPropsLines = 5;
+if (deadLetterRecoveryItemCardRetryButtonPropsLines > maxDeadLetterRecoveryItemCardRetryButtonPropsLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-button-props.ts exceeded ${maxDeadLetterRecoveryItemCardRetryButtonPropsLines} lines: ${deadLetterRecoveryItemCardRetryButtonPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryButtonPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type BuildDeadLetterRecoveryItemCardRetryButtonPropsInput = DeadLetterRecoveryItemCardActionButtonsProps;',
+]) {
+  if (!deadLetterRecoveryItemCardRetryButtonPropsTypesSource.includes(requiredDeadLetterRecoveryItemCardRetryButtonPropsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button-props.types.ts must own retry-button props input typing: ${requiredDeadLetterRecoveryItemCardRetryButtonPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryButtonPropsTypesLines = 2;
+if (deadLetterRecoveryItemCardRetryButtonPropsTypesLines > maxDeadLetterRecoveryItemCardRetryButtonPropsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-button-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardRetryButtonPropsTypesLines} lines: ${deadLetterRecoveryItemCardRetryButtonPropsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryButtonUsage of [
+  'import { canRetryMediaIssue } from "../lib/record-panel-media";',
+  'import type { DeadLetterRecoveryItemCardRetryButtonProps } from "./dead-letter-recovery-item-card-retry-button.types";',
+  "}: DeadLetterRecoveryItemCardRetryButtonProps) {",
+  "retryingMediaId === item.media_id",
+  "canWriteWorkspace && canRetryMediaIssue(item)",
+  'className="button secondary"',
+  "onClick={() => void onRetryMediaProcessing(item.media_id)}",
+  "mediaIssueCopy.retryNow",
+]) {
+  if (!deadLetterRecoveryItemCardRetryButtonSource.includes(requiredDeadLetterRecoveryItemCardRetryButtonUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button.tsx must own retry-button rendering: ${requiredDeadLetterRecoveryItemCardRetryButtonUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardRetryButtonToken of [
+  'import Link from "next/link";',
+  "settingsHref",
+  "openSettings",
+]) {
+  if (deadLetterRecoveryItemCardRetryButtonSource.includes(forbiddenDeadLetterRecoveryItemCardRetryButtonToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button.tsx must keep settings-link rendering delegated: ${forbiddenDeadLetterRecoveryItemCardRetryButtonToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryButtonLines = 21;
+if (deadLetterRecoveryItemCardRetryButtonLines > maxDeadLetterRecoveryItemCardRetryButtonLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-button.tsx exceeded ${maxDeadLetterRecoveryItemCardRetryButtonLines} lines: ${deadLetterRecoveryItemCardRetryButtonLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardRetryButtonTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type DeadLetterRecoveryItemCardRetryButtonProps = Pick<DeadLetterRecoveryItemCardActionButtonsProps, "item" | "canWriteWorkspace" | "mediaIssueCopy" | "onRetryMediaProcessing" | "retryingMediaId">;',
+]) {
+  if (!deadLetterRecoveryItemCardRetryButtonTypesSource.includes(requiredDeadLetterRecoveryItemCardRetryButtonTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-retry-button.types.ts must own retry-button prop typing: ${requiredDeadLetterRecoveryItemCardRetryButtonTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardRetryButtonTypesLines = 2;
+if (deadLetterRecoveryItemCardRetryButtonTypesLines > maxDeadLetterRecoveryItemCardRetryButtonTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-retry-button.types.ts exceeded ${maxDeadLetterRecoveryItemCardRetryButtonTypesLines} lines: ${deadLetterRecoveryItemCardRetryButtonTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardSettingsLinkPropsUsage of [
+  'import type { DeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-recovery-item-card-settings-link.types";',
+  'import type { BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput } from "./dead-letter-recovery-item-card-settings-link-props.types";',
+  "export function buildDeadLetterRecoveryItemCardSettingsLinkProps({ mediaIssueCopy, settingsHref }: BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput): DeadLetterRecoveryItemCardSettingsLinkProps {",
+]) {
+  if (!deadLetterRecoveryItemCardSettingsLinkPropsSource.includes(requiredDeadLetterRecoveryItemCardSettingsLinkPropsUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link-props.ts must own settings-link prop projection: ${requiredDeadLetterRecoveryItemCardSettingsLinkPropsUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardSettingsLinkPropsToken of [
+  "<DeadLetterRecoveryItemCardSettingsLink",
+  'import Link from "next/link";',
+  "canRetryMediaIssue(",
+]) {
+  if (deadLetterRecoveryItemCardSettingsLinkPropsSource.includes(forbiddenDeadLetterRecoveryItemCardSettingsLinkPropsToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link-props.ts must keep rendering and retry eligibility delegated: ${forbiddenDeadLetterRecoveryItemCardSettingsLinkPropsToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardSettingsLinkPropsLines = 5;
+if (deadLetterRecoveryItemCardSettingsLinkPropsLines > maxDeadLetterRecoveryItemCardSettingsLinkPropsLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-settings-link-props.ts exceeded ${maxDeadLetterRecoveryItemCardSettingsLinkPropsLines} lines: ${deadLetterRecoveryItemCardSettingsLinkPropsLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardSettingsLinkPropsTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type BuildDeadLetterRecoveryItemCardSettingsLinkPropsInput = DeadLetterRecoveryItemCardActionButtonsProps;',
+]) {
+  if (!deadLetterRecoveryItemCardSettingsLinkPropsTypesSource.includes(requiredDeadLetterRecoveryItemCardSettingsLinkPropsTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link-props.types.ts must own settings-link props input typing: ${requiredDeadLetterRecoveryItemCardSettingsLinkPropsTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardSettingsLinkPropsTypesLines = 2;
+if (deadLetterRecoveryItemCardSettingsLinkPropsTypesLines > maxDeadLetterRecoveryItemCardSettingsLinkPropsTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-settings-link-props.types.ts exceeded ${maxDeadLetterRecoveryItemCardSettingsLinkPropsTypesLines} lines: ${deadLetterRecoveryItemCardSettingsLinkPropsTypesLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardSettingsLinkUsage of [
+  'import Link from "next/link";',
+  'import type { DeadLetterRecoveryItemCardSettingsLinkProps } from "./dead-letter-recovery-item-card-settings-link.types";',
+  "}: DeadLetterRecoveryItemCardSettingsLinkProps) {",
+  "settingsHref ? (",
+  'className="button secondary"',
+  "{mediaIssueCopy.openSettings}",
+]) {
+  if (!deadLetterRecoveryItemCardSettingsLinkSource.includes(requiredDeadLetterRecoveryItemCardSettingsLinkUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link.tsx must own settings-link rendering: ${requiredDeadLetterRecoveryItemCardSettingsLinkUsage}`,
+    );
+  }
+}
+
+for (const forbiddenDeadLetterRecoveryItemCardSettingsLinkToken of [
+  "canRetryMediaIssue(",
+  "retryingMediaId",
+  "onRetryMediaProcessing",
+]) {
+  if (deadLetterRecoveryItemCardSettingsLinkSource.includes(forbiddenDeadLetterRecoveryItemCardSettingsLinkToken)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link.tsx must keep retry-button rendering delegated: ${forbiddenDeadLetterRecoveryItemCardSettingsLinkToken}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardSettingsLinkLines = 14;
+if (deadLetterRecoveryItemCardSettingsLinkLines > maxDeadLetterRecoveryItemCardSettingsLinkLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-settings-link.tsx exceeded ${maxDeadLetterRecoveryItemCardSettingsLinkLines} lines: ${deadLetterRecoveryItemCardSettingsLinkLines}`,
+  );
+}
+
+for (const requiredDeadLetterRecoveryItemCardSettingsLinkTypesUsage of [
+  'import type { DeadLetterRecoveryItemCardActionButtonsProps } from "./dead-letter-recovery-item-card-action-buttons.types"; export type DeadLetterRecoveryItemCardSettingsLinkProps = Pick<DeadLetterRecoveryItemCardActionButtonsProps, "mediaIssueCopy" | "settingsHref">;',
+]) {
+  if (!deadLetterRecoveryItemCardSettingsLinkTypesSource.includes(requiredDeadLetterRecoveryItemCardSettingsLinkTypesUsage)) {
+    throw new Error(
+      `dead-letter-recovery-item-card-settings-link.types.ts must own settings-link prop typing: ${requiredDeadLetterRecoveryItemCardSettingsLinkTypesUsage}`,
+    );
+  }
+}
+
+const maxDeadLetterRecoveryItemCardSettingsLinkTypesLines = 2;
+if (deadLetterRecoveryItemCardSettingsLinkTypesLines > maxDeadLetterRecoveryItemCardSettingsLinkTypesLines) {
+  throw new Error(
+    `dead-letter-recovery-item-card-settings-link.types.ts exceeded ${maxDeadLetterRecoveryItemCardSettingsLinkTypesLines} lines: ${deadLetterRecoveryItemCardSettingsLinkTypesLines}`,
   );
 }
 
