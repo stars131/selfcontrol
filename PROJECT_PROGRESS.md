@@ -3472,6 +3472,10 @@ Last updated: 2026-03-28
   - `apps/web/components/workspace-shell-client-panels-props.ts` now uses an explicit `input` parameter while keeping shell panel prop assembly unchanged
   - this keeps the workspace-shell helper layer aligned with the broader helper-signature normalization work without changing shell panel behavior
   - the record-panel structure guardrail now enforces this normalized shell-panels helper boundary so future shell helper edits stay easier to review and extend
+- List Item Card Helper Naming Cleanup V1:
+  - `apps/web/components/recent-media-issues-list-item-props.ts`, `dead-letter-recovery-list-item-props.ts`, and `record-reminder-list-item-props.ts` now use explicit `input` parameters and pass their card props through unchanged
+  - this keeps the list-item card helper layer aligned with the broader helper-signature normalization work without changing list rendering behavior
+  - the record-panel structure guardrail now enforces this normalized item-card helper boundary so future list-item edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice

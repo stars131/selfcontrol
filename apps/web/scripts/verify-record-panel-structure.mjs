@@ -29150,11 +29150,7 @@ if (recentMediaIssuesPanelListPropsTypesLines > maxRecentMediaIssuesPanelListPro
 for (const requiredRecentMediaIssuesListItemPropsUsage of [
   'import type { RecentMediaIssueCardProps } from "./recent-media-issues-panel.types";',
   'import type { BuildRecentMediaIssueCardPropsInput } from "./recent-media-issues-list-item-props.types";',
-  "export function buildRecentMediaIssueCardProps({",
-  "}: BuildRecentMediaIssueCardPropsInput): RecentMediaIssueCardProps {",
-  "canWriteWorkspace,",
-  "onRetryMediaProcessing,",
-  "workspaceId,",
+  "export function buildRecentMediaIssueCardProps(input: BuildRecentMediaIssueCardPropsInput): RecentMediaIssueCardProps { return input; }",
 ]) {
   if (!recentMediaIssuesListItemPropsSource.includes(requiredRecentMediaIssuesListItemPropsUsage)) {
     throw new Error(
@@ -35280,11 +35276,7 @@ for (const requiredRecordReminderListItemPropsUsage of [
   'import type { ReminderItem } from "../lib/types";',
   'import type { RecordReminderItemCardProps } from "./record-reminder-panel.types";',
   'import type { BuildRecordReminderItemCardPropsInput } from "./record-reminder-list-item-props.types";',
-  "export function buildRecordReminderItemCardProps({",
-  "}: BuildRecordReminderItemCardPropsInput): RecordReminderItemCardProps {",
-  "canWriteWorkspace,",
-  "onToggleReminderEnabled,",
-  "untitledReminderLabel,",
+  "export function buildRecordReminderItemCardProps(input: BuildRecordReminderItemCardPropsInput): RecordReminderItemCardProps { return input; }",
 ]) {
   if (!recordReminderListItemPropsSource.includes(requiredRecordReminderListItemPropsUsage)) {
     throw new Error(
@@ -35613,11 +35605,7 @@ if (deadLetterRecoveryPanelListTypesLines > maxDeadLetterRecoveryPanelListTypesL
 for (const requiredDeadLetterRecoveryListItemPropsUsage of [
   'import type { DeadLetterRecoveryItemCardProps } from "./dead-letter-recovery-panel.types";',
   'import type { BuildDeadLetterRecoveryItemCardPropsInput } from "./dead-letter-recovery-list-item-props.types";',
-  "export function buildDeadLetterRecoveryItemCardProps({",
-  "}: BuildDeadLetterRecoveryItemCardPropsInput): DeadLetterRecoveryItemCardProps {",
-  "bulkRetryingDeadLetter,",
-  "onRetryMediaProcessing,",
-  "workspaceId,",
+  "export function buildDeadLetterRecoveryItemCardProps(input: BuildDeadLetterRecoveryItemCardPropsInput): DeadLetterRecoveryItemCardProps { return input; }",
 ]) {
   if (!deadLetterRecoveryListItemPropsSource.includes(requiredDeadLetterRecoveryListItemPropsUsage)) {
     throw new Error(
