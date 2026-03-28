@@ -3432,6 +3432,10 @@ Last updated: 2026-03-28
   - `apps/web/components/dead-letter-recovery-item-card-actions-props.ts` and `recent-media-issue-card-actions-props.ts` now use explicit `input` parameters while keeping their `settingsHref` derivation behavior unchanged
   - this keeps the media-issue action builder layer aligned across dead-letter and recent-media cards without changing retry or settings behavior
   - the record-panel structure guardrail now enforces this normalized computed-helper boundary so future action builder edits stay easier to review and extend
+- Recent Media Metadata Builder Naming Cleanup V1:
+  - `apps/web/components/recent-media-issue-card-metadata-props.ts` now uses an explicit `input` parameter while keeping its `getMediaIssueAction(...)` derivation behavior unchanged
+  - this keeps the recent-media metadata builder aligned with the broader helper-signature normalization work without changing metadata rendering behavior
+  - the record-panel structure guardrail now enforces this normalized computed-helper boundary so future metadata builder edits stay easier to review and extend
 
 ## Next
 - Continue the next product slice
