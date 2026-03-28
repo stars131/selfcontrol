@@ -9741,7 +9741,7 @@ for (const requiredEditorWorkspaceCopyPropsImport of [
 }
 
 for (const requiredEditorWorkspaceCopyPropsUsage of [
-  "}: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceCopyProps {",
+  "export function buildRecordEditorWorkspaceCopyProps(input: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceCopyProps {",
   "...buildRecordEditorWorkspaceChannelCopyProps(input)",
   "...buildRecordEditorWorkspaceMediaCopyProps(input)",
   "...buildRecordEditorWorkspaceReminderCopyProps(input)",
@@ -10336,7 +10336,7 @@ for (const requiredEditorWorkspaceActionPropsImport of [
 }
 
 for (const requiredEditorWorkspaceActionPropsUsage of [
-  "export function buildRecordEditorWorkspaceActionProps({ ...input }: RecordEditorWorkspaceActionPropsInput): RecordEditorWorkspaceActionProps {",
+  "export function buildRecordEditorWorkspaceActionProps(input: RecordEditorWorkspaceActionPropsInput): RecordEditorWorkspaceActionProps {",
   "buildRecordEditorWorkspaceDeadLetterActionProps(input)",
   "buildRecordEditorWorkspacePrimaryActionProps(input)",
   "...deadLetterActionProps",
@@ -10509,7 +10509,7 @@ for (const requiredEditorWorkspaceBasePropsImport of [
 }
 
 for (const requiredEditorWorkspaceBasePropsUsage of [
-  "export function buildRecordEditorWorkspaceBaseProps({",
+  "export function buildRecordEditorWorkspaceBaseProps(input: BuildRecordEditorWorkspaceBasePropsInput): RecordEditorWorkspaceBaseProps {",
   "...buildRecordEditorWorkspaceBaseFormProps(input)",
   "...buildRecordEditorWorkspaceBaseMediaProps(input)",
   "...buildRecordEditorWorkspaceBaseSessionProps(input)",

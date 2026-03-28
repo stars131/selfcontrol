@@ -3352,6 +3352,10 @@ Last updated: 2026-03-28
   - `apps/web/components/record-panel-controller-view-data-result.ts` now uses a consistent `input` parameter name while preserving the same delegation into the core and localized result helpers
   - this keeps the top-level view-data result builder aligned with the recently normalized result-helper layer so the controller result path reads uniformly
   - the record-panel structure guardrail now enforces this naming consistency so future view-data result assembly does not drift back to mixed `viewData` terminology
+- Record Panel Editor Workspace Builder Naming Cleanup V1:
+  - `apps/web/components/record-panel-v2-editor-workspace-action-props.ts`, `record-panel-v2-editor-workspace-base-props.ts`, and `record-panel-v2-editor-workspace-copy-props.ts` now use explicit `input` parameters instead of function-boundary spread destructuring
+  - this keeps the editor workspace composition layer aligned with the rest of the normalized adapter chain so the builder signatures are easier to scan and reason about
+  - the record-panel structure guardrail now enforces this builder-signature consistency so future editor workspace composition does not drift back to mixed boundary styles
 
 ## Next
 - Continue the next product slice

@@ -4,7 +4,7 @@ import { buildRecordEditorWorkspaceBaseMediaProps } from "./record-panel-v2-edit
 import { buildRecordEditorWorkspaceBaseSessionProps } from "./record-panel-v2-editor-workspace-base-session-props";
 import { buildRecordEditorWorkspaceBaseStateProps } from "./record-panel-v2-editor-workspace-base-state-props";
 
-export function buildRecordEditorWorkspaceBaseProps({ ...input }: BuildRecordEditorWorkspaceBasePropsInput): RecordEditorWorkspaceBaseProps {
+export function buildRecordEditorWorkspaceBaseProps(input: BuildRecordEditorWorkspaceBasePropsInput): RecordEditorWorkspaceBaseProps {
   return {
     ...buildRecordEditorWorkspaceBaseFormProps(input),
     ...buildRecordEditorWorkspaceBaseMediaProps(input),

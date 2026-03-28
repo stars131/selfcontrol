@@ -4,7 +4,7 @@ import { buildRecordEditorWorkspaceMediaCopyProps } from "./record-panel-v2-edit
 import { buildRecordEditorWorkspaceReminderCopyProps } from "./record-panel-v2-editor-workspace-reminder-copy-props";
 import type { RecordEditorWorkspaceCopyPropsInput } from "./record-panel-v2-editor-workspace-copy-props-input.types";
 
-export function buildRecordEditorWorkspaceCopyProps({ ...input }: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceCopyProps {
+export function buildRecordEditorWorkspaceCopyProps(input: RecordEditorWorkspaceCopyPropsInput): RecordEditorWorkspaceCopyProps {
   return {
     ...buildRecordEditorWorkspaceChannelCopyProps(input),
     ...buildRecordEditorWorkspaceMediaCopyProps(input),
