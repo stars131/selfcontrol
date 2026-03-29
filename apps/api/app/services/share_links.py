@@ -21,11 +21,20 @@ def build_share_path(token: str) -> str:
     return f"/share/{token}"
 
 
+def _normalize_share_datetime(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
+
+
 def is_share_link_active(link: ShareLink) -> bool:
     if not link.is_enabled:
         return False
     now = datetime.now(timezone.utc)
-    if link.expires_at and link.expires_at <= now:
+    expires_at = _normalize_share_datetime(link.expires_at)
+    if expires_at and expires_at <= now:
         return False
     if link.max_uses is not None and link.use_count >= link.max_uses:
         return False
