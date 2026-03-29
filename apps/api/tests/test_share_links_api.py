@@ -142,6 +142,30 @@ def test_share_link_management_flow(monkeypatch) -> None:
     assert updated["max_uses"] == 5
 
 
+def test_share_link_create_defaults_name_and_missing_update_returns_404(monkeypatch) -> None:
+    client, workspace_id = build_share_links_client(monkeypatch)
+
+    create_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/share-links",
+        json={
+            "name": None,
+            "permission_code": "viewer",
+            "max_uses": None,
+        },
+    )
+    assert create_response.status_code == 200
+    payload = create_response.json()["data"]
+    assert payload["share_link"]["name"] == "Workspace share"
+    assert payload["share_path"].startswith("/share/")
+
+    update_response = client.patch(
+        f"/api/v1/workspaces/{workspace_id}/share-links/missing-link-id",
+        json={"is_enabled": False},
+    )
+    assert update_response.status_code == 404
+    assert update_response.json()["detail"] == "Share link not found"
+
+
 def test_public_share_preview_and_accept_flow(monkeypatch) -> None:
     client, workspace_id = build_share_links_client(monkeypatch)
 
@@ -180,3 +204,49 @@ def test_public_share_preview_and_accept_flow(monkeypatch) -> None:
     item = list_response.json()["data"]["items"][0]
     assert item["use_count"] == 1
     assert item["last_used_at"] is not None
+
+
+def test_public_share_preview_rejects_disabled_and_exhausted_links(monkeypatch) -> None:
+    client, workspace_id = build_share_links_client(monkeypatch)
+
+    disabled_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/share-links",
+        json={
+            "name": "Disabled Link",
+            "permission_code": "viewer",
+            "max_uses": 3,
+        },
+    )
+    assert disabled_response.status_code == 200
+    disabled_payload = disabled_response.json()["data"]
+    disabled_link_id = disabled_payload["share_link"]["id"]
+    disabled_token = disabled_payload["access_token"]
+
+    patch_response = client.patch(
+        f"/api/v1/workspaces/{workspace_id}/share-links/{disabled_link_id}",
+        json={"is_enabled": False},
+    )
+    assert patch_response.status_code == 200
+
+    disabled_preview_response = client.get(f"/api/v1/shares/{disabled_token}")
+    assert disabled_preview_response.status_code == 404
+    assert disabled_preview_response.json()["detail"] == "Share link not found"
+
+    exhausted_response = client.post(
+        f"/api/v1/workspaces/{workspace_id}/share-links",
+        json={
+            "name": "Single Use Link",
+            "permission_code": "viewer",
+            "max_uses": 1,
+        },
+    )
+    assert exhausted_response.status_code == 200
+    exhausted_token = exhausted_response.json()["data"]["access_token"]
+
+    client.current_user_key["value"] = "guest"  # type: ignore[attr-defined]
+    accept_response = client.post(f"/api/v1/shares/{exhausted_token}/accept")
+    assert accept_response.status_code == 200
+
+    exhausted_preview_response = client.get(f"/api/v1/shares/{exhausted_token}")
+    assert exhausted_preview_response.status_code == 404
+    assert exhausted_preview_response.json()["detail"] == "Share link not found"
