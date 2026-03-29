@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Reminder Dispatch Service Unit Coverage V1:
+  - `apps/api/tests/test_reminders_service.py` now directly covers due-reminder notification creation, reminder delivery state transitions, record-text fallback behavior, workspace scoping, and pending/enabled/time-based filtering at the service boundary
+  - the new service-level tests lock down both explicit reminder copy and record-derived/default notification copy without routing through reminder or notification API handlers
+  - this strengthens the reliability, maintainability, and future refactor safety of the reminder-to-notification delivery loop under the enterprise engineering standard
 - Provider Config Service Unit Coverage V1:
   - `apps/api/tests/test_provider_configs_service.py` now directly covers provider-config listing, saved/default effective-config resolution, create/update persistence, unsupported-provider rejection, and media-storage option normalization at the service boundary
   - the new service-level tests lock down API base URL normalization, server-side env-name normalization, and in-place update behavior without routing through FastAPI handlers
