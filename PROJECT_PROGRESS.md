@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Search Preset Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_search_preset_route_helpers.py` now directly covers search-preset filter trimming, default fallback shaping, invalid avoid/review/map filter rejection, preset-name normalization, blank-name rejection, and workspace-scoped preset lookup behavior
+  - this expands the direct helper-level coverage around saved-search route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of search preset normalization and lookup boundaries under the enterprise engineering standard
 - Reminder Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_reminder_route_helpers.py` now directly covers workspace-scoped record lookup, reminder lookup, user-scoped notification lookup, reminder cancellation timestamp injection, explicit cancellation timestamp preservation, notification read/unread transitions, and explicit notification status override behavior
   - this expands the direct helper-level coverage around reminder and notification route contracts without changing runtime behavior
