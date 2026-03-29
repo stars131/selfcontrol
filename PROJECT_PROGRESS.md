@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Audit Log Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_audit_log_route_helpers.py` now directly covers audit-log serialization with full field passthrough plus ISO timestamp formatting and missing-timestamp fallback behavior
+  - this expands the direct helper-level coverage around audit-log route contracts without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of audit serialization boundaries under the enterprise engineering standard
 - Auth Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_auth_route_helpers.py` now directly covers registration-time existing-user lookup by username and email, registration user creation field mapping and password hashing, duplicate-user error shaping, login lookup by username and email, invalid-credentials error shaping, and login authentication success and failure paths
   - this expands the direct helper-level coverage around authentication route contracts without changing runtime behavior
