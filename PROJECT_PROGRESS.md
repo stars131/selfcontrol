@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Issue Tracking Classification Coverage Expansion V1:
+  - `apps/api/tests/test_media_issue_tracking_classification.py` now additionally covers local-file-missing and remote-asset-missing branches, missing-secret and provider-config/unsupported-provider settings routing, provider-not-ready and retry-state classification, remote-fetch-failed handling, and unknown-issue bulk-retry defaults
+  - this expands the direct helper-level coverage around shared media issue classification and recommended-action derivation without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of media issue recovery guidance under the enterprise engineering standard
 - Media File Analysis Helper Coverage Expansion V1:
   - `apps/api/tests/test_media_file_analysis.py` now additionally covers invalid-JSON extracted-text fallback, extracted-text length truncation, `None` metadata fallback, non-image preview metadata, GIF dimension parsing, image-dimension dispatch for GIF files, and JPEG SOF dimension parsing
   - this expands the direct helper-level coverage around shared media file analysis and metadata derivation rules without changing runtime behavior
