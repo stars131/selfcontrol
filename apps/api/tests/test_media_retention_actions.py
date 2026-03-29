@@ -134,6 +134,38 @@ def test_select_archive_media_candidates_requires_old_existing_local_files(
     }
 
 
+def test_select_cleanup_media_candidates_clamps_future_created_at_to_zero_age(
+    monkeypatch,
+) -> None:
+    future_local = build_media(
+        id="media-future",
+        storage_key="uploads/workspace-1/future.txt",
+        created_at=datetime.now(timezone.utc) + timedelta(days=10),
+    )
+
+    monkeypatch.setattr(
+        "app.services.media_retention_actions.media_uses_local_storage",
+        lambda item: True,
+    )
+    monkeypatch.setattr(
+        "app.services.media_retention_actions.get_media_storage_tier",
+        lambda item: "primary",
+    )
+    monkeypatch.setattr(
+        "app.services.media_retention_actions.resolve_storage_path",
+        lambda item: SimpleNamespace(exists=lambda: True),
+    )
+
+    selection = select_cleanup_media_candidates(
+        [future_local],
+        ["media-future"],
+        older_than_days=90,
+    )
+
+    assert selection.candidate_items == []
+    assert selection.skipped_reason_by_media_id == {"media-future": "not_old_enough"}
+
+
 def test_build_media_retention_action_result_adds_orphan_stats_when_requested(
     tmp_path,
 ) -> None:
@@ -164,3 +196,30 @@ def test_build_media_retention_action_result_adds_orphan_stats_when_requested(
     assert result["orphan_file_count"] == 2
     assert result["orphan_file_size_bytes"] == 10
     assert result["skipped_reason_by_media_id"] == {"missing": "not_found"}
+
+
+def test_build_media_retention_action_result_without_orphans_keeps_base_fields() -> None:
+    selection = MediaRetentionActionSelection(
+        candidate_items=[build_media(size_bytes=5)],
+        affected_record_ids={"record-1"},
+        skipped_reason_by_media_id={"missing": "not_found"},
+    )
+
+    result = build_media_retention_action_result(
+        workspace_id="workspace-1",
+        older_than_days=30,
+        dry_run=False,
+        selection=selection,
+    )
+
+    assert result == {
+        "workspace_id": "workspace-1",
+        "older_than_days": 30,
+        "dry_run": False,
+        "candidate_media_count": 1,
+        "candidate_media_size_bytes": 5,
+        "candidate_media_size_label": "5 B",
+        "affected_record_ids": ["record-1"],
+        "skipped_media_ids": ["missing"],
+        "skipped_reason_by_media_id": {"missing": "not_found"},
+    }

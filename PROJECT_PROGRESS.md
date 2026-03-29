@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Retention Action Helper Coverage Expansion V1:
+  - `apps/api/tests/test_media_retention_actions.py` now additionally covers future-created media age clamping for cleanup selection plus base action-result shaping when orphan-file statistics are not requested
+  - this expands the direct helper-level coverage around media retention candidate selection and result payload assembly without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of retention execution helpers under the enterprise engineering standard
 - Workspace Transfer Manifest Coverage Expansion V2:
   - `apps/api/tests/test_workspace_transfer_manifest.py` now additionally covers offset-aware datetime ISO serialization plus imported-reference marker overwrite behavior without mutating the original metadata input
   - this expands the direct helper-level coverage around workspace backup/import manifest contracts without changing runtime behavior
