@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Export Service Unit Coverage V1:
+  - `apps/api/tests/test_workspace_export_service.py` now directly covers workspace export archive creation, local-media embedding, export count aggregation, filename sanitization, and sensitive metadata stripping from exported manifests
+  - the new service-level checks also cover the missing-workspace failure path without routing through the API layer
+  - this strengthens the long-term maintainability of workspace backup/export behavior by locking down the manifest and media-packaging rules closer to the service boundary
 - Provider Config Validation Unit Coverage V1:
   - `apps/api/tests/test_provider_config_validation.py` now directly covers API key env-name normalization, API base URL validation, media-storage retry option coercion, secret-status resolution, production warning composition, and media-storage service-root validation
   - this gives the provider configuration safety rules their own service-layer regression coverage instead of relying only on route and merge-path tests
