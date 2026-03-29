@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Transport Service Coverage Expansion V1:
+  - `apps/api/tests/test_provider_transport.py` now additionally covers the no-secret-required branch and the resolved-default-env-name branch for `resolve_provider_secret(...)`
+  - this expands the direct service-level coverage of provider secret resolution without changing runtime behavior or duplicating the dedicated URL and transport-mode tests
+  - this strengthens the maintainability and future refactor safety of provider secret handling under the enterprise engineering standard
 - Media Remote Storage Service Unit Coverage V1:
   - `apps/api/tests/test_media_remote_storage_service.py` now directly covers disabled-storage no-op uploads, custom-provider upload fallback behavior, fallback-disabled upload errors, upload-result passthrough, provider-mismatch protection on download/delete, and temp-file download persistence
   - the new service-level tests lock down the remote media orchestration layer without duplicating the lower-level webhook contract, HTTP transport, or health-check tests

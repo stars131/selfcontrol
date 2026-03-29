@@ -30,3 +30,31 @@ def test_resolve_provider_secret_reads_env_and_raises_when_missing(monkeypatch) 
         assert "TEST_SECRET_ENV" in str(exc)
     else:
         raise AssertionError("Expected missing secret error")
+
+
+def test_resolve_provider_secret_returns_none_when_no_env_name_is_required(monkeypatch) -> None:
+    monkeypatch.setattr("app.services.provider_transport.resolve_secret_env_name", lambda config: None)
+    monkeypatch.setattr(
+        "app.services.provider_transport.read_secret_from_env_name",
+        lambda env_name: (_ for _ in ()).throw(RuntimeError("should not read env")),
+    )
+
+    assert resolve_provider_secret(build_config(api_key_env_name=None), error_type=RuntimeError) is None
+
+
+def test_resolve_provider_secret_uses_resolved_default_env_name(monkeypatch) -> None:
+    observed_env_names: list[str] = []
+
+    monkeypatch.setattr("app.services.provider_transport.resolve_secret_env_name", lambda config: "OPENAI_API_KEY")
+    monkeypatch.setattr(
+        "app.services.provider_transport.read_secret_from_env_name",
+        lambda env_name: observed_env_names.append(env_name) or "resolved-secret",
+    )
+
+    secret = resolve_provider_secret(
+        build_config(provider_code="openai", api_key_env_name=None),
+        error_type=RuntimeError,
+    )
+
+    assert secret == "resolved-secret"
+    assert observed_env_names == ["OPENAI_API_KEY"]
