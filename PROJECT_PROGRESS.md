@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Location Review Service Coverage Expansion V2:
+  - `apps/api/tests/test_location_review_service.py` now additionally covers first-time location set flow with default pending review metadata plus history entry creation, and location removal flow with review cleanup, invalid-history fallback, and removed-history snapshot retention
+  - this expands the direct service-level coverage around map/location correction state transitions without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of the location review workflow under the enterprise engineering standard
 - Media Issue Tracking Classification Coverage Expansion V1:
   - `apps/api/tests/test_media_issue_tracking_classification.py` now additionally covers local-file-missing and remote-asset-missing branches, missing-secret and provider-config/unsupported-provider settings routing, provider-not-ready and retry-state classification, remote-fetch-failed handling, and unknown-issue bulk-retry defaults
   - this expands the direct helper-level coverage around shared media issue classification and recommended-action derivation without changing runtime behavior

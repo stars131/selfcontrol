@@ -138,3 +138,90 @@ def test_prepare_record_extra_data_truncates_history_when_review_changes() -> No
     assert merged["location_history"][-1]["action_code"] == "review"
     assert merged["location_history"][-1]["review_status"] == "confirmed"
     assert merged["location_history"][-1]["changed_by"] == "reviewer-1"
+
+
+def test_prepare_record_extra_data_sets_new_location_with_pending_review_history() -> None:
+    now = datetime(2026, 3, 29, 10, 0, tzinfo=timezone.utc)
+
+    merged, location_changed, review_changed = prepare_record_extra_data(
+        existing_extra_data={"category": "snack"},
+        incoming_extra_data={
+            "location": {
+                "place_name": "Tea Shop",
+                "address": "Lane 8",
+                "latitude": "31.2304",
+                "longitude": "121.4737",
+                "source": "map_search",
+            }
+        },
+        actor_user_id="user-3",
+        now=now,
+    )
+
+    assert location_changed is True
+    assert review_changed is True
+    assert merged["category"] == "snack"
+    assert merged["location"]["place_name"] == "Tea Shop"
+    assert merged["location_review"]["status"] == "pending"
+    assert merged["location_review"]["updated_by"] == "user-3"
+    assert merged["location_review"]["updated_at"] == now.isoformat()
+    assert merged["location_history"] == [
+        {
+            "action_code": "set",
+            "changed_at": now.isoformat(),
+            "changed_by": "user-3",
+            "review_status": "pending",
+            "place_name": "Tea Shop",
+            "address": "Lane 8",
+            "latitude": 31.2304,
+            "longitude": 121.4737,
+            "source": "map_search",
+        }
+    ]
+
+
+def test_prepare_record_extra_data_removes_location_and_review_with_history_entry() -> None:
+    now = datetime(2026, 3, 29, 11, 0, tzinfo=timezone.utc)
+    existing = {
+        "location": {
+            "place_name": "Tea Shop",
+            "address": "Lane 8",
+            "latitude": 31.2304,
+            "longitude": 121.4737,
+            "source": "map_search",
+        },
+        "location_review": {
+            "status": "confirmed",
+            "note": "checked",
+            "confirmed_at": "2026-03-20T08:00:00+00:00",
+            "updated_at": "2026-03-20T08:00:00+00:00",
+            "updated_by": "user-1",
+        },
+        "location_history": "invalid-history",
+    }
+
+    merged, location_changed, review_changed = prepare_record_extra_data(
+        existing_extra_data=existing,
+        incoming_extra_data={"location": None},
+        actor_user_id="user-4",
+        now=now,
+    )
+
+    assert location_changed is True
+    assert review_changed is True
+    assert "location" not in merged
+    assert "location_review" not in merged
+    assert merged["location_history"] == [
+        {
+            "action_code": "removed",
+            "changed_at": now.isoformat(),
+            "changed_by": "user-4",
+            "review_status": "confirmed",
+            "review_note": "checked",
+            "place_name": "Tea Shop",
+            "address": "Lane 8",
+            "latitude": 31.2304,
+            "longitude": 121.4737,
+            "source": "map_search",
+        }
+    ]
