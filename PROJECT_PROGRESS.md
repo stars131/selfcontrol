@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Auth Form Controller Boundary Cleanup V1:
+  - `apps/web/components/login-form.tsx` and `register-form.tsx` now keep focus on localized form rendering and delegate login/register async submission, redirect, session persistence, and fallback-error handling to dedicated controller hooks
+  - `apps/web/components/use-login-form-controller.ts`, `use-register-form-controller.ts`, `login-form-controller.types.ts`, and `register-form-controller.types.ts` now separate auth workflow state from the visual form shell so future auth changes do not require editing the field layout components directly
+  - `apps/web/scripts/verify-auth-forms-structure.mjs` now enforces this thinner auth-form boundary so API/auth side effects and navigation do not drift back into the render components
 - Share Preview Controller Boundary Cleanup V1:
   - `apps/web/components/share-preview-client.tsx` now stays as a thin locale/router entrypoint and delegates share-link preview loading and join orchestration to a dedicated controller hook instead of mixing async state, navigation, and layout in one file
   - `apps/web/components/use-share-preview-controller.ts`, `share-preview-content.tsx`, `share-preview-controller.types.ts`, and `share-preview-content.types.ts` now separate async share-preview behavior from pure rendering while keeping the public share page contract unchanged

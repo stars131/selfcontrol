@@ -1,45 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
 
-import { login } from "../lib/api";
-import { getStoredToken, setStoredSession } from "../lib/auth";
-import { resolveErrorMessage } from "../lib/error-message";
 import { useStoredLocale } from "../lib/locale";
 import { getLoginFormCopy } from "./auth-form-copy";
 import { AuthFormFrame } from "./auth-form-frame";
+import { useLoginFormController } from "./use-login-form-controller";
 
 export function LoginForm() {
   const router = useRouter();
   const { locale, setLocale } = useStoredLocale();
   const copy = getLoginFormCopy(locale);
-  const [account, setAccount] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (getStoredToken()) {
-      router.replace("/app");
-    }
-  }, [router]);
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const result = await login({ account, password });
-      setStoredSession(result.access_token, result.user);
-      router.push("/app");
-    } catch (caught) {
-      setError(resolveErrorMessage(caught, copy.loginFailed));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const controller = useLoginFormController(router, copy.loginFailed);
 
   return (
     <AuthFormFrame
@@ -50,13 +22,13 @@ export function LoginForm() {
       onLocaleChange={setLocale}
       title={copy.title}
     >
-      <form className="form-stack" onSubmit={handleSubmit}>
+      <form className="form-stack" onSubmit={controller.onSubmit}>
         <label className="field">
           <span className="field-label">{copy.account}</span>
           <input
             className="input"
-            value={account}
-            onChange={(event) => setAccount(event.target.value)}
+            value={controller.account}
+            onChange={(event) => controller.onAccountChange(event.target.value)}
             placeholder={copy.accountPlaceholder}
           />
         </label>
@@ -65,14 +37,14 @@ export function LoginForm() {
           <input
             className="input"
             type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            value={controller.password}
+            onChange={(event) => controller.onPasswordChange(event.target.value)}
             placeholder={copy.passwordPlaceholder}
           />
         </label>
-        {error ? <div className="notice error">{error}</div> : null}
-        <button className="button" type="submit" disabled={loading}>
-          {loading ? copy.loading : copy.submit}
+        {controller.error ? <div className="notice error">{controller.error}</div> : null}
+        <button className="button" type="submit" disabled={controller.loading}>
+          {controller.loading ? copy.loading : copy.submit}
         </button>
       </form>
     </AuthFormFrame>
