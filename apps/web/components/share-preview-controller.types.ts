@@ -1,0 +1,1 @@
+import type { SharePreview } from "../lib/types"; export type SharePreviewControllerResult = { error: string; handleJoin: () => Promise<void>; joining: boolean; loading: boolean; preview: SharePreview | null }; export type SharePreviewRouter = { push: (href: string) => void };

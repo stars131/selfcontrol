@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Share Preview Controller Boundary Cleanup V1:
+  - `apps/web/components/share-preview-client.tsx` now stays as a thin locale/router entrypoint and delegates share-link preview loading and join orchestration to a dedicated controller hook instead of mixing async state, navigation, and layout in one file
+  - `apps/web/components/use-share-preview-controller.ts`, `share-preview-content.tsx`, `share-preview-controller.types.ts`, and `share-preview-content.types.ts` now separate async share-preview behavior from pure rendering while keeping the public share page contract unchanged
+  - `apps/web/scripts/verify-record-panel-structure.mjs` now enforces this split so future share-preview changes do not silently reintroduce view logic and async workflow handling into the same component boundary
 - Map Panel Content View Boundary Cleanup V1:
   - `apps/web/components/map-panel-content.tsx` now stays focused on localized shell rendering and delegates map header, drilldown, search form, status notices, and mapped-record list prop assembly to a dedicated content-view helper instead of wiring those props inline
   - `apps/web/components/map-panel-content-view.ts` and `map-panel-content-view.types.ts` now own the map-content view contracts, including location-source label derivation and editable/search visibility mapping for the location drilldown surface

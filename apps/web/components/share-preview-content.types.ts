@@ -1,0 +1,1 @@
+import type { LocaleCode } from "../lib/locale"; import { getSharePreviewPageCopy } from "../lib/share-link-display"; import type { SharePreviewControllerResult } from "./share-preview-controller.types"; export type SharePreviewContentProps = SharePreviewControllerResult & { copy: ReturnType<typeof getSharePreviewPageCopy>; locale: LocaleCode };

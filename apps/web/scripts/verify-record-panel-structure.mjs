@@ -2513,6 +2513,19 @@ const sharePreviewClientTypesPath = path.resolve(
   process.cwd(),
   "components/share-preview-client.types.ts",
 );
+const sharePreviewContentPath = path.resolve(process.cwd(), "components/share-preview-content.tsx");
+const sharePreviewContentTypesPath = path.resolve(
+  process.cwd(),
+  "components/share-preview-content.types.ts",
+);
+const sharePreviewControllerTypesPath = path.resolve(
+  process.cwd(),
+  "components/share-preview-controller.types.ts",
+);
+const useSharePreviewControllerPath = path.resolve(
+  process.cwd(),
+  "components/use-share-preview-controller.ts",
+);
 const workspaceEntryLoadingShellPath = path.resolve(
   process.cwd(),
   "components/workspace-entry-loading-shell.tsx",
@@ -5211,6 +5224,13 @@ const mediaAssetCardExtractionModeTagTypesSource = fs.readFileSync(
 );
 const sharePreviewClientSource = fs.readFileSync(sharePreviewClientPath, "utf8");
 const sharePreviewClientTypesSource = fs.readFileSync(sharePreviewClientTypesPath, "utf8");
+const sharePreviewContentSource = fs.readFileSync(sharePreviewContentPath, "utf8");
+const sharePreviewContentTypesSource = fs.readFileSync(sharePreviewContentTypesPath, "utf8");
+const sharePreviewControllerTypesSource = fs.readFileSync(
+  sharePreviewControllerTypesPath,
+  "utf8",
+);
+const useSharePreviewControllerSource = fs.readFileSync(useSharePreviewControllerPath, "utf8");
 const workspaceEntryLoadingShellSource = fs.readFileSync(workspaceEntryLoadingShellPath, "utf8");
 const workspaceEntryLoadingShellTypesSource = fs.readFileSync(
   workspaceEntryLoadingShellTypesPath,
@@ -7614,6 +7634,11 @@ const mediaAssetCardExtractionModeTagPropsTypesLines =
 const mediaAssetCardExtractionModeTagTypesLines =
   mediaAssetCardExtractionModeTagTypesSource.split(/\r?\n/).length;
 const sharePreviewClientTypesLines = sharePreviewClientTypesSource.split(/\r?\n/).length;
+const sharePreviewContentLines = sharePreviewContentSource.split(/\r?\n/).length;
+const sharePreviewContentTypesLines = sharePreviewContentTypesSource.split(/\r?\n/).length;
+const sharePreviewControllerTypesLines =
+  sharePreviewControllerTypesSource.split(/\r?\n/).length;
+const useSharePreviewControllerLines = useSharePreviewControllerSource.split(/\r?\n/).length;
 const workspaceEntryLoadingShellTypesLines =
   workspaceEntryLoadingShellTypesSource.split(/\r?\n/).length;
 const languageSwitcherTypesLines = languageSwitcherTypesSource.split(/\r?\n/).length;
@@ -26490,9 +26515,13 @@ if (
 
 for (const requiredSharePreviewClientUsage of [
   'import { useStoredLocale } from "../lib/locale";',
+  'import { getSharePreviewPageCopy } from "../lib/share-link-display";',
+  'import { SharePreviewContent } from "./share-preview-content";',
   'import type { SharePreviewClientProps } from "./share-preview-client.types";',
+  'import { useSharePreviewController } from "./use-share-preview-controller";',
   "getSharePreviewPageCopy(locale)",
-  "getSharePermissionLabel(locale, preview.permission_code)",
+  "const controller = useSharePreviewController(router, tokenValue, copy.loadFailed, copy.joinFailed);",
+  'return <SharePreviewContent copy={copy} locale={locale} {...controller} />;',
   "}: SharePreviewClientProps) {",
 ]) {
   if (!sharePreviewClientSource.includes(requiredSharePreviewClientUsage)) {
@@ -26504,6 +26533,32 @@ for (const requiredSharePreviewClientUsage of [
 
 if (sharePreviewClientSource.includes("tokenValue }: { tokenValue: string }")) {
   throw new Error("share-preview-client.tsx must keep share-preview prop typing delegated");
+}
+
+for (const forbiddenSharePreviewClientToken of [
+  'import Link from "next/link";',
+  'import { useEffect, useState } from "react";',
+  'import { acceptShareToken, previewShareToken } from "../lib/api";',
+  'import { getStoredToken } from "../lib/auth";',
+  'import { resolveErrorMessage } from "../lib/error-message";',
+  "getSharePermissionLabel(locale, preview.permission_code)",
+  "const [preview, setPreview] = useState",
+  "useEffect(() => {",
+  "const handleJoin = async () => {",
+  '<main className="page-shell">',
+]) {
+  if (sharePreviewClientSource.includes(forbiddenSharePreviewClientToken)) {
+    throw new Error(
+      `share-preview-client.tsx must keep share-preview orchestration and layout delegated: ${forbiddenSharePreviewClientToken}`,
+    );
+  }
+}
+
+const maxSharePreviewClientLines = 25;
+if (sharePreviewClientSource.split(/\r?\n/).length > maxSharePreviewClientLines) {
+  throw new Error(
+    `share-preview-client.tsx exceeded ${maxSharePreviewClientLines} lines: ${sharePreviewClientSource.split(/\r?\n/).length}`,
+  );
 }
 
 for (const requiredSharePreviewClientTypesUsage of [
@@ -26520,6 +26575,125 @@ const maxSharePreviewClientTypesLines = 2;
 if (sharePreviewClientTypesLines > maxSharePreviewClientTypesLines) {
   throw new Error(
     `share-preview-client.types.ts exceeded ${maxSharePreviewClientTypesLines} lines: ${sharePreviewClientTypesLines}`,
+  );
+}
+
+for (const requiredSharePreviewContentUsage of [
+  'import Link from "next/link";',
+  'import { getSharePermissionLabel } from "../lib/share-link-display";',
+  'import type { SharePreviewContentProps } from "./share-preview-content.types";',
+  "}: SharePreviewContentProps) {",
+  'className="page-shell"',
+  'className="panel-header"',
+  "getSharePermissionLabel(locale, preview.permission_code)",
+  "joining ? copy.joining : copy.joinWorkspace",
+  '{copy.controlCenter}',
+]) {
+  if (!sharePreviewContentSource.includes(requiredSharePreviewContentUsage)) {
+    throw new Error(
+      `share-preview-content.tsx must own share-preview rendering: ${requiredSharePreviewContentUsage}`,
+    );
+  }
+}
+
+for (const forbiddenSharePreviewContentToken of [
+  'import { useRouter } from "next/navigation";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { acceptShareToken, previewShareToken } from "../lib/api";',
+  'import { getStoredToken } from "../lib/auth";',
+  'import { resolveErrorMessage } from "../lib/error-message";',
+  "useEffect(",
+  "useState(",
+]) {
+  if (sharePreviewContentSource.includes(forbiddenSharePreviewContentToken)) {
+    throw new Error(
+      `share-preview-content.tsx must keep share-preview loading logic delegated: ${forbiddenSharePreviewContentToken}`,
+    );
+  }
+}
+
+const maxSharePreviewContentLines = 55;
+if (sharePreviewContentLines > maxSharePreviewContentLines) {
+  throw new Error(
+    `share-preview-content.tsx exceeded ${maxSharePreviewContentLines} lines: ${sharePreviewContentLines}`,
+  );
+}
+
+for (const requiredSharePreviewContentTypesUsage of [
+  'import type { LocaleCode } from "../lib/locale"; import { getSharePreviewPageCopy } from "../lib/share-link-display"; import type { SharePreviewControllerResult } from "./share-preview-controller.types"; export type SharePreviewContentProps = SharePreviewControllerResult & { copy: ReturnType<typeof getSharePreviewPageCopy>; locale: LocaleCode };',
+]) {
+  if (!sharePreviewContentTypesSource.includes(requiredSharePreviewContentTypesUsage)) {
+    throw new Error(
+      `share-preview-content.types.ts must own share-preview content prop typing: ${requiredSharePreviewContentTypesUsage}`,
+    );
+  }
+}
+
+if (sharePreviewContentTypesLines > 2) {
+  throw new Error(
+    `share-preview-content.types.ts exceeded 2 lines: ${sharePreviewContentTypesLines}`,
+  );
+}
+
+for (const requiredSharePreviewControllerTypesUsage of [
+  'import type { SharePreview } from "../lib/types"; export type SharePreviewControllerResult = { error: string; handleJoin: () => Promise<void>; joining: boolean; loading: boolean; preview: SharePreview | null }; export type SharePreviewRouter = { push: (href: string) => void };',
+]) {
+  if (!sharePreviewControllerTypesSource.includes(requiredSharePreviewControllerTypesUsage)) {
+    throw new Error(
+      `share-preview-controller.types.ts must own share-preview controller contracts: ${requiredSharePreviewControllerTypesUsage}`,
+    );
+  }
+}
+
+if (sharePreviewControllerTypesLines > 2) {
+  throw new Error(
+    `share-preview-controller.types.ts exceeded 2 lines: ${sharePreviewControllerTypesLines}`,
+  );
+}
+
+for (const requiredUseSharePreviewControllerUsage of [
+  'import { useEffect, useState } from "react";',
+  'import { acceptShareToken, previewShareToken } from "../lib/api";',
+  'import { getStoredToken } from "../lib/auth";',
+  'import { resolveErrorMessage } from "../lib/error-message";',
+  'from "./share-preview-controller.types";',
+  "export function useSharePreviewController(",
+  "const [preview, setPreview] = useState<SharePreview | null>(null);",
+  "const [loading, setLoading] = useState(true);",
+  "const [joining, setJoining] = useState(false);",
+  "const [error, setError] = useState(\"\");",
+  "const result = await previewShareToken(tokenValue);",
+  "const token = getStoredToken();",
+  'router.push("/login");',
+  "const result = await acceptShareToken(token, tokenValue);",
+  'router.push(`/app/workspaces/${result.workspace.id}`);',
+]) {
+  if (!useSharePreviewControllerSource.includes(requiredUseSharePreviewControllerUsage)) {
+    throw new Error(
+      `use-share-preview-controller.ts must own share-preview async orchestration: ${requiredUseSharePreviewControllerUsage}`,
+    );
+  }
+}
+
+for (const forbiddenUseSharePreviewControllerToken of [
+  'import Link from "next/link";',
+  'import { useRouter } from "next/navigation";',
+  'import { useStoredLocale } from "../lib/locale";',
+  'import { getSharePreviewPageCopy } from "../lib/share-link-display";',
+  "<main className=",
+  "<section className=",
+]) {
+  if (useSharePreviewControllerSource.includes(forbiddenUseSharePreviewControllerToken)) {
+    throw new Error(
+      `use-share-preview-controller.ts must keep share-preview rendering delegated: ${forbiddenUseSharePreviewControllerToken}`,
+    );
+  }
+}
+
+const maxUseSharePreviewControllerLines = 70;
+if (useSharePreviewControllerLines > maxUseSharePreviewControllerLines) {
+  throw new Error(
+    `use-share-preview-controller.ts exceeded ${maxUseSharePreviewControllerLines} lines: ${useSharePreviewControllerLines}`,
   );
 }
 
