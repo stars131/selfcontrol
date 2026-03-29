@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Search API Coverage Expansion V1:
+  - `apps/api/tests/test_search_api.py` now directly covers workspace-member search access, hybrid-mode summary shaping, keyword-mode summary shaping, search-service parameter passthrough, serialized record results, and forbidden access for non-members
+  - this expands the direct API-level coverage around workspace search contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of chat-adjacent record retrieval boundaries under the enterprise engineering standard
 - Audit Logs API Coverage Expansion V1:
   - `apps/api/tests/test_audit_logs_api.py` now directly covers workspace-member audit-log listing, descending audit-log ordering, limit handling, action-code filtering, and forbidden access for non-members
   - this expands the direct API-level coverage around workspace audit-log read contracts without changing runtime behavior
