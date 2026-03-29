@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Transport Helper Coverage Expansion V1:
+  - `apps/api/tests/test_provider_transport_modes.py` now additionally covers explicit `openai_compatible` transport selection and unsupported-provider fallback, while `apps/api/tests/test_provider_transport_urls.py` now additionally covers trailing-slash normalization and the required-base-URL error branch for non-default providers
+  - this expands the direct helper-level coverage around provider routing and base-URL resolution without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of provider transport selection under the enterprise engineering standard
 - Media Processing Service Unit Coverage V1:
   - `apps/api/tests/test_media_processing_service.py` now directly covers missing-media rejection, successful orchestration through start/acquire/execute/finalize/cleanup, and failure-path orchestration through apply-failure/finalize/cleanup at the main media processing service boundary
   - the new service-level tests lock down the top-level workflow coordinator without duplicating the already-tested execution, I/O, state, and outcome helper details

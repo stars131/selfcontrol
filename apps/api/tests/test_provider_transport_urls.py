@@ -18,6 +18,13 @@ def test_resolve_provider_api_base_url_uses_explicit_or_provider_defaults() -> N
     assert resolve_provider_api_base_url(build_config(), error_type=RuntimeError) == "https://example.test/api"
     assert (
         resolve_provider_api_base_url(
+            build_config(api_base_url="https://example.test/api/"),
+            error_type=RuntimeError,
+        )
+        == "https://example.test/api"
+    )
+    assert (
+        resolve_provider_api_base_url(
             build_config(provider_code="openai", api_base_url=None),
             error_type=RuntimeError,
         )
@@ -30,3 +37,15 @@ def test_resolve_provider_api_base_url_uses_explicit_or_provider_defaults() -> N
         )
         == "https://openrouter.ai/api/v1"
     )
+
+
+def test_resolve_provider_api_base_url_requires_value_for_non_default_provider() -> None:
+    try:
+        resolve_provider_api_base_url(
+            build_config(provider_code="custom", api_base_url=None),
+            error_type=RuntimeError,
+        )
+    except RuntimeError as exc:
+        assert "API base URL is required" in str(exc)
+    else:
+        raise AssertionError("Expected custom provider without base URL to fail")
