@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Storage Helper Coverage Expansion V2:
+  - `apps/api/tests/test_media_storage_service.py` now additionally covers local-provider normalization, storage-path resolution, blank or non-dict tier fallback, missing-local-file no-op deletion, and empty-workspace storage summary defaults
+  - this expands the direct helper-level coverage around shared media storage primitives without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of upload, delete, retention, and observability storage paths under the enterprise engineering standard
 - API Test Runtime Stability Hardening V1:
   - `pytest.ini` now disables pytest's built-in `tmpdir` plugin, `apps/api/tests/conftest.py` now provides a repository-scoped `tmp_path` fixture backed by explicit directory creation, and `apps/api/app/api/routes/media.py` now closes uploaded files immediately after reading request content
   - this hardens API test execution on the current Windows environment by avoiding unstable temp-directory cleanup behavior and preventing uploaded media file handles from lingering across later delete/archive paths
