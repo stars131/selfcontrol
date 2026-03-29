@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Config Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_provider_config_route_helpers.py` now directly covers provider-config upsert parameter passthrough and ValueError-to-HTTP-400 mapping behavior
+  - this expands the direct helper-level coverage around provider configuration route contracts without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of provider settings write-side boundaries under the enterprise engineering standard
 - Conversation Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_conversation_route_helpers.py` now directly covers workspace-and-user-scoped conversation lookup, chat user-message persistence, assistant-message conversation assignment, knowledge rebuild dispatch for chat-created records, and create-mode-only audit logging behavior
   - this expands the direct helper-level coverage around conversation route contracts without changing runtime behavior
