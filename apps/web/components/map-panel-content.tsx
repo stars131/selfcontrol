@@ -1,9 +1,9 @@
 "use client";
 
-import { getLocationSourceLabel } from "../lib/location-source-display";
 import { useStoredLocale } from "../lib/locale";
 import { getRecordPanelUiBundle } from "../lib/record-panel-ui";
 import { MapDrilldownCard } from "./map-drilldown-card";
+import { buildMapPanelContentViewProps } from "./map-panel-content-view";
 import { MapPanelHeader } from "./map-panel-header";
 import { MapSearchForm } from "./map-search-form";
 import { MapStatusNotices } from "./map-status-notices";
@@ -19,61 +19,23 @@ export function MapPanelContent({
 }: MapPanelContentProps) {
   const { locale } = useStoredLocale();
   const { panelCopy } = getRecordPanelUiBundle(locale);
+  const view = buildMapPanelContentViewProps({
+    controller,
+    draftLocation,
+    onSelectRecord,
+    panelCopy,
+    selectedRecordId,
+  });
   return (
     <section className="record-card" style={{ marginTop: 20 }}>
-      <MapPanelHeader
-        confirmedCount={controller.confirmedCount}
-        confirmedCountLabel={panelCopy.confirmedCountLabel}
-        editableDescription={panelCopy.mapEditableDescription}
-        isEditable={controller.isEditable}
-        mappedCount={controller.mappedRecords.length}
-        mappedCountLabel={panelCopy.mappedCountLabel}
-        needsReviewCount={controller.needsReviewCount}
-        needsReviewCountLabel={panelCopy.needsReviewCountLabel}
-        readonlyDescription={panelCopy.mapReadonlyDescription}
-        title={panelCopy.mapTitle}
-      />
-      <MapDrilldownCard
-        filterDraft={controller.filterDraft}
-        filteringRecords={controller.filteringRecords}
-        onApplyFilter={controller.handleApplyFilter}
-        onClearFilter={controller.handleClearFilter}
-        onFilterDraftChange={controller.setFilterDraft}
-        onUseMappedOnly={controller.handleUseMappedOnly}
-      />
-      {controller.isEditable ? (
-        <MapSearchForm
-          searchActionLabel={panelCopy.searchPlace}
-          searchLabel={panelCopy.locationSearch}
-          searchPlaceholder={panelCopy.locationSearchPlaceholder}
-          searchingLabel={panelCopy.searchingPlace}
-          onSearchQueryChange={controller.setSearchQuery}
-          onSubmit={controller.handleSearch}
-          searchQuery={controller.searchQuery}
-          searching={controller.searching}
-        />
+      <MapPanelHeader {...view.headerProps} />
+      <MapDrilldownCard {...view.drilldownCardProps} />
+      {view.showSearchForm ? (
+        <MapSearchForm {...view.searchFormProps} />
       ) : null}
-      <MapStatusNotices
-        currentPointLabel={panelCopy.currentPoint}
-        draftCoordinates={controller.draftCoordinates}
-        draftLocation={draftLocation}
-        draftLocationSourceLabel={getLocationSourceLabel(draftLocation?.source, panelCopy)}
-        isEditable={controller.isEditable}
-        loadError={controller.loadError}
-        mappedRecordCount={controller.mappedRecords.length}
-        noLocationSelectedLabel={panelCopy.noLocationSelected}
-        noMappedRecordsLabel={panelCopy.noMappedRecords}
-        searchError={controller.searchError}
-      />
+      <MapStatusNotices {...view.statusNoticesProps} />
       <div className="map-canvas" ref={containerRef} />
-      <MappedRecordsList
-        confirmedLabel={panelCopy.confirmed}
-        mappedRecords={controller.mappedRecords}
-        needsReviewLabel={panelCopy.needsReview}
-        onSelectRecord={onSelectRecord}
-        pendingLabel={panelCopy.pending}
-        selectedRecordId={selectedRecordId}
-      />
+      <MappedRecordsList {...view.mappedRecordsListProps} />
     </section>
   );
 }

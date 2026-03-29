@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Map Panel Content View Boundary Cleanup V1:
+  - `apps/web/components/map-panel-content.tsx` now stays focused on localized shell rendering and delegates map header, drilldown, search form, status notices, and mapped-record list prop assembly to a dedicated content-view helper instead of wiring those props inline
+  - `apps/web/components/map-panel-content-view.ts` and `map-panel-content-view.types.ts` now own the map-content view contracts, including location-source label derivation and editable/search visibility mapping for the location drilldown surface
+  - `apps/web/scripts/verify-map-panel-structure.mjs` and `verify-record-panel-structure.mjs` now enforce this thinner map-content boundary so future map-filter and drilldown changes stay easier to review and extend
 - Workspace Settings Client View Boundary Cleanup V1:
   - `apps/web/components/workspace-settings-client.tsx` now mirrors the thin entry pattern used by the workspace entry page and delegates settings-page view assembly to a dedicated client-view helper instead of projecting controller state into header and main-content props inline
   - `apps/web/components/workspace-settings-client-view.ts` and `workspace-settings-client-view.types.ts` now own the loading-shell, header, and main-content view contracts while `workspace-settings-client-helpers.ts` stays focused on smaller provider and managed-section mapping helpers

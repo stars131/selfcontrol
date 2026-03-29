@@ -19295,16 +19295,18 @@ if (mediaAssetCardRetryButtonTypesLines > maxMediaAssetCardRetryButtonTypesLines
 }
 
 for (const requiredMapPanelContentUsage of [
-  'import { getLocationSourceLabel } from "../lib/location-source-display";',
   'import { useStoredLocale } from "../lib/locale";',
   'import { getRecordPanelUiBundle } from "../lib/record-panel-ui";',
+  'import { buildMapPanelContentViewProps } from "./map-panel-content-view";',
   'import type { MapPanelContentProps } from "./map-panel-content.types";',
   "const { locale } = useStoredLocale();",
   "const { panelCopy } = getRecordPanelUiBundle(locale);",
-  "getLocationSourceLabel(draftLocation?.source, panelCopy)",
-  "panelCopy.mapTitle",
-  "panelCopy.locationSearch",
-  "panelCopy.currentPoint",
+  "const view = buildMapPanelContentViewProps({",
+  "<MapPanelHeader {...view.headerProps} />",
+  "<MapDrilldownCard {...view.drilldownCardProps} />",
+  "<MapSearchForm {...view.searchFormProps} />",
+  "<MapStatusNotices {...view.statusNoticesProps} />",
+  "<MappedRecordsList {...view.mappedRecordsListProps} />",
   "}: MapPanelContentProps) {",
 ]) {
   if (!mapPanelContentSource.includes(requiredMapPanelContentUsage)) {
@@ -19319,6 +19321,11 @@ for (const forbiddenMapPanelContentToken of [
   'import type { LocationDraft } from "../lib/map-panel";',
   'import type { MapPanelControllerState } from "./map-panel-controller-result.types";',
   "type MapPanelContentProps = {",
+  'import { getLocationSourceLabel } from "../lib/location-source-display";',
+  "getLocationSourceLabel(draftLocation?.source, panelCopy)",
+  "panelCopy.mapTitle",
+  "panelCopy.locationSearch",
+  "panelCopy.currentPoint",
 ]) {
   if (mapPanelContentSource.includes(forbiddenMapPanelContentToken)) {
     throw new Error(
