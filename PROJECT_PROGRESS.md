@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Remote Storage Health Service Unit Coverage V1:
+  - `apps/api/tests/test_media_remote_storage_health.py` now directly covers disabled/local media storage modes plus misconfigured custom-provider, transport timeout, missing endpoint, invalid JSON, and degraded remote-health payload branches
+  - the new service-level tests also lock down capability coercion and contract-version warning behavior for remote media health responses
+  - this strengthens the reliability and maintainability of media storage observability without depending only on route-level provider-config tests
 - Workspace Import Service Unit Coverage V1:
   - `apps/api/tests/test_workspace_import_service.py` now directly covers workspace archive import, custom-name trimming, slug de-duplication, local media restoration, remote reference-media import fallback behavior, skipped-media accounting, and record knowledge rebuild invocation
   - the same service-level test file now also covers invalid ZIP, missing manifest, unsupported schema, and incomplete manifest failure paths without routing through the API layer
