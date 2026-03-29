@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Knowledge Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_knowledge_route_helpers.py` now directly covers workspace-scoped record lookup plus knowledge-hit record collection with duplicate record-id collapse, hit-order preservation, and missing-record skipping
+  - this expands the direct helper-level coverage around knowledge route contracts without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of knowledge search result assembly boundaries under the enterprise engineering standard
 - Provider Config Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_provider_config_route_helpers.py` now directly covers provider-config upsert parameter passthrough and ValueError-to-HTTP-400 mapping behavior
   - this expands the direct helper-level coverage around provider configuration route contracts without changing runtime behavior
