@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Transfer Manifest Coverage Expansion V2:
+  - `apps/api/tests/test_workspace_transfer_manifest.py` now additionally covers offset-aware datetime ISO serialization plus imported-reference marker overwrite behavior without mutating the original metadata input
+  - this expands the direct helper-level coverage around workspace backup/import manifest contracts without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of workspace transfer metadata rules under the enterprise engineering standard
 - Media Remote Storage Health Coverage Expansion V2:
   - `apps/api/tests/test_media_remote_storage_health.py` now additionally covers unsupported provider-code handling, non-object JSON health payload rejection, and successful ready-state remote health responses including default capability coercion and `to_dict()` serialization
   - this expands the direct service-level coverage around remote media storage observability without changing runtime behavior
