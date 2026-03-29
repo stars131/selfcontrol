@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Timeline Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_timeline_route_helpers.py` now directly covers effective timestamp fallback, place-name extraction fallback, date-range filtering, descending timeline ordering, per-day grouping, avoid-count aggregation, top-place summarization, and timeline item serialization behavior
+  - this expands the direct helper-level coverage around timeline route contracts without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of timeline aggregation and map-place summary boundaries under the enterprise engineering standard
 - Knowledge Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_knowledge_route_helpers.py` now directly covers workspace-scoped record lookup plus knowledge-hit record collection with duplicate record-id collapse, hit-order preservation, and missing-record skipping
   - this expands the direct helper-level coverage around knowledge route contracts without changing runtime behavior
