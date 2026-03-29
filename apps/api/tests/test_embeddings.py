@@ -80,6 +80,39 @@ def test_embed_text_for_workspace_routes_remote_transport(monkeypatch) -> None:
     assert result.metadata_json == {"transport_mode": "openai_compatible"}
 
 
+def test_embed_text_for_workspace_routes_webhook_transport(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "app.services.embeddings.get_effective_provider_config",
+        lambda db, workspace_id, feature_code: build_embedding_config(
+            provider_code="custom",
+            model_name="custom-embed-v1",
+            api_base_url="https://embeddings.example.test/webhook",
+            api_key_env_name="CUSTOM_EMBEDDING_KEY",
+            requires_secret=True,
+            secret_env_name="CUSTOM_EMBEDDING_KEY",
+            secret_status="configured",
+        ),
+    )
+    monkeypatch.setattr("app.services.embeddings.infer_transport_mode", lambda config: "webhook_json")
+    monkeypatch.setattr(
+        "app.services.embeddings.request_custom_webhook_embedding",
+        lambda config, value: EmbeddingResult(
+            vector=[0.25, 0.75],
+            provider_code=config.provider_code,
+            model_name=config.model_name or "fallback",
+            dimensions=2,
+            metadata_json={"transport_mode": "webhook_json"},
+        ),
+    )
+
+    result = embed_text_for_workspace(SimpleNamespace(), "workspace-1", "hello world")
+
+    assert result.provider_code == "custom"
+    assert result.model_name == "custom-embed-v1"
+    assert result.dimensions == 2
+    assert result.metadata_json == {"transport_mode": "webhook_json"}
+
+
 def test_embed_text_for_workspace_rejects_disabled_or_unsupported_provider(monkeypatch) -> None:
     disabled_config = build_embedding_config(is_enabled=False)
     monkeypatch.setattr(

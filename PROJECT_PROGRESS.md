@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Embeddings Service Coverage Expansion V1:
+  - `apps/api/tests/test_embeddings.py` now additionally covers the `webhook_json` transport branch for `embed_text_for_workspace(...)`
+  - this expands the direct service-level coverage of the embeddings entrypoint so both remote transport families used by provider-configurable workspaces are exercised at the orchestration boundary
+  - this strengthens the maintainability and future refactor safety of workspace embedding routing under the enterprise engineering standard
 - Provider Transport Service Coverage Expansion V1:
   - `apps/api/tests/test_provider_transport.py` now additionally covers the no-secret-required branch and the resolved-default-env-name branch for `resolve_provider_secret(...)`
   - this expands the direct service-level coverage of provider secret resolution without changing runtime behavior or duplicating the dedicated URL and transport-mode tests
