@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Transfer Manifest Unit Coverage V1:
+  - `apps/api/tests/test_workspace_transfer_manifest.py` now directly covers schema version stability, optional datetime ISO serialization, optional datetime parsing, and imported reference-only metadata tagging
+  - the new service-level tests lock down the shared workspace import/export helper rules without routing through the larger archive service flows alone
+  - this strengthens the maintainability and future refactor safety of the workspace transfer manifest boundary under the enterprise engineering standard
 - Background Tasks Service Unit Coverage V1:
   - `apps/api/tests/test_background_tasks_service.py` now directly covers remote async retry scheduling, non-eligible retry no-op behavior, async media dispatch reset-and-queue orchestration, sync media dispatch fallback, and missing-media rejection at the background task service boundary
   - the new service-level tests lock down the async processing control flow without depending only on the broader media preview API integration tests
