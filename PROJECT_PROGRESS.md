@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Share Link Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_share_link_route_helpers.py` now directly covers permission-code validation, workspace-scoped share-link lookup, active-link lookup failure for inactive links, preview serialization, in-place share-link update application, and workspace-member serialization failure paths
+  - this expands the direct helper-level coverage around share-link route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of workspace sharing route helpers under the enterprise engineering standard
 - Share Links API Coverage Expansion V1:
   - `apps/api/tests/test_share_links_api.py` now additionally covers default share-link name fallback, missing-link update 404 handling, and public preview rejection for disabled or exhausted links
   - this expands the direct API-level coverage around owner-managed share links and public share preview contracts without changing runtime behavior
