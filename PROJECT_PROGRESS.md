@@ -3,6 +3,14 @@
 Last updated: 2026-03-29
 
 ## Completed
+- API Test Runtime Stability Hardening V1:
+  - `pytest.ini` now disables pytest's built-in `tmpdir` plugin, `apps/api/tests/conftest.py` now provides a repository-scoped `tmp_path` fixture backed by explicit directory creation, and `apps/api/app/api/routes/media.py` now closes uploaded files immediately after reading request content
+  - this hardens API test execution on the current Windows environment by avoiding unstable temp-directory cleanup behavior and preventing uploaded media file handles from lingering across later delete/archive paths
+  - this strengthens the maintainability and future refactor safety of the backend validation pipeline under the enterprise engineering standard
+- Share Links Service Coverage Expansion V2:
+  - `apps/api/tests/test_share_links_service.py` now additionally covers naive expiry normalization for active links, non-downgrade behavior for existing higher-role memberships, single-use link exhaustion after acceptance, and unknown-token lookup fallback
+  - this expands the direct service-level coverage around workspace sharing and membership updates without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of shared workspace access control under the enterprise engineering standard
 - Provider Config Validation Coverage Expansion V2:
   - `apps/api/tests/test_provider_config_validation.py` now additionally covers missing-host API base URL rejection, secretless-provider detection, supported-feature lookup, unsupported-feature rejection, enabled custom media storage missing-URL rejection, and non-media feature pass-through behavior
   - this expands the direct helper-level coverage around provider configuration safety rules without changing runtime behavior

@@ -143,6 +143,20 @@ def test_share_links_hash_path_and_active_status_rules() -> None:
     )
     assert is_share_link_active(exhausted_link) is False
 
+    naive_future_link = ShareLink(
+        workspace_id="workspace-1",
+        created_by="user-1",
+        name="Naive Future",
+        token_hash="n",
+        token_hint="naive",
+        permission_code="viewer",
+        is_enabled=True,
+        expires_at=(datetime.now(timezone.utc) + timedelta(days=1)).replace(tzinfo=None),
+        max_uses=None,
+        use_count=0,
+    )
+    assert is_share_link_active(naive_future_link) is True
+
 
 def test_create_share_link_and_accept_share_link_upgrade_membership() -> None:
     session_local, ids = build_share_links_service_session()
@@ -207,6 +221,64 @@ def test_create_share_link_and_accept_share_link_upgrade_membership() -> None:
         second_refreshed_link = db.get(ShareLink, second_link.id)
         assert second_refreshed_link is not None
         assert second_refreshed_link.use_count == 1
+
+
+def test_accept_share_link_does_not_downgrade_existing_membership_and_exhausts_single_use_link() -> None:
+    session_local, ids = build_share_links_service_session()
+
+    with session_local() as db:
+        link, token = create_share_link(
+            db,
+            workspace_id=ids["workspace_id"],
+            created_by=ids["owner_id"],
+            name="Single Use Viewer Link",
+            permission_code="viewer",
+            expires_at=None,
+            max_uses=1,
+        )
+
+        workspace = accept_share_link(db, token=token, user_id=ids["viewer_id"])
+        assert workspace.id == ids["workspace_id"]
+
+        existing_membership = (
+            db.query(WorkspaceMember)
+            .filter(
+                WorkspaceMember.workspace_id == ids["workspace_id"],
+                WorkspaceMember.user_id == ids["viewer_id"],
+            )
+            .first()
+        )
+        assert existing_membership is not None
+        assert existing_membership.role == "viewer"
+
+        refreshed_link = db.get(ShareLink, link.id)
+        assert refreshed_link is not None
+        assert refreshed_link.use_count == 1
+        assert is_share_link_active(refreshed_link) is False
+
+        try:
+            accept_share_link(db, token=token, user_id=ids["guest_id"])
+        except ValueError as exc:
+            assert "invalid or expired" in str(exc)
+        else:
+            raise AssertionError("Expected exhausted share token to fail")
+
+
+def test_get_share_link_by_token_returns_none_for_unknown_token() -> None:
+    session_local, ids = build_share_links_service_session()
+
+    with session_local() as db:
+        create_share_link(
+            db,
+            workspace_id=ids["workspace_id"],
+            created_by=ids["owner_id"],
+            name="Existing Link",
+            permission_code="viewer",
+            expires_at=None,
+            max_uses=None,
+        )
+
+        assert get_share_link_by_token(db, "missing-token") is None
 
 
 def test_accept_share_link_rejects_invalid_or_orphaned_links() -> None:

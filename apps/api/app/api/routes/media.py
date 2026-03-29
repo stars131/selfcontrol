@@ -293,7 +293,10 @@ async def upload_media(
     require_workspace_write_access(workspace_id, current_user, db)
     get_workspace_record_or_404(db, workspace_id, record_id)
 
-    content = await file.read()
+    try:
+        content = await file.read()
+    finally:
+        await file.close()
     original_filename = file.filename or "upload.bin"
     mime_type = file.content_type or "application/octet-stream"
     media_type = mime_type.split("/")[0]
