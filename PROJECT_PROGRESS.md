@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Auth Service Unit Coverage V1:
+  - `apps/api/tests/test_auth_service.py` now directly covers password hashing and verification plus JWT access-token creation, expiry-window shaping, successful decode, and wrong-secret rejection at the service boundary
+  - the new service-level tests lock down these security-sensitive primitives without depending only on auth route coverage
+  - this strengthens the security, maintainability, and future refactor safety of the authentication core under the enterprise engineering standard
 - Reminder Dispatch Service Unit Coverage V1:
   - `apps/api/tests/test_reminders_service.py` now directly covers due-reminder notification creation, reminder delivery state transitions, record-text fallback behavior, workspace scoping, and pending/enabled/time-based filtering at the service boundary
   - the new service-level tests lock down both explicit reminder copy and record-derived/default notification copy without routing through reminder or notification API handlers
