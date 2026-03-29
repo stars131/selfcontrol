@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Audit Logs API Coverage Expansion V1:
+  - `apps/api/tests/test_audit_logs_api.py` now directly covers workspace-member audit-log listing, descending audit-log ordering, limit handling, action-code filtering, and forbidden access for non-members
+  - this expands the direct API-level coverage around workspace audit-log read contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of audit-log visibility and filtering boundaries under the enterprise engineering standard
 - Media Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_media_route_helpers.py` now directly covers dead-letter retry-state normalization, workspace-scoped media and record lookup, explicit dead-letter target resolution, overview-based dead-letter target fallback, bulk-retry result aggregation, remote/local media content response shaping, remote content error mapping, and remote/local uploaded-media asset construction including local fallback metadata
   - this expands the direct helper-level coverage around media route contracts without changing runtime behavior
