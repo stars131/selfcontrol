@@ -4,11 +4,15 @@ from hashlib import sha256
 from types import SimpleNamespace
 
 from app.services.media_file_analysis import (
+    MAX_EXTRACTED_TEXT_LENGTH,
     collect_media_metadata,
     decode_best_effort,
     format_size_label,
     is_text_like_media,
     normalize_extracted_text,
+    read_gif_dimensions,
+    read_image_dimensions,
+    read_jpeg_dimensions,
 )
 
 
@@ -41,6 +45,15 @@ def test_normalize_extracted_text_pretty_prints_json_and_trims_whitespace() -> N
     assert normalized == '{\n  "name": "noodle",\n  "score": 5\n}'
 
 
+def test_normalize_extracted_text_keeps_invalid_json_and_applies_length_limit() -> None:
+    media = build_media_stub(original_filename="payload.json", mime_type="application/json")
+    raw_text = "  {" + ("x" * (MAX_EXTRACTED_TEXT_LENGTH + 10))
+
+    normalized = normalize_extracted_text(media, raw_text)
+
+    assert normalized == ("{" + ("x" * (MAX_EXTRACTED_TEXT_LENGTH - 1)))
+
+
 def test_collect_media_metadata_records_size_hash_and_image_dimensions(tmp_path) -> None:
     png_bytes = (
         b"\x89PNG\r\n\x1a\n"
@@ -71,3 +84,51 @@ def test_collect_media_metadata_records_size_hash_and_image_dimensions(tmp_path)
     assert metadata["height"] == 8
     assert metadata["text_char_count"] == 11
     assert metadata["text_line_count"] == 2
+
+
+def test_collect_media_metadata_handles_none_metadata_and_non_image_preview(tmp_path) -> None:
+    media_path = tmp_path / "clip.bin"
+    media_bytes = b"not-an-image"
+    media_path.write_bytes(media_bytes)
+    media = build_media_stub(
+        original_filename="clip.bin",
+        mime_type="application/octet-stream",
+        media_type="document",
+        size_bytes=len(media_bytes),
+        metadata_json=None,
+    )
+
+    metadata = collect_media_metadata(media, media_path)
+
+    assert metadata["file_extension"] == ".bin"
+    assert metadata["preview_kind"] == "none"
+    assert metadata["size_label"] == format_size_label(len(media_bytes))
+    assert metadata["sha256"] == sha256(media_bytes).hexdigest()
+    assert "width" not in metadata
+    assert "text_char_count" not in metadata
+
+
+def test_read_gif_dimensions_and_read_image_dimensions_support_gif_files(tmp_path) -> None:
+    gif_bytes = b"GIF89a" + (16).to_bytes(2, "little") + (8).to_bytes(2, "little") + b"\x00"
+    image_path = tmp_path / "sample.gif"
+    image_path.write_bytes(gif_bytes)
+    media = build_media_stub(
+        original_filename="sample.gif",
+        mime_type="image/gif",
+        media_type="image",
+        size_bytes=len(gif_bytes),
+    )
+
+    assert read_gif_dimensions(gif_bytes) == (16, 8)
+    assert read_image_dimensions(media, image_path) == (16, 8)
+
+
+def test_read_jpeg_dimensions_supports_baseline_sof_markers() -> None:
+    jpeg_bytes = (
+        b"\xff\xd8"
+        b"\xff\xe0\x00\x04AA"
+        b"\xff\xc0\x00\x11\x08\x00\x08\x00\x10\x03\x01\x11\x00\x02\x11\x01\x03\x11\x01"
+        b"\xff\xd9"
+    )
+
+    assert read_jpeg_dimensions(jpeg_bytes) == (16, 8)
