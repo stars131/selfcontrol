@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Retention Service Unit Coverage V1:
+  - `apps/api/tests/test_media_retention_service.py` now directly covers local media archive moves, archive filename collision handling, cleanup delete orchestration, orphan-file purge wiring, dry-run safeguards, archive orchestration, and record knowledge rebuild triggers at the retention service boundary
+  - the new service-level tests lock down the write-side retention orchestrator without duplicating the lower-level candidate-selection and reporting tests that already exist
+  - this strengthens the maintainability and future refactor safety of media lifecycle management under the enterprise engineering standard
 - Media Storage Service Unit Coverage V1:
   - `apps/api/tests/test_media_storage_service.py` now directly covers storage-tier normalization, local file deletion with empty-directory cleanup, remote-storage no-op deletion behavior, and workspace media storage summary aggregation
   - the new service-level tests lock down total-size counting, missing-local-file detection, per-type and per-status grouping, and largest-item labeling without depending only on media preview or workspace transfer flows
