@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_media_route_helpers.py` now directly covers dead-letter retry-state normalization, workspace-scoped media and record lookup, explicit dead-letter target resolution, overview-based dead-letter target fallback, bulk-retry result aggregation, remote/local media content response shaping, remote content error mapping, and remote/local uploaded-media asset construction including local fallback metadata
+  - this expands the direct helper-level coverage around media route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of media retry, download, and upload helper boundaries under the enterprise engineering standard
 - Timeline Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_timeline_route_helpers.py` now directly covers effective timestamp fallback, place-name extraction fallback, date-range filtering, descending timeline ordering, per-day grouping, avoid-count aggregation, top-place summarization, and timeline item serialization behavior
   - this expands the direct helper-level coverage around timeline route contracts without changing runtime behavior
