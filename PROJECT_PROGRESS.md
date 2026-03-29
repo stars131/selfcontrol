@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Remote Storage Service Unit Coverage V1:
+  - `apps/api/tests/test_media_remote_storage_service.py` now directly covers disabled-storage no-op uploads, custom-provider upload fallback behavior, fallback-disabled upload errors, upload-result passthrough, provider-mismatch protection on download/delete, and temp-file download persistence
+  - the new service-level tests lock down the remote media orchestration layer without duplicating the lower-level webhook contract, HTTP transport, or health-check tests
+  - this strengthens the maintainability and future refactor safety of remote media storage integration under the enterprise engineering standard
 - Media Provider Service Unit Coverage V1:
   - `apps/api/tests/test_media_provider_service.py` now directly covers unsupported media-type rejection, disabled/none provider rejection, unsupported transport rejection, and successful dispatch parameter wiring for `extract_text_via_provider(...)`
   - the new service-level tests lock down the thin provider-config lookup and dispatch boundary without duplicating lower-level dispatch, HTTP, or video-helper tests
