@@ -4,9 +4,11 @@ from app.core.config import settings
 from app.services.provider_config_validation import (
     MAX_MEDIA_STORAGE_BACKOFF_ITEMS,
     build_config_warnings,
+    get_feature_definition,
     normalize_api_base_url,
     normalize_api_key_env_name,
     normalize_media_storage_options,
+    provider_requires_secret,
     resolve_secret_status,
     validate_feature_specific_provider_config,
 )
@@ -30,6 +32,7 @@ def test_normalize_api_base_url_rejects_credentials_and_query_fragments() -> Non
         ("https://user:pass@example.com/hook", "must not embed credentials"),
         ("https://example.com/hook?debug=1", "must not include query strings or fragments"),
         ("ftp://example.com/hook", "must start with http:// or https://"),
+        ("https:///missing-host", "must include a valid host"),
     ]:
         try:
             normalize_api_base_url(value)
@@ -95,6 +98,24 @@ def test_resolve_secret_status_and_build_config_warnings_reflect_runtime_configu
     ]
 
 
+def test_provider_requires_secret_and_feature_definition_cover_secretless_and_supported_features() -> None:
+    assert provider_requires_secret("openai") is True
+    assert provider_requires_secret("amap") is False
+    assert get_feature_definition("maps_geocoding")["providers"] == [
+        "amap",
+        "google_maps",
+        "mapbox",
+        "custom",
+    ]
+
+    try:
+        get_feature_definition("unknown-feature")
+    except ValueError as exc:
+        assert "Unsupported feature code" in str(exc)
+    else:
+        raise AssertionError("Expected unknown feature code to fail")
+
+
 def test_validate_feature_specific_provider_config_enforces_media_storage_service_root() -> None:
     validate_feature_specific_provider_config(
         feature_code="media_storage",
@@ -108,9 +129,28 @@ def test_validate_feature_specific_provider_config_enforces_media_storage_servic
             feature_code="media_storage",
             provider_code="custom",
             is_enabled=True,
+            api_base_url=None,
+        )
+    except ValueError as exc:
+        assert "requires an API base URL" in str(exc)
+    else:
+        raise AssertionError("Expected enabled custom media storage without URL to be rejected")
+
+    try:
+        validate_feature_specific_provider_config(
+            feature_code="media_storage",
+            provider_code="custom",
+            is_enabled=True,
             api_base_url="https://storage.example.test/api/media/upload",
         )
     except ValueError as exc:
         assert "service root" in str(exc)
     else:
         raise AssertionError("Expected endpoint suffix URL to be rejected")
+
+    validate_feature_specific_provider_config(
+        feature_code="chat_generation",
+        provider_code="custom",
+        is_enabled=True,
+        api_base_url=None,
+    )

@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Config Validation Coverage Expansion V2:
+  - `apps/api/tests/test_provider_config_validation.py` now additionally covers missing-host API base URL rejection, secretless-provider detection, supported-feature lookup, unsupported-feature rejection, enabled custom media storage missing-URL rejection, and non-media feature pass-through behavior
+  - this expands the direct helper-level coverage around provider configuration safety rules without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of multi-provider workspace configuration under the enterprise engineering standard
 - Media Retention Action Helper Coverage Expansion V1:
   - `apps/api/tests/test_media_retention_actions.py` now additionally covers future-created media age clamping for cleanup selection plus base action-result shaping when orphan-file statistics are not requested
   - this expands the direct helper-level coverage around media retention candidate selection and result payload assembly without changing runtime behavior
