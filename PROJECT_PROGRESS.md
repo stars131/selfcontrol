@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Record Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_record_route_helpers.py` now directly covers location payload reading, coordinate detection, location-query matching, review-status matching, location-field filtering, workspace-scoped record lookup, in-place record update application, and local/remote media removal success and failure paths
+  - this expands the direct helper-level coverage around record route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of record lookup, map filtering, and media cleanup helper boundaries under the enterprise engineering standard
 - Workspace Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_workspace_route_helpers.py` now directly covers workspace serialization, membership serialization, transfer-job serialization, workspace-role resolution, transfer-job ownership lookup, export artifact download response shaping, membership lookup, role-change validation, removal validation, and export archive cleanup behavior
   - this expands the direct helper-level coverage around workspace route contracts without changing runtime behavior
