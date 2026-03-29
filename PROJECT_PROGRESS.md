@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Import Service Unit Coverage V1:
+  - `apps/api/tests/test_workspace_import_service.py` now directly covers workspace archive import, custom-name trimming, slug de-duplication, local media restoration, remote reference-media import fallback behavior, skipped-media accounting, and record knowledge rebuild invocation
+  - the same service-level test file now also covers invalid ZIP, missing manifest, unsupported schema, and incomplete manifest failure paths without routing through the API layer
+  - this strengthens the maintainability and safety of the workspace restore path by locking down the import service boundary directly
 - Workspace Export Service Unit Coverage V1:
   - `apps/api/tests/test_workspace_export_service.py` now directly covers workspace export archive creation, local-media embedding, export count aggregation, filename sanitization, and sensitive metadata stripping from exported manifests
   - the new service-level checks also cover the missing-workspace failure path without routing through the API layer
