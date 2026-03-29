@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Provider Service Unit Coverage V1:
+  - `apps/api/tests/test_media_provider_service.py` now directly covers unsupported media-type rejection, disabled/none provider rejection, unsupported transport rejection, and successful dispatch parameter wiring for `extract_text_via_provider(...)`
+  - the new service-level tests lock down the thin provider-config lookup and dispatch boundary without duplicating lower-level dispatch, HTTP, or video-helper tests
+  - this strengthens the maintainability and future refactor safety of provider-driven OCR/ASR/video extraction orchestration under the enterprise engineering standard
 - Workspace Transfer Manifest Unit Coverage V1:
   - `apps/api/tests/test_workspace_transfer_manifest.py` now directly covers schema version stability, optional datetime ISO serialization, optional datetime parsing, and imported reference-only metadata tagging
   - the new service-level tests lock down the shared workspace import/export helper rules without routing through the larger archive service flows alone
