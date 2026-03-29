@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Remote Storage Health Coverage Expansion V2:
+  - `apps/api/tests/test_media_remote_storage_health.py` now additionally covers unsupported provider-code handling, non-object JSON health payload rejection, and successful ready-state remote health responses including default capability coercion and `to_dict()` serialization
+  - this expands the direct service-level coverage around remote media storage observability without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of media storage health checks under the enterprise engineering standard
 - Media Retention Common Helper Coverage Expansion V1:
   - `apps/api/tests/test_media_retention_common.py` now additionally covers timezone-offset to UTC normalization for retention datetimes plus missing-workspace orphan-file scan fallback
   - this expands the direct helper-level coverage around shared media retention filesystem and datetime handling without changing runtime behavior

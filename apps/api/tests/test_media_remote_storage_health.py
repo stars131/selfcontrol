@@ -85,6 +85,24 @@ def test_media_remote_storage_health_reports_misconfigured_custom_provider(monke
     assert missing_secret.message == "Server-side media storage secret is not configured"
 
 
+def test_media_remote_storage_health_rejects_unsupported_provider_code(monkeypatch) -> None:
+    unsupported_config = build_media_storage_config(
+        provider_code="s3",
+        is_enabled=True,
+        api_base_url="https://storage.example.test/api",
+    )
+    monkeypatch.setattr(
+        "app.services.media_remote_storage_health.get_media_storage_provider_config",
+        lambda db, workspace_id: unsupported_config,
+    )
+
+    result = get_media_storage_provider_health(None, "workspace-1")
+
+    assert result.status == "unsupported"
+    assert result.reachable is None
+    assert result.message == "Unsupported media storage provider: s3"
+
+
 def test_media_remote_storage_health_reports_transport_and_endpoint_failures(monkeypatch) -> None:
     config = build_media_storage_config(
         provider_code="custom",
@@ -188,6 +206,35 @@ def test_media_remote_storage_health_reports_invalid_json_and_degraded_contract(
     assert invalid_json.reachable is True
     assert invalid_json.message == "Remote media health endpoint returned invalid JSON"
 
+    class InvalidObjectResponse:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return ["not", "an", "object"]
+
+    class InvalidObjectClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def get(self, url, *, headers, params):
+            return InvalidObjectResponse()
+
+    monkeypatch.setattr("app.services.media_remote_storage_health.httpx.Client", InvalidObjectClient)
+    invalid_object = get_media_storage_provider_health(None, "workspace-1")
+    assert invalid_object.status == "unhealthy"
+    assert invalid_object.reachable is True
+    assert (
+        invalid_object.message
+        == "Remote media health endpoint returned an invalid JSON object"
+    )
+
     class DegradedResponse:
         status_code = 200
 
@@ -230,3 +277,63 @@ def test_media_remote_storage_health_reports_invalid_json_and_degraded_contract(
     assert degraded.capabilities == {"upload": True, "download": True, "delete": False}
     assert degraded.warnings[0] == "Existing warning"
     assert "unexpected-v2" in degraded.warnings[1]
+
+
+def test_media_remote_storage_health_reports_ready_remote_defaults_and_serializes(
+    monkeypatch,
+) -> None:
+    config = build_media_storage_config(
+        provider_code="custom",
+        is_enabled=True,
+        api_base_url="https://storage.example.test/api",
+        requires_secret=False,
+        secret_status="not_required",
+    )
+    monkeypatch.setattr(
+        "app.services.media_remote_storage_health.get_media_storage_provider_config",
+        lambda db, workspace_id: config,
+    )
+    monkeypatch.setattr(
+        "app.services.media_remote_storage_health._build_custom_headers",
+        lambda config, operation, accept: {"Accept": accept, "X-Test-Operation": operation},
+    )
+
+    class ReadyResponse:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "status": "ready",
+                "service_name": "remote-storage",
+                "service_version": "2.1.0",
+                "capabilities": {},
+            }
+
+    class ReadyClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def get(self, url, *, headers, params):
+            return ReadyResponse()
+
+    monkeypatch.setattr("app.services.media_remote_storage_health.httpx.Client", ReadyClient)
+
+    result = get_media_storage_provider_health(None, "workspace-1")
+    payload = result.to_dict()
+
+    assert result.status == "ready"
+    assert result.reachable is True
+    assert result.message == "Remote media storage is reachable"
+    assert result.service_status == "ready"
+    assert result.service_name == "remote-storage"
+    assert result.service_version == "2.1.0"
+    assert result.capabilities == {"upload": True, "download": True, "delete": True}
+    assert payload["status"] == "ready"
+    assert payload["capabilities"] == {"upload": True, "download": True, "delete": True}
