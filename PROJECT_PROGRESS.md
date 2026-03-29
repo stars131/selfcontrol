@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Reminder Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_reminder_route_helpers.py` now directly covers workspace-scoped record lookup, reminder lookup, user-scoped notification lookup, reminder cancellation timestamp injection, explicit cancellation timestamp preservation, notification read/unread transitions, and explicit notification status override behavior
+  - this expands the direct helper-level coverage around reminder and notification route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of reminder lookup and notification state helper boundaries under the enterprise engineering standard
 - Record Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_record_route_helpers.py` now directly covers location payload reading, coordinate detection, location-query matching, review-status matching, location-field filtering, workspace-scoped record lookup, in-place record update application, and local/remote media removal success and failure paths
   - this expands the direct helper-level coverage around record route contracts without changing runtime behavior
