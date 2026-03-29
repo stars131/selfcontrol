@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Workspace Transfer Jobs Service Unit Coverage V1:
+  - `apps/api/tests/test_workspace_transfer_jobs_service.py` now directly covers export/import job creation, transfer-job workspace directory materialization, sync job completion, failed job status persistence, and async queue dispatch behavior
+  - the new service-level tests lock down artifact output handling and import/export result-json shaping without routing through the API layer
+  - this improves long-term maintainability around background-ready workspace transfer flows and makes future refactors of the job orchestrator safer
 - Share Links Service Unit Coverage And Expiry Fix V1:
   - `apps/api/tests/test_share_links_service.py` now directly covers token hashing, share-path generation, active-link evaluation, membership role upgrades, new-member acceptance, missing-token rejection, expired-link rejection, and orphaned-workspace rejection for the share service layer
   - `apps/api/app/services/share_links.py` now normalizes naive `expires_at` timestamps to UTC before comparing them against the current time, preventing runtime `TypeError` failures on share acceptance in environments that return naive datetimes from persistence
