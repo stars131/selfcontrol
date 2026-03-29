@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Knowledge Stats Service Unit Coverage V1:
+  - `apps/api/tests/test_knowledge_service.py` now directly covers workspace-scoped knowledge chunk aggregation, distinct record/media counting, latest-indexed timestamp selection, and embedding-dimension fallback behavior for `get_knowledge_stats(...)`
+  - the new service-level tests also lock down embedding provider/model resolution from provider config plus runtime fallback behavior when a workspace has no indexed knowledge yet
+  - this strengthens the maintainability and future refactor safety of the knowledge statistics boundary under the enterprise engineering standard
 - Audit Service Unit Coverage V1:
   - `apps/api/tests/test_audit_service.py` now directly covers successful audit-log persistence plus failure-path rollback behavior for `log_audit_event(...)`
   - the new service-level tests lock down default metadata shaping and the non-throwing failure contract used by many write-side API paths
