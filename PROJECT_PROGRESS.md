@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Config Validation Unit Coverage V1:
+  - `apps/api/tests/test_provider_config_validation.py` now directly covers API key env-name normalization, API base URL validation, media-storage retry option coercion, secret-status resolution, production warning composition, and media-storage service-root validation
+  - this gives the provider configuration safety rules their own service-layer regression coverage instead of relying only on route and merge-path tests
+  - the added coverage strengthens the long-term security and maintainability baseline around one of the most sensitive enterprise configuration surfaces in the project
 - Location Review Service Unit Coverage V1:
   - `apps/api/tests/test_location_review_service.py` now directly covers `normalize_location(...)` invalid-value normalization, unchanged review metadata preservation, and bounded history truncation for review-only updates
   - this reduces reliance on route-level record tests for the location-review merge rules and gives the service layer its own regression safety net around a user-facing map/location workflow
