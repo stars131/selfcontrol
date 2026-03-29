@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Conversation Route Helper Coverage Expansion V1:
+  - `apps/api/tests/test_conversation_route_helpers.py` now directly covers workspace-and-user-scoped conversation lookup, chat user-message persistence, assistant-message conversation assignment, knowledge rebuild dispatch for chat-created records, and create-mode-only audit logging behavior
+  - this expands the direct helper-level coverage around conversation route contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of chat persistence and record-creation side-effect boundaries under the enterprise engineering standard
 - Audit Log Route Helper Coverage Expansion V1:
   - `apps/api/tests/test_audit_log_route_helpers.py` now directly covers audit-log serialization with full field passthrough plus ISO timestamp formatting and missing-timestamp fallback behavior
   - this expands the direct helper-level coverage around audit-log route contracts without changing runtime behavior
