@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Chat Service Unit Coverage V1:
+  - `apps/api/tests/test_chat_service.py` now directly covers create-intent detection, bilingual record-type and avoid-flag inference, title normalization, empty-search replies, RAG reply composition, record creation from chat input, and non-create search responses at the service boundary
+  - the new service-level tests lock down the single-input capture path and assistant search reply contract without depending only on conversation route tests
+  - this strengthens the maintainability and future refactor safety of the chat-first product core under the enterprise engineering standard
 - Knowledge Stats Service Unit Coverage V1:
   - `apps/api/tests/test_knowledge_service.py` now directly covers workspace-scoped knowledge chunk aggregation, distinct record/media counting, latest-indexed timestamp selection, and embedding-dimension fallback behavior for `get_knowledge_stats(...)`
   - the new service-level tests also lock down embedding provider/model resolution from provider config plus runtime fallback behavior when a workspace has no indexed knowledge yet
