@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Processing Service Unit Coverage V1:
+  - `apps/api/tests/test_media_processing_service.py` now directly covers missing-media rejection, successful orchestration through start/acquire/execute/finalize/cleanup, and failure-path orchestration through apply-failure/finalize/cleanup at the main media processing service boundary
+  - the new service-level tests lock down the top-level workflow coordinator without duplicating the already-tested execution, I/O, state, and outcome helper details
+  - this strengthens the maintainability and future refactor safety of the media extraction workflow under the enterprise engineering standard
 - Media Issue Tracking Service Unit Coverage V1:
   - `apps/api/tests/test_media_issue_tracking_service.py` now directly covers remote dead-letter filtering and sorting, processing-overview aggregation, issue-category grouping, retry-state grouping, and overview item limits at the media issue tracking service boundary
   - the new service-level tests lock down the overview/list assembly layer without duplicating the lower-level issue classification and metadata helper tests
