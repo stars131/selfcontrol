@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Storage Service Unit Coverage V1:
+  - `apps/api/tests/test_media_storage_service.py` now directly covers storage-tier normalization, local file deletion with empty-directory cleanup, remote-storage no-op deletion behavior, and workspace media storage summary aggregation
+  - the new service-level tests lock down total-size counting, missing-local-file detection, per-type and per-status grouping, and largest-item labeling without depending only on media preview or workspace transfer flows
+  - this strengthens the maintainability and future refactor safety of the storage primitives used across media upload, export, retention, and observability features under the enterprise engineering standard
 - Chat Service Unit Coverage V1:
   - `apps/api/tests/test_chat_service.py` now directly covers create-intent detection, bilingual record-type and avoid-flag inference, title normalization, empty-search replies, RAG reply composition, record creation from chat input, and non-create search responses at the service boundary
   - the new service-level tests lock down the single-input capture path and assistant search reply contract without depending only on conversation route tests
