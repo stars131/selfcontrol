@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Audit Service Unit Coverage V1:
+  - `apps/api/tests/test_audit_service.py` now directly covers successful audit-log persistence plus failure-path rollback behavior for `log_audit_event(...)`
+  - the new service-level tests lock down default metadata shaping and the non-throwing failure contract used by many write-side API paths
+  - this strengthens the reliability and maintainability of the shared audit logging boundary under the enterprise engineering standard
 - Auth Service Unit Coverage V1:
   - `apps/api/tests/test_auth_service.py` now directly covers password hashing and verification plus JWT access-token creation, expiry-window shaping, successful decode, and wrong-secret rejection at the service boundary
   - the new service-level tests lock down these security-sensitive primitives without depending only on auth route coverage
