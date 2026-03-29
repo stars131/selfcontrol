@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Issue Tracking Metadata Helper Coverage Expansion V1:
+  - `apps/api/tests/test_media_issue_tracking_metadata.py` now additionally covers non-dict metadata fallback, missing/non-string/blank retry-state normalization, non-string text rejection, direct integer handling, signed-or-blank integer rejection, and sort tie-breaking across attempt and update timestamps
+  - this expands the direct helper-level coverage around shared media issue metadata parsing and ordering rules without changing runtime behavior
+  - this strengthens the maintainability and future refactor safety of media issue observability helpers under the enterprise engineering standard
 - Provider Transport Helper Coverage Expansion V1:
   - `apps/api/tests/test_provider_transport_modes.py` now additionally covers explicit `openai_compatible` transport selection and unsupported-provider fallback, while `apps/api/tests/test_provider_transport_urls.py` now additionally covers trailing-slash normalization and the required-base-URL error branch for non-default providers
   - this expands the direct helper-level coverage around provider routing and base-URL resolution without changing runtime behavior
