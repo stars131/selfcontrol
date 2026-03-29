@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Background Tasks Service Unit Coverage V1:
+  - `apps/api/tests/test_background_tasks_service.py` now directly covers remote async retry scheduling, non-eligible retry no-op behavior, async media dispatch reset-and-queue orchestration, sync media dispatch fallback, and missing-media rejection at the background task service boundary
+  - the new service-level tests lock down the async processing control flow without depending only on the broader media preview API integration tests
+  - this strengthens the maintainability and future refactor safety of media background execution under the enterprise engineering standard
 - Media Retention Service Unit Coverage V1:
   - `apps/api/tests/test_media_retention_service.py` now directly covers local media archive moves, archive filename collision handling, cleanup delete orchestration, orphan-file purge wiring, dry-run safeguards, archive orchestration, and record knowledge rebuild triggers at the retention service boundary
   - the new service-level tests lock down the write-side retention orchestrator without duplicating the lower-level candidate-selection and reporting tests that already exist
