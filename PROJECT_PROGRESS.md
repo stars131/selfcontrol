@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Config Service Unit Coverage V1:
+  - `apps/api/tests/test_provider_configs_service.py` now directly covers provider-config listing, saved/default effective-config resolution, create/update persistence, unsupported-provider rejection, and media-storage option normalization at the service boundary
+  - the new service-level tests lock down API base URL normalization, server-side env-name normalization, and in-place update behavior without routing through FastAPI handlers
+  - this strengthens the security, maintainability, and future refactor safety of the workspace provider-configuration core under the enterprise engineering standard
 - Workspace Transfer Jobs Service Unit Coverage V1:
   - `apps/api/tests/test_workspace_transfer_jobs_service.py` now directly covers export/import job creation, transfer-job workspace directory materialization, sync job completion, failed job status persistence, and async queue dispatch behavior
   - the new service-level tests lock down artifact output handling and import/export result-json shaping without routing through the API layer
