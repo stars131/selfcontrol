@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Media Issue Tracking Service Unit Coverage V1:
+  - `apps/api/tests/test_media_issue_tracking_service.py` now directly covers remote dead-letter filtering and sorting, processing-overview aggregation, issue-category grouping, retry-state grouping, and overview item limits at the media issue tracking service boundary
+  - the new service-level tests lock down the overview/list assembly layer without duplicating the lower-level issue classification and metadata helper tests
+  - this strengthens the maintainability and future refactor safety of media observability and recovery workflows under the enterprise engineering standard
 - Embeddings Service Coverage Expansion V1:
   - `apps/api/tests/test_embeddings.py` now additionally covers the `webhook_json` transport branch for `embed_text_for_workspace(...)`
   - this expands the direct service-level coverage of the embeddings entrypoint so both remote transport families used by provider-configurable workspaces are exercised at the orchestration boundary
