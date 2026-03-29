@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from app.services.media_retention_common import (
@@ -13,9 +13,19 @@ from app.services.media_retention_common import (
 def test_coerce_retention_datetime_normalizes_naive_and_aware_values() -> None:
     naive = datetime(2026, 3, 27, 10, 0, 0)
     aware = datetime(2026, 3, 27, 10, 0, 0, tzinfo=timezone.utc)
+    offset_aware = datetime(2026, 3, 27, 18, 0, 0, tzinfo=timezone(timedelta(hours=8)))
 
     assert coerce_retention_datetime(naive).tzinfo == timezone.utc
     assert coerce_retention_datetime(aware) == aware
+    assert coerce_retention_datetime(offset_aware) == datetime(
+        2026,
+        3,
+        27,
+        10,
+        0,
+        0,
+        tzinfo=timezone.utc,
+    )
 
 
 def test_list_and_scan_workspace_orphan_files_detect_untracked_files(tmp_path, monkeypatch) -> None:
@@ -37,3 +47,16 @@ def test_list_and_scan_workspace_orphan_files_detect_untracked_files(tmp_path, m
         1,
         orphan_file.stat().st_size,
     )
+
+
+def test_list_and_scan_workspace_orphan_files_handle_missing_workspace_directory(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    storage_dir = tmp_path / "uploads"
+    storage_dir.mkdir(parents=True, exist_ok=True)
+
+    monkeypatch.setattr("app.services.media_retention_common.settings.storage_dir", str(storage_dir))
+
+    assert list_workspace_orphan_files("missing-workspace", set()) == []
+    assert scan_workspace_orphan_files("missing-workspace", set()) == (0, 0)
