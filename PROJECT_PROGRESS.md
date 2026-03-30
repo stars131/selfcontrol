@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Knowledge Search API Coverage Expansion V1:
+  - `apps/api/tests/test_knowledge_search_api.py` now directly covers knowledge-search query and limit passthrough, collected-record passthrough, empty-result summary shaping, and workspace-membership enforcement for knowledge search routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `knowledge.py` against a dedicated search API coverage file in addition to the existing general and reindex coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around knowledge retrieval contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of knowledge search boundaries under the enterprise engineering standard
 - Knowledge Reindex API Coverage Expansion V1:
   - `apps/api/tests/test_knowledge_reindex_api.py` now directly covers knowledge stats passthrough, workspace and record reindex parameter passthrough, reindex audit logging, record-scope lookup, and the write-vs-member permission boundary between stats and reindex routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `knowledge.py` against a dedicated reindex/stats API coverage file in addition to the broader knowledge route coverage
