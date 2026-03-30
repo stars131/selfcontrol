@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Workspace Members API Coverage Expansion V1:
+  - `apps/api/tests/test_workspace_members_api.py` now directly covers workspace-member listing for owner/editor roles, member role updates, member deletion, update/delete audit logging, validation and missing-member error mapping, and owner/editor/viewer permission boundaries for member-management routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `workspaces.py` against a dedicated workspace-members API coverage file in addition to the existing base, export, import, permissions, and transfer slices
+  - this expands the direct API-level coverage and route-coverage guardrails around workspace membership management contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of workspace member-management boundaries under the enterprise engineering standard
 - Media Management API Coverage Expansion V1:
   - `apps/api/tests/test_media_management_api.py` now directly covers record-scoped media listing order, storage-summary passthrough, processing-overview passthrough, member-scoped media status reads, retry-route audit logging, delete-route knowledge rebuild and audit logging, and member-vs-write permission boundaries for media management routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated media-management API coverage file in addition to the preview, dead-letter, and retention slices
