@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Workspaces API Coverage Expansion V1:
+  - `apps/api/tests/test_workspaces_api.py` now directly covers member-scoped workspace listing with role resolution and ordering, workspace creation with owner-membership persistence, duplicate-slug rejection, and workspace-detail membership enforcement
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `workspaces.py` against a dedicated base-route API coverage file in addition to the existing export/import/permissions/transfer slices
+  - this expands the direct API-level coverage and route-coverage guardrails around the primary workspace list/create/detail contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of workspace access and creation boundaries under the enterprise engineering standard
 - Reminders API Coverage Expansion V1:
   - `apps/api/app/api/routes/reminders.py` now imports `datetime` for `due_before` query parsing and requires workspace write access for reminder deletion, aligning reminder filtering and delete permissions with the route's intended write-side behavior
   - `apps/api/tests/test_reminders_api.py` now directly covers reminder listing filters, create-route record lookup passthrough, update-route helper passthrough, and write-access enforcement across reminder read/write endpoints including delete

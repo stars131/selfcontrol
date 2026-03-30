@@ -23,6 +23,7 @@ ROUTE_TEST_BASELINE = {
     "share_links.py": ["test_share_links_api.py"],
     "timeline.py": ["test_timeline_api.py"],
     "workspaces.py": [
+        "test_workspaces_api.py",
         "test_workspace_export_api.py",
         "test_workspace_import_api.py",
         "test_workspace_permissions_api.py",
