@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Reminders API Coverage Expansion V1:
+  - `apps/api/app/api/routes/reminders.py` now imports `datetime` for `due_before` query parsing and requires workspace write access for reminder deletion, aligning reminder filtering and delete permissions with the route's intended write-side behavior
+  - `apps/api/tests/test_reminders_api.py` now directly covers reminder listing filters, create-route record lookup passthrough, update-route helper passthrough, and write-access enforcement across reminder read/write endpoints including delete
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `reminders.py` against its dedicated direct API coverage file instead of relying on the reminders-and-notifications composite route test
+  - this expands the direct API-level coverage and tightens the write-permission boundary around reminder lifecycle contracts under the enterprise engineering standard
 - Notifications API Coverage Expansion V1:
   - `apps/api/tests/test_notifications_api.py` now directly covers notification sync dispatch passthrough, current-user notification listing with unread filtering, notification update helper passthrough, and workspace-membership enforcement for notification routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `notifications.py` against its dedicated direct API coverage file instead of relying on the reminders composite route test

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.deps import get_current_user, require_workspace_write_access
 from app.api.routes.reminder_route_helpers import (
     apply_reminder_update,
     get_workspace_record_or_404,
@@ -100,7 +102,7 @@ def delete_reminder(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     reminder = get_workspace_reminder_or_404(db, workspace_id=workspace_id, reminder_id=reminder_id)
 
     db.delete(reminder)

@@ -17,7 +17,7 @@ ROUTE_TEST_BASELINE = {
     "provider_configs.py": ["test_provider_configs_api.py"],
     "public_shares.py": ["test_public_shares_api.py"],
     "records.py": ["test_records_api.py", "test_record_location_review.py"],
-    "reminders.py": ["test_reminders_notifications_api.py"],
+    "reminders.py": ["test_reminders_api.py"],
     "search.py": ["test_search_api.py"],
     "search_presets.py": ["test_search_presets_api.py"],
     "share_links.py": ["test_share_links_api.py"],
