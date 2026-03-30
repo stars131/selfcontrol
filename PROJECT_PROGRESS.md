@@ -1,8 +1,13 @@
 # SelfControl Project Progress
 
-Last updated: 2026-03-29
+Last updated: 2026-03-30
 
 ## Completed
+- Public Shares API Coverage Expansion V1:
+  - `apps/api/tests/test_public_shares_api.py` now directly covers public-share preview helper pass-through, accept-route workspace serialization, accept-route audit logging, and ValueError-to-HTTP-400 translation behavior
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks dedicated direct API coverage files for audit logs, search, provider configs, and public shares instead of relying on adjacent composite route tests
+  - this expands the direct API-level coverage and route-coverage guardrails around public share acceptance contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of public workspace-invite boundaries under the enterprise engineering standard
 - Provider Configs API Coverage Expansion V1:
   - `apps/api/tests/test_provider_configs_api.py` now directly covers workspace write-access enforcement for provider-config routes, provider-config listing, media-storage health response shaping, provider-config update parameter passthrough, and provider-config update audit logging behavior
   - this expands the direct API-level coverage around workspace provider settings contracts without changing runtime behavior
