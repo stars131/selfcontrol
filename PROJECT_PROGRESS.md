@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media Remote Processing Coverage Extraction V1:
+  - `apps/api/tests/test_media_remote_processing_api.py` now owns the remote-media processing and retry-state scenarios that were previously embedded inside the oversized `test_media_preview_api.py`, including scheduled auto-retry, workspace retry policy override, auto-retry disablement, manual-only recovery, retry-budget exhaustion, and dead-letter bulk retry execution
+  - `apps/api/tests/test_media_preview_api.py` is now smaller and less coupled because those remote-processing scenarios were moved out without changing route or processing behavior
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against this additional dedicated remote-processing coverage file
+  - this keeps the direct coverage surface the same while improving maintainability and reviewability of remote-media processing tests under the enterprise engineering standard
 - Media Remote Route Coverage Extraction V1:
   - `apps/api/tests/test_media_remote_routes_api.py` now owns the remote-storage route scenarios that were previously embedded inside the oversized `test_media_preview_api.py`, including remote content/retention handling, remote upload-fetch-delete flow, remote text upload processing, fallback-vs-502 upload behavior, remote record-delete handling, and remote retry completion behavior
   - `apps/api/tests/test_media_preview_api.py` is now smaller and less coupled because those remote-route scenarios were moved out without changing route behavior

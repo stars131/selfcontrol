@@ -27,6 +27,7 @@ ROUTE_TEST_BASELINE = {
         "test_media_management_api.py",
         "test_media_io_api.py",
         "test_media_remote_routes_api.py",
+        "test_media_remote_processing_api.py",
     ],
     "notifications.py": ["test_notifications_api.py"],
     "provider_configs.py": ["test_provider_configs_api.py"],
