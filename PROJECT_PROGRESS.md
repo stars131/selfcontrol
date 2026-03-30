@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Records Query API Coverage Expansion V1:
+  - `apps/api/tests/test_records_query_api.py` now directly covers route-level query filtering before location helper execution, location-filter helper passthrough, detail-route scoped lookup passthrough, and workspace-membership enforcement for record read routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `records.py` against a dedicated records-query API coverage file in addition to the existing CRUD, location-review, and management coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around record read/query contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of record retrieval boundaries under the enterprise engineering standard
 - Timeline Filters API Coverage Expansion V1:
   - `apps/api/tests/test_timeline_filters_api.py` now directly covers route-level `type_code` and `is_avoid` filtering before timeline-helper execution, `start_date` and `end_date` passthrough into timeline filtering, and workspace-membership enforcement for timeline routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `timeline.py` against a dedicated filter/permission API coverage file in addition to the existing timeline route coverage

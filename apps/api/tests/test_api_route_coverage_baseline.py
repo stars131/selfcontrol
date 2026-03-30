@@ -30,7 +30,12 @@ ROUTE_TEST_BASELINE = {
     "notifications.py": ["test_notifications_api.py"],
     "provider_configs.py": ["test_provider_configs_api.py"],
     "public_shares.py": ["test_public_shares_api.py"],
-    "records.py": ["test_records_api.py", "test_record_location_review.py", "test_records_management_api.py"],
+    "records.py": [
+        "test_records_api.py",
+        "test_record_location_review.py",
+        "test_records_management_api.py",
+        "test_records_query_api.py",
+    ],
     "reminders.py": ["test_reminders_api.py"],
     "search.py": ["test_search_api.py"],
     "search_presets.py": ["test_search_presets_api.py", "test_search_presets_management_api.py"],
