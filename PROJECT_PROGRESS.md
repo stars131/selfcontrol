@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Conversation Threads API Coverage Expansion V1:
+  - `apps/api/tests/test_conversation_threads_api.py` now directly covers conversation-thread listing order, current-user conversation scoping, conversation creation for write-enabled members, default-title persistence, and workspace write-access enforcement for conversation thread routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `conversations.py` against a dedicated conversation-threads API coverage file in addition to the existing message and broader conversation route coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around conversation thread contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of conversation thread creation and listing boundaries under the enterprise engineering standard
 - Conversation Messages API Coverage Expansion V1:
   - `apps/api/tests/test_conversation_messages_api.py` now directly covers conversation-message history lookup passthrough, message ordering, send-message chat-service passthrough, persist/finalize helper passthrough, and membership-plus-user-scope enforcement for conversation message routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `conversations.py` against a dedicated conversation-messages API coverage file in addition to the broader conversation route coverage
