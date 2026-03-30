@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Notifications API Coverage Expansion V1:
+  - `apps/api/tests/test_notifications_api.py` now directly covers notification sync dispatch passthrough, current-user notification listing with unread filtering, notification update helper passthrough, and workspace-membership enforcement for notification routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `notifications.py` against its dedicated direct API coverage file instead of relying on the reminders composite route test
+  - this expands the direct API-level coverage and route-coverage guardrails around notification delivery and read-state contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of workspace notification boundaries under the enterprise engineering standard
 - Public Shares API Coverage Expansion V1:
   - `apps/api/tests/test_public_shares_api.py` now directly covers public-share preview helper pass-through, accept-route workspace serialization, accept-route audit logging, and ValueError-to-HTTP-400 translation behavior
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks dedicated direct API coverage files for audit logs, search, provider configs, and public shares instead of relying on adjacent composite route tests

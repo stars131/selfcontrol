@@ -13,7 +13,7 @@ ROUTE_TEST_BASELINE = {
     "conversations.py": ["test_conversations_api.py"],
     "knowledge.py": ["test_knowledge_api.py"],
     "media.py": ["test_media_preview_api.py"],
-    "notifications.py": ["test_reminders_notifications_api.py"],
+    "notifications.py": ["test_notifications_api.py"],
     "provider_configs.py": ["test_provider_configs_api.py"],
     "public_shares.py": ["test_public_shares_api.py"],
     "records.py": ["test_records_api.py", "test_record_location_review.py"],
