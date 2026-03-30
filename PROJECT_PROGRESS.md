@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media Retention API Coverage Expansion V1:
+  - `apps/api/tests/test_media_retention_api.py` now directly covers retention-report filter passthrough, retention cleanup parameter passthrough and conditional audit logging, retention archive audit logging behavior, and write-vs-owner permission boundaries across retention routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated retention API coverage file in addition to the existing preview and dead-letter coverage slices
+  - this expands the direct API-level coverage and route-coverage guardrails around media retention contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of media cleanup and archival boundaries under the enterprise engineering standard
 - Media Dead Letter API Coverage Expansion V1:
   - `apps/api/tests/test_media_dead_letter_api.py` now directly covers dead-letter overview retry-state normalization passthrough, bulk-retry target/result passthrough, conditional audit logging when media are actually retried, and write-access enforcement for dead-letter routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated dead-letter API coverage file in addition to the broader preview and end-to-end media route coverage
