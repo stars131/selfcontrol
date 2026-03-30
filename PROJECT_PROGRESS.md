@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media Remote Storage Integration Coverage Extraction V1:
+  - `apps/api/tests/test_media_remote_storage_integration.py` now owns the remote-storage integration and contract scenarios that were previously embedded inside the oversized `test_media_preview_api.py`, including workspace provider-config dispatch, upload webhook contract enforcement, invalid storage-key rejection, and remote download timeout handling
+  - `apps/api/tests/test_media_preview_api.py` is now smaller and less coupled because those remote-storage integration scenarios were moved out without changing behavior
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against this additional dedicated remote-storage integration coverage file
+  - this keeps the direct coverage surface the same while improving maintainability and reviewability of remote-storage integration tests under the enterprise engineering standard
 - Media Remote Processing Coverage Extraction V1:
   - `apps/api/tests/test_media_remote_processing_api.py` now owns the remote-media processing and retry-state scenarios that were previously embedded inside the oversized `test_media_preview_api.py`, including scheduled auto-retry, workspace retry policy override, auto-retry disablement, manual-only recovery, retry-budget exhaustion, and dead-letter bulk retry execution
   - `apps/api/tests/test_media_preview_api.py` is now smaller and less coupled because those remote-processing scenarios were moved out without changing route or processing behavior
