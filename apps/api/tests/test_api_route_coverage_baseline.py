@@ -33,7 +33,7 @@ ROUTE_TEST_BASELINE = {
     "records.py": ["test_records_api.py", "test_record_location_review.py"],
     "reminders.py": ["test_reminders_api.py"],
     "search.py": ["test_search_api.py"],
-    "search_presets.py": ["test_search_presets_api.py"],
+    "search_presets.py": ["test_search_presets_api.py", "test_search_presets_management_api.py"],
     "share_links.py": ["test_share_links_api.py"],
     "timeline.py": ["test_timeline_api.py"],
     "workspaces.py": [

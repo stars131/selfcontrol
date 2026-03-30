@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
+from app.api.deps import get_current_user, require_workspace_write_access
 from app.api.routes.search_preset_route_helpers import (
     get_workspace_search_preset_or_404,
     normalize_search_preset_filters,
@@ -106,7 +106,7 @@ def delete_search_preset(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    require_workspace_member(workspace_id, current_user, db)
+    require_workspace_write_access(workspace_id, current_user, db)
     item = get_workspace_search_preset_or_404(db, workspace_id=workspace_id, preset_id=preset_id)
 
     preset_name = item.name

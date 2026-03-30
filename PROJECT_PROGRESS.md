@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Search Presets Management API Coverage Expansion V1:
+  - `apps/api/app/api/routes/search_presets.py` now requires workspace write access for preset deletion, aligning delete permissions with the route's other write-side preset operations
+  - `apps/api/tests/test_search_presets_management_api.py` now directly covers preset listing order, create normalization passthrough, update/delete audit logging, delete persistence, and write-access enforcement across search preset routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `search_presets.py` against a dedicated management API coverage file in addition to the existing search-preset API coverage
+  - this expands the direct API-level coverage and tightens the write-permission boundary around saved-search preset contracts under the enterprise engineering standard
 - Knowledge Search API Coverage Expansion V1:
   - `apps/api/tests/test_knowledge_search_api.py` now directly covers knowledge-search query and limit passthrough, collected-record passthrough, empty-result summary shaping, and workspace-membership enforcement for knowledge search routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `knowledge.py` against a dedicated search API coverage file in addition to the existing general and reindex coverage
