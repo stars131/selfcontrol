@@ -10,7 +10,7 @@ TESTS_DIR = REPO_ROOT / "apps" / "api" / "tests"
 ROUTE_TEST_BASELINE = {
     "auth.py": ["test_auth_api.py"],
     "audit_logs.py": ["test_audit_logs_api.py"],
-    "conversations.py": ["test_conversations_api.py"],
+    "conversations.py": ["test_conversations_api.py", "test_conversation_messages_api.py"],
     "knowledge.py": ["test_knowledge_api.py"],
     "media.py": [
         "test_media_preview_api.py",
