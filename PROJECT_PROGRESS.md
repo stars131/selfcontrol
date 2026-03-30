@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Records Management API Coverage Expansion V1:
+  - `apps/api/tests/test_records_management_api.py` now directly covers create-route location-preparation passthrough, update-route prepare/apply passthrough, create/update knowledge rebuild dispatch, delete-route removed-media audit metadata, and member-vs-write permission boundaries for record management routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `records.py` against a dedicated records-management API coverage file in addition to the existing CRUD and location-review coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around record write-side contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of record mutation boundaries under the enterprise engineering standard
 - Share Links Management API Coverage Expansion V1:
   - `apps/api/tests/test_share_links_management_api.py` now directly covers share-link listing order, create-route validation and service passthrough, share-path construction, update-helper passthrough, create/update audit logging, and owner-only permission boundaries for share-link management routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `share_links.py` against a dedicated management API coverage file in addition to the existing end-to-end share-link coverage
