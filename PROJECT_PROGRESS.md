@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Knowledge Reindex API Coverage Expansion V1:
+  - `apps/api/tests/test_knowledge_reindex_api.py` now directly covers knowledge stats passthrough, workspace and record reindex parameter passthrough, reindex audit logging, record-scope lookup, and the write-vs-member permission boundary between stats and reindex routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `knowledge.py` against a dedicated reindex/stats API coverage file in addition to the broader knowledge route coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around knowledge index maintenance contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of knowledge indexing boundaries under the enterprise engineering standard
 - Conversation Threads API Coverage Expansion V1:
   - `apps/api/tests/test_conversation_threads_api.py` now directly covers conversation-thread listing order, current-user conversation scoping, conversation creation for write-enabled members, default-title persistence, and workspace write-access enforcement for conversation thread routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `conversations.py` against a dedicated conversation-threads API coverage file in addition to the existing message and broader conversation route coverage

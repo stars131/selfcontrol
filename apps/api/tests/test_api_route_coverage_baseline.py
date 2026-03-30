@@ -15,7 +15,7 @@ ROUTE_TEST_BASELINE = {
         "test_conversation_messages_api.py",
         "test_conversation_threads_api.py",
     ],
-    "knowledge.py": ["test_knowledge_api.py"],
+    "knowledge.py": ["test_knowledge_api.py", "test_knowledge_reindex_api.py"],
     "media.py": [
         "test_media_preview_api.py",
         "test_media_dead_letter_api.py",
