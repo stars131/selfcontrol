@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Timeline Filters API Coverage Expansion V1:
+  - `apps/api/tests/test_timeline_filters_api.py` now directly covers route-level `type_code` and `is_avoid` filtering before timeline-helper execution, `start_date` and `end_date` passthrough into timeline filtering, and workspace-membership enforcement for timeline routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `timeline.py` against a dedicated filter/permission API coverage file in addition to the existing timeline route coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around timeline filtering contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of timeline query boundaries under the enterprise engineering standard
 - Records Management API Coverage Expansion V1:
   - `apps/api/tests/test_records_management_api.py` now directly covers create-route location-preparation passthrough, update-route prepare/apply passthrough, create/update knowledge rebuild dispatch, delete-route removed-media audit metadata, and member-vs-write permission boundaries for record management routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `records.py` against a dedicated records-management API coverage file in addition to the existing CRUD and location-review coverage
