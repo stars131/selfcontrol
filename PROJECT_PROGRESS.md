@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media Management API Coverage Expansion V1:
+  - `apps/api/tests/test_media_management_api.py` now directly covers record-scoped media listing order, storage-summary passthrough, processing-overview passthrough, member-scoped media status reads, retry-route audit logging, delete-route knowledge rebuild and audit logging, and member-vs-write permission boundaries for media management routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated media-management API coverage file in addition to the preview, dead-letter, and retention slices
+  - this expands the direct API-level coverage and route-coverage guardrails around core media management contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of media read/write orchestration boundaries under the enterprise engineering standard
 - Media Retention API Coverage Expansion V1:
   - `apps/api/tests/test_media_retention_api.py` now directly covers retention-report filter passthrough, retention cleanup parameter passthrough and conditional audit logging, retention archive audit logging behavior, and write-vs-owner permission boundaries across retention routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated retention API coverage file in addition to the existing preview and dead-letter coverage slices
