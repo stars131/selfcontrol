@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media Dead Letter API Coverage Expansion V1:
+  - `apps/api/tests/test_media_dead_letter_api.py` now directly covers dead-letter overview retry-state normalization passthrough, bulk-retry target/result passthrough, conditional audit logging when media are actually retried, and write-access enforcement for dead-letter routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated dead-letter API coverage file in addition to the broader preview and end-to-end media route coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around media recovery contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of media dead-letter recovery boundaries under the enterprise engineering standard
 - Workspaces API Coverage Expansion V1:
   - `apps/api/tests/test_workspaces_api.py` now directly covers member-scoped workspace listing with role resolution and ordering, workspace creation with owner-membership persistence, duplicate-slug rejection, and workspace-detail membership enforcement
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `workspaces.py` against a dedicated base-route API coverage file in addition to the existing export/import/permissions/transfer slices
