@@ -3,6 +3,10 @@
 Last updated: 2026-03-29
 
 ## Completed
+- Provider Configs API Coverage Expansion V1:
+  - `apps/api/tests/test_provider_configs_api.py` now directly covers workspace write-access enforcement for provider-config routes, provider-config listing, media-storage health response shaping, provider-config update parameter passthrough, and provider-config update audit logging behavior
+  - this expands the direct API-level coverage around workspace provider settings contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of provider settings read/write boundaries under the enterprise engineering standard
 - Search API Coverage Expansion V1:
   - `apps/api/tests/test_search_api.py` now directly covers workspace-member search access, hybrid-mode summary shaping, keyword-mode summary shaping, search-service parameter passthrough, serialized record results, and forbidden access for non-members
   - this expands the direct API-level coverage around workspace search contracts without changing runtime behavior
