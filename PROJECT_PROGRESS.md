@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Share Links Management API Coverage Expansion V1:
+  - `apps/api/tests/test_share_links_management_api.py` now directly covers share-link listing order, create-route validation and service passthrough, share-path construction, update-helper passthrough, create/update audit logging, and owner-only permission boundaries for share-link management routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `share_links.py` against a dedicated management API coverage file in addition to the existing end-to-end share-link coverage
+  - this expands the direct API-level coverage and route-coverage guardrails around workspace share-link management contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of share-link management boundaries under the enterprise engineering standard
 - Search Presets Management API Coverage Expansion V1:
   - `apps/api/app/api/routes/search_presets.py` now requires workspace write access for preset deletion, aligning delete permissions with the route's other write-side preset operations
   - `apps/api/tests/test_search_presets_management_api.py` now directly covers preset listing order, create normalization passthrough, update/delete audit logging, delete persistence, and write-access enforcement across search preset routes
