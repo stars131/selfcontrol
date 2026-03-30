@@ -3,6 +3,11 @@
 Last updated: 2026-03-30
 
 ## Completed
+- Media IO API Coverage Expansion V1:
+  - `apps/api/tests/test_media_io_api.py` now directly covers upload-route record lookup and remote-upload parameter passthrough, uploaded-media asset construction inputs, upload audit logging, provider-error HTTP mapping, content-route helper passthrough, and member-vs-write permission boundaries for media content and upload routes
+  - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `media.py` against a dedicated media-io API coverage file in addition to the preview, dead-letter, retention, and management slices
+  - this expands the direct API-level coverage and route-coverage guardrails around media upload/download contracts without changing runtime behavior
+  - this strengthens the maintainability, security, and future refactor safety of media file IO boundaries under the enterprise engineering standard
 - Workspace Members API Coverage Expansion V1:
   - `apps/api/tests/test_workspace_members_api.py` now directly covers workspace-member listing for owner/editor roles, member role updates, member deletion, update/delete audit logging, validation and missing-member error mapping, and owner/editor/viewer permission boundaries for member-management routes
   - `apps/api/tests/test_api_route_coverage_baseline.py` now tracks `workspaces.py` against a dedicated workspace-members API coverage file in addition to the existing base, export, import, permissions, and transfer slices
