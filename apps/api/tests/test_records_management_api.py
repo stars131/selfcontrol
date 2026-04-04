@@ -285,21 +285,34 @@ def test_records_management_api_delete_logs_removed_media_count(monkeypatch) -> 
         title="Delete me",
         extra_data={},
     )
-    removed_counts: list[int] = []
+    removed_local_counts: list[int] = []
     audit_calls: list[dict[str, object]] = []
 
-    def fake_remove_record_media_assets(db, media_assets, *, delete_remote_media_fn):
-        removed_counts.append(len(media_assets))
+    def fake_preflight_remote_record_media_assets(db, media_assets, *, delete_remote_media_fn):
+        assert len(media_assets) == 0
         return 2
 
-    monkeypatch.setattr(records_route, "remove_record_media_assets", fake_remove_record_media_assets)
+    def fake_cleanup_local_record_media_assets(media_assets):
+        removed_local_counts.append(len(media_assets))
+        return 0
+
+    monkeypatch.setattr(
+        records_route,
+        "preflight_remote_record_media_assets",
+        fake_preflight_remote_record_media_assets,
+    )
+    monkeypatch.setattr(
+        records_route,
+        "cleanup_local_record_media_assets",
+        fake_cleanup_local_record_media_assets,
+    )
     monkeypatch.setattr(records_route, "log_audit_event", lambda db, **kwargs: audit_calls.append(kwargs))
 
     response = client.delete(f"/api/v1/workspaces/{ids['workspace_id']}/records/{record_id}")
 
     assert response.status_code == 200
     assert response.json()["data"]["deleted"] is True
-    assert removed_counts == [0]
+    assert removed_local_counts == [0]
     assert audit_calls == [
         {
             "workspace_id": ids["workspace_id"],

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -10,19 +10,21 @@ from app.models.workspace import Workspace, WorkspaceMember
 from app.services.auth import decode_access_token
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
     )
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        raise credentials_exception
     try:
-        payload = decode_access_token(token)
+        payload = decode_access_token(credentials.credentials)
         user_id = payload.get("sub")
         if not user_id:
             raise credentials_exception

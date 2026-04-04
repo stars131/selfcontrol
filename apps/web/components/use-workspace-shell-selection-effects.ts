@@ -17,12 +17,6 @@ export function useWorkspaceShellSelectionEffects({
       return;
     }
     void refreshMediaAssets(token, workspaceId, selectedRecordId, setMediaAssets);
-  }, [token, workspaceId, selectedRecordId, setMediaAssets]);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
     void refreshReminderItems(token, workspaceId, selectedRecordId, setReminders);
-  }, [token, workspaceId, selectedRecordId, setReminders]);
+  }, [token, workspaceId, selectedRecordId, setMediaAssets, setReminders]);
 }

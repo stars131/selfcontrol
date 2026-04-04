@@ -6,6 +6,7 @@ from app.api.routes import media as media_route
 from app.api.routes import records as records_route
 from app.models.media import MediaAsset
 from app.models.provider_config import ProviderConfig
+from app.models.record import Record
 from app.models.user import User
 from app.services import media_remote_storage as media_remote_storage_service
 from app.services.media_remote_storage import (
@@ -287,6 +288,43 @@ def test_record_delete_triggers_remote_media_delete(tmp_path, monkeypatch) -> No
 
     assert response.status_code == 200
     assert deleted_keys == [f"remote/{workspace_id}/voice-note.m4a"]
+
+
+def test_record_delete_surfaces_remote_media_delete_failure(tmp_path, monkeypatch) -> None:
+    client, workspace_id, record_id, session_local = build_media_client(tmp_path, monkeypatch)
+
+    with session_local() as db:
+        remote_media = MediaAsset(
+            workspace_id=workspace_id,
+            record_id=record_id,
+            uploaded_by=db.query(User).first().id,
+            media_type="audio",
+            storage_provider="custom",
+            storage_key=f"remote/{workspace_id}/broken-voice-note.m4a",
+            original_filename="broken-voice-note.m4a",
+            mime_type="audio/mp4",
+            size_bytes=256,
+            metadata_json={"remote_storage_mode": "custom_webhook"},
+            processing_status="deferred",
+        )
+        db.add(remote_media)
+        db.commit()
+        remote_media_id = remote_media.id
+
+    monkeypatch.setattr(
+        records_route,
+        "delete_remote_media_via_provider",
+        lambda db, media: (_ for _ in ()).throw(RuntimeError("remote delete failed")),
+    )
+
+    response = client.delete(f"/api/v1/workspaces/{workspace_id}/records/{record_id}")
+
+    assert response.status_code == 502
+    assert response.json()["detail"] == "remote delete failed"
+
+    with session_local() as db:
+        assert db.get(Record, record_id) is not None
+        assert db.get(MediaAsset, remote_media_id) is not None
 
 
 def test_remote_media_retry_can_complete_processing(tmp_path, monkeypatch) -> None:

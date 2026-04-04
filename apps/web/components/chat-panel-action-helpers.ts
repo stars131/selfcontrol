@@ -27,6 +27,6 @@ export function buildCreateShareLinkInput({
   return {
     name: shareName || undefined,
     permission_code: sharePermission,
-    max_uses: shareMaxUses ? Number(shareMaxUses) : null,
+    max_uses: shareMaxUses ? (Number.isFinite(Number(shareMaxUses)) ? Math.max(0, Math.floor(Number(shareMaxUses))) : null) : null,
   };
 }

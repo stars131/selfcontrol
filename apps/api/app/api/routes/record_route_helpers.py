@@ -82,7 +82,7 @@ def apply_record_updates(record: Record, changes: dict) -> None:
         setattr(record, field, value)
 
 
-def remove_record_media_assets(
+def preflight_remote_record_media_assets(
     db: Session,
     media_assets: list[MediaAsset],
     *,
@@ -91,13 +91,22 @@ def remove_record_media_assets(
     removed_media_count = 0
     for media in media_assets:
         if media_uses_local_storage(media):
+            continue
+        delete_remote_media_fn(db, media)
+        removed_media_count += 1
+    return removed_media_count
+
+
+def cleanup_local_record_media_assets(
+    media_assets: list[MediaAsset],
+) -> int:
+    removed_media_count = 0
+    for media in media_assets:
+        if not media_uses_local_storage(media):
+            continue
+        try:
             if remove_storage_file(media):
                 removed_media_count += 1
-            continue
-
-        try:
-            delete_remote_media_fn(db, media)
-            removed_media_count += 1
-        except Exception:  # noqa: BLE001
+        except OSError:
             continue
     return removed_media_count

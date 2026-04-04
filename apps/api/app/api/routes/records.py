@@ -7,9 +7,10 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user, require_workspace_member, require_workspace_write_access
 from app.api.routes.record_route_helpers import (
     apply_record_updates,
+    cleanup_local_record_media_assets,
     filter_records_by_location_fields,
     get_workspace_record_or_404,
-    remove_record_media_assets,
+    preflight_remote_record_media_assets,
 )
 from app.db.session import get_db
 from app.models.record import Record
@@ -19,6 +20,7 @@ from app.services.audit import log_audit_event
 from app.services.knowledge import rebuild_record_knowledge
 from app.services.location_review import prepare_record_extra_data
 from app.services.media_remote_storage import delete_remote_media_via_provider
+from app.services.media_provider import DeferredMediaProcessingError
 
 
 router = APIRouter()
@@ -178,12 +180,20 @@ def delete_record(
     record = get_workspace_record_or_404(db, workspace_id=workspace_id, record_id=record_id)
 
     media_assets = list(record.media_assets)
+    try:
+        removed_remote_media_count = preflight_remote_record_media_assets(
+            db,
+            media_assets,
+            delete_remote_media_fn=delete_remote_media_via_provider,
+        )
+    except DeferredMediaProcessingError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
     db.delete(record)
     db.commit()
-    removed_media_count = remove_record_media_assets(
-        db,
+    removed_media_count = removed_remote_media_count + cleanup_local_record_media_assets(
         media_assets,
-        delete_remote_media_fn=delete_remote_media_via_provider,
     )
     log_audit_event(
         db,

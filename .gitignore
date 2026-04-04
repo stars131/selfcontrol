@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.pytest-tmp/
 .mypy_cache/
 .ruff_cache/
 .venv/
@@ -23,6 +24,10 @@ storage/tmp/
 backups/
 apps/api/storage/
 .codex-runtime/
+test-runtime-tmp/
+apps/api/tests/_tmp_probe/
+apps/api/tests/pytest-temp-run/
+pytest-cache-files-*/
 *.db
 *.db-journal
 

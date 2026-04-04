@@ -33,6 +33,12 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 button,
 input,
 textarea,
@@ -162,6 +168,17 @@ button:disabled {
   border-radius: 999px;
   padding: 8px 12px;
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.conversation-pill:hover {
+  background: rgba(255, 248, 237, 0.9);
+}
+
+.conversation-pill:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(208, 100, 43, 0.2);
 }
 
 .conversation-pill.active {
@@ -181,6 +198,14 @@ button:disabled {
   background: rgba(255, 255, 255, 0.8);
   padding: 12px 14px;
   color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input:focus-visible,
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(208, 100, 43, 0.15);
 }
 
 .textarea {
@@ -196,6 +221,16 @@ button:disabled {
   color: white;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.button:hover:not(:disabled) {
+  background: #b85524;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(208, 100, 43, 0.3);
 }
 
 .button.secondary {

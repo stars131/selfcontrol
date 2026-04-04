@@ -16,6 +16,7 @@ from app.api.routes.media_route_helpers import (
     get_workspace_media_or_404,
     get_workspace_record_or_404,
     normalize_dead_letter_retry_states,
+    persist_local_uploaded_media_file,
 )
 from app.core.config import settings
 from app.db.base import Base
@@ -430,7 +431,13 @@ def test_build_uploaded_media_asset_covers_remote_and_local_fallback_paths(tmp_p
         assert remote_upload_asset.processing_status == "pending"
         assert remote_upload_asset.processing_error is None
 
-        monkeypatch.setattr(media_route_helpers.uuid, "uuid4", lambda: type("FakeUuid", (), {"hex": "fixedhex"})())
+        class FakeUuid:
+            hex = "fixedhex"
+
+            def __str__(self) -> str:
+                return "fixedhex"
+
+        monkeypatch.setattr(media_route_helpers.uuid, "uuid4", lambda: FakeUuid())
 
         local_upload_asset = build_uploaded_media_asset(
             upload_attempt=RemoteMediaUploadAttemptResult(
@@ -457,10 +464,15 @@ def test_build_uploaded_media_asset_covers_remote_and_local_fallback_paths(tmp_p
             "storage_fallback_provider": "custom",
             "storage_fallback_at": "2026-03-29T12:00:00Z",
         }
+        assert local_upload_asset.id == "fixedhex"
+        assert local_upload_asset.original_filename == "local.png"
 
         stored_file = Path(settings.storage_dir).parent / local_upload_asset.storage_key
+        assert stored_file.exists() is False
+        assert stored_file.name == "fixedhex_local.png"
+
+        persist_local_uploaded_media_file(local_upload_asset, b"png-bytes")
         assert stored_file.exists() is True
         assert stored_file.read_bytes() == b"png-bytes"
-        assert stored_file.name == "fixedhex_local.png"
     finally:
         settings.storage_dir = original_storage_dir

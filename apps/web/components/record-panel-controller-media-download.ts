@@ -7,10 +7,16 @@ export async function downloadRecordPanelMediaFile({
   workspaceId,
 }: DownloadRecordPanelMediaFileInput) {
   const blob = await fetchMediaBlob(authToken, workspaceId, asset.id);
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = asset.original_filename || `${asset.id}.bin`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  let url: string | null = null;
+  try {
+    url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = asset.original_filename || `${asset.id}.bin`;
+    anchor.click();
+  } finally {
+    if (url) {
+      URL.revokeObjectURL(url);
+    }
+  }
 }

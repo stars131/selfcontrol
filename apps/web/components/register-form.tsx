@@ -27,6 +27,9 @@ export function RegisterForm() {
           <span className="field-label">{copy.username}</span>
           <input
             className="input"
+            name="username"
+            autoComplete="username"
+            required
             value={controller.username}
             onChange={(event) => controller.onUsernameChange(event.target.value)}
             placeholder={copy.usernamePlaceholder}
@@ -36,7 +39,10 @@ export function RegisterForm() {
           <span className="field-label">{copy.email}</span>
           <input
             className="input"
+            name="email"
             type="email"
+            autoComplete="email"
+            required
             value={controller.email}
             onChange={(event) => controller.onEmailChange(event.target.value)}
             placeholder={copy.emailPlaceholder}
@@ -46,6 +52,8 @@ export function RegisterForm() {
           <span className="field-label">{copy.displayName}</span>
           <input
             className="input"
+            name="displayName"
+            autoComplete="name"
             value={controller.displayName}
             onChange={(event) => controller.onDisplayNameChange(event.target.value)}
             placeholder={copy.displayNamePlaceholder}
@@ -55,7 +63,10 @@ export function RegisterForm() {
           <span className="field-label">{copy.password}</span>
           <input
             className="input"
+            name="password"
             type="password"
+            autoComplete="new-password"
+            required
             value={controller.password}
             onChange={(event) => controller.onPasswordChange(event.target.value)}
             placeholder={copy.passwordPlaceholder}

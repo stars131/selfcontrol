@@ -4,6 +4,7 @@ import hashlib
 import secrets
 from datetime import datetime, timezone
 
+from sqlalchemy import or_, update
 from sqlalchemy.orm import Session
 
 from app.models.share_link import ShareLink
@@ -68,19 +69,52 @@ def create_share_link(
     return item, token
 
 
-def get_share_link_by_token(db: Session, token: str) -> ShareLink | None:
+def get_share_link_by_token(
+    db: Session,
+    token: str,
+    *,
+    populate_existing: bool = False,
+) -> ShareLink | None:
     token_hash = hash_share_token(token)
-    return db.query(ShareLink).filter(ShareLink.token_hash == token_hash).first()
+    query = db.query(ShareLink).filter(ShareLink.token_hash == token_hash)
+    if populate_existing:
+        query = query.execution_options(populate_existing=True)
+    return query.first()
+
+
+def consume_share_link_use(db: Session, *, link: ShareLink, consumed_at: datetime) -> bool:
+    conditions = [
+        ShareLink.id == link.id,
+        ShareLink.is_enabled.is_(True),
+        or_(ShareLink.expires_at.is_(None), ShareLink.expires_at > consumed_at),
+    ]
+    if link.max_uses is not None:
+        conditions.append(ShareLink.use_count < link.max_uses)
+
+    result = db.execute(
+        update(ShareLink)
+        .where(*conditions)
+        .values(
+            use_count=ShareLink.use_count + 1,
+            last_used_at=consumed_at,
+        )
+    )
+    return bool(result.rowcount)
 
 
 def accept_share_link(db: Session, *, token: str, user_id: str) -> Workspace:
-    link = get_share_link_by_token(db, token)
+    link = get_share_link_by_token(db, token, populate_existing=True)
     if not link or not is_share_link_active(link):
         raise ValueError("Share link is invalid or expired")
 
     workspace = db.get(Workspace, link.workspace_id)
     if not workspace:
         raise ValueError("Workspace not found")
+
+    consumed_at = datetime.now(timezone.utc)
+    if not consume_share_link_use(db, link=link, consumed_at=consumed_at):
+        db.rollback()
+        raise ValueError("Share link is invalid or expired")
 
     membership = (
         db.query(WorkspaceMember)
@@ -96,10 +130,6 @@ def accept_share_link(db: Session, *, token: str, user_id: str) -> Workspace:
     else:
         membership = WorkspaceMember(workspace_id=workspace.id, user_id=user_id, role=link.permission_code)
         db.add(membership)
-
-    link.use_count += 1
-    link.last_used_at = datetime.now(timezone.utc)
-    db.add(link)
     db.commit()
     db.refresh(workspace)
     return workspace

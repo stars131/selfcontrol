@@ -315,6 +315,47 @@ def test_media_io_api_upload_maps_provider_errors_to_http(monkeypatch) -> None:
     assert runtime_response.json()["detail"] == "remote media gateway failed"
 
 
+def test_media_io_api_upload_cleans_database_when_local_file_persist_fails(monkeypatch) -> None:
+    client, session_local, ids, current_user_key = build_media_io_client()
+    current_user_key["value"] = "editor_id"
+
+    async def fake_attempt_media_upload_via_provider(
+        db,
+        *,
+        workspace_id,
+        record_id,
+        filename,
+        mime_type,
+        content,
+    ):
+        return SimpleNamespace(
+            remote_upload=None,
+            fallback_used=False,
+            fallback_reason=None,
+            fallback_provider=None,
+            fallback_at=None,
+        )
+
+    monkeypatch.setattr(media_route, "attempt_media_upload_via_provider", fake_attempt_media_upload_via_provider)
+    monkeypatch.setattr(
+        media_route,
+        "persist_local_uploaded_media_file",
+        lambda media, content: (_ for _ in ()).throw(OSError("disk full")),
+    )
+
+    response = client.post(
+        f"/api/v1/workspaces/{ids['workspace_id']}/records/{ids['record_id']}/media",
+        files={"file": ("failed.txt", b"failed-write", "text/plain")},
+    )
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "Failed to store uploaded file"
+
+    with session_local() as db:
+        items = db.query(MediaAsset).filter(MediaAsset.record_id == ids["record_id"]).all()
+        assert items == []
+
+
 def test_media_io_api_content_route_passes_scoped_media_and_download_dependency(monkeypatch) -> None:
     client, session_local, ids, current_user_key = build_media_io_client()
     current_user_key["value"] = "viewer_id"

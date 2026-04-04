@@ -18,7 +18,7 @@ export function ChatMessageThread({ messages }: ChatMessageThreadProps) {
           >
             <div className="eyebrow">{message.role === "assistant" ? copy.assistant : copy.user}</div>
             <div style={{ marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{message.content}</div>
-            {message.role === "assistant" && Array.isArray(message.metadata_json.sources) ? (
+            {message.role === "assistant" && message.metadata_json && Array.isArray(message.metadata_json.sources) ? (
               <ChatMessageSources messageId={message.id} sources={message.metadata_json.sources} />
             ) : null}
           </article>

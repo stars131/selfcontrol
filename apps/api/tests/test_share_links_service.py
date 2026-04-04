@@ -264,6 +264,36 @@ def test_accept_share_link_does_not_downgrade_existing_membership_and_exhausts_s
             raise AssertionError("Expected exhausted share token to fail")
 
 
+def test_accept_share_link_reloads_state_before_consuming_single_use_token() -> None:
+    session_local, ids = build_share_links_service_session()
+
+    with session_local() as db:
+        link, token = create_share_link(
+            db,
+            workspace_id=ids["workspace_id"],
+            created_by=ids["owner_id"],
+            name="Race-safe single-use link",
+            permission_code="viewer",
+            expires_at=None,
+            max_uses=1,
+        )
+
+        stale_link = get_share_link_by_token(db, token)
+        assert stale_link is not None
+        assert stale_link.id == link.id
+
+        with session_local() as other_db:
+            workspace = accept_share_link(other_db, token=token, user_id=ids["viewer_id"])
+            assert workspace.id == ids["workspace_id"]
+
+        try:
+            accept_share_link(db, token=token, user_id=ids["guest_id"])
+        except ValueError as exc:
+            assert "invalid or expired" in str(exc)
+        else:
+            raise AssertionError("Expected stale session to respect consumed single-use token")
+
+
 def test_get_share_link_by_token_returns_none_for_unknown_token() -> None:
     session_local, ids = build_share_links_service_session()
 

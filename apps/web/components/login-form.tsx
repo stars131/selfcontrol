@@ -27,6 +27,9 @@ export function LoginForm() {
           <span className="field-label">{copy.account}</span>
           <input
             className="input"
+            name="username"
+            autoComplete="username"
+            required
             value={controller.account}
             onChange={(event) => controller.onAccountChange(event.target.value)}
             placeholder={copy.accountPlaceholder}
@@ -36,7 +39,10 @@ export function LoginForm() {
           <span className="field-label">{copy.password}</span>
           <input
             className="input"
+            name="password"
             type="password"
+            autoComplete="current-password"
+            required
             value={controller.password}
             onChange={(event) => controller.onPasswordChange(event.target.value)}
             placeholder={copy.passwordPlaceholder}

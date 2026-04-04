@@ -29,8 +29,12 @@ export class ApiRequestError extends Error {
   }
 }
 
+function safeStringTrim(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 function buildApiRequestError(response: Response, payload?: ApiErrorPayload | null) {
-  return new ApiRequestError(payload?.error?.message?.trim() || payload?.detail?.trim() || "", {
+  return new ApiRequestError(safeStringTrim(payload?.error?.message) || safeStringTrim(payload?.detail) || "", {
     code: payload?.error?.code,
     status: response.status,
   });

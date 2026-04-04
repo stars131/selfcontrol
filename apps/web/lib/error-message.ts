@@ -3,6 +3,6 @@ export function resolveErrorMessage(caught: unknown, fallbackMessage: string) {
     return fallbackMessage;
   }
 
-  const message = caught.message.trim();
+  const message = typeof caught.message === "string" ? caught.message.trim() : "";
   return message || fallbackMessage;
 }

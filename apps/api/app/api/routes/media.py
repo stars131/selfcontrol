@@ -12,6 +12,7 @@ from app.api.routes.media_route_helpers import (
     get_workspace_media_or_404,
     get_workspace_record_or_404,
     normalize_dead_letter_retry_states,
+    persist_local_uploaded_media_file,
 )
 from app.db.session import get_db
 from app.models.media import MediaAsset
@@ -327,6 +328,12 @@ async def upload_media(
     db.add(media)
     db.commit()
     db.refresh(media)
+    try:
+        persist_local_uploaded_media_file(media, content)
+    except OSError as exc:
+        db.delete(media)
+        db.commit()
+        raise HTTPException(status_code=500, detail="Failed to store uploaded file") from exc
 
     media, processing_mode = dispatch_media_processing(db, media.id)
     log_audit_event(
@@ -391,9 +398,7 @@ def delete_media(
     record_id = media.record_id
     original_filename = media.original_filename
     storage_key = media.storage_key
-    if media_uses_local_storage(media):
-        remove_storage_file(media)
-    else:
+    if not media_uses_local_storage(media):
         try:
             delete_remote_media_via_provider(db, media)
         except DeferredMediaProcessingError as exc:
@@ -402,6 +407,8 @@ def delete_media(
             raise HTTPException(status_code=502, detail=str(exc)) from exc
     db.delete(media)
     db.commit()
+    if media_uses_local_storage(media):
+        remove_storage_file(media)
     rebuild_record_knowledge(db, record_id)
     log_audit_event(
         db,

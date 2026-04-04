@@ -51,10 +51,12 @@ export async function loadWorkspaceShellInitialBootstrap({
     workspaceId,
   });
 
-  await refreshNotificationItems(activeToken, workspaceId, setNotifications);
-  await refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats);
-  await refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary);
-  await refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview);
+  await Promise.all([
+    refreshNotificationItems(activeToken, workspaceId, setNotifications),
+    refreshKnowledgeStatsData(activeToken, workspaceId, setKnowledgeStats),
+    refreshMediaStorageSummaryData(activeToken, workspaceId, setMediaStorageSummary),
+    refreshMediaProcessingOverviewData(activeToken, workspaceId, setMediaProcessingOverview),
+  ]);
 
   return {
     role: workspaceResult.workspace.role as WorkspaceShellLoadRole,

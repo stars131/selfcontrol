@@ -170,6 +170,7 @@ def build_uploaded_media_asset(
     content: bytes,
 ) -> MediaAsset:
     remote_upload = upload_attempt.remote_upload
+    safe_original_filename = Path(original_filename or "upload.bin").name or "upload.bin"
     if remote_upload is not None:
         return MediaAsset(
             workspace_id=workspace_id,
@@ -178,7 +179,7 @@ def build_uploaded_media_asset(
             media_type=media_type,
             storage_provider=remote_upload.storage_provider,
             storage_key=remote_upload.storage_key,
-            original_filename=original_filename,
+            original_filename=safe_original_filename,
             mime_type=mime_type,
             size_bytes=remote_upload.size_bytes,
             metadata_json=remote_upload.metadata_json,
@@ -186,11 +187,10 @@ def build_uploaded_media_asset(
             processing_error=None,
         )
 
+    media_id = str(uuid.uuid4())
     target_dir = Path(settings.storage_dir) / workspace_id
-    target_dir.mkdir(parents=True, exist_ok=True)
-    target_name = f"{uuid.uuid4().hex}_{original_filename}"
+    target_name = f"{media_id}_{safe_original_filename}"
     target_path = target_dir / target_name
-    target_path.write_bytes(content)
     fallback_metadata: dict[str, str] = {}
     if upload_attempt.fallback_used:
         fallback_metadata = {
@@ -202,15 +202,29 @@ def build_uploaded_media_asset(
             fallback_metadata["storage_fallback_at"] = upload_attempt.fallback_at
 
     return MediaAsset(
+        id=media_id,
         workspace_id=workspace_id,
         record_id=record_id,
         uploaded_by=uploaded_by,
         media_type=media_type,
         storage_provider="local",
         storage_key=str(target_path.relative_to(Path(settings.storage_dir).parent)),
-        original_filename=original_filename,
+        original_filename=safe_original_filename,
         mime_type=mime_type,
         size_bytes=len(content),
         metadata_json=fallback_metadata,
         processing_status="pending",
     )
+
+
+def persist_local_uploaded_media_file(media: MediaAsset, content: bytes) -> None:
+    if not media_uses_local_storage(media):
+        return
+
+    target_path = resolve_storage_path(media)
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        target_path.write_bytes(content)
+    except Exception:
+        target_path.unlink(missing_ok=True)
+        raise

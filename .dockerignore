@@ -1,0 +1,46 @@
+.git
+.gitignore
+.github
+.claude
+
+# Dependencies (rebuilt in Docker)
+node_modules
+__pycache__
+*.pyc
+.venv
+
+# Build outputs
+.next
+dist
+*.egg-info
+
+# Environment & secrets
+.env*
+!.env.production.example
+
+# Storage & backups
+backups
+storage
+
+# Docs
+docs
+*.md
+LICENSE
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+tests
+**/tests
+**/__tests__
+.pytest_cache
+.coverage
+htmlcov

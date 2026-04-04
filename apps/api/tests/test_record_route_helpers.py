@@ -8,13 +8,14 @@ from sqlalchemy.pool import StaticPool
 from app.api.routes import record_route_helpers
 from app.api.routes.record_route_helpers import (
     apply_record_updates,
+    cleanup_local_record_media_assets,
     filter_records_by_location_fields,
     get_workspace_record_or_404,
+    preflight_remote_record_media_assets,
     read_record_location,
     record_has_coordinates,
     record_matches_location_query,
     record_matches_review_status,
-    remove_record_media_assets,
 )
 from app.db.base import Base
 from app.models import audit_log, conversation, knowledge, media, notification, provider_config, record, reminder, search_preset, share_link, workspace_transfer_job  # noqa: F401
@@ -266,7 +267,7 @@ def test_workspace_record_lookup_and_update_helpers_cover_success_and_failures()
             raise AssertionError("Expected cross-workspace record lookup to fail")
 
 
-def test_remove_record_media_assets_covers_local_remote_success_and_failures(monkeypatch) -> None:
+def test_record_media_asset_cleanup_helpers_cover_local_and_remote_paths(monkeypatch) -> None:
     session_local, ids = build_record_route_helper_session()
 
     removed_local_media_ids: list[str] = []
@@ -288,17 +289,31 @@ def test_remove_record_media_assets_covers_local_remote_success_and_failures(mon
             db.get(MediaAsset, ids["local_media_id"]),
             db.get(MediaAsset, ids["local_missing_media_id"]),
             db.get(MediaAsset, ids["remote_media_id"]),
-            db.get(MediaAsset, ids["remote_failed_media_id"]),
         ]
 
         assert all(media is not None for media in media_assets)
 
-        removed_media_count = remove_record_media_assets(
+        removed_remote_media_count = preflight_remote_record_media_assets(
             db,
             media_assets,  # type: ignore[arg-type]
             delete_remote_media_fn=fake_delete_remote_media,
         )
+        removed_local_media_count = cleanup_local_record_media_assets(
+            media_assets,  # type: ignore[arg-type]
+        )
 
-        assert removed_media_count == 2
+        assert removed_remote_media_count == 1
+        assert removed_local_media_count == 1
         assert removed_local_media_ids == [ids["local_media_id"], ids["local_missing_media_id"]]
         assert removed_remote_media_ids == [ids["remote_media_id"]]
+
+        try:
+            preflight_remote_record_media_assets(
+                db,
+                [db.get(MediaAsset, ids["remote_failed_media_id"])],  # type: ignore[list-item]
+                delete_remote_media_fn=fake_delete_remote_media,
+            )
+        except RuntimeError as exc:
+            assert str(exc) == "remote delete failed"
+        else:
+            raise AssertionError("Expected remote cleanup failure to surface")
