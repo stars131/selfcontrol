@@ -39,7 +39,7 @@
     "verify:record-panel-detail-copy": "npm run verify:record-panel-copy"
   },
   "dependencies": {
-    "next": "15.4.6",
+    "next": "16.2.1",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },
